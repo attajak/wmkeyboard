@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The emoji panel itself (search, skin tones, favourites) is covered in [Emoji picker & search](/emoji/picker/). This page is about the settings that shape it: which font draws the emoji, which languages emoji search understands, when emoji get suggested while you type, and whether a dedicated row of them sits above the keys.
 
 <PhoneFrame caption="The Emoji settings screen, with the live font preview row.">
-  ![The Emoji settings screen, with the live font preview row.](@assets/screens/emoji/settings-overview.webp)
+  <Shot id="emoji/settings-overview" alt="The Emoji settings screen, with the live font preview row." />
 </PhoneFrame>
 
 ## Choosing an emoji font
@@ -56,7 +57,7 @@ This toggle (off by default) checks both your chosen font and the phone's own sy
 Emoji search ships with English and Bangla keywords built in, so it works out of the box in both languages. For anything else, download a keyword pack. WM Keyboard's data repository carries packs for 126 languages, each a small gzipped file of `{emoji, name, keywords, category}` entries sourced from Unicode CLDR.
 
 <PhoneFrame caption="The Emoji keywords screen, with per-language download and delete controls.">
-  ![The Emoji keywords screen, with per-language download and delete controls.](@assets/screens/emoji/keyword-packs.webp)
+  <Shot id="emoji/keyword-packs" alt="The Emoji keywords screen, with per-language download and delete controls." />
 </PhoneFrame>
 
 Packs stack on top of the bundled English and Bangla keywords rather than replacing them, so downloading, say, Spanish adds Spanish search terms without losing the two you already had.

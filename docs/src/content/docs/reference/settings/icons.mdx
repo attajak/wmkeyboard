@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Icons screen lists every glyph the keyboard draws, grouped by where it appears, with the active pack's controls above the list. This page walks the screen top to bottom. For why you'd swap icons and how to build a pack of your own, see [Icon packs](/themes/icon-packs/) instead.
 
 <PhoneFrame caption="The Icons screen: the active pack (with export and delete on each installed row), then the slot list.">
-  {/* shot: reference/settings/icons-overview */}
+  <Shot id="reference/settings/icons-overview" alt="The Icons screen: the active pack (with export and delete on each installed row), then the slot list." />
 </PhoneFrame>
 
 ## Options
@@ -31,7 +32,7 @@ Every installed row also carries two trailing buttons the built-in row doesn't h
 - **Delete** asks for confirmation first (a "Delete `<pack name>`?" dialog whose body reads "The app deletes its `<N>` icons from your device.") before removing the pack's files and any per-slot override pinned to it.
 
 <PhoneFrame caption="Confirming deletion of an installed icon pack.">
-  {/* shot: reference/settings/icons-delete-confirm */}
+  <Shot id="reference/settings/icons-delete-confirm" alt="Confirming deletion of an installed icon pack." />
 </PhoneFrame>
 
 ### Download, import and reset

@@ -9,11 +9,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Accessibility screen gathers the options into four groups: vision, motion, screen reader and touch. Turn on only what you need, whether that's a colour filter, a screen-reader mode or a slower press-and-hold delay. Two related settings live on their own screens, key size on **Layout & size** and feedback on **Key press**, and this screen has a link straight to each.
 
 <PhoneFrame caption="The Vision group at the top of the Accessibility screen.">
-  ![The Vision group at the top of the Accessibility screen.](@assets/screens/accessibility/vision-group.webp)
+  <Shot id="accessibility/vision-group" alt="The Vision group at the top of the Accessibility screen." />
 </PhoneFrame>
 
 ## Typing with a screen reader
@@ -28,7 +29,7 @@ The Accessibility screen gathers the options into four groups: vision, motion, s
 - **Gestures.** Keeps the keyboard's own touch handling active even while a screen reader runs, so the <KeyCap>Space</KeyCap> cursor slide, the <KeyCap>⌫</KeyCap> word-swipe, glide typing and handwriting all keep working. Each key still announces itself when you touch it, and types only when you lift your finger. This mode needs the pass-through service described below. Without that service it behaves exactly like Explore.
 
 <PhoneFrame caption="TalkBack support set to Gestures, with the four modes shown in the picker.">
-  ![TalkBack support set to Gestures, with the four modes shown in the picker.](@assets/screens/accessibility/screen-reader-modes.webp)
+  <Shot id="accessibility/screen-reader-modes" alt="TalkBack support set to Gestures, with the four modes shown in the picker." />
 </PhoneFrame>
 
 :::note
@@ -42,7 +43,7 @@ Setting TalkBack support to **Gestures** reveals an extra row asking you to turn
 This service is deliberately narrow. It requests no accessibility events and can't read anything on screen. Its only job is to tell Android to route touches on the key grid straight to the keyboard, instead of through the screen reader's touch exploration. The carve-out covers the key grid alone. The suggestion strip, the toolbar and every panel stay explorable by your screen reader as usual, as does the rest of the device. The service never turns touch exploration on by itself, and it takes effect only while a screen reader you already enabled is exploring by touch.
 
 <PhoneFrame caption="The extra row that appears when TalkBack support is set to Gestures, before the service is granted.">
-  {/* shot: accessibility/gestures-service-required */}
+  <Shot id="accessibility/gestures-service-required" alt="The extra row that appears when TalkBack support is set to Gestures, before the service is granted." />
 </PhoneFrame>
 
 Tap that row. A disclosure sheet explains what the service does and what it can't do. Tap **Open system settings** on it to reach Android's own Accessibility screen, then turn the service on there like any other. Turning it back off is safe at any time, as is leaving it off. The keyboard falls back to Explore-by-touch for as long as TalkBack support is set to Gestures.
@@ -108,7 +109,7 @@ This changes only the settings app. The keyboard, its toolbar and the Tools list
 Two links round out the group. **Key size and spacing** opens [Size, position & one-handed use](/typing/size-position/) for taller keys and wider gaps. **Haptics and sound** opens the Key press screen, covered on [Sound & vibration](/typing/feedback/), for feedback on every press.
 
 <PhoneFrame caption="The Touch group: ignore repeated presses and press and hold delay.">
-  ![The Touch group: ignore repeated presses and press and hold delay.](@assets/screens/accessibility/touch-group.webp)
+  <Shot id="accessibility/touch-group" alt="The Touch group: ignore repeated presses and long-press delay." />
 </PhoneFrame>
 
 ## One-handed and floating keyboards

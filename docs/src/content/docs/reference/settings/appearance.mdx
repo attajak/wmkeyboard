@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The Appearance screen is where the keyboard's look comes together. It's the hub for the theme, font, and icon pickers, and it holds the sliders that shape the keys themselves and the toolbar above them.
 
 <PhoneFrame caption="The Appearance settings screen, showing Style, Keys, and Toolbar.">
-{/* shot: reference/settings/appearance-overview */}
+<Shot id="reference/settings/appearance-overview" alt="The Appearance settings screen, showing Style, Keys, and Toolbar." />
 </PhoneFrame>
 
 ## Style
@@ -48,7 +49,7 @@ Three sliders that apply to every key, whatever layout is active. All three are 
 **Key hint position** moves that corner hint up or down. At 0 the hint touches the top edge of the key. Raise it to bring the hint down toward the letter.
 
 <PhoneFrame caption="The Keys sliders: corner radius, label size, and hint size.">
-{/* shot: reference/settings/appearance-keys */}
+<Shot id="reference/settings/appearance-keys" alt="The Keys sliders — corner radius, label size, and hint size." />
 </PhoneFrame>
 
 ## Toolbar
@@ -82,7 +83,7 @@ The toolbar is the strip above the keys that carries word suggestions while you 
 | Reset toolbar *(shown only once something on this screen has moved)* | Button (confirms first) | n/a | Puts every slider and switch on this screen back to its default. Which tools are pinned is not affected. |
 
 <PhoneFrame caption="The Toolbar group, with the confirmation dialog for turning the toolbar off.">
-{/* shot: reference/settings/appearance-toolbar */}
+<Shot id="reference/settings/appearance-toolbar" alt="The Toolbar group, with the confirmation dialog for turning the toolbar off." />
 </PhoneFrame>
 
 For the toolbox itself (pinning, reordering, and which tools work before you unlock your phone), see [Tools](/tools/overview/).

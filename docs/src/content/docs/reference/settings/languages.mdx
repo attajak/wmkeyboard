@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Languages screen is where you enable languages and layouts, reorder the switch ring, and open each language's own screen for its numeral system, secondary suggestions, dictionary, and (for a few) CJK options. This page walks every group and row on it in order. For how switching and adding actually feel to use, see [Languages overview](/languages/overview/) and [Switching languages](/languages/switching/); this page cross-links to both throughout instead of repeating them.
 
 <PhoneFrame caption="The Languages screen: Your languages, Add language, and (once more than one layout is enabled) Switch order.">
-  {/* shot: reference/settings/languages-top */}
+  <Shot id="reference/settings/languages-top" alt="The Languages screen: Your languages, Add language, and (once more than one layout is enabled) Switch order." />
 </PhoneFrame>
 
 ## Your languages and adding one
@@ -36,7 +37,7 @@ Adding a language, from anywhere (the search list, Suggested for you, or the set
 Tapping **Add language** opens a full-screen search:
 
 <PhoneFrame caption="Add language: search matches endonym, English name, id, and locale tag.">
-  {/* shot: reference/settings/add-language-screen */}
+  <Shot id="reference/settings/add-language-screen" alt="Add language: search matches endonym, English name, id, and locale tag." />
 </PhoneFrame>
 
 - The search box matches (case-insensitively, as a substring) against a language's endonym, English name, id, and locale tag, so "german", "deutsch", "de", and "de-DE" all find German. It also matches the names and ids of the layouts that language ships, so "avro" finds Bangla and "bepo" finds French even if you don't know which language the app files them under.
@@ -59,7 +60,7 @@ Two more groups sit below Language data:
 Conjunct-aware backspace used to sit here too, as a single **Complex scripts** switch across every cluster-forming script at once. It is per language now, on each language's own screen (below). An install that had the old switch on keeps cluster deletion in whichever cluster-forming languages it had enabled at the time.
 
 <PhoneFrame caption="Further down the screen: Per-app language and System language switcher.">
-  {/* shot: reference/settings/languages-bottom */}
+  <Shot id="reference/settings/languages-bottom" alt="Further down the screen: Per-app language, System language switcher, and Complex scripts." />
 </PhoneFrame>
 
 ## Each language's own screen
@@ -67,7 +68,7 @@ Conjunct-aware backspace used to sit here too, as a single **Complex scripts** s
 Tapping a language (from Your languages or straight after adding one) opens a screen titled with that language's own name, built from up to twelve sections depending on what it supports (eleven named groups plus the Remove button at the foot). They're listed below in the order the screen draws them.
 
 <PhoneFrame caption="Bangla's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji.">
-  {/* shot: reference/settings/language-detail-bengali */}
+  <Shot id="reference/settings/language-detail-bengali" alt="Bengali's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji." />
 </PhoneFrame>
 
 **Layouts**: one toggle per layout the language ships, no subtitle. Turning off the last enabled layout anywhere is a no-op rather than an error, so you can never empty the switch ring from here.
@@ -120,7 +121,7 @@ Whether the emoji keywords and word pairs download by themselves depends on **Do
 Three languages, `zh`, `ja`, and `yue`, get an extra group named after themselves (for example "Chinese options"), holding a downloadable conversion dictionary plus extra input-scheme settings. It's the only part of a language's screen that isn't identical in shape across every language, so it's covered separately here and in full on [Chinese, Japanese & Korean](/languages/cjk/).
 
 <PhoneFrame caption="Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin.">
-  {/* shot: reference/settings/cjk-options-chinese */}
+  <Shot id="reference/settings/cjk-options-chinese" alt="Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin." />
 </PhoneFrame>
 
 - One download/delete row per conversion-dictionary pack for that language: Chinese gets Pinyin, Stroke, and Cangjie tables; Japanese gets a kana→kanji table; Cantonese gets a Jyutping table. All five packs are hosted and available to download today.

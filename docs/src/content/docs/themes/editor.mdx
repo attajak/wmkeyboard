@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The theme editor is where a single custom theme gets built: every color, the key shape, optional gradients, corner-radius overrides, and a live-animated background if you want one. Every field here applies and saves the instant you touch it. There's no separate save step.
 
@@ -268,7 +269,7 @@ There's no Save or Apply button anywhere in this screen: every field write goes 
 **Deleting** a custom theme is a gallery action too: tap the trash icon on its card. A confirmation dialog asks "Delete this theme?" with a note that it will be removed permanently. The theme's image files (background, textures, stickers, particles) are not deleted with it. A housekeeping pass clears them once nothing in any theme still points at them, and only after they have been unreferenced for a day, because looks in the same family share their files:
 
 <PhoneFrame caption="Deleting a custom theme asks for confirmation before removing it.">
-  ![Deleting a custom theme asks for confirmation before removing it.](@assets/screens/themes/editor-delete-confirm.webp)
+  <Shot id="themes/editor-delete-confirm" alt="Deleting a custom theme asks for confirmation before removing it." />
 </PhoneFrame>
 
 Delete isn't offered for built-in themes or for the Default theme, only for themes in Your themes. Export is offered on built-in cards as well, so you can hand someone a copy of one as a file; only the Default card has no export button, since it's generated live rather than stored.

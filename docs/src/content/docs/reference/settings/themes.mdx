@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Two screens live behind **Keyboard themes**. One is a gallery for picking, creating, and managing themes. The other is an editor for building one from scratch. This page is the field reference for both. For the reasoning and the bigger picture, read [Theming overview](/themes/overview/) and [Theme editor](/themes/editor/) instead.
 
 <PhoneFrame caption="The theme gallery: Mode, Auto (light + dark), and the Themes grid.">
-![The theme gallery: Mode, Auto (light + dark), and the Themes grid.](@assets/screens/reference/settings/themes-gallery-overview.webp)
+<Shot id="reference/settings/themes-gallery-overview" alt="The theme gallery: Mode, Auto (light + dark), and the Themes grid." />
 </PhoneFrame>
 
 ## Theme list
@@ -52,7 +53,7 @@ Each half of the pair is independent: one can hold a single theme while the othe
 </PhoneFrame>
 
 <PhoneFrame caption="Auto theme on, with Time of day chosen and both clock rows visible.">
-![Auto theme on, with Time of day chosen and both clock rows visible.](@assets/screens/reference/settings/themes-auto-schedule.webp)
+<Shot id="reference/settings/themes-auto-schedule" alt="Auto theme on, with Time of day chosen and both clock rows visible." />
 </PhoneFrame>
 
 ### Themes
@@ -79,7 +80,7 @@ Each half of the pair is independent: one can hold a single theme while the othe
 The grid runs two cards per row. **Default (system)** comes first, with no edit, export, or delete, since it's generated live rather than stored. Then **Your themes**, which only shows once you have at least one. Then **Built-in**, under its own note: "Press a theme to use it. The pencil icon makes a copy that you can edit." Built-in cards never show a delete button. A second caption explains the pin: your own themes always show in the Appearance tool, built-ins only when pinned.
 
 <PhoneFrame caption="Deleting a custom theme asks for confirmation before removing it.">
-![Deleting a custom theme asks for confirmation before removing it.](@assets/screens/reference/settings/themes-delete-confirm.webp)
+<Shot id="reference/settings/themes-delete-confirm" alt="Deleting a custom theme asks for confirmation before removing it." />
 </PhoneFrame>
 
 There are 29 built-in themes: 19 original WM Keyboard designs, plus 10 ports of well-known editor colour schemes (Dracula, Alucard, Nord, Solarized Dark, Solarized Light, Catppuccin Mocha, Catppuccin Latte, Catppuccin Frappé, Catppuccin Macchiato, Tokyo Night). Cyberpunk sits with the ports in the source but isn't one: it's ours, and it's the theme that uses the whole feature set at once (animated board gradient, cut keys, translucent faces, neon outline). Twenty-four of the 29 sit in six families (Nightfall, Pastel, Gradients, Dracula, Solarized, Catppuccin), so the grouped grid shows eleven built-in cards. See [Theming overview](/themes/overview/#choosing-a-theme) for the full list and what each one showcases.

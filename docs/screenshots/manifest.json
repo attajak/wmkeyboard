@@ -2,7 +2,7 @@
   {
     "id": "addons/repo-catalogue-grid",
     "page": "docs/src/content/docs/addons/installing.mdx",
-    "file": "src/assets/screens/addons/repo-catalogue-grid.webp",
+    "file": "src/assets/screens/addons/repo-catalogue-grid.light.webp",
     "caption": "A repository's catalogue: search, type filters, and a two-column grid of addon cards.",
     "host": "settings",
     "setup": [
@@ -10,9 +10,11 @@
       "Tap the seeded sample repository row (added automatically on first Addons-screen visit) to open its catalogue",
       "Optionally select a type filter chip so the grid shows a visually varied set of cards with previews"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Shows AddonRepoScreen (AddonScreens.kt:572+): search field, horizontally-scrolling type chips, 2-column AddonCard grid. Use the app's seeded repo (AddonStore.SEED_URL) so cards have real previews/metadata.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/addons/repo-catalogue-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "addons/add-repository-dialog",
@@ -48,7 +50,7 @@
   {
     "id": "addons/apply-prompt",
     "page": "docs/src/content/docs/addons/installing.mdx",
-    "file": "src/assets/screens/addons/apply-prompt.webp",
+    "file": "src/assets/screens/addons/apply-prompt.light.webp",
     "caption": "The prompt after a first install, offering to switch to what you just installed.",
     "host": "settings",
     "setup": [
@@ -57,9 +59,11 @@
       "Tap Install on a Theme (or IconPack/EmojiFont/Sound/Layout/Plugin) card that is not yet installed",
       "Wait for the download to finish; the 'Installed {name}' AlertDialog with the switch-to-it question appears automatically"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "AddonApplyPrompt composable (AddonScreens.kt:405-432). Only fires on a genuinely first-time install (no prior record for that key) \u2014 use an addon you haven't installed on the capture device yet. A Theme install gives the 'Use it as your keyboard theme now?' / 'Switch to it' wording used in the page's table.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/addons/apply-prompt.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "addons/update-chip-catalogue",
@@ -95,35 +99,39 @@
   {
     "id": "addons/addons-home",
     "page": "docs/src/content/docs/addons/overview.mdx",
-    "file": "src/assets/screens/addons/addons-home.webp",
+    "file": "src/assets/screens/addons/addons-home.light.webp",
     "caption": "The Addons screen: repositories you've added, plus everything you've installed from them.",
     "host": "settings",
     "setup": [
       "Settings home > Features > Addons (route \"addons\" is not on the wmkeyboard:// deep-link allowlist, so navigate by tapping: Settings home, Features group, Addons tile)",
       "Add at least one repository (the seeded sample repo qualifies) and install a couple of addons beforehand so both the Repositories and Installed sections have content"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Screen shows an Add repository / Refresh button row, a Repositories list, and (if anything installed) an Installed list below it. Capture with the seeded sample repository present plus 1-2 installed items so both groups render.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/addons/addons-home.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "addons/plugin-trust-preview",
     "page": "docs/src/content/docs/addons/overview.mdx",
-    "file": "src/assets/screens/addons/plugin-trust-preview.webp",
+    "file": "src/assets/screens/addons/plugin-trust-preview.light.webp",
     "caption": "A plugin's detail page shows what it can do before you install it \u2014 this is the one addon type that isn't pure data.",
     "host": "settings",
     "setup": [
       "From the Addons screen, open a repository that lists a plugin, then open that plugin's detail page",
       "The \"What this plugin can do\" card sits above the Install button, listing its declared permissions (or \"Nothing outside its own panel\" if it declares none) plus a caption about the sandbox"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is the PluginPreview composable in AddonScreens.kt. Use a plugin from the sample repository (wasi-master/wmkeyboard-addon-repository) that declares at least one permission (e.g. local storage) so the list isn't empty/less illustrative.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/addons/plugin-trust-preview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/vision-group",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/vision-group.webp",
+    "file": "src/assets/screens/accessibility/vision-group.light.webp",
     "caption": "The Vision group at the top of the Accessibility screen.",
     "host": "settings",
     "setup": [
@@ -132,12 +140,14 @@
     ],
     "status": "done",
     "notes": "Route is \"accessibility\", screen title \"Accessibility\" (MainActivity.kt:682-690). No wmkeyboard:// deep link exists for it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/vision-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/screen-reader-modes",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/screen-reader-modes.webp",
+    "file": "src/assets/screens/accessibility/screen-reader-modes.light.webp",
     "caption": "TalkBack support set to Gestures, with the four modes shown in the picker.",
     "host": "settings",
     "setup": [
@@ -146,12 +156,14 @@
     ],
     "status": "done",
     "notes": "ChoiceSetting in AccessibilityScreens.kt:38-57, backed by settings.screenReaderMode (default LABELS).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/screen-reader-modes.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/gestures-service-required",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/gestures-service-required.webp",
+    "file": "src/assets/screens/accessibility/gestures-service-required.light.webp",
     "caption": "The extra row that appears when TalkBack support is set to Gestures, before the service is granted.",
     "host": "settings",
     "setup": [
@@ -159,9 +171,11 @@
       "Set \"TalkBack support\" to \"Gestures\" to reveal the \"Keyboard gestures service required\" row (only shows in this mode).",
       "Do NOT actually grant the accessibility service for this shot \u2014 capture the ungranted state."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "NavRow only rendered when settings.screenReaderMode == PASSTHROUGH, AccessibilityScreens.kt:172-192.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/gestures-service-required.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "accessibility/high-contrast-live",
@@ -197,7 +211,7 @@
   {
     "id": "accessibility/touch-group",
     "page": "docs/src/content/docs/accessibility/overview.mdx",
-    "file": "src/assets/screens/accessibility/touch-group.webp",
+    "file": "src/assets/screens/accessibility/touch-group.light.webp",
     "caption": "The Touch group: ignore repeated presses and long-press delay.",
     "host": "settings",
     "setup": [
@@ -206,7 +220,9 @@
     ],
     "status": "done",
     "notes": "Group at AccessibilityScreens.kt:213-260.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/accessibility/touch-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ai-panel-idle",
@@ -254,7 +270,7 @@
   {
     "id": "tools/ai-settings-providers",
     "page": "docs/src/content/docs/tools/ai.mdx",
-    "file": "src/assets/screens/tools/ai-settings-providers.webp",
+    "file": "src/assets/screens/tools/ai-settings-providers.light.webp",
     "caption": "The provider row and a cloud provider's API key and model fields.",
     "host": "settings",
     "setup": [
@@ -263,12 +279,14 @@
     ],
     "status": "done",
     "notes": "AI's own screen isn't in the deep-link allowlist beyond the Tools list root, so this needs one tap into 'AI writing tools' after the deep link.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-settings-providers.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ai-settings-local-catalog",
     "page": "docs/src/content/docs/tools/ai.mdx",
-    "file": "src/assets/screens/tools/ai-settings-local-catalog.webp",
+    "file": "src/assets/screens/tools/ai-settings-local-catalog.light.webp",
     "caption": "The on-device model catalog, with tier badges and a size/RAM subtitle per model.",
     "host": "settings",
     "setup": [
@@ -277,7 +295,9 @@
     ],
     "status": "done",
     "notes": "Full edition only \u2014 the On-device chip doesn't render at all in a Lite build (BuildConfig.ENABLE_LOCAL_LLM gates it out of the provider row), so this must be captured on a Full build.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-settings-local-catalog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/calendar-month-grid",
@@ -314,7 +334,7 @@
   {
     "id": "tools/calendar-options",
     "page": "docs/src/content/docs/tools/calendar.mdx",
-    "file": "src/assets/screens/tools/calendar-options.webp",
+    "file": "src/assets/screens/tools/calendar-options.light.webp",
     "caption": "Calendar options: First and second calendar pickers, and the Hijri day adjustment slider.",
     "host": "settings",
     "setup": [
@@ -323,7 +343,9 @@
     ],
     "status": "done",
     "notes": "Default settings (First=Bengali, Second=Hijri) already satisfy showsHijri, so the Hijri day adjustment slider is visible with no changes needed.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/calendar-options.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/camera-viewfinder",
@@ -373,7 +395,7 @@
   {
     "id": "tools/camera-options",
     "page": "docs/src/content/docs/tools/camera.mdx",
-    "file": "src/assets/screens/tools/camera-options.webp",
+    "file": "src/assets/screens/tools/camera-options.light.webp",
     "caption": "Camera's Options screen: selfie camera, mirroring, gallery saving, shutter sound and haptics.",
     "host": "settings",
     "setup": [
@@ -383,7 +405,9 @@
     ],
     "status": "done",
     "notes": "tool/CAMERA itself is not in the deep-link allowlist (only typing, appearance, themes, languages, tools, search are) \u2014 deep-link to tools then tap Camera manually.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/camera-options.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/clipboard-panel",
@@ -450,7 +474,7 @@
   {
     "id": "tools/clipboard-settings",
     "page": "docs/src/content/docs/tools/clipboard.mdx",
-    "file": "src/assets/screens/tools/clipboard-settings.webp",
+    "file": "src/assets/screens/tools/clipboard-settings.light.webp",
     "caption": "Clipboard settings: the History group and, below it, Passwords & codes.",
     "host": "settings",
     "setup": [
@@ -460,7 +484,9 @@
     ],
     "status": "done",
     "notes": "Screen is long (roughly a dozen rows across two groups); may need two stacked shots or a scroll-captured composite if a single viewport crop can't fit both group headers legibly.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/clipboard-settings.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/handwriting-panel-writing",
@@ -481,7 +507,7 @@
   {
     "id": "tools/handwriting-model-manager",
     "page": "docs/src/content/docs/tools/handwriting.mdx",
-    "file": "src/assets/screens/tools/handwriting-model-manager.webp",
+    "file": "src/assets/screens/tools/handwriting-model-manager.light.webp",
     "caption": "Recognition models: one row per enabled language, each with its own download status.",
     "host": "settings",
     "setup": [
@@ -491,7 +517,9 @@
     ],
     "status": "done",
     "notes": "MainActivity.kt ~6828-6834 (SectionHeader + caption) and HandwritingModelManager composable. Caption text used verbatim on the page: \"about 20 MB\" one-time download, then offline.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/handwriting-model-manager.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/text-edit-panel",
@@ -587,7 +615,7 @@
   {
     "id": "tools/whisper-engine-choice",
     "page": "docs/src/content/docs/tools/whisper.mdx",
-    "file": "src/assets/screens/tools/whisper-engine-choice.webp",
+    "file": "src/assets/screens/tools/whisper-engine-choice.light.webp",
     "caption": "Recognition engine choice on the Voice typing screen.",
     "host": "settings",
     "setup": [
@@ -596,12 +624,14 @@
     ],
     "status": "done",
     "notes": "Full edition build required \u2014 the Engine section does not render on lite. Capture with System recognizer selected so both options are visible in the chooser.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/whisper-engine-choice.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/whisper-catalog",
     "page": "docs/src/content/docs/tools/whisper.mdx",
-    "file": "src/assets/screens/tools/whisper-catalog.webp",
+    "file": "src/assets/screens/tools/whisper-catalog.light.webp",
     "caption": "Model catalog with size and language filters, grouped by tier.",
     "host": "settings",
     "setup": [
@@ -610,7 +640,9 @@
     ],
     "status": "done",
     "notes": "Enable at least one non-English language first so a single-language model or two shows up in the visible catalog, not just the 8 multilingual entries.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/whisper-catalog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/whisper-routing",
@@ -837,7 +869,7 @@
   {
     "id": "tools/snippets-settings",
     "page": "docs/src/content/docs/tools/snippets.mdx",
-    "file": "src/assets/screens/tools/snippets-settings.webp",
+    "file": "src/assets/screens/tools/snippets-settings.light.webp",
     "caption": "Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.",
     "host": "settings",
     "setup": [
@@ -847,12 +879,14 @@
     ],
     "status": "done",
     "notes": "Screen order top to bottom: CaptionText subtitle, Enabled toggle, (icon colour row if colourful tool icons on), Keyword shortcut text field, then SnippetSettings() content: intro paragraph, template-variable reference Card (18 rows + {date:...} row), Add/Import/Export button row, then the snippet list with pencil/trash icons per row. Consider cropping/scrolling to frame the variable card + list; full screen may be tall.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/snippets-settings.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/snippets-add-dialog",
     "page": "docs/src/content/docs/tools/snippets.mdx",
-    "file": "src/assets/screens/tools/snippets-add-dialog.webp",
+    "file": "src/assets/screens/tools/snippets-add-dialog.light.webp",
     "caption": "Adding a snippet: label, text with variables, and a Word or Pattern trigger.",
     "host": "settings",
     "setup": [
@@ -861,12 +895,14 @@
     ],
     "status": "done",
     "notes": "AlertDialog with Label (single-line), Text (multiline, hint 'Text -- supports {date} {time} {clip} {app} {cursor} ...'), Trigger word (single-line, optional) plus helper text below it. Save button is disabled unless label and text are both non-blank.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/snippets-add-dialog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/settings-overview",
     "page": "docs/src/content/docs/emoji/customization.mdx",
-    "file": "src/assets/screens/emoji/settings-overview.webp",
+    "file": "src/assets/screens/emoji/settings-overview.light.webp",
     "caption": "The Emoji settings screen, with the live font preview row.",
     "host": "settings",
     "setup": [
@@ -876,12 +912,14 @@
     ],
     "status": "done",
     "notes": "\"emoji\" is not in the wmkeyboard://settings deep-link allowlist (only typing, appearance, themes, languages, tools, search are) \u2014 reach it by tapping through the settings home screen instead. Capture with default settings (Emoji font = System) so the preview row shows the device's own emoji pack.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/settings-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/keyword-packs",
     "page": "docs/src/content/docs/emoji/customization.mdx",
-    "file": "src/assets/screens/emoji/keyword-packs.webp",
+    "file": "src/assets/screens/emoji/keyword-packs.light.webp",
     "caption": "The Emoji keywords screen, with per-language download and delete controls.",
     "host": "settings",
     "setup": [
@@ -891,7 +929,9 @@
     ],
     "status": "done",
     "notes": "Ideally capture with one language already downloaded (shows a Delete button) and one not yet downloaded (shows a Download button) visible in the same frame to illustrate both states.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/keyword-packs.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/word-suggestions",
@@ -1153,7 +1193,7 @@
   {
     "id": "emoji/sticker-pack-manage",
     "page": "docs/src/content/docs/emoji/stickers.mdx",
-    "file": "src/assets/screens/emoji/sticker-pack-manage.webp",
+    "file": "src/assets/screens/emoji/sticker-pack-manage.light.webp",
     "caption": "A sticker pack's management screen, with reorder and export controls.",
     "host": "settings",
     "setup": [
@@ -1162,7 +1202,9 @@
     ],
     "status": "done",
     "notes": "Deep link only reaches the Tools list (route 'tools' is the allowlisted one) \u2014 Sticker packs and the per-pack screen need the two follow-up taps noted above; seed the pack with 3-5 stickers beforehand so reorder/export controls have something to act on.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/sticker-pack-manage.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/editions-toolbox-full",
@@ -1199,7 +1241,7 @@
   {
     "id": "start/editions-about-version",
     "page": "docs/src/content/docs/start/editions.mdx",
-    "file": "src/assets/screens/start/editions-about-version.webp",
+    "file": "src/assets/screens/start/editions-about-version.light.webp",
     "caption": "Settings \u2192 About \u2192 Version names the flavor, build type, and version code.",
     "host": "settings",
     "setup": [
@@ -1207,14 +1249,16 @@
       "Open the WM Keyboard settings app, tap \"About\" in the About section on the settings home screen",
       "Screenshot the Version row under the App group \u2014 reads \"Full build (release) \u00b7 code \u2026\" or \"Lite build (release) \u00b7 code \u2026\""
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capturing on a Full-flavor build is the more informative choice (shows \"Full build\" explicitly); a Lite capture would be an equally valid substitute if that's the build already installed for other shots in this batch.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/editions-about-version.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/faq-privacy-summary",
     "page": "docs/src/content/docs/start/faq.mdx",
-    "file": "src/assets/screens/start/faq-privacy-summary.webp",
+    "file": "src/assets/screens/start/faq-privacy-summary.light.webp",
     "caption": "The Privacy screen's on-device summary, with the data-clearing controls below it.",
     "host": "settings",
     "setup": [
@@ -1222,14 +1266,16 @@
       "On the home screen, tap 'Privacy' under the 'Data' group.",
       "Scroll to the bottom to frame the 'Your data' group (Clear learned words button) together with the closing caption text."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "The in-app caption at the bottom of this screen (MainActivity.kt ~8498-8503) currently only mentions the weather tool as the network exception; it's stale relative to the real tool list (dictionary, translate, GIF/sticker, search, AI). Known in-app content bug, not something for docs to fix, but don't let a future screenshot caption imply the in-app text is exhaustive.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/faq-privacy-summary.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/faq-personal-dictionary",
     "page": "docs/src/content/docs/start/faq.mdx",
-    "file": "src/assets/screens/start/faq-personal-dictionary.webp",
+    "file": "src/assets/screens/start/faq-personal-dictionary.light.webp",
     "caption": "Personal dictionary: every learned word, with per-word delete and an Add word button.",
     "host": "settings",
     "setup": [
@@ -1239,7 +1285,9 @@
     ],
     "status": "done",
     "notes": "Words seen fewer than 200 times show as 'Seen N\u00d7'; words added via the dialog show as 'Added by you' (boost 200). Capture with at least one of each for a representative shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/faq-personal-dictionary.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/first-launch",
@@ -1273,7 +1321,7 @@
   {
     "id": "start/migrating-tools-recommended",
     "page": "docs/src/content/docs/start/migrating.mdx",
-    "file": "src/assets/screens/start/migrating-tools-recommended.webp",
+    "file": "src/assets/screens/start/migrating-tools-recommended.light.webp",
     "caption": "Settings \u2192 Tools: every tool starts on. Recommended switches to the curated 17-tool set the setup wizard offers.",
     "host": "settings",
     "setup": [
@@ -1282,26 +1330,30 @@
     ],
     "status": "done",
     "notes": "Route 'tools' is in SettingsShortcuts.Routes allowlist. Shows enabledTools default = ToolbarTool.entries (~60 tools) and the RecommendedTools 17-tool curated set (ToolbarTool.kt:140-146).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/migrating-tools-recommended.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/migrating-personal-dictionary",
     "page": "docs/src/content/docs/start/migrating.mdx",
-    "file": "src/assets/screens/start/migrating-personal-dictionary.webp",
+    "file": "src/assets/screens/start/migrating-personal-dictionary.light.webp",
     "caption": "The personal dictionary screen \u2014 words you add show 'Added by you'; words picked up from typing show a use count. There's no bulk-import button here.",
     "host": "settings",
     "setup": [
       "Route 'dictionary' is NOT in the SettingsShortcuts deep-link allowlist (only typing/appearance/themes/languages/tools/search are) \u2014 launch the app and tap Typing \u2192 Personal dictionary manually",
       "Add one word via the Add word button, and let another word accumulate a few uses from typing first, so both 'Added by you' and 'Seen N\u00d7' labels are visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "count >= 200 shows 'Added by you' (MainActivity.kt:4438, UserLexicon.addWord boost=200); otherwise 'Seen N\u00d7'. Demonstrates there is no bulk-import UI on this screen, backing the page's 'no one-click import' claim.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/migrating-personal-dictionary.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/setup-card-not-enabled",
     "page": "docs/src/content/docs/start/setup.mdx",
-    "file": "src/assets/screens/start/setup-card-not-enabled.webp",
+    "file": "src/assets/screens/start/setup-card-not-enabled.light.webp",
     "caption": "The setup card before WM Keyboard is enabled \u2014 'Enable keyboard' opens system settings, 'Switch keyboard' opens the picker.",
     "host": "settings",
     "setup": [
@@ -1309,9 +1361,11 @@
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Capture the Home screen's top card in its 'Not enabled' state (title 'Setup', both 'Enable keyboard' and 'Switch keyboard' buttons visible)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is the MainActivity Home screen, not the IME field harness \u2014 DocsShotActivity does not apply. Card polls IME state every ~1s so it will flip states live if you enable the keyboard mid-session; capture before enabling. A second still of the 'Enabled and selected' checkmark state would also be useful but is not required for this page.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/setup-card-not-enabled.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/wizard-gestures-page",
@@ -1387,7 +1441,7 @@
   {
     "id": "tour/settings-entry",
     "page": "docs/src/content/docs/start/tour.mdx",
-    "file": "src/assets/screens/start/settings-entry.webp",
+    "file": "src/assets/screens/tour/settings-entry.light.webp",
     "caption": "The Settings tool opens the full settings app to its home screen.",
     "host": "settings",
     "setup": [
@@ -1396,7 +1450,9 @@
     ],
     "status": "done",
     "notes": "wmkeyboard://settings/ allowlist only covers typing, appearance, themes, languages, tools, search \u2014 not a bare home route, so for the literal home screen a plain app-open + navigate is more reliable than a deep link. Emphasize the six SettingsGroup clusters from MainActivity.kt HomeScreen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tour/settings-entry.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/cjk-pinyin-candidate-strip",
@@ -1457,71 +1513,81 @@
   {
     "id": "languages/key-layouts-gallery",
     "page": "docs/src/content/docs/languages/custom-layouts.mdx",
-    "file": "src/assets/screens/languages/key-layouts-gallery.webp",
+    "file": "src/assets/screens/languages/key-layouts-gallery.light.webp",
     "caption": "The Key layouts screen: your own layouts, the shipped set, and an import row.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Tap into a language and enable at least one custom-eligible layout, or navigate Settings > Key layouts directly if a deep link for 'keymaps' is not allowlisted"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route is 'keymaps' (title 'Key layouts'); not confirmed on the deep-link allowlist (only typing/appearance/themes/languages/tools/search are). Fall back to a tap-sequence from Settings home if wmkeyboard://settings/keymaps 404s. Shows two groups: 'Your layouts' (only appears once at least one custom/edited layout is enabled) and 'Built in'.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/key-layouts-gallery.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/layout-editor-grid",
     "page": "docs/src/content/docs/languages/custom-layouts.mdx",
-    "file": "src/assets/screens/languages/layout-editor-grid.webp",
+    "file": "src/assets/screens/languages/layout-editor-grid.light.webp",
     "caption": "The visual layout editor, showing the Letters layer with a key selected.",
     "host": "settings",
     "setup": [
       "From Key layouts, tap the edit icon on any enabled layout (e.g. the built-in QWERTY row) to reach keymap_edit/{layoutId}",
       "Tap one letter key to show the RowActionBar/RowHeightRow selected state"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Show the layer tabs (LayerChips) across the top and the 'Saved automatically' caption near the undo/redo icons.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/layout-editor-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/key-edit-sheet",
     "page": "docs/src/content/docs/languages/custom-layouts.mdx",
-    "file": "src/assets/screens/languages/key-edit-sheet.webp",
+    "file": "src/assets/screens/languages/key-edit-sheet.light.webp",
     "caption": "The key edit sheet \u2014 label, output, action, width, and long-press alternates.",
     "host": "settings",
     "setup": [
       "From the layout editor grid, tap a text key (e.g. a letter) to open the KeyEditSheet bottom sheet",
       "Scroll to show Long-press alternates and the AlternatePreview chips if possible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Pick a key with a few long-press alternates already set (e.g. a vowel from a shipped layout) so the alternate preview chips are visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/key-edit-sheet.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/layout-json-editor",
     "page": "docs/src/content/docs/languages/custom-layouts.mdx",
-    "file": "src/assets/screens/languages/layout-json-editor.webp",
+    "file": "src/assets/screens/languages/layout-json-editor.light.webp",
     "caption": "The raw JSON editor, with syntax highlighting and an Apply button.",
     "host": "settings",
     "setup": [
       "From the layout editor grid, tap 'Edit as JSON' near the bottom of the settings list to reach keymap_json/{layoutId}"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture with the default (unedited) JSON so syntax highlighting colors are visible without needing to type anything.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/layout-json-editor.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/dictionary-download-row",
     "page": "docs/src/content/docs/languages/dictionaries.mdx",
-    "file": "src/assets/screens/languages/dictionary-download-row.webp",
+    "file": "src/assets/screens/languages/dictionary-download-row.light.webp",
     "caption": "A language's Dictionary section: the built-in note, a size tier, and the Download button.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Tap a language that has no bundled dictionary but does have a downloadable wordlist (e.g. French) to open its language screen, then screenshot the Dictionary section showing the size-tier dropdown and Download button before tapping it."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "wmkeyboard://settings/languages is on the deep-link allowlist per MainActivity.kt, but the per-language screen itself is reached by an in-app tap, not a deeper deep link \u2014 navigate manually from there. Pick a language whose full wordlist is bigger than the Small tier (50k words) so the size picker is actually visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/dictionary-download-row.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/dictionary-download-progress",
@@ -1555,7 +1621,7 @@
   {
     "id": "languages/fancy-text-layout-toggles",
     "page": "docs/src/content/docs/languages/fancy-text.mdx",
-    "file": "src/assets/screens/languages/fancy-text-layout-toggles.webp",
+    "file": "src/assets/screens/languages/fancy-text-layout-toggles.light.webp",
     "caption": "The Fancy Text language screen: 22 style toggles under Layouts.",
     "host": "settings",
     "setup": [
@@ -1563,9 +1629,11 @@
       "Tap \"Add language\", search \"fancy\", tap the \ud835\udcd5\ud835\udcea\ud835\udcf7\ud835\udcec\ud835\udd02 \u00b7 Fancy Text row (this auto-enables Bold and opens this detail screen)",
       "Optionally toggle on a couple more styles (e.g. Small Caps, Double-struck) so the Layouts list shows a mix of on/off states, then scroll so the Layouts group is in frame"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Screen title renders in the fancy font itself (the language's own displayName). The Layouts group has 22 rows total, so a partial scroll position that shows several toggled + several untoggled reads best.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/fancy-text-layout-toggles.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/notation-music-field",
@@ -1614,71 +1682,81 @@
   {
     "id": "languages/notation-add-language-search",
     "page": "docs/src/content/docs/languages/notation.mdx",
-    "file": "src/assets/screens/languages/notation-add-language-search.webp",
+    "file": "src/assets/screens/languages/notation-add-language-search.light.webp",
     "caption": "Add language: searching \"morse\" finds Morse code in the full catalogue.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Tap 'Add language', type 'morse' into the search box, capture the filtered result row."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Deep link lands on the Languages list screen; 'Add language' itself needs a manual tap since add_language isn't in the deep-link allowlist.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/notation-add-language-search.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/list-overview",
     "page": "docs/src/content/docs/languages/overview.mdx",
-    "file": "src/assets/screens/languages/list-overview.webp",
+    "file": "src/assets/screens/languages/list-overview.light.webp",
     "caption": "The Languages screen: your enabled languages, plus Add language to search the full catalogue.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Top of the Languages screen: 'Your languages' group (English/QWERTY + the three Bangla layouts enabled by default) ending in the 'Add language' row. No scrolling needed.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/list-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/add-language-search",
     "page": "docs/src/content/docs/languages/overview.mdx",
-    "file": "src/assets/screens/languages/add-language-search.webp",
+    "file": "src/assets/screens/languages/add-language-search.light.webp",
     "caption": "Add language: search matches endonym, English name, id, and locale.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Tap 'Add language' at the bottom of the Your languages group"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Show a handful of matched rows with the search box populated (e.g. type 'ban' to surface Bangla/Bengali-adjacent entries), including at least one row marked 'Added' to show the state distinction.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/add-language-search.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/language-detail-screen",
     "page": "docs/src/content/docs/languages/overview.mdx",
-    "file": "src/assets/screens/languages/language-detail-screen.webp",
+    "file": "src/assets/screens/languages/language-detail-screen.light.webp",
     "caption": "A language's own screen: layout toggles, numeral system, and other enabled languages to suggest from.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Tap a language with more than one layout, e.g. Bengali (Avro/Probhat/Jatiya), with at least one other language already enabled so 'Also suggest from' is visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Frame the top of the screen: Layouts group, Numerals group, and the start of Also suggest from. Do not scroll to Dictionary/Emoji \u2014 those are captured separately for dictionaries.mdx.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/language-detail-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/list-per-app-and-switcher",
     "page": "docs/src/content/docs/languages/overview.mdx",
-    "file": "src/assets/screens/languages/list-per-app-and-switcher.webp",
+    "file": "src/assets/screens/languages/list-per-app-and-switcher.light.webp",
     "caption": "Further down the Languages screen: per-app language memory and the Android system switcher toggle.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Scroll past 'Your languages' and 'Your layouts' to the 'Per-app language' and 'System language switcher' groups"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Toggle 'List languages in Android's switcher' on beforehand so the 'Show app name first' sub-toggle is also visible in frame.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/list-per-app-and-switcher.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/spacebar-resting-label",
@@ -1729,48 +1807,54 @@
   {
     "id": "languages/globe-key-toggle",
     "page": "docs/src/content/docs/languages/switching.mdx",
-    "file": "src/assets/screens/languages/globe-key-toggle.webp",
+    "file": "src/assets/screens/languages/globe-key-toggle.light.webp",
     "caption": "Layout & size \u2192 Bottom-row keys: turning off Emoji key instead of \ud83c\udf10 restores the language-switch key.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/layout",
       "Scroll to the Bottom-row keys group at the bottom of the screen."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "globeAsEmoji defaults to true, so on a fresh install this toggle is ON and the bottom row shows an emoji key rather than \ud83c\udf10 \u2014 capture the group with the toggle visible (either state is fine, but on-state matches the default and is the more useful shot).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/globe-key-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/languages-screen-order",
     "page": "docs/src/content/docs/languages/switching.mdx",
-    "file": "src/assets/screens/languages/languages-screen-order.webp",
+    "file": "src/assets/screens/languages/languages-screen-order.light.webp",
     "caption": "The Languages screen: Your languages, Add language, and Switch order.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Switch order only appears once more than one layout is enabled (true by default with 4). Capture the top of the screen showing Your languages, Add language, and the Switch order group.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/languages-screen-order.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/system-switcher-toggle",
     "page": "docs/src/content/docs/languages/switching.mdx",
-    "file": "src/assets/screens/languages/system-switcher-toggle.webp",
+    "file": "src/assets/screens/languages/system-switcher-toggle.light.webp",
     "caption": "Languages \u2192 System language switcher: register every enabled layout as an Android input-method subtype.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Scroll to the System language switcher group near the bottom of the screen."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "osLanguageSwitcher defaults to true, so 'List languages in Android's switcher' is on and the 'Show app name first' sub-toggle (default off) should be visible beneath it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/system-switcher-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/backup-restore-screen",
     "page": "docs/src/content/docs/privacy/backup.mdx",
-    "file": "src/assets/screens/privacy/backup-restore-screen.webp",
+    "file": "src/assets/screens/privacy/backup-restore-screen.light.webp",
     "caption": "Backup & restore: pick what to include, then export or import a file.",
     "host": "settings",
     "setup": [
@@ -1779,12 +1863,14 @@
     ],
     "status": "done",
     "notes": "Screen is BackupSettings composable, MainActivity.kt:4589. Show the 'Include in export' toggle group; scroll position should include at least the top few rows (Settings, Include API keys hidden since Settings default is on but API keys default off, Themes) so the visible defaults are checkable against the docs table.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/backup-restore-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/backup-import-confirm",
     "page": "docs/src/content/docs/privacy/backup.mdx",
-    "file": "src/assets/screens/privacy/backup-import-confirm.webp",
+    "file": "src/assets/screens/privacy/backup-import-confirm.light.webp",
     "caption": "The import confirmation, listing what a backup file contains before anything is applied.",
     "host": "settings",
     "setup": [
@@ -1793,12 +1879,14 @@
     ],
     "status": "done",
     "notes": "Use a test file that does NOT include secrets, so the screenshot shows the plain merge/replace sentence without the extra API-key warning paragraph \u2014 keeps the caption's claim clean. A separate capture with a secrets-containing file could be added later if the reviewer wants that state shown too, but it's not required by this page.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/backup-import-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/on-device-learning-toggles",
     "page": "docs/src/content/docs/privacy/data.mdx",
-    "file": "src/assets/screens/privacy/on-device-learning-toggles.webp",
+    "file": "src/assets/screens/privacy/on-device-learning-toggles.light.webp",
     "caption": "The Privacy screen: on-device learning toggles above, the Clear learned words button below.",
     "host": "settings",
     "setup": [
@@ -1808,12 +1896,14 @@
     ],
     "status": "done",
     "notes": "The privacy route is NOT in the deep-link allowlist (only typing/appearance/themes/languages/tools/search are) -- reach it by tapping through the settings home screen's Data group rather than a wmkeyboard://settings/privacy deep link.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/on-device-learning-toggles.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/clear-learned-words-button",
     "page": "docs/src/content/docs/privacy/data.mdx",
-    "file": "src/assets/screens/privacy/clear-learned-words-button.webp",
+    "file": "src/assets/screens/privacy/clear-learned-words-button.light.webp",
     "caption": "Clear learned words, under Privacy \u2192 Your data.",
     "host": "settings",
     "setup": [
@@ -1823,7 +1913,9 @@
     ],
     "status": "done",
     "notes": "Shows the Your data group's single Clear learned words button. There is no confirmation dialog on tap (verified in MainActivity.kt) -- do not tap it during capture unless intentionally showing the post-clear state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/clear-learned-words-button.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/incognito-toolbar-badge",
@@ -1874,7 +1966,7 @@
   {
     "id": "privacy/clipboard-settings-passwords",
     "page": "docs/src/content/docs/privacy/incognito.mdx",
-    "file": "src/assets/screens/privacy/clipboard-settings-passwords.webp",
+    "file": "src/assets/screens/privacy/clipboard-settings-passwords.light.webp",
     "caption": "Passwords & codes: sensitive-clip handling and the paste-time purge, both on by default.",
     "host": "settings",
     "setup": [
@@ -1884,7 +1976,9 @@
     ],
     "status": "done",
     "notes": "'tools' is on the wmkeyboard:// deep-link allowlist (SettingsShortcuts.kt:38); the Clipboard sub-screen itself is reached by tap from there, not by its own deep link.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/clipboard-settings-passwords.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/long-press-popup",
@@ -1959,7 +2053,7 @@
   {
     "id": "typing/keypress-settings-overview",
     "page": "docs/src/content/docs/typing/feedback.mdx",
-    "file": "src/assets/screens/typing/keypress-settings-overview.webp",
+    "file": "src/assets/screens/typing/keypress-settings-overview.light.webp",
     "caption": "The Key press screen: haptic style chips above the key press sound group.",
     "host": "settings",
     "setup": [
@@ -1967,12 +2061,14 @@
     ],
     "status": "done",
     "notes": "Top of the Key press screen, showing the Haptic feedback group's master toggle and style chips scrolled into view.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/keypress-settings-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/haptic-style-custom-sliders",
     "page": "docs/src/content/docs/typing/feedback.mdx",
-    "file": "src/assets/screens/typing/haptic-style-custom-sliders.webp",
+    "file": "src/assets/screens/typing/haptic-style-custom-sliders.light.webp",
     "caption": "Haptic style chips, with the strength and intensity sliders shown for Custom.",
     "host": "settings",
     "setup": [
@@ -1981,12 +2077,14 @@
     ],
     "status": "done",
     "notes": "Needs Custom selected as the active haptic style before the screenshot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/haptic-style-custom-sliders.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/keysound-style-chips",
     "page": "docs/src/content/docs/typing/feedback.mdx",
-    "file": "src/assets/screens/typing/keysound-style-chips.webp",
+    "file": "src/assets/screens/typing/keysound-style-chips.light.webp",
     "caption": "Sound style chips with the volume slider below.",
     "host": "settings",
     "setup": [
@@ -1995,7 +2093,9 @@
     ],
     "status": "done",
     "notes": "Show the six style chips (Click/Standard/Pop/Thock/Chime/Custom) and the Sound volume slider together.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/keysound-style-chips.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/sound-haptics-toolbar-panel",
@@ -2141,7 +2241,7 @@
   {
     "id": "typing/glide-settings-gestures",
     "page": "docs/src/content/docs/typing/glide-typing.mdx",
-    "file": "src/assets/screens/typing/glide-settings-gestures.webp",
+    "file": "src/assets/screens/typing/glide-settings-gestures.light.webp",
     "caption": "The Gestures group on the Typing settings screen.",
     "host": "settings",
     "setup": [
@@ -2152,7 +2252,9 @@
     ],
     "status": "done",
     "notes": "typing is an allowlisted deep-link route. Frame the Gesture typing toggle plus the three trail sliders; scroll position needs a manual swipe since the group sits partway down the screen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/glide-settings-gestures.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/hardware-typing-live",
@@ -2187,7 +2289,7 @@
   {
     "id": "typing/hardware-shortcuts-list",
     "page": "docs/src/content/docs/typing/hardware-keyboard.mdx",
-    "file": "src/assets/screens/typing/hardware-shortcuts-list.webp",
+    "file": "src/assets/screens/typing/hardware-shortcuts-list.light.webp",
     "caption": "The Tool shortcuts list screen: every tool with the letter that opens it.",
     "host": "settings",
     "setup": [
@@ -2196,7 +2298,9 @@
     ],
     "status": "done",
     "notes": "Route 'hwshortcuts' is not in the deep-link allowlist (only typing/appearance/themes/languages/tools/search are) \u2014 must navigate via a tap from the Typing screen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/hardware-shortcuts-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/hardware-focus-ring",
@@ -2288,7 +2392,7 @@
   {
     "id": "typing/power-saving-settings-triggers",
     "page": "docs/src/content/docs/typing/power-saving.mdx",
-    "file": "src/assets/screens/typing/power-saving-settings-triggers.webp",
+    "file": "src/assets/screens/typing/power-saving-settings-triggers.light.webp",
     "caption": "The Power saving group: the switch, the automatic trigger picker, and the battery slider.",
     "host": "settings",
     "setup": [
@@ -2298,12 +2402,14 @@
     ],
     "status": "done",
     "notes": "Set Switch on by itself to 'Battery is low' or 'Battery saver or low battery' before capturing so the Low battery is slider and Off while charging toggle are both visible (they're conditionally shown).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/power-saving-settings-triggers.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/power-saving-what-to-drop",
     "page": "docs/src/content/docs/typing/power-saving.mdx",
-    "file": "src/assets/screens/typing/power-saving-what-to-drop.webp",
+    "file": "src/assets/screens/typing/power-saving-what-to-drop.light.webp",
     "caption": "The What to drop group \u2014 eleven independent switches.",
     "host": "settings",
     "setup": [
@@ -2313,12 +2419,14 @@
     ],
     "status": "done",
     "notes": "The full group is 11 toggles and likely needs two frames or a tall crop to show entirely; a single screenshot showing the group header plus the first several rows is acceptable.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/power-saving-what-to-drop.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-settings-overview",
     "page": "docs/src/content/docs/typing/size-position.mdx",
-    "file": "src/assets/screens/typing/size-position-settings-overview.webp",
+    "file": "src/assets/screens/typing/size-position-settings-overview.light.webp",
     "caption": "The Size & position group: key height, key spacing, width and position sliders.",
     "host": "settings",
     "setup": [
@@ -2327,21 +2435,25 @@
     ],
     "status": "done",
     "notes": "LayoutSettings() composable at MainActivity.kt:3429; this group starts at line 3501.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/size-position-settings-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-per-screen",
     "page": "docs/src/content/docs/typing/size-position.mdx",
-    "file": "src/assets/screens/typing/size-position-per-screen.webp",
+    "file": "src/assets/screens/typing/size-position-per-screen.light.webp",
     "caption": "Per-screen sizing: Landscape expanded, showing the Keyboard scale slider.",
     "host": "settings",
     "setup": [
       "Home \u2192 Keyboard group \u2192 Layout & size",
       "Scroll to 'Per-screen sizing' and tap the 'Landscape' row to expand its editor (Keyboard scale, Key height, Bottom padding, Keyboard width, Font size sliders)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Group at MainActivity.kt:3590-3695; expanded editor renders under whichever ScreenVariant row is tapped.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/size-position-per-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/size-position-one-handed",
@@ -2450,7 +2562,7 @@
   {
     "id": "smart/autocorrect-options",
     "page": "docs/src/content/docs/smart/autocorrect.mdx",
-    "file": "src/assets/screens/smart/autocorrect-options.webp",
+    "file": "src/assets/screens/smart/autocorrect-options.light.webp",
     "caption": "The Automatic corrections group in Typing settings, including the confidence slider.",
     "host": "settings",
     "setup": [
@@ -2459,7 +2571,9 @@
     ],
     "status": "done",
     "notes": "Only shows the slider and dependent toggles while the master Autocorrect toggle is on (default state), which is the state to capture.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/autocorrect-options.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/autofill-chips-strip",
@@ -2494,7 +2608,7 @@
   {
     "id": "smart/blacklist-editor",
     "page": "docs/src/content/docs/smart/blacklist.mdx",
-    "file": "src/assets/screens/smart/blacklist-editor.webp",
+    "file": "src/assets/screens/smart/blacklist-editor.light.webp",
     "caption": "The suggestion blacklist editor, reached from Typing settings.",
     "host": "settings",
     "setup": [
@@ -2504,7 +2618,9 @@
     ],
     "status": "done",
     "notes": "Shows the sorted word list with trailing delete icons per row. Route 'blacklist' is not itself deep-link allowlisted, only 'typing' is, so navigate via the Typing screen and tap through.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/blacklist-editor.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/blacklist-add-dialog",
@@ -2597,7 +2713,7 @@
   {
     "id": "smart/options",
     "page": "docs/src/content/docs/smart/chips.mdx",
-    "file": "src/assets/screens/smart/options.webp",
+    "file": "src/assets/screens/smart/options.light.webp",
     "caption": "Smart chips settings under Typing: master switch and the four per-family toggles.",
     "host": "settings",
     "setup": [
@@ -2606,7 +2722,9 @@
     ],
     "status": "done",
     "notes": "Typing is deep-link allowlisted per MainActivity.kt/SettingsSearch.kt. All five toggles default true.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/options.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/contact-name-suggestion",
@@ -2685,7 +2803,7 @@
   {
     "id": "smart/grammar-settings",
     "page": "docs/src/content/docs/smart/grammar.mdx",
-    "file": "src/assets/screens/smart/grammar-settings.webp",
+    "file": "src/assets/screens/smart/grammar-settings.light.webp",
     "caption": "The Grammar check settings screen: dialect, re-check delay, and the system-wide group.",
     "host": "settings",
     "setup": [
@@ -2695,12 +2813,14 @@
     ],
     "status": "done",
     "notes": "Same screen is also referenced by smart/spell-checker.mdx's own settings shot (smart/spell-checker-options) which crops to just the System-wide group \u2014 this one should show the whole screen including the Options group above it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/grammar-settings.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/personal-dictionary-list",
     "page": "docs/src/content/docs/smart/personal-dictionary.mdx",
-    "file": "src/assets/screens/smart/personal-dictionary-list.webp",
+    "file": "src/assets/screens/smart/personal-dictionary-list.light.webp",
     "caption": "The Personal dictionary screen: learned and manually-added words, most-used first.",
     "host": "settings",
     "setup": [
@@ -2709,7 +2829,9 @@
     ],
     "status": "done",
     "notes": "Route 'dictionary' is not in the deep-link allowlist (only typing/appearance/themes/languages/tools/search are), so the deep link lands on Typing and needs one tap into Personal dictionary. Pre-seed a few words before shooting so both an 'Added by you' row (weight >= 200) and a 'Seen N\u00d7' row are visible in the same frame -- either type a word 200+ times via automation, or manually add one (Add word) and let a couple others accumulate a lower count from normal typing.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/personal-dictionary-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/personal-dictionary-add",
@@ -2729,30 +2851,34 @@
   {
     "id": "smart/personal-dictionary-clear",
     "page": "docs/src/content/docs/smart/personal-dictionary.mdx",
-    "file": "src/assets/screens/smart/personal-dictionary-clear.webp",
+    "file": "src/assets/screens/smart/personal-dictionary-clear.light.webp",
     "caption": "The 'Your data' group on the Privacy screen, with the one-tap clear button.",
     "host": "settings",
     "setup": [
       "Privacy is not deep-link allowlisted -- open Settings home and tap 'Privacy'",
       "Scroll to the bottom 'Your data' group so the 'Clear learned words' button is in frame"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Do not actually tap Clear learned words during capture unless the shot specifically needs the confirmation state -- there is no confirmation dialog, it deletes immediately.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/personal-dictionary-clear.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/personal-dictionary-backup-toggle",
     "page": "docs/src/content/docs/smart/personal-dictionary.mdx",
-    "file": "src/assets/screens/smart/personal-dictionary-backup-toggle.webp",
+    "file": "src/assets/screens/smart/personal-dictionary-backup-toggle.light.webp",
     "caption": "The Dictionary section of a manual export, off by default.",
     "host": "settings",
     "setup": [
       "Backup & restore is not deep-link allowlisted -- open Settings home and tap 'Backup & restore'",
       "Scroll to the 'Include in export' group so the 'Dictionary' toggle (off) is in frame"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Shoot with the toggle in its default off state to match the caption; no need to actually export.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/personal-dictionary-backup-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/spell-checker-underline",
@@ -2787,7 +2913,7 @@
   {
     "id": "smart/spell-checker-options",
     "page": "docs/src/content/docs/smart/spell-checker.mdx",
-    "file": "src/assets/screens/smart/spell-checker-options.webp",
+    "file": "src/assets/screens/smart/spell-checker-options.light.webp",
     "caption": "The System-wide group on the Grammar check screen: Use Harper everywhere, and Underline only for Android 12 and up.",
     "host": "settings",
     "setup": [
@@ -2797,7 +2923,9 @@
     ],
     "status": "done",
     "notes": "System-wide group only renders when BuildConfig.ENABLE_GRAMMAR is true (full flavor) -- capture on a full build. The 'Underline only, no fix popup' row only renders on API 31+, so capture on an Android 12+ image to show both rows together.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/spell-checker-options.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/suggestion-strip-anatomy",
@@ -2876,7 +3004,7 @@
   {
     "id": "smart/suggestions-settings-group",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/suggestions-settings-group.webp",
+    "file": "src/assets/screens/smart/suggestions-settings-group.light.webp",
     "caption": "The Suggestions group on the Typing settings screen.",
     "host": "settings",
     "setup": [
@@ -2885,12 +3013,14 @@
     ],
     "status": "done",
     "notes": "Crop/scroll to the Suggestions group specifically, not the whole Typing screen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/suggestions-settings-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/instruments-settings-utilities-group",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/instruments-settings-utilities-group.webp",
+    "file": "src/assets/screens/tools/instruments-settings-utilities-group.light.webp",
     "caption": "The Utilities group under Settings \u2192 Tools: Flashlight, Compass, Bubble level, Calendar, Weather and Moon phase.",
     "host": "settings",
     "setup": [
@@ -2899,7 +3029,9 @@
     ],
     "status": "done",
     "notes": "This is a Settings-app screenshot, not the live keyboard toolbox \u2014 the toolbox grid itself has no 'Utilities' label (verified: the string only appears in app/.../MainActivity.kt, never in feature/ime/).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/instruments-settings-utilities-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/flashlight-toggled-on",
@@ -2976,7 +3108,7 @@
   {
     "id": "tools/weather-options-location",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/weather-options-location.webp",
+    "file": "src/assets/screens/tools/weather-options-location.light.webp",
     "caption": "Weather's settings: a location search or coordinate entry, and the Fahrenheit toggle.",
     "host": "settings",
     "setup": [
@@ -2985,7 +3117,9 @@
     ],
     "status": "done",
     "notes": "Optionally capture the location-edit dialog open (tap the Location row) rather than just the summary row, to show the search field.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/weather-options-location.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/avro-lenient-spelling",
@@ -3021,7 +3155,7 @@
   {
     "id": "languages/bengali-language-screen",
     "page": "docs/src/content/docs/languages/bengali.mdx",
-    "file": "src/assets/screens/languages/bengali-language-screen.webp",
+    "file": "src/assets/screens/languages/bengali-language-screen.light.webp",
     "caption": "Bengali's language screen: layout toggles, numeral system, and dictionary/emoji status.",
     "host": "settings",
     "setup": [
@@ -3029,14 +3163,16 @@
       "Tap the \"\u09ac\u09be\u0982\u09b2\u09be \u00b7 Bangla\" row under Your languages to open its detail screen.",
       "Screenshot showing the Layouts group (Avro/Probhat/Jatiya toggles), scrolled to also include Numerals if possible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "\"language/bn\" is not on the deep-link allowlist (only typing, appearance, themes, languages, tools, search are) \u2014 must tap through manually from the Languages screen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/bengali-language-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/conjunct-backspace-toggle",
     "page": "docs/src/content/docs/languages/bengali.mdx",
-    "file": "src/assets/screens/languages/conjunct-backspace-toggle.webp",
+    "file": "src/assets/screens/languages/conjunct-backspace-toggle.light.webp",
     "caption": "Conjunct-aware backspace, under Languages \u2192 Complex scripts. Off by default.",
     "host": "settings",
     "setup": [
@@ -3044,9 +3180,11 @@
       "Scroll to the bottom of the Languages screen to the \"Complex scripts\" group.",
       "Screenshot the \"Conjunct-aware backspace\" toggle in its default (off) state."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This group only renders when a conjunct-forming (INDIC_CLUSTER) script is enabled; Bengali's default-enabled layouts satisfy that.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/conjunct-backspace-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/spacebar-cursor-swipe",
@@ -3214,7 +3352,7 @@
   {
     "id": "privacy/tools-enabled-switches",
     "page": "docs/src/content/docs/privacy/network.mdx",
-    "file": "src/assets/screens/privacy/tools-enabled-switches.webp",
+    "file": "src/assets/screens/privacy/tools-enabled-switches.light.webp",
     "caption": "The Tools screen: every tool has its own Enabled switch, on by default.",
     "host": "settings",
     "setup": [
@@ -3222,12 +3360,14 @@
     ],
     "status": "done",
     "notes": "Top-level Tools settings screen (ToolsSettings composable, MainActivity.kt ~line 5873) listing every ToolbarTool with its Enabled switch; enabledTools defaults to every tool. 'tools' is in the SettingsShortcuts deep-link allowlist, so the single adb command lands directly on this screen.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/tools-enabled-switches.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/ai-ollama-plain-http",
     "page": "docs/src/content/docs/privacy/network.mdx",
-    "file": "src/assets/screens/privacy/ai-ollama-plain-http.webp",
+    "file": "src/assets/screens/privacy/ai-ollama-plain-http.light.webp",
     "caption": "AI tool settings: a self-hosted Ollama or LM Studio server address, with the plain-HTTP disclosure below it.",
     "host": "settings",
     "setup": [
@@ -3237,12 +3377,14 @@
     ],
     "status": "done",
     "notes": "The per-tool AI screen (route 'tool/AI') is not in the deep-link allowlist (only typing/appearance/themes/languages/tools/search are), so this needs a tap after landing on Tools \u2014 no direct wmkeyboard:// URI. This id is distinct from tools/ai.mdx's own registered shots (ai-panel-idle, ai-need-setup, ai-result-ready, ai-settings-providers, ai-settings-local-catalog) \u2014 none of those already cover the Ollama/LM Studio plain-HTTP note specifically, so this is not a duplicate, but double-check at capture time in case that page's manifest grew one since.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/ai-ollama-plain-http.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/privacy-screen-groups",
     "page": "docs/src/content/docs/privacy/overview.mdx",
-    "file": "src/assets/screens/privacy/privacy-screen-groups.webp",
+    "file": "src/assets/screens/privacy/privacy-screen-groups.light.webp",
     "caption": "The Privacy screen: On-device learning, Android backup, and Your data groups.",
     "host": "settings",
     "setup": [
@@ -3250,12 +3392,14 @@
     ],
     "status": "done",
     "notes": "Full-screen shot of the Privacy settings screen showing all three SettingsGroup headers (On-device learning, Android backup, Your data) \u2014 scroll to capture all three if they don't fit in one viewport, or take the top of the screen where On-device learning starts.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/privacy-screen-groups.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/smart-chips-currency-toggle",
     "page": "docs/src/content/docs/privacy/overview.mdx",
-    "file": "src/assets/screens/privacy/smart-chips-currency-toggle.webp",
+    "file": "src/assets/screens/privacy/smart-chips-currency-toggle.light.webp",
     "caption": "Convert currencies, on by default under Smart chips \u2014 the one smart chip that reaches the network.",
     "host": "settings",
     "setup": [
@@ -3264,12 +3408,14 @@
     ],
     "status": "done",
     "notes": "Not in the deep-link allowlist beyond 'typing' itself (which is allowlisted); the Smart chips group is partway down that screen so a scroll is needed after the deep link lands.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/smart-chips-currency-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "development/diagnostics-screen",
     "page": "docs/src/content/docs/development/testing.mdx",
-    "file": "src/assets/screens/development/diagnostics-screen.webp",
+    "file": "src/assets/screens/development/diagnostics-screen.light.webp",
     "caption": "Settings \u2192 About \u2192 Diagnostics: filterable app log, crash records, and a one-tap report export.",
     "host": "settings",
     "setup": [
@@ -3277,14 +3423,16 @@
       "Type a few characters into any field first, or trigger a tool error, so the App log group isn't empty for the shot.",
       "Leave 'Include the system log' toggled off (its real default) unless specifically demonstrating that toggle."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Backed by core/common/.../debug/DebugLog.kt (CAPACITY=500 ring buffer, CRASH_CAPACITY=10) and app/.../DebugLogScreen.kt. Route is composable(\"debug_log\") off MainActivity.kt's about screen, not itself deep-link allowlisted. Also relevant to reference/settings/about.mdx (different page, different agent) \u2014 this entry is independent, capture once and it can serve either page if convenient, but each page's manifest is authoritative for its own placeholder id.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/development/diagnostics-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings-deep-link-destination",
     "page": "docs/src/content/docs/reference/deep-links.mdx",
-    "file": "src/assets/screens/reference/settings-deep-link-destination.webp",
+    "file": "src/assets/screens/reference/settings-deep-link-destination.light.webp",
     "caption": "A settings screen reached from a launcher shortcut \u2014 this one opened straight to Themes.",
     "host": "settings",
     "setup": [
@@ -3292,7 +3440,9 @@
     ],
     "status": "done",
     "notes": "Settings deep links are not BROWSABLE, so this must be an explicit intent naming MainActivity directly (works even without an intent-filter match, since the component is named). Shows the Themes settings screen as the destination.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings-deep-link-destination.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/addon-link-prefilled-repo",
@@ -3311,7 +3461,7 @@
   {
     "id": "reference/file-import-dialog",
     "page": "docs/src/content/docs/reference/deep-links.mdx",
-    "file": "src/assets/screens/reference/file-import-dialog.webp",
+    "file": "src/assets/screens/reference/file-import-dialog.light.webp",
     "caption": "The one-time confirm dialog shown before any file import goes through.",
     "host": "settings",
     "setup": [
@@ -3319,14 +3469,16 @@
       "Open a file manager app, navigate to Downloads, and tap the file \u2014 this launches ImportFileActivity's confirm dialog (a separate activity, not reachable via a settings deep link).",
       "Capture the dialog before tapping Import."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Any recognized extension works for a generic 'here's the dialog' shot; a theme import (title 'Import <name>?') is a reasonable representative choice since its wording is short.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/file-import-dialog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/plugin-import-gate",
     "page": "docs/src/content/docs/reference/deep-links.mdx",
-    "file": "src/assets/screens/reference/plugin-import-gate.webp",
+    "file": "src/assets/screens/reference/plugin-import-gate.light.webp",
     "caption": "Opening a plugin file while the Plugins subsystem is off \u2014 nothing installs or runs.",
     "host": "settings",
     "setup": [
@@ -3334,14 +3486,16 @@
       "Push a sample .wmplugin file to Downloads via adb push, open it from a file manager the same way as the file-import-dialog entry.",
       "Capture the 'Plugins are turned off' dialog."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Distinct from the generic file-import-dialog shot: this specific dialog never shows the plugin's name, only the 'turn plugins on in Settings > Tools > Plugins first' message. Requires the subsystem toggle to be off, which is the default state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/plugin-import-gate.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/import-file-confirm-dialog",
     "page": "docs/src/content/docs/reference/file-formats.mdx",
-    "file": "src/assets/screens/reference/import-file-confirm-dialog.webp",
+    "file": "src/assets/screens/reference/import-file-confirm-dialog.light.webp",
     "caption": "Opening a WM Keyboard file from a file manager: one confirm dialog, then the import.",
     "host": "settings",
     "setup": [
@@ -3349,9 +3503,11 @@
       "adb shell am start -a android.intent.action.VIEW -d file:///sdcard/Download/sample.wmtheme.json -t application/json -n com.wasimaster.wmkeyboard/.app.ImportFileActivity",
       "If the VIEW intent doesn't route correctly from adb (content:// URIs from a real file manager work more reliably than file:// from adb), instead open a file manager app on-device, navigate to the pushed file, and tap it \u2014 WM Keyboard's file association (AndroidManifest.xml intent-filter, pathPattern match on the compound extension) opens ImportFileActivity directly."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is ImportFileActivity's ImportFileDialog composable (app/src/main/java/com/wasimaster/wmkeyboard/app/FileImport.kt), a single AlertDialog over whatever was on screen \u2014 not a NavHost settings screen and not a DocsShotActivity harness mode, so host is approximated as 'settings' for lack of a better bucket; treat the setup steps as authoritative. Title/body come from WMFileTypes.identify()'s result (e.g. 'Import theme \"<name>\"?' for a theme). Using a .wmlayout.json with a deliberate minor error would additionally show the 'Changed on the way in' repairs list, which is a more interesting shot if the capture agent wants to show that branch instead.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/import-file-confirm-dialog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/shortcuts-cheat-sheet",
@@ -3373,7 +3529,7 @@
   {
     "id": "reference/troubleshooting-empty-dictionary-state",
     "page": "docs/src/content/docs/reference/troubleshooting.mdx",
-    "file": "src/assets/screens/reference/troubleshooting-empty-dictionary-state.webp",
+    "file": "src/assets/screens/reference/troubleshooting-empty-dictionary-state.light.webp",
     "caption": "A language with no built-in or downloaded dictionary yet \u2014 suggestions come only from what you've typed.",
     "host": "settings",
     "setup": [
@@ -3381,9 +3537,11 @@
       "Tap a language that has neither a built-in dictionary nor a downloaded one yet (e.g. French or German \u2014 see languages/dictionaries.mdx for which ship built-in) to open its language detail screen",
       "Scroll to the Dictionary section and capture the 'nothing available yet, download one or import your own' state"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Reuses the same UI as languages/dictionaries.mdx's own dictionary-download-row shot but should show the empty/no-dictionary state specifically, since that's the troubleshooting angle (not the tier picker or an in-progress download).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/troubleshooting-empty-dictionary-state.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/troubleshooting-panel-captures-input",
@@ -3403,21 +3561,23 @@
   {
     "id": "reference/troubleshooting-diagnostics-screen",
     "page": "docs/src/content/docs/reference/troubleshooting.mdx",
-    "file": "src/assets/screens/reference/troubleshooting-diagnostics-screen.webp",
+    "file": "src/assets/screens/reference/troubleshooting-diagnostics-screen.light.webp",
     "caption": "The Diagnostics screen: report actions at the top, the filterable app log below.",
     "host": "settings",
     "setup": [
       "Diagnostics is NOT in the wmkeyboard://settings/ deep-link allowlist (only typing, appearance, themes, languages, tools, search) \u2014 navigate by hand instead: open the app, go to About, tap Diagnostics",
       "Capture with the Report group (Share diagnostics / Copy to clipboard / Include the system log) visible plus at least a few App log entries below; the Crashes section only appears if a crash exists so it's fine if it's absent"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route is debug_log (SettingsScreen(\"Diagnostics\", ...) in MainActivity.kt:728-732), reached only via About, confirmed not on the deep-link allowlist in reference/deep-links.mdx.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/troubleshooting-diagnostics-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/gestures-typing-screen",
     "page": "docs/src/content/docs/reference/gestures.mdx",
-    "file": "src/assets/screens/reference/gestures-typing-screen.webp",
+    "file": "src/assets/screens/reference/gestures-typing-screen.light.webp",
     "caption": "The Gestures group on the Typing settings screen \u2014 home to most of the spacebar and backspace gestures below.",
     "host": "settings",
     "setup": [
@@ -3426,12 +3586,14 @@
     ],
     "status": "done",
     "notes": "Reconstructed manually \u2014 the writer agent's structured-output call dropped due to a connection error after the file edit itself succeeded.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/gestures-typing-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/home-screen",
     "page": "docs/src/content/docs/reference/settings/index.mdx",
-    "file": "src/assets/screens/reference/settings/home-screen.webp",
+    "file": "src/assets/screens/reference/settings/home-screen.light.webp",
     "caption": "The Home screen: Typing, Keyboard, Features, Accessibility, Data and About, each its own card.",
     "host": "settings",
     "setup": [
@@ -3440,12 +3602,14 @@
     ],
     "status": "done",
     "notes": "Scroll position should show at least the Typing and Keyboard groups; the setup card at top will read 'WM Keyboard is your active keyboard' if the harness device already has it enabled \u2014 that's the desired state for a clean shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/home-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/search-results",
     "page": "docs/src/content/docs/reference/settings/index.mdx",
-    "file": "src/assets/screens/reference/settings/search-results.webp",
+    "file": "src/assets/screens/reference/settings/search-results.light.webp",
     "caption": "Typing a query in Settings search \u2014 each result carries a breadcrumb to the screen it lives on.",
     "host": "settings",
     "setup": [
@@ -3454,12 +3618,14 @@
     ],
     "status": "done",
     "notes": "Pick a query that returns 3-6 results so the breadcrumb text is legible at phone-frame scale; avoid a query with only one hit.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/search-results.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/about-screen",
     "page": "docs/src/content/docs/reference/settings/about.mdx",
-    "file": "src/assets/screens/reference/settings/about-screen.webp",
+    "file": "src/assets/screens/reference/settings/about-screen.light.webp",
     "caption": "The About screen: Share, App, Documentation, Third party, and Word lists groups.",
     "host": "settings",
     "setup": [
@@ -3467,28 +3633,32 @@
       "'about' is not in the wmkeyboard://settings/<route> deep-link allowlist (only typing, appearance, themes, languages, tools, search are) \u2014 tap the 'About' row inside the standalone 'About' group near the bottom of the home screen instead",
       "capture the resulting About screen, scrolled to show at least the Share and App groups"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Home screen has a dedicated SettingsGroup(\"About\") with a single HomeItem that navigates to route \"about\" (MainActivity.kt ~line 872). Full scroll shows five groups: Share, App, Documentation, Third party, Word lists.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/about-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/licenses-screen",
     "page": "docs/src/content/docs/reference/settings/about.mdx",
-    "file": "src/assets/screens/reference/settings/licenses-screen.webp",
+    "file": "src/assets/screens/reference/settings/licenses-screen.light.webp",
     "caption": "The open-source licences list, grouped by bundled components, downloadable data packs, and online services.",
     "host": "settings",
     "setup": [
       "From the About screen (see about-screen entry), tap 'Open-source licences' under the 'Third party' group",
       "capture the top of the list showing the 'Bundled in the app' group header and its first several rows"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "A full-flavor build shows 19 bundled entries (12 always-present + 7 gated behind ENABLE_GRAMMAR/ENABLE_ML_KIT_*/ENABLE_LOCAL_LLM/ENABLE_WHISPER in app/build.gradle.kts); lite shows 12. Capture from a full build so all three groups (bundled/data packs/services) and the flavor-gated rows are visible if scrolled.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/licenses-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/diagnostics-screen",
     "page": "docs/src/content/docs/reference/settings/about.mdx",
-    "file": "src/assets/screens/reference/settings/diagnostics-screen.webp",
+    "file": "src/assets/screens/reference/settings/diagnostics-screen.light.webp",
     "caption": "Diagnostics: report actions, the app log with its filter and level chips, and Clear app log at the bottom.",
     "host": "settings",
     "setup": [
@@ -3496,14 +3666,16 @@
       "reproduce at least one logged event beforehand (open any panel) so the App log list isn't empty for the shot",
       "capture the top of the Diagnostics screen: Report group (Share diagnostics / Copy to clipboard / Include the system log toggle) through the App log filter and level chips"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route is \"debug_log\", also not deep-link allowlisted. Crashes group only renders if core/common's DebugLog crash file is non-empty \u2014 leave it out of frame unless deliberately capturing that state, in which case use a separate entry.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/diagnostics-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/accessibility-vision-group",
     "page": "docs/src/content/docs/reference/settings/accessibility.mdx",
-    "file": "src/assets/screens/reference/settings/accessibility-vision-group.webp",
+    "file": "src/assets/screens/reference/settings/accessibility-vision-group.light.webp",
     "caption": "The Vision group at the top of the Accessibility screen.",
     "host": "settings",
     "setup": [
@@ -3512,26 +3684,30 @@
     ],
     "status": "done",
     "notes": "Same screenshot subject as accessibility/vision-group registered by the finished /accessibility/overview/ guide page, but a distinct asset id/path under reference/settings/ per the manifest namespace rule \u2014 capture agent may reuse a single capture for both ids if convenient, but register/file both separately.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/accessibility-vision-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/accessibility-color-vision-picker",
     "page": "docs/src/content/docs/reference/settings/accessibility.mdx",
-    "file": "src/assets/screens/reference/settings/accessibility-color-vision-picker.webp",
+    "file": "src/assets/screens/reference/settings/accessibility-color-vision-picker.light.webp",
     "caption": "Colour vision set to Deutan, with the five filter options shown in the picker.",
     "host": "settings",
     "setup": [
       "Navigate to the Accessibility screen (no direct deep link; via Settings home > Accessibility)",
       "Tap the Colour vision row to open its choice picker and select Deutan"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Picker options in order: Off, Deutan, Protan, Tritan, Grey (on-screen label is 'Grey', not 'Grayscale').",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/accessibility-color-vision-picker.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/accessibility-screen-reader-group",
     "page": "docs/src/content/docs/reference/settings/accessibility.mdx",
-    "file": "src/assets/screens/reference/settings/accessibility-screen-reader-group.webp",
+    "file": "src/assets/screens/reference/settings/accessibility-screen-reader-group.light.webp",
     "caption": "TalkBack support set to Gestures, with the Keyboard gestures service row asking to be granted.",
     "host": "settings",
     "setup": [
@@ -3539,41 +3715,47 @@
       "Set TalkBack support to Gestures so the conditional Keyboard gestures service row appears",
       "Capture before granting the 'WM Keyboard gestures' accessibility service so the row reads 'Keyboard gestures service required'"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Same subject as accessibility/gestures-service-required from the finished guide page; distinct id/path per this page's manifest namespace.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/accessibility-screen-reader-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/accessibility-touch-group",
     "page": "docs/src/content/docs/reference/settings/accessibility.mdx",
-    "file": "src/assets/screens/reference/settings/accessibility-touch-group.webp",
+    "file": "src/assets/screens/reference/settings/accessibility-touch-group.light.webp",
     "caption": "The Touch group: ignore repeated presses and long-press delay.",
     "host": "settings",
     "setup": [
       "Navigate to the Accessibility screen (via Settings home > Accessibility)",
       "Scroll to the bottom Touch group and screenshot Ignore repeated presses, Long-press delay, Key size & spacing, and Haptics & sound rows"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Same subject as accessibility/touch-group from the finished guide page; distinct id/path per this page's manifest namespace.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/accessibility-touch-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/addons-home",
     "page": "docs/src/content/docs/reference/settings/addons.mdx",
-    "file": "src/assets/screens/reference/settings/addons-home.webp",
+    "file": "src/assets/screens/reference/settings/addons-home.light.webp",
     "caption": "The Addons screen: repositories you've added, plus everything installed from them.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d \"wmkeyboard://addons\"  # this is AddonDeepLink's own scheme, not the wmkeyboard://settings/<route> shortcut allowlist (which does NOT include \"addons\")"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Best captured once the seeded sample repository (AddonStore.SEED_URL) has finished loading, so both the Repositories and Installed groups have content instead of the empty/loading state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/addons-home.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/addon-detail-page",
     "page": "docs/src/content/docs/reference/settings/addons.mdx",
-    "file": "src/assets/screens/reference/settings/addon-detail-page.webp",
+    "file": "src/assets/screens/reference/settings/addon-detail-page.light.webp",
     "caption": "An addon's detail page: previews, description, licence, and the install action.",
     "host": "settings",
     "setup": [
@@ -3581,14 +3763,16 @@
       "Tap the seeded sample repository row to open its catalogue",
       "Tap an addon card that has at least one preview screenshot in its manifest, so the PreviewGallery section renders"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No direct deep link exists to one specific addon without already knowing its repo URL and addon id (that's the wmkeyboard://addon?repo=...&id=... form, documented in reference/deep-links.mdx). Pick whichever card in the sample repo has previews.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/addon-detail-page.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/sticker-packs-list",
     "page": "docs/src/content/docs/reference/settings/addons.mdx",
-    "file": "src/assets/screens/reference/settings/sticker-packs-list.webp",
+    "file": "src/assets/screens/reference/settings/sticker-packs-list.light.webp",
     "caption": "Sticker packs: your own packs, plus New pack and Import a pack.",
     "host": "settings",
     "setup": [
@@ -3596,14 +3780,16 @@
       "Tap the search icon and search \"Sticker packs\"",
       "Tap the result (breadcrumb Tools \u203a Stickers)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route is sticker_packs, not deep-link allowlisted. Create one or two packs with a handful of stickers each before capturing so the thumbnail strips and \"N sticker(s)\" subtitles are visible rather than an empty list.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/sticker-packs-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/plugins-screen",
     "page": "docs/src/content/docs/reference/settings/addons.mdx",
-    "file": "src/assets/screens/reference/settings/plugins-screen.webp",
+    "file": "src/assets/screens/reference/settings/plugins-screen.light.webp",
     "caption": "Plugins: the Allow plugins switch and what a plugin can and can't do.",
     "host": "settings",
     "setup": [
@@ -3611,14 +3797,16 @@
       "Tap the search icon and search \"Manage plugins\"",
       "Tap the result (breadcrumb Tools \u203a Plugins)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route is plugins, not deep-link allowlisted. The 'What a plugin can and can't do' static group shows regardless of switch state; turn Allow plugins on first if the shot should also include the Installed/Add groups.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/plugins-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/plugin-detail-screen",
     "page": "docs/src/content/docs/reference/settings/addons.mdx",
-    "file": "src/assets/screens/reference/settings/plugin-detail-screen.webp",
+    "file": "src/assets/screens/reference/settings/plugin-detail-screen.light.webp",
     "caption": "A plugin's own screen: enabled switch, capabilities, stored data, and the log.",
     "host": "settings",
     "setup": [
@@ -3626,41 +3814,47 @@
       "Install any .wmplugin file (from an addon repository's Plugin entry, or Install from a file with a prepared sample plugin)",
       "From the Plugins screen's Installed group, tap \"Manage <plugin name>\""
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a real installed plugin (route plugin/{pluginId}) \u2014 use a small sample .wmplugin fixture if the seeded addon repo has no Plugin-type entry. The Log group only appears once the plugin has printed or errored at least once, so trigger it before capturing if that group should be visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/plugin-detail-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/appearance-overview",
     "page": "docs/src/content/docs/reference/settings/appearance.mdx",
-    "file": "src/assets/screens/reference/settings/appearance-overview.webp",
+    "file": "src/assets/screens/reference/settings/appearance-overview.light.webp",
     "caption": "The Appearance settings screen, showing Style, Keys, and Toolbar.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/appearance"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Top of the Appearance screen \u2014 Style group (3 nav rows) and start of Keys group should be visible without scrolling on a typical device.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/appearance-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/appearance-keys",
     "page": "docs/src/content/docs/reference/settings/appearance.mdx",
-    "file": "src/assets/screens/reference/settings/appearance-keys.webp",
+    "file": "src/assets/screens/reference/settings/appearance-keys.light.webp",
     "caption": "The Keys sliders \u2014 corner radius, label size, and hint size.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/appearance",
       "scroll to the Keys group"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Scroll past the Style group's three nav rows to reach the Keys group's three sliders.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/appearance-keys.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/appearance-toolbar",
     "page": "docs/src/content/docs/reference/settings/appearance.mdx",
-    "file": "src/assets/screens/reference/settings/appearance-toolbar.webp",
+    "file": "src/assets/screens/reference/settings/appearance-toolbar.light.webp",
     "caption": "The Toolbar group, with the confirmation dialog for turning the toolbar off.",
     "host": "settings",
     "setup": [
@@ -3668,14 +3862,16 @@
       "scroll to the Toolbar group",
       "tap the 'Show the toolbar' toggle to trigger the 'Disable the toolbar?' AlertDialog"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Two options: capture the flat toolbar row list, or capture the AlertDialog overlay (title 'Disable the toolbar?', MainActivity.kt:3401-3423) triggered by turning off 'Show the toolbar'. The dialog is the more distinctive shot since the row list itself is long (13 rows) and won't fit one screen anyway.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/appearance-toolbar.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/backup-screen",
     "page": "docs/src/content/docs/reference/settings/backup.mdx",
-    "file": "src/assets/screens/reference/settings/backup-screen.webp",
+    "file": "src/assets/screens/reference/settings/backup-screen.light.webp",
     "caption": "The Backup & restore screen: what to include, plus the export and import buttons.",
     "host": "settings",
     "setup": [
@@ -3686,12 +3882,14 @@
     ],
     "status": "done",
     "notes": "Shows the 10-toggle export list at its default state (Settings/Themes/Snippets/Custom word lists/Addon repositories on, the rest off) plus the Export backup and Import backup buttons below.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/backup-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/backup-import-confirm",
     "page": "docs/src/content/docs/reference/settings/backup.mdx",
-    "file": "src/assets/screens/reference/settings/backup-import-confirm.webp",
+    "file": "src/assets/screens/reference/settings/backup-import-confirm.light.webp",
     "caption": "The import confirmation dialog, listing what a backup file contains before anything is applied.",
     "host": "settings",
     "setup": [
@@ -3700,14 +3898,16 @@
       "Push a sample .wmconfig.json backup file to the device first (adb push), or export one from the app, then tap 'Import backup' and pick that file to trigger the 'Import backup?' AlertDialog.",
       "Capture while the AlertDialog is showing, before tapping Import or Cancel."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Dialog text is built dynamically per section found in the file (e.g. 'Themes: 3 custom themes') plus a fixed merge/replace sentence and an optional API-keys warning line \u2014 pick a sample file with at least 2-3 sections and, ideally, one containing API keys so the warning line is visible too.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/backup-import-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/dictionary-personal",
     "page": "docs/src/content/docs/reference/settings/dictionaries.mdx",
-    "file": "src/assets/screens/reference/settings/dictionary-personal.webp",
+    "file": "src/assets/screens/reference/settings/dictionary-personal.light.webp",
     "caption": "The Personal dictionary screen: learned and manually-added words, most-used first.",
     "host": "settings",
     "setup": [
@@ -3717,12 +3917,14 @@
     ],
     "status": "done",
     "notes": "Route 'dictionary' is not deep-link allowlisted (only typing/appearance/themes/languages/tools/search are, per SettingsShortcuts.kt), so deep-link to typing and tap the Suggestions row.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/dictionary-personal.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/dictionary-custom",
     "page": "docs/src/content/docs/reference/settings/dictionaries.mdx",
-    "file": "src/assets/screens/reference/settings/dictionary-custom.webp",
+    "file": "src/assets/screens/reference/settings/dictionary-custom.light.webp",
     "caption": "Custom dictionaries, grouped by language, with Import and From URL actions.",
     "host": "settings",
     "setup": [
@@ -3732,12 +3934,14 @@
     ],
     "status": "done",
     "notes": "Route 'customdictionaries' is not deep-link allowlisted; reached via Typing screen only.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/dictionary-custom.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/dictionary-blacklist",
     "page": "docs/src/content/docs/reference/settings/dictionaries.mdx",
-    "file": "src/assets/screens/reference/settings/dictionary-blacklist.webp",
+    "file": "src/assets/screens/reference/settings/dictionary-blacklist.light.webp",
     "caption": "The Suggestion blacklist editor, empty until you add a word.",
     "host": "settings",
     "setup": [
@@ -3747,12 +3951,14 @@
     ],
     "status": "done",
     "notes": "Route 'blacklist' is not deep-link allowlisted; reached via Typing screen only.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/dictionary-blacklist.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/dictionary-emoji-keywords",
     "page": "docs/src/content/docs/reference/settings/dictionaries.mdx",
-    "file": "src/assets/screens/reference/settings/dictionary-emoji-keywords.webp",
+    "file": "src/assets/screens/reference/settings/dictionary-emoji-keywords.light.webp",
     "caption": "Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language.",
     "host": "settings",
     "setup": [
@@ -3762,40 +3968,46 @@
     ],
     "status": "done",
     "notes": "Route 'emoji' and 'emojikeywords' are both outside SettingsShortcuts.Routes (only typing/appearance/themes/languages/tools/search). Falling back to settings search is the cleanest path.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/dictionary-emoji-keywords.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/emoji-overview",
     "page": "docs/src/content/docs/reference/settings/emoji.mdx",
-    "file": "src/assets/screens/reference/settings/emoji-overview.webp",
+    "file": "src/assets/screens/reference/settings/emoji-overview.light.webp",
     "caption": "The Emoji settings screen, showing Access and Suggestions at the top.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/emoji",
       "Screen opens scrolled to the top \u2014 Access and Suggestions groups visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Top of the Emoji settings screen (route emoji, deep-link allowlisted).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/emoji-panel-group",
     "page": "docs/src/content/docs/reference/settings/emoji.mdx",
-    "file": "src/assets/screens/reference/settings/emoji-panel-group.webp",
+    "file": "src/assets/screens/reference/settings/emoji-panel-group.light.webp",
     "caption": "The Emoji panel group, with the Emoji keywords row at the bottom.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/emoji",
       "Scroll to the 'Emoji panel' group (Return to keyboard after inserting ... Emoji keywords NavRow)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Scroll-position shot; no deep link to the exact scroll offset, tap-scroll needed after opening route emoji.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-panel-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/emoji-row-group",
     "page": "docs/src/content/docs/reference/settings/emoji.mdx",
-    "file": "src/assets/screens/reference/settings/emoji-row-group.webp",
+    "file": "src/assets/screens/reference/settings/emoji-row-group.light.webp",
     "caption": "The Emoji row group with Own row selected.",
     "host": "settings",
     "setup": [
@@ -3803,56 +4015,64 @@
       "Scroll to 'Emoji row' group",
       "Set Emoji row = Own row so the content/count/scroll rows and the Rows & bars caption are all visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Set Emoji row to 'Own row' before the shot so the conditional rows (content, count, scroll) and the caption about Rows & bars all render.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-row-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/emoji-style-group",
     "page": "docs/src/content/docs/reference/settings/emoji.mdx",
-    "file": "src/assets/screens/reference/settings/emoji-style-group.webp",
+    "file": "src/assets/screens/reference/settings/emoji-style-group.light.webp",
     "caption": "The Emoji style group, with the live font preview row and font choices.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/emoji",
       "Scroll to the bottom 'Emoji style' group"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Shows the live 8-emoji preview row plus the Emoji font choice and Hide emoji this phone can't display toggle.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-style-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/emoji-keywords-screen",
     "page": "docs/src/content/docs/reference/settings/emoji.mdx",
-    "file": "src/assets/screens/reference/settings/emoji-keywords-screen.webp",
+    "file": "src/assets/screens/reference/settings/emoji-keywords-screen.light.webp",
     "caption": "The Emoji keywords screen, with per-language download and import controls.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/emoji",
       "Tap the 'Emoji keywords' row in the Emoji panel group (route emojikeywords is not itself deep-link allowlisted, reach it by tap)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Sub-screen reached only by tapping the NavRow from the Emoji settings screen \u2014 emojikeywords is not on the deep-link allowlist.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-keywords-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/fonts-english-section",
     "page": "docs/src/content/docs/reference/settings/fonts.mdx",
-    "file": "src/assets/screens/reference/settings/fonts-english-section.webp",
+    "file": "src/assets/screens/reference/settings/fonts-english-section.light.webp",
     "caption": "The Keyboard font screen: English font section with Google Fonts, each row previewed in its own face.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/fonts",
       "scroll to top so the English font section's curated Google Fonts list is visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Route 'fonts' is allowlisted for deep-link (verified in MainActivity.kt NavHost). This can reuse/match the themes/font-picker-english shot already registered by the themes/fonts.mdx page if the capture team wants to dedupe \u2014 same screen, same section.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/fonts-english-section.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/icons-overview",
     "page": "docs/src/content/docs/reference/settings/icons.mdx",
-    "file": "src/assets/screens/reference/settings/icons-overview.webp",
+    "file": "src/assets/screens/reference/settings/icons-overview.light.webp",
     "caption": "The Icons screen: the active pack (with export and delete on each installed row), then the slot list.",
     "host": "settings",
     "setup": [
@@ -3860,14 +4080,16 @@
       "Tap the 'Icons' row under Style to open the Icons screen ('icons' is not itself in the shortcut deep-link allowlist, so route there via Appearance)",
       "Scroll so the Icon pack group (Built-in icons + at least one installed pack with its Export/Delete icon buttons visible) is in frame"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Install at least one icon pack beforehand (import a .wmicons file, or install one from an addon repo) so an installed-pack row with Export/Delete trailing icons is visible, not just Built-in icons.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/icons-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/icons-delete-confirm",
     "page": "docs/src/content/docs/reference/settings/icons.mdx",
-    "file": "src/assets/screens/reference/settings/icons-delete-confirm.webp",
+    "file": "src/assets/screens/reference/settings/icons-delete-confirm.light.webp",
     "caption": "Confirming deletion of an installed icon pack.",
     "host": "settings",
     "setup": [
@@ -3875,9 +4097,11 @@
       "Tap 'Icons' to open the Icons screen",
       "Install an icon pack first if none is present, then tap the trash/Delete icon on that pack's row to open the 'Delete <pack name>?' AlertDialog"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Dialog text is 'Delete <pack name>? Its <N> icon(s) are removed from this device.' with Delete/Cancel buttons.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/icons-delete-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/icons-slot-picker",
@@ -3897,188 +4121,214 @@
   {
     "id": "reference/settings/key-layouts-list",
     "page": "docs/src/content/docs/reference/settings/keymaps.mdx",
-    "file": "src/assets/screens/reference/settings/key-layouts-list.webp",
+    "file": "src/assets/screens/reference/settings/key-layouts-list.light.webp",
     "caption": "The Key layouts screen: your own layouts, an import row, and the enabled built-ins.",
     "host": "settings",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Tap 'Key layouts' under the Keyboard group on Settings home ('keymaps' is not on the wmkeyboard://settings/ deep-link allowlist, so this needs a tap sequence, not a deep link)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Fresh install shows QWERTY + Avro + Probhat + Jatiya under Built in, and empty 'Your layouts'. For a more interesting shot, add/edit one custom layout first so 'Your layouts' isn't showing its empty state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/key-layouts-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/key-layouts-delete-confirm",
     "page": "docs/src/content/docs/reference/settings/keymaps.mdx",
-    "file": "src/assets/screens/reference/settings/key-layouts-delete-confirm.webp",
+    "file": "src/assets/screens/reference/settings/key-layouts-delete-confirm.light.webp",
     "caption": "Confirming a reset on an edited built-in layout.",
     "host": "settings",
     "setup": [
       "From the Key layouts list, edit a Built in layout (e.g. QWERTY) so it carries an override.",
       "Back out to the Key layouts list, then tap the Reset icon on that row."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Must edit a shipped layout first, otherwise its row has no Delete/Reset button at all.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/key-layouts-delete-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-editor-grid",
     "page": "docs/src/content/docs/reference/settings/keymaps.mdx",
-    "file": "src/assets/screens/reference/settings/layout-editor-grid.webp",
+    "file": "src/assets/screens/reference/settings/layout-editor-grid.light.webp",
     "caption": "The visual layout editor: the Letters layer, a key selected, and its row action bar.",
     "host": "settings",
     "setup": [
       "From the Key layouts list, tap any enabled layout to open Edit layout.",
       "Tap a key in the grid so the row action bar and row height slider appear before capturing."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture on the Letters layer with a key selected so the row action bar (Row N, add/duplicate/delete row) and row height slider are both visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-editor-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/key-edit-sheet",
     "page": "docs/src/content/docs/reference/settings/keymaps.mdx",
-    "file": "src/assets/screens/reference/settings/key-edit-sheet.webp",
+    "file": "src/assets/screens/reference/settings/key-edit-sheet.light.webp",
     "caption": "The key edit sheet: label, output, action, width, and long-press alternates.",
     "host": "settings",
     "setup": [
       "From Edit layout, tap any Text-action key to open its bottom sheet.",
       "Scroll the sheet so Label/Output/Action/Width and the long-press alternates field are all in frame."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Pick a key with the 'Types text' action so the icon/icon-hint/alternates/field-adaptation fields (text-action-only) are shown, not just the universal fields.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/key-edit-sheet.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-json",
     "page": "docs/src/content/docs/reference/settings/keymaps.mdx",
-    "file": "src/assets/screens/reference/settings/layout-json.webp",
+    "file": "src/assets/screens/reference/settings/layout-json.light.webp",
     "caption": "The Layout JSON screen: the stored layout as text, with syntax highlighting.",
     "host": "settings",
     "setup": [
       "From Edit layout, tap 'Edit as JSON' to open Layout JSON.",
       "Scroll the text field so real syntax-highlighted content is visible, not just the top of an empty-looking field."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture on a layout with a nontrivial layer (a few rows/keys) so the JSON isn't a near-empty document.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-json.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/keypress-overview",
     "page": "docs/src/content/docs/reference/settings/keypress.mdx",
-    "file": "src/assets/screens/reference/settings/keypress-overview.webp",
+    "file": "src/assets/screens/reference/settings/keypress-overview.light.webp",
     "caption": "The top of the Key press screen: the Haptic feedback group with its style chips.",
     "host": "settings",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Tap the \"Key press\" tile on the settings home grid (route \"keypress\" is not in the wmkeyboard://settings/ deep-link allowlist \u2014 only typing, appearance, themes, languages, tools, search are \u2014 so there is no am start -d shortcut)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Top of screen, no scroll needed: Key press haptics toggle + Haptic style chip row visible without scrolling on a standard phone height.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/keypress-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/keypress-haptic-custom-sliders",
     "page": "docs/src/content/docs/reference/settings/keypress.mdx",
-    "file": "src/assets/screens/reference/settings/keypress-haptic-custom-sliders.webp",
+    "file": "src/assets/screens/reference/settings/keypress-haptic-custom-sliders.light.webp",
     "caption": "Haptic style set to Custom, showing the strength and intensity sliders.",
     "host": "settings",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Tap \"Key press\", then tap the \"Custom\" chip under Haptic style to reveal the Haptic strength and Haptic intensity sliders."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Same underlying UI state as typing/haptic-style-custom-sliders on the /typing/feedback/ guide page, but scoped/named separately per this page's own manifest namespace \u2014 capture once and it may be reusable, otherwise capture the same state twice.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/keypress-haptic-custom-sliders.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/keypress-popup-timing",
     "page": "docs/src/content/docs/reference/settings/keypress.mdx",
-    "file": "src/assets/screens/reference/settings/keypress-popup-timing.webp",
+    "file": "src/assets/screens/reference/settings/keypress-popup-timing.light.webp",
     "caption": "Key popup and Timing groups, mid-screen.",
     "host": "settings",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Tap \"Key press\", scroll to where the Key popup group's sliders (Popup font size, Popup height) meet the Timing group's sliders (Long-press delay, Key repeat interval, Caps-lock double-tap)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Pick a scroll position that shows the boundary between the two groups so both headers are visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/keypress-popup-timing.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/keypress-long-press-shortcuts",
     "page": "docs/src/content/docs/reference/settings/keypress.mdx",
-    "file": "src/assets/screens/reference/settings/keypress-long-press-shortcuts.webp",
+    "file": "src/assets/screens/reference/settings/keypress-long-press-shortcuts.light.webp",
     "caption": "Long-press shortcuts: the currency keys field and the Hold-letter toggles.",
     "host": "settings",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.MainActivity",
       "Tap \"Key press\", scroll to the bottom Long-press shortcuts group so the Currency keys text field and at least a few of the Hold A/C/X/V/Z/Y toggles are visible together."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Currency keys field should show its backfilled default (\u09f3 \u20ac \u00a3 \u00a5 \u20b9 \u20bf) since it has never been edited on a fresh install.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/keypress-long-press-shortcuts.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/languages-top",
     "page": "docs/src/content/docs/reference/settings/languages.mdx",
-    "file": "src/assets/screens/reference/settings/languages-top.webp",
+    "file": "src/assets/screens/reference/settings/languages-top.light.webp",
     "caption": "The Languages screen: Your languages, Add language, and (once more than one layout is enabled) Switch order.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Fresh install shows 2 rows (English, \u09ac\u09be\u0982\u09b2\u09be) plus Add language; Switch order group is visible since 4 layouts are enabled by default. Capture without scrolling.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/languages-top.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/add-language-screen",
     "page": "docs/src/content/docs/reference/settings/languages.mdx",
-    "file": "src/assets/screens/reference/settings/add-language-screen.webp",
+    "file": "src/assets/screens/reference/settings/add-language-screen.light.webp",
     "caption": "Add language: search matches endonym, English name, id, and locale tag.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "tap 'Add language'"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Leave the search box empty so the shot shows registry order (English, \u09ac\u09be\u0982\u09b2\u09be, Fran\u00e7ais, ...) rather than alphabetical \u2014 this is the visual proof for the 'not alphabetical' claim in the text.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/add-language-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/languages-bottom",
     "page": "docs/src/content/docs/reference/settings/languages.mdx",
-    "file": "src/assets/screens/reference/settings/languages-bottom.webp",
+    "file": "src/assets/screens/reference/settings/languages-bottom.light.webp",
     "caption": "Further down the screen: Per-app language, System language switcher, and Complex scripts.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "scroll to the bottom of the screen"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Complex scripts group is visible by default because Bengali (INDIC_CLUSTER script) is enabled out of the box.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/languages-bottom.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/language-detail-bengali",
     "page": "docs/src/content/docs/reference/settings/languages.mdx",
-    "file": "src/assets/screens/reference/settings/language-detail-bengali.webp",
+    "file": "src/assets/screens/reference/settings/language-detail-bengali.light.webp",
     "caption": "Bengali's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "tap '\u09ac\u09be\u0982\u09b2\u09be \u00b7 Bangla'"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Bengali is a good representative because it's enabled by default, has a bundled dictionary, a downloadable wordlist, an emoji pack, and shows Also suggest from (English is the other enabled language) \u2014 but has no CJK options group.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/language-detail-bengali.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/cjk-options-chinese",
     "page": "docs/src/content/docs/reference/settings/languages.mdx",
-    "file": "src/assets/screens/reference/settings/cjk-options-chinese.webp",
+    "file": "src/assets/screens/reference/settings/cjk-options-chinese.light.webp",
     "caption": "Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin.",
     "host": "settings",
     "setup": [
@@ -4086,66 +4336,76 @@
       "tap 'Add language', search 'chinese', tap the Chinese entry to add and open it",
       "scroll to the 'Chinese options' group at the bottom"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture with Traditional characters toggled on so the Standard/Taiwan/Hong Kong radio group is also visible in frame. Note for the capture operator: a stale code comment in LanguageSettingsScreens.kt implies only the Xiaohe Double Pinyin scheme is selectable ('coming soon' for the rest) \u2014 verified false in current source (DoublePinyin.kt has tables for all 5 non-Off schemes), so the screenshot should show none of them disabled.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/cjk-options-chinese.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-overview",
     "page": "docs/src/content/docs/reference/settings/layout.mdx",
-    "file": "src/assets/screens/reference/settings/layout-overview.webp",
+    "file": "src/assets/screens/reference/settings/layout-overview.light.webp",
     "caption": "The Layout & size screen, opening on the Number row and Numerals groups.",
     "host": "settings",
     "setup": [
       "Not deep-link allowlisted (SettingsShortcuts.Routes = typing, appearance, themes, languages, tools, search only) \u2014 navigate manually: launch the app, tap the 'Layout & size' tile on the home screen (AspectRatio icon)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture with default (off) state \u2014 Number row off, so only the toggle and the Numerals group's Type native digits in row show below it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-per-screen-editor",
     "page": "docs/src/content/docs/reference/settings/layout.mdx",
-    "file": "src/assets/screens/reference/settings/layout-per-screen-editor.webp",
+    "file": "src/assets/screens/reference/settings/layout-per-screen-editor.light.webp",
     "caption": "A Per-screen sizing row expanded, with Keyboard scale and the other override sliders.",
     "host": "settings",
     "setup": [
       "From the Layout & size screen (see layout-overview setup), scroll to 'Per-screen sizing' and tap the 'Landscape' row to expand its inline editor."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Shows Keyboard scale, Key height, Bottom padding, Keyboard width, Font size sliders plus the 'Follow portrait again' row once any field is touched.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-per-screen-editor.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-one-handed-split-floating",
     "page": "docs/src/content/docs/reference/settings/layout.mdx",
-    "file": "src/assets/screens/reference/settings/layout-one-handed-split-floating.webp",
+    "file": "src/assets/screens/reference/settings/layout-one-handed-split-floating.light.webp",
     "caption": "One-handed mode set to Right, with the Portrait width, height, and side sliders below it.",
     "host": "settings",
     "setup": [
       "From the Layout & size screen, scroll to 'One-handed, split & floating' and set One-handed mode to Right so the Portrait/Landscape sub-sliders render."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default is One-handed mode = Off, which hides the per-orientation sliders \u2014 set it to Right for the capture so the full group is visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-one-handed-split-floating.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/layout-bottom-row-keys",
     "page": "docs/src/content/docs/reference/settings/layout.mdx",
-    "file": "src/assets/screens/reference/settings/layout-bottom-row-keys.webp",
+    "file": "src/assets/screens/reference/settings/layout-bottom-row-keys.light.webp",
     "caption": "The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key.",
     "host": "settings",
     "setup": [
       "From the Layout & size screen, scroll to the bottom 'Bottom-row keys' group."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default state: Comma key opens emoji = Off, Emoji key instead of globe = On.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/layout-bottom-row-keys.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/modes-list",
     "page": "docs/src/content/docs/reference/settings/modes.mdx",
-    "file": "src/assets/screens/reference/settings/modes-list.webp",
+    "file": "src/assets/screens/reference/settings/modes-list.light.webp",
     "caption": "Keyboard modes: the six default modes, each with its auto-activation summary, plus New mode.",
     "host": "settings",
     "setup": [
@@ -4153,56 +4413,64 @@
       "Open WM Keyboard settings, tap the Keyboard group's 'Keyboard modes' row (subtitle 'Per-app setups: email, browser, coding, passwords')",
       "Capture on a fresh/default install so all six seeded modes are visible with their default binding summaries"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Row order is settings.keyboardModes as stored (seed order: Passwords, Email, Browser, Chat, Writing, Coding), each showing its icon + modeBindingsSummary (e.g. 'Auto: text fields', 'Auto: 6 apps + text fields', 'Auto: password fields'). New mode row has a plain Add icon at the bottom.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/modes-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/mode-editor-top",
     "page": "docs/src/content/docs/reference/settings/modes.mdx",
-    "file": "src/assets/screens/reference/settings/mode-editor-top.webp",
+    "file": "src/assets/screens/reference/settings/mode-editor-top.light.webp",
     "caption": "Edit mode: name, icon, and the What this mode changes group.",
     "host": "settings",
     "setup": [
       "From Keyboard modes, tap a built-in mode, e.g. Chat",
       "Screenshot the top of the editor: Name field, Icon row, then Emoji row / Symbol row / Theme choices at the top of 'What this mode changes'"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Chat ships with emojiBarMode ALWAYS and no themeId set, so Theme should show 'Inherit \u2014 whatever theme is set' with no Clear button in this shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/mode-editor-top.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/mode-editor-custom-tools",
     "page": "docs/src/content/docs/reference/settings/modes.mdx",
-    "file": "src/assets/screens/reference/settings/mode-editor-custom-tools.webp",
+    "file": "src/assets/screens/reference/settings/mode-editor-custom-tools.light.webp",
     "caption": "A mode's Custom pinned tools turned on, with its own tool chips and reorder option.",
     "host": "settings",
     "setup": [
       "From Keyboard modes, tap Chat (ships with toolbarTools already set, toolbarToolsAppend = true)",
       "Scroll to the Custom pinned tools toggle (already on) and capture the revealed Pinned tools behaviour choice ('Add to mine'), the tool chip picker, and Modify pinned tool order"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No extra taps needed to reveal this section on Chat since it's a built-in with the toggle already on; the four selected chips should be Emoji, GIF, Sticker, Voice.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/mode-editor-custom-tools.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/mode-editor-activation",
     "page": "docs/src/content/docs/reference/settings/modes.mdx",
-    "file": "src/assets/screens/reference/settings/mode-editor-activation.webp",
+    "file": "src/assets/screens/reference/settings/mode-editor-activation.light.webp",
     "caption": "Field-type chips and the bound app list at the bottom of the mode editor.",
     "host": "settings",
     "setup": [
       "From Keyboard modes, tap Chat (has both apps and fieldKinds set, so it also shows the 'Both have to match' caption)",
       "Scroll to 'Activate automatically for': the Text field-type chip selected, the caption, and the bound chat-app list (Messenger, Instagram, Telegram, WhatsApp, Signal, Discord) with the Add app row below"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Chat is the only default mode with both apps and field types set, making it the best example of the AND-match caption text.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/mode-editor-activation.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/privacy-screen-groups",
     "page": "docs/src/content/docs/reference/settings/privacy.mdx",
-    "file": "src/assets/screens/reference/settings/privacy-screen-groups.webp",
+    "file": "src/assets/screens/reference/settings/privacy-screen-groups.light.webp",
     "caption": "The Privacy screen: On-device learning, Android backup, and Your data groups.",
     "host": "settings",
     "setup": [
@@ -4210,55 +4478,63 @@
       "Launch com.wasimaster.wmkeyboard/.app.MainActivity normally, then tap through: Settings home -> 'Privacy' tile under the 'Data' group.",
       "theme=dark (default)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Full-screen capture of all three SettingsGroups (On-device learning / Android backup / Your data) stacked; may need a scroll or a shortened device chrome to fit all three plus the footer caption in one shot \u2014 if it doesn't fit, prioritize showing all group headers over the footer text.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/privacy-screen-groups.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/privacy-backup-info-dialog",
     "page": "docs/src/content/docs/reference/settings/privacy.mdx",
-    "file": "src/assets/screens/reference/settings/privacy-backup-info-dialog.webp",
+    "file": "src/assets/screens/reference/settings/privacy-backup-info-dialog.light.webp",
     "caption": "The info dialog for Back up with Android, listing what's included and excluded.",
     "host": "settings",
     "setup": [
       "Navigate to Settings -> Privacy (same tap path as privacy-screen-groups; no deep link available).",
       "Tap the (i) info button next to 'Back up with Android' to open its explanation dialog (BACKUP_INFO text, MainActivity.kt:8403-8413)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "The dialog text is long \u2014 make sure the sentence 'Note that this does include saved API keys' is visible/legible in the crop, it's the one detail the page calls out as worth knowing.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/privacy-backup-info-dialog.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/privacy-clear-learned-words",
     "page": "docs/src/content/docs/reference/settings/privacy.mdx",
-    "file": "src/assets/screens/reference/settings/privacy-clear-learned-words.webp",
+    "file": "src/assets/screens/reference/settings/privacy-clear-learned-words.light.webp",
     "caption": "Clear learned words, the only control in the Your data group.",
     "host": "settings",
     "setup": [
       "Navigate to Settings -> Privacy (same tap path as privacy-screen-groups; no deep link available).",
       "Scroll to the bottom 'Your data' group showing the standalone 'Clear learned words' OutlinedButton."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No dialog appears on tap \u2014 do not capture mid-tap, just the resting button in its group.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/privacy-clear-learned-words.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/rows-overview",
     "page": "docs/src/content/docs/reference/settings/rows.mdx",
-    "file": "src/assets/screens/reference/settings/rows-overview.webp",
+    "file": "src/assets/screens/reference/settings/rows-overview.light.webp",
     "caption": "The Rows & bars screen: Symbol row, Row order, and Symbol sets groups.",
     "host": "settings",
     "setup": [
       "Navigate: Settings home -> Keyboard group -> \"Rows & bars\" row (no deep-link route allowlisted for this screen; 'rows' is not in SettingsShortcuts.Routes, so open via in-app navigation)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Full-screen capture showing all three groups if they fit; scroll to top first.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/rows-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/rows-symbol-sets",
     "page": "docs/src/content/docs/reference/settings/rows.mdx",
-    "file": "src/assets/screens/reference/settings/rows-symbol-sets.webp",
+    "file": "src/assets/screens/reference/settings/rows-symbol-sets.light.webp",
     "caption": "The Symbol sets group, with the edit icon open on Coding.",
     "host": "settings",
     "setup": [
@@ -4266,14 +4542,16 @@
       "Scroll to the Symbol sets group",
       "Tap the edit (pencil) icon on the Coding row to show Edit symbol set open, or capture the list row with the icon visible if a two-shot composite is preferred"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Caption implies the edit screen is open on Coding \u2014 capture either the Symbol sets list with Coding's edit icon highlighted, or the Edit symbol set screen itself pre-filled with Coding's name/characters. Pick whichever the capture agent finds clearer; both are defensible readings of the caption.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/rows-symbol-sets.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/themes-gallery-overview",
     "page": "docs/src/content/docs/reference/settings/themes.mdx",
-    "file": "src/assets/screens/reference/settings/themes-gallery-overview.webp",
+    "file": "src/assets/screens/reference/settings/themes-gallery-overview.light.webp",
     "caption": "The theme gallery: Mode, Auto (light + dark), and the Themes grid.",
     "host": "settings",
     "setup": [
@@ -4282,12 +4560,14 @@
     ],
     "status": "done",
     "notes": "ThemesScreen (ThemeScreens.kt:294-589). Keep Auto theme off for this shot so the collapsed state is what's shown; the expanded/Auto-on state is its own shot below.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/themes-gallery-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/themes-auto-schedule",
     "page": "docs/src/content/docs/reference/settings/themes.mdx",
-    "file": "src/assets/screens/reference/settings/themes-auto-schedule.webp",
+    "file": "src/assets/screens/reference/settings/themes-auto-schedule.light.webp",
     "caption": "Auto theme on, with Time of day chosen and both clock rows visible.",
     "host": "settings",
     "setup": [
@@ -4298,12 +4578,14 @@
     ],
     "status": "done",
     "notes": "Auto theme defaults off (AutoThemeSettings.enabled = false); Trigger defaults to System light/dark. This shot needs SCHEDULE selected to show the two time rows (7:00 AM / 7:00 PM defaults).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/themes-auto-schedule.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/themes-delete-confirm",
     "page": "docs/src/content/docs/reference/settings/themes.mdx",
-    "file": "src/assets/screens/reference/settings/themes-delete-confirm.webp",
+    "file": "src/assets/screens/reference/settings/themes-delete-confirm.light.webp",
     "caption": "Deleting a custom theme asks for confirmation before removing it.",
     "host": "settings",
     "setup": [
@@ -4314,7 +4596,9 @@
     ],
     "status": "done",
     "notes": "Dialog text is exact: title \"Delete theme?\", body \u201c\u201c${theme.name}\u201d will be removed permanently.\u201d (ThemeScreens.kt:715-716). Do not actually confirm delete if the capture harness needs the theme to stay for other shots \u2014 or delete last.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/themes-delete-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/themes-editor-overview",
@@ -4365,7 +4649,7 @@
   {
     "id": "reference/settings/tools-list",
     "page": "docs/src/content/docs/reference/settings/tools.mdx",
-    "file": "src/assets/screens/reference/settings/tools-list.webp",
+    "file": "src/assets/screens/reference/settings/tools-list.light.webp",
     "caption": "The Tools screen: Colorful tool icons, then every tool grouped by what it does.",
     "host": "settings",
     "setup": [
@@ -4374,12 +4658,14 @@
     ],
     "status": "done",
     "notes": "Top of the Tools list screen (ToolsSettings composable). Capture with default settings (all 60 tools enabled, colorful icons on) so the tune-icon and switch pattern is visible on a few rows.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/tools-list.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/tool-detail-top",
     "page": "docs/src/content/docs/reference/settings/tools.mdx",
-    "file": "src/assets/screens/reference/settings/tool-detail-top.webp",
+    "file": "src/assets/screens/reference/settings/tool-detail-top.light.webp",
     "caption": "A tool's own detail screen: Enabled, Icon colour, and its keyword shortcut field above the tool's own settings.",
     "host": "settings",
     "setup": [
@@ -4389,12 +4675,14 @@
     ],
     "status": "done",
     "notes": "No deep-link route exists for an individual tool/{toolName} screen (not in the allowlist) \u2014 requires a tap sequence from the Tools list. Pick a tool with both a keyword (present in SmartSuggest.defaultKeywords) and a tune icon so all three shared rows plus a hint of tool-specific settings are visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/tool-detail-top.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-overview",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-overview.webp",
+    "file": "src/assets/screens/reference/settings/typing-overview.light.webp",
     "caption": "The Typing settings screen, scrolled to the Automatic corrections group.",
     "host": "settings",
     "setup": [
@@ -4403,12 +4691,14 @@
     ],
     "status": "done",
     "notes": "Route is deep-link allowlisted (SettingsShortcuts.kt Routes set). Capture with Autocorrect on so the confidence slider and the three gated toggles are visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-suggestions-group",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-suggestions-group.webp",
+    "file": "src/assets/screens/reference/settings/typing-suggestions-group.light.webp",
     "caption": "The Suggestions group, including the three dictionary and blacklist navigation rows.",
     "host": "settings",
     "setup": [
@@ -4417,12 +4707,14 @@
     ],
     "status": "done",
     "notes": "Consider adding 1-2 blacklist words beforehand so the Suggestion blacklist row shows a count subtitle instead of the empty-state text.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-suggestions-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-smart-chips-group",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-smart-chips-group.webp",
+    "file": "src/assets/screens/reference/settings/typing-smart-chips-group.light.webp",
     "caption": "The Smart chips group: the master switch and its four per-family toggles.",
     "host": "settings",
     "setup": [
@@ -4431,12 +4723,14 @@
     ],
     "status": "done",
     "notes": "Default currency is BDT (Taka) \u2014 the Convert currencies subtitle will read 'offers the amount in BDT' unless the device's currencyTo has been changed first.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-smart-chips-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-gestures-group",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-gestures-group.webp",
+    "file": "src/assets/screens/reference/settings/typing-gestures-group.light.webp",
     "caption": "The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers.",
     "host": "settings",
     "setup": [
@@ -4445,12 +4739,14 @@
     ],
     "status": "done",
     "notes": "Full-flavor build will additionally show 'Handwrite with swipes' above Glide across spacebar; lite build skips straight to it. Pick one flavor consistently with other Gestures-related screenshots on typing/gestures.mdx and typing/glide-typing.mdx.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-gestures-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-volume-keys-group",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-volume-keys-group.webp",
+    "file": "src/assets/screens/reference/settings/typing-volume-keys-group.light.webp",
     "caption": "Volume cursor control and its media-aware release toggle.",
     "host": "settings",
     "setup": [
@@ -4460,12 +4756,14 @@
     ],
     "status": "done",
     "notes": "Both rows only appear together once Volume cursor control is on (default off) \u2014 must toggle it on before capturing.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-volume-keys-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-physical-keyboard-group",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-physical-keyboard-group.webp",
+    "file": "src/assets/screens/reference/settings/typing-physical-keyboard-group.light.webp",
     "caption": "The Physical keyboard group, with Tool shortcuts list showing the current shortcut key.",
     "host": "settings",
     "setup": [
@@ -4474,12 +4772,14 @@
     ],
     "status": "done",
     "notes": "Tool shortcuts list row only appears while the 'Tool shortcuts' toggle above it is on (default on) \u2014 no action needed at defaults.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-physical-keyboard-group.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/settings/typing-hwshortcuts-screen",
     "page": "docs/src/content/docs/reference/settings/typing.mdx",
-    "file": "src/assets/screens/reference/settings/typing-hwshortcuts-screen.webp",
+    "file": "src/assets/screens/reference/settings/typing-hwshortcuts-screen.light.webp",
     "caption": "The Tool shortcuts list screen: every tool with its assigned letter.",
     "host": "settings",
     "setup": [
@@ -4488,7 +4788,9 @@
     ],
     "status": "done",
     "notes": "Capture at default bindings (23 letters bound, Reset to defaults not pressed) so it matches the default table on typing/hardware-keyboard.mdx.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/typing-hwshortcuts-screen.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/background-image-live",
@@ -4598,7 +4900,7 @@
   {
     "id": "themes/editor-delete-confirm",
     "page": "docs/src/content/docs/themes/editor.mdx",
-    "file": "src/assets/screens/themes/editor-delete-confirm.webp",
+    "file": "src/assets/screens/themes/editor-delete-confirm.light.webp",
     "caption": "Deleting a custom theme asks for confirmation before removing it.",
     "host": "settings",
     "setup": [
@@ -4608,12 +4910,14 @@
     ],
     "status": "done",
     "notes": "Needs at least one existing custom theme on the device first (create one via 'Create theme' if none exist).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/editor-delete-confirm.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/font-picker-english",
     "page": "docs/src/content/docs/themes/fonts.mdx",
-    "file": "src/assets/screens/themes/font-picker-english.webp",
+    "file": "src/assets/screens/themes/font-picker-english.light.webp",
     "caption": "The Keyboard font screen: curated Google Fonts, each row previewed in its own face.",
     "host": "settings",
     "setup": [
@@ -4623,12 +4927,14 @@
     ],
     "status": "done",
     "notes": "English section is always present regardless of enabled languages. Let a couple of Google Font rows finish downloading/rendering (system font provider caches after first fetch) before capturing so previews aren't showing placeholder glyphs.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/font-picker-english.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/font-picker-script",
     "page": "docs/src/content/docs/themes/fonts.mdx",
-    "file": "src/assets/screens/themes/font-picker-script.webp",
+    "file": "src/assets/screens/themes/font-picker-script.light.webp",
     "caption": "A script-specific picker (Devanagari): the automatic Noto face, a short curated list, and any installed fonts that declare coverage for the script.",
     "host": "settings",
     "setup": [
@@ -4639,12 +4945,14 @@
     ],
     "status": "done",
     "notes": "Devanagari has 7 curated alternatives (Noto Serif Devanagari, Hind, Mukta, Baloo 2, Tiro Devanagari Hindi, Rozha One, Kalam) so the list has enough visual variety. No import button appears in this section by design (import is English/Bengali only) \u2014 don't crop it out expecting one.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/font-picker-script.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/icons-screen-overview",
     "page": "docs/src/content/docs/themes/icon-packs.mdx",
-    "file": "src/assets/screens/themes/icons-screen-overview.webp",
+    "file": "src/assets/screens/themes/icons-screen-overview.light.webp",
     "caption": "The Icons screen: the active pack, and every replaceable slot grouped by where it appears.",
     "host": "settings",
     "setup": [
@@ -4653,7 +4961,9 @@
     ],
     "status": "done",
     "notes": "Show the Icon pack section (Built-in icons selected) plus the top of the grouped slot list (Tools/Keys/Toolbar/Emoji tabs headers visible).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/icons-screen-overview.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/icons-slot-picker",
@@ -4673,7 +4983,7 @@
   {
     "id": "themes/icons-addon-apply-prompt",
     "page": "docs/src/content/docs/themes/icon-packs.mdx",
-    "file": "src/assets/screens/themes/icons-addon-apply-prompt.webp",
+    "file": "src/assets/screens/themes/icons-addon-apply-prompt.light.webp",
     "caption": "After installing an icon pack from an addon repository, the app asks whether to switch to it.",
     "host": "settings",
     "setup": [
@@ -4681,14 +4991,16 @@
       "Navigate to Settings > Addons, open that repository, tap Install on an icon pack",
       "Capture the resulting 'Use its icons on the keyboard now?' dialog (Switch to it / dismiss buttons)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a seeded test repo URL from whoever owns addon-repo fixtures \u2014 flagging as the one shot in this set that isn't reachable with just the shipped app.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/icons-addon-apply-prompt.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/gallery-grid",
     "page": "docs/src/content/docs/themes/overview.mdx",
-    "file": "src/assets/screens/themes/gallery-grid.webp",
+    "file": "src/assets/screens/themes/gallery-grid.light.webp",
     "caption": "The theme gallery: custom themes on top, built-in themes below.",
     "host": "settings",
     "setup": [
@@ -4696,7 +5008,9 @@
     ],
     "status": "done",
     "notes": "Capture with at least one custom theme saved so the 'Your themes' section is visible above 'Built-in'; 2-column grid, ThemeScreens.kt.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/gallery-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/amoled-default-theme",
@@ -4715,7 +5029,7 @@
   {
     "id": "themes/auto-theme-sun",
     "page": "docs/src/content/docs/themes/overview.mdx",
-    "file": "src/assets/screens/themes/auto-theme-sun.webp",
+    "file": "src/assets/screens/themes/auto-theme-sun.light.webp",
     "caption": "Auto theme on, with Sunrise & sunset chosen as the trigger.",
     "host": "settings",
     "setup": [
@@ -4724,12 +5038,14 @@
     ],
     "status": "done",
     "notes": "ThemeScreens.kt Auto (light + dark) section; capture with a location already saved so the sunrise/sunset copy shows rather than the fallback message.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/auto-theme-sun.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/gallery-export-import",
     "page": "docs/src/content/docs/themes/sharing.mdx",
-    "file": "src/assets/screens/themes/gallery-export-import.webp",
+    "file": "src/assets/screens/themes/gallery-export-import.light.webp",
     "caption": "The theme gallery, with export and import actions above the cards.",
     "host": "settings",
     "setup": [
@@ -4738,7 +5054,9 @@
     ],
     "status": "done",
     "notes": "ThemeScreens.kt:510-530 \u2014 the Import button sits next to Create theme, right above the Default card and gallery.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/themes/gallery-export-import.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "themes/file-import-confirm",

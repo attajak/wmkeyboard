@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 **Key layouts** is where you manage the key grids themselves for every layout you've switched on: which key sits where, what it types, what its long-press alternates are. This page is the field reference for its three screens. For the reasoning behind any of it, and a worked example, see [Custom layouts & the layout editor](/languages/custom-layouts/) instead.
 
@@ -16,7 +17,7 @@ Don't confuse this with [Layout & size](/reference/settings/layout/), a differen
 :::
 
 <PhoneFrame caption="The Key layouts screen: your own layouts, the two import rows, and the enabled built-ins.">
-  {/* shot: reference/settings/key-layouts-list */}
+  <Shot id="reference/settings/key-layouts-list" alt="The Key layouts screen: your own layouts, an import row, and the enabled built-ins." />
 </PhoneFrame>
 
 ## Managing your layouts
@@ -53,7 +54,7 @@ Tapping the row itself (not a button) opens the visual editor.
 - On a **Built in** row, editing a shipped layout doesn't fork a new one, since your changes are stored as an override under that same built-in id. So the button only appears once there's an override to drop, and it reads Reset instead of Delete: `Reset <name>?`, which reads "The app discards your changes to this built-in layout. The original grid comes back. Nothing else changes." An untouched built-in row has no button here at all.
 
 <PhoneFrame caption="Confirming a reset on an edited built-in layout.">
-  {/* shot: reference/settings/key-layouts-delete-confirm */}
+  <Shot id="reference/settings/key-layouts-delete-confirm" alt="Confirming a reset on an edited built-in layout." />
 </PhoneFrame>
 
 WM Keyboard ships **1,280 layouts** in total: 21 compiled built-ins and 1,259 JSON asset layouts, 862 of which are [converted Keyman keyboards](/languages/keyman/) covering the long tail of languages and scripts. The built-ins are QWERTY plus its English alternates like Dvorak and Colemak, Avro/Probhat/Jatiya for Bangla, and one-off grids for languages like French, Korean, Russian, Arabic, Greek, Hebrew and Hindi. Only a handful show up here at once, so see [Options](#options) for which ones a fresh install enables.
@@ -63,7 +64,7 @@ WM Keyboard ships **1,280 layouts** in total: 21 compiled built-ins and 1,259 JS
 Tap any enabled layout's row to open **Edit layout**. The grid is rendered with your actual theme, key shape and font, so what you edit is what you'll type on. It's always drawn left-to-right whatever your locale, since a key's serialized row order has to match "move right" and "move left" consistently. Keys whose action is "switch layout" or "emoji panel" draw the same monochrome icon the keyboard draws rather than the emoji stored as their label, in the grid and in the reorder dialog alike.
 
 <PhoneFrame caption="The visual layout editor: the Letters layer, a key selected, and its row action bar.">
-  {/* shot: reference/settings/layout-editor-grid */}
+  <Shot id="reference/settings/layout-editor-grid" alt="The visual layout editor: the Letters layer, a key selected, and its row action bar." />
 </PhoneFrame>
 
 ### The layout's identity
@@ -111,7 +112,7 @@ A closing caption sits under the whole screen, and which one you get depends on 
 ### The key edit sheet
 
 <PhoneFrame caption="The key edit sheet: label, output, action, width, and long-press alternates.">
-  {/* shot: reference/settings/key-edit-sheet */}
+  <Shot id="reference/settings/key-edit-sheet" alt="The key edit sheet: label, output, action, width, and long-press alternates." />
 </PhoneFrame>
 
 Tapping a key opens a bottom sheet headed "Row *N*, key *M*", with, in order:
@@ -166,7 +167,7 @@ Behind that sits a second, separate pass that repairs rather than reports. It fo
 ## The raw JSON editor
 
 <PhoneFrame caption="The Layout JSON screen: the stored layout as text, with syntax highlighting.">
-  {/* shot: reference/settings/layout-json */}
+  <Shot id="reference/settings/layout-json" alt="The Layout JSON screen: the stored layout as text, with syntax highlighting." />
 </PhoneFrame>
 
 **Layout JSON** opens from the editor's "Edit as JSON" row, and it covers anything the grid editor has no control for. It's a full-screen code editor with its own top bar (back, undo, redo, **Apply** and a menu), pre-filled with the layout exactly as it's stored: monospaced on a code background, with a numbered margin, the cursor's line lit, bracket pairs boxed, a fold chevron on every object and list, and the standard editor colors for keys, strings, numbers and keywords. Long lines scroll sideways unless **Wrap** in the menu says otherwise.

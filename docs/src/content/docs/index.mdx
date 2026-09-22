@@ -28,6 +28,7 @@ import GestureDemo from '@components/GestureDemo.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import bengali from '@assets/layouts/bn_jatiya.wmlayout.json';
+import Shot from '@components/Shot.astro';
 
 <p class="wm-kicker">The short version</p>
 
@@ -64,7 +65,7 @@ import bengali from '@assets/layouts/bn_jatiya.wmlayout.json';
 <FeatureRow kicker="Voice typing" title="Speech that stays on the phone" href="/tools/whisper/" linkText="Set up Whisper" flip>
 	<Fragment slot="media">
 		<PhoneFrame caption="The Whisper model catalog">
-			![The Whisper model catalog inside WM Keyboard settings](../../assets/screens/tools/whisper-catalog.webp)
+			<Shot id="tools/whisper-catalog" alt="The Whisper model catalog inside WM Keyboard settings" />
 		</PhoneFrame>
 	</Fragment>
 	Dictate with Whisper running entirely on device. Pick from 29 models, tiny ones
@@ -83,7 +84,7 @@ import bengali from '@assets/layouts/bn_jatiya.wmlayout.json';
 <FeatureRow kicker="Privacy" title="Private by construction" href="/privacy/overview/" linkText="Read the privacy tour" flip>
 	<Fragment slot="media">
 		<PhoneFrame caption="On-device learning, under your control">
-			![The on-device learning toggles in settings](../../assets/screens/privacy/on-device-learning-toggles.webp)
+			<Shot id="privacy/on-device-learning-toggles" alt="The on-device learning toggles in settings" />
 		</PhoneFrame>
 	</Fragment>
 	Prediction, autocorrect and learning all happen offline. Every tool that touches

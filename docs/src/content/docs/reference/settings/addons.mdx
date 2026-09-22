@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The **Addons** screen is where WM Keyboard reaches past what ships in the app. Themes, layouts, dictionaries, fonts, sounds and more get browsed and installed straight from a repository URL. This page is the field reference for every screen in that tree, plus the separate sticker-pack and plugin managers that live alongside it. For the reasoning behind any of it, start with [What are addons?](/addons/overview/) and [WM Keyboard plugins](/plugins/overview/) instead.
 
 <PhoneFrame caption="The Addons screen: repositories you've added, plus everything installed from them.">
-  {/* shot: reference/settings/addons-home */}
+  <Shot id="reference/settings/addons-home" alt="The Addons screen: repositories you've added, plus everything installed from them." />
 </PhoneFrame>
 
 ## Repositories and installed addons
@@ -33,7 +34,7 @@ The first time you ever open this screen, it seeds the two repositories the app 
 Tapping a loaded repository opens its catalogue. At the top is a **Search** field matching name, description, author and tags case-insensitively, then a row of type filter chips: **All**, plus one chip per addon type the manifest actually contains. Results render as a two-column card grid. Each card shows the addon's first screenshot, or a centered type glyph if it has none, then its name, type, and a "vX.Y · size · author" line. A status badge in the corner doubles as the install button: a download arrow when not installed, a check when installed, an "Update" chip when a newer version exists, a spinner while downloading, or an X on failure. Tapping the badge installs directly from the grid without opening the addon's own page. An empty result set says nothing matches your search. A repository that can't be read at all tells you so, and points you at Refresh on the Addons screen.
 
 <PhoneFrame caption="An addon's detail page: previews, description, licence, and the install action.">
-  {/* shot: reference/settings/addon-detail-page */}
+  <Shot id="reference/settings/addon-detail-page" alt="An addon's detail page: previews, description, licence, and the install action." />
 </PhoneFrame>
 
 Tapping a card opens its detail page, which shows, top to bottom:
@@ -74,7 +75,7 @@ A repository manifest can declare an "Unknown" type too, but the app filters tho
 ## Managing sticker packs
 
 <PhoneFrame caption="Sticker packs: your own packs, plus New pack and Import a pack.">
-  {/* shot: reference/settings/sticker-packs-list */}
+  <Shot id="reference/settings/sticker-packs-list" alt="Sticker packs: your own packs, plus New pack and Import a pack." />
 </PhoneFrame>
 
 The **Sticker packs** screen opens with a caption. These are your own stickers, sent from the "My stickers" tab of the sticker tool. Still images become 512×512 WebP files, so WhatsApp receives them as real stickers. Animated GIFs are kept as they are and send as images.
@@ -92,7 +93,7 @@ Sticker packs have two separate ways to end up in **Your packs**: the manual New
 ## Turning on plugins
 
 <PhoneFrame caption="Plugins: the Allow plugins switch and what a plugin can and can't do.">
-  {/* shot: reference/settings/plugins-screen */}
+  <Shot id="reference/settings/plugins-screen" alt="Plugins: the Allow plugins switch and what a plugin can and can't do." />
 </PhoneFrame>
 
 **Allow plugins** is a subsystem-wide switch, **off by default**. Its subtitle explains the scope: a plugin is a small tool that other people write, running inside a sandbox on this keyboard, and this switch is not the Plugins tool on the toolbar, which only sets where the panel appears. Under it sits **Switch off a plugin that hangs**, on by default. It is what turns a plugin off after two strikes. Turn it off and the keyboard still counts and shows the strikes, but never disables the plugin for you.
@@ -104,7 +105,7 @@ Below that, a **Write your own** group always shows, whether or not Allow plugin
 With plugins allowed, two more groups appear. **Installed** carries one row per plugin: its name, then "Version X by Y" underneath, with ". Turned off" appended for a disabled one. The row is the link, so tapping anywhere on it opens that plugin. With nothing installed the group says so instead. **Add** carries a **Download more** row into the addon catalogue and **Install from a file**, which asks for a `.wmplugin` file, plus a note that plugins also install from Addons. Either install path shows the same confirmation dialog first: name, description, version, author, and either a line saying it doesn't ask for anything outside its own panel or an "It can:" list of the permissions it declared. Installing reports success by name. A wrong file reports that it isn't a WM Keyboard plugin, the cap reports how many plugins you already have, and anything else reports that the plugin could not be installed. The cap is **50 plugins**.
 
 <PhoneFrame caption="A plugin's own screen: enabled switch, capabilities, stored data, and the log.">
-  {/* shot: reference/settings/plugin-detail-screen */}
+  <Shot id="reference/settings/plugin-detail-screen" alt="A plugin's own screen: enabled switch, capabilities, stored data, and the log." />
 </PhoneFrame>
 
 Opening a plugin (route `plugin/{pluginId}`, title "Plugin") shows its name, description, version and author, then:

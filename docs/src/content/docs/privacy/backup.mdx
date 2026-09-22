@@ -7,6 +7,7 @@ sidebar:
 
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard backs itself up two ways. One is a config file you export and
 move yourself. The other is Android's own backup system, off until you turn
@@ -14,7 +15,7 @@ it on. Both exist so a reinstall or a new phone doesn't mean retyping every
 setting and rebuilding every theme.
 
 <PhoneFrame caption="Backup & restore: pick what to include, then export or import a file.">
-  ![Backup & restore: pick what to include, then export or import a file.](@assets/screens/privacy/backup-restore-screen.webp)
+  <Shot id="privacy/backup-restore-screen" alt="Backup & restore: pick what to include, then export or import a file." />
 </PhoneFrame>
 
 ## Exporting a config file
@@ -72,7 +73,7 @@ Opening a `.wmconfig.json` file from a file manager works the same way. It
 launches the same confirmation dialog rather than importing silently.
 
 <PhoneFrame caption="The import confirmation, listing what a backup file contains before anything is applied.">
-  ![The import confirmation, listing what a backup file contains before anything is applied.](@assets/screens/privacy/backup-import-confirm.webp)
+  <Shot id="privacy/backup-import-confirm" alt="The import confirmation, listing what a backup file contains before anything is applied." />
 </PhoneFrame>
 
 Each section behaves differently once you confirm, and the difference matters

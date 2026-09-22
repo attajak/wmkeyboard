@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Quick answers to the questions people ask before they've read anything else. Each one links to a fuller page if you want the details.
 
@@ -17,7 +18,7 @@ No, not by default, and not for typing itself. WM Keyboard's prediction, autocor
 What does need the internet is a handful of optional toolbar tools that are online services by nature: weather (Open‑Meteo), the dictionary look‑up, translate (the Full edition can also translate on the device, with no connection, once you download the languages), currency conversion, Wikipedia, GIF/sticker search (KLIPY, GIPHY), and web/image search (Brave, Google), plus any AI tool you set up with your own API key. Almost all of them make a request only when you open and use the tool. Link previews are the one opt‑in exception. Turn that on and copying a URL anywhere on the device, or scanning a QR code, fetches the page title in the background without any WM Keyboard tool being open. It's off by default, and Power saving can drop it along with the other background network fetches. See [Network policy](/privacy/network/) for the full tool‑by‑tool breakdown of what gets sent where.
 
 <PhoneFrame caption="The Privacy screen's on-device summary, with the data-clearing controls below it.">
-  {/* shot: start/faq-privacy-summary */}
+  <Shot id="start/faq-privacy-summary" alt="The Privacy screen's on-device summary, with the data-clearing controls below it." />
 </PhoneFrame>
 
 <SettingsPath path="Privacy" />
@@ -56,7 +57,7 @@ In a plain JSON file in the app's private storage, and nowhere else. It's `user_
 Two different screens manage it, depending on whether you want to edit individual words or wipe everything:
 
 <PhoneFrame caption="Personal dictionary: every learned word, with per-word delete and an Add word button.">
-  ![Personal dictionary: every learned word, with per-word delete and an Add word button.](@assets/screens/start/faq-personal-dictionary.webp)
+  <Shot id="start/faq-personal-dictionary" alt="Personal dictionary: every learned word, with per-word delete and an Add word button." />
 </PhoneFrame>
 
 <SettingsPath path="Typing / Suggestions / Personal dictionary" />

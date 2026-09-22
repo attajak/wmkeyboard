@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Smart chips watch the last 48 characters before your cursor. The moment that text looks like something a tool can answer, the answer lands on the suggestion strip in place of word candidates. Tap the chip to type the answer, or its gear button to open the full tool with the same numbers already loaded. A few chips have nothing to type and only ever open a tool. Those carry no gear, and the whole chip is the door. The gear also stays hidden while its tool is switched off under Tools, since there would be nothing for it to open.
 
@@ -139,7 +140,7 @@ A few related settings live under each tool instead:
 - **Detect codes, numbers and links** (default **on**), under <SettingsPath path="Clipboard" />, governs the Clipboard panel's entity strip. The fresh-copy code chip is a separate pair of settings on that same screen: **Suggest the last copy** (default **on**), since the code chip is a variant of that chip, and **Suggest copied codes** (default **Any field**), which is what allows a copied code onto the strip at all.
 
 <PhoneFrame caption="Smart chips settings under Typing: master switch and the per-family toggles.">
-  ![Smart chips settings under Typing: master switch and the per-family toggles.](@assets/screens/smart/options.webp)
+  <Shot id="smart/options" alt="Smart chips settings under Typing: master switch and the four per-family toggles." />
 </PhoneFrame>
 
 ## Details & edge cases

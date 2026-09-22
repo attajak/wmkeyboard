@@ -8,6 +8,7 @@ sidebar:
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 The core typing engine has no network code anywhere in it. Prediction,
 autocorrect, gesture typing and layouts all behave the same with the radio
@@ -25,7 +26,7 @@ field empty and it calls the service's own server. See
 [Servers](/reference/settings/servers/).
 
 <PhoneFrame caption="The Tools screen: every tool has its own Enabled switch, on by default.">
-  ![The Tools screen: every tool has its own Enabled switch, on by default.](@assets/screens/privacy/tools-enabled-switches.webp)
+  <Shot id="privacy/tools-enabled-switches" alt="The Tools screen: every tool has its own Enabled switch, on by default." />
 </PhoneFrame>
 
 ## What each tool sends, and when
@@ -102,7 +103,7 @@ confirmations of that.
 ## The services behind them
 
 <PhoneFrame caption="AI tool settings: a self-hosted Ollama or LM Studio server address, with the plain-HTTP disclosure below it.">
-  ![AI tool settings: a self-hosted Ollama or LM Studio server address, with the plain-HTTP disclosure below it.](@assets/screens/privacy/ai-ollama-plain-http.webp)
+  <Shot id="privacy/ai-ollama-plain-http" alt="AI tool settings: a self-hosted Ollama or LM Studio server address, with the plain-HTTP disclosure below it." />
 </PhoneFrame>
 
 "Google Translate" is really two different endpoints, and it's worth being

@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The Calendar tool opens a full month grid inside the keyboard rather than a today list. Browse any month, and up to two non-Gregorian calendars ride alongside the Gregorian dates in the header and inside each day cell. Tap a day to see its date across every calendar you've picked, plus whatever's on your device calendar for that day.
 
@@ -60,7 +61,7 @@ Accuracy varies by calendar: Chinese dates are computed astronomically (real new
 The same First calendar / Second calendar / Weekend pickers also appear on the first-run setup page during onboarding, if you've kept Calendar enabled: anything you set there is the same setting, just asked up front. All three already open on the region's guess, so that page is where you see it and correct it.
 
 <PhoneFrame caption="Calendar options: the two calendar pickers, the weekend picker, and the Hijri day adjustment slider.">
-  ![Calendar options: the two calendar pickers, the weekend picker, and the Hijri day adjustment slider.](@assets/screens/tools/calendar-options.webp)
+  <Shot id="tools/calendar-options" alt="Calendar options: First and second calendar pickers, and the Hijri day adjustment slider." />
 </PhoneFrame>
 
 ## Details & edge cases

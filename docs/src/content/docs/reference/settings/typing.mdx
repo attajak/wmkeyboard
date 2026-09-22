@@ -9,11 +9,12 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 The Typing screen is a hub. Six of its groups are pages of their own (Automatic corrections, Suggestions, Smart chips, One-time codes, Gestures, Physical keyboard) and two short groups stay on the hub: Enter key and Volume keys. The Delete keys group used to sit here too; it lives on [Key press](/reference/settings/keypress/#delete-keys) now, with the rest of what a key does under your finger. The tool-shortcuts letter list is one tap deeper still. Most of what's here has its own task-focused guide too, linked from each group below. This page is the field-by-field reference, for checking a default or finding a setting by name.
 
 <PhoneFrame caption="The Typing settings screen, scrolled to the Automatic corrections group.">
-  ![The Typing settings screen, scrolled to the Automatic corrections group.](@assets/screens/reference/settings/typing-overview.webp)
+  <Shot id="reference/settings/typing-overview" alt="The Typing settings screen, scrolled to the Automatic corrections group." />
 </PhoneFrame>
 
 ## Automatic corrections
@@ -127,7 +128,7 @@ All three are covered in full on [Personal dictionary](/smart/personal-dictionar
 The three navigation rows at the bottom open their own screens rather than an inline setting. The subtitle on **Suggestion blacklist** starts as "Words to never suggest or autocorrect to" and becomes a running count ("3 words never suggested") once you've added something. All three are documented in full on [Dictionaries & words](/reference/settings/dictionaries/).
 
 <PhoneFrame caption="The Suggestions group, including the three dictionary and blacklist navigation rows.">
-  ![The Suggestions group, including the three dictionary and blacklist navigation rows.](@assets/screens/reference/settings/typing-suggestions-group.webp)
+  <Shot id="reference/settings/typing-suggestions-group" alt="The Suggestions group, including the three dictionary and blacklist navigation rows." />
 </PhoneFrame>
 
 Full writeup: [Suggestions & prediction](/smart/suggestions/) for the strip itself, [Contact-aware typing](/smart/contacts/) for the three permission-gated toggles, [Password manager chips & smart replies](/smart/autofill/) for the two Android-11 toggles, [Autocorrect](/smart/autocorrect/#reducing-typos-before-they-happen) for autopilot, and [Words on the keys](/typing/words-on-the-keys/) for the octopus screen.
@@ -200,7 +201,7 @@ Two gestures take a floating word. **Flick up to pick** reads a straight, mostly
 **Convert currencies**' own subtitle ends with your live target currency code instead of describing the setting, so out of the box it reads "…offers the amount in BDT". It updates the moment you change that currency inside the Currency converter tool. The same three calculate/currency/unit toggles are mirrored inside each tool's own Options screen. See [Smart chips](/smart/chips/#options) for where. Five of the rows above are the phrase-triggered chips: "next friday" offers a date, "will it rain" the forecast, "define serendipity" a dictionary lookup, "in spanish" the translator, and "happy birthday" a GIF search. **Group long numbers** offers a typed run of digits back grouped, so `1234567` gets a chip reading `1,234,567`, and one press types the grouped form; **Grouping style** picks where the separators fall, following the language you're typing in when it's Automatic.
 
 <PhoneFrame caption="The Smart chips group: the master switch and its per-family toggles.">
-  ![The Smart chips group: the master switch and its per-family toggles.](@assets/screens/reference/settings/typing-smart-chips-group.webp)
+  <Shot id="reference/settings/typing-smart-chips-group" alt="The Smart chips group: the master switch and its four per-family toggles." />
 </PhoneFrame>
 
 Full writeup: [Smart chips](/smart/chips/).
@@ -286,7 +287,7 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 **Ask when a glide is unclear** covers the strokes that have no single right answer. Hold your finger still at the end of one and the closest words appear just above your fingertip. Slide onto one and lift to take it. Lift without choosing and you get the best guess, as before. The stroke is finished the moment the words appear, so sliding to one does not redraw it, and sliding down away from the words and lifting types nothing at all. It matters most on a fixed Bangla layout, where ক and খ share a key, so a word and its aspirated twin are drawn identically. The four rows under it set **When to ask** (how close a call a stroke has to be, from Near ties to Every pause), **Time to hold still** (the pause before the words appear), **Hold longer to always ask** (a confident stroke still asks after twice the pause) and **Words to choose from** (two to five). See [When a swipe is a genuine toss-up](/typing/glide-typing/#when-a-swipe-is-a-genuine-toss-up).
 
 <PhoneFrame caption="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers.">
-  ![The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers.](@assets/screens/reference/settings/typing-gestures-group.webp)
+  <Shot id="reference/settings/typing-gestures-group" alt="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers." />
 </PhoneFrame>
 
 Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-key drags, [Glide typing](/typing/glide-typing/) for the glide sub-settings, and [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel) for handwrite mode.
@@ -339,7 +340,7 @@ Turning it off doesn't take line breaks away. Press and hold <KeyCap>Enter</KeyC
 With **Volume keys move the cursor** on, volume down/up step the text cursor left/right instead of changing the volume while the keyboard is showing. **Release the keys while audio plays** hands the keys back to normal volume control the instant something is actually playing, re-checked on every keypress.
 
 <PhoneFrame caption="Volume cursor control and its media-aware release toggle.">
-  ![Volume cursor control and its media-aware release toggle.](@assets/screens/reference/settings/typing-volume-keys-group.webp)
+  <Shot id="reference/settings/typing-volume-keys-group" alt="Volume cursor control and its media-aware release toggle." />
 </PhoneFrame>
 
 Full writeup: [Gestures](/typing/gestures/#volume-keys-as-a-cursor-control).
@@ -374,7 +375,7 @@ Three rows decide how much the keyboard takes from your apps. Check them first i
 **Number keys select suggestions** ships on **Alt + number**, so a digit picks a strip candidate with no shortcut key first. **Show the suggestion numbers** only appears in that mode. It puts the key under each suggestion for as long as a physical keyboard is attached, and on "After the shortcut key" the numbers already show at the moment they work. **Time to press a key** is how long the badges stay up after the shortcut key. Nothing else happens until they clear or you press one.
 
 <PhoneFrame caption="The Physical keyboard group, with Tool shortcuts list showing the current shortcut key.">
-  ![The Physical keyboard group, with Tool shortcuts list showing the current shortcut key.](@assets/screens/reference/settings/typing-physical-keyboard-group.webp)
+  <Shot id="reference/settings/typing-physical-keyboard-group" alt="The Physical keyboard group, with Tool shortcuts list showing the current shortcut key." />
 </PhoneFrame>
 
 Full writeup: [Hardware keyboards](/typing/hardware-keyboard/).
@@ -389,7 +390,7 @@ Tapping **Tool shortcuts list** opens a dedicated screen (route `hwshortcuts`) w
 A **Reset to defaults** button at the bottom restores every letter and the shortcut key itself, behind a confirmation dialog.
 
 <PhoneFrame caption="The Tool shortcuts list screen: every tool with its assigned letter.">
-  ![The Tool shortcuts list screen: every tool with its assigned letter.](@assets/screens/reference/settings/typing-hwshortcuts-screen.webp)
+  <Shot id="reference/settings/typing-hwshortcuts-screen" alt="The Tool shortcuts list screen: every tool with its assigned letter." />
 </PhoneFrame>
 
 <KeyCap>T</KeyCap> (toolbox) and <KeyCap>?</KeyCap> (cheat sheet) are reserved and can never be bound to a tool. Every one of the other 25 letters ships bound to something, close to each tool's own initial. This page only covers the settings screen. The full binding table lives on [Hardware keyboards](/typing/hardware-keyboard/#opening-tools-with-the-leader-key), and the printable cheat sheet on [Hardware shortcuts](/reference/shortcuts/).

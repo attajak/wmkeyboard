@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard keeps your words in four separate screens, reached from two different corners of Settings: what it has learned from your typing, dictionaries you import yourself, words it must never suggest, and emoji search keywords for languages beyond English and Bangla. This page is the field reference for all four. For the reasoning and full mechanics behind each, see the guide pages linked in every section.
 
@@ -27,7 +28,7 @@ Past 12 words the list grows a search box above it, with a clear button in the f
 The dialog takes anything you type, but the store won't: a word over 32 characters (measured after lowercasing) is dropped silently, so the dialog closes and the list is exactly as it was. The same limit applies to words learned from typing.
 
 <PhoneFrame caption="The Personal dictionary screen: learned and manually-added words, most-used first.">
-  ![The Personal dictionary screen: learned and manually-added words, most-used first.](@assets/screens/reference/settings/dictionary-personal.webp)
+  <Shot id="reference/settings/dictionary-personal" alt="The Personal dictionary screen: learned and manually-added words, most-used first." />
 </PhoneFrame>
 
 A row whose capitals are kept as written reads "capitals kept" after its count; the edit dialog's **Keep these capitals** switch turns that on or off. When you have moved words up or down from the keyboard's word card, a **Rank adjustments** group at the bottom lists them, each with a button to reset it. See [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip) for the card.
@@ -51,7 +52,7 @@ A **Download more** row leads, opening the add-on repositories' dictionaries. Un
 A language you've since switched off keeps its group, headed "*language* (language switched off)", so its lists stay reachable rather than sitting on disk with nothing pointing at them. That group has no import buttons, since a list imported there wouldn't be read, but the switches and trash icons still work.
 
 <PhoneFrame caption="Custom dictionaries, grouped by language, with Import and From URL actions.">
-  ![Custom dictionaries, grouped by language, with Import and From URL actions.](@assets/screens/reference/settings/dictionary-custom.webp)
+  <Shot id="reference/settings/dictionary-custom" alt="Custom dictionaries, grouped by language, with Import and From URL actions." />
 </PhoneFrame>
 
 The format, per the screen's own description: one word per line, optionally followed by a space and a frequency number. Lines starting with `#` are ignored. Imported words are never autocorrected away.
@@ -82,7 +83,7 @@ Lists are additive, so several can sit under one language, and for English and B
 Words the keyboard must never suggest or autocorrect to, listed alphabetically with a trash icon per row. **Add word** opens the same single-field dialog shape as the personal dictionary; whatever you type is stored trimmed and lowercased, so capitalization and stray spaces don't create duplicate entries. The list is empty by default, and nothing is blacklisted until you add something yourself. Once it has entries, a **Clear the blacklist** row appears above them and empties the lot behind a confirmation. Clearing only unblocks the words; nothing you've taught the keyboard is touched. Words also arrive here from the keyboard: **Never suggest** on a held suggestion, and **Delete** on a word that is still in a read-only word list.
 
 <PhoneFrame caption="The Suggestion blacklist editor, empty until you add a word.">
-  ![The Suggestion blacklist editor, empty until you add a word.](@assets/screens/reference/settings/dictionary-blacklist.webp)
+  <Shot id="reference/settings/dictionary-blacklist" alt="The Suggestion blacklist editor, empty until you add a word." />
 </PhoneFrame>
 
 Before you add anything, the screen reads "No words in this list yet. Add a word above." Back on the Typing screen, the nav row's subtitle changes with the list: "Words to never suggest or autocorrect to" while empty, or "N words never suggested" once it has entries. See [Suggestion blacklist](/smart/blacklist/) for exactly which suggestion paths it filters and how it interacts with the personal dictionary.
@@ -101,7 +102,7 @@ Each language group can carry a bundled-catalog row (only shown for the 126 lang
 - **Imported packs**: one row per file, headline the filename minus extension, subtitle "N emoji", trash to remove. **Import pack**/**Import another** and **From URL** buttons work exactly as they do on Custom dictionaries.
 
 <PhoneFrame caption="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language.">
-  ![Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language.](@assets/screens/reference/settings/dictionary-emoji-keywords.webp)
+  <Shot id="reference/settings/dictionary-emoji-keywords" alt="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language." />
 </PhoneFrame>
 
 A language's group appears here if it's currently enabled, has a downloaded catalog, or has an imported pack. So you can still delete a pack for a language you've since turned off.

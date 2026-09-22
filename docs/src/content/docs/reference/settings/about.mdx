@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 About has its own group on the Settings home screen: one tap gets you the build you're running, every licence bundled into the app, and a diagnostics screen for pulling a shareable report when something needs debugging.
 
 <PhoneFrame caption="The About screen: Share, App, Updates, Feedback, Documentation, Third party, and Word lists groups.">
-  {/* shot: reference/settings/about-screen */}
+  <Shot id="reference/settings/about-screen" alt="The About screen: Share, App, Documentation, Third party, and Word lists groups." />
 </PhoneFrame>
 
 ## Sharing the app
@@ -146,7 +147,7 @@ Two more single-purpose groups round out the screen:
 Tapping **Open-source licences** opens a three-group screen: everything bundled into the APK, data the app can download, and the online services its tools call. Tap a row with a bundled licence text and it opens in full, monospaced and horizontally scrollable, matching the licence viewer described above. Rows without a bundled text, mostly the online services, open the provider's terms in your browser instead.
 
 <PhoneFrame caption="The open-source licences list, grouped by bundled components, downloadable data packs, and online services.">
-  {/* shot: reference/settings/licenses-screen */}
+  <Shot id="reference/settings/licenses-screen" alt="The open-source licences list, grouped by bundled components, downloadable data packs, and online services." />
 </PhoneFrame>
 
 **Inside the app** always lists AndroidX & Jetpack Compose, Kotlin/coroutines/serialization, Coil, OkHttp & Okio, ZXing, and LuaJ, all Apache-2.0 or MIT. <Flavor edition="full" /> adds Harper and its Rust dependencies (grammar checking), Google ML Kit (handwriting and scanning), LiteRT-LM (the local AI models), and LiteRT plus OpenAI Whisper and whisper_android (offline speech-to-text). The <Flavor edition="lite" /> build doesn't link those features, so their licences don't apply to it. A Play build adds one more, Play In-App Updates. It isn't open source, so it opens Google's SDK terms in your browser rather than a bundled text. Both editions also list Unicode CLDR & emoji data, gemoji, Keyman keyboard layouts, OpenCC, the LSHK Jyutping table, the bundled editor colour palettes (Dracula, Nord, Solarized, Catppuccin, Tokyo Night), Google Fonts, and Inter & Manrope. Those last two are the faces the settings app itself is set in. They ship as files in the APK, so they carry their own notice rather than the generic one.
@@ -162,7 +163,7 @@ That makes 22 bundled components on a full Play build and 14 on a lite F-Droid o
 **Diagnostics** is where you go if something's misbehaving and you want to send in what the keyboard recorded, or just look at it yourself. It never contains anything you typed. That's a hard design rule stated in the logging code's own documentation, not only a promise in the UI copy.
 
 <PhoneFrame caption="Diagnostics: report actions, the app log with its filter and level chips, and Clear app log at the bottom.">
-  {/* shot: reference/settings/diagnostics-screen */}
+  <Shot id="reference/settings/diagnostics-screen" alt="Diagnostics: report actions, the app log with its filter and level chips, and Clear app log at the bottom." />
 </PhoneFrame>
 
 The **Report** group has three controls:

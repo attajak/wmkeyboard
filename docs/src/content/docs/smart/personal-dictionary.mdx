@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard quietly builds a private, on-device vocabulary out of what you actually type: names, slang, abbreviations, anything the bundled dictionary doesn't know. Every word in it is safe from autocorrect. A word nothing recognises has to be typed a few times before it gets in, so one bad swipe doesn't put a misspelling in your dictionary for good. You can review that vocabulary, add to it or remove from it by hand, and wipe it entirely, all from Settings.
 
 <PhoneFrame caption="The Personal dictionary screen: learned and manually-added words, most-used first.">
-  ![The Personal dictionary screen: learned and manually-added words, most-used first.](@assets/screens/smart/personal-dictionary-list.webp)
+  <Shot id="smart/personal-dictionary-list" alt="The Personal dictionary screen: learned and manually-added words, most-used first." />
 </PhoneFrame>
 
 ## What gets learned, and how strongly
@@ -170,7 +171,7 @@ It reaches wider than this word list. Seven files are cleared together, because 
 Like an add or a remove, the delete bumps the version marker a running keyboard watches, so a session open in another app re-reads your vocabulary from disk instead of saving the old copy back over the wipe. Typing statistics live under their own folder and aren't touched. Clear those from the Statistics screen instead.
 
 <PhoneFrame caption="The 'Your data' group on the Privacy screen, with the delete button and its confirmation.">
-  {/* shot: smart/personal-dictionary-clear */}
+  <Shot id="smart/personal-dictionary-clear" alt="The 'Your data' group on the Privacy screen, with the one-tap clear button." />
 </PhoneFrame>
 
 :::caution[This does empty the list on this page]
@@ -187,7 +188,7 @@ Your personal dictionary is a single JSON file in the app's private storage, nev
 - **A manual export leaves it out by default.** The Backup & restore screen's "Dictionary" section covers your personal vocabulary, next-word patterns, rank adjustments, the fixes you have taught autocorrect and where your taps land, and it starts unchecked. A settings file you export and share out of habit carries no typing data along unless you deliberately opt in. Restoring that section does signal a running keyboard to reload, the same as adding or removing a word does.
 
 <PhoneFrame caption="The Dictionary section of a manual export, off by default.">
-  {/* shot: smart/personal-dictionary-backup-toggle */}
+  <Shot id="smart/personal-dictionary-backup-toggle" alt="The Dictionary section of a manual export, off by default." />
 </PhoneFrame>
 
 See [Incognito & secure fields](/privacy/incognito/) for the rest of how incognito and secure fields work, and [Backup & restore](/privacy/backup/) for the full export/restore and Android-backup picture.

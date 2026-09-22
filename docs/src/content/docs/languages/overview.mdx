@@ -11,11 +11,12 @@ import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import cherokee from '../../../../../app/src/main/assets/layouts/chr_cherokee.wmlayout.json';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard's language catalogue holds 843 entries. Alongside the languages you'd expect are InScript variants, minority Cyrillic alphabets, and a dozen constructed languages. Every one you enable becomes a full input mode with its own layout, dictionary, and settings, and you move between them without leaving the keyboard.
 
 <PhoneFrame caption="The Languages screen: your enabled languages and Add language to search the full catalogue.">
-  {/* shot: languages/list-overview */}
+  <Shot id="languages/list-overview" alt="The Languages screen: your enabled languages, plus Add language to search the full catalogue." />
 </PhoneFrame>
 
 ## Suggested languages
@@ -46,7 +47,7 @@ Removing a language asks the mirror question when it has files on disk: delete i
 Language names in the list are shown as `endonym · English`, for example "বাংলা · Bangla" or "Русский · Russian". The native name comes first and the English name after it, so you can find a language whether or not you can already read its script. English itself is just "English", since repeating it would say nothing.
 
 <PhoneFrame caption="Add language: search matches endonym, English name, id, and locale.">
-  {/* shot: languages/add-language-search */}
+  <Shot id="languages/add-language-search" alt="Add language: search matches endonym, English name, id, and locale." />
 </PhoneFrame>
 
 :::tip[Typing a language in Latin letters]
@@ -66,7 +67,7 @@ Tap any enabled language to reach its screen. **Layouts** and **Dictionaries** a
 Three more groups turn up on the languages that have them: **Clusters** on a conjunct script (see the note below), **Spellings** on Bangla, whose "Use known spellings" switch turns "tmr" into তোমার and "table" into টেবিল, and **Style** on the Fancy Text entry, which is where its 31 styles are listed.
 
 <PhoneFrame caption="A language's own screen: layout toggles, numeral system, and other enabled languages to suggest from.">
-  {/* shot: languages/language-detail-screen */}
+  <Shot id="languages/language-detail-screen" alt="A language's own screen: layout toggles, numeral system, and other enabled languages to suggest from." />
 </PhoneFrame>
 
 A **Remove** button sits at the bottom once you have more than one language enabled. Removing a language turns off every layout that belongs to it.
@@ -84,7 +85,7 @@ Two settings on the Languages screen connect your language choices to the rest o
 **List languages in the Android switcher**, under System language switcher, is off by default. Turn it on and every enabled layout is registered as an Android input-method subtype, so the system's "Choose input method" sheet lists each one and can switch directly to it. It starts off because that sheet draws a subtype's label in the same slot where it draws the name of a keyboard with no subtypes, so a single language name sitting there just reads as the keyboard's name. Left off, switching stays entirely inside the keyboard and Android sees no subtypes at all. Turn it on and a second toggle appears: **Show app name first**, off by default, which puts "WM Keyboard" ahead of the language in the switcher's label instead of after it.
 
 <PhoneFrame caption="Further down the Languages screen: per-app language memory and the Android system switcher toggle.">
-  {/* shot: languages/list-per-app-and-switcher */}
+  <Shot id="languages/list-per-app-and-switcher" alt="Further down the Languages screen: per-app language memory and the Android system switcher toggle." />
 </PhoneFrame>
 
 ## The language the app itself speaks

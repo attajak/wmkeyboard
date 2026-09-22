@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Plug in a Bluetooth or USB keyboard and WM Keyboard keeps running underneath rather than getting out of the way. Autocorrect, suggestions and transliteration all work on physical keystrokes exactly as they do on the soft keys. A leader key opens any tool without your hand leaving the keys.
 
@@ -88,7 +89,7 @@ The default letter for each tool is close to its own initial, wherever that lett
 Open **Tool shortcuts list** to change any of it. (The screen is reachable only while Tool shortcuts is on.) Tap the shortcut key row to pick a different double-tapped modifier, <KeyCap>Ctrl</KeyCap>, <KeyCap>Alt</KeyCap> or <KeyCap>Shift</KeyCap>, or to capture an arbitrary chord live from an attached keyboard. Tap any tool's row to type a new single letter or digit for it. **Reset to defaults** puts every letter and the shortcut key itself back the way they started.
 
 <PhoneFrame caption="The Tool shortcuts list screen: every tool with the letter that opens it.">
-  ![The Tool shortcuts list screen: every tool with the letter that opens it.](@assets/screens/typing/hardware-shortcuts-list.webp)
+  <Shot id="typing/hardware-shortcuts-list" alt="The Tool shortcuts list screen: every tool with the letter that opens it." />
 </PhoneFrame>
 
 <KeyCap>T</KeyCap> and <KeyCap>?</KeyCap> are reserved and can never be bound to a tool: they always open the toolbox and the cheat sheet, respectively. The full binding table and cheat sheet also live in [Hardware shortcuts](/reference/shortcuts/).

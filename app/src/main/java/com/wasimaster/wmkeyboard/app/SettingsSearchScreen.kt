@@ -103,6 +103,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -236,6 +237,19 @@ internal object SettingsHighlight {
     fun clearIfUnchanged(serialAtEntry: Int) {
         if (serial == serialAtEntry) clear()
     }
+
+    /**
+     * Keeps a highlight standing instead of pulsing it once, untinted, and
+     * names it [HIGHLIGHT_TAG] for a test to find.
+     *
+     * Only the docs screenshot run sets this (app/src/docShots): it marks the
+     * setting a page is about, and a pulse that has already faded by the time
+     * the frame is captured marks nothing. Never set in the app.
+     */
+    var hold: Boolean = false
+
+    /** The test tag a held highlight carries; see [hold]. */
+    const val HIGHLIGHT_TAG = "settingHighlight"
 }
 
 /**
@@ -404,7 +418,7 @@ private fun HighlightFrame(
     var flashing by remember { mutableStateOf(false) }
     val requester = remember { BringIntoViewRequester() }
     val color by animateColorAsState(
-        targetValue = if (flashing) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+        targetValue = if (flashing && !SettingsHighlight.hold) MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
         else Color.Transparent,
         animationSpec = tween(durationMillis = 320),
         label = "settingHighlight",
@@ -423,6 +437,7 @@ private fun HighlightFrame(
         if (rank != HighlightRank.ITEM && SettingsHighlight.scrollTaken()) return@LaunchedEffect
         if (SettingsHighlight.claimScroll()) requester.bringIntoView()
         flashing = true
+        if (SettingsHighlight.hold) return@LaunchedEffect
         delay(1400)
         flashing = false
         // Consumed: a later visit to the same screen must not flash again.
@@ -432,6 +447,7 @@ private fun HighlightFrame(
         modifier = Modifier
             .fillMaxWidth()
             .bringIntoViewRequester(requester)
+            .then(if (flashing && SettingsHighlight.hold) Modifier.testTag(SettingsHighlight.HIGHLIGHT_TAG) else Modifier)
             .background(color),
     ) {
         content()

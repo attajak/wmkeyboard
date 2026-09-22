@@ -8,6 +8,7 @@ sidebar:
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard has two separate ways of not learning from you. Incognito mode is
 a switch that you, or a private-browsing tab, control. Secure fields are
@@ -174,7 +175,7 @@ beside the sensitive-clip options below rather than with the rest of
 clipboard history.
 
 <PhoneFrame caption="Sensitive-clip handling under Passwords & codes, both turned on.">
-  ![Passwords & codes: sensitive-clip handling and the paste-time purge, both turned on.](@assets/screens/privacy/clipboard-settings-passwords.webp)
+  <Shot id="privacy/clipboard-settings-passwords" alt="Passwords & codes: sensitive-clip handling and the paste-time purge, both on by default." />
 </PhoneFrame>
 
 Neither of these depends on incognito being on. They run any time the

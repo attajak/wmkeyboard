@@ -1,0 +1,88 @@
+---
+/**
+ * A settings-app screenshot in the reader's theme: the light capture on a
+ * light page, the dark one on a dark page.
+ *
+ * The swap has no fade of its own, on purpose. The page itself recolours in a
+ * single frame, and whatever crossfade the browser or the OS draws over a
+ * change of appearance is drawn over the whole window, images included. A
+ * fade here ran on top of that one and lagged visibly behind the page.
+ *
+ *   <PhoneFrame caption="The Vision group">
+ *     <Shot id="accessibility/vision-group" alt="The Vision group…" />
+ *   </PhoneFrame>
+ *
+ * `id` is the manifest id; the pair lives at
+ * src/assets/screens/<id>.light.webp and <id>.dark.webp (rendered by
+ * docs/screenshots/finish.py). Both are served as AVIF, then WebP, then JPEG
+ * for browsers that read neither, at two widths so a phone-width frame never
+ * downloads the full capture. Each keeps starlight-image-zoom's zoom.
+ *
+ * Both images load (lazily): a theme switch that first went blank while the
+ * other one fetched would read as broken.
+ */
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { Zoom } from 'starlight-image-zoom/components';
+
+interface Props {
+	id: string;
+	alt: string;
+}
+const { id, alt } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/screens/**/*.{light,dark}.webp', {
+	eager: true,
+});
+const light = images[`/src/assets/screens/${id}.light.webp`]?.default;
+const dark = images[`/src/assets/screens/${id}.dark.webp`]?.default;
+if (!light) throw new Error(`Shot: no src/assets/screens/${id}.light.webp`);
+
+const picture = {
+	formats: ['avif', 'webp'] as const,
+	fallbackFormat: 'jpg' as const,
+	widths: [540, 1080],
+	sizes: '(max-width: 30rem) 80vw, 20rem',
+	quality: 'high' as const,
+	loading: 'lazy' as const,
+	decoding: 'async' as const,
+};
+---
+
+<div class={`shot not-content${dark ? ' shot-pair' : ''}`}>
+	<div class="shot-light">
+		<Zoom label={alt}><Picture src={light} alt={alt} {...picture} /></Zoom>
+	</div>
+	{
+		dark && (
+			<div class="shot-dark">
+				<Zoom label={alt}><Picture src={dark} alt={alt} {...picture} /></Zoom>
+			</div>
+		)
+	}
+</div>
+
+<style>
+	.shot {
+		display: grid;
+	}
+	/* Both captures share one cell, so the pair keeps one size either way. */
+	.shot > div {
+		grid-area: 1 / 1;
+	}
+	/* Starlight writes the theme onto <html> before first paint, and leaves it
+	   at "dark" with scripting off, which is the pair's no-JS answer too.
+	   visibility (not display) keeps the hidden one laid out and decoded, and
+	   out of the accessibility tree and the tab order. */
+	:global(:root[data-theme='light']) .shot-pair .shot-dark,
+	:global(:root:not([data-theme='light'])) .shot-pair .shot-light {
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+	}
+	.shot :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+</style>

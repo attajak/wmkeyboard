@@ -9,6 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import GestureDemo from '@components/GestureDemo.astro';
+import Shot from '@components/Shot.astro';
 
 Once more than one layout is enabled, there are four ways to move between them on the touchscreen: swipe the spacebar, hold the spacebar and drag through a list, use a dedicated key, or reach for Android's own input-method switcher. All four call the same underlying switch. Pick whichever suits your hands, because nothing about what a switch *does* changes. A physical keyboard adds a fifth: its own language key, or <KeyCap>Ctrl</KeyCap>+<KeyCap>Space</KeyCap>. See [Hardware keyboards](/typing/hardware-keyboard/#switching-language) for those.
 
@@ -95,7 +96,7 @@ With many languages enabled, you often type only two or three of them at a time,
 Only the layout you stop on counts as used, so tapping past a language on the way doesn't push it up the list. Every switch you make counts, whether it came from the spacebar, the picker or the key, so the list is ready when you turn the setting on. Layouts you've never switched to come last, in switch order. With two layouts enabled this works the same as the plain tap. A physical keyboard's language key follows this setting too. The spacebar swipe doesn't: it always steps through your switch order.
 
 <PhoneFrame caption="Layout & size → Bottom row keys: turning off Emoji key instead of 🌐 restores the language-switch key.">
-  {/* shot: languages/globe-key-toggle */}
+  <Shot id="languages/globe-key-toggle" alt="Layout & size → Bottom-row keys: turning off Emoji key instead of 🌐 restores the language-switch key." />
 </PhoneFrame>
 
 :::note
@@ -121,7 +122,7 @@ On the **Languages** screen:
 There's no "maximum visible" setting. (The one recently-used option, [🌐 goes back to the last language](#going-back-to-the-last-language), only changes which layout the key visits next, not which ones are in the ring.) The ring is exactly as long as your enabled-layout list, so reordering or removing is the only way to shorten it. Ring length changes behavior on its own at three thresholds: two layouts swipe as a toggle rather than a cycle, more than four turn the hold-drag gesture from an inline preview into a full list, and more than five shrink the swipe preview to a sliding five-chip window.
 
 <PhoneFrame caption="The Languages screen: Your languages, Add language, and Switch order.">
-  {/* shot: languages/languages-screen-order */}
+  <Shot id="languages/languages-screen-order" alt="The Languages screen: Your languages, Add language, and Switch order." />
 </PhoneFrame>
 
 ## Switching from Android's system menu
@@ -141,7 +142,7 @@ Android 14 added an API that lets a keyboard enable its own subtypes. On Android
 :::
 
 <PhoneFrame caption="Languages → System language switcher: register every enabled layout as an Android input-method subtype.">
-  {/* shot: languages/system-switcher-toggle */}
+  <Shot id="languages/system-switcher-toggle" alt="Languages → System language switcher: register every enabled layout as an Android input-method subtype." />
 </PhoneFrame>
 
 A separate, unrelated toggle, **Remember language per app** (under Per-app language, off by default), has the keyboard remember whichever layout you last explicitly switched to in a given app and restore it the next time you type there. Apps you haven't switched languages in yet follow whatever you last used globally, and a field that demands Latin input or advertises its own language still overrides the memory either way.

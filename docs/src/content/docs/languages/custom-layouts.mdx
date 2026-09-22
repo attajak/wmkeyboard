@@ -10,11 +10,12 @@ import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import qwertyAfar from '../../../../../app/src/main/assets/layouts/aa.wmlayout.json';
+import Shot from '@components/Shot.astro';
 
 A layout is the key grid itself: which key sits where, what it types, what its long-press alternates are. WM Keyboard ships 1,280 of them, and every one is editable: rearrange a few keys, add a Ctrl key for a terminal app, or build a language layout from scratch, then share the result as a file.
 
 <PhoneFrame caption="The Key layouts screen: your own layouts, the shipped set, and the two import rows.">
-  {/* shot: languages/key-layouts-gallery */}
+  <Shot id="languages/key-layouts-gallery" alt="The Key layouts screen: your own layouts, the shipped set, and an import row." />
 </PhoneFrame>
 
 ## Editing a layout
@@ -26,7 +27,7 @@ Each layout row also has a chevron. Open it and the layout's layers list underne
 **Start a new layout** is the first row under Your layouts, for a grid that isn't a rearranged anything. It builds an empty four-row skeleton and opens it. Only the plain character keys are cleared, so enter, shift, space and delete keep the grid usable while you fill it in.
 
 <PhoneFrame caption="The visual layout editor, showing the Letters layer with a key selected.">
-  {/* shot: languages/layout-editor-grid */}
+  <Shot id="languages/layout-editor-grid" alt="The visual layout editor, showing the Letters layer with a key selected." />
 </PhoneFrame>
 
 A layout has up to nine layers (Letters, Symbols, Symbols 2, Number, Phone, Date, Time, Date & time, and Fn), switchable with tabs across the top, followed by a tab for each of the five [panels](#panel-layouts). None of them has to be defined. Any layer you leave untouched falls back to the built-in grid for it, the shipped QWERTY's, so a layout that only rearranges letters still gets a working number pad and symbol page without you drawing three hundred keys yourself. The Number layer is also what the Numpad tool, and a long press on <KeyCap>?123</KeyCap>, put on screen, so a layout that authors one gets its own pad there too, in the order it drew it. Letters gets one extra guarantee the others don't, though. See [Details & edge cases](#details--edge-cases). A pencil icon on a tab marks a layer this layout has authored its own copy of. An unauthored tab shows the built-in grid live, with a note that editing it will fork a copy just for this layout.
@@ -40,7 +41,7 @@ Keys set to "switch layout", "emoji panel" or "open a tool" draw an icon in the 
 Tap any key to open its edit sheet:
 
 <PhoneFrame caption="The key edit sheet: label, output, action, width, and long-press alternates.">
-  {/* shot: languages/key-edit-sheet */}
+  <Shot id="languages/key-edit-sheet" alt="The key edit sheet — label, output, action, width, and long-press alternates." />
 </PhoneFrame>
 
 - **Label**: what's drawn on the key.
@@ -124,7 +125,7 @@ Your phone grid is what the editor shows and what you're editing. The tablet key
 The layout's **name**, its **language** and its **typing method** used to live here too. All three are rows in the grid editor now, so a duplicate can be renamed and re-languaged without touching the JSON. The language picker is the same searchable registry dialog the foreign-layout import uses, and the language is what picks the dictionary, autocorrect, script rules, dictation and shift behaviour for the grid. Typing method defaults to *follow the language*, which is right for almost every layout. Override it only when one language has both a phonetic and a direct grid.
 
 <PhoneFrame caption="The JSON editor: suggestions at the cursor, a squiggle under a problem, and the code keys on the keyboard.">
-  {/* shot: languages/layout-json-editor */}
+  <Shot id="languages/layout-json-editor" alt="The raw JSON editor, with syntax highlighting and an Apply button." />
 </PhoneFrame>
 
 This screen works differently from the grid editor. It's a draft with an explicit **Apply** button rather than autosave, because half-typed JSON isn't a valid layout and there's nothing sensible to save as you type. The text starts as your layout, JSON-encoded. Applying it parses the text, and invalid JSON shows "That is not valid layout JSON.", jumps to the first error, opens **Problems** and stops there. A valid parse always keeps the id you were already editing, so pasting a different layout's id in is deliberately ignored and you can't overwrite a different layout by accident. It then runs the result through the same repair pass used on import (see below) and shows what got fixed. If nothing needed fixing, the screen closes for you. If something did, a dialog lists the changes, and the screen closes once you have read them. Back leaves without saving.

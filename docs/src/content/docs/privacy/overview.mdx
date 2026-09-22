@@ -9,11 +9,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Typing never touches the network on this keyboard, in any language and on any layout. That covers composing, prediction, autocorrect, gesture typing, spell check and learning. A short list of optional tools does reach the network. This page names every one of them, what sets it off, and how to switch it off.
 
 <PhoneFrame caption="The Privacy screen: On-device learning, Android backup, and Your data groups.">
-  ![The Privacy screen: On-device learning, Android backup, and Your data groups.](@assets/screens/privacy/privacy-screen-groups.webp)
+  <Shot id="privacy/privacy-screen-groups" alt="The Privacy screen: On-device learning, Android backup, and Your data groups." />
 </PhoneFrame>
 
 ## The short version
@@ -68,7 +69,7 @@ Two more fetch automatically but are **off by default**, so they don't belong on
 [Power saving mode](/typing/power-saving/) is the one-tap way to shut off the background half of that list. While it's active, clipboard link previews, QR-scan link previews and dictionary auto-lookup all drop back to off, and a separate switch in the same group drops the smart chips, so the currency and weather fetches stop with them. See that page for the rest of what it changes.
 
 <PhoneFrame caption="Convert currencies, on by default under Smart chips: the smart chip that fetches exchange rates on its own.">
-  ![Convert currencies, on by default under Smart chips: the smart chip that fetches exchange rates on its own.](@assets/screens/privacy/smart-chips-currency-toggle.webp)
+  <Shot id="privacy/smart-chips-currency-toggle" alt="Convert currencies, on by default under Smart chips — the one smart chip that reaches the network." />
 </PhoneFrame>
 
 See [Network policy](/privacy/network/) for the complete tool-by-tool breakdown: exact endpoints, what payload each one sends, and how downloads (wordlists, CJK dictionaries, speech and AI models, addons) are fetched and verified.

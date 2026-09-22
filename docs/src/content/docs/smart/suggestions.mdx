@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The suggestion strip is the row of tappable words above the keys. It offers completions while you're mid-word, corrections when what you typed doesn't look like a real word, and next-word predictions once you've finished one. All three come out of the same on-device engine, which also learns your own vocabulary and phrasing the more you type.
 
@@ -149,7 +150,7 @@ Four of the rows above aren't in the Suggestions group at all. They live under <
 A physical keyboard can also pick a strip candidate by number without touching the screen (see [Hardware keyboard](/typing/hardware-keyboard/) for how that's bound).
 
 <PhoneFrame caption="The Suggestions group on the Typing settings screen.">
-  ![The Suggestions group on the Typing settings screen.](@assets/screens/smart/suggestions-settings-group.webp)
+  <Shot id="smart/suggestions-settings-group" alt="The Suggestions group on the Typing settings screen." />
 </PhoneFrame>
 
 ## Details & edge cases

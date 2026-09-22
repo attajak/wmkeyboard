@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard builds as two APKs from the same source. <Flavor edition="full" /> bundles on-device machine learning for handwriting, scanning, grammar checking, offline voice, and a local AI model. <Flavor edition="lite" /> drops all of it for a much smaller download. Everything else (typing, prediction, themes, languages, privacy) is identical between them.
 
@@ -67,7 +68,7 @@ Lite is a smaller build, not a more private one. Every Full-only feature already
 <SettingsPath path="About / App / Version" />
 
 <PhoneFrame caption="Settings → About → Version names the flavor, build type, and version code.">
-  {/* shot: start/editions-about-version */}
+  <Shot id="start/editions-about-version" alt="Settings → About → Version names the flavor, build type, and version code." />
 </PhoneFrame>
 
 The Version row reads the build's own flavor name, so it shows "Full build (release) · code …" or "Lite build (release) · code …" alongside the version number. There's a quicker visual check, though. Open the toolbox. If Handwriting, Text scan, QR & barcode scanner, Document scanner and Grammar check are all there, you're on Full. If they're missing, you're on Lite.

@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Every glyph the keyboard draws around your keys (toolbar tools, the <KeyCap>Shift</KeyCap> and <KeyCap>Enter</KeyCap> keys, the emoji tab strip) is a named icon slot you can replace. Change one icon at a time, or install a pack that redraws the whole set.
 
 <PhoneFrame caption="The Icons screen: the active pack, and every replaceable slot grouped by where it appears.">
-  ![The Icons screen: the active pack, and every replaceable slot grouped by where it appears.](@assets/screens/themes/icons-screen-overview.webp)
+  <Shot id="themes/icons-screen-overview" alt="The Icons screen: the active pack, and every replaceable slot grouped by where it appears." />
 </PhoneFrame>
 
 ## What you can replace
@@ -55,7 +56,7 @@ A pack can come from two places, and both end up in the same list of installed p
 **From an addon repository.** Icon packs are one of the addon types a repository can host. They're capped at 8 MB and, unlike dictionaries or sticker packs, can't be previewed before you install. A set of glyphs is hard to judge from a text description, so it's install-and-look. Installing is a two-step handoff. The pack lands on the device first, then a dialog asks **"Use its icons on the keyboard now?"** with a **Switch to it** button. Declining leaves the pack installed but inactive, so you can come back to it later from the Icons screen without reinstalling.
 
 <PhoneFrame caption="After installing an icon pack from an addon repository, the app asks whether to switch to it.">
-  {/* shot: themes/icons-addon-apply-prompt */}
+  <Shot id="themes/icons-addon-apply-prompt" alt="After installing an icon pack from an addon repository, the app asks whether to switch to it." />
 </PhoneFrame>
 
 **Importing a file directly.** You don't need a repository at all: **Import an icon pack** on the Icons screen opens a file picker for any `.wmicons` file, the same format a repository ships. This is the flow for a pack a friend sent you directly rather than one hosted anywhere. Importing switches to the pack immediately, since installing one and not using it isn't usually what you wanted.

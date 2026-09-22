@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 "Instruments" is this site's name for five small utility tools that Settings groups together as "Utilities," alongside [Calendar](/tools/calendar/) and [Plugins](/plugins/overview/): **Flashlight**, **Compass**, **Bubble level**, **Moon phase** and **Weather**. None of them makes you leave the keyboard to check something. Four open as a panel that replaces the key rows. Flashlight is the odd one out, a single tap with no panel at all.
 
 <PhoneFrame caption="The Utilities group under Settings → Tools: Flashlight, Compass, Bubble level, Calendar, Weather, Moon phase and Plugins.">
-  ![The Utilities group under Settings → Tools: Flashlight, Compass, Bubble level, Calendar, Weather, Moon phase and Plugins.](@assets/screens/tools/instruments-settings-utilities-group.webp)
+  <Shot id="tools/instruments-settings-utilities-group" alt="The Utilities group under Settings → Tools: Flashlight, Compass, Bubble level, Calendar, Weather and Moon phase." />
 </PhoneFrame>
 
 Open any of the five from the toolbar if you've pinned it, or from the toolbox. None ships pinned by default, and none is in the onboarding wizard's Recommended set, so the first time you want one you'll probably find it in the toolbox. Weather is the one the "show me everything" answer does turn on, next to Calendar. The toolbox doesn't label a "Utilities" section the way Settings does, and it doesn't keep the five together either. Flashlight, Compass, Bubble level and Moon phase sit as a block near the end of the default ranking, after the scanners and the camera and just before the one-tap cursor moves. Weather is much earlier, right after Calendar in the everyday run.
@@ -99,7 +100,7 @@ Once a location is set, the panel shows an emoji and short description for the c
 <SettingsPath path="Tools / Weather" />
 
 <PhoneFrame caption="Weather's settings: a location search or coordinate entry, and the Fahrenheit toggle.">
-  ![Weather's settings: a location search or coordinate entry, and the Fahrenheit toggle.](@assets/screens/tools/weather-options-location.webp)
+  <Shot id="tools/weather-options-location" alt="Weather's settings: a location search or coordinate entry, and the Fahrenheit toggle." />
 </PhoneFrame>
 
 - **Location**: unset by default. It opens a dialog with a search field, backed by Open-Meteo's geocoding API, plus manual latitude and longitude fields if you'd rather skip the search.

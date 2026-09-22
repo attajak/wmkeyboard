@@ -7,6 +7,7 @@ sidebar:
 
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
+import Shot from '@components/Shot.astro';
 
 An addon repository is just a URL (a GitHub repo or any `https://` host) that
 points at a small JSON index of themes, layouts, dictionaries and the rest.
@@ -14,7 +15,7 @@ You add the repository once, browse what it offers in a searchable grid, and
 install one addon at a time.
 
 <PhoneFrame caption="A repository's catalogue: search, type filters, and a two-column grid of addon cards.">
-  {/* shot: addons/repo-catalogue-grid */}
+  <Shot id="addons/repo-catalogue-grid" alt="A repository's catalogue: search, type filters, and a two-column grid of addon cards." />
 </PhoneFrame>
 
 ## Adding a repository
@@ -94,7 +95,7 @@ Installing three themes while you're comparing them should not repaint your
 keyboard three times.
 
 <PhoneFrame caption="The prompt after a first install, offering to switch to what you just installed.">
-  {/* shot: addons/apply-prompt */}
+  <Shot id="addons/apply-prompt" alt="The prompt after a first install, offering to switch to what you just installed." />
 </PhoneFrame>
 
 The question only appears the first time you install something with a slot to

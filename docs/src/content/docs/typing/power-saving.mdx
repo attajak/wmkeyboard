@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Power saving drops the parts of WM Keyboard that cost the most battery: vibration, key sounds, animations, the glide trail, background network fetches. It goes on with one tap. It never turns on by itself unless you ask it to follow Android's battery saver or a low battery. It's a view laid over your settings rather than a rewrite of them. Turn it off and everything comes back exactly as you had it, because nothing was ever changed.
 
@@ -35,7 +36,7 @@ Beyond the manual switch, **Turn on by itself** decides whether power saving als
 Two things temper the automatic triggers. **Off while charging** (on by default) suppresses them entirely while the charger is in, since there's nothing to save with power flowing in, and a phone sitting at 100% on the charger counts as charging too. An unread battery level, before the keyboard has taken a reading, is always treated as "not low", so it can never falsely trigger on startup. Neither of these touches the manual switch: turning it on by hand means it, charger or no charger.
 
 <PhoneFrame caption="The Power saving group: the switch, the automatic trigger picker, and the battery slider.">
-  ![The Power saving group: the switch, the automatic trigger picker, and the battery slider.](@assets/screens/typing/power-saving-settings-triggers.webp)
+  <Shot id="typing/power-saving-settings-triggers" alt="The Power saving group: the switch, the automatic trigger picker, and the battery slider." />
 </PhoneFrame>
 
 :::note
@@ -49,7 +50,7 @@ The keyboard watches a handful of coarse system broadcasts (battery low, battery
 Power saving is thirteen independent switches rather than one bundle of "reduce everything", plus a fourteenth drop with no switch of its own. Each switch defaults to whatever gives up the least for the most battery back. Turn any of the thirteen back on individually if that trade-off doesn't suit you.
 
 <PhoneFrame caption="The three drop cards: effects, typing helpers and background work.">
-  ![The three drop cards: effects, typing helpers and background work.](@assets/screens/typing/power-saving-what-to-drop.webp)
+  <Shot id="typing/power-saving-what-to-drop" alt="The What to drop group — eleven independent switches." />
 </PhoneFrame>
 
 | Switch | Default | What it drops |

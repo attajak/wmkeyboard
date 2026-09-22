@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 The Camera tool swaps the key rows for a live viewfinder, so you can snap a photo and send it into whatever you're typing in without ever leaving the keyboard. <Flavor edition="both" />: it's built on plain CameraX, not ML Kit, so it ships in both editions.
 
@@ -84,7 +85,7 @@ On a device with no camera at all, the panel shows "Your device has no camera." 
 <SettingsPath path="Tools / Camera" />
 
 <PhoneFrame caption="Camera's Options screen: selfie camera, mirroring, gallery saving, shutter sound and haptics.">
-  ![Camera's Options screen: selfie camera, mirroring, gallery saving, shutter sound and haptics.](@assets/screens/tools/camera-options.webp)
+  <Shot id="tools/camera-options" alt="Camera's Options screen: selfie camera, mirroring, gallery saving, shutter sound and haptics." />
 </PhoneFrame>
 
 Like every tool on the [full tool list](/reference/settings/tools/), this screen opens with a **Turn on** switch. An **Icon colour** override follows it, but only while [colorful tool icons](/tools/overview/) are on globally. It's pink by default, and it becomes two rows instead of one if gradient tool colours are on as well.

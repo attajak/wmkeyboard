@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Every key press can confirm itself two ways: a short vibration and a click sound. Both are tunable on their own, down to which events buzz and which don't. Haptics are on by default. The sound is off.
 
 <PhoneFrame caption="The Key press screen: haptic style chips above the key press sound group.">
-  ![The Key press screen: haptic style chips above the key press sound group.](@assets/screens/typing/keypress-settings-overview.webp)
+  <Shot id="typing/keypress-settings-overview" alt="The Key press screen: haptic style chips above the key press sound group." />
 </PhoneFrame>
 
 ## Haptic feedback
@@ -41,7 +42,7 @@ Click, Heavy, Sharp and Custom bypass the platform call and drive the motor more
 Custom exposes two sliders: **Haptic strength** (5–60&nbsp;ms, vibration length) and **Haptic intensity** (1–255, how hard the motor is driven). Sharp exposes intensity too, to control the punch of its click primitive, but not strength, since the hardware fixes the primitive's length. The system-wide touch-feedback vibration setting still scales the final strength on top of whatever you set here.
 
 <PhoneFrame caption="Haptic style chips, with the strength and intensity sliders shown for Custom.">
-  ![Haptic style chips, with the strength and intensity sliders shown for Custom.](@assets/screens/typing/haptic-style-custom-sliders.webp)
+  <Shot id="typing/haptic-style-custom-sliders" alt="Haptic style chips, with the strength and intensity sliders shown for Custom." />
 </PhoneFrame>
 
 Two more toggles cover the edges of a long press. **Long-press haptics** (on by default) buzzes the moment a long press registers, whether that's the alternate-character popup opening or a long-press action firing, so your finger knows it can let go. **Long-press release haptics** (off by default) adds a second buzz when you lift your finger afterward. It's off because a third vibration in one gesture reads as excessive to a lot of people.
@@ -84,7 +85,7 @@ Click and Standard come from the device's own system sound pack, so they vary ph
 All seven chips are on the settings screen. On the keyboard's own Sound & haptics panel, Custom and Sound pack appear only once one of them is already selected, since neither names a fixed waveform and there's no file picker on the keyboard. Pick them from the settings screen the first time.
 
 <PhoneFrame caption="Sound style chips with the volume slider below.">
-  ![Sound style chips with the volume slider below.](@assets/screens/typing/keysound-style-chips.webp)
+  <Shot id="typing/keysound-style-chips" alt="Sound style chips with the volume slider below." />
 </PhoneFrame>
 
 **Sound volume** (5%–100%) is relative to the system media volume rather than an absolute level.

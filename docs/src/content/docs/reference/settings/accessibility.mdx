@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Accessibility screen collects every vision, motion, screen-reader, and touch accommodation WM Keyboard offers in one place, grouped exactly as they appear on screen. This page is the field reference. For the reasoning behind each option, read [Accessibility overview](/accessibility/overview/) instead.
 
 <PhoneFrame caption="The Vision group at the top of the Accessibility screen.">
-  ![The Vision group at the top of the Accessibility screen.](@assets/screens/reference/settings/accessibility-vision-group.webp)
+  <Shot id="reference/settings/accessibility-vision-group" alt="The Vision group at the top of the Accessibility screen." />
 </PhoneFrame>
 
 ## Options
@@ -42,7 +43,7 @@ The Accessibility screen collects every vision, motion, screen-reader, and touch
 **Text size** shows the key label size and opens Appearance, where the slider lives (70% up to 200% of normal). To change the size of the keys themselves, use [Size, position & one-handed use](/typing/size-position/). The two are easy to confuse, and they live on different screens.
 
 <PhoneFrame caption="Colour vision set to Deutan, with the five filter options shown in the picker.">
-  {/* shot: reference/settings/accessibility-color-vision-picker */}
+  <Shot id="reference/settings/accessibility-color-vision-picker" alt="Colour vision set to Deutan, with the five filter options shown in the picker." />
 </PhoneFrame>
 
 ### Motion
@@ -92,7 +93,7 @@ Setting TalkBack support to **Gestures** reveals the **Keyboard gestures service
 Tap the row and a disclosure appears first, explaining what the service reads (nothing) and what it does. Continue from there and the app opens Android's Accessibility settings. Without the service granted, Gestures mode falls back to behaving like Explore.
 
 <PhoneFrame caption="TalkBack support set to Gestures, with the Keyboard gestures service row asking to be granted.">
-  {/* shot: reference/settings/accessibility-screen-reader-group */}
+  <Shot id="reference/settings/accessibility-screen-reader-group" alt="TalkBack support set to Gestures, with the Keyboard gestures service row asking to be granted." />
 </PhoneFrame>
 
 ### Touch
@@ -111,7 +112,7 @@ Tap the row and a disclosure appears first, explaining what the service reads (n
 **Key size & spacing** and **Haptics & sound** are plain navigation rows, not settings stored on this screen. They open [Layout & size](/reference/settings/layout/) and [Key press](/reference/settings/keypress/) respectively.
 
 <PhoneFrame caption="The Touch group: ignore repeated presses and long-press delay.">
-  {/* shot: reference/settings/accessibility-touch-group */}
+  <Shot id="reference/settings/accessibility-touch-group" alt="The Touch group: ignore repeated presses and long-press delay." />
 </PhoneFrame>
 
 ## Details & edge cases

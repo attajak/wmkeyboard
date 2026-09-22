@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Emoji screen collects every setting behind emoji access, suggestions, the panel, and emoji fonts in one place, grouped exactly as they appear on screen. This page is the field reference. For the emoji panel itself, with search, skin tones and favourites, see [Emoji picker & search](/emoji/picker/). For the reasoning behind fonts, keyword packs, suggestions, and the emoji row, see [Emoji customization](/emoji/customization/).
 
 <PhoneFrame caption="The Emoji settings screen, showing Access and Suggestions at the top.">
-  {/* shot: reference/settings/emoji-overview */}
+  <Shot id="reference/settings/emoji-overview" alt="The Emoji settings screen, showing Access and Suggestions at the top." />
 </PhoneFrame>
 
 ## Options
@@ -102,7 +103,7 @@ This group is a page of its own, opened from the Emoji panel row in the Access g
 **Emoji keywords** is a navigation row, not a setting stored here: it opens the sub-screen documented below.
 
 <PhoneFrame caption="The Emoji panel group, with the Emoji keywords row at the bottom.">
-  {/* shot: reference/settings/emoji-panel-group */}
+  <Shot id="reference/settings/emoji-panel-group" alt="The Emoji panel group, with the Emoji keywords row at the bottom." />
 </PhoneFrame>
 
 ### Emoji row
@@ -127,7 +128,7 @@ Until you've used enough emoji to fill the row from your own history, it falls b
 When Emoji row is set to **Own row**, a caption on this screen points to **Rows & bars** for where the row sits relative to the toolbar and symbol row; by default it's first, above both.
 
 <PhoneFrame caption="The Emoji row group with Own row selected.">
-  {/* shot: reference/settings/emoji-row-group */}
+  <Shot id="reference/settings/emoji-row-group" alt="The Emoji row group with Own row selected." />
 </PhoneFrame>
 
 ### Skin tone
@@ -171,7 +172,7 @@ While the download runs the button becomes a progress bar, and a failure leaves 
 **Hide emoji that your device cannot show** is off by default. It hides an emoji from the panel, search, and suggestions only when *neither* the chosen font *nor* the phone's own system font can draw it. An emoji missing from just the chosen font is drawn quietly in the system font instead, in a different style.
 
 <PhoneFrame caption="The Emoji style group, with the live font preview row and font choices.">
-  {/* shot: reference/settings/emoji-style-group */}
+  <Shot id="reference/settings/emoji-style-group" alt="The Emoji style group, with the live font preview row and font choices." />
 </PhoneFrame>
 
 Long-pressing any emoji in the panel opens its favourite and skin-tone controls: two-person emoji like 🤝 let you set each person's tone independently.
@@ -228,7 +229,7 @@ Below that, one group appears per language you've enabled (plus any language tha
 Packs stack on top of the bundled English and Bangla keywords rather than replacing them, and a language can have several at once. The import format is a tab-separated file: one emoji per line, then its comma-separated keywords, and optionally a display name. Lines starting `# ` are ignored. The JSON emoji dictionaries from the [wmkeyboard-data](https://github.com/wasi-master/wmkeyboard-data) repository import as they are, with no conversion needed.
 
 <PhoneFrame caption="The Emoji keywords screen, with per-language download and import controls.">
-  {/* shot: reference/settings/emoji-keywords-screen */}
+  <Shot id="reference/settings/emoji-keywords-screen" alt="The Emoji keywords screen, with per-language download and import controls." />
 </PhoneFrame>
 
 The data repository currently covers 126 downloadable language packs: fewer than its raw language count because a handful of codes get remapped or merged with duplicates, and a few packs the source data leaves nearly empty are left out.

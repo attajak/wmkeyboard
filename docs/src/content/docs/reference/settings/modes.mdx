@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 **Keyboard modes** is a single screen with two levels: a list of modes, and a per-mode editor that decides what a mode changes and when it turns on. This page walks the settings screen itself. For the concepts behind modes, including how activation is resolved and how the on-keyboard Modes tool overrides the pick by hand, see [Modes & the symbol row](/typing/modes/).
 
 <PhoneFrame caption="Keyboard modes: the six default modes, each with its auto-activation summary, plus New mode.">
-  {/* shot: reference/settings/modes-list */}
+  <Shot id="reference/settings/modes-list" alt="Keyboard modes: the six default modes, each with its auto-activation summary, plus New mode." />
 </PhoneFrame>
 
 You reach this screen three ways: Home → **Keyboard modes**, the settings search index, or the on-keyboard **Modes** tool's own settings entry (**Edit the keyboard modes**, which shows the live mode count as its value). All three land on the same list.
@@ -33,7 +34,7 @@ Below those, each mode's row shows its icon, its name, and a one-line summary of
 Tapping a mode opens **Edit mode**, starting with its **Name** (shown in the Modes tool) and **Icon**: a picker of 36 bare-icon chips (tune, chat, forum, write, note, article, book, mail, lock, shield, key, web, search, code, terminal, work, school, science, home, person, group, call, shopping, money, calendar, game, music, video, camera, palette, travel, fitness, cloud, bolt, star, favorite) in a scrolling grid, no text labels or clear option.
 
 <PhoneFrame caption="Edit mode: name, icon, and the What this mode changes group.">
-  {/* shot: reference/settings/mode-editor-top */}
+  <Shot id="reference/settings/mode-editor-top" alt="Edit mode: name, icon, and the What this mode changes group." />
 </PhoneFrame>
 
 ### What this mode changes
@@ -71,13 +72,13 @@ The symbol row itself can switch **Symbol row** to Off for the mode it's showing
 **Custom symbol sets** seeds from your current symbol-row sets (or the built-in defaults if none are enabled), offers every set (built-in and custom) as toggle chips, guards against emptying the list to zero, and reorders with **Change the symbol set order**. The first set in that order is what the symbol row opens on while the mode is active.
 
 <PhoneFrame caption="A mode's Custom pinned tools turned on, with its own tool chips and reorder option.">
-  {/* shot: reference/settings/mode-editor-custom-tools */}
+  <Shot id="reference/settings/mode-editor-custom-tools" alt="A mode's Custom pinned tools turned on, with its own tool chips and reorder option." />
 </PhoneFrame>
 
 ### Activate automatically for
 
 <PhoneFrame caption="Field-type chips, the field-hint list and the bound app list at the bottom of the mode editor.">
-  {/* shot: reference/settings/mode-editor-activation */}
+  <Shot id="reference/settings/mode-editor-activation" alt="Field-type chips and the bound app list at the bottom of the mode editor." />
 </PhoneFrame>
 
 **Field types** is a row of chips for the ten kinds a mode can match: Password, Email, URL, Number, Phone, Text, Notification replies, Multi-line text, Single-line text, No suggestions.

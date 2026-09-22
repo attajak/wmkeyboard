@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard's tests span three runners: plain JVM unit tests, Compose and instrumented tests that need a real device or emulator, and a small Rust suite for the offline grammar engine. Which one a piece of code gets depends on whether it touches the Android framework at all.
 
@@ -68,7 +69,7 @@ Even the modules that look closest to framework-free aren't. `core/icons`, `core
 ## Testing on a device
 
 <PhoneFrame caption="Settings → About → Diagnostics: filterable app log, crash records, and a one-tap report export.">
-{/* shot: development/diagnostics-screen */}
+<Shot id="development/diagnostics-screen" alt="Settings → About → Diagnostics: filterable app log, crash records, and a one-tap report export." />
 </PhoneFrame>
 
 Once you've [built and installed](/development/building/) a flavor, set WM Keyboard as your active input method before you test gesture or layout changes. To check which IME is currently active, run `adb shell dumpsys input_method | grep mCurId`.

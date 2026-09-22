@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Everything WM Keyboard remembers about you goes into the app's own private storage on this phone. That means words you've typed, things you've copied, and dictionaries you chose to download. None of it syncs anywhere unless you turn on a backup yourself, which has a page of its own: see [Backup & restore](/privacy/backup/).
 
 <PhoneFrame caption="The Privacy screen: on-device learning toggles above, the Clear learned words button below.">
-  ![The Privacy screen: on-device learning toggles above, the Clear learned words button below.](@assets/screens/privacy/on-device-learning-toggles.webp)
+  <Shot id="privacy/on-device-learning-toggles" alt="The Privacy screen: on-device learning toggles above, the Clear learned words button below." />
 </PhoneFrame>
 
 ## What's stored, and where
@@ -70,7 +71,7 @@ Open **Privacy**. Tap **Delete the learned words**. A dialog lists what goes and
 Confirming deletes 13 files: your word and word-pair history, the new words still waiting to be counted, and your emoji-usage history. It also takes your autocorrect revert memory and your Chinese/Japanese/Cantonese pick history, plus the language-mix tracker and its per-app twin. Finally, it clears the fixes you've taught autocorrect, both of your finger's key-position models, your swipe-typing outcomes and shapes, and your personal-dictionary word rankings. Your personal dictionary goes with the first of those, because words you add by hand live in the same file, and the dialog says so. Your snippets and your imported word lists stay.
 
 <PhoneFrame caption="Learned words, under Privacy → Your data.">
-  ![The Learned words row, under Privacy → Your data.](@assets/screens/privacy/clear-learned-words-button.webp)
+  <Shot id="privacy/clear-learned-words-button" alt="Clear learned words, under Privacy → Your data." />
 </PhoneFrame>
 
 Beyond that one bulk action, clearing works two ways: per-item where the data lives, and per-category on the storage screen.

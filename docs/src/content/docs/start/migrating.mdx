@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Switching keyboards is mostly muscle memory, and WM Keyboard was built with that in mind. Dozens of its behaviors deliberately follow Gboard and SwiftKey conventions, right down to code comments that say so. This page maps the features you already rely on to their WM Keyboard equivalent, and calls out the handful of places where migration isn't a straight swap.
 
@@ -45,7 +46,7 @@ There's no one-click "import my personal dictionary" button. Most keyboards keep
 Words you've typed build up in an on-device dictionary automatically, the same way any predictive keyboard learns your vocabulary. There's nothing to migrate beyond typing normally with [Learn from typing](#options) switched on. You can also add words one at a time from the personal dictionary screen. Anything added that way reads "You added this word." Words the keyboard picked up from typing read "Seen 4 times" instead.
 
 <PhoneFrame caption="The personal dictionary screen: words you add read 'You added this word'; words picked up from typing show a use count. There's no bulk-import button here.">
-  {/* shot: start/migrating-personal-dictionary */}
+  <Shot id="start/migrating-personal-dictionary" alt="The personal dictionary screen — words you add show 'Added by you'; words picked up from typing show a use count. There's no bulk-import button here." />
 </PhoneFrame>
 
 For seeding a large vocabulary at once (brand names, jargon, a whole word list you already have), use **Custom dictionaries** instead. It's a different feature (word lists layered per language, mainly meant for languages with no bundled dictionary), but it's the closest thing to a bulk import:
@@ -73,7 +74,7 @@ The first-run wizard covers most of this already (see [Enable the keyboard](/sta
 - **Revisit autocorrect strength** if your old keyboard's felt looser or tighter. WM Keyboard's confidence multiplier defaults to ×4 out of a ×1.5–×10 range. That sits nearer the eager end than the conservative one, but well short of the most aggressive setting.
 
 <PhoneFrame caption="Settings → Tools: one switch per tool, grouped, with no bulk shortcut. The wizard's Recommended and Everything buttons don't appear on this screen.">
-  ![Settings → Tools: one switch per tool, grouped, with no bulk shortcut.](@assets/screens/start/migrating-tools-recommended.webp)
+  <Shot id="start/migrating-tools-recommended" alt="Settings → Tools: every tool starts on. Recommended switches to the curated 17-tool set the setup wizard offers." />
 </PhoneFrame>
 
 ## What WM Keyboard does differently

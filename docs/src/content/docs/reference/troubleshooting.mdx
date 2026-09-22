@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Most keyboard problems trace back to one of a handful of causes: a permission Android never granted, a dictionary that never downloaded, or a tool panel doing exactly what it's supposed to. This page walks through the usual suspects and where to go next when the fix isn't here.
 
@@ -24,7 +25,7 @@ This is almost always dictionary state. A language hasn't gone missing, because 
 Only English and Bangla ship a built-in dictionary. Every other language starts with nothing but what you've typed yourself, until you download a wordlist or import your own. See [Downloadable dictionaries](/languages/dictionaries/) for the four states a language's Dictionary section can be in, the three size tiers, and why a failed download shows **Retry** instead of leaving you guessing.
 
 <PhoneFrame caption="A language with no built-in or downloaded dictionary yet. Suggestions come only from what you've typed.">
-  {/* shot: reference/troubleshooting-empty-dictionary-state */}
+  <Shot id="reference/troubleshooting-empty-dictionary-state" alt="A language with no built-in or downloaded dictionary yet — suggestions come only from what you've typed." />
 </PhoneFrame>
 
 One setting can also hide suggestions everywhere at once, which is worth ruling out before you suspect a single language:
@@ -94,7 +95,7 @@ See [The toolbar](/tools/overview/#panels-and-captured-keys) for the full explan
 Diagnostics is what the keyboard has recorded about itself, kept specifically because a keyboard's failures are usually invisible: a crash swaps in a different IME with no on-screen error, a panel comes up empty, a model silently fails to load. Nothing you actually type is ever recorded here. Every entry is what happened, not what you wrote.
 
 <PhoneFrame caption="The Diagnostics screen: report actions at the top, the filterable app log below.">
-  {/* shot: reference/troubleshooting-diagnostics-screen */}
+  <Shot id="reference/troubleshooting-diagnostics-screen" alt="The Diagnostics screen: report actions at the top, the filterable app log below." />
 </PhoneFrame>
 
 The screen has four parts:

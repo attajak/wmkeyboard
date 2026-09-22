@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Autocorrect fixes typos as you finish typing a word, but only when one candidate is clearly the right fix. A fat-fingered slip that's obviously "world" gets corrected. A word that sits genuinely between two real words is left alone for the suggestion strip to offer instead. This page is about that confidence gate, and about everything built around it: reverting a correction, the words autocorrect never touches, and the auto-space rules that ride along with it.
 
@@ -205,7 +206,7 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 <SettingsPath path="Typing / Automatic corrections" />
 
 <PhoneFrame caption="The Automatic corrections group in Typing settings, including the confidence slider.">
-  ![The Automatic corrections group in Typing settings, including the confidence slider.](@assets/screens/smart/autocorrect-options.webp)
+  <Shot id="smart/autocorrect-options" alt="The Automatic corrections group in Typing settings, including the confidence slider." />
 </PhoneFrame>
 
 | Setting | Default | Shown when |

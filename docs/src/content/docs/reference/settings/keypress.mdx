@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Key press screen collects everything about the physical act of pressing a key: vibration, sound, the backspace swipe, the preview bubble, timing, and press-and-hold shortcuts. This page lists them in the order they appear on screen. It's the field reference. For the reasoning behind each option, read [Sound & vibration](/typing/feedback/) and [Typing basics](/typing/basics/) instead.
 
 <PhoneFrame caption="The top of the Key press screen: the Haptic feedback group with its style chips.">
-  {/* shot: reference/settings/keypress-overview */}
+  <Shot id="reference/settings/keypress-overview" alt="The top of the Key press screen: the Haptic feedback group with its style chips." />
 </PhoneFrame>
 
 ## Options
@@ -47,7 +48,7 @@ The Key press screen is a hub. Haptics and sound, Key popup and Press and hold s
 Two of the per-event rows are odd ones out. **Click on key repeat** has nothing to do with vibration at all: it's the sound half of "Vibrate on key repeat", playing the key sound on every auto-repeat while <KeyCap>⌫</KeyCap> or <KeyCap>Space</KeyCap> is held, and it does nothing unless Key sound is on. **Follow the system touch feedback setting** isn't a per-event gate either. It hands the master switch over to Android's own touch-vibration toggle. It ships off, so turning off touch feedback in Android's sound settings leaves the keyboard buzzing. Turn this on if you expect the system switch to cover the keyboard too.
 
 <PhoneFrame caption="Haptic style set to Custom, showing the strength and intensity sliders.">
-  {/* shot: reference/settings/keypress-haptic-custom-sliders */}
+  <Shot id="reference/settings/keypress-haptic-custom-sliders" alt="Haptic style set to Custom, showing the strength and intensity sliders." />
 </PhoneFrame>
 
 ### Key press sound
@@ -104,7 +105,7 @@ A theme can carry a key sound of its own, and where it does, it wins over everyt
 **Popup shape** and **Popup corner radius** reach past the preview bubble. They set the outline of every popup surface the keyboard draws, press-and-hold alternates, the language picker and the panel menus included. The radius applies only to the rounded and cut shapes. The rest size their corners off the popup itself. A theme can override either one.
 
 <PhoneFrame caption="Key popup and Timing groups, mid-screen.">
-  {/* shot: reference/settings/keypress-popup-timing */}
+  <Shot id="reference/settings/keypress-popup-timing" alt="Key popup and Timing groups, mid-screen." />
 </PhoneFrame>
 
 ### Delete keys
@@ -212,7 +213,7 @@ The repeat interval is two sliders, because delete and space are held for opposi
 **Shortcut keys** is one row for all six bindings rather than six rows, and it appears whenever at least one of them is on. The shipped `a c v x z y` is a QWERTY answer, so a layout without those letters (Bangla, Russian) needs the whole set moved onto keys it actually draws. The row's subtitle lists the keys currently bound. Tap it to open a dialog with one field per switched-on action, saved in one go.
 
 <PhoneFrame caption="Press and hold shortcuts: the currency keys field and the hold-letter toggles.">
-  {/* shot: reference/settings/keypress-long-press-shortcuts */}
+  <Shot id="reference/settings/keypress-long-press-shortcuts" alt="Long-press shortcuts: the currency keys field and the Hold-letter toggles." />
 </PhoneFrame>
 
 ## Details & edge cases

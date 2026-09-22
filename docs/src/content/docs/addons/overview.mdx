@@ -8,11 +8,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Addons are how the keyboard grows past what ships in the app. Themes, layouts, dictionaries, fonts and sounds can all come from anyone who can host a JSON file. You add a repository by its URL, browse what it lists, and install straight from the phone. No app store, no build step, no account.
 
 <PhoneFrame caption="The Addons screen: repositories you've added, plus everything you've installed from them.">
-  {/* shot: addons/addons-home */}
+  <Shot id="addons/addons-home" alt="The Addons screen: repositories you've added, plus everything you've installed from them." />
 </PhoneFrame>
 
 ## What you can install
@@ -62,7 +63,7 @@ A few rules keep that trust model intact even before an addon reaches your devic
 - **Size caps are enforced mid-download.** A download that exceeds its type's limit (the table above) is aborted in flight rather than flagged after the fact.
 
 <PhoneFrame caption="A plugin's detail page shows what it can do before you install it. This is the one addon type that isn't pure data.">
-  {/* shot: addons/plugin-trust-preview */}
+  <Shot id="addons/plugin-trust-preview" alt="A plugin's detail page shows what it can do before you install it — this is the one addon type that isn't pure data." />
 </PhoneFrame>
 
 Plugins are the sole exception: they carry Lua that actually runs. That code is sandboxed with no way to read what you type and no access to the text field, the clipboard, or the network. The sandbox has no such API to withhold in the first place. A plugin can ask for local on-device storage and nothing else, and because nothing in the sandbox can reach the network, whatever it stores can't leave the device either.

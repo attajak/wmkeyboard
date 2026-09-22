@@ -11,6 +11,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Grammar check runs your writing past Harper, the same open-source engine behind `harper-ls`, and surfaces fixable issues right above the keys as you type. <Flavor edition="full" /> Everything happens on-device. Nothing you type leaves the phone to get checked.
 
@@ -95,7 +96,7 @@ The very first check after opening the panel can take a beat longer, since build
 <SettingsPath path="Tools / Grammar check" />
 
 <PhoneFrame caption="The Grammar check settings screen: dialect, re-check delay, and the system-wide group.">
-  ![The Grammar check settings screen: dialect, re-check delay, and the system-wide group.](@assets/screens/smart/grammar-settings.webp)
+  <Shot id="smart/grammar-settings" alt="The Grammar check settings screen: dialect, re-check delay, and the system-wide group." />
 </PhoneFrame>
 
 | Setting | Default | Range/options |

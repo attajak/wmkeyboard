@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The Backup & restore screen is where you write your keyboard to a file and read one back in. This page is the field reference for every switch, button, and message on it. For the reasoning behind the merge-vs-replace split and a walkthrough of moving to a new phone, see [Backup & restore](/privacy/backup/) instead.
 
 <PhoneFrame caption="The Backup & restore screen: what to include, plus the export and import buttons.">
-  ![The Backup & restore screen: what to include, plus the export and import buttons.](@assets/screens/reference/settings/backup-screen.webp)
+  <Shot id="reference/settings/backup-screen" alt="The Backup & restore screen: what to include, plus the export and import buttons." />
 </PhoneFrame>
 
 ## Options
@@ -112,7 +113,7 @@ Sticker packs and icon packs default off because their images make the file larg
 | File doesn't decode as either format | "That file is not a WM Keyboard backup." |
 
 <PhoneFrame caption="The import confirmation dialog, listing what a backup file contains before anything is applied.">
-  {/* shot: reference/settings/backup-import-confirm */}
+  <Shot id="reference/settings/backup-import-confirm" alt="The import confirmation dialog, listing what a backup file contains before anything is applied." />
 </PhoneFrame>
 
 Confirming a current-format import applies each section independently and merges or replaces depending on which one it is:

@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Snippets are reusable pieces of text (a mailing address, a canned reply, a sign-off) that you save once and reuse everywhere you type. Insert one with a tap from the panel, or type its trigger word and let it expand on its own as you finish typing.
 
@@ -176,7 +177,7 @@ A snippet's text can include any of these tokens. They're substituted the moment
 Find the list under Settings → Text expansion (see [Options](#options) below for the exact path). The Snippets tool page has one row that opens the same screen.
 
 <PhoneFrame caption="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.">
-  ![Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.](@assets/screens/tools/snippets-settings.webp)
+  <Shot id="tools/snippets-settings" alt="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export." />
 </PhoneFrame>
 
 The settings screen opens with a reference card listing all 18 variables plus `{date:pattern}`, each with a live example. Below it:
@@ -190,7 +191,7 @@ The settings screen opens with a reference card listing all 18 variables plus `{
 - Every row also shows a live "Inserts as: …" preview whenever the expanded text would differ from what you typed, and "Expands by itself from: …" if you've set a trigger (or the pattern itself, if you set one of those). A snippet set to ask first says "Offers itself after: …" instead. A snippet with more than one expansion, or with links, counts them on a line of its own.
 
 <PhoneFrame caption="Adding a snippet: label, text with variables, and an optional trigger word.">
-  ![Adding a snippet: label, text with variables, and an optional trigger word.](@assets/screens/tools/snippets-add-dialog.webp)
+  <Shot id="tools/snippets-add-dialog" alt="Adding a snippet: label, text with variables, and a Word or Pattern trigger." />
 </PhoneFrame>
 
 Snippets have a stored order. New ones append to the end, and the pencil button on the heading above a list of them turns that list into one you drag into order, so the ones you use daily can go back to the top. Press the tick to leave. That matters because the snippets panel draws in the same order and has no search of its own. Each list is ordered on its own: the snippets inside a folder, and the ones in no folder at all.

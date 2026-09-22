@@ -12,6 +12,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
 import { Steps } from '@astrojs/starlight/components';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard can also stand in as Android's own spell-check service, the one that draws the red underline in any app's text field, no matter which on-screen keyboard is active at the time. <Flavor edition="full" /> It's built on Harper, the same offline grammar engine behind the in-keyboard [Grammar check](/smart/grammar/) tool. Turn it on and the same fixes reach every app, not only WM Keyboard's own suggestion strip.
 
@@ -65,7 +66,7 @@ One toggle covers both: **Suggest contact names** loads names and email addresse
 <SettingsPath path="Tools / Grammar check" />
 
 <PhoneFrame caption="The System-wide group on the Grammar check screen: Use Harper everywhere, and Underline only for Android 12 and up.">
-  ![The System-wide group on the Grammar check screen: Use Harper everywhere, and Underline only for Android 12 and up.](@assets/screens/smart/spell-checker-options.webp)
+  <Shot id="smart/spell-checker-options" alt="The System-wide group on the Grammar check screen: Use Harper everywhere, and Underline only for Android 12 and up." />
 </PhoneFrame>
 
 | Setting | Default | Notes |

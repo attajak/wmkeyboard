@@ -13,6 +13,7 @@ import music from '../../../../../app/src/main/assets/layouts/music.wmlayout.jso
 import brailleChord from '../../../../../app/src/main/assets/layouts/braille_chord.wmlayout.json';
 import morse from '../../../../../app/src/main/assets/layouts/morse.wmlayout.json';
 import ipa from '../../../../../app/src/main/assets/layouts/ipa.wmlayout.json';
+import Shot from '@components/Shot.astro';
 
 Four entries in the language catalogue are notation systems rather than spoken languages: musical notation, chorded braille, Morse code, and the International Phonetic Alphabet. Each behaves exactly like a language (its own layout, its own switch-ring slot, its own settings screen), but what you're typing is notation, not prose. [Fancy text](/languages/fancy-text/) is the one other entry that isn't a language, and it gets its own page.
 
@@ -106,7 +107,7 @@ None of the four are enabled on a fresh install. What you start with is read off
 None of the four gets a **Numerals** group. That group only appears for a language whose own digits aren't `0-9`, and all four use plain Latin digits, so there is nothing to choose and the group isn't drawn.
 
 <PhoneFrame caption="Add language: searching “morse” finds Morse code in the full catalogue.">
-  {/* shot: languages/notation-add-language-search */}
+  <Shot id="languages/notation-add-language-search" alt="Add language: searching &quot;morse&quot; finds Morse code in the full catalogue." />
 </PhoneFrame>
 
 Once enabled, a notation layout takes a slot in the normal switch ring exactly like any language: cycle to it with the <KeyCap>🌐</KeyCap> key or a spacebar swipe. See [Switching languages](/languages/switching/) for how the cycle itself works. Nothing about it changes for a notation layout. For the language catalogue in general (search, numerals, "also suggest from," and everything else every language screen shares), see [Languages overview](/languages/overview/).

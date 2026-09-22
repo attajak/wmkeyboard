@@ -238,3 +238,41 @@ const jsonLd = noindex || ownGraph ? undefined : JSON.stringify(graph(nodes));
 />
 
 {jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
+
+{/* The theme toggle, as one crossfade of the whole page. starlight-theme-black's
+    button recolours everything in a single frame, and anything that animates on
+    its own (a screenshot pair, a component's background) then trails behind the
+    page. A view transition snapshots the page before and after the switch and
+    fades between the two, so every part of it moves together.
+
+    The theme's button is not forked: its click is caught on the way down and
+    handed back to it inside the transition's update callback. A browser without
+    view transitions, or a reader who asked for reduced motion, gets the click
+    untouched, which is the instant switch it always was. A switch that comes
+    from the OS (the theme set to follow it) is left alone too: the OS already
+    fades the whole window. */}
+<script is:inline>
+	document.addEventListener(
+		'click',
+		(event) => {
+			const button = event.target instanceof Element && event.target.closest('starlight-theme-black-select button');
+			if (!button || event.wmThemeReplay || !document.startViewTransition) return;
+			if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+			event.stopImmediatePropagation();
+			event.preventDefault();
+			document.startViewTransition(() => {
+				const replay = new MouseEvent('click', { bubbles: true, cancelable: true });
+				replay.wmThemeReplay = true;
+				button.dispatchEvent(replay);
+			});
+		},
+		true
+	);
+</script>
+<style is:global>
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 0.3s;
+		animation-timing-function: ease;
+	}
+</style>

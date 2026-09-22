@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 Every height, width and gap on WM Keyboard is a slider rather than a fixed number. Shrink the keyboard toward one thumb, split it down the middle for a wide screen, or detach it into a floating panel. Sizing you set for portrait carries to the unfolded shapes by default, landscape starts from its own shorter board, and all three can override any of it, right down to scaling the whole keyboard at once.
 
 <PhoneFrame caption="The Size & position group: key height, key spacing, width and position sliders.">
-  ![The Size & position group: key height, key spacing, width and position sliders.](@assets/screens/typing/size-position-settings-overview.webp)
+  <Shot id="typing/size-position-settings-overview" alt="The Size & position group: key height, key spacing, width and position sliders." />
 </PhoneFrame>
 
 ## Sizing the keys
@@ -61,7 +62,7 @@ Tap a shape's row to expand its editor:
 - **Follow portrait again**, which appears only once a shape has at least one override set. It clears every override for that shape in one tap. On landscape that returns it to the landscape defaults below, not to your portrait numbers.
 
 <PhoneFrame caption="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider.">
-  {/* shot: typing/size-position-per-screen */}
+  <Shot id="typing/size-position-per-screen" alt="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider." />
 </PhoneFrame>
 
 Everything in [one-handed, split and floating](#one-handed-mode) below is global instead. It applies the same whichever screen shape you're on.

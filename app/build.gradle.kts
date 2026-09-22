@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import java.time.Duration
 import java.util.Properties
 
 plugins {
@@ -880,7 +881,13 @@ if (docShots) {
         // drags AAPT2 linking into every unit-test run.
         testOptions.unitTests.isIncludeAndroidResources = true
         // Native graphics plus a whole activity tree; 2g is the ordinary suite's.
-        testOptions.unitTests.all { it.maxHeapSize = "4g" }
+        testOptions.unitTests.all {
+            it.maxHeapSize = "4g"
+            // Shots are independent, so two workers halve the run.
+            it.maxParallelForks = 2
+            // A shot that wedges must not hold the run forever.
+            it.timeout.set(Duration.ofMinutes(45))
+        }
     }
 
     androidComponents {
@@ -909,5 +916,9 @@ if (docShots) {
         filter { includeTestsMatching("com.wasimaster.wmkeyboard.docshots.*") }
         systemProperty("roborazzi.test.record", "true")
         systemProperty("wmkb.docShots.out", layout.buildDirectory.dir("docshots").get().asFile.absolutePath)
+        // `-Pwmkb.docShots.only=<regex>` renders just the ids it matches.
+        systemProperty("wmkb.docShots.only", providers.gradleProperty("wmkb.docShots.only").getOrElse(""))
+        // Every shot is a separate test; the report shows which ones failed.
+        outputs.upToDateWhen { false }
     }
 }

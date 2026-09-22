@@ -9,11 +9,12 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import { Steps } from '@astrojs/starlight/components';
+import Shot from '@components/Shot.astro';
 
 Installing WM Keyboard doesn't make it your keyboard. Android keeps every installed input method switched off until you enable it and then pick it as the active one. The app's Home screen has a card that walks you through both steps, and it disappears the moment you're done.
 
 <PhoneFrame caption="The setup card before WM Keyboard is enabled: 'Turn on keyboard' opens system settings, 'Switch keyboard' waits its turn.">
-  {/* shot: start/setup-card-not-enabled */}
+  <Shot id="start/setup-card-not-enabled" alt="The setup card before WM Keyboard is enabled — 'Enable keyboard' opens system settings, 'Switch keyboard' opens the picker." />
 </PhoneFrame>
 
 ## Using the setup card

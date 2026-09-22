@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The Layout & size screen collects every physical dimension WM Keyboard's keys can take: a digit row, key and row heights, per-screen-shape overrides, and one-handed, split and floating modes. The groups below appear in the same order they do on screen. This page is the field reference. The linked guides carry the reasoning and walk through each group in more depth.
 
 <PhoneFrame caption="The Layout & size screen, opening on Your layouts and the Number row group.">
-  {/* shot: reference/settings/layout-overview */}
+  <Shot id="reference/settings/layout-overview" alt="The Layout & size screen, opening on the Number row and Numerals groups." />
 </PhoneFrame>
 
 You can reach this screen from the home screen's **Layout & size** tile, from Accessibility → Touch → **Key size & spacing**, or from the **Split**, **Floating**, and **One-handed** toolbar tools' own Options panels, each of which has an **All layout & size settings** row.
@@ -120,7 +121,7 @@ The Size & position values above are your portrait sizes, and the in-app caption
 A **Follow portrait again** row appears at the bottom of the editor once any field is set, clearing the whole override back to "Follows portrait" in one tap. On landscape that returns the shape to its own defaults rather than to your portrait numbers.
 
 <PhoneFrame caption="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders.">
-  {/* shot: reference/settings/layout-per-screen-editor */}
+  <Shot id="reference/settings/layout-per-screen-editor" alt="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders." />
 </PhoneFrame>
 
 **Keyboard scale** has no portrait equivalent. It's a whole-keyboard multiplier that only exists on these three override shapes. It earns its keep on a foldable, whose roomy inner display often wants a smaller keyboard than the cover screen. **Font size** here is the same field as **Key label font size** under [Appearance settings](/reference/settings/appearance/). This screen doesn't own it, but you can still give it a different value per screen shape from here. **Number row** is the one override that isn't a number, and landscape is what it's for: least room for a sixth row, most need for the keys under it.
@@ -151,7 +152,7 @@ Landscape is also the one shape that doesn't fall back to portrait for the three
 One-handed mode tunes separately per orientation. The rail's arrow inside the keyboard flips the side, and it remembers the answer here for whichever orientation you're in. Split divides every row into left and right halves with a gap between them, and **Split only on wide screens** holds that back until you're in landscape or on an unfolded screen, so rotating out of landscape doesn't leave a portrait phone split in two. Floating detaches the keyboard into a movable, resizable panel. While it's active it replaces the width, position and bottom-padding logic above, though split still works alongside it. **Keep the keyboard on screen** stops the keyboard from closing when a text field loses focus, so it stays up over screens with no field at all until you hide it yourself. See [Keeping the keyboard on screen](/typing/size-position/#keeping-the-keyboard-on-screen) for what reaches the app and how to close it.
 
 <PhoneFrame caption="One-handed mode set to Right, with the Portrait width, height, and side sliders below it.">
-  {/* shot: reference/settings/layout-one-handed-split-floating */}
+  <Shot id="reference/settings/layout-one-handed-split-floating" alt="One-handed mode set to Right, with the Portrait width, height, and side sliders below it." />
 </PhoneFrame>
 
 Full detail on all three (plus the floating panel's drag pill and resize grip) is on [Size, position & one-handed use](/typing/size-position/).
@@ -174,7 +175,7 @@ Full detail on all three (plus the floating panel's drag pill and resize grip) i
 **Show the 🌐 key** is on by default. Turn it off and the key is gone from the bottom row of every layout, on the symbol layers too, and so is the emoji key that **Emoji key instead of 🌐** puts in its place. The spacebar takes its width, so the row stays the same length. While the key is hidden, **Emoji key instead of 🌐** and **Swap the comma and 🌐 keys** have nothing to change and are greyed out. Language switching stays on the spacebar: a quick swipe does it by default. See [Switching languages](/languages/switching/).
 
 <PhoneFrame caption="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key.">
-  {/* shot: reference/settings/layout-bottom-row-keys */}
+  <Shot id="reference/settings/layout-bottom-row-keys" alt="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key." />
 </PhoneFrame>
 
 See [Switching languages](/languages/switching/#using-the-globe-key) and [Opening the emoji panel](/emoji/picker/) for what each toggle changes in daily use.

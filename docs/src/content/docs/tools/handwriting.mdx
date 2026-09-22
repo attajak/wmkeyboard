@@ -12,6 +12,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Handwriting turns a full-width canvas into a keyboard. Write a letter or a word with a finger or a stylus, and the keyboard recognizes it on-device and drops it into your text. <Flavor edition="full" />: it runs on Google ML Kit's digital ink models, which only ship in the full build.
 
@@ -68,7 +69,7 @@ The list of available models isn't hardcoded in WM Keyboard. It's read straight 
 If an enabled language has no ink model, it's called out separately underneath the list: writing in that language falls back to the nearest language that does have one, rather than failing outright. And if none of your enabled languages has a model, the list itself is replaced by a note asking you to add a language on the Languages screen first. A **Languages and layouts** row at the bottom of the section takes you straight there either way.
 
 <PhoneFrame caption="Recognition models: one row per enabled language, each with its own download status.">
-  ![Recognition models: one row per enabled language, each with its own download status.](@assets/screens/tools/handwriting-model-manager.webp)
+  <Shot id="tools/handwriting-model-manager" alt="Recognition models: one row per enabled language, each with its own download status." />
 </PhoneFrame>
 
 ## Options

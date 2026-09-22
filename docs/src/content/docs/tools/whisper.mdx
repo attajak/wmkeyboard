@@ -11,11 +11,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 Offline Whisper is a second dictation engine that runs entirely on your phone. Instead of streaming audio to a speech-recognition service, it records what you say and transcribes it locally with an OpenAI Whisper model, so nothing ever leaves the device.
 
 <PhoneFrame caption="Recognition engine choice on the Voice typing screen.">
-![Recognition engine choice on the Voice typing screen.](@assets/screens/tools/whisper-engine-choice.webp)
+<Shot id="tools/whisper-engine-choice" alt="Recognition engine choice on the Voice typing screen." />
 </PhoneFrame>
 
 ## Why offline dictation
@@ -40,7 +41,7 @@ On the Play Store build the interpreter that runs these models is not in the app
 The catalog has 29 downloadable models. Ten are multilingual graphs: seven auto-detect the spoken language, and three are grouped models you can pin to one language. The other 19 are single-language models covering 13 languages, several at more than one size: English, German, Spanish, French, Hindi, Italian, Japanese, Portuguese, Russian, Tamil, Telugu, Urdu, and Chinese. A single-language model only appears in the catalog once you've enabled that language on the Languages screen.
 
 <PhoneFrame caption="The model catalog, with a row of size filter chips over the list.">
-![The model catalog, with a row of size filter chips over the list.](@assets/screens/tools/whisper-catalog.webp)
+<Shot id="tools/whisper-catalog" alt="Model catalog with size and language filters, grouped by tier." />
 </PhoneFrame>
 
 The screen is four sections in a row: the per-language routing list, then **Your voice models**, then a short **Suggested for your languages** shortlist, then a collapsed browse section holding everything else. Browse carries one filter, a chip per size, and it splits what's left into the models that take any language and the ones locked to a single one. Each row wears its size, how many languages it covers, and its download size as small chips. Small is the only model carrying a Recommended badge.

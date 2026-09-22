@@ -9,6 +9,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import ThemePreview from '@components/ThemePreview.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard's look is driven by a theme: a full set of colors, gradients, key shapes and corner radii bundled together. Pick a built-in theme, let it follow your wallpaper, switch it automatically between day and night, or [build your own](/themes/editor/) from scratch.
 
@@ -23,7 +24,7 @@ The theme gallery is a two-column grid: the **Default (system)** card first, the
 The toolbox also has an **Appearance** tool that draws live mini-previews right over the keys. It carries a shortlist rather than the whole gallery. Your custom and downloaded themes always show up in it, along with whichever built-ins you pin: each built-in card in the settings gallery carries a pin that adds it to the tool or takes it out, and a fresh install starts with a spread of six. That makes the tool a quick mood switch, with a handful of favourites to flip between mid-typing and the full collection one tap away in Settings (the tool's caption says so too). The tool runs full-bleed. The toolbar row hides while it's open and its space becomes a header, with a back button on the left and the **Themes** / **Icons** / **Emoji** / **Fonts** tabs beside it, so the cards get the reclaimed rows. On the Themes tab, pressing a card while Auto theme is on sets whichever half of the pair, light or dark, is due right now. The grid goes read-only only when that half is set to Random, or when the active keyboard mode carries a theme of its own. A caption at the top names which of those two is holding it.
 
 <PhoneFrame caption="The theme gallery: Default (system) first, then custom themes, then built-ins.">
-  ![The theme gallery: custom themes on top, built-in themes below.](@assets/screens/themes/gallery-grid.webp)
+  <Shot id="themes/gallery-grid" alt="The theme gallery: custom themes on top, built-in themes below." />
 </PhoneFrame>
 
 There are 29 built-in themes. Nineteen are original WM Keyboard designs: plain colours like Ocean and Forest, gradient showcases like Nebula and the animated Sunset drift and Aurora, two shape showcases (Bubble for pill keys, Facet for cut corners), and Cyberpunk, which puts the whole feature set on screen at once. The other ten (Dracula, Alucard, Nord, Solarized Dark, Solarized Light, Catppuccin Mocha, Catppuccin Latte, Catppuccin Frappé, Catppuccin Macchiato and Tokyo Night) are ports of well-known editor colour schemes. Alucard is Dracula's own light half, spelled backwards, so it draws as a second look on the Dracula card rather than a theme of its own. Cyberpunk is filed beside them in the source because it is written in that style, but the palette is ours. The MIT notices for the ones with upstream licences ship in the app's About screen.
@@ -55,7 +56,7 @@ Turn on **Material You colors** and the **Default (system)** theme pulls its pal
 While Auto is on, pressing a card in the keyboard's own Appearance tool updates whichever half of the pair is currently due, light or dark. That only holds while the half isn't set to Random; a random half stays read-only there instead. Pressing a card in the settings gallery instead stores a manual pick for later, since Auto ignores it outright while it's on. A caption on each surface says which theme is live. Turn Auto off to pick themes manually again.
 
 <PhoneFrame caption="Auto theme on, with Sunrise and sunset chosen as the trigger.">
-  ![Auto theme on, with Sunrise and sunset chosen as the trigger.](@assets/screens/themes/auto-theme-sun.webp)
+  <Shot id="themes/auto-theme-sun" alt="Auto theme on, with Sunrise & sunset chosen as the trigger." />
 </PhoneFrame>
 
 ### One theme, or a set
