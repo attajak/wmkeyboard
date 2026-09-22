@@ -7,6 +7,7 @@ sidebar:
 
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard opens straight to a specific screen from three different starting
 points: a long-press on the app icon, a `wmkeyboard://` link, or a file you
@@ -28,7 +29,7 @@ time, and no runtime code is involved. They only exist on Android 7.1
 long-pressing the icon does nothing extra.
 
 <PhoneFrame caption="A settings screen reached from a launcher shortcut. This one opened straight to Themes.">
-  ![A settings screen reached from a launcher shortcut. This one opened straight to Themes.](@assets/screens/reference/settings-deep-link-destination.webp)
+  <Shot id="reference/settings-deep-link-destination" alt="A settings screen reached from a launcher shortcut — this one opened straight to Themes." />
 </PhoneFrame>
 
 ## Opening a settings screen with a link
@@ -119,6 +120,15 @@ answer as an unknown route: with a screen named alongside it the screen still
 opens, and either way the app says it doesn't have that setting and looks for a
 newer version. A name the app has on a different screen from the one the link
 names is not missing: the named screen opens, without the row flashing.
+
+With a screen named, `setting=` can also be a group's heading, and then the
+whole group scrolls into view and flashes. Settings search doesn't list the
+headings, so this only works in the long form, where the link says which screen
+the group is on:
+
+```
+wmkeyboard://settings/accessibility?setting=accessibility_vision_title
+```
 
 ### Links from a newer version
 
@@ -495,7 +505,7 @@ permissions listed below are the whole question for those two.
 - **Plugin** (`.wmplugin`). This one has an extra gate. See below.
 
 <PhoneFrame caption="The one-time confirm dialog shown before any file import goes through.">
-  {/* shot: reference/file-import-dialog */}
+  <Shot id="reference/file-import-dialog" alt="The one-time confirm dialog shown before any file import goes through." />
 </PhoneFrame>
 
 A `.wmtheme.json` file has no internal tag: any JSON object decodes
@@ -520,7 +530,7 @@ Opening a `.wmplugin` file doesn't install it the way the other formats do;
 it's gated twice:
 
 <PhoneFrame caption="Opening a plugin file while the Plugins subsystem is off: nothing installs or runs.">
-  {/* shot: reference/plugin-import-gate */}
+  <Shot id="reference/plugin-import-gate" alt="Opening a plugin file while the Plugins subsystem is off — nothing installs or runs." />
 </PhoneFrame>
 
 1. If the Plugins subsystem is off, the dialog just says plugins are turned

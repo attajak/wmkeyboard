@@ -14,7 +14,7 @@ import java.net.URLDecoder
  * | `wmkeyboard://settings` | the settings home list |
  * | `wmkeyboard://settings/<route>` | that screen, e.g. `themes`, `typing/corrections` |
  * | `wmkeyboard://settings/<route>/<id>` | a screen that names one of the user's own things, e.g. `language/en_US`, `tool/CLIPBOARD` |
- * | `wmkeyboard://settings/<route>?setting=<name>` | that screen, with one row scrolled to and flashed |
+ * | `wmkeyboard://settings/<route>?setting=<name>` | that screen, with one row, or a group by its heading, scrolled to and flashed |
  * | `wmkeyboard://setting/<name>` | the same row, on whichever screen holds it |
  *
  * Either form may carry `since=<version>`, the first release that has what the

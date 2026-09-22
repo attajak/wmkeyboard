@@ -416,10 +416,11 @@ class MainActivity : FragmentActivity() {
      */
     private fun pendingFor(target: SettingsDeepLink.Target): PendingNav? {
         val entry = SettingsDeepLink.resolve(target) { searchIndex }
+        val group = if (entry == null) groupTitle(target) else 0
         // A row this build has on another screen is a link that went stale,
         // and still opens the screen it named. Only a row the index has
-        // nowhere is one this version is missing.
-        val missing = if (target.setting.isNotEmpty() && entry == null &&
+        // nowhere, and no heading answers to, is one this version is missing.
+        val missing = if (target.setting.isNotEmpty() && entry == null && group == 0 &&
             SettingsDeepLink.resolve(target.copy(route = "")) { searchIndex } == null
         ) {
             MissingLink(target.since, row = true)
@@ -428,7 +429,27 @@ class MainActivity : FragmentActivity() {
         }
         val route = entry?.route?.takeIf { target.route.isEmpty() } ?: target.route
         if (route.isEmpty()) return missing?.let { PendingNav(missing = it) }
-        return PendingNav(route = route, highlight = entry?.titleRes ?: 0, missing = missing)
+        return PendingNav(route = route, highlight = entry?.titleRes ?: group, missing = missing)
+    }
+
+    /**
+     * The title resource [target] names when the search index does not list
+     * it, which on a named screen is a group: "Vision" on Accessibility,
+     * "Passwords and codes" on Clipboard. Every named group answers to its own
+     * title the way a row does, so a link can land on a whole section without
+     * the index carrying an entry per heading, which would crowd every search
+     * with section names. A name nothing on the screen answers to marks
+     * nothing, as an unknown row did before.
+     *
+     * Only with a screen: the index is what finds the screen for a bare
+     * `wmkeyboard://setting/<name>`, and a heading's name alone does not.
+     */
+    private fun groupTitle(target: SettingsDeepLink.Target): Int {
+        if (target.route.isEmpty() || target.setting.isEmpty()) return 0
+        // The name is the link's whole point, and SettingsDeepLink has
+        // already held it to the shape aapt gives resource names.
+        @Suppress("DiscouragedApi")
+        return resources.getIdentifier(target.setting, "string", packageName)
     }
 }
 
