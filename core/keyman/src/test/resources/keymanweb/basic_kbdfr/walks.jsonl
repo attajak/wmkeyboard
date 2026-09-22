@@ -1,0 +1,400 @@
+{"w":0,"s":0,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"*","layer":"default"}
+{"w":0,"s":1,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"*c","layer":"default"}
+{"w":0,"s":2,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"*ck","layer":"default"}
+{"w":0,"s":3,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"*ckd","layer":"default"}
+{"w":0,"s":4,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"*ckd","layer":"rightalt"}
+{"w":0,"s":5,"start":"rightalt","L":"rightalt","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"*ckd","layer":"default"}
+{"w":0,"s":6,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"*ckdç","layer":"default"}
+{"w":0,"s":7,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"*ckdç²","layer":"default"}
+{"w":0,"s":8,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"*ckdç²l","layer":"default"}
+{"w":0,"s":9,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"*ckdç²l:","layer":"default"}
+{"w":0,"s":10,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"*ckdç²l:(","layer":"default"}
+{"w":0,"s":11,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"*ckdç²l:(u","layer":"default"}
+{"w":0,"s":12,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"*ckdç²l:(u","layer":"rightalt"}
+{"w":0,"s":13,"start":"rightalt","L":"rightalt","r":0,"k":4,"g":"k","id":"K_5","text":"*ckdç²l:(u[","layer":"default"}
+{"w":0,"s":14,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"*ckdç²l:(u[","layer":"shift"}
+{"w":0,"s":15,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"*ckdç²l:(u[A","layer":"shift"}
+{"w":0,"s":16,"start":"shift","L":"shift","r":3,"k":5,"g":"k","id":"K_V","text":"*ckdç²l:(u[AV","layer":"shift"}
+{"w":0,"s":17,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"*ckdç²l:(u[AVR","layer":"shift"}
+{"w":0,"s":18,"start":"shift","L":"shift","r":3,"k":3,"g":"k","id":"K_X","text":"*ckdç²l:(u[AVRX","layer":"shift"}
+{"w":0,"s":19,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"*ckdç²l:(u[AVRXR","layer":"shift"}
+{"w":0,"s":20,"start":"shift","L":"shift","r":3,"k":4,"g":"k","id":"K_C","text":"*ckdç²l:(u[AVRXRC","layer":"shift"}
+{"w":0,"s":21,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_N","text":"*ckdç²l:(u[AVRXRCN","layer":"shift"}
+{"w":0,"s":22,"start":"shift","L":"shift","r":3,"k":4,"g":"k","id":"K_C","text":"*ckdç²l:(u[AVRXRCNC","layer":"shift"}
+{"w":0,"s":23,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"*ckdç²l:(u[AVRXRCNC°","layer":"shift"}
+{"w":0,"s":24,"start":"shift","L":"shift","r":1,"k":4,"g":"k","id":"K_T","text":"*ckdç²l:(u[AVRXRCNC°T","layer":"shift"}
+{"w":0,"s":25,"start":"shift","L":"shift","r":1,"k":7,"g":"k","id":"K_I","text":"*ckdç²l:(u[AVRXRCNC°TI","layer":"shift"}
+{"w":0,"s":26,"start":"shift","L":"shift","r":0,"k":9,"g":"k","id":"K_0","text":"*ckdç²l:(u[AVRXRCNC°TI0","layer":"shift"}
+{"w":0,"s":27,"start":"shift","L":"shift","r":2,"k":4,"g":"k","id":"K_F","text":"*ckdç²l:(u[AVRXRCNC°TI0F","layer":"shift"}
+{"w":0,"s":28,"start":"shift","L":"shift","r":0,"k":3,"g":"k","id":"K_4","text":"*ckdç²l:(u[AVRXRCNC°TI0F4","layer":"shift"}
+{"w":0,"s":29,"start":"shift","L":"shift","r":2,"k":8,"g":"k","id":"K_K","text":"*ckdç²l:(u[AVRXRCNC°TI0F4K","layer":"shift"}
+{"w":0,"s":30,"start":"shift","L":"shift","r":2,"k":4,"g":"k","id":"K_F","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KF","layer":"shift"}
+{"w":0,"s":31,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFU","layer":"shift"}
+{"w":0,"s":32,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUU","layer":"shift"}
+{"w":0,"s":33,"start":"shift","L":"shift","r":2,"k":7,"g":"k","id":"K_J","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJ","layer":"shift"}
+{"w":0,"s":34,"start":"shift","L":"shift","r":2,"k":5,"g":"k","id":"K_G","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJG","layer":"shift"}
+{"w":0,"s":35,"start":"shift","L":"shift","r":3,"k":5,"g":"k","id":"K_V","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJGV","layer":"shift"}
+{"w":0,"s":36,"start":"shift","L":"shift","r":2,"k":1,"g":"k","id":"K_A","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJGVQ","layer":"shift"}
+{"w":0,"s":37,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJGVQA","layer":"shift"}
+{"w":0,"s":38,"start":"shift","L":"shift","r":0,"k":4,"g":"k","id":"K_5","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJGVQA5","layer":"shift"}
+{"w":0,"s":39,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"*ckdç²l:(u[AVRXRCNC°TI0F4KFUUJGVQA","layer":"shift"}
+{"w":1,"s":0,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"t","layer":"default"}
+{"w":1,"s":1,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"t","layer":"shift"}
+{"w":1,"s":2,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"t°","layer":"shift"}
+{"w":1,"s":3,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_N","text":"t°N","layer":"shift"}
+{"w":1,"s":4,"start":"shift","L":"shift","r":3,"k":3,"g":"k","id":"K_X","text":"t°NX","layer":"shift"}
+{"w":1,"s":5,"start":"shift","L":"shift","r":0,"k":3,"g":"k","id":"K_4","text":"t°NX4","layer":"shift"}
+{"w":1,"s":6,"start":"shift","L":"shift","r":1,"k":2,"g":"k","id":"K_E","text":"t°NX4E","layer":"shift"}
+{"w":1,"s":7,"start":"shift","L":"shift","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"t°NX4E/","layer":"shift"}
+{"w":1,"s":8,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"t°NX4E/R","layer":"shift"}
+{"w":1,"s":9,"start":"shift","L":"shift","r":2,"k":10,"g":"k","id":"K_COLON","text":"t°NX4E/RM","layer":"shift"}
+{"w":1,"s":10,"start":"shift","L":"shift","r":1,"k":1,"g":"k","id":"K_W","text":"t°NX4E/RMZ","layer":"shift"}
+{"w":1,"s":11,"start":"shift","L":"shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"t°NX4E/RMZ ","layer":"shift"}
+{"w":1,"s":12,"start":"shift","L":"shift","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"t°NX4E/RMZ ","layer":"default"}
+{"w":1,"s":13,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"t°NX4E/RMZ _","layer":"default"}
+{"w":1,"s":14,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"t°NX4E/RMZ _ ","layer":"default"}
+{"w":1,"s":15,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"t°NX4E/RMZ _ g","layer":"default"}
+{"w":1,"s":16,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"t°NX4E/RMZ _ gm","layer":"default"}
+{"w":1,"s":17,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"t°NX4E/RMZ _ gm!","layer":"default"}
+{"w":1,"s":18,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"t°NX4E/RMZ _ gm!k","layer":"default"}
+{"w":1,"s":19,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"t°NX4E/RMZ _ gm!k*","layer":"default"}
+{"w":1,"s":20,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"t°NX4E/RMZ _ gm!k*p","layer":"default"}
+{"w":1,"s":21,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"t°NX4E/RMZ _ gm!k*pu","layer":"default"}
+{"w":1,"s":22,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"t°NX4E/RMZ _ gm!k*pur","layer":"default"}
+{"w":1,"s":23,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"t°NX4E/RMZ _ gm!k*pur*","layer":"default"}
+{"w":1,"s":24,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"t°NX4E/RMZ _ gm!k*pur*i","layer":"default"}
+{"w":1,"s":25,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"t°NX4E/RMZ _ gm!k*pur*ik","layer":"default"}
+{"w":1,"s":26,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"t°NX4E/RMZ _ gm!k*pur*ik","layer":"default"}
+{"w":1,"s":27,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"t°NX4E/RMZ _ gm!k*pur*ik$","layer":"default"}
+{"w":1,"s":28,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"t°NX4E/RMZ _ gm!k*pur*ik$a","layer":"default"}
+{"w":1,"s":29,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:","layer":"default"}
+{"w":1,"s":30,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:y","layer":"default"}
+{"w":1,"s":31,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv","layer":"default"}
+{"w":1,"s":32,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv'","layer":"default"}
+{"w":1,"s":33,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' ","layer":"default"}
+{"w":1,"s":34,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' i","layer":"default"}
+{"w":1,"s":35,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' ir","layer":"default"}
+{"w":1,"s":36,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' irù","layer":"default"}
+{"w":1,"s":37,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' irùt","layer":"default"}
+{"w":1,"s":38,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' irùty","layer":"default"}
+{"w":1,"s":39,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"t°NX4E/RMZ _ gm!k*pur*ik$a:yv' irùty<","layer":"default"}
+{"w":2,"s":0,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":":","layer":"default"}
+{"w":2,"s":1,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":":","layer":"default"}
+{"w":2,"s":2,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":":ç","layer":"default"}
+{"w":2,"s":3,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":":çw","layer":"default"}
+{"w":2,"s":4,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":":çww","layer":"default"}
+{"w":2,"s":5,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":":çwwè","layer":"default"}
+{"w":2,"s":6,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":":çwwè","layer":"rightalt"}
+{"w":2,"s":7,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":":çwwè","layer":"rightalt"}
+{"w":2,"s":8,"start":"rightalt","L":"rightalt","r":2,"k":6,"g":"k","id":"K_J","text":":çwwè","layer":"rightalt"}
+{"w":2,"s":9,"start":"rightalt","L":"rightalt","r":1,"k":6,"g":"k","id":"K_U","text":":çwwè","layer":"rightalt"}
+{"w":2,"s":10,"start":"rightalt","L":"rightalt","r":0,"k":6,"g":"k","id":"K_7","text":":çwwè","layer":"default"}
+{"w":2,"s":11,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":":çwwèw","layer":"default"}
+{"w":2,"s":12,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":":çwwèwk","layer":"default"}
+{"w":2,"s":13,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":":çwwèwk\"","layer":"default"}
+{"w":2,"s":14,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":":çwwèwk\",","layer":"default"}
+{"w":2,"s":15,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":":çwwèwk\",t","layer":"default"}
+{"w":2,"s":16,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":":çwwèwk\",th","layer":"default"}
+{"w":2,"s":17,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":":çwwèwk\",tht","layer":"default"}
+{"w":2,"s":18,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":":çwwèwk\",tht","layer":"default"}
+{"w":2,"s":19,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":":çwwèwk\",tht","layer":"default"}
+{"w":2,"s":20,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":":çwwèwk\",thtk","layer":"default"}
+{"w":2,"s":21,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":":çwwèwk\",thtkv","layer":"default"}
+{"w":2,"s":22,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":":çwwèwk\",thtkv!","layer":"default"}
+{"w":2,"s":23,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":":çwwèwk\",thtkv!s","layer":"default"}
+{"w":2,"s":24,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":":çwwèwk\",thtkv!s","layer":"shift"}
+{"w":2,"s":25,"start":"shift","L":"shift","r":3,"k":1,"g":"k","id":"U_003E","text":":çwwèwk\",thtkv!s>","layer":"shift"}
+{"w":2,"s":26,"start":"shift","L":"shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":":çwwèwk\",thtkv!s>~","layer":"shift"}
+{"w":2,"s":27,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":":çwwèwk\",thtkv!s>","layer":"shift"}
+{"w":2,"s":28,"start":"shift","L":"shift","r":1,"k":8,"g":"k","id":"K_O","text":":çwwèwk\",thtkv!s>O","layer":"shift"}
+{"w":2,"s":29,"start":"shift","L":"shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":":çwwèwk\",thtkv!s>O~","layer":"shift"}
+{"w":2,"s":30,"start":"shift","L":"shift","r":1,"k":2,"g":"k","id":"K_E","text":":çwwèwk\",thtkv!s>O~E","layer":"shift"}
+{"w":2,"s":31,"start":"shift","L":"shift","r":0,"k":7,"g":"k","id":"K_8","text":":çwwèwk\",thtkv!s>O~E8","layer":"shift"}
+{"w":2,"s":32,"start":"shift","L":"shift","r":1,"k":1,"g":"k","id":"K_W","text":":çwwèwk\",thtkv!s>O~E8Z","layer":"shift"}
+{"w":2,"s":33,"start":"shift","L":"shift","r":1,"k":11,"g":"k","id":"K_RBRKT","text":":çwwèwk\",thtkv!s>O~E8Z£","layer":"shift"}
+{"w":2,"s":34,"start":"shift","L":"shift","r":1,"k":11,"g":"k","id":"K_RBRKT","text":":çwwèwk\",thtkv!s>O~E8Z££","layer":"shift"}
+{"w":2,"s":35,"start":"shift","L":"shift","r":3,"k":11,"g":"k","id":"K_SLASH","text":":çwwèwk\",thtkv!s>O~E8Z££§","layer":"shift"}
+{"w":2,"s":36,"start":"shift","L":"shift","r":3,"k":0,"g":"k","id":"K_SHIFT","text":":çwwèwk\",thtkv!s>O~E8Z££§","layer":"default"}
+{"w":2,"s":37,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":":çwwèwk\",thtkv!s>O~E8Z££§z","layer":"default"}
+{"w":2,"s":38,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":":çwwèwk\",thtkv!s>O~E8Z££§z(","layer":"default"}
+{"w":2,"s":39,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":":çwwèwk\",thtkv!s>O~E8Z££§z(t","layer":"default"}
+{"w":3,"s":0,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"","layer":"rightalt"}
+{"w":3,"s":1,"start":"rightalt","L":"rightalt","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"","layer":"rightalt"}
+{"w":3,"s":2,"start":"rightalt","L":"rightalt","r":2,"k":2,"g":"k","id":"K_D","text":"","layer":"rightalt"}
+{"w":3,"s":3,"start":"rightalt","L":"rightalt","r":3,"k":6,"g":"k","id":"K_B","text":"","layer":"rightalt"}
+{"w":3,"s":4,"start":"rightalt","L":"rightalt","r":0,"k":5,"g":"k","id":"K_6","text":"|","layer":"default"}
+{"w":3,"s":5,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"|(","layer":"default"}
+{"w":3,"s":6,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"|(r","layer":"default"}
+{"w":3,"s":7,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"|(ra","layer":"default"}
+{"w":3,"s":8,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"|(rac","layer":"default"}
+{"w":3,"s":9,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"|(rac$","layer":"default"}
+{"w":3,"s":10,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"|(rac$:","layer":"default"}
+{"w":3,"s":11,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"|(rac$:v","layer":"default"}
+{"w":3,"s":12,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"|(rac$:va","layer":"default"}
+{"w":3,"s":13,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"|(rac$:va$","layer":"default"}
+{"w":3,"s":14,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"|(rac$:va$-","layer":"default"}
+{"w":3,"s":15,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"|(rac$:va$-;","layer":"default"}
+{"w":3,"s":16,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"|(rac$:va$-;*","layer":"default"}
+{"w":3,"s":17,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"|(rac$:va$-;*é","layer":"default"}
+{"w":3,"s":18,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"|(rac$:va$-;*én","layer":"default"}
+{"w":3,"s":19,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"|(rac$:va$-;*énx","layer":"default"}
+{"w":3,"s":20,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"|(rac$:va$-;*énx$","layer":"default"}
+{"w":3,"s":21,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"|(rac$:va$-;*énx$a","layer":"default"}
+{"w":3,"s":22,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"|(rac$:va$-;*énx$aa","layer":"default"}
+{"w":3,"s":23,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"|(rac$:va$-;*énx$aaa","layer":"default"}
+{"w":3,"s":24,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"|(rac$:va$-;*énx$aaa,","layer":"default"}
+{"w":3,"s":25,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"|(rac$:va$-;*énx$aaa,&","layer":"default"}
+{"w":3,"s":26,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"|(rac$:va$-;*énx$aaa,&r","layer":"default"}
+{"w":3,"s":27,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"|(rac$:va$-;*énx$aaa,&rx","layer":"default"}
+{"w":3,"s":28,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"|(rac$:va$-;*énx$aaa,&rxf","layer":"default"}
+{"w":3,"s":29,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"|(rac$:va$-;*énx$aaa,&rxfm","layer":"default"}
+{"w":3,"s":30,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"|(rac$:va$-;*énx$aaa,&rxfm\"","layer":"default"}
+{"w":3,"s":31,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"|(rac$:va$-;*énx$aaa,&rxfm\"t","layer":"default"}
+{"w":3,"s":32,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tè","layer":"default"}
+{"w":3,"s":33,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèb","layer":"default"}
+{"w":3,"s":34,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tè","layer":"default"}
+{"w":3,"s":35,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèq","layer":"default"}
+{"w":3,"s":36,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèqn","layer":"default"}
+{"w":3,"s":37,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèqné","layer":"default"}
+{"w":3,"s":38,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèqnéo","layer":"default"}
+{"w":3,"s":39,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"|(rac$:va$-;*énx$aaa,&rxfm\"tèqnéoe","layer":"default"}
+{"w":4,"s":0,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"x","layer":"default"}
+{"w":4,"s":1,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"xe","layer":"default"}
+{"w":4,"s":2,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"xez","layer":"default"}
+{"w":4,"s":3,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"xezl","layer":"default"}
+{"w":4,"s":4,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"xezl!","layer":"default"}
+{"w":4,"s":5,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"xezl!&","layer":"default"}
+{"w":4,"s":6,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"xezl!&$","layer":"default"}
+{"w":4,"s":7,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"xezl!&$w","layer":"default"}
+{"w":4,"s":8,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"xezl!&$wc","layer":"default"}
+{"w":4,"s":9,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"xezl!&$wcl","layer":"default"}
+{"w":4,"s":10,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"xezl!&$wcld","layer":"default"}
+{"w":4,"s":11,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"xezl!&$wcldf","layer":"default"}
+{"w":4,"s":12,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"xezl!&$wcldfé","layer":"default"}
+{"w":4,"s":13,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"xezl!&$wcldféq","layer":"default"}
+{"w":4,"s":14,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"xezl!&$wcldféqa","layer":"default"}
+{"w":4,"s":15,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"xezl!&$wcldféqa(","layer":"default"}
+{"w":4,"s":16,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"xezl!&$wcldféqa","layer":"default"}
+{"w":4,"s":17,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"xezl!&$wcldféqa*","layer":"default"}
+{"w":4,"s":18,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"xezl!&$wcldféqa*n","layer":"default"}
+{"w":4,"s":19,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"xezl!&$wcldféqa*nh","layer":"default"}
+{"w":4,"s":20,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"xezl!&$wcldféqa*nh","layer":"default"}
+{"w":4,"s":21,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"xezl!&$wcldféqa*nhé","layer":"default"}
+{"w":4,"s":22,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"xezl!&$wcldféqa*nhén","layer":"default"}
+{"w":4,"s":23,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"xezl!&$wcldféqa*nhénf","layer":"default"}
+{"w":4,"s":24,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"xezl!&$wcldféqa*nhénfc","layer":"default"}
+{"w":4,"s":25,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"xezl!&$wcldféqa*nhénfcè","layer":"default"}
+{"w":4,"s":26,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"xezl!&$wcldféqa*nhénfcèr","layer":"default"}
+{"w":4,"s":27,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"xezl!&$wcldféqa*nhénfcèr,","layer":"default"}
+{"w":4,"s":28,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"xezl!&$wcldféqa*nhénfcèr,w","layer":"default"}
+{"w":4,"s":29,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"xezl!&$wcldféqa*nhénfcèr,wf","layer":"default"}
+{"w":4,"s":30,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"xezl!&$wcldféqa*nhénfcèr,wfb","layer":"default"}
+{"w":4,"s":31,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"xezl!&$wcldféqa*nhénfcèr,wfbé","layer":"default"}
+{"w":4,"s":32,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=","layer":"default"}
+{"w":4,"s":33,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i","layer":"default"}
+{"w":4,"s":34,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!","layer":"default"}
+{"w":4,"s":35,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!&","layer":"default"}
+{"w":4,"s":36,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!&*","layer":"default"}
+{"w":4,"s":37,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!&*=","layer":"default"}
+{"w":4,"s":38,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!&*=!","layer":"default"}
+{"w":4,"s":39,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"xezl!&$wcldféqa*nhénfcèr,wfbé=i!&*=!)","layer":"default"}
+{"w":5,"s":0,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"a","layer":"default"}
+{"w":5,"s":1,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ap","layer":"default"}
+{"w":5,"s":2,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"apé","layer":"default"}
+{"w":5,"s":3,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"apéù","layer":"default"}
+{"w":5,"s":4,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"apéù","layer":"rightalt"}
+{"w":5,"s":5,"start":"rightalt","L":"rightalt","r":1,"k":0,"g":"k","id":"K_Q","text":"apéù","layer":"rightalt"}
+{"w":5,"s":6,"start":"rightalt","L":"rightalt","r":0,"k":5,"g":"k","id":"K_6","text":"apéù|","layer":"default"}
+{"w":5,"s":7,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"apéù|z","layer":"default"}
+{"w":5,"s":8,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"apéù|z<","layer":"default"}
+{"w":5,"s":9,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"apéù|z<l","layer":"default"}
+{"w":5,"s":10,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"apéù|z<lo","layer":"default"}
+{"w":5,"s":11,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"apéù|z<loù","layer":"default"}
+{"w":5,"s":12,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"apéù|z<loùw","layer":"default"}
+{"w":5,"s":13,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"apéù|z<loùwm","layer":"default"}
+{"w":5,"s":14,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"apéù|z<loùwm;","layer":"default"}
+{"w":5,"s":15,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"apéù|z<loùwm;q","layer":"default"}
+{"w":5,"s":16,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"apéù|z<loùwm;qz","layer":"default"}
+{"w":5,"s":17,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"apéù|z<loùwm;qz<","layer":"default"}
+{"w":5,"s":18,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"apéù|z<loùwm;qz<t","layer":"default"}
+{"w":5,"s":19,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"apéù|z<loùwm;qz<tk","layer":"default"}
+{"w":5,"s":20,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"apéù|z<loùwm;qz<tkz","layer":"default"}
+{"w":5,"s":21,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"apéù|z<loùwm;qz<tkzs","layer":"default"}
+{"w":5,"s":22,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"apéù|z<loùwm;qz<tkzsè","layer":"default"}
+{"w":5,"s":23,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"apéù|z<loùwm;qz<tkzsèx","layer":"default"}
+{"w":5,"s":24,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"apéù|z<loùwm;qz<tkzsèx<","layer":"default"}
+{"w":5,"s":25,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"apéù|z<loùwm;qz<tkzsèx<<","layer":"default"}
+{"w":5,"s":26,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"apéù|z<loùwm;qz<tkzsèx<<q","layer":"default"}
+{"w":5,"s":27,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"apéù|z<loùwm;qz<tkzsèx<<q:","layer":"default"}
+{"w":5,"s":28,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"apéù|z<loùwm;qz<tkzsèx<<q:c","layer":"default"}
+{"w":5,"s":29,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"apéù|z<loùwm;qz<tkzsèx<<q:cd","layer":"default"}
+{"w":5,"s":30,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdx","layer":"default"}
+{"w":5,"s":31,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxf","layer":"default"}
+{"w":5,"s":32,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw","layer":"default"}
+{"w":5,"s":33,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!","layer":"default"}
+{"w":5,"s":34,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$","layer":"default"}
+{"w":5,"s":35,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$v","layer":"default"}
+{"w":5,"s":36,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$v;","layer":"default"}
+{"w":5,"s":37,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$v;k","layer":"default"}
+{"w":5,"s":38,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$v;k²","layer":"default"}
+{"w":5,"s":39,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"apéù|z<loùwm;qz<tkzsèx<<q:cdxfw!$v;k²u","layer":"default"}
+{"w":6,"s":0,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"c","layer":"default"}
+{"w":6,"s":1,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"ca","layer":"default"}
+{"w":6,"s":2,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"c","layer":"default"}
+{"w":6,"s":3,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"c","layer":"default"}
+{"w":6,"s":4,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"c-","layer":"default"}
+{"w":6,"s":5,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"c-l","layer":"default"}
+{"w":6,"s":6,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"c-lv","layer":"default"}
+{"w":6,"s":7,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"c-lv,","layer":"default"}
+{"w":6,"s":8,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"c-lv,=","layer":"default"}
+{"w":6,"s":9,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"c-lv,='","layer":"default"}
+{"w":6,"s":10,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"c-lv,='$","layer":"default"}
+{"w":6,"s":11,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"c-lv,='$;","layer":"default"}
+{"w":6,"s":12,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"c-lv,='$;g","layer":"default"}
+{"w":6,"s":13,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"c-lv,='$;gn","layer":"default"}
+{"w":6,"s":14,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"c-lv,='$;gnf","layer":"default"}
+{"w":6,"s":15,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"c-lv,='$;gnf*","layer":"default"}
+{"w":6,"s":16,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"c-lv,='$;gnf*&","layer":"default"}
+{"w":6,"s":17,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"c-lv,='$;gnf*&<","layer":"default"}
+{"w":6,"s":18,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"c-lv,='$;gnf*&<g","layer":"default"}
+{"w":6,"s":19,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"c-lv,='$;gnf*&<gd","layer":"default"}
+{"w":6,"s":20,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"c-lv,='$;gnf*&<gdm","layer":"default"}
+{"w":6,"s":21,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"c-lv,='$;gnf*&<gdm\"","layer":"default"}
+{"w":6,"s":22,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"c-lv,='$;gnf*&<gdm\"k","layer":"default"}
+{"w":6,"s":23,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"c-lv,='$;gnf*&<gdm\"k","layer":"default"}
+{"w":6,"s":24,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"c-lv,='$;gnf*&<gdm\"kq","layer":"default"}
+{"w":6,"s":25,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"c-lv,='$;gnf*&<gdm\"kqc","layer":"default"}
+{"w":6,"s":26,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"c-lv,='$;gnf*&<gdm\"kqcf","layer":"default"}
+{"w":6,"s":27,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"c-lv,='$;gnf*&<gdm\"kqcfè","layer":"default"}
+{"w":6,"s":28,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"default"}
+{"w":6,"s":29,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":30,"start":"rightalt","L":"rightalt","r":3,"k":7,"g":"k","id":"K_N","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":31,"start":"rightalt","L":"rightalt","r":2,"k":5,"g":"k","id":"K_H","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":32,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_Z","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":33,"start":"rightalt","L":"rightalt","r":1,"k":4,"g":"k","id":"K_T","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":34,"start":"rightalt","L":"rightalt","r":3,"k":5,"g":"k","id":"K_V","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"rightalt"}
+{"w":6,"s":35,"start":"rightalt","L":"rightalt","r":0,"k":9,"g":"k","id":"K_0","text":"c-lv,='$;gnf*&<gdm\"kqcfè_@","layer":"default"}
+{"w":6,"s":36,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"c-lv,='$;gnf*&<gdm\"kqcfè_","layer":"default"}
+{"w":6,"s":37,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"c-lv,='$;gnf*&<gdm\"kqcfè_g","layer":"default"}
+{"w":6,"s":38,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"c-lv,='$;gnf*&<gdm\"kqcfè_gl","layer":"default"}
+{"w":6,"s":39,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"c-lv,='$;gnf*&<gdm\"kqcfè_gl*","layer":"default"}
+{"w":7,"s":0,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"<","layer":"default"}
+{"w":7,"s":1,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"<z","layer":"default"}
+{"w":7,"s":2,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"<z","layer":"default"}
+{"w":7,"s":3,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"<zû","layer":"default"}
+{"w":7,"s":4,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"<zûg","layer":"default"}
+{"w":7,"s":5,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"<zûg","layer":"shift"}
+{"w":7,"s":6,"start":"shift","L":"shift","r":1,"k":2,"g":"k","id":"K_E","text":"<zûgE","layer":"shift"}
+{"w":7,"s":7,"start":"shift","L":"shift","r":2,"k":10,"g":"k","id":"K_COLON","text":"<zûgEM","layer":"shift"}
+{"w":7,"s":8,"start":"shift","L":"shift","r":2,"k":4,"g":"k","id":"K_F","text":"<zûgEMF","layer":"shift"}
+{"w":7,"s":9,"start":"shift","L":"shift","r":0,"k":9,"g":"k","id":"K_0","text":"<zûgEMF0","layer":"shift"}
+{"w":7,"s":10,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_N","text":"<zûgEMF0N","layer":"shift"}
+{"w":7,"s":11,"start":"shift","L":"shift","r":3,"k":11,"g":"k","id":"K_SLASH","text":"<zûgEMF0N§","layer":"shift"}
+{"w":7,"s":12,"start":"shift","L":"shift","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"<zûgEMF0N§/","layer":"shift"}
+{"w":7,"s":13,"start":"shift","L":"shift","r":1,"k":9,"g":"k","id":"K_P","text":"<zûgEMF0N§/P","layer":"shift"}
+{"w":7,"s":14,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"<zûgEMF0N§/PU","layer":"shift"}
+{"w":7,"s":15,"start":"shift","L":"shift","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"<zûgEMF0N§/PU","layer":"default"}
+{"w":7,"s":16,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"<zûgEMF0N§/PU-","layer":"default"}
+{"w":7,"s":17,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"<zûgEMF0N§/PU-o","layer":"default"}
+{"w":7,"s":18,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"<zûgEMF0N§/PU-oh","layer":"default"}
+{"w":7,"s":19,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"<zûgEMF0N§/PU-oha","layer":"default"}
+{"w":7,"s":20,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"<zûgEMF0N§/PU-ohal","layer":"default"}
+{"w":7,"s":21,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"<zûgEMF0N§/PU-ohall","layer":"default"}
+{"w":7,"s":22,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"<zûgEMF0N§/PU-ohalld","layer":"default"}
+{"w":7,"s":23,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"<zûgEMF0N§/PU-ohalld;","layer":"default"}
+{"w":7,"s":24,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"<zûgEMF0N§/PU-ohalld;,","layer":"default"}
+{"w":7,"s":25,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"<zûgEMF0N§/PU-ohalld;,-","layer":"default"}
+{"w":7,"s":26,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"<zûgEMF0N§/PU-ohalld;,-h","layer":"default"}
+{"w":7,"s":27,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"<zûgEMF0N§/PU-ohalld;,-ha","layer":"default"}
+{"w":7,"s":28,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"<zûgEMF0N§/PU-ohalld;,-haç","layer":"default"}
+{"w":7,"s":29,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"<zûgEMF0N§/PU-ohalld;,-haç","layer":"shift"}
+{"w":7,"s":30,"start":"shift","L":"shift","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"<zûgEMF0N§/PU-ohalld;,-haç%","layer":"shift"}
+{"w":7,"s":31,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"<zûgEMF0N§/PU-ohalld;,-haç","layer":"shift"}
+{"w":7,"s":32,"start":"shift","L":"shift","r":2,"k":1,"g":"k","id":"K_A","text":"<zûgEMF0N§/PU-ohalld;,-haçQ","layer":"shift"}
+{"w":7,"s":33,"start":"shift","L":"shift","r":2,"k":3,"g":"k","id":"K_D","text":"<zûgEMF0N§/PU-ohalld;,-haçQD","layer":"shift"}
+{"w":7,"s":34,"start":"shift","L":"shift","r":2,"k":7,"g":"k","id":"K_J","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ","layer":"shift"}
+{"w":7,"s":35,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ°","layer":"shift"}
+{"w":7,"s":36,"start":"shift","L":"shift","r":3,"k":8,"g":"k","id":"K_M","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ°?","layer":"shift"}
+{"w":7,"s":37,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ°?U","layer":"shift"}
+{"w":7,"s":38,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ°?UR","layer":"shift"}
+{"w":7,"s":39,"start":"shift","L":"shift","r":1,"k":2,"g":"k","id":"K_E","text":"<zûgEMF0N§/PU-ohalld;,-haçQDJ°?URE","layer":"shift"}
+{"w":8,"s":0,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":":","layer":"default"}
+{"w":8,"s":1,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":":à","layer":"default"}
+{"w":8,"s":2,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":":àç","layer":"default"}
+{"w":8,"s":3,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":":àçz","layer":"default"}
+{"w":8,"s":4,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":":àçzo","layer":"default"}
+{"w":8,"s":5,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":":àçzo'","layer":"default"}
+{"w":8,"s":6,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":":àçzo'a","layer":"default"}
+{"w":8,"s":7,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":":àçzo'ah","layer":"default"}
+{"w":8,"s":8,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":":àçzo'ahh","layer":"default"}
+{"w":8,"s":9,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":":àçzo'ahh(","layer":"default"}
+{"w":8,"s":10,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":":àçzo'ahh(²","layer":"default"}
+{"w":8,"s":11,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":":àçzo'ahh(²p","layer":"default"}
+{"w":8,"s":12,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":":àçzo'ahh(²pà","layer":"default"}
+{"w":8,"s":13,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":":àçzo'ahh(²pàe","layer":"default"}
+{"w":8,"s":14,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":":àçzo'ahh(²pàeù","layer":"default"}
+{"w":8,"s":15,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":":àçzo'ahh(²pàeùè","layer":"default"}
+{"w":8,"s":16,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":":àçzo'ahh(²pàeùèp","layer":"default"}
+{"w":8,"s":17,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":":àçzo'ahh(²pàeùèpà","layer":"default"}
+{"w":8,"s":18,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":":àçzo'ahh(²pàeùèpà)","layer":"default"}
+{"w":8,"s":19,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":":àçzo'ahh(²pàeùèpà)(","layer":"default"}
+{"w":8,"s":20,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":":àçzo'ahh(²pàeùèpà)('","layer":"default"}
+{"w":8,"s":21,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":":àçzo'ahh(²pàeùèpà)('\"","layer":"default"}
+{"w":8,"s":22,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":":àçzo'ahh(²pàeùèpà)('\"k","layer":"default"}
+{"w":8,"s":23,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":":àçzo'ahh(²pàeùèpà)('\"k ","layer":"default"}
+{"w":8,"s":24,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":":àçzo'ahh(²pàeùèpà)('\"k ²","layer":"default"}
+{"w":8,"s":25,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":":àçzo'ahh(²pàeùèpà)('\"k ²,","layer":"default"}
+{"w":8,"s":26,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,","layer":"default"}
+{"w":8,"s":27,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-","layer":"default"}
+{"w":8,"s":28,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-x","layer":"default"}
+{"w":8,"s":29,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xç","layer":"default"}
+{"w":8,"s":30,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp","layer":"default"}
+{"w":8,"s":31,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp ","layer":"default"}
+{"w":8,"s":32,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp f","layer":"default"}
+{"w":8,"s":33,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp fe","layer":"default"}
+{"w":8,"s":34,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp fee","layer":"default"}
+{"w":8,"s":35,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp feem","layer":"default"}
+{"w":8,"s":36,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp feemç","layer":"default"}
+{"w":8,"s":37,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp feemç:","layer":"default"}
+{"w":8,"s":38,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp feemç:v","layer":"default"}
+{"w":8,"s":39,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":":àçzo'ahh(²pàeùèpà)('\"k ²,,-xçp feemç:vo","layer":"default"}
+{"w":9,"s":0,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"d","layer":"default"}
+{"w":9,"s":1,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"dé","layer":"default"}
+{"w":9,"s":2,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"déj","layer":"default"}
+{"w":9,"s":3,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"déjy","layer":"default"}
+{"w":9,"s":4,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"déjy(","layer":"default"}
+{"w":9,"s":5,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"déjy(g","layer":"default"}
+{"w":9,"s":6,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"déjy(gz","layer":"default"}
+{"w":9,"s":7,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"déjy(gzx","layer":"default"}
+{"w":9,"s":8,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"déjy(gzxh","layer":"default"}
+{"w":9,"s":9,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"déjy(gzxhf","layer":"default"}
+{"w":9,"s":10,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"déjy(gzxh","layer":"default"}
+{"w":9,"s":11,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"déjy(gzxh'","layer":"default"}
+{"w":9,"s":12,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"déjy(gzxh't","layer":"default"}
+{"w":9,"s":13,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"déjy(gzxh't(","layer":"default"}
+{"w":9,"s":14,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"déjy(gzxh't(","layer":"default"}
+{"w":9,"s":15,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"U_003C","text":"déjy(gzxh't(<","layer":"default"}
+{"w":9,"s":16,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"déjy(gzxh't(<=","layer":"default"}
+{"w":9,"s":17,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"déjy(gzxh't(<=)","layer":"default"}
+{"w":9,"s":18,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"déjy(gzxh't(<=)","layer":"shift"}
+{"w":9,"s":19,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"déjy(gzxh't(<=)R","layer":"shift"}
+{"w":9,"s":20,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"déjy(gzxh't(<=)RR","layer":"shift"}
+{"w":9,"s":21,"start":"shift","L":"shift","r":2,"k":7,"g":"k","id":"K_J","text":"déjy(gzxh't(<=)RRJ","layer":"shift"}
+{"w":9,"s":22,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"déjy(gzxh't(<=)RRJA","layer":"shift"}
+{"w":9,"s":23,"start":"shift","L":"shift","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"déjy(gzxh't(<=)RRJA/","layer":"shift"}
+{"w":9,"s":24,"start":"shift","L":"shift","r":3,"k":8,"g":"k","id":"K_M","text":"déjy(gzxh't(<=)RRJA/?","layer":"shift"}
+{"w":9,"s":25,"start":"shift","L":"shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"déjy(gzxh't(<=)RRJA/?~","layer":"shift"}
+{"w":9,"s":26,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"déjy(gzxh't(<=)RRJA/?~A","layer":"shift"}
+{"w":9,"s":27,"start":"shift","L":"shift","r":1,"k":3,"g":"k","id":"K_R","text":"déjy(gzxh't(<=)RRJA/?~AR","layer":"shift"}
+{"w":9,"s":28,"start":"shift","L":"shift","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"déjy(gzxh't(<=)RRJA/?~AR","layer":"shift"}
+{"w":9,"s":29,"start":"shift","L":"shift","r":2,"k":8,"g":"k","id":"K_K","text":"déjy(gzxh't(<=)RRJA/?~ARK","layer":"shift"}
+{"w":9,"s":30,"start":"shift","L":"shift","r":0,"k":2,"g":"k","id":"K_3","text":"déjy(gzxh't(<=)RRJA/?~ARK3","layer":"shift"}
+{"w":9,"s":31,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_N","text":"déjy(gzxh't(<=)RRJA/?~ARK3N","layer":"shift"}
+{"w":9,"s":32,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_N","text":"déjy(gzxh't(<=)RRJA/?~ARK3NN","layer":"shift"}
+{"w":9,"s":33,"start":"shift","L":"shift","r":1,"k":5,"g":"k","id":"K_Y","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY","layer":"shift"}
+{"w":9,"s":34,"start":"shift","L":"shift","r":0,"k":1,"g":"k","id":"K_2","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY2","layer":"shift"}
+{"w":9,"s":35,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY","layer":"shift"}
+{"w":9,"s":36,"start":"shift","L":"shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY~","layer":"shift"}
+{"w":9,"s":37,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY~U","layer":"shift"}
+{"w":9,"s":38,"start":"shift","L":"shift","r":0,"k":3,"g":"k","id":"K_4","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY~U4","layer":"shift"}
+{"w":9,"s":39,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"déjy(gzxh't(<=)RRJA/?~ARK3NNY~U4°","layer":"shift"}

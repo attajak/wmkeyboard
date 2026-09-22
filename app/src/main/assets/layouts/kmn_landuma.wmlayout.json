@@ -11,15 +11,56 @@
           [
             {
               "label": "ə",
-              "shiftLabel": "Ə",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0259",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_018F"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0071"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0051"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0031"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "Ə",
+                "q",
+                "Q",
+                "1"
+              ]
             },
             {
               "label": "w",
-              "shiftLabel": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0077",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0057"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0032"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "W",
@@ -28,15 +69,106 @@
             },
             {
               "label": "e",
-              "shiftLabel": "E",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0065",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0045"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_025B"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0190"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0259"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_018F"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E9"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C9"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E8"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C8"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00EA"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CA"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00EB"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CB"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0033"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "E",
+                "ɛ",
+                "Ɛ",
+                "ə",
+                "Ə",
+                "é",
+                "É",
+                "è",
+                "È",
+                "ê",
+                "Ê",
+                "ë",
+                "Ë",
+                "3"
+              ]
             },
             {
               "label": "r",
-              "shiftLabel": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0072",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0052"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0034"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "R",
@@ -45,7 +177,22 @@
             },
             {
               "label": "t",
-              "shiftLabel": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0074",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0054"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0035"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "T",
@@ -54,7 +201,22 @@
             },
             {
               "label": "y",
-              "shiftLabel": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0079",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0059"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0036"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "Y",
@@ -63,7 +225,54 @@
             },
             {
               "label": "u",
-              "shiftLabel": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0075",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0055"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00FA"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00DA"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00F9"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00D9"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00FB"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00DB"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00FC"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00DC"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0037"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "U",
@@ -80,23 +289,160 @@
             },
             {
               "label": "i",
-              "shiftLabel": "I",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0069",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0049"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00ED"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CD"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00EC"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CC"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00EE"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CE"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00EF"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00CF"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0038"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "I",
+                "í",
+                "Í",
+                "ì",
+                "Ì",
+                "î",
+                "Î",
+                "ï",
+                "Ï",
+                "8"
+              ]
             },
             {
               "label": "o",
-              "shiftLabel": "O",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006F",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_004F"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0254"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0186"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00F3"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00D3"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00F2"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00D2"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00F4"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00D4"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00F6"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00D6"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0039"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "O",
+                "ɔ",
+                "Ɔ",
+                "ó",
+                "Ó",
+                "ò",
+                "Ò",
+                "ô",
+                "Ô",
+                "ö",
+                "Ö",
+                "9"
+              ]
             },
             {
               "label": "p",
-              "shiftLabel": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0070",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0050"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0030"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "P",
@@ -107,23 +453,111 @@
           [
             {
               "label": "ɑ",
-              "shiftLabel": "A",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0251",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0041"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_028C"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0245"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E1"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C1"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E0"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C0"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E2"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C2"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E4"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C4"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0061"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "A",
+                "ʌ",
+                "Ʌ",
+                "á",
+                "Á",
+                "à",
+                "À",
+                "â",
+                "Â",
+                "ä",
+                "Ä",
+                "a"
+              ]
             },
             {
               "label": "s",
-              "shiftLabel": "S",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0073",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0053"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "S"
+              ]
             },
             {
               "label": "d",
-              "shiftLabel": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0064",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0044"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "D"
@@ -131,7 +565,18 @@
             },
             {
               "label": "f",
-              "shiftLabel": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0066",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0046"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "F"
@@ -139,15 +584,57 @@
             },
             {
               "label": "ɡb",
-              "shiftLabel": "Gb",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_261_62",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_47_62"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_47_42"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0067"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0047"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0261"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "Gb",
+                "GB",
+                "g",
+                "G",
+                "ɡ"
+              ]
             },
             {
               "label": "h",
-              "shiftLabel": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0068",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0048"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "H"
@@ -155,7 +642,18 @@
             },
             {
               "label": "j",
-              "shiftLabel": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006A",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_004A"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "J"
@@ -163,7 +661,18 @@
             },
             {
               "label": "k",
-              "shiftLabel": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006B",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_4B"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "K"
@@ -171,7 +680,18 @@
             },
             {
               "label": "l",
-              "shiftLabel": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006C",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_004C"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "L"
@@ -195,39 +715,134 @@
             },
             {
               "label": "ʌ",
-              "shiftLabel": "Ʌ",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_028C",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0245"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_007A"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_005A"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "Ʌ",
+                "z",
+                "Z"
+              ]
             },
             {
               "label": "ɔ",
-              "shiftLabel": "Ɔ",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0254",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0186"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0078"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0058"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "Ɔ",
+                "x",
+                "X"
+              ]
             },
             {
               "label": "c",
-              "shiftLabel": "C",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0063",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0043"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00E7"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_00C7"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "C",
+                "ç",
+                "Ç"
+              ]
             },
             {
               "label": "ɛ",
-              "shiftLabel": "Ɛ",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_025B",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0190"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0076"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0056"
+                  }
+                ]
               },
-              "width": 1.16
+              "width": 1.16,
+              "longPress": [
+                "Ɛ",
+                "v",
+                "V"
+              ]
             },
             {
               "label": "b",
-              "shiftLabel": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0062",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0042"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "B"
@@ -235,7 +850,18 @@
             },
             {
               "label": "n",
-              "shiftLabel": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006E",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_004E"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "N"
@@ -243,7 +869,18 @@
             },
             {
               "label": "m",
-              "shiftLabel": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_006D",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_004D"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "M"
@@ -251,19 +888,61 @@
             },
             {
               "label": "ŋ",
-              "shiftLabel": "Ŋ",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_014B",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_014A"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_003B"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_20_3A_20"
+                  }
+                ]
               },
-              "width": 1.16
+              "width": 1.16,
+              "longPress": [
+                "Ŋ",
+                ";",
+                ":"
+              ]
             },
             {
               "label": "ɲ",
-              "shiftLabel": "Ɲ",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0272",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_019D"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0027"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "Ɲ",
+                "'",
+                "\""
+              ]
             }
           ],
           [
@@ -290,22 +969,117 @@
             },
             {
               "label": "?",
-              "shiftLabel": "/",
               "action": {
-                "type": "letters"
-              }
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_20_3F_20",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_20_21_20"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_2D"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_002F"
+                  }
+                ]
+              },
+              "longPress": [
+                "!",
+                "-",
+                "/"
+              ]
             },
             {
               "label": ",",
               "action": {
-                "type": "letters"
-              }
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_002C",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_20_AB_20"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0028"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_005B"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_007B"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_003C"
+                  }
+                ]
+              },
+              "longPress": [
+                "«",
+                "\"",
+                "(",
+                "[",
+                "{",
+                "<"
+              ]
             },
             {
               "label": ".",
               "action": {
-                "type": "letters"
-              }
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_20_BB_20"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0029"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_005D"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_007D"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_003E"
+                  }
+                ]
+              },
+              "longPress": [
+                "»",
+                "\"",
+                ")",
+                "]",
+                "}",
+                ">"
+              ]
             },
             {
               "label": "⏎",
@@ -317,86 +1091,788 @@
           ]
         ]
       },
-      "symbols": {
+      "k:shift": {
         "rows": [
           [
             {
-              "label": "1",
-              "width": 1.2
+              "label": "Ə",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_018F",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0259"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0071"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0051"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0031"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "ə",
+                "q",
+                "Q",
+                "1"
+              ]
             },
             {
-              "label": "2",
-              "width": 1.2
+              "label": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0057",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0077"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0032"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "w",
+                "2"
+              ]
             },
             {
-              "label": "3",
-              "width": 1.2
+              "label": "E",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0045",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0065"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_025B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0190"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0259"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_018F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E9"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C9"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E8"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C8"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00EA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00EB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0033"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "e",
+                "ɛ",
+                "Ɛ",
+                "ə",
+                "Ə",
+                "é",
+                "É",
+                "è",
+                "È",
+                "ê",
+                "Ê",
+                "ë",
+                "Ë",
+                "3"
+              ]
             },
             {
-              "label": "4",
-              "width": 1.2
+              "label": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0052",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0072"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0034"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "r",
+                "4"
+              ]
             },
             {
-              "label": "5",
-              "width": 1.2
+              "label": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0054",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0074"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0035"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "t",
+                "5"
+              ]
             },
             {
-              "label": "6",
-              "width": 1.2
+              "label": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0059",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0079"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0036"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "y",
+                "6"
+              ]
             },
             {
-              "label": "7",
-              "width": 1.2
+              "label": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0055",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0075"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00FA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00DA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00F9"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00D9"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00FB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00DB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00FC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00DC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0037"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "u",
+                "ú",
+                "Ú",
+                "ù",
+                "Ù",
+                "û",
+                "Û",
+                "ü",
+                "Ü",
+                "7"
+              ]
             },
             {
-              "label": "8",
-              "width": 1.2
+              "label": "I",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0049",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0069"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00ED"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CD"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00EC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00EE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00EF"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00CF"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0038"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "i",
+                "í",
+                "Í",
+                "ì",
+                "Ì",
+                "î",
+                "Î",
+                "ï",
+                "Ï",
+                "8"
+              ]
             },
             {
-              "label": "9",
-              "width": 1.2
+              "label": "O",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004F",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0254"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0186"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00F3"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00D3"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00F2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00D2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00F4"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00D4"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00F6"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00D6"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0039"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "o",
+                "ɔ",
+                "Ɔ",
+                "ó",
+                "Ó",
+                "ò",
+                "Ò",
+                "ô",
+                "Ô",
+                "ö",
+                "Ö",
+                "9"
+              ]
             },
             {
-              "label": "0",
-              "width": 1.2
+              "label": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0050",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0070"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0030"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "p",
+                "0"
+              ]
             }
           ],
           [
             {
-              "label": "!",
-              "width": 1.2
+              "label": "A",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0041",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0251"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_028C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0245"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E1"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C1"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E0"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C0"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E4"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C4"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "ɑ",
+                "ʌ",
+                "Ʌ",
+                "á",
+                "Á",
+                "à",
+                "À",
+                "â",
+                "Â",
+                "ä",
+                "Ä"
+              ]
             },
             {
-              "label": "@",
-              "width": 1.2
+              "label": "S",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0053",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0073"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "s"
+              ]
             },
             {
-              "label": "#",
-              "width": 1.2
+              "label": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0044",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0064"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "d"
+              ]
             },
             {
-              "label": "$",
-              "width": 1.2
+              "label": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0046",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0066"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "f"
+              ]
             },
             {
-              "label": "%",
-              "width": 1.2
+              "label": "Gb",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_47_62",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_47_42"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "T_261_62"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0047"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0067"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_0261"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "GB",
+                "ɡb",
+                "G",
+                "g",
+                "ɡ"
+              ]
             },
             {
-              "label": "&",
-              "width": 1.2
+              "label": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0048",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0068"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "h"
+              ]
             },
             {
-              "label": "*",
-              "width": 1.2
+              "label": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004A",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006A"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "j"
+              ]
             },
             {
-              "label": "(",
-              "width": 1.2
+              "label": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004B",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006B"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "k"
+              ]
             },
             {
-              "label": ")",
-              "width": 1.2
+              "label": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004C",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006C"
+                  }
+                ]
+              },
+              "width": 1.2,
+              "longPress": [
+                "l"
+              ]
             },
             {
               "label": "⌫",
@@ -408,56 +1884,283 @@
           ],
           [
             {
-              "label": "ABC",
-              "action": {
-                "type": "letters"
-              },
-              "width": 1.65
-            },
-            {
-              "label": "^",
-              "width": 1.15
-            },
-            {
-              "label": "¨",
-              "width": 1.15
-            },
-            {
-              "label": "+",
-              "width": 1.15
-            },
-            {
-              "label": "-",
-              "width": 1.15
-            },
-            {
-              "label": "×",
-              "width": 1.15
-            },
-            {
-              "label": "÷",
-              "width": 1.15
-            },
-            {
-              "label": "=",
-              "width": 1.15
-            },
-            {
-              "label": "/",
-              "width": 1.15
-            },
-            {
-              "label": "_",
-              "width": 1.15
-            }
-          ],
-          [
-            {
               "label": "⌨",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "numeric2"
+                "nextLayer": "k:capslock"
+              },
+              "width": 1.6
+            },
+            {
+              "label": "Ʌ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0245",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_028C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_007A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_005A"
+                  }
+                ]
+              },
+              "width": 1.15,
+              "longPress": [
+                "ʌ",
+                "z",
+                "Z"
+              ]
+            },
+            {
+              "label": "Ɔ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0186",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0254"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0078"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0058"
+                  }
+                ]
+              },
+              "width": 1.15,
+              "longPress": [
+                "ɔ",
+                "x",
+                "X"
+              ]
+            },
+            {
+              "label": "C",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0043",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0063"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00E7"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_00C7"
+                  }
+                ]
+              },
+              "width": 1.15,
+              "longPress": [
+                "c",
+                "ç",
+                "Ç"
+              ]
+            },
+            {
+              "label": "Ɛ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0190",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_025B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0076"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0056"
+                  }
+                ]
+              },
+              "width": 1.16,
+              "longPress": [
+                "ɛ",
+                "v",
+                "V"
+              ]
+            },
+            {
+              "label": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0042",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0062"
+                  }
+                ]
+              },
+              "width": 1.16,
+              "longPress": [
+                "b"
+              ]
+            },
+            {
+              "label": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004E",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006E"
+                  }
+                ]
+              },
+              "width": 1.16,
+              "longPress": [
+                "n"
+              ]
+            },
+            {
+              "label": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_004D",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_006D"
+                  }
+                ]
+              },
+              "width": 1.16,
+              "longPress": [
+                "m"
+              ]
+            },
+            {
+              "label": "Ŋ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_014A",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_014B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_003B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "T_20_3A_20"
+                  }
+                ]
+              },
+              "width": 1.16,
+              "longPress": [
+                "ŋ",
+                ";",
+                ":"
+              ]
+            },
+            {
+              "label": "Ɲ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_019D",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0272"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0027"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  }
+                ]
+              },
+              "width": 1.15,
+              "longPress": [
+                "ɲ",
+                "'",
+                "\""
+              ]
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.3
             },
@@ -476,13 +2179,135 @@
               "width": 5.0
             },
             {
-              "label": ","
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_002F",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "T_20_21_20"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_002D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_20_3F_20"
+                  }
+                ]
+              },
+              "longPress": [
+                "!",
+                "-",
+                "?"
+              ]
             },
             {
-              "label": "."
+              "label": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_002C",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "T_20_AB_20"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0028"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_005B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_007B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_003C"
+                  }
+                ]
+              },
+              "longPress": [
+                "«",
+                "\"",
+                "(",
+                "[",
+                "{",
+                "<"
+              ]
             },
             {
-              "label": "?"
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "T_20_BB_20"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_0029"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_005D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_007D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "nextLayer": "letters",
+                    "id": "U_003E"
+                  }
+                ]
+              },
+              "longPress": [
+                "»",
+                "\"",
+                ")",
+                "]",
+                "}",
+                ">"
+              ]
             },
             {
               "label": "⏎",
@@ -494,7 +2319,339 @@
           ]
         ]
       },
-      "capslock": {
+      "symbols": {
+        "rows": [
+          [
+            {
+              "label": "1",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0031"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "2",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0032"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "3",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0033"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "4",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0034"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "5",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0035"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "6",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0036"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "7",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0037"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "8",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0038"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "9",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0039"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "0",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0030"
+              },
+              "width": 1.2
+            }
+          ],
+          [
+            {
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_20_21_20"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0040"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0023"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "$",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0024"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0025"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0026"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002A"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0028"
+              },
+              "width": 1.2
+            },
+            {
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0029"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 1.2
+            }
+          ],
+          [
+            {
+              "label": "abc",
+              "action": {
+                "type": "letters"
+              },
+              "width": 1.65
+            },
+            {
+              "label": "^",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005E"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "¨",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A8"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002B"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "-",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002D"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "×",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00D7"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "÷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00F7"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003D"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              },
+              "width": 1.15
+            },
+            {
+              "label": "_",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005F"
+              },
+              "width": 1.15
+            }
+          ],
+          [
+            {
+              "label": "=\\<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:numeric2"
+              },
+              "width": 1.3
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.4
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 5.0
+            },
+            {
+              "label": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002C"
+              }
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002E"
+              }
+            },
+            {
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_20_3F_20"
+              }
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.45
+            }
+          ]
+        ]
+      },
+      "k:capslock": {
         "rows": [
           [
             {
@@ -502,12 +2659,72 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_018F",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0259"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0071"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0051"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0031"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "T_20_21_20"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "ə",
+                "q",
+                "Q",
+                "1",
+                "!"
+              ]
             },
             {
               "label": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0057",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0077"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0032"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0040"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "w",
@@ -520,12 +2737,132 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0045",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0065"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_025B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0190"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0259"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_018F"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E9"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C9"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E8"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C8"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00EA"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CA"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00EB"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CB"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0033"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0023"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "e",
+                "ɛ",
+                "Ɛ",
+                "ə",
+                "Ə",
+                "é",
+                "É",
+                "è",
+                "È",
+                "ê",
+                "Ê",
+                "ë",
+                "Ë",
+                "3",
+                "#"
+              ]
             },
             {
               "label": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0052",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0072"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0034"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0024"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "r",
@@ -535,6 +2872,30 @@
             },
             {
               "label": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0054",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0074"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0035"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0025"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "t",
@@ -544,6 +2905,30 @@
             },
             {
               "label": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0059",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0079"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0036"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_005E"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "y",
@@ -553,6 +2938,70 @@
             },
             {
               "label": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0055",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0075"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00FA"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00DA"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00F9"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00D9"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00FB"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00DB"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00FC"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00DC"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0037"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0026"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "u",
@@ -573,21 +3022,211 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0049",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0069"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00ED"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CD"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00EC"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CC"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00EE"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CE"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00EF"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00CF"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0038"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_002A"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "i",
+                "í",
+                "Í",
+                "ì",
+                "Ì",
+                "î",
+                "Î",
+                "ï",
+                "Ï",
+                "8",
+                "*"
+              ]
             },
             {
               "label": "O",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004F",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006F"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0254"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0186"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00F3"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00D3"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00F2"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00D2"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00F4"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00D4"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00F6"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00D6"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0039"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0028"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "o",
+                "ɔ",
+                "Ɔ",
+                "ó",
+                "Ó",
+                "ò",
+                "Ò",
+                "ô",
+                "Ô",
+                "ö",
+                "Ö",
+                "9",
+                "("
+              ]
             },
             {
               "label": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0050",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0070"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0030"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0029"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_005F"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_002B"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "p",
@@ -604,21 +3243,119 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0041",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0251"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_028C"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0245"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E1"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C1"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E0"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C0"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E2"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C2"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E4"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C4"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "ɑ",
+                "ʌ",
+                "Ʌ",
+                "á",
+                "Á",
+                "à",
+                "À",
+                "â",
+                "Â",
+                "ä",
+                "Ä"
+              ]
             },
             {
               "label": "S",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0053",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0073"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "s"
+              ]
             },
             {
               "label": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0044",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0064"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "d"
@@ -626,6 +3363,20 @@
             },
             {
               "label": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0046",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0066"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "f"
@@ -636,12 +3387,59 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "nextLayer": "k:capslock",
+                "id": "T_47_42",
+                "longPress": [
+                  {
+                    "nextLayer": "k:capslock",
+                    "id": "T_47_62"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "T_261_62"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0047"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0067"
+                  },
+                  {
+                    "nextLayer": "k:capslock",
+                    "id": "U_0261"
+                  }
+                ]
               },
-              "width": 1.2
+              "width": 1.2,
+              "longPress": [
+                "Gb",
+                "ɡb",
+                "G",
+                "g",
+                "ɡ"
+              ]
             },
             {
               "label": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0048",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0068"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "h"
@@ -649,6 +3447,20 @@
             },
             {
               "label": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004A",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006A"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "j"
@@ -656,6 +3468,20 @@
             },
             {
               "label": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004B",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006B"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "k"
@@ -663,6 +3489,20 @@
             },
             {
               "label": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004C",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006C"
+                  }
+                ]
+              },
               "width": 1.2,
               "longPress": [
                 "l"
@@ -678,7 +3518,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },
@@ -689,39 +3529,149 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0245",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_028C"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_007A"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_005A"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "ʌ",
+                "z",
+                "Z"
+              ]
             },
             {
               "label": "Ɔ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0186",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0254"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0078"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0058"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "ɔ",
+                "x",
+                "X"
+              ]
             },
             {
               "label": "C",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0043",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0063"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00E7"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_00C7"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "c",
+                "ç",
+                "Ç"
+              ]
             },
             {
               "label": "Ɛ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0190",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_025B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0076"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0056"
+                  }
+                ]
               },
-              "width": 1.16
+              "width": 1.16,
+              "longPress": [
+                "ɛ",
+                "v",
+                "V"
+              ]
             },
             {
               "label": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_0042",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0062"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "b"
@@ -729,6 +3679,20 @@
             },
             {
               "label": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004E",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006E"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "n"
@@ -736,6 +3700,20 @@
             },
             {
               "label": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_004D",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_006D"
+                  }
+                ]
+              },
               "width": 1.16,
               "longPress": [
                 "m"
@@ -746,25 +3724,75 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_014A",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_014B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_003B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "T_20_3A_20"
+                  }
+                ]
               },
-              "width": 1.16
+              "width": 1.16,
+              "longPress": [
+                "ŋ",
+                ";",
+                ":"
+              ]
             },
             {
               "label": "Ɲ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_019D",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0272"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0027"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0022"
+                  }
+                ]
               },
-              "width": 1.15
+              "width": 1.15,
+              "longPress": [
+                "ɲ",
+                "'",
+                "\""
+              ]
             }
           ],
           [
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.3
             },
@@ -784,6 +3812,30 @@
             },
             {
               "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "U_002F",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "T_20_21_20"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_2D"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "T_20_3F_20"
+                  }
+                ]
+              },
               "longPress": [
                 "!",
                 "-",
@@ -795,16 +3847,100 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
-              }
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "T_20_AB_20",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_002C"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0028"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_005B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_007B"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_003C"
+                  }
+                ]
+              },
+              "longPress": [
+                ",",
+                "\"",
+                "(",
+                "[",
+                "{",
+                "<"
+              ]
             },
             {
               "label": "»",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "capslock"
-              }
+                "modifiers": 256,
+                "nextLayer": "k:capslock",
+                "id": "T_20_BB_20",
+                "longPress": [
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_002E"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_0029"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_005D"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_007D"
+                  },
+                  {
+                    "modifiers": 256,
+                    "nextLayer": "k:capslock",
+                    "id": "U_003E"
+                  }
+                ]
+              },
+              "longPress": [
+                ".",
+                "\"",
+                ")",
+                "]",
+                "}",
+                ">"
+              ]
             },
             {
               "label": "⏎",
@@ -814,87 +3950,189 @@
               "width": 1.45
             }
           ]
-        ]
+        ],
+        "keymanFrames": {
+          "K_BKSP": {
+            "vkey": 8,
+            "modifiers": 256,
+            "nextLayer": "k:capslock"
+          }
+        }
       },
-      "numeric2": {
+      "k:numeric2": {
         "rows": [
           [
             {
               "label": "¡",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A1"
+              },
               "width": 1.2
             },
             {
               "label": "ª",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00AA"
+              },
               "width": 1.2
             },
             {
               "label": "º",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00BA"
+              },
               "width": 1.2
             },
             {
               "label": "•",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_2022"
+              },
               "width": 1.2
             },
             {
               "label": "·",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B7"
+              },
               "width": 1.2
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B"
+              },
               "width": 1.2
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D"
+              },
               "width": 1.2
             },
             {
               "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007B"
+              },
               "width": 1.2
             },
             {
               "label": "}",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007D"
+              },
               "width": 1.2
             },
             {
               "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007C"
+              },
               "width": 1.2
             }
           ],
           [
             {
               "label": "`",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0060"
+              },
               "width": 1.2
             },
             {
               "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007E"
+              },
               "width": 1.2
             },
             {
               "label": "´",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B4"
+              },
               "width": 1.2
             },
             {
               "label": "¸",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B8"
+              },
               "width": 1.2
             },
             {
               "label": "¯",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00AF"
+              },
               "width": 1.2
             },
             {
               "label": "¬",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00AC"
+              },
               "width": 1.2
             },
             {
               "label": "¶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B6"
+              },
               "width": 1.2
             },
             {
               "label": "¢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A2"
+              },
               "width": 1.2
             },
             {
               "label": "\\",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005C"
+              },
               "width": 1.2
             },
             {
@@ -907,7 +4145,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },
@@ -915,38 +4153,83 @@
             },
             {
               "label": "§",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A7"
+              },
               "width": 1.15
             },
             {
               "label": "±",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B1"
+              },
               "width": 1.15
             },
             {
               "label": "°",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B0"
+              },
               "width": 1.15
             },
             {
               "label": "µ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00B5"
+              },
               "width": 1.15
             },
             {
               "label": "©",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A9"
+              },
               "width": 1.15
             },
             {
               "label": "®",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00AE"
+              },
               "width": 1.15
             },
             {
               "label": "£",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A3"
+              },
               "width": 1.15
             },
             {
               "label": "€",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_20AC"
+              },
               "width": 1.15
             },
             {
               "label": "¥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A5"
+              },
               "width": 1.15
             }
           ],
@@ -954,7 +4237,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.3
             },
@@ -973,13 +4258,28 @@
               "width": 5.0
             },
             {
-              "label": "«"
+              "label": "«",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_20_AB_20"
+              }
             },
             {
-              "label": "»"
+              "label": "»",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_20_BB_20"
+              }
             },
             {
-              "label": "¿"
+              "label": "¿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00BF"
+              }
             },
             {
               "label": "⏎",

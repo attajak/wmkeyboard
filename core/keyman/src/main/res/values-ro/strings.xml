@@ -15,8 +15,6 @@
         <item quantity="other">Această tastatură are %1$d taste pe care le apăsați în mod repetat pentru a parcurge caracterele. Această aplicație de tastatură nu are astfel de taste, deci este disponibil doar primul caracter al fiecăreia.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Această tastatură folosește reguli pentru a decide ce tastează. Aplicația nu are acele reguli, așa că fiecare tastă scrie caracterul imprimat pe ea.</string>
-    <string name="core_keyman_shift_layer_folded">Aplicația a îmbinat stratul Shift în taste. Țineți apăsat Shift pentru a accesa acele caractere.</string>
-    <string name="core_keyman_shift_layer_separate">Stratul Shift are o formă diferită, așa că aplicația l-a păstrat ca strat propriu.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Aplicația a eliminat %1$d tastă. Această tastatură nu are nicio tastă care să facă același lucru.</item>
         <item quantity="other">Aplicația a eliminat %1$d taste. Această tastatură nu are nicio tastă care să facă același lucru.</item>

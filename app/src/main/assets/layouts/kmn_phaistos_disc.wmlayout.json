@@ -186,7 +186,12 @@
               }
             },
             {
-              "label": "|"
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007C"
+              }
             }
           ],
           [
@@ -354,7 +359,12 @@
               }
             },
             {
-              "label": "?"
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003F"
+              }
             },
             {
               "label": "",

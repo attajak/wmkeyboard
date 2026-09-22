@@ -103,15 +103,21 @@ class TouchLayoutConverterTest {
     fun `every next layer names a layer that exists`() {
         for (id in FIXTURES) {
             val spec = convert(id).layout
-            val known = spec.layers.keys
+            // Our own layers always exist: a missing one draws the built-in grid.
+            val known = spec.layers.keys + LayoutLayer.entries.map { it.key }
             for ((name, layer) in spec.layers) {
                 for (row in layer.rows) {
                     for (key in row) {
-                        val target = (key.action as? KeyAction.KeymanKey)?.nextLayer ?: continue
-                        assertTrue(
-                            "$id layer '$name' key '${key.label}' points at missing layer '$target'",
-                            target in known,
-                        )
+                        val keyman = key.action as? KeyAction.KeymanKey ?: continue
+                        val targets = listOfNotNull(keyman.nextLayer) +
+                            keyman.longPress.mapNotNull { it.nextLayer } +
+                            keyman.flick.values.mapNotNull { it.nextLayer }
+                        for (target in targets) {
+                            assertTrue(
+                                "$id layer '$name' key '${key.label}' points at missing layer '$target'",
+                                target in known,
+                            )
+                        }
                     }
                 }
             }
@@ -135,21 +141,97 @@ class TouchLayoutConverterTest {
         }
     }
 
-    /** Lao's shift layer has the base layer's shape, so it should fold. */
+    private fun ConvertedKeymanLayout.keys(layer: String): List<com.wasimaster.wmkeyboard.core.layout.Key> =
+        layout.layers.getValue(layer).rows.flatten()
+
+    /**
+     * Keyman's shift layer is its own set of keys. Khmer Angkor's puts `K_M`
+     * pressed with shift where the letters page has `ើ`, and `K_B` where it has
+     * `វ` — so it is kept whole, each key as Keyman knows it, rather than being
+     * read as the letters page with shift held.
+     */
     @Test
-    fun `a matching shift layer folds into shift labels`() {
+    fun `the shift layer is kept whole, each key as keyman knows it`() {
+        val converted = convert("khmer_angkor")
+        val shift = converted.keys(KeymanLayers.SHIFT)
+        val am = shift.single { it.label == "ំ" }.action as KeyAction.KeymanKey
+        assertEquals(77, am.vkey)
+        assertEquals(KmxFormat.K_SHIFTFLAG, am.modifiers)
+        // `៊` is K_SLASH with `layer: default` on the shift page: no shift.
+        val triisap = shift.single { it.label == "៊" }.action as KeyAction.KeymanKey
+        assertEquals(191, triisap.vkey)
+        assertEquals(0, triisap.modifiers)
+        // A U_ key keeps its name and types its code point with no rules.
+        val repeat = shift.single { it.label == "ៗ" }
+        assertEquals("U_17D7", (repeat.action as KeyAction.KeymanKey).id)
+        // The letters page's shift key is ours, and so is the shift page's.
+        assertTrue(converted.keys(LayoutLayer.LETTERS.key).any { it.action == KeyAction.Shift })
+        assertTrue(shift.any { it.action == KeyAction.Shift })
+    }
+
+    /** A key's `layer` attribute, else its layer's name, is what the rules see as held. */
+    @Test
+    fun `keys on a right alt layer are pressed with right alt`() {
         val converted = convert("lao_2008_basic")
-        assertTrue(
-            "shift layer neither folded nor kept: ${converted.report}",
-            converted.report.shiftLayerFolded || converted.report.shiftLayerKeptSeparate,
-        )
-        if (converted.report.shiftLayerFolded) {
-            val letters = converted.layout.layers.getValue(LayoutLayer.LETTERS.key)
-            assertTrue(
-                "folded but no key carries a shift label",
-                letters.rows.any { row -> row.any { it.shiftLabel != null } },
-            )
+        val keys = converted.keys(KeymanLayers.PREFIX + "rightalt")
+            .mapNotNull { it.action as? KeyAction.KeymanKey }
+            .filter { !it.isLayerSwitch }
+        assertTrue("no keys on Lao's rightalt layer", keys.isNotEmpty())
+        assertTrue(keys.all { it.modifiers and KmxFormat.RALTFLAG != 0 })
+    }
+
+    /** A flick or long press is a key of its own in Keyman, and reaches the rules as one. */
+    @Test
+    fun `gesture keys keep their keyman identity`() {
+        val letters = convert("khmer_angkor").keys(LayoutLayer.LETTERS.key)
+        val q = letters.single { it.label == "ឆ" }
+        val qFlick = (q.action as KeyAction.KeymanKey).flick.values.single()
+        assertEquals("T_17D2_1786", qFlick.id)
+        assertEquals(null, qFlick.text)
+        assertEquals("្ឆ", q.flick.values.single())
+        val w = letters.single { it.label == "ឹ" }
+        val wFlick = (w.action as KeyAction.KeymanKey).flick.values.single()
+        assertEquals(87, wFlick.vkey)
+        assertEquals(KmxFormat.K_SHIFTFLAG, wFlick.modifiers)
+    }
+
+    /** Long-press entries and their keys stay parallel, which is how a pick finds its key. */
+    @Test
+    fun `long press keys line up with their labels`() {
+        for (id in FIXTURES) {
+            for ((_, layer) in convert(id).layout.layers) {
+                for (key in layer.rows.flatten()) {
+                    val keyman = key.action as? KeyAction.KeymanKey ?: continue
+                    assertEquals("$id '${key.label}'", key.longPress.size, keyman.longPress.size)
+                    assertEquals("$id '${key.label}'", key.flick.keys, keyman.flick.keys)
+                }
+            }
         }
+    }
+
+    /** Keyman layer ids that are also names of ours must not land on ours. */
+    @Test
+    fun `keyman layer names are kept apart from ours`() {
+        assertEquals("letters", KeymanLayers.specKey("default"))
+        assertEquals("symbols", KeymanLayers.specKey("numeric"))
+        assertEquals("symbols2", KeymanLayers.specKey("symbol"))
+        assertEquals("k:symbols", KeymanLayers.specKey("symbols"))
+        assertEquals("k:number", KeymanLayers.specKey("number"))
+        for (id in listOf("default", "numeric", "symbol", "symbols", "rightalt-shift")) {
+            assertEquals(id, KeymanLayers.keymanId(KeymanLayers.specKey(id)))
+        }
+    }
+
+    /** Layer names are read the way KeymanWeb reads them: by what they contain. */
+    @Test
+    fun `layer names become modifiers the way keymanweb reads them`() {
+        assertEquals(0, KeymanLayers.modifiers("default"))
+        assertEquals(0, KeymanLayers.modifiers("numeric"))
+        assertEquals(KmxFormat.K_SHIFTFLAG, KeymanLayers.modifiers("shift"))
+        assertEquals(KmxFormat.RALTFLAG or KmxFormat.K_SHIFTFLAG, KeymanLayers.modifiers("rightalt-shift"))
+        assertEquals(KmxFormat.LCTRLFLAG, KeymanLayers.modifiers("leftctrl"))
+        assertEquals(KmxFormat.K_CTRLFLAG or KmxFormat.K_ALTFLAG, KeymanLayers.modifiers("ctrlalt"))
+        assertEquals(KmxFormat.CAPITALFLAG, KeymanLayers.modifiers("caps"))
     }
 
     /** The gestures we cannot express are counted, not silently discarded. */

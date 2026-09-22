@@ -11,7 +11,49 @@
           [
             {
               "label": "1",
-              "shiftLabel": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0031",
+                "longPress": [
+                  {
+                    "id": "U_00B9"
+                  },
+                  {
+                    "id": "U_2081"
+                  },
+                  {
+                    "id": "U_00BD"
+                  },
+                  {
+                    "id": "U_2153"
+                  },
+                  {
+                    "id": "U_00BC"
+                  },
+                  {
+                    "id": "U_2155"
+                  },
+                  {
+                    "id": "U_2159"
+                  },
+                  {
+                    "id": "U_2150"
+                  },
+                  {
+                    "id": "U_215B"
+                  },
+                  {
+                    "id": "U_2151"
+                  },
+                  {
+                    "id": "U_2152"
+                  },
+                  {
+                    "id": "U_215F"
+                  }
+                ]
+              },
               "longPress": [
                 "¹",
                 "₁",
@@ -29,7 +71,28 @@
             },
             {
               "label": "2",
-              "shiftLabel": "\"",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0032",
+                "longPress": [
+                  {
+                    "id": "U_00B2"
+                  },
+                  {
+                    "id": "U_2082"
+                  },
+                  {
+                    "id": "U_00BD"
+                  },
+                  {
+                    "id": "U_2154"
+                  },
+                  {
+                    "id": "U_2156"
+                  }
+                ]
+              },
               "longPress": [
                 "²",
                 "₂",
@@ -40,7 +103,37 @@
             },
             {
               "label": "3",
-              "shiftLabel": "№",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0033",
+                "longPress": [
+                  {
+                    "id": "U_00B3"
+                  },
+                  {
+                    "id": "U_2083"
+                  },
+                  {
+                    "id": "U_2189"
+                  },
+                  {
+                    "id": "U_2153"
+                  },
+                  {
+                    "id": "U_2154"
+                  },
+                  {
+                    "id": "U_00BE"
+                  },
+                  {
+                    "id": "U_2157"
+                  },
+                  {
+                    "id": "U_215C"
+                  }
+                ]
+              },
               "longPress": [
                 "³",
                 "₃",
@@ -54,7 +147,28 @@
             },
             {
               "label": "4",
-              "shiftLabel": "¤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0034",
+                "longPress": [
+                  {
+                    "id": "U_2074"
+                  },
+                  {
+                    "id": "U_2084"
+                  },
+                  {
+                    "id": "U_00BC"
+                  },
+                  {
+                    "id": "U_00BE"
+                  },
+                  {
+                    "id": "U_2158"
+                  }
+                ]
+              },
               "longPress": [
                 "⁴",
                 "₄",
@@ -65,7 +179,37 @@
             },
             {
               "label": "5",
-              "shiftLabel": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0035",
+                "longPress": [
+                  {
+                    "id": "U_2075"
+                  },
+                  {
+                    "id": "U_2085"
+                  },
+                  {
+                    "id": "U_2155"
+                  },
+                  {
+                    "id": "U_2156"
+                  },
+                  {
+                    "id": "U_2157"
+                  },
+                  {
+                    "id": "U_2158"
+                  },
+                  {
+                    "id": "U_215A"
+                  },
+                  {
+                    "id": "U_215D"
+                  }
+                ]
+              },
               "longPress": [
                 "⁵",
                 "₅",
@@ -79,7 +223,25 @@
             },
             {
               "label": "6",
-              "shiftLabel": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0036",
+                "longPress": [
+                  {
+                    "id": "U_2076"
+                  },
+                  {
+                    "id": "U_2086"
+                  },
+                  {
+                    "id": "U_2159"
+                  },
+                  {
+                    "id": "U_215A"
+                  }
+                ]
+              },
               "longPress": [
                 "⁶",
                 "₆",
@@ -89,7 +251,25 @@
             },
             {
               "label": "7",
-              "shiftLabel": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0037",
+                "longPress": [
+                  {
+                    "id": "U_2077"
+                  },
+                  {
+                    "id": "U_2087"
+                  },
+                  {
+                    "id": "U_2150"
+                  },
+                  {
+                    "id": "U_215E"
+                  }
+                ]
+              },
               "longPress": [
                 "⁷",
                 "₇",
@@ -99,7 +279,34 @@
             },
             {
               "label": "8",
-              "shiftLabel": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0038",
+                "longPress": [
+                  {
+                    "id": "U_2078"
+                  },
+                  {
+                    "id": "U_2088"
+                  },
+                  {
+                    "id": "U_215B"
+                  },
+                  {
+                    "id": "U_215C"
+                  },
+                  {
+                    "id": "U_215D"
+                  },
+                  {
+                    "id": "U_215E"
+                  },
+                  {
+                    "id": "U_221E"
+                  }
+                ]
+              },
               "longPress": [
                 "⁸",
                 "₈",
@@ -112,7 +319,22 @@
             },
             {
               "label": "9",
-              "shiftLabel": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0039",
+                "longPress": [
+                  {
+                    "id": "U_2079"
+                  },
+                  {
+                    "id": "U_2089"
+                  },
+                  {
+                    "id": "U_2151"
+                  }
+                ]
+              },
               "longPress": [
                 "⁹",
                 "₉",
@@ -121,7 +343,28 @@
             },
             {
               "label": "0",
-              "shiftLabel": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0030",
+                "longPress": [
+                  {
+                    "id": "U_2070"
+                  },
+                  {
+                    "id": "U_2080"
+                  },
+                  {
+                    "id": "U_2152"
+                  },
+                  {
+                    "id": "U_2189"
+                  },
+                  {
+                    "id": "U_00B0"
+                  }
+                ]
+              },
               "longPress": [
                 "⁰",
                 "₀",
@@ -132,7 +375,38 @@
             },
             {
               "label": "-",
-              "shiftLabel": "_",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002D",
+                "longPress": [
+                  {
+                    "id": "U_002B"
+                  },
+                  {
+                    "id": "U_003D"
+                  },
+                  {
+                    "id": "U_005E"
+                  },
+                  {
+                    "id": "U_00AC"
+                  },
+                  {
+                    "id": "U_2013"
+                  },
+                  {
+                    "id": "U_2014"
+                  },
+                  {
+                    "id": "U_00AD",
+                    "text": "­"
+                  },
+                  {
+                    "id": "U_00A0"
+                  }
+                ]
+              },
               "longPress": [
                 "+",
                 "=",
@@ -146,7 +420,25 @@
             },
             {
               "label": ".",
-              "shiftLabel": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_2026"
+                  },
+                  {
+                    "id": "U_00B7"
+                  },
+                  {
+                    "id": "U_2022"
+                  }
+                ]
+              },
               "longPress": [
                 ":",
                 "…",
@@ -171,15 +463,35 @@
             },
             {
               "label": "я",
-              "shiftLabel": "Я"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044F"
+              }
             },
             {
               "label": "в",
-              "shiftLabel": "В"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0432"
+              }
             },
             {
               "label": "е",
-              "shiftLabel": "Е",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0435",
+                "longPress": [
+                  {
+                    "id": "U_0454"
+                  },
+                  {
+                    "id": "U_04D9"
+                  }
+                ]
+              },
               "longPress": [
                 "є",
                 "ә"
@@ -187,19 +499,46 @@
             },
             {
               "label": "р",
-              "shiftLabel": "Р"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0440"
+              }
             },
             {
               "label": "т",
-              "shiftLabel": "Т"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0442"
+              }
             },
             {
               "label": "ы",
-              "shiftLabel": "Ы"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044B"
+              }
             },
             {
               "label": "у",
-              "shiftLabel": "У",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0443",
+                "longPress": [
+                  {
+                    "id": "U_045E"
+                  },
+                  {
+                    "id": "U_04EF"
+                  },
+                  {
+                    "id": "U_04AF"
+                  }
+                ]
+              },
               "longPress": [
                 "ў",
                 "ӯ",
@@ -208,7 +547,28 @@
             },
             {
               "label": "и",
-              "shiftLabel": "И",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0438",
+                "longPress": [
+                  {
+                    "id": "U_045D"
+                  },
+                  {
+                    "id": "U_04E3"
+                  },
+                  {
+                    "id": "U_0456"
+                  },
+                  {
+                    "id": "U_0457"
+                  },
+                  {
+                    "id": "U_0458"
+                  }
+                ]
+              },
               "longPress": [
                 "ѝ",
                 "ӣ",
@@ -219,22 +579,43 @@
             },
             {
               "label": "о",
-              "shiftLabel": "О",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043E",
+                "longPress": [
+                  {
+                    "id": "U_04E9"
+                  }
+                ]
+              },
               "longPress": [
                 "ө"
               ]
             },
             {
               "label": "п",
-              "shiftLabel": "П"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043F"
+              }
             },
             {
               "label": "ш",
-              "shiftLabel": "Ш"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0448"
+              }
             },
             {
               "label": "щ",
-              "shiftLabel": "Щ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0449"
+              }
             },
             {
               "label": "",
@@ -247,30 +628,73 @@
           [
             {
               "label": "`",
-              "shiftLabel": "~"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0060"
+              }
             },
             {
               "label": "а",
-              "shiftLabel": "А"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0430"
+              }
             },
             {
               "label": "с",
-              "shiftLabel": "С",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0441",
+                "longPress": [
+                  {
+                    "id": "U_04AB"
+                  }
+                ]
+              },
               "longPress": [
                 "ҫ"
               ]
             },
             {
               "label": "д",
-              "shiftLabel": "Д"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0434"
+              }
             },
             {
               "label": "ф",
-              "shiftLabel": "Ф"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0444"
+              }
             },
             {
               "label": "г",
-              "shiftLabel": "Г",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0433",
+                "longPress": [
+                  {
+                    "id": "U_0491"
+                  },
+                  {
+                    "id": "U_0453"
+                  },
+                  {
+                    "id": "U_0493"
+                  },
+                  {
+                    "id": "U_0495"
+                  }
+                ]
+              },
               "longPress": [
                 "ґ",
                 "ѓ",
@@ -280,7 +704,28 @@
             },
             {
               "label": "ч",
-              "shiftLabel": "Ч",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0447",
+                "longPress": [
+                  {
+                    "id": "U_04B7"
+                  },
+                  {
+                    "id": "U_04B9"
+                  },
+                  {
+                    "id": "U_04BB"
+                  },
+                  {
+                    "id": "U_045B"
+                  },
+                  {
+                    "id": "U_0452"
+                  }
+                ]
+              },
               "longPress": [
                 "ҷ",
                 "ҹ",
@@ -291,7 +736,28 @@
             },
             {
               "label": "й",
-              "shiftLabel": "Й",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0439",
+                "longPress": [
+                  {
+                    "id": "U_045D"
+                  },
+                  {
+                    "id": "U_04E3"
+                  },
+                  {
+                    "id": "U_0456"
+                  },
+                  {
+                    "id": "U_0457"
+                  },
+                  {
+                    "id": "U_0458"
+                  }
+                ]
+              },
               "longPress": [
                 "ѝ",
                 "ӣ",
@@ -302,7 +768,25 @@
             },
             {
               "label": "к",
-              "shiftLabel": "К",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043A",
+                "longPress": [
+                  {
+                    "id": "U_049B"
+                  },
+                  {
+                    "id": "U_045C"
+                  },
+                  {
+                    "id": "U_04A1"
+                  },
+                  {
+                    "id": "U_049D"
+                  }
+                ]
+              },
               "longPress": [
                 "қ",
                 "ќ",
@@ -312,14 +796,35 @@
             },
             {
               "label": "л",
-              "shiftLabel": "Л",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043B",
+                "longPress": [
+                  {
+                    "id": "U_0459"
+                  }
+                ]
+              },
               "longPress": [
                 "љ"
               ]
             },
             {
               "label": "ъ",
-              "shiftLabel": "Ъ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044A",
+                "longPress": [
+                  {
+                    "id": "U_0459"
+                  },
+                  {
+                    "id": "U_045A"
+                  }
+                ]
+              },
               "longPress": [
                 "љ",
                 "њ"
@@ -327,7 +832,19 @@
             },
             {
               "label": "э",
-              "shiftLabel": "Э",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044D",
+                "longPress": [
+                  {
+                    "id": "U_0454"
+                  },
+                  {
+                    "id": "U_04D9"
+                  }
+                ]
+              },
               "longPress": [
                 "є",
                 "ә"
@@ -335,7 +852,11 @@
             },
             {
               "label": "\\",
-              "shiftLabel": "/"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005C"
+              }
             }
           ],
           [
@@ -348,39 +869,94 @@
             },
             {
               "label": "з",
-              "shiftLabel": "З",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0437",
+                "longPress": [
+                  {
+                    "id": "U_0499"
+                  }
+                ]
+              },
               "longPress": [
                 "ҙ"
               ]
             },
             {
               "label": "х",
-              "shiftLabel": "Х",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0445",
+                "longPress": [
+                  {
+                    "id": "U_04B3"
+                  }
+                ]
+              },
               "longPress": [
                 "ҳ"
               ]
             },
             {
               "label": "ц",
-              "shiftLabel": "Ц",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0446",
+                "longPress": [
+                  {
+                    "id": "U_045F"
+                  }
+                ]
+              },
               "longPress": [
                 "џ"
               ]
             },
             {
               "label": "ж",
-              "shiftLabel": "Ж",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0436",
+                "longPress": [
+                  {
+                    "id": "U_0497"
+                  }
+                ]
+              },
               "longPress": [
                 "җ"
               ]
             },
             {
               "label": "б",
-              "shiftLabel": "Б"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0431"
+              }
             },
             {
               "label": "н",
-              "shiftLabel": "Н",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043D",
+                "longPress": [
+                  {
+                    "id": "U_04A3"
+                  },
+                  {
+                    "id": "U_04A5"
+                  },
+                  {
+                    "id": "U_045A"
+                  }
+                ]
+              },
               "longPress": [
                 "ң",
                 "ҥ",
@@ -389,19 +965,35 @@
             },
             {
               "label": "м",
-              "shiftLabel": "М"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_043C"
+              }
             },
             {
               "label": "ь",
-              "shiftLabel": "Ь"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044C"
+              }
             },
             {
               "label": "ю",
-              "shiftLabel": "Ю"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_044E"
+              }
             },
             {
               "label": "ё",
-              "shiftLabel": "Ё"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0451"
+              }
             },
             {
               "label": "⇧",
@@ -417,7 +1009,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "alt"
+                "nextLayer": "k:alt"
               },
               "width": 1.3
             },
@@ -445,44 +1037,440 @@
           ]
         ]
       },
-      "alt": {
+      "k:shift": {
         "rows": [
           [
             {
-              "label": "§"
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0021",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A1"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A6"
+                  }
+                ]
+              },
+              "longPress": [
+                "¡",
+                "|",
+                "¦"
+              ]
             },
             {
-              "label": "@"
+              "label": "\"",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0022",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_201E"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201F"
+                  }
+                ]
+              },
+              "longPress": [
+                "„",
+                "“",
+                "”",
+                "‟"
+              ]
             },
             {
-              "label": "#"
+              "label": "№",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_2116",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0023"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A3"
+                  }
+                ]
+              },
+              "longPress": [
+                "#",
+                "£"
+              ]
             },
             {
-              "label": "$"
+              "label": "¤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_00A4",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0024"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20AC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A5"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20B8"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20AE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20BD"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20B4"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_20C0"
+                  }
+                ]
+              },
+              "longPress": [
+                "$",
+                "€",
+                "¥",
+                "₸",
+                "₮",
+                "₽",
+                "₴",
+                "⃀"
+              ]
             },
             {
-              "label": "<"
+              "label": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0025",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_2030"
+                  }
+                ]
+              },
+              "longPress": [
+                "‰"
+              ]
             },
             {
-              "label": ">"
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_003F",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_00BF"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_203D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2E18"
+                  }
+                ]
+              },
+              "longPress": [
+                "¿",
+                "‽",
+                "⸘"
+              ]
             },
             {
-              "label": "["
+              "label": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0027",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_201A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2018"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2019"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201B"
+                  }
+                ]
+              },
+              "longPress": [
+                "‚",
+                "‘",
+                "’",
+                "‛"
+              ]
             },
             {
-              "label": "]"
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002A",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0040"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A9"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2117"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00AE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0026"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A7"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00B6"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00B7"
+                  }
+                ]
+              },
+              "longPress": [
+                "@",
+                "©",
+                "℗",
+                "®",
+                "&",
+                "§",
+                "¶",
+                "•",
+                "·"
+              ]
             },
             {
-              "label": "{"
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0028",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_003C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2039"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00AB"
+                  }
+                ]
+              },
+              "longPress": [
+                "<",
+                "[",
+                "{",
+                "‹",
+                "«"
+              ]
             },
             {
-              "label": "}"
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0029",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_003E"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_203A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00BB"
+                  }
+                ]
+              },
+              "longPress": [
+                ">",
+                "]",
+                "}",
+                "›",
+                "»"
+              ]
             },
             {
-              "label": "="
+              "label": "_",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_005F",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_002B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005E"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00AC"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2013"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_2014"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00AD",
+                    "text": "­"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_00A0"
+                  }
+                ]
+              },
+              "longPress": [
+                "+",
+                "=",
+                "^",
+                "¬",
+                "–",
+                "—",
+                "(-)",
+                " "
+              ]
             },
             {
-              "label": ":"
+              "label": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002C",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_003B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_201E"
+                  }
+                ]
+              },
+              "longPress": [
+                ";",
+                "‚",
+                "„"
+              ]
             },
             {
               "label": "⌫",
@@ -500,40 +1488,183 @@
               "width": 0.7
             },
             {
-              "label": "ј"
+              "label": "Я",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042F"
+              }
             },
             {
-              "label": "ӣ"
+              "label": "В",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0412"
+              }
             },
             {
-              "label": "ѝ"
+              "label": "Е",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0415",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0404"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04D8"
+                  }
+                ]
+              },
+              "longPress": [
+                "Є",
+                "Ә"
+              ]
             },
             {
-              "label": "ҕ"
+              "label": "Р",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0420"
+              }
             },
             {
-              "label": "ү"
+              "label": "Т",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0422"
+              }
             },
             {
-              "label": "ӯ"
+              "label": "Ы",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042B"
+              }
             },
             {
-              "label": "ў"
+              "label": "У",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0423",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_040E"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04EE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04AE"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ў",
+                "Ӯ",
+                "Ү"
+              ]
             },
             {
-              "label": "і"
+              "label": "И",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0418",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_040D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04E2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0406"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0407"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0408"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ѝ",
+                "Ӣ",
+                "І",
+                "Ї",
+                "Ј"
+              ]
             },
             {
-              "label": "ө"
+              "label": "О",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041E",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_04E8"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ө"
+              ]
             },
             {
-              "label": "һ"
+              "label": "П",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041F"
+              }
             },
             {
-              "label": "ћ"
+              "label": "Ш",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0428"
+              }
             },
             {
-              "label": "ђ"
+              "label": "Щ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0429"
+              }
             },
             {
               "label": "",
@@ -545,43 +1676,273 @@
           ],
           [
             {
-              "label": "^"
+              "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_007E"
+              }
             },
             {
-              "label": "ә"
+              "label": "А",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0410"
+              }
             },
             {
-              "label": "ҫ"
+              "label": "С",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0421",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_04AA"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ҫ"
+              ]
             },
             {
-              "label": "ғ"
+              "label": "Д",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0414"
+              }
             },
             {
-              "label": "ѓ"
+              "label": "Ф",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0424"
+              }
             },
             {
-              "label": "ґ"
+              "label": "Г",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0413",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0490"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0403"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0492"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0494"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ґ",
+                "Ѓ",
+                "Ғ",
+                "Ҕ"
+              ]
             },
             {
-              "label": "ҷ"
+              "label": "Ч",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0427",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_04B6"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04B8"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04BA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_040B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0402"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ҷ",
+                "Ҹ",
+                "Һ",
+                "Ћ",
+                "Ђ"
+              ]
             },
             {
-              "label": "ї"
+              "label": "Й",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0419",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_040D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04E2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0406"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0407"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0408"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ѝ",
+                "Ӣ",
+                "І",
+                "Ї",
+                "Ј"
+              ]
             },
             {
-              "label": "қ"
+              "label": "К",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041A",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_049A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_040C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04A0"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_049C"
+                  }
+                ]
+              },
+              "longPress": [
+                "Қ",
+                "Ќ",
+                "Ҡ",
+                "Ҝ"
+              ]
             },
             {
-              "label": "љ"
+              "label": "Л",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041B",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0409"
+                  }
+                ]
+              },
+              "longPress": [
+                "Љ"
+              ]
             },
             {
-              "label": "њ"
+              "label": "Ъ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042A",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0409"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_040A"
+                  }
+                ]
+              },
+              "longPress": [
+                "Љ",
+                "Њ"
+              ]
             },
             {
-              "label": "є"
+              "label": "Э",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042D",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0404"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04D8"
+                  }
+                ]
+              },
+              "longPress": [
+                "Є",
+                "Ә"
+              ]
             },
             {
-              "label": "¥"
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002F"
+              }
             }
           ],
           [
@@ -593,39 +1954,659 @@
               "width": 1.6
             },
             {
-              "label": "ҙ"
+              "label": "З",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0417",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0498"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ҙ"
+              ]
             },
             {
-              "label": "ҳ"
+              "label": "Х",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0425",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_04B2"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ҳ"
+              ]
             },
             {
-              "label": "џ"
+              "label": "Ц",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0426",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_040F"
+                  }
+                ]
+              },
+              "longPress": [
+                "Џ"
+              ]
             },
             {
-              "label": "җ"
+              "label": "Ж",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0416",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0496"
+                  }
+                ]
+              },
+              "longPress": [
+                "Җ"
+              ]
             },
             {
-              "label": "ҹ"
+              "label": "Б",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0411"
+              }
             },
             {
-              "label": "ң"
+              "label": "Н",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041D",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_04A2"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_04A4"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_040A"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ң",
+                "Ҥ",
+                "Њ"
+              ]
             },
             {
-              "label": "ҥ"
+              "label": "М",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_041C"
+              }
             },
             {
-              "label": "ќ"
+              "label": "Ь",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042C"
+              }
             },
             {
-              "label": "ҡ"
+              "label": "Ю",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_042E"
+              }
             },
             {
-              "label": "ҝ"
+              "label": "Ё",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0401"
+              }
             },
             {
               "label": "⇧",
               "action": {
                 "type": "shift"
+              },
+              "width": 1.55
+            }
+          ],
+          [
+            {
+              "label": "⌨",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:shift-alt"
+              },
+              "width": 1.3
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.4
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 9.3
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 2.35
+            }
+          ]
+        ]
+      },
+      "k:alt": {
+        "rows": [
+          [
+            {
+              "label": "§",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_00A7"
+              }
+            },
+            {
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0040"
+              }
+            },
+            {
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0023"
+              }
+            },
+            {
+              "label": "$",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0024"
+              }
+            },
+            {
+              "label": "<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_003C"
+              }
+            },
+            {
+              "label": ">",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_003E"
+              }
+            },
+            {
+              "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_005B"
+              }
+            },
+            {
+              "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_005D"
+              }
+            },
+            {
+              "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_007B"
+              }
+            },
+            {
+              "label": "}",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_007D"
+              }
+            },
+            {
+              "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_003D"
+              }
+            },
+            {
+              "label": ":",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_003A"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.7
+            },
+            {
+              "label": "ј",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0458"
+              }
+            },
+            {
+              "label": "ӣ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04E3"
+              }
+            },
+            {
+              "label": "ѝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045D"
+              }
+            },
+            {
+              "label": "ҕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0495"
+              }
+            },
+            {
+              "label": "ү",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04AF"
+              }
+            },
+            {
+              "label": "ӯ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04EF"
+              }
+            },
+            {
+              "label": "ў",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045E"
+              }
+            },
+            {
+              "label": "і",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0456"
+              }
+            },
+            {
+              "label": "ө",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04E9"
+              }
+            },
+            {
+              "label": "һ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04BB"
+              }
+            },
+            {
+              "label": "ћ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045B"
+              }
+            },
+            {
+              "label": "ђ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0452"
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.4
+            }
+          ],
+          [
+            {
+              "label": "^",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_005E"
+              }
+            },
+            {
+              "label": "ә",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04D9"
+              }
+            },
+            {
+              "label": "ҫ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04AB"
+              }
+            },
+            {
+              "label": "ғ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0493"
+              }
+            },
+            {
+              "label": "ѓ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0453"
+              }
+            },
+            {
+              "label": "ґ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0491"
+              }
+            },
+            {
+              "label": "ҷ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04B7"
+              }
+            },
+            {
+              "label": "ї",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0457"
+              }
+            },
+            {
+              "label": "қ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_049B"
+              }
+            },
+            {
+              "label": "љ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0459"
+              }
+            },
+            {
+              "label": "њ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045A"
+              }
+            },
+            {
+              "label": "є",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0454"
+              }
+            },
+            {
+              "label": "¥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_00A5"
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:shift-alt"
+              },
+              "width": 1.6
+            },
+            {
+              "label": "ҙ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0499"
+              }
+            },
+            {
+              "label": "ҳ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04B3"
+              }
+            },
+            {
+              "label": "џ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045F"
+              }
+            },
+            {
+              "label": "җ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0497"
+              }
+            },
+            {
+              "label": "ҹ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04B9"
+              }
+            },
+            {
+              "label": "ң",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04A3"
+              }
+            },
+            {
+              "label": "ҥ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04A5"
+              }
+            },
+            {
+              "label": "ќ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_045C"
+              }
+            },
+            {
+              "label": "ҡ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_04A1"
+              }
+            },
+            {
+              "label": "ҝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_049D"
+              }
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:shift-alt"
               },
               "width": 1.55
             }
@@ -662,44 +2643,116 @@
           ]
         ]
       },
-      "shift-alt": {
+      "k:shift-alt": {
         "rows": [
           [
             {
-              "label": "„"
+              "label": "„",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_201E"
+              }
             },
             {
-              "label": "“"
+              "label": "“",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_201C"
+              }
             },
             {
-              "label": "₸"
+              "label": "₸",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20B8"
+              }
             },
             {
-              "label": "₮"
+              "label": "₮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20AE"
+              }
             },
             {
-              "label": "€"
+              "label": "€",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20AC"
+              }
             },
             {
-              "label": "‚"
+              "label": "‚",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_201A"
+              }
             },
             {
-              "label": "‘"
+              "label": "‘",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_2018"
+              }
             },
             {
-              "label": "₽"
+              "label": "₽",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20BD"
+              }
             },
             {
-              "label": "₴"
+              "label": "₴",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20B4"
+              }
             },
             {
-              "label": "⃀"
+              "label": "⃀",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_20C0"
+              }
             },
             {
-              "label": "+"
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_002B"
+              }
             },
             {
-              "label": ";"
+              "label": ";",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_003B"
+              }
             },
             {
               "label": "⌫",
@@ -717,40 +2770,112 @@
               "width": 0.7
             },
             {
-              "label": "Ј"
+              "label": "Ј",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0408"
+              }
             },
             {
-              "label": "Ӣ"
+              "label": "Ӣ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04E2"
+              }
             },
             {
-              "label": "Ѝ"
+              "label": "Ѝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040D"
+              }
             },
             {
-              "label": "Ҕ"
+              "label": "Ҕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0494"
+              }
             },
             {
-              "label": "Ү"
+              "label": "Ү",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04AE"
+              }
             },
             {
-              "label": "Ӯ"
+              "label": "Ӯ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04EE"
+              }
             },
             {
-              "label": "Ў"
+              "label": "Ў",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040E"
+              }
             },
             {
-              "label": "І"
+              "label": "І",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0406"
+              }
             },
             {
-              "label": "Ө"
+              "label": "Ө",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04E8"
+              }
             },
             {
-              "label": "Һ"
+              "label": "Һ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04BA"
+              }
             },
             {
-              "label": "Ћ"
+              "label": "Ћ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040B"
+              }
             },
             {
-              "label": "Ђ"
+              "label": "Ђ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0402"
+              }
             },
             {
               "label": "",
@@ -762,87 +2887,229 @@
           ],
           [
             {
-              "label": "¬"
+              "label": "¬",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_00AC"
+              }
             },
             {
-              "label": "Ә"
+              "label": "Ә",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04D8"
+              }
             },
             {
-              "label": "Ҫ"
+              "label": "Ҫ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04AA"
+              }
             },
             {
-              "label": "Ғ"
+              "label": "Ғ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0492"
+              }
             },
             {
-              "label": "Ѓ"
+              "label": "Ѓ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0403"
+              }
             },
             {
-              "label": "Ґ"
+              "label": "Ґ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0490"
+              }
             },
             {
-              "label": "Ҷ"
+              "label": "Ҷ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04B6"
+              }
             },
             {
-              "label": "Ї"
+              "label": "Ї",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0407"
+              }
             },
             {
-              "label": "Қ"
+              "label": "Қ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_049A"
+              }
             },
             {
-              "label": "Љ"
+              "label": "Љ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0409"
+              }
             },
             {
-              "label": "Њ"
+              "label": "Њ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040A"
+              }
             },
             {
-              "label": "Є"
+              "label": "Є",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0404"
+              }
             },
             {
-              "label": "|"
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_007C"
+              }
             }
           ],
           [
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:alt"
               },
               "width": 1.6
             },
             {
-              "label": "Ҙ"
+              "label": "Ҙ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0498"
+              }
             },
             {
-              "label": "Ҳ"
+              "label": "Ҳ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04B2"
+              }
             },
             {
-              "label": "Џ"
+              "label": "Џ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040F"
+              }
             },
             {
-              "label": "Җ"
+              "label": "Җ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_0496"
+              }
             },
             {
-              "label": "Ҹ"
+              "label": "Ҹ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04B8"
+              }
             },
             {
-              "label": "Ң"
+              "label": "Ң",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04A2"
+              }
             },
             {
-              "label": "Ҥ"
+              "label": "Ҥ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04A4"
+              }
             },
             {
-              "label": "Ќ"
+              "label": "Ќ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_040C"
+              }
             },
             {
-              "label": "Ҡ"
+              "label": "Ҡ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_04A0"
+              }
             },
             {
-              "label": "Ҝ"
+              "label": "Ҝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 80,
+                "id": "U_049C"
+              }
             },
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:alt"
               },
               "width": 1.55
             }

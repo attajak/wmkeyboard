@@ -15,8 +15,6 @@
         <item quantity="other">Ta tipkovnica ima %1$d tipk, ki jih večkrat pritisnete za kroženje med znaki. Ta aplikacija za tipkovnico nima takšnih tipk, zato je na voljo le prvi znak vsake od njih.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Ta tipkovnica uporablja pravila za določanje, kaj tipke natipkajo. Aplikacija teh pravil nima, zato vsaka tipka natipka znak, ki je na njej natisnjen.</string>
-    <string name="core_keyman_shift_layer_folded">Aplikacija je združila plast za velike črke s tipkami. Pridržite Shift za dostop do teh znakov.</string>
-    <string name="core_keyman_shift_layer_separate">Plast za velike črke ima drugačno obliko, zato jo je aplikacija obdržala kot svojo plast.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Aplikacija je odstranila %1$d tipko. Ta tipkovnica nima tipke, ki bi opravljala enako funkcijo.</item>
         <item quantity="other">Aplikacija je odstranila %1$d tipk. Ta tipkovnica nima tipk, ki bi opravljale enako funkcijo.</item>

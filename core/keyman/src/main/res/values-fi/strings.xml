@@ -15,8 +15,6 @@
         <item quantity="other">Tässä näppäimistössä on %1$d näppäintä, joita napauttamalla voit selata merkkejä. Tässä näppäimistösovelluksessa ei ole tällaisia näppäimiä, joten vain kunkin ensimmäinen merkki on käytettävissä.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Tämä näppäimistö käyttää sääntöjä päättääkseen, mitä näppäimet kirjoittavat. Sovelluksella ei ole näitä sääntöjä, joten jokainen näppäin kirjoittaa siihen painetun merkin.</string>
-    <string name="core_keyman_shift_layer_folded">Sovellus yhdisti vaihto-tason näppäimiin. Pidä Vaihto-näppäintä pohjassa päästäksesi näihin merkkeihin.</string>
-    <string name="core_keyman_shift_layer_separate">Vaihtotasolla on eri muoto, joten sovellus piti sen omana tasonaan.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Sovellus poisti %1$d näppäimen. Tässä näppäimistössä ei ole näppäintä, joka tekee saman asian.</item>
         <item quantity="other">Sovellus poisti %1$d näppäintä. Tässä näppäimistössä ei ole näppäimiä, jotka tekevät saman asian.</item>

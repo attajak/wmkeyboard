@@ -15,8 +15,6 @@
         <item quantity="other">Þetta lyklaborð er með %1$d takka sem þú ýtir ítrekað á til að fletta í gegnum stafi. Þetta lyklaborðsforrit hefur enga slíka takka, svo aðeins fyrsti stafur hvers og eins er í boði.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Þetta lyklaborð notar reglur til að ákveða hvað lyklar þess skrifa. Forritið hefur ekki þessar reglur, svo hver lykill skrifar stafinn sem er prentaður á hann.</string>
-    <string name="core_keyman_shift_layer_folded">Forritið sameinaði hástafalagið við lyklana. Haltu inni Shift til að ná í þá stafi.</string>
-    <string name="core_keyman_shift_layer_separate">Shift-lagið hefur aðra lögun, svo forritið hélt því sem sínu eigin lagi.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Forritið fjarlægði %1$d lykil. Þetta lyklaborð hefur engan lykil sem gerir það sama.</item>
         <item quantity="other">Forritið fjarlægði %1$d lykla. Þetta lyklaborð hefur enga lykla sem gera það sama.</item>

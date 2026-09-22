@@ -15,8 +15,6 @@
         <item quantity="other">Le khibhodi inokhiye abangu-%1$d obathepha ngokuphindaphindiwe ukuze ujikeleze izinhlamvu. Lolu hlelo lokusebenza lwekhibhodi alunawo lowo khiye, ngakho uhlamvu lokuqala lwalowo nalowo kuphela olutholakalayo.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Le khibhodi isebenzisa imithetho ukunquma ukuthi izinkinobho zayo zithayipha ini. Uhlelo lokusebenza alunawo leyo mithetho, ngakho inkinobho ngayinye ithayipha uhlamvu oluphrintwe kuyo.</string>
-    <string name="core_keyman_shift_layer_folded">Uhlelo lokusebenza luhlanganise ungqimba lwe-shift okhiye. Bamba u-Shift ukuze ufinyelele lezo zinhlamvu.</string>
-    <string name="core_keyman_shift_layer_separate">Ungqimba lwe-shift lunomumo ohlukile, ngakho uhlelo lokusebenza lulugcine njengongqimba lwalo.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Uhlelo lokusebenza lususe ukhiye ongu-%1$d. Le ikhibhodi ayinawo ukhiye owenza into efanayo.</item>
         <item quantity="other">Uhlelo lokusebenza lususe okhiye abangu-%1$d. Le ikhibhodi ayinawo okhiye abenza izinto ezifanayo.</item>

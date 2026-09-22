@@ -15,8 +15,6 @@
         <item quantity="other">למקלדת זו יש %1$d מקשים שאתה מקיש עליהם שוב ושוב כדי לעבור בין תווים. לאפליקציית המקלדת הזו אין מקשים כאלה, לכן רק התו הראשון של כל אחד מהם זמין.</item>
     </plurals>
     <string name="core_keyman_rules_missing">מקלדת זו משתמשת בכללים כדי להחליט מה המקשים שלה מקלידים. לאפליקציה אין את הכללים האלה, לכן כל מקש מקליד את התו המודפס עליו.</string>
-    <string name="core_keyman_shift_layer_folded">האפליקציה מיזגה את שכבת ה-Shift לתוך המקשים. החזק את Shift כדי להגיע לתווים אלו.</string>
-    <string name="core_keyman_shift_layer_separate">לשכבת ה-Shift יש צורה שונה, לכן האפליקציה שמרה עליה כשכבה נפרדת.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">האפליקציה הסירה %1$d מקש. למקלדת זו אין מקש שמבצע את אותה פעולה.</item>
         <item quantity="other">האפליקציה הסירה %1$d מקשים. למקלדת זו אין מקשים שמבצעים את אותה פעולה.</item>

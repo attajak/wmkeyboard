@@ -169,6 +169,55 @@ class KmxConformanceTest {
         assertEquals("\u1780\u17D2", backspaceAfter("windows desktop hardware native"))
     }
 
+    /**
+     * A `T_` key is known to the rules by its place in the keyboard's key
+     * dictionary. Khmer Angkor's subscript flicks are `T_17D2_xxxx` keys, each
+     * with rules of its own.
+     */
+    @Test
+    fun `named touch keys resolve through the key dictionary`() {
+        val engine = KmxProcessor(keyboard("khmer_angkor.kmx"))
+        val field = Field()
+        engine.resetContext("")
+        (engine.process(ProcessorKey(75, 0)) as ProcessorResult.Edit).let(field::apply)
+        val code = checkNotNull(engine.keyForName("T_17D2_1786")) { "no T_17D2_1786 in the dictionary" }
+        assertTrue("dictionary codes start at 256", code >= 256)
+        assertEquals(code, engine.keyForName("t_17d2_1786"))
+        (engine.process(ProcessorKey(code, 0)) as ProcessorResult.Edit).let(field::apply)
+        assertEquals("\u1780\u17D2\u1786", field.text.toString())
+        assertEquals(null, engine.keyForName("T_NOT_THERE"))
+    }
+
+    /**
+     * Khmer Angkor's PostKeystroke group returns from the shift layer after a
+     * shifted letter, stays on the numeric layer after a digit, and otherwise
+     * goes back to the default layer — and, being readonly, never touches the
+     * text or the engine's view of it.
+     */
+    @Test
+    fun `post keystroke picks the layer and leaves the context alone`() {
+        val engine = KmxProcessor(keyboard("khmer_angkor.kmx"))
+        val field = Field()
+        engine.resetContext("")
+        assertTrue(engine.hasPostKeystroke)
+
+        engine.setLayer("shift")
+        (engine.process(ProcessorKey(81, KmxFormat.K_SHIFTFLAG)) as ProcessorResult.Edit).let(field::apply)
+        assertEquals("ឈ", field.text.toString())
+        assertEquals("default", engine.onPostKeystroke())
+        // A layer the keystroke itself chose is left alone.
+        engine.setLayer("shift")
+        assertEquals(null, engine.onPostKeystroke(newLayer = "shift", oldLayer = "default"))
+
+        engine.setLayer("numeric")
+        (engine.process(ProcessorKey(49, 0)) as ProcessorResult.Edit).let(field::apply)
+        assertEquals(null, engine.onPostKeystroke())
+
+        // Nothing above may have changed what the engine thinks the field holds.
+        (engine.process(ProcessorKey(8, 0)) as ProcessorResult.Edit).let(field::apply)
+        assertEquals("ឈ", field.text.toString())
+    }
+
     /** No sequence may ever ask the host to delete more than the field holds. */
     @Test
     fun `no keyboard ever over-deletes`() {

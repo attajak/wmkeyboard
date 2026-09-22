@@ -387,9 +387,27 @@ sealed interface AlternateEntry {
  * whole point of [Key.actionAlternatesFirst].
  */
 fun Key.alternateEntries(): List<AlternateEntry> {
-    val characters = longPress.map { AlternateEntry.Character(it) }
+    // A Keyman key's long-press entries are keys of their own, with their own
+    // id and layer for the rules to match on, so they go out as key presses
+    // rather than as the text on their caps.
+    val keyman = (action as? KeyAction.KeymanKey)?.longPress?.takeIf { it.size == longPress.size }
+    val characters = longPress.mapIndexed { i, text ->
+        keyman?.get(i)?.let { AlternateEntry.Action(KeyAlternate(action = it.toAction(), label = text)) }
+            ?: AlternateEntry.Character(text)
+    }
     val actions = actionAlternates.map { AlternateEntry.Action(it) }
     return if (actionAlternatesFirst) actions + characters else characters + actions
+}
+
+/**
+ * The key a flick towards [direction] commits: the flick's own Keyman key when
+ * this is a Keyman key that has one, else this key typing the flick's text.
+ */
+fun Key.flickKey(direction: FlickDirection): Key? {
+    val text = flick[direction] ?: return null
+    val target = (action as? KeyAction.KeymanKey)?.flick?.get(direction)
+        ?: return copy(output = text)
+    return Key(label = text, output = target.text, action = target.toAction())
 }
 
 /**
@@ -455,6 +473,8 @@ data class KeyboardLayout(
      * on screen rather than re-deriving the layer-beats-layout rule.
      */
     val themeId: String? = null,
+    /** [LayerSpec.keymanFrames], carried onto the grid on screen. */
+    val keymanFrames: Map<String, KeymanTarget> = emptyMap(),
 )
 
 /**

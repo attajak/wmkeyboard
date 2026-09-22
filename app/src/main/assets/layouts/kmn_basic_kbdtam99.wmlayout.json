@@ -11,7 +11,6 @@
           [
             {
               "label": "ஆ",
-              "shiftLabel": "ஸ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -19,7 +18,6 @@
             },
             {
               "label": "ஈ",
-              "shiftLabel": "ஷ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -27,7 +25,6 @@
             },
             {
               "label": "ஊ",
-              "shiftLabel": "ஜ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -35,7 +32,6 @@
             },
             {
               "label": "ஐ",
-              "shiftLabel": "ஹ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 82
@@ -43,7 +39,6 @@
             },
             {
               "label": "ஏ",
-              "shiftLabel": "க்ஷ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 84
@@ -51,7 +46,6 @@
             },
             {
               "label": "ள",
-              "shiftLabel": "ஶ்ரீ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89
@@ -59,7 +53,6 @@
             },
             {
               "label": "ற",
-              "shiftLabel": "ஶ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85
@@ -67,7 +60,6 @@
             },
             {
               "label": "ன",
-              "shiftLabel": "ச",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73
@@ -75,7 +67,6 @@
             },
             {
               "label": "ட",
-              "shiftLabel": "ஞ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79
@@ -83,7 +74,6 @@
             },
             {
               "label": "ண",
-              "shiftLabel": "/",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -100,7 +90,6 @@
             },
             {
               "label": "அ",
-              "shiftLabel": "௹",
               "action": {
                 "type": "keyman_key",
                 "vkey": 65
@@ -108,7 +97,6 @@
             },
             {
               "label": "இ",
-              "shiftLabel": "௺",
               "action": {
                 "type": "keyman_key",
                 "vkey": 83
@@ -116,7 +104,6 @@
             },
             {
               "label": "உ",
-              "shiftLabel": "௸",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -124,7 +111,6 @@
             },
             {
               "label": "்",
-              "shiftLabel": "ஃ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -153,7 +139,6 @@
             },
             {
               "label": "ம",
-              "shiftLabel": "ந",
               "action": {
                 "type": "keyman_key",
                 "vkey": 75
@@ -161,7 +146,6 @@
             },
             {
               "label": "த",
-              "shiftLabel": "ய",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76
@@ -185,7 +169,6 @@
             },
             {
               "label": "ஔ",
-              "shiftLabel": "௳",
               "action": {
                 "type": "keyman_key",
                 "vkey": 90
@@ -193,7 +176,6 @@
             },
             {
               "label": "ஓ",
-              "shiftLabel": "௴",
               "action": {
                 "type": "keyman_key",
                 "vkey": 88
@@ -201,7 +183,6 @@
             },
             {
               "label": "ஒ",
-              "shiftLabel": "௵",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -209,7 +190,6 @@
             },
             {
               "label": "வ",
-              "shiftLabel": "௶",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -217,7 +197,6 @@
             },
             {
               "label": "ங",
-              "shiftLabel": "௷",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66
@@ -225,7 +204,6 @@
             },
             {
               "label": "ல",
-              "shiftLabel": "ௐ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -233,7 +211,6 @@
             },
             {
               "label": "ர",
-              "shiftLabel": "ழ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -243,7 +220,39 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 75,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 76,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -269,6 +278,328 @@
               "label": "?123",
               "action": {
                 "type": "symbols"
+              },
+              "width": 1.4
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.2
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 6.3
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.4
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "ஸ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஷ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஜ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஹ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "க்ஷ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஶ்ரீ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஶ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ச",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 219
+              }
+            },
+            {
+              "label": "ஞ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 221
+              }
+            },
+            {
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.65
+            },
+            {
+              "label": "௹",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௺",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௸",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ஃ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "எ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "க",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ப",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ந",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 186
+              }
+            },
+            {
+              "label": "ய",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 222
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.1
+            },
+            {
+              "label": "௳",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௴",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௵",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 86,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "௷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ௐ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ழ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 191
+              }
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 75,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 76,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  }
+                ]
+              },
+              "longPress": [
+                ",",
+                "!",
+                "?",
+                "'",
+                "\"",
+                "\\",
+                ":",
+                ";"
+              ]
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 0.9
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -460,7 +791,7 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "none"
               },
               "width": 1.1
             },
@@ -468,7 +799,20 @@
               "label": "`",
               "action": {
                 "type": "keyman_key",
-                "vkey": 192
+                "vkey": 192,
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "«",
@@ -481,7 +825,13 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 57,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "vkey": 79,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "["
@@ -492,7 +842,13 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 48,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "vkey": 80,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "]"
@@ -503,7 +859,20 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 192,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "»",
@@ -552,7 +921,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },

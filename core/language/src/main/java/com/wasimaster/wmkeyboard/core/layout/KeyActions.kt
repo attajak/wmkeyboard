@@ -262,20 +262,33 @@ sealed interface KeyAction {
 
     /** A deliberate gap in the grid: drawn as empty space, swallows its taps. */
     /**
-     * A key of a converted Keyman layout. The key names a virtual key and the
+     * A key of a converted Keyman layout. The key names a Keyman key and the
      * keyboard's rule engine decides what it types.
      *
      * [Key.label] and [Key.output] are the cap and the fallback, not the answer:
      * the character a rule matches on comes from Keyman's own US virtual-key
      * table, so a Khmer key cap does not make the matched character Khmer. When
      * no engine is loaded — an exported layout on a device without the rules,
-     * or a keyboard whose rules failed to parse — the key types its label, and
-     * the grid stays an ordinary usable keyboard.
+     * or a keyboard whose rules failed to parse — the key types its output or
+     * its label, and the grid stays an ordinary usable keyboard.
      *
-     * [modifiers] is the touch key's `layer` attribute folded into a Keyman
-     * modifier mask: "match rules as though this combination were held", which
-     * is a different thing from [nextLayer], the layer to *show* afterwards. A
-     * touch key's `nextlayer` wins over a rule's own `layer()` statement.
+     * The key is identified the way Keyman identifies it: a US virtual key in
+     * [vkey] for a `K_` key, or the author's own name in [id] for a `T_` or `U_`
+     * key, which the engine resolves against the keyboard's virtual-key
+     * dictionary (and a `U_` key not in it types its code points). [modifiers]
+     * is the Keyman modifier mask the rules match as held: the key's `layer`
+     * attribute, else the layer it sits on, read the way KeymanWeb reads a layer
+     * name — so a key on `rightalt-shift` matches `[RALT SHIFT K_x]`.
+     *
+     * [nextLayer] is the layer to show afterwards, as a key of
+     * [LayoutSpec.layers]. A rule's own `layer()` wins over it, as it does in
+     * KeymanWeb, where the rule's store write lands after the key's switch.
+     *
+     * [longPress] and [flick] are the Keyman keys behind the key's gestures,
+     * parallel to [Key.longPress] and [Key.flick]: a Keyman gesture is a key in
+     * its own right, with its own id and layer, and has to reach the rules as
+     * one rather than as the text on its cap. Each carries its own fallback in
+     * [text].
      *
      * Carried on the action rather than as a field on [Key] because [Key] is
      * serialised with `encodeDefaults`, so a new field there writes into every
@@ -288,7 +301,14 @@ sealed interface KeyAction {
         val vkey: Int,
         val modifiers: Int = 0,
         val nextLayer: String? = null,
-    ) : KeyAction
+        val id: String? = null,
+        val text: String? = null,
+        val longPress: List<KeymanTarget> = emptyList(),
+        val flick: Map<FlickDirection, KeymanTarget> = emptyMap(),
+    ) : KeyAction {
+        /** A key that only switches layers: no virtual key and no name to type. */
+        val isLayerSwitch: Boolean get() = vkey == 0 && id == null && nextLayer != null
+    }
 
     @Serializable @SerialName("none") data object None : KeyAction
 
@@ -457,6 +477,26 @@ private const val KEYCODE_DPAD_RIGHT = 22
  * the same lookup [Key.icon] goes through.
  */
 @Immutable
+
+
+/**
+ * The Keyman key behind one of a [KeyAction.KeymanKey]'s gestures: the same
+ * identity as a key of its own, flat so a gesture cannot carry gestures.
+ * [text] is what it types with no rules loaded, since a popup entry has no
+ * [Key.output] of its own.
+ */
+@Serializable
+data class KeymanTarget(
+    val vkey: Int = 0,
+    val modifiers: Int = 0,
+    val nextLayer: String? = null,
+    val id: String? = null,
+    val text: String? = null,
+) {
+    /** This target as a key press. */
+    fun toAction(): KeyAction.KeymanKey =
+        KeyAction.KeymanKey(vkey = vkey, modifiers = modifiers, nextLayer = nextLayer, id = id, text = text)
+}
 @Serializable
 data class KeyAlternate(
     val action: KeyAction,

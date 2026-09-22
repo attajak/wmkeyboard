@@ -60,23 +60,44 @@ object VirtualKeys {
         put("K_BKSLASH", 220)
         put("K_RBRKT", 221)
         put("K_QUOTE", 222)
+        put("K_LSHIFT", 160)
+        put("K_RSHIFT", 161)
+        put("K_LCONTROL", 162)
+        put("K_RCONTROL", 163)
+        put("K_LALT", 164)
+        put("K_RALT", 165)
+        put("K_oC1", 193)
+        put("K_oDF", 223)
         put("K_oE2", 226)
         // Layer-switch conveniences. They carry no intrinsic behaviour — a key
         // using one still has to set `nextlayer` — but they are legal ids and a
-        // converter that does not know them would treat them as unknown.
+        // converter that does not know them would treat them as unknown. The
+        // values are KeymanWeb's own (`USVirtualKeyCodes`).
         put("K_LOPT", 50001)
         put("K_ROPT", 50002)
         put("K_NUMERALS", 50003)
         put("K_SYMBOLS", 50004)
         put("K_CURRENCIES", 50005)
-        put("K_SHIFTED", 50006)
-        put("K_ALTGR", 50007)
-        put("K_TABBACK", 50008)
-        put("K_TABFWD", 50009)
+        put("K_UPPER", 50006)
+        put("K_LOWER", 50007)
+        put("K_ALPHA", 50008)
+        put("K_SHIFTED", 50009)
+        put("K_ALTGR", 50010)
+        put("K_TABBACK", 50011)
+        put("K_TABFWD", 50012)
     }
 
-    /** The virtual key a touch-layout `K_*` id names, or null. */
-    fun byName(name: String): Int? = BY_NAME[name]
+    /** The same table keyed upper-case, because KeymanWeb reads key ids that way. */
+    private val BY_UPPER_NAME: Map<String, Int> = BY_NAME.mapKeys { it.key.uppercase() }
+
+    /**
+     * The first of the codes KeymanWeb gives its layer-switch and option keys
+     * (`K_LOPT`, `K_NUMERALS` ...). A key at or above it is frame, not text.
+     */
+    const val FIRST_FRAME_CODE: Int = 50001
+
+    /** The virtual key a touch-layout `K_*` id names, or null. Case-insensitive. */
+    fun byName(name: String): Int? = BY_NAME[name] ?: BY_UPPER_NAME[name.uppercase()]
 
     /** True for the ids that exist to switch layers rather than to type. */
     fun isLayerSwitch(name: String): Boolean = when (name) {

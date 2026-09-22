@@ -13,7 +13,13 @@
               "label": "◌",
               "action": {
                 "type": "keyman_key",
-                "vkey": 65
+                "vkey": 65,
+                "longPress": [
+                  {
+                    "vkey": 65,
+                    "modifiers": 32
+                  }
+                ]
               },
               "longPress": [
                 "ᬵ"
@@ -23,7 +29,13 @@
               "label": "ᬶ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 73
+                "vkey": 73,
+                "longPress": [
+                  {
+                    "vkey": 73,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "ᬷ"
@@ -33,7 +45,13 @@
               "label": "ᬸ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 85
+                "vkey": 85,
+                "longPress": [
+                  {
+                    "vkey": 85,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "ᬹ"
@@ -44,7 +62,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 69,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "T_TALING_REPA"
+                  }
+                ]
               },
               "longPress": [
                 "ᬿ"
@@ -54,7 +77,12 @@
               "label": "ᭀ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 79
+                "vkey": 79,
+                "longPress": [
+                  {
+                    "id": "T_TALING_REPA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᭁ"
@@ -64,24 +92,52 @@
               "label": "ᭂ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 69
+                "vkey": 69,
+                "longPress": [
+                  {
+                    "id": "T_PEPET_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᭃ"
               ]
             },
             {
-              "label": "ᬂ"
+              "label": "ᬂ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_CECEK"
+              }
             },
             {
               "label": "ᬃ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_SURANG",
+                "longPress": [
+                  {
+                    "id": "T_RA_REPA"
+                  },
+                  {
+                    "id": "T_RA_REPA_TEDONG"
+                  }
+                ]
+              },
               "longPress": [
                 "ᬺ",
                 "ᬻ"
               ]
             },
             {
-              "label": "ᬄ"
+              "label": "ᬄ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_BISAH"
+              }
             },
             {
               "label": "᭄",
@@ -103,7 +159,12 @@
               "label": "ᬦ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 78
+                "vkey": 78,
+                "longPress": [
+                  {
+                    "vkey": 88
+                  }
+                ]
               },
               "longPress": [
                 "ᬡ"
@@ -113,7 +174,12 @@
               "label": "ᬘ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 67
+                "vkey": 67,
+                "longPress": [
+                  {
+                    "id": "T_CH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬙ"
@@ -123,7 +189,15 @@
               "label": "ᬭ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 82
+                "vkey": 82,
+                "longPress": [
+                  {
+                    "id": "T_RA_REPA"
+                  },
+                  {
+                    "id": "T_RA_REPA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᬋ",
@@ -134,7 +208,12 @@
               "label": "ᬓ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 75
+                "vkey": 75,
+                "longPress": [
+                  {
+                    "id": "T_KH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬔ"
@@ -144,7 +223,18 @@
               "label": "ᬤ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 68
+                "vkey": 68,
+                "longPress": [
+                  {
+                    "id": "T_DH"
+                  },
+                  {
+                    "id": "T_DD"
+                  },
+                  {
+                    "id": "T_DDH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬥ",
@@ -156,7 +246,12 @@
               "label": "ᬢ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 84
+                "vkey": 84,
+                "longPress": [
+                  {
+                    "id": "T_TH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬣ"
@@ -166,7 +261,15 @@
               "label": "ᬲ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 83
+                "vkey": 83,
+                "longPress": [
+                  {
+                    "vkey": 219
+                  },
+                  {
+                    "vkey": 221
+                  }
+                ]
               },
               "longPress": [
                 "ᬱ",
@@ -184,7 +287,15 @@
               "label": "ᬮ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 76
+                "vkey": 76,
+                "longPress": [
+                  {
+                    "id": "T_LA_LENGA"
+                  },
+                  {
+                    "id": "T_LA_LENGA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᬍ",
@@ -202,7 +313,12 @@
               "label": "ᬕ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 71
+                "vkey": 71,
+                "longPress": [
+                  {
+                    "vkey": 70
+                  }
+                ]
               },
               "longPress": [
                 "ᬖ"
@@ -220,7 +336,12 @@
               "label": "ᬩ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 66
+                "vkey": 66,
+                "longPress": [
+                  {
+                    "vkey": 86
+                  }
+                ]
               },
               "longPress": [
                 "ᬪ"
@@ -230,7 +351,12 @@
               "label": "ᬝ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 192
+                "vkey": 192,
+                "longPress": [
+                  {
+                    "id": "T_TTH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬞ"
@@ -247,7 +373,13 @@
               "label": "ᬧ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 80
+                "vkey": 80,
+                "longPress": [
+                  {
+                    "vkey": 220,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "ᬨ"
@@ -257,7 +389,12 @@
               "label": "ᬚ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 74
+                "vkey": 74,
+                "longPress": [
+                  {
+                    "id": "T_JH"
+                  }
+                ]
               },
               "longPress": [
                 "ᬛ"
@@ -281,7 +418,12 @@
               "label": "᭞",
               "action": {
                 "type": "keyman_key",
-                "vkey": 188
+                "vkey": 188,
+                "longPress": [
+                  {
+                    "vkey": 190
+                  }
+                ]
               },
               "longPress": [
                 "᭟"
@@ -326,7 +468,7 @@
           ]
         ]
       },
-      "shift": {
+      "k:shift": {
         "rows": [
           [
             {
@@ -334,7 +476,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 65,
-                "modifiers": 48
+                "modifiers": 48,
+                "longPress": [
+                  {
+                    "id": "T_AKARA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᬆ"
@@ -345,7 +492,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 73,
-                "modifiers": 48
+                "modifiers": 48,
+                "longPress": [
+                  {
+                    "id": "T_IKARA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᬈ"
@@ -356,7 +508,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 85,
-                "modifiers": 48
+                "modifiers": 48,
+                "longPress": [
+                  {
+                    "id": "T_UKARA_TEDONG"
+                  }
+                ]
               },
               "longPress": [
                 "ᬊ"
@@ -367,7 +524,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 69,
-                "modifiers": 48
+                "modifiers": 48,
+                "longPress": [
+                  {
+                    "id": "T_TALING_REPA"
+                  }
+                ]
               },
               "longPress": [
                 "ᬐ"
@@ -378,7 +540,15 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 79,
-                "modifiers": 48
+                "modifiers": 48,
+                "longPress": [
+                  {
+                    "id": "T_TALING_REPA_TEDONG"
+                  },
+                  {
+                    "id": "T_OM"
+                  }
+                ]
               },
               "longPress": [
                 "ᬒ",
@@ -386,10 +556,20 @@
               ]
             },
             {
-              "label": "ᬁ"
+              "label": "ᬁ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_CANDRA"
+              }
             },
             {
-              "label": "ᬀ"
+              "label": "ᬀ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_RICEM"
+              }
             },
             {
               "label": "᬴",
@@ -404,7 +584,17 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 85,
-                "modifiers": 64
+                "modifiers": 64,
+                "longPress": [
+                  {
+                    "vkey": 69,
+                    "modifiers": 80
+                  },
+                  {
+                    "vkey": 69,
+                    "modifiers": 64
+                  }
+                ]
               },
               "longPress": [
                 "ᬾ",
@@ -421,25 +611,60 @@
           ],
           [
             {
-              "label": "ᭆ"
+              "label": "ᭆ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_KHOT"
+              }
             },
             {
-              "label": "ᭅ"
+              "label": "ᭅ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_KAF"
+              }
             },
             {
-              "label": "ᭈ"
+              "label": "ᭈ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_EF"
+              }
             },
             {
-              "label": "ᭉ"
+              "label": "ᭉ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_VE"
+              }
             },
             {
-              "label": "ᭇ"
+              "label": "ᭇ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TZIR"
+              }
             },
             {
-              "label": "ᭊ"
+              "label": "ᭊ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_ZAL"
+              }
             },
             {
-              "label": "ᭋ"
+              "label": "ᭋ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_ASYURA"
+              }
             },
             {
               "label": "",
@@ -491,7 +716,8 @@
               "label": "᭠",
               "action": {
                 "type": "keyman_key",
-                "vkey": 189
+                "vkey": 189,
+                "modifiers": 16
               }
             },
             {
@@ -514,7 +740,9 @@
             {
               "label": "᭗᭘᭙",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.5
             },
@@ -712,6 +940,22 @@
           [
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LBRKT",
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "id": "U_003C"
+                  },
+                  {
+                    "id": "U_007B"
+                  }
+                ]
+              },
               "longPress": [
                 "«",
                 "<",
@@ -720,6 +964,22 @@
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_RBRKT",
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "id": "U_003E"
+                  },
+                  {
+                    "id": "U_007D"
+                  }
+                ]
+              },
               "longPress": [
                 "»",
                 ">",
@@ -727,16 +987,36 @@
               ]
             },
             {
-              "label": "("
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0028"
+              }
             },
             {
-              "label": ")"
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0029"
+              }
             },
             {
-              "label": "+"
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002B"
+              }
             },
             {
-              "label": "*"
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002A"
+              }
             },
             {
               "label": "/",
@@ -785,9 +1065,11 @@
               }
             },
             {
-              "label": " ",
+              "label": "",
               "action": {
-                "type": "space"
+                "type": "keyman_key",
+                "vkey": 32,
+                "modifiers": 16
               },
               "width": 6.5
             },

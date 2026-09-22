@@ -98,10 +98,36 @@ interface KeyProcessor {
     fun onNewContext(before: CharSequence): String?
 
     /**
-     * Keyman's `begin PostKeystroke`, run after an edit has been applied. Same
-     * contract as [onNewContext]: layer only, never text.
+     * Keyman's `begin PostKeystroke`, run after every keystroke once its edit and
+     * any layer switch have been applied — KeymanWeb's order. Same contract as
+     * [onNewContext]: layer only, never text, and the context is left exactly
+     * as it was. [newLayer] and [oldLayer] are what `&newLayer` and `&oldLayer`
+     * read: the layer the keystroke switched to and the one it left, both
+     * empty when it switched nothing.
      */
-    fun onPostKeystroke(): String?
+    fun onPostKeystroke(newLayer: String = "", oldLayer: String = ""): String?
+
+    /** Whether the keyboard has a `begin PostKeystroke` group at all. */
+    val hasPostKeystroke: Boolean get() = false
+
+    /** Whether the keyboard has a `begin NewContext` group at all. */
+    val hasNewContext: Boolean get() = false
+
+    /**
+     * The virtual key a touch layout's own key name (`T_KOKAI`, `U_05AB`) stands
+     * for in this keyboard's rules, or null when no rule names it. Keyman numbers
+     * these from 256 in the order of the keyboard's key dictionary.
+     */
+    fun keyForName(name: String): Int? = null
+
+    /**
+     * Text the host typed on the engine's behalf — a key's default output after
+     * the rules passed on it — appended to the context as it is, deadkeys and
+     * all, the way KeymanWeb's default output lands in its text store.
+     */
+    fun onTextTyped(text: CharSequence) {
+        // A processor that keeps no context has nothing to add it to.
+    }
 
     /** True while a deadkey is pending, for the strip's pending-accent hint. */
     val deadKeyPending: Boolean

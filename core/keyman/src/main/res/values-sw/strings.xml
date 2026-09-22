@@ -15,8 +15,6 @@
         <item quantity="other">Kibodi hii ina vitufe %1$d unavyogonga mara kwa mara ili kuzunguka herufi. Programu hii ya kibodi haina vitufe kama hivyo, kwa hivyo herufi ya kwanza ya kila kimoja pekee ndiyo inayopatikana.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Kibodi hii hutumia kanuni kuamua vitufe vyake vinachapa nini. Programu haina kanuni hizo, kwa hivyo kila kitufe huchapa herufi iliyochapishwa juu yake.</string>
-    <string name="core_keyman_shift_layer_folded">Programu imeunganisha safu ya shift kwenye vitufe. Shikilia Shift ili kufikia herufi hizo.</string>
-    <string name="core_keyman_shift_layer_separate">Safu ya shift ina umbo tofauti, kwa hivyo programu iliihifadhi kama safu yake yenyewe.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Programu imeondoa ufunguo %1$d. Kibodi hii haina ufunguo unaofanya kazi sawa na huo.</item>
         <item quantity="other">Programu imeondoa funguo %1$d. Kibodi hii haina funguo zinazofanya kazi sawa na hizo.</item>

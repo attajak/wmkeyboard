@@ -15,8 +15,6 @@
         <item quantity="other">이 키보드에는 반복해서 탭하여 문자를 순환시키는 %1$d개의 키가 있습니다. 이 키보드 앱에는 해당 키가 없으므로 각 키의 첫 번째 문자만 사용할 수 있습니다.</item>
     </plurals>
     <string name="core_keyman_rules_missing">이 키보드는 규칙을 사용하여 키 입력 방식을 결정합니다. 앱에 해당 규칙이 없으므로 각 키는 인쇄된 문자를 입력합니다.</string>
-    <string name="core_keyman_shift_layer_folded">앱이 Shift 레이어를 키에 병합했습니다. Shift를 길게 눌러 해당 문자에 액세스하세요.</string>
-    <string name="core_keyman_shift_layer_separate">Shift 레이어의 모양이 다르므로 앱에서 별도의 레이어로 유지했습니다.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">앱에서 %1$d개의 키를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다.</item>
         <item quantity="other">앱에서 %1$d개의 키를 제거했습니다. 이 키보드에는 동일한 기능을 하는 키가 없습니다.</item>

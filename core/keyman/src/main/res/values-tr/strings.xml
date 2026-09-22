@@ -15,8 +15,6 @@
         <item quantity="other">Bu klavyede karakterler arasında geçiş yapmak için art arda dokunduğunuz %1$d tuş bulunuyor. Bu klavye uygulamasında böyle tuşlar yoktur, bu nedenle her birinin yalnızca ilk karakteri kullanılabilir.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Bu klavye, tuşlarının ne yazacağına karar vermek için kurallar kullanır. Uygulamada bu kurallar bulunmadığından, her tuş üzerinde yazılı olan karakteri yazar.</string>
-    <string name="core_keyman_shift_layer_folded">Uygulama, Shift katmanını tuşlarla birleştirdi. Bu karakterlere ulaşmak için Shift tuşunu basılı tutun.</string>
-    <string name="core_keyman_shift_layer_separate">Shift katmanı farklı bir şekle sahip, bu yüzden uygulama onu kendi katmanı olarak tuttu.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işlevi gören bir tuş yok.</item>
         <item quantity="other">Uygulama %1$d tuşu kaldırdı. Bu klavyede aynı işlevi gören tuşlar yok.</item>

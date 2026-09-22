@@ -11,7 +11,6 @@
           [
             {
               "label": "q",
-              "shiftLabel": "Q",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -20,7 +19,6 @@
             },
             {
               "label": "w",
-              "shiftLabel": "W",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -29,10 +27,14 @@
             },
             {
               "label": "e",
-              "shiftLabel": "E",
               "action": {
                 "type": "keyman_key",
-                "vkey": 69
+                "vkey": 69,
+                "longPress": [
+                  {
+                    "id": "U_0117"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -41,10 +43,14 @@
             },
             {
               "label": "r",
-              "shiftLabel": "R",
               "action": {
                 "type": "keyman_key",
-                "vkey": 82
+                "vkey": 82,
+                "longPress": [
+                  {
+                    "id": "U_0157"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -53,10 +59,14 @@
             },
             {
               "label": "t",
-              "shiftLabel": "T",
               "action": {
                 "type": "keyman_key",
-                "vkey": 84
+                "vkey": 84,
+                "longPress": [
+                  {
+                    "id": "U_021B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -65,10 +75,14 @@
             },
             {
               "label": "y",
-              "shiftLabel": "Y",
               "action": {
                 "type": "keyman_key",
-                "vkey": 89
+                "vkey": 89,
+                "longPress": [
+                  {
+                    "id": "U_03B3"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -77,10 +91,14 @@
             },
             {
               "label": "u",
-              "shiftLabel": "U",
               "action": {
                 "type": "keyman_key",
-                "vkey": 85
+                "vkey": 85,
+                "longPress": [
+                  {
+                    "id": "U_00FC"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -89,10 +107,14 @@
             },
             {
               "label": "i",
-              "shiftLabel": "I",
               "action": {
                 "type": "keyman_key",
-                "vkey": 73
+                "vkey": 73,
+                "longPress": [
+                  {
+                    "id": "U_0129"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -101,10 +123,14 @@
             },
             {
               "label": "o",
-              "shiftLabel": "O",
               "action": {
                 "type": "keyman_key",
-                "vkey": 79
+                "vkey": 79,
+                "longPress": [
+                  {
+                    "id": "U_022F"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -113,7 +139,6 @@
             },
             {
               "label": "p",
-              "shiftLabel": "P",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -131,10 +156,14 @@
             },
             {
               "label": "a",
-              "shiftLabel": "A",
               "action": {
                 "type": "keyman_key",
-                "vkey": 65
+                "vkey": 65,
+                "longPress": [
+                  {
+                    "id": "U_00E4"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -143,10 +172,14 @@
             },
             {
               "label": "s",
-              "shiftLabel": "S",
               "action": {
                 "type": "keyman_key",
-                "vkey": 83
+                "vkey": 83,
+                "longPress": [
+                  {
+                    "id": "U_015B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -155,10 +188,14 @@
             },
             {
               "label": "d",
-              "shiftLabel": "D",
               "action": {
                 "type": "keyman_key",
-                "vkey": 68
+                "vkey": 68,
+                "longPress": [
+                  {
+                    "id": "U_1E0D"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -167,7 +204,6 @@
             },
             {
               "label": "f",
-              "shiftLabel": "F",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -176,10 +212,14 @@
             },
             {
               "label": "g",
-              "shiftLabel": "G",
               "action": {
                 "type": "keyman_key",
-                "vkey": 71
+                "vkey": 71,
+                "longPress": [
+                  {
+                    "id": "U_01F5"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -188,7 +228,6 @@
             },
             {
               "label": "h",
-              "shiftLabel": "H",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -197,7 +236,6 @@
             },
             {
               "label": "j",
-              "shiftLabel": "J",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -206,10 +244,14 @@
             },
             {
               "label": "k",
-              "shiftLabel": "K",
               "action": {
                 "type": "keyman_key",
-                "vkey": 75
+                "vkey": 75,
+                "longPress": [
+                  {
+                    "id": "U_1E31"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -218,10 +260,14 @@
             },
             {
               "label": "l",
-              "shiftLabel": "L",
               "action": {
                 "type": "keyman_key",
-                "vkey": 76
+                "vkey": 76,
+                "longPress": [
+                  {
+                    "id": "U_013C"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -245,10 +291,14 @@
             },
             {
               "label": "z",
-              "shiftLabel": "Z",
               "action": {
                 "type": "keyman_key",
-                "vkey": 90
+                "vkey": 90,
+                "longPress": [
+                  {
+                    "id": "U_0292"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -257,10 +307,14 @@
             },
             {
               "label": "χ",
-              "shiftLabel": "X",
               "action": {
                 "type": "keyman_key",
-                "vkey": 88
+                "vkey": 88,
+                "longPress": [
+                  {
+                    "id": "U_017A"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -269,10 +323,14 @@
             },
             {
               "label": "c",
-              "shiftLabel": "C",
               "action": {
                 "type": "keyman_key",
-                "vkey": 67
+                "vkey": 67,
+                "longPress": [
+                  {
+                    "id": "U_0107"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -281,7 +339,6 @@
             },
             {
               "label": "v",
-              "shiftLabel": "V",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -290,10 +347,14 @@
             },
             {
               "label": "b",
-              "shiftLabel": "B",
               "action": {
                 "type": "keyman_key",
-                "vkey": 66
+                "vkey": 66,
+                "longPress": [
+                  {
+                    "id": "U_1E47"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -302,10 +363,14 @@
             },
             {
               "label": "n",
-              "shiftLabel": "N",
               "action": {
                 "type": "keyman_key",
-                "vkey": 78
+                "vkey": 78,
+                "longPress": [
+                  {
+                    "id": "U_0144"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -314,10 +379,14 @@
             },
             {
               "label": "m",
-              "shiftLabel": "M",
               "action": {
                 "type": "keyman_key",
-                "vkey": 77
+                "vkey": 77,
+                "longPress": [
+                  {
+                    "id": "U_014B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -338,7 +407,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "alt"
+                "nextLayer": "k:alt"
               },
               "width": 2.2
             },
@@ -347,7 +416,8 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "diacritics"
+                "nextLayer": "k:diacritics",
+                "id": "T_NEW_40822"
               },
               "width": 2.2
             },
@@ -369,7 +439,36 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "id": "U_002C"
+                  },
+                  {
+                    "id": "U_0021"
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_002F"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_003B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -394,7 +493,548 @@
           ]
         ]
       },
-      "alt": {
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "Q",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "E",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0116"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ė"
+              ]
+            },
+            {
+              "label": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0156"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ŗ"
+              ]
+            },
+            {
+              "label": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_021A"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ț"
+              ]
+            },
+            {
+              "label": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0393"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Γ"
+              ]
+            },
+            {
+              "label": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_00DC"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ü"
+              ]
+            },
+            {
+              "label": "I",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0128"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ĩ"
+              ]
+            },
+            {
+              "label": "O",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_022E"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ȯ"
+              ]
+            },
+            {
+              "label": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              },
+              "width": 2.2
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 1.25
+            },
+            {
+              "label": "A",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_00C4"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ä"
+              ]
+            },
+            {
+              "label": "S",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_015A"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ś"
+              ]
+            },
+            {
+              "label": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_1E0C"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ḍ"
+              ]
+            },
+            {
+              "label": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "G",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_01F4"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ǵ"
+              ]
+            },
+            {
+              "label": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_1E30"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ḱ"
+              ]
+            },
+            {
+              "label": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_013B"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ļ"
+              ]
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 3.0
+            },
+            {
+              "label": "Z",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_01B7"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ʒ"
+              ]
+            },
+            {
+              "label": "X",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0179"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ź"
+              ]
+            },
+            {
+              "label": "C",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0106"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ć"
+              ]
+            },
+            {
+              "label": "V",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 86,
+                "modifiers": 16
+              },
+              "width": 2.2
+            },
+            {
+              "label": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_1E44"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ṅ"
+              ]
+            },
+            {
+              "label": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0143"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ń"
+              ]
+            },
+            {
+              "label": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_014A"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                "Ŋ"
+              ]
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 3.0
+            }
+          ],
+          [
+            {
+              "label": "123",
+              "action": {
+                "type": "shift"
+              },
+              "width": 2.2
+            },
+            {
+              "label": "diac",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:diacritics",
+                "id": "T_NEW_40746"
+              },
+              "width": 2.2
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 2.2
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 10.0
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_002C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0021"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0027"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_002F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003B"
+                  }
+                ]
+              },
+              "width": 2.2,
+              "longPress": [
+                ",",
+                "!",
+                "?",
+                "'",
+                "\"",
+                "\\",
+                "/",
+                ":",
+                ";"
+              ]
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 3.0
+            }
+          ]
+        ]
+      },
+      "k:alt": {
         "rows": [
           [
             {
@@ -408,7 +1048,8 @@
               "label": "1",
               "action": {
                 "type": "keyman_key",
-                "vkey": 49
+                "vkey": 49,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -416,7 +1057,8 @@
               "label": "2",
               "action": {
                 "type": "keyman_key",
-                "vkey": 50
+                "vkey": 50,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -424,7 +1066,8 @@
               "label": "3",
               "action": {
                 "type": "keyman_key",
-                "vkey": 51
+                "vkey": 51,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -432,7 +1075,8 @@
               "label": "4",
               "action": {
                 "type": "keyman_key",
-                "vkey": 52
+                "vkey": 52,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -440,7 +1084,8 @@
               "label": "5",
               "action": {
                 "type": "keyman_key",
-                "vkey": 53
+                "vkey": 53,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -448,7 +1093,8 @@
               "label": "6",
               "action": {
                 "type": "keyman_key",
-                "vkey": 54
+                "vkey": 54,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -456,7 +1102,8 @@
               "label": "7",
               "action": {
                 "type": "keyman_key",
-                "vkey": 55
+                "vkey": 55,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -464,7 +1111,8 @@
               "label": "8",
               "action": {
                 "type": "keyman_key",
-                "vkey": 56
+                "vkey": 56,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -472,7 +1120,8 @@
               "label": "9",
               "action": {
                 "type": "keyman_key",
-                "vkey": 57
+                "vkey": 57,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -480,7 +1129,8 @@
               "label": "0",
               "action": {
                 "type": "keyman_key",
-                "vkey": 48
+                "vkey": 48,
+                "modifiers": 64
               },
               "width": 2.2
             },
@@ -501,38 +1151,92 @@
             },
             {
               "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0040"
+              },
               "width": 2.2
             },
             {
               "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0023"
+              },
               "width": 2.2
             },
             {
               "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0026"
+              },
               "width": 2.2
             },
             {
               "label": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0025"
+              },
               "width": 2.2
             },
             {
               "label": "$",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0024"
+              },
               "width": 2.2
             },
             {
               "label": "-",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_002D"
+              },
               "width": 2.2
             },
             {
               "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_003D"
+              },
               "width": 2.2
             },
             {
               "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_007C"
+              },
               "width": 2.2
             },
             {
               "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_007B"
+              },
               "width": 2.2
             },
             {
@@ -546,12 +1250,24 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "none"
               },
               "width": 3.0
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_005B",
+                "longPress": [
+                  {
+                    "modifiers": 64,
+                    "id": "U_003C"
+                  }
+                ]
+              },
               "width": 2.2,
               "longPress": [
                 "<"
@@ -559,14 +1275,38 @@
             },
             {
               "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0028"
+              },
               "width": 2.2
             },
             {
               "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0029"
+              },
               "width": 2.2
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_005D",
+                "longPress": [
+                  {
+                    "modifiers": 64,
+                    "id": "U_003E"
+                  }
+                ]
+              },
               "width": 2.2,
               "longPress": [
                 ">"
@@ -574,18 +1314,42 @@
             },
             {
               "label": "}",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_007D"
+              },
               "width": 2.2
             },
             {
               "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_002B"
+              },
               "width": 2.2
             },
             {
               "label": "̩",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_0329"
+              },
               "width": 2.2
             },
             {
               "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 64,
+                "id": "U_002A"
+              },
               "width": 2.2
             },
             {
@@ -609,7 +1373,9 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "diacritics"
+                "modifiers": 64,
+                "nextLayer": "k:diacritics",
+                "id": "T_NEW_42955"
               },
               "width": 2.2
             },
@@ -631,7 +1397,46 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 188
+                "vkey": 188,
+                "modifiers": 64,
+                "longPress": [
+                  {
+                    "modifiers": 64,
+                    "id": "U_002C"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_0021"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_003F"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_0027"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_005C"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_002F"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_003A"
+                  },
+                  {
+                    "modifiers": 64,
+                    "id": "U_003B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [
@@ -656,7 +1461,7 @@
           ]
         ]
       },
-      "diacritics": {
+      "k:diacritics": {
         "rows": [
           [
             {
@@ -683,26 +1488,56 @@
             },
             {
               "label": "`",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0060"
+              },
               "width": 2.2
             },
             {
               "label": "́",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0301"
+              },
               "width": 2.2
             },
             {
               "label": "̦",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0326"
+              },
               "width": 2.2
             },
             {
               "label": "̃",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0303"
+              },
               "width": 2.2
             },
             {
               "label": "̯",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_032F"
+              },
               "width": 2.2
             },
             {
               "label": "̮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_032E"
+              },
               "width": 2.2
             },
             {
@@ -730,26 +1565,56 @@
             },
             {
               "label": "̣",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0323"
+              },
               "width": 2.2
             },
             {
               "label": "̈",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0308"
+              },
               "width": 2.2
             },
             {
               "label": "̊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_030A"
+              },
               "width": 2.2
             },
             {
               "label": "̌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_030C"
+              },
               "width": 2.2
             },
             {
               "label": "̩",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0329"
+              },
               "width": 2.2
             },
             {
               "label": "̢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0322"
+              },
               "width": 2.2
             },
             {
@@ -776,11 +1641,13 @@
               "width": 2.2
             },
             {
-              "label": "123",
+              "label": "?123",
+              "output": "",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "alt"
+                "nextLayer": "k:alt",
+                "id": "T_NEW_51521"
               },
               "width": 2.2
             },
@@ -802,7 +1669,36 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "id": "U_002C"
+                  },
+                  {
+                    "id": "U_0021"
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_002F"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_003B"
+                  }
+                ]
               },
               "width": 2.2,
               "longPress": [

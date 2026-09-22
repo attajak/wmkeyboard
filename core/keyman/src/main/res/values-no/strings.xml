@@ -15,8 +15,6 @@
         <item quantity="other">Dette tastaturet har %1$d taster du trykker gjentatte ganger på for å bla gjennom tegn. Denne tastaturappen har ingen slike taster, så bare det første tegnet for hver er tilgjengelig.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Dette tastaturet bruker regler for å bestemme hva tastene skriver. Appen har ikke disse reglene, så hver tast skriver tegnet som er trykt på den.</string>
-    <string name="core_keyman_shift_layer_folded">Appen slo sammen skift-laget med tastene. Hold inne Skift for å nå disse tegnene.</string>
-    <string name="core_keyman_shift_layer_separate">Skift-laget har en annen form, så appen beholdt det som sitt eget lag.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Appen fjernet %1$d tast. Dette tastaturet har ingen tast som gjør det samme.</item>
         <item quantity="other">Appen fjernet %1$d taster. Dette tastaturet har ingen taster som gjør det samme.</item>

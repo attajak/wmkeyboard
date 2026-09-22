@@ -47,12 +47,32 @@ class KeymanContext {
         return out.toString()
     }
 
+    /** True when the context holds any character, as opposed to only deadkeys or nothing. */
+    val hasVisibleText: Boolean
+        get() {
+            var i = 0
+            while (i < buf.length) {
+                if (!isDeadkeyAt(i)) return true
+                i += DEADKEY_UNITS
+            }
+            return false
+        }
+
     /** True when a deadkey marker sits at the very end. */
     val endsWithDeadkey: Boolean
         get() = buf.length >= DEADKEY_UNITS && isDeadkeyAt(buf.length - DEADKEY_UNITS)
 
     fun clear() {
         buf.setLength(0)
+    }
+
+    /** The buffer as it stands, markers included, for [restore]. */
+    fun snapshot(): String = buf.toString()
+
+    /** Puts back what [snapshot] took. */
+    fun restore(snapshot: String) {
+        buf.setLength(0)
+        buf.append(snapshot)
     }
 
     /** Replaces the buffer with the tail of [before], dropping every deadkey. */
@@ -72,6 +92,7 @@ class KeymanContext {
         trim()
     }
 
+    /** [id] is the deadkey's number as the file stores it: biased by one, so never 0. */
     fun appendDeadkey(id: Int) {
         buf.append(KmxFormat.UC_SENTINEL.toChar())
         buf.append(KmxFormat.CODE_DEADKEY.toChar())
@@ -95,6 +116,23 @@ class KeymanContext {
             Character.isHighSurrogate(buf[buf.length - 2])
         ) 2 else 1
         buf.setLength(buf.length - units)
+        return units
+    }
+
+    /**
+     * Drops the last character — one unit, or a surrogate pair — leaving every
+     * deadkey marker where it is, before or after it. Returns the units of
+     * visible text removed, 0 when there was no character to remove.
+     */
+    fun deleteLastVisibleElement(): Int {
+        var end = buf.length
+        while (end >= DEADKEY_UNITS && isDeadkeyAt(end - DEADKEY_UNITS)) end -= DEADKEY_UNITS
+        if (end == 0) return 0
+        val units = if (end >= 2 &&
+            Character.isLowSurrogate(buf[end - 1]) &&
+            Character.isHighSurrogate(buf[end - 2])
+        ) 2 else 1
+        buf.delete(end - units, end)
         return units
     }
 

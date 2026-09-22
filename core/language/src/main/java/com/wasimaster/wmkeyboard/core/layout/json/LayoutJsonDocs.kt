@@ -22,6 +22,12 @@ object LayoutJsonDocs {
     const val ACTION_TYPE = "action.type"
 
     private val docs: Map<String, String> = mapOf(
+        "LayerSpec.keymanFrames" to "A converted Keyman layer's space, backspace and enter: the modifiers they press with and the layer they switch to.",
+        "KeymanTarget.vkey" to "The Keyman virtual key behind a long press or flick, or 0 for a named key.",
+        "KeymanTarget.modifiers" to "The Keyman modifier mask that the rules match as held.",
+        "KeymanTarget.nextLayer" to "The layer to show after it, unless a rule picks one.",
+        "KeymanTarget.id" to "A T_ or U_ key's own name, looked up in the Keyman keyboard's key list.",
+        "KeymanTarget.text" to "What it types when no rules are loaded.",
         "LayoutFile.format" to "Always \"wmkeyboard-layout\". It marks the file as a layout, so an import can tell it from any other JSON.",
         "LayoutFile.version" to "The revision of the file format. Leave it as the app wrote it.",
         "LayoutFile.appVersion" to "The version code of the app that exported the file. Only for information.",
@@ -151,7 +157,11 @@ object LayoutJsonDocs {
         "action:keyman_key" to "A key of a converted Keyman layout. The Keyman rules decide what it types.",
         "action:keyman_key.vkey" to "The Keyman virtual key.",
         "action:keyman_key.modifiers" to "The Keyman modifier mask that the rules match as held.",
-        "action:keyman_key.nextLayer" to "The Keyman layer to show after the key.",
+        "action:keyman_key.nextLayer" to "The layer to show after the key, unless a rule picks one.",
+        "action:keyman_key.id" to "A T_ or U_ key's own name, looked up in the Keyman keyboard's key list.",
+        "action:keyman_key.text" to "What a long-press or flick key types when no rules are loaded.",
+        "action:keyman_key.longPress" to "The Keyman keys behind the key's long-press entries, in the same order.",
+        "action:keyman_key.flick" to "The Keyman keys behind the key's flicks, by direction.",
         "action:none" to "A gap in the grid. It draws as empty space and does nothing.",
         "action:field" to "A panel cell that holds a live component, such as the emoji grid. Only a panel layout can hold one.",
         "action:field.kind" to "Which component the cell holds.",

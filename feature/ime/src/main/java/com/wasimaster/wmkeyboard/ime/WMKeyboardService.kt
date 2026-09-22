@@ -490,11 +490,13 @@ import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
+import com.wasimaster.wmkeyboard.core.keyman.KeymanLayers
 import com.wasimaster.wmkeyboard.core.keyman.KeymanRuleStore
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorKey
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorResult
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
+import com.wasimaster.wmkeyboard.core.layout.KeymanTarget
 import com.wasimaster.wmkeyboard.core.layout.letterSet
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
@@ -538,6 +540,7 @@ import com.wasimaster.wmkeyboard.core.layout.layoutAfterFancy
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.layout.script
 import com.wasimaster.wmkeyboard.core.layout.compile
+import com.wasimaster.wmkeyboard.core.layout.compileNamed
 import com.wasimaster.wmkeyboard.core.layout.secondaryLayouts
 import com.wasimaster.wmkeyboard.ime.ui.panelLayout
 import com.wasimaster.wmkeyboard.core.layout.panelLayers
@@ -5051,6 +5054,13 @@ open class WMKeyboardService : InputMethodService() {
         // Chord and morse state belongs to the field it was typed over.
         resetChordInputs()
         refreshKarContext()
+        // The rule engine's context and deadkeys belong to the field they were
+        // typed in. A new field that reports no caret move would otherwise be
+        // typed against the last one's text. A keyboard with a NewContext group
+        // then picks the layer for where the caret has landed, as KeymanWeb does
+        // on focus.
+        keymanSession?.markStale()
+        if (!restarting) runKeymanNewContext()
         // The first field this process shows the keyboard for is where a layer
         // the user asked to keep comes back (issue #227). Deferred until the
         // stored settings land, because the flag is re-read off the layouts as
@@ -5132,7 +5142,14 @@ open class WMKeyboardService : InputMethodService() {
         // Marks the engine's context stale unless this is the echo of its own
         // edit. No text is read here: this runs on every keystroke, and a read
         // would undo what the expected-selection cache exists to save.
-        keymanSession?.onSelectionReported(newSelStart, newSelEnd)
+        keymanSession?.let { session ->
+            session.onSelectionReported(newSelStart, newSelEnd)
+            // The user moved the caret: a keyboard with a NewContext group looks
+            // at where it landed and may pick a layer for it.
+            if (session.stale && newSelStart == newSelEnd && session.processor.hasNewContext) {
+                runKeymanNewContext()
+            }
+        }
         glideReadings.onCaret(newSelStart, newSelEnd)
         noteCaretForLearning(oldSelStart, oldSelEnd, newSelStart, newSelEnd)
         noteCaretForRevision(newSelStart, newSelEnd)
@@ -5950,6 +5967,41 @@ open class WMKeyboardService : InputMethodService() {
     // No vibrate() here: press-time haptics fire from the UI's pointer-down
     // callback (onKeyPressed) so feedback lands on touch, not on release.
     fun onKey(key: Key) {
+        // Space, backspace and enter on a Keyman layout: the layer may say what
+        // modifiers the rules see them with and where they lead, and the
+        // keyboard's PostKeystroke group runs after them as after every other
+        // keystroke — a space that ends a sentence is where one puts shift
+        // back on. A Keyman key runs all of that itself, after its own rules.
+        val frameId = when (key.action) {
+            KeyAction.Space -> "K_SPACE"
+            KeyAction.Delete -> "K_BKSP"
+            KeyAction.Enter, KeyAction.Newline -> "K_ENTER"
+            else -> null
+        }
+        val frame = frameId?.let { currentLayout(_uiState.value).keymanFrames[it] }
+        val keymanStart = if (frameId != null && (frame != null || keymanSession != null)) activeKeymanLayer() else null
+        pendingKeymanFrame = frame
+        keymanFrameRuleLayer = false
+        try {
+            dispatchKey(key)
+        } finally {
+            pendingKeymanFrame = null
+        }
+        if (keymanStart != null) {
+            // A rule's own `layer()` beats the key's, as in KeymanWeb.
+            val keyLayer = frame?.nextLayer.takeIf { !keymanFrameRuleLayer }
+            keyLayer?.let { switchToKeymanLayer(it) }
+            runKeymanPostKeystroke(keymanStart, changed = keyLayer != null || keymanFrameRuleLayer)
+        }
+    }
+
+    /** The frame key being pressed, while it is: see [onKey]. */
+    private var pendingKeymanFrame: KeymanTarget? = null
+
+    /** Whether the rules picked a layer for the frame key being pressed. */
+    private var keymanFrameRuleLayer = false
+
+    private fun dispatchKey(key: Key) {
         stopVoiceForManualInput()
         // Armed by the enter key itself, below, and spent by the caret update
         // that answers it. Cleared here so a field that reports no update at
@@ -6034,7 +6086,7 @@ open class WMKeyboardService : InputMethodService() {
             // yet. It types its own cap, which is what it would do anyway on a
             // device that has the layout but not the keyboard's rules — the
             // grid stays an ordinary usable keyboard rather than going dead.
-            is KeyAction.KeymanKey -> onTextKey(key)
+            is KeyAction.KeymanKey -> onKeymanKeyPress(key, key.action as KeyAction.KeymanKey)
             KeyAction.Shift -> onShift()
             KeyAction.CapsLock -> onCapsLock()
             KeyAction.Delete -> onDelete()
@@ -6334,15 +6386,6 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private fun onTextKey(key: Key) {
-        val keyman = key.action as? KeyAction.KeymanKey
-        if (keyman != null && onKeymanKey(keyman)) {
-            // The engine typed instead of [processTypedText], which is where a
-            // Text key normally spends these. Leaving them armed would hand a
-            // later key a space it did not earn.
-            pendingWordSpace = false
-            pendingPunctuationSpace = false
-            return
-        }
         val output = keyOutput(key, _uiState.value)
         // What this key could have meant, for the append to pair with the
         // character it commits — the twin of [pendingTouch], and set here for
@@ -6368,20 +6411,103 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * Runs one key of a converted Keyman layout through its rule engine.
+     * One key of a converted Keyman layout, in KeymanWeb's order: the rules
+     * first, then the key's own `nextlayer` — which a rule's `layer()`
+     * overrides, because KeymanWeb applies the rule's store write after the
+     * key's switch — then the keyboard's `begin PostKeystroke` group.
      *
-     * Returns false when the engine did not handle it — no session, a keyboard
-     * buffer owns the keys, or the engine declined — and the caller then types
-     * the key the ordinary way.
+     * With no rules on the device the key types its fallback and still switches
+     * layers, so the grid stays an ordinary usable keyboard.
      */
-    private fun onKeymanKey(keyman: KeyAction.KeymanKey): Boolean {
+    private fun onKeymanKeyPress(key: Key, keyman: KeyAction.KeymanKey) {
+        val startLayer = activeKeymanLayer()
+        if (keyman.isLayerSwitch) {
+            switchToKeymanLayer(keyman.nextLayer ?: return)
+            runKeymanPostKeystroke(startLayer, changed = true)
+            return
+        }
+        val outcome = runKeymanRules(keyman)
+        if (outcome == null) {
+            if (!typeKeymanFallback(key)) onTextKey(key)
+        } else {
+            // The engine typed instead of [processTypedText], which is where a
+            // Text key normally spends these. Leaving them armed would hand a
+            // later key a space it did not earn.
+            pendingWordSpace = false
+            pendingPunctuationSpace = false
+        }
+        val target = outcome?.layer ?: keyman.nextLayer
+        when {
+            target != null -> switchToKeymanLayer(target)
+            // Our shift is one-shot, like every other layout's here. A keyboard
+            // that decides for itself when shift lets go does so in its
+            // PostKeystroke group, and is left to.
+            keymanSession?.processor?.hasPostKeystroke != true -> consumeShift()
+        }
+        runKeymanPostKeystroke(startLayer, changed = target != null)
+    }
+
+    /**
+     * Types a key the rules passed on — a `U_` key no rule names, say — the way
+     * KeymanWeb's default output does: straight into the field, and into the
+     * engine's own context, so a deadkey waiting there survives it. Our
+     * composing machinery has no business with a Keyman layout's text, and
+     * re-reading the field instead would drop every deadkey. False when no
+     * engine is attached, and the key goes down the ordinary path.
+     */
+    private fun typeKeymanFallback(key: Key): Boolean {
         val session = keymanSession ?: return false
+        val state = _uiState.value
+        if (state.keysTakenByKeyboard || session.disabled) return false
+        val ic = currentInputConnection ?: return false
+        if (composing.isNotEmpty()) {
+            commitComposing(ic, autocorrect = false)
+            session.markStale()
+        }
+        val text = keyOutput(key, state)
+        if (text.isEmpty()) return true
+        if (hasSelection(ic)) return false
+        session.syncIfNeeded(expectedSelStart) {
+            ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
+        }
+        val edit = ProcessorResult.Edit(deleteBefore = 0, insert = text)
+        ic.commitText(text, 1)
+        session.processor.onTextTyped(text)
+        session.onEdited(edit)
+        pendingWordSpace = false
+        pendingPunctuationSpace = false
+        return true
+    }
+
+    /** What the rules made of a key: the layer they asked for, if any. */
+    private class KeymanOutcome(val layer: String?)
+
+    /**
+     * Runs one key through the rule engine. Null when the engine did not take
+     * it — no session, a keyboard buffer owns the keys, the engine declined a
+     * key that has text of its own to fall back on — and the caller types the
+     * key the ordinary way.
+     */
+    private fun runKeymanRules(keyman: KeyAction.KeymanKey): KeymanOutcome? {
+        val session = keymanSession ?: return null
         val state = _uiState.value
         // While a search box or a typing test owns the keys, what the user types
         // must not reach the app behind the keyboard, so the engine stays out of
         // it and the text goes down the ordinary local-buffer path.
-        if (state.keysTakenByKeyboard) return false
-        val ic = currentInputConnection ?: return false
+        if (state.keysTakenByKeyboard) return null
+        val ic = currentInputConnection ?: return null
+
+        // A `T_`/`U_` key is known to the rules by its place in the keyboard's
+        // key dictionary. KeymanWeb's default output for a key no rule takes is
+        // narrow: a `U_` key types its code points, and nothing else types
+        // anything — a `T_` key, and a `K_` key the rules pass on (the engine
+        // types the US character itself where one applies, so a pass here is
+        // always a key with none). A key with no name at all is one of ours,
+        // a gesture entry with only text, and types that.
+        val named = keyman.id
+        val vkey = if (named != null) session.processor.keyForName(named) ?: 0 else keyman.vkey
+        val unicode = named?.startsWith("U_") == true
+        if (vkey == 0) return if (named == null || unicode) null else KeymanOutcome(null)
 
         // A word our own path started — a long-press alternate, a key the
         // engine passed on — is still a composing region. commitText replaces
@@ -6399,25 +6525,71 @@ open class WMKeyboardService : InputMethodService() {
             ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
         }
 
-        val shifted = state.shiftState != ShiftState.OFF
+        val layouts = state.layouts
         val modifiers = keyman.modifiers or
-            KeymanSeam.modifiersFor(
-                shifted = shifted,
-                capsLocked = state.shiftState == ShiftState.CAPS_LOCK,
-            )
-        session.processor.setLayer(KeymanSeam.layerName(state.layoutMode, shifted))
-        val result = session.process(ProcessorKey(keyman.vkey, modifiers)) ?: return false
-
-        return when (result) {
-            is ProcessorResult.Declined -> false
-            is ProcessorResult.Failed -> false
+            KeymanSeam.runtimeModifiers(state.layoutMode, state.shiftState, layouts.keymanShift != null)
+        session.processor.setLayer(KeymanLayers.keymanId(activeKeymanLayer()))
+        return when (val result = session.process(ProcessorKey(vkey, modifiers))) {
+            null, is ProcessorResult.Failed -> null
+            is ProcessorResult.Declined -> if (unicode) null else KeymanOutcome(null)
             is ProcessorResult.Edit -> {
                 applyKeymanEdit(ic, session, result)
-                keyman.nextLayer?.let { switchToNamedLayer(it) }
-                    ?: result.nextLayer?.let { switchToNamedLayer(it) }
-                true
+                KeymanOutcome(result.nextLayer?.let(KeymanLayers::specKey))
             }
         }
+    }
+
+    /**
+     * Keyman's `begin PostKeystroke`: after every keystroke, with `&newLayer`
+     * and `&oldLayer` saying what the keystroke switched, the keyboard may pick
+     * a layer — returning from shift after one letter, say. Readonly: it never
+     * edits text.
+     */
+    private fun runKeymanPostKeystroke(startLayer: String, changed: Boolean) {
+        val session = keymanSession ?: return
+        if (!session.processor.hasPostKeystroke || _uiState.value.keysTakenByKeyboard) return
+        val ic = currentInputConnection ?: return
+        // Text this keystroke typed by our own path has not come back through
+        // onUpdateSelection yet, so the context is refreshed from the field now:
+        // the group reads it.
+        session.markStale()
+        session.syncIfNeeded(expectedSelStart) {
+            ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
+        }
+        val now = activeKeymanLayer()
+        session.processor.setLayer(KeymanLayers.keymanId(now))
+        val layer = session.processor.onPostKeystroke(
+            newLayer = if (changed) KeymanLayers.keymanId(now) else "",
+            oldLayer = if (changed) KeymanLayers.keymanId(startLayer) else "",
+        )
+        layer?.let { switchToKeymanLayer(KeymanLayers.specKey(it)) }
+    }
+
+    /**
+     * Keyman's `begin NewContext`, for a field just entered or a caret the user
+     * moved: the keyboard reads the text around it and may pick a layer — the
+     * shift layer at the start of a sentence, typically.
+     */
+    private fun runKeymanNewContext() {
+        val session = keymanSession ?: return
+        if (!session.processor.hasNewContext || _uiState.value.keysTakenByKeyboard) return
+        val ic = currentInputConnection ?: return
+        val before = ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
+        session.processor.setLayer(KeymanLayers.keymanId(activeKeymanLayer()))
+        val layer = session.processor.onNewContext(before)
+        session.reset(before, expectedSelStart)
+        layer?.let { switchToKeymanLayer(KeymanLayers.specKey(it)) }
+    }
+
+    /** The Keyman layer on screen, as its key in the layout's layers. */
+    private fun activeKeymanLayer(): String {
+        val state = _uiState.value
+        return KeymanSeam.activeLayerKey(
+            state.layoutMode,
+            state.shiftState,
+            state.namedLayer,
+            hasCapsGrid = state.layouts.keymanCaps != null,
+        )
     }
 
     /**
@@ -6444,22 +6616,36 @@ open class WMKeyboardService : InputMethodService() {
         if (composing.isNotEmpty()) return false
         val ic = currentInputConnection ?: return false
 
-        val modifiers = KeymanSeam.modifiersFor(
-            shifted = state.shiftState != ShiftState.OFF,
-            capsLocked = state.shiftState == ShiftState.CAPS_LOCK,
-        )
-        if (!session.processor.matches(vkey, modifiers)) return false
+        // The frame key sits on whatever layer is showing, and is pressed with
+        // that layer's modifiers, as KeymanWeb reads them off its name — or with
+        // its own, where the layout gave it a `layer` of its own.
+        val layer = KeymanLayers.keymanId(activeKeymanLayer())
+        val modifiers = (pendingKeymanFrame?.modifiers ?: KeymanLayers.modifiers(layer)) or
+            KeymanSeam.runtimeModifiers(state.layoutMode, state.shiftState, state.layouts.keymanShift != null)
+        // Backspace always goes to the engine: with no rule of its own it pops a
+        // waiting deadkey before any character, which is Keyman's backspace and
+        // not ours. Space only when a rule could want it, so the ordinary
+        // spacebar — auto-space, double-space period — keeps working.
+        if (vkey != VK_BACKSPACE && !session.processor.matches(vkey, modifiers)) {
+            // KeymanWeb types a default space only on a plain or shifted layer;
+            // on an Alt or Ctrl one, space with no rule of its own is nothing.
+            return vkey == VK_SPACE && modifiers and KeymanLayers.CTRL_ALT != 0
+        }
+        // A selection is the editor's to delete, not the rules'.
+        if (hasSelection(ic)) return false
 
-        session.processor.setLayer(
-            KeymanSeam.layerName(state.layoutMode, shifted = state.shiftState != ShiftState.OFF),
-        )
+        session.processor.setLayer(layer)
         session.syncIfNeeded(expectedSelStart) {
             ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
         }
         val result = session.process(ProcessorKey(vkey, modifiers)) ?: return false
-        val edit = result as? ProcessorResult.Edit ?: return false
+        val edit = result as? ProcessorResult.Edit
+            ?: return vkey == VK_SPACE && modifiers and KeymanLayers.CTRL_ALT != 0
         applyKeymanEdit(ic, session, edit)
-        edit.nextLayer?.let { switchToNamedLayer(it) }
+        edit.nextLayer?.let {
+            keymanFrameRuleLayer = true
+            switchToKeymanLayer(KeymanLayers.specKey(it))
+        }
         return true
     }
 
@@ -6493,17 +6679,59 @@ open class WMKeyboardService : InputMethodService() {
         session.onEdited(edit)
     }
 
-    /** Shows a layer by name, for the layers a Keyman grid brought with it. */
-    private fun switchToNamedLayer(name: String) {
-        when (name) {
-            LayoutLayer.LETTERS.key -> _uiState.update {
-                it.copy(layoutMode = LayoutMode.LETTERS, fnLocked = false, fnReturn = null)
+    /**
+     * Shows the Keyman layer keyed [name] in the layout's layers — from a key's
+     * `nextlayer`, a rule's `layer()`, or the keyboard's PostKeystroke and
+     * NewContext groups.
+     *
+     * `shift` and `caps` are our shift state rather than places, so they set it
+     * and the letters page draws the layout's own shift or caps grid. A layer
+     * this layout does not have goes to the letters, which is what KeymanWeb
+     * does with one.
+     */
+    private fun switchToKeymanLayer(requested: String) {
+        val state = _uiState.value
+        val layouts = state.layouts
+        val defined = layouts.keymanLayerKeys
+        val name = when {
+            defined == null || requested in defined -> requested
+            // Shift with no page of its own is still our shift state.
+            requested == KeymanLayers.SHIFT && defined.none { it.startsWith(KeymanLayers.PREFIX) } -> requested
+            else -> LayoutLayer.LETTERS.key
+        }
+        if (state.layoutMode == LayoutMode.LETTERS) dropKeyboardHandwritingInk()
+        _uiState.update {
+            when {
+                name == KeymanLayers.SHIFT && it.layoutMode == LayoutMode.LETTERS &&
+                    it.shiftState != ShiftState.OFF -> it
+                name == KeymanLayers.SHIFT -> it.copy(
+                    layoutMode = LayoutMode.LETTERS,
+                    shiftState = ShiftState.ON,
+                    fnLocked = false,
+                    fnReturn = null,
+                )
+                name == KeymanLayers.CAPS -> it.copy(
+                    layoutMode = LayoutMode.LETTERS,
+                    shiftState = ShiftState.CAPS_LOCK,
+                    fnLocked = false,
+                    fnReturn = null,
+                )
+                name == LayoutLayer.SYMBOLS.key -> it.copy(layoutMode = LayoutMode.SYMBOLS)
+                name == LayoutLayer.SYMBOLS_SHIFTED.key -> it.copy(layoutMode = LayoutMode.SYMBOLS_SHIFTED)
+                name in layouts.named -> it.copy(
+                    layoutMode = LayoutMode.NAMED,
+                    namedLayer = name,
+                    shiftState = ShiftState.OFF,
+                    fnLocked = false,
+                    fnReturn = null,
+                )
+                else -> it.copy(
+                    layoutMode = LayoutMode.LETTERS,
+                    shiftState = ShiftState.OFF,
+                    fnLocked = false,
+                    fnReturn = null,
+                )
             }
-            LayoutLayer.SYMBOLS.key, LayoutLayer.SYMBOLS_SHIFTED.key ->
-                _uiState.update { it.copy(layoutMode = LayoutMode.SYMBOLS) }
-            // A layer our grid has no slot for. Leaving the display alone beats
-            // switching to something arbitrary; the key still typed its output.
-            else -> Unit
         }
     }
 
@@ -6514,6 +6742,15 @@ open class WMKeyboardService : InputMethodService() {
      * the previous keyboard's rules running against the new grid.
      */
     private fun syncKeymanSession(spec: LayoutSpec) {
+        // A Keyman page belongs to the layout it came from. KeymanWeb goes back
+        // to `default` on a keyboard change, and a page left named here would
+        // come back up the next time this layout does.
+        if (spec.id != keymanPageLayoutId) {
+            keymanPageLayoutId = spec.id
+            _uiState.update {
+                if (it.layoutMode == LayoutMode.NAMED) it.copy(layoutMode = LayoutMode.LETTERS, namedLayer = null) else it
+            }
+        }
         val binding = spec.keyman
         if (binding == null) {
             keymanSession = null
@@ -6529,6 +6766,9 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private var activeKeymanKeyboardId: String? = null
+
+    /** The layout the Keyman page on screen belongs to; see [syncKeymanSession]. */
+    private var keymanPageLayoutId: String? = null
 
     /** Keyman's own virtual keys for the two frame keys the engine may claim. */
     private val VK_BACKSPACE = 8
@@ -7940,6 +8180,11 @@ open class WMKeyboardService : InputMethodService() {
         // The number row's other numeral system, picked from a hold (#309):
         // typed as offered, not cased and not rewritten back.
         if (base.startsWith(VERBATIM_DIGITS)) return base.substring(VERBATIM_DIGITS.length)
+        // A key off a Keyman shift or caps page is already the shifted key its
+        // author drew; casing it again would type a different letter.
+        if (key.action is KeyAction.KeymanKey && state.layouts.keymanShift != null) {
+            return applyNumerals(base, state)
+        }
         val shiftLabel = key.shiftLabel
         val out = when {
             state.shiftState != ShiftState.OFF && shiftLabel != null -> shiftLabel
@@ -9701,6 +9946,8 @@ open class WMKeyboardService : InputMethodService() {
                     LayoutMode.FN -> LayoutMode.SYMBOLS
                     // Same from a secondary layout: its ?123 key is a way out.
                     LayoutMode.SECONDARY -> LayoutMode.SYMBOLS
+                    // And from a Keyman layer, whose ?123 key leaves it too.
+                    LayoutMode.NAMED -> LayoutMode.SYMBOLS
                 },
                 fnLocked = false,
                 fnReturn = null,
@@ -9989,6 +10236,15 @@ open class WMKeyboardService : InputMethodService() {
             gridWidth = gridWidth,
             secondaries = secondaries,
             themeId = safe.themeId,
+            keymanShift = safe.compileNamed(KeymanLayers.SHIFT),
+            keymanCaps = safe.compileNamed(KeymanLayers.CAPS),
+            named = safe.layers.keys
+                .filter { it.startsWith(KeymanLayers.PREFIX) && it != KeymanLayers.SHIFT && it != KeymanLayers.CAPS }
+                .mapNotNull { name -> safe.compileNamed(name)?.let { name to it } }
+                .toMap(),
+            keymanLayerKeys = safe.layers.keys.takeIf { keys ->
+                safe.keyman != null || keys.any { it.startsWith(KeymanLayers.PREFIX) }
+            },
         )
         layoutSetCache[key] = spec to set
         return set

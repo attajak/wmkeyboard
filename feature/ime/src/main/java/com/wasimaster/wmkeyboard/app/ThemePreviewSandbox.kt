@@ -85,7 +85,7 @@ data class ThemePreviewSandbox(
                     LayoutMode.LETTERS -> LayoutMode.SYMBOLS
                     LayoutMode.SYMBOLS -> LayoutMode.SYMBOLS_SHIFTED
                     LayoutMode.SYMBOLS_SHIFTED -> LayoutMode.SYMBOLS
-                    LayoutMode.FN, LayoutMode.SECONDARY -> LayoutMode.SYMBOLS
+                    LayoutMode.FN, LayoutMode.SECONDARY, LayoutMode.NAMED -> LayoutMode.SYMBOLS
                 },
             )
             KeyAction.Letters -> copy(layoutMode = LayoutMode.LETTERS)

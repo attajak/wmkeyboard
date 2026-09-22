@@ -15,8 +15,6 @@
         <item quantity="other">Šajā tastatūrā ir %1$d taustiņi, kurus atkārtoti pieskaroties var pārslēgt rakstzīmes. Šajā tastatūras lietotnē šādu taustiņu nav, tāpēc ir pieejama tikai katra taustiņa pirmā rakstzīme.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Šī tastatūra izmanto noteikumus, lai noteiktu, kādus taustiņus tā ievada. Lietotnē šo noteikumu nav, tāpēc katrs taustiņš ievada uz tā uzdrukāto rakstzīmi.</string>
-    <string name="core_keyman_shift_layer_folded">Lietotne apvienoja Shift slāni ar taustiņiem. Turiet Shift, lai piekļūtu šīm rakstzīmēm.</string>
-    <string name="core_keyman_shift_layer_separate">Shift slānim ir atšķirīga forma, tāpēc lietotne to saglabāja kā atsevišķu slāni.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Lietotne noņēma %1$d taustiņu. Šai tastatūrai nav taustiņa, kas dara to pašu.</item>
         <item quantity="other">Lietotne noņēma %1$d taustiņus. Šai tastatūrai nav taustiņu, kas dara to pašu.</item>

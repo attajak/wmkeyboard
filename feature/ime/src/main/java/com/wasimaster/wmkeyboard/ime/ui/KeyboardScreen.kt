@@ -489,6 +489,7 @@ import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
 import com.wasimaster.wmkeyboard.core.layout.AlternateEntry
 import com.wasimaster.wmkeyboard.core.layout.alternateEntries
+import com.wasimaster.wmkeyboard.core.layout.flickKey
 import com.wasimaster.wmkeyboard.core.layout.clipboardAlternate
 import com.wasimaster.wmkeyboard.core.layout.FlickDirection
 import com.wasimaster.wmkeyboard.core.layout.Key
@@ -15718,6 +15719,10 @@ internal fun rememberCurrentLayout(state: KeyboardUiState): KeyboardLayout = rem
     // rebuild the whole grid mid-word.
     state.enterAction,
     state.secondaryLayoutId,
+    state.namedLayer,
+    // Only a layout with its own shift page redraws on shift; for every other
+    // one the key stays out, so shift does not rebuild the grid.
+    state.shiftState.takeIf { state.layouts.keymanShift != null || state.layouts.keymanCaps != null },
     numericPadActive(state),
 ) {
     currentLayout(state)
@@ -15755,11 +15760,22 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         // Fn key can outlive the layer it points at, and onFn already refuses to
         // switch, so this only ever fires on a state built out of order.
         LayoutMode.FN -> state.layouts.fn ?: state.layouts.letters
-        LayoutMode.LETTERS -> state.layouts.letters
+        // A converted Keyman layout draws its author's own shift and caps pages
+        // while shift is on, rather than re-casing the letters: those pages are
+        // keys of their own, not the letters in capitals.
+        LayoutMode.LETTERS -> when {
+            state.shiftState == ShiftState.CAPS_LOCK && state.layouts.keymanCaps != null ->
+                state.layouts.keymanCaps
+            state.shiftState != ShiftState.OFF && state.layouts.keymanShift != null ->
+                state.layouts.keymanShift
+            else -> state.layouts.letters
+        }
         // Same fallback as Fn, for the same reason: the layout named can have
         // been deleted between the state being set and this draw.
         LayoutMode.SECONDARY ->
             state.secondaryLayoutId?.let { state.layouts.secondaries[it] } ?: state.layouts.letters
+        LayoutMode.NAMED ->
+            state.namedLayer?.let { state.layouts.named[it] } ?: state.layouts.letters
     }
     // Issue #139: a hidden 🌐 key leaves the bottom row before anything below
     // reads the grid. The emoji rewrite finds the key by its action and the
@@ -20108,9 +20124,11 @@ private fun Modifier.pointerInputKey(
                 }
             }
         }
-    } else if (key.action == KeyAction.Text && key.flick.isNotEmpty()) {
+    } else if ((key.action == KeyAction.Text || key.action is KeyAction.KeymanKey) && key.flick.isNotEmpty()) {
         // A 12-key kana pad key: a tap commits the centre kana, a directional
-        // flick past the slop commits that arm's kana instead. One pointer owns
+        // flick past the slop commits that arm's kana instead. A Keyman key's
+        // flicks work the same way, each arm being a key of its own that
+        // [flickKey] hands to the rules. One pointer owns
         // the whole gesture (like space/backspace) so the cross popup can track
         // the live direction; a long press still opens the alternates popup.
         Modifier.pointerInput(
@@ -20172,9 +20190,9 @@ private fun Modifier.pointerInputKey(
                 setPressed(false)
                 onKeyRelease()
                 setFlickDirection(null)
-                val chosen = dir?.let { key.flick[it] }
+                val chosen = dir?.let { key.flickKey(it) }
                 when {
-                    chosen != null -> onKey(key.copy(output = chosen))
+                    chosen != null -> onKey(chosen)
                     // The long press already opened alternates; release commits
                     // what the popup has highlighted, and never the centre kana.
                     longFired -> {

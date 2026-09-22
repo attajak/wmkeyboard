@@ -11,7 +11,6 @@
           [
             {
               "label": "a",
-              "shiftLabel": "A",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81,
@@ -20,11 +19,15 @@
             },
             {
               "label": "ë",
-              "shiftLabel": "Ë"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_E_DIAERESIS"
+              }
             },
             {
               "label": "e",
-              "shiftLabel": "E",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -32,7 +35,6 @@
             },
             {
               "label": "r",
-              "shiftLabel": "R",
               "action": {
                 "type": "keyman_key",
                 "vkey": 82,
@@ -41,11 +43,18 @@
             },
             {
               "label": "t",
-              "shiftLabel": "T",
               "action": {
                 "type": "keyman_key",
                 "vkey": 84,
-                "nextLayer": "letters"
+                "nextLayer": "letters",
+                "longPress": [
+                  {
+                    "id": "T_T_CEDILLA"
+                  },
+                  {
+                    "id": "T_T_STROKE"
+                  }
+                ]
               },
               "longPress": [
                 "ţ",
@@ -54,7 +63,6 @@
             },
             {
               "label": "y",
-              "shiftLabel": "Y",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89,
@@ -63,7 +71,6 @@
             },
             {
               "label": "u",
-              "shiftLabel": "U",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85,
@@ -72,7 +79,6 @@
             },
             {
               "label": "i",
-              "shiftLabel": "I",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73,
@@ -81,7 +87,6 @@
             },
             {
               "label": "o",
-              "shiftLabel": "O",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79,
@@ -90,7 +95,6 @@
             },
             {
               "label": "p",
-              "shiftLabel": "P",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80,
@@ -108,15 +112,24 @@
             },
             {
               "label": "ŋ",
-              "shiftLabel": "Ŋ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_ENG"
+              }
             },
             {
               "label": "ş",
-              "shiftLabel": "Ş"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_S_CEDILLA"
+              }
             },
             {
               "label": "d",
-              "shiftLabel": "D",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68,
@@ -125,7 +138,6 @@
             },
             {
               "label": "f",
-              "shiftLabel": "F",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70,
@@ -134,7 +146,6 @@
             },
             {
               "label": "g",
-              "shiftLabel": "G",
               "action": {
                 "type": "keyman_key",
                 "vkey": 71,
@@ -143,7 +154,6 @@
             },
             {
               "label": "h",
-              "shiftLabel": "H",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72,
@@ -152,7 +162,6 @@
             },
             {
               "label": "j",
-              "shiftLabel": "J",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -160,7 +169,6 @@
             },
             {
               "label": "k",
-              "shiftLabel": "K",
               "action": {
                 "type": "keyman_key",
                 "vkey": 75,
@@ -169,7 +177,6 @@
             },
             {
               "label": "l",
-              "shiftLabel": "L",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76,
@@ -194,7 +201,6 @@
             },
             {
               "label": "w",
-              "shiftLabel": "W",
               "action": {
                 "type": "keyman_key",
                 "vkey": 90,
@@ -203,11 +209,15 @@
             },
             {
               "label": "ñ",
-              "shiftLabel": "Ñ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_N_TILDE"
+              }
             },
             {
               "label": "c",
-              "shiftLabel": "C",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67,
@@ -216,7 +226,6 @@
             },
             {
               "label": "b",
-              "shiftLabel": "B",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66,
@@ -225,7 +234,6 @@
             },
             {
               "label": "n",
-              "shiftLabel": "N",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78,
@@ -234,7 +242,6 @@
             },
             {
               "label": "m",
-              "shiftLabel": "M",
               "action": {
                 "type": "keyman_key",
                 "vkey": 186,
@@ -243,11 +250,18 @@
             },
             {
               "label": ",",
-              "shiftLabel": "?",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77,
-                "nextLayer": "letters"
+                "nextLayer": "letters",
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 190
+                  }
+                ]
               },
               "longPress": [
                 ";",
@@ -256,12 +270,23 @@
             },
             {
               "label": ".",
-              "shiftLabel": "!",
               "action": {
                 "type": "keyman_key",
                 "vkey": 188,
                 "modifiers": 16,
-                "nextLayer": "letters"
+                "nextLayer": "letters",
+                "longPress": [
+                  {
+                    "id": "T_ELLIPSIS"
+                  },
+                  {
+                    "vkey": 191
+                  },
+                  {
+                    "vkey": 77,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "…",
@@ -304,14 +329,359 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "other"
+                "nextLayer": "k:other",
+                "id": "T_OTHER"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.7
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "A",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ë",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_E_DIAERESIS"
+              }
+            },
+            {
+              "label": "E",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_T_CEDILLA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_T_STROKE"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ţ",
+                "Ŧ"
+              ]
+            },
+            {
+              "label": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "I",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "O",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.65
+            },
+            {
+              "label": "Ŋ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ENG"
+              }
+            },
+            {
+              "label": "Ş",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_S_CEDILLA"
+              }
+            },
+            {
+              "label": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "G",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.1
+            },
+            {
+              "label": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ñ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_N_TILDE"
+              }
+            },
+            {
+              "label": "C",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 186,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16,
+                "nextLayer": "letters"
+              }
+            },
+            {
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 191,
+                "nextLayer": "letters"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 0.9
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
+              },
+              "width": 1.4
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.2
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 32,
+                "longPress": [
+                  {
+                    "id": "T_NBSP",
+                    "text": " "
+                  },
+                  {
+                    "id": "T_NNBSP"
+                  }
+                ]
+              },
+              "width": 3.9,
+              "longPress": [
+                "⍽",
+                "NNBSP"
+              ]
+            },
+            {
+              "label": "cv",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:others",
+                "id": "T_OTHER"
+              },
+              "width": 1.2
+            },
+            {
+              "label": "§",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },
@@ -422,7 +792,29 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 221,
-                "nextLayer": "symbols"
+                "nextLayer": "symbols",
+                "longPress": [
+                  {
+                    "nextLayer": "symbols",
+                    "id": "T_CENT"
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16,
+                    "nextLayer": "symbols"
+                  },
+                  {
+                    "nextLayer": "symbols",
+                    "id": "T_EURO"
+                  },
+                  {
+                    "nextLayer": "symbols",
+                    "id": "T_YEN"
+                  },
+                  {
+                    "id": "T_CURRENCY"
+                  }
+                ]
               },
               "longPress": [
                 "¢",
@@ -433,10 +825,20 @@
               ]
             },
             {
-              "label": "@"
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_AROBAS"
+              }
             },
             {
-              "label": "#"
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_HASH"
+              }
             },
             {
               "label": "%",
@@ -468,10 +870,20 @@
               }
             },
             {
-              "label": "|"
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_VERTICAL_BAR"
+              }
             },
             {
-              "label": "\\"
+              "label": "\\",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_BKSLASH"
+              }
             },
             {
               "label": "",
@@ -485,12 +897,25 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "letters"
               },
               "width": 1.1
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LBRKT",
+                "longPress": [
+                  {
+                    "id": "T_LT"
+                  },
+                  {
+                    "id": "T_LCURLY"
+                  }
+                ]
+              },
               "longPress": [
                 "<",
                 "{"
@@ -512,6 +937,19 @@
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_RBRKT",
+                "longPress": [
+                  {
+                    "id": "T_GT"
+                  },
+                  {
+                    "id": "T_RCURLY"
+                  }
+                ]
+              },
               "longPress": [
                 ">",
                 "}"
@@ -529,7 +967,15 @@
               "label": "-",
               "action": {
                 "type": "keyman_key",
-                "vkey": 54
+                "vkey": 54,
+                "longPress": [
+                  {
+                    "id": "U_2013"
+                  },
+                  {
+                    "vkey": 55
+                  }
+                ]
               },
               "longPress": [
                 "–",
@@ -561,7 +1007,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },
@@ -586,14 +1032,18 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "other"
+                "nextLayer": "k:other",
+                "id": "T_OTHER"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },
@@ -607,7 +1057,7 @@
           ]
         ]
       },
-      "other": {
+      "k:other": {
         "rows": [
           [
             {
@@ -635,7 +1085,12 @@
               }
             },
             {
-              "label": "ţ"
+              "label": "ţ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_T_CEDILLA"
+              }
             },
             {
               "label": "",
@@ -701,7 +1156,12 @@
               }
             },
             {
-              "label": "ŧ"
+              "label": "ŧ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_T_STROKE"
+              }
             },
             {
               "label": "",
@@ -739,21 +1199,47 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:others"
               },
               "width": 1.1
             },
             {
-              "label": "«≈"
+              "label": "«≈",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_LGUILLMET"
+              }
             },
             {
-              "label": "“≈"
+              "label": "“≈",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_LDBLQUOTE"
+              }
             },
             {
-              "label": "≈”"
+              "label": "≈”",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_RDBLQUOTE"
+              }
             },
             {
-              "label": "≈»"
+              "label": "≈»",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_RGUILLMET"
+              }
             },
             {
               "label": "",
@@ -795,7 +1281,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -809,19 +1297,32 @@
             {
               "label": "⍽",
               "output": " ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_NBSP"
+              },
               "width": 3.9
             },
             {
-              "label": "ABC",
+              "label": "abc",
+              "output": "",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_ABC"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },
@@ -835,7 +1336,7 @@
           ]
         ]
       },
-      "others": {
+      "k:others": {
         "rows": [
           [
             {
@@ -863,7 +1364,13 @@
               }
             },
             {
-              "label": "Ţ"
+              "label": "Ţ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_T_CEDILLA"
+              }
             },
             {
               "label": "",
@@ -929,7 +1436,13 @@
               }
             },
             {
-              "label": "Ŧ"
+              "label": "Ŧ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_T_STROKE"
+              }
             },
             {
               "label": "",
@@ -967,17 +1480,19 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:other"
               },
               "width": 1.1
             },
             {
-              "label": "‘"
-            },
-            {
-              "label": "",
+              "label": "‘",
               "action": {
-                "type": "none"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_LSNGLQUOTE"
               }
             },
             {
@@ -987,7 +1502,20 @@
               }
             },
             {
-              "label": "’"
+              "label": "",
+              "action": {
+                "type": "none"
+              }
+            },
+            {
+              "label": "’",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "T_RSNGLQUOTE"
+              }
             },
             {
               "label": "z",
@@ -1033,7 +1561,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -1046,19 +1576,31 @@
             },
             {
               "label": " NNBSP",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_NNBSP"
+              },
               "width": 3.9
             },
             {
-              "label": "ABC",
+              "label": "abc",
+              "output": "",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_ABC"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },
@@ -1076,10 +1618,20 @@
         "rows": [
           [
             {
-              "label": "{"
+              "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LCURLY"
+              }
             },
             {
-              "label": "}"
+              "label": "}",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_RCURLY"
+              }
             },
             {
               "label": "^",
@@ -1089,25 +1641,64 @@
               }
             },
             {
-              "label": "®"
+              "label": "®",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_REGISTERED"
+              }
             },
             {
-              "label": "~"
+              "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TILDE"
+              }
             },
             {
-              "label": "¢"
+              "label": "¢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_CENT"
+              }
             },
             {
-              "label": "£"
+              "label": "£",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols",
+                "id": "T_POUND_SIGN"
+              }
             },
             {
-              "label": "€"
+              "label": "€",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_EURO"
+              }
             },
             {
-              "label": "¥"
+              "label": "¥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols",
+                "id": "T_YEN"
+              }
             },
             {
-              "label": "¤"
+              "label": "¤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols",
+                "id": "T_CURRENCY"
+              }
             }
           ],
           [
@@ -1119,31 +1710,78 @@
               "width": 0.65
             },
             {
-              "label": "¶"
+              "label": "¶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_PILCROW"
+              }
             },
             {
-              "label": "±"
+              "label": "±",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_PLUS_MINUS"
+              }
             },
             {
-              "label": "×"
+              "label": "×",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_MULTIPLY"
+              }
             },
             {
-              "label": "÷"
+              "label": "÷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_DIVIDE"
+              }
             },
             {
-              "label": "–"
+              "label": "–",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_2013"
+              }
             },
             {
-              "label": "—"
+              "label": "—",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_2014"
+              }
             },
             {
-              "label": "<"
+              "label": "<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LT"
+              }
             },
             {
-              "label": "¦"
+              "label": "¦",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_BROKEN_BAR"
+              }
             },
             {
-              "label": ">"
+              "label": ">",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_GT"
+              }
             },
             {
               "label": "",
@@ -1162,28 +1800,71 @@
               "width": 1.1
             },
             {
-              "label": "§"
+              "label": "§",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_SECTION"
+              }
             },
             {
-              "label": "℗"
+              "label": "℗",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols",
+                "id": "T_SOUND"
+              }
             },
             {
-              "label": "©"
+              "label": "©",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols",
+                "id": "T_COPYRIGHT"
+              }
             },
             {
-              "label": "µ"
+              "label": "µ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_MU"
+              }
             },
             {
-              "label": "°"
+              "label": "°",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_DEGREE"
+              }
             },
             {
-              "label": "…"
+              "label": "…",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_ELLIPSIS"
+              }
             },
             {
-              "label": "•"
+              "label": "•",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_BULLET"
+              }
             },
             {
-              "label": "·"
+              "label": "·",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_MID_DOT"
+              }
             },
             {
               "label": "⌫",
@@ -1197,7 +1878,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -1210,16 +1893,29 @@
             },
             {
               "label": " NBSP",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_NBSP"
+              },
               "width": 3.9
             },
             {
               "label": "cv",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_OTHER"
+              },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_ABC"
               },
               "width": 1.2
             },
@@ -1229,11 +1925,18 @@
                 "type": "enter"
               },
               "width": 1.7
+            },
+            {
+              "label": "ABC",
+              "action": {
+                "type": "letters"
+              },
+              "width": 1.5
             }
           ]
         ]
       },
-      "caps": {
+      "k:caps": {
         "rows": [
           [
             {
@@ -1245,7 +1948,13 @@
               }
             },
             {
-              "label": "Ë"
+              "label": "Ë",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_E_DIAERESIS"
+              }
             },
             {
               "label": "E",
@@ -1268,7 +1977,17 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 84,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_T_CEDILLA"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_T_STROKE"
+                  }
+                ]
               },
               "longPress": [
                 "Ţ",
@@ -1325,10 +2044,22 @@
               "width": 0.65
             },
             {
-              "label": "Ŋ"
+              "label": "Ŋ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ENG"
+              }
             },
             {
-              "label": "Ş"
+              "label": "Ş",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_S_CEDILLA"
+              }
             },
             {
               "label": "D",
@@ -1396,7 +2127,7 @@
           ],
           [
             {
-              "label": "⇧",
+              "label": "⇪",
               "action": {
                 "type": "shift"
               },
@@ -1411,7 +2142,13 @@
               }
             },
             {
-              "label": "Ñ"
+              "label": "Ñ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_N_TILDE"
+              }
             },
             {
               "label": "C",
@@ -1474,7 +2211,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -1488,23 +2227,43 @@
             {
               "label": " ",
               "action": {
-                "type": "space"
+                "type": "keyman_key",
+                "vkey": 32,
+                "longPress": [
+                  {
+                    "id": "T_NBSP",
+                    "text": " "
+                  },
+                  {
+                    "id": "T_NNBSP"
+                  }
+                ]
               },
-              "width": 3.9
+              "width": 3.9,
+              "longPress": [
+                "⍽",
+                "NNBSP"
+              ]
             },
             {
               "label": "CV",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "othercaps"
+                "modifiers": 16,
+                "nextLayer": "k:othercaps",
+                "id": "T_OTHER"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },
@@ -1518,7 +2277,7 @@
           ]
         ]
       },
-      "othercaps": {
+      "k:othercaps": {
         "rows": [
           [
             {
@@ -1546,7 +2305,14 @@
               }
             },
             {
-              "label": "Ţ"
+              "label": "Ţ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:caps",
+                "id": "T_T_CEDILLA"
+              }
             },
             {
               "label": "",
@@ -1612,7 +2378,14 @@
               }
             },
             {
-              "label": "Ŧ"
+              "label": "Ŧ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:caps",
+                "id": "T_T_STROKE"
+              }
             },
             {
               "label": "",
@@ -1648,19 +2421,21 @@
           ],
           [
             {
-              "label": "⇧",
+              "label": "⇪",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:other"
               },
               "width": 1.1
             },
             {
-              "label": "‘"
-            },
-            {
-              "label": "",
+              "label": "‘",
               "action": {
-                "type": "none"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "k:caps",
+                "id": "T_LSNGLQUOTE"
               }
             },
             {
@@ -1670,14 +2445,27 @@
               }
             },
             {
-              "label": "’"
+              "label": "",
+              "action": {
+                "type": "none"
+              }
+            },
+            {
+              "label": "’",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:caps",
+                "id": "T_RSNGLQUOTE"
+              }
             },
             {
               "label": "z",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87,
-                "nextLayer": "caps"
+                "nextLayer": "k:caps"
               }
             },
             {
@@ -1685,7 +2473,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 88,
-                "nextLayer": "caps"
+                "nextLayer": "k:caps"
               }
             },
             {
@@ -1693,7 +2481,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 86,
-                "nextLayer": "caps"
+                "nextLayer": "k:caps"
               }
             },
             {
@@ -1701,7 +2489,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 65,
-                "nextLayer": "caps"
+                "nextLayer": "k:caps"
               }
             },
             {
@@ -1716,7 +2504,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.4
             },
@@ -1729,21 +2519,34 @@
             },
             {
               "label": " NNBSP",
-              "width": 3.9
-            },
-            {
-              "label": "⌨",
               "action": {
                 "type": "keyman_key",
                 "vkey": 0,
-                "nextLayer": "caps"
+                "nextLayer": "k:caps",
+                "id": "T_NNBSP"
+              },
+              "width": 3.9
+            },
+            {
+              "label": "ABC",
+              "output": "",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:caps",
+                "id": "T_ABC"
               },
               "width": 1.2
             },
             {
               "label": "§",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 256,
+                "nextLayer": "symbols2",
+                "id": "T_SYMBOL"
               },
               "width": 1.2
             },

@@ -81,6 +81,19 @@
             },
             {
               "label": "𐴢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D22",
+                "longPress": [
+                  {
+                    "id": "U_10D19"
+                  },
+                  {
+                    "id": "U_10D23"
+                  }
+                ]
+              },
               "longPress": [
                 "𐴙",
                 "𐴣"
@@ -152,10 +165,20 @@
               }
             },
             {
-              "label": "𐴆"
+              "label": "𐴆",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D06"
+              }
             },
             {
-              "label": "𐴛"
+              "label": "𐴛",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D1B"
+              }
             }
           ],
           [
@@ -215,13 +238,28 @@
               }
             },
             {
-              "label": "𐴃"
+              "label": "𐴃",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D03"
+              }
             },
             {
-              "label": "𐴊"
+              "label": "𐴊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D0A"
+              }
             },
             {
-              "label": "𐴍"
+              "label": "𐴍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10D0D"
+              }
             }
           ],
           [
@@ -250,7 +288,37 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -279,16 +347,17 @@
           ]
         ]
       },
-      "shift": {
+      "k:shift": {
         "rows": [
           [
             {
-              "label": "𐴧"
-            },
-            {
-              "label": "",
+              "label": "𐴧",
               "action": {
-                "type": "none"
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_10D27"
               }
             },
             {
@@ -304,7 +373,20 @@
               }
             },
             {
-              "label": "𐴥"
+              "label": "",
+              "action": {
+                "type": "none"
+              }
+            },
+            {
+              "label": "𐴥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_10D25"
+              }
             },
             {
               "label": "",
@@ -339,12 +421,13 @@
           ],
           [
             {
-              "label": "𐴦"
-            },
-            {
-              "label": "",
+              "label": "𐴦",
               "action": {
-                "type": "none"
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_10D26"
               }
             },
             {
@@ -366,12 +449,19 @@
               }
             },
             {
-              "label": "𐴤"
-            },
-            {
               "label": "",
               "action": {
                 "type": "none"
+              }
+            },
+            {
+              "label": "𐴤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_10D24"
               }
             },
             {
@@ -381,7 +471,20 @@
               }
             },
             {
-              "label": "؛"
+              "label": "",
+              "action": {
+                "type": "none"
+              }
+            },
+            {
+              "label": "؛",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_061B"
+              }
             },
             {
               "label": "",
@@ -428,13 +531,34 @@
               }
             },
             {
-              "label": "،"
+              "label": "،",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_060C"
+              }
             },
             {
-              "label": "۔"
+              "label": "۔",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_06D4"
+              }
             },
             {
-              "label": "؟"
+              "label": "؟",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_061F"
+              }
             },
             {
               "label": "⌫",
@@ -447,7 +571,9 @@
             {
               "label": "?123",
               "action": {
-                "type": "symbols"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
               },
               "width": 1.5
             },
@@ -460,6 +586,13 @@
             },
             {
               "label": "𐴢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_10D22"
+              },
               "width": 6.1
             },
             {
@@ -618,7 +751,12 @@
               }
             },
             {
-              "label": "\\"
+              "label": "\\",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005C"
+              }
             },
             {
               "label": "",
@@ -638,6 +776,24 @@
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B",
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003C"
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
+              },
               "longPress": [
                 "«",
                 "<",
@@ -662,6 +818,24 @@
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D",
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003E"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007D"
+                  }
+                ]
+              },
               "longPress": [
                 "»",
                 ">",
@@ -692,7 +866,12 @@
               }
             },
             {
-              "label": "/"
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              }
             },
             {
               "label": "⌫",
@@ -703,7 +882,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },

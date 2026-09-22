@@ -11,7 +11,6 @@
           [
             {
               "label": "љ",
-              "shiftLabel": "Љ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -19,7 +18,6 @@
             },
             {
               "label": "њ",
-              "shiftLabel": "Њ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -27,7 +25,6 @@
             },
             {
               "label": "е",
-              "shiftLabel": "Е",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -35,7 +32,6 @@
             },
             {
               "label": "р",
-              "shiftLabel": "Р",
               "action": {
                 "type": "keyman_key",
                 "vkey": 82
@@ -43,7 +39,6 @@
             },
             {
               "label": "т",
-              "shiftLabel": "Т",
               "action": {
                 "type": "keyman_key",
                 "vkey": 84
@@ -51,7 +46,6 @@
             },
             {
               "label": "з",
-              "shiftLabel": "З",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89
@@ -59,7 +53,6 @@
             },
             {
               "label": "у",
-              "shiftLabel": "У",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85
@@ -67,7 +60,6 @@
             },
             {
               "label": "и",
-              "shiftLabel": "И",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73
@@ -75,7 +67,6 @@
             },
             {
               "label": "о",
-              "shiftLabel": "О",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79
@@ -83,7 +74,6 @@
             },
             {
               "label": "п",
-              "shiftLabel": "П",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -91,7 +81,6 @@
             },
             {
               "label": "ш",
-              "shiftLabel": "Ш",
               "action": {
                 "type": "keyman_key",
                 "vkey": 219
@@ -115,7 +104,6 @@
             },
             {
               "label": "а",
-              "shiftLabel": "А",
               "action": {
                 "type": "keyman_key",
                 "vkey": 65
@@ -123,7 +111,6 @@
             },
             {
               "label": "с",
-              "shiftLabel": "С",
               "action": {
                 "type": "keyman_key",
                 "vkey": 83
@@ -131,7 +118,6 @@
             },
             {
               "label": "д",
-              "shiftLabel": "Д",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -139,7 +125,6 @@
             },
             {
               "label": "ф",
-              "shiftLabel": "Ф",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -147,10 +132,14 @@
             },
             {
               "label": "г",
-              "shiftLabel": "Г",
               "action": {
                 "type": "keyman_key",
-                "vkey": 71
+                "vkey": 71,
+                "longPress": [
+                  {
+                    "id": "U_0453"
+                  }
+                ]
               },
               "longPress": [
                 "ѓ"
@@ -158,7 +147,6 @@
             },
             {
               "label": "х",
-              "shiftLabel": "Х",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -166,7 +154,6 @@
             },
             {
               "label": "ј",
-              "shiftLabel": "Ј",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -174,10 +161,14 @@
             },
             {
               "label": "к",
-              "shiftLabel": "К",
               "action": {
                 "type": "keyman_key",
-                "vkey": 75
+                "vkey": 75,
+                "longPress": [
+                  {
+                    "id": "U_045C"
+                  }
+                ]
               },
               "longPress": [
                 "ќ"
@@ -185,7 +176,6 @@
             },
             {
               "label": "л",
-              "shiftLabel": "Л",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76
@@ -193,11 +183,19 @@
             },
             {
               "label": "ч",
-              "shiftLabel": "Ч"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0447"
+              }
             },
             {
               "label": "ћ",
-              "shiftLabel": "Ћ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_045B"
+              }
             }
           ],
           [
@@ -210,7 +208,6 @@
             },
             {
               "label": "ѕ",
-              "shiftLabel": "Ѕ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 90
@@ -218,7 +215,6 @@
             },
             {
               "label": "џ",
-              "shiftLabel": "Џ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 88
@@ -226,7 +222,6 @@
             },
             {
               "label": "ц",
-              "shiftLabel": "Ц",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -234,7 +229,6 @@
             },
             {
               "label": "в",
-              "shiftLabel": "В",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -242,7 +236,6 @@
             },
             {
               "label": "б",
-              "shiftLabel": "Б",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66
@@ -250,7 +243,6 @@
             },
             {
               "label": "н",
-              "shiftLabel": "Н",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -258,7 +250,6 @@
             },
             {
               "label": "м",
-              "shiftLabel": "М",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -266,11 +257,19 @@
             },
             {
               "label": "ђ",
-              "shiftLabel": "Ђ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0452"
+              }
             },
             {
               "label": "ж",
-              "shiftLabel": "Ж"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0436"
+              }
             },
             {
               "label": "⌫",
@@ -306,7 +305,408 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_003B"
+                  }
+                ]
+              },
+              "longPress": [
+                ",",
+                "!",
+                "?",
+                "\\",
+                ":",
+                ";"
+              ]
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.4
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "Љ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Њ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Е",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Р",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Т",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "З",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "У",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "И",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "О",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "П",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ш",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 219,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.3
+            },
+            {
+              "label": "А",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "С",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Д",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ф",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Г",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_0403"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ѓ"
+              ]
+            },
+            {
+              "label": "Х",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ј",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "К",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_040C"
+                  }
+                ]
+              },
+              "longPress": [
+                "Ќ"
+              ]
+            },
+            {
+              "label": "Л",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ч",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0427"
+              }
+            },
+            {
+              "label": "Ћ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_040B"
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.1
+            },
+            {
+              "label": "Ѕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Џ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ц",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "В",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 86,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Б",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Н",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "М",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ђ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0402"
+              }
+            },
+            {
+              "label": "Ж",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0416"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 1.23
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
+              },
+              "width": 1.4
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.2
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 6.65
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003B"
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -414,7 +814,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 52,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_20AC"
+                  }
+                ]
               },
               "longPress": [
                 "€"
@@ -445,10 +850,20 @@
               }
             },
             {
-              "label": "&"
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0026"
+              }
             },
             {
-              "label": "/"
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              }
             },
             {
               "label": "+",
@@ -458,10 +873,20 @@
               }
             },
             {
-              "label": "`"
+              "label": "`",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0060"
+              }
             },
             {
-              "label": "~"
+              "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007E"
+              }
             },
             {
               "label": "",
@@ -475,25 +900,61 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "none"
               },
               "width": 1.1
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B",
+                "longPress": [
+                  {
+                    "id": "U_003C"
+                  },
+                  {
+                    "id": "U_007B"
+                  }
+                ]
+              },
               "longPress": [
                 "<",
                 "{"
               ]
             },
             {
-              "label": "("
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0028"
+              }
             },
             {
-              "label": ")"
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0029"
+              }
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D",
+                "longPress": [
+                  {
+                    "id": "U_003E"
+                  },
+                  {
+                    "id": "U_007D"
+                  }
+                ]
+              },
               "longPress": [
                 ">",
                 "}"
@@ -508,16 +969,31 @@
               }
             },
             {
-              "label": "'"
+              "label": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0027"
+              }
             },
             {
-              "label": "="
+              "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003D"
+              }
             },
             {
               "label": "-",
               "action": {
                 "type": "keyman_key",
-                "vkey": 191
+                "vkey": 191,
+                "longPress": [
+                  {
+                    "id": "U_005F"
+                  }
+                ]
               },
               "longPress": [
                 "_"
@@ -533,7 +1009,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },

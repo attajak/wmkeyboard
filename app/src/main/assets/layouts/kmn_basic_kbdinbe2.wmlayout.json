@@ -11,7 +11,6 @@
           [
             {
               "label": "১",
-              "shiftLabel": "!",
               "action": {
                 "type": "keyman_key",
                 "vkey": 49
@@ -19,7 +18,6 @@
             },
             {
               "label": "২",
-              "shiftLabel": "@",
               "action": {
                 "type": "keyman_key",
                 "vkey": 50
@@ -27,7 +25,6 @@
             },
             {
               "label": "৩",
-              "shiftLabel": "্র",
               "action": {
                 "type": "keyman_key",
                 "vkey": 51
@@ -35,7 +32,6 @@
             },
             {
               "label": "৪",
-              "shiftLabel": "র্",
               "action": {
                 "type": "keyman_key",
                 "vkey": 52
@@ -43,7 +39,6 @@
             },
             {
               "label": "৫",
-              "shiftLabel": "জ্ঞ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 53
@@ -51,7 +46,6 @@
             },
             {
               "label": "৬",
-              "shiftLabel": "ত্র",
               "action": {
                 "type": "keyman_key",
                 "vkey": 54
@@ -59,7 +53,6 @@
             },
             {
               "label": "৭",
-              "shiftLabel": "ক্ষ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 55
@@ -67,7 +60,6 @@
             },
             {
               "label": "৮",
-              "shiftLabel": "শ্র",
               "action": {
                 "type": "keyman_key",
                 "vkey": 56
@@ -75,7 +67,6 @@
             },
             {
               "label": "৯",
-              "shiftLabel": "(",
               "action": {
                 "type": "keyman_key",
                 "vkey": 57
@@ -83,7 +74,6 @@
             },
             {
               "label": "০",
-              "shiftLabel": ")",
               "action": {
                 "type": "keyman_key",
                 "vkey": 48
@@ -91,7 +81,6 @@
             },
             {
               "label": "-",
-              "shiftLabel": "ঃ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 189
@@ -99,7 +88,6 @@
             },
             {
               "label": "ৃ",
-              "shiftLabel": "ঋ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 187
@@ -123,7 +111,6 @@
             },
             {
               "label": "ৌ",
-              "shiftLabel": "ঔ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -131,7 +118,6 @@
             },
             {
               "label": "ৈ",
-              "shiftLabel": "ঐ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -139,7 +125,6 @@
             },
             {
               "label": "া",
-              "shiftLabel": "আ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -147,7 +132,6 @@
             },
             {
               "label": "ী",
-              "shiftLabel": "ঈ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 82
@@ -155,7 +139,6 @@
             },
             {
               "label": "ূ",
-              "shiftLabel": "ঊ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 84
@@ -163,7 +146,6 @@
             },
             {
               "label": "ব",
-              "shiftLabel": "ভ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89
@@ -171,7 +153,6 @@
             },
             {
               "label": "হ",
-              "shiftLabel": "ঙ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85
@@ -179,7 +160,6 @@
             },
             {
               "label": "গ",
-              "shiftLabel": "ঘ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73
@@ -187,7 +167,6 @@
             },
             {
               "label": "দ",
-              "shiftLabel": "ধ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79
@@ -195,7 +174,6 @@
             },
             {
               "label": "জ",
-              "shiftLabel": "ঝ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -203,7 +181,6 @@
             },
             {
               "label": "ড",
-              "shiftLabel": "ঢ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 219
@@ -211,7 +188,6 @@
             },
             {
               "label": "়",
-              "shiftLabel": "ঞ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 221
@@ -235,7 +211,6 @@
             },
             {
               "label": "ো",
-              "shiftLabel": "ও",
               "action": {
                 "type": "keyman_key",
                 "vkey": 65
@@ -243,7 +218,6 @@
             },
             {
               "label": "ে",
-              "shiftLabel": "এ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 83
@@ -251,7 +225,6 @@
             },
             {
               "label": "্",
-              "shiftLabel": "অ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -259,7 +232,6 @@
             },
             {
               "label": "ি",
-              "shiftLabel": "ই",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -267,7 +239,6 @@
             },
             {
               "label": "ু",
-              "shiftLabel": "উ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 71
@@ -275,7 +246,6 @@
             },
             {
               "label": "প",
-              "shiftLabel": "ফ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -283,7 +253,6 @@
             },
             {
               "label": "র",
-              "shiftLabel": "ৎ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -291,7 +260,6 @@
             },
             {
               "label": "ক",
-              "shiftLabel": "খ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 75
@@ -299,7 +267,6 @@
             },
             {
               "label": "ত",
-              "shiftLabel": "থ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76
@@ -307,7 +274,6 @@
             },
             {
               "label": "চ",
-              "shiftLabel": "ছ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 186
@@ -315,7 +281,6 @@
             },
             {
               "label": "ট",
-              "shiftLabel": "ঠ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 222
@@ -323,7 +288,6 @@
             },
             {
               "label": "\\",
-              "shiftLabel": "|",
               "action": {
                 "type": "keyman_key",
                 "vkey": 220
@@ -340,7 +304,6 @@
             },
             {
               "label": "ং",
-              "shiftLabel": "ঁ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 88
@@ -348,7 +311,6 @@
             },
             {
               "label": "ম",
-              "shiftLabel": "ণ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -356,7 +318,6 @@
             },
             {
               "label": "ন",
-              "shiftLabel": "‍",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -364,7 +325,6 @@
             },
             {
               "label": "ব",
-              "shiftLabel": "‌",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66
@@ -372,7 +332,6 @@
             },
             {
               "label": "ল",
-              "shiftLabel": "শ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -380,7 +339,6 @@
             },
             {
               "label": "স",
-              "shiftLabel": "ষ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -388,7 +346,6 @@
             },
             {
               "label": ",",
-              "shiftLabel": "।",
               "action": {
                 "type": "keyman_key",
                 "vkey": 188
@@ -396,7 +353,6 @@
             },
             {
               "label": ".",
-              "shiftLabel": "য",
               "action": {
                 "type": "keyman_key",
                 "vkey": 190
@@ -404,7 +360,6 @@
             },
             {
               "label": "য়",
-              "shiftLabel": "অ্যা",
               "action": {
                 "type": "keyman_key",
                 "vkey": 191
@@ -412,10 +367,466 @@
             },
             {
               "label": "॥",
-              "shiftLabel": "₹",
               "action": {
                 "type": "keyman_key",
                 "vkey": 192
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 2.3
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.6
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.4
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 8.5
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.45
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 49,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 50,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "্র",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 51,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "র্",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 52,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "জ্ঞ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 53,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ত্র",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 54,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ক্ষ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 55,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "শ্র",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 56,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 57,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 48,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঃ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 189,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঋ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 187,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.3
+            },
+            {
+              "label": "ঔ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঐ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "আ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঈ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঊ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ভ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঙ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঘ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ধ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঢ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 219,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঞ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 221,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.7
+            },
+            {
+              "label": "ও",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "এ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "অ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ই",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "উ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ফ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ৎ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "খ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "থ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ছ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 186,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ঠ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 222,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 220,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.3
+            },
+            {
+              "label": "ঁ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ণ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "◌‿◌",
+              "output": "‍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_200D"
+              }
+            },
+            {
+              "label": "◌│◌",
+              "output": "‌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_200C"
+              }
+            },
+            {
+              "label": "শ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ষ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 188,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "।",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "য",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 191,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "অ্যা",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 192,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "₹",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_20B9"
               }
             },
             {

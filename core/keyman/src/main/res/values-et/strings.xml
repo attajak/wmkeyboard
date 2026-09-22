@@ -15,8 +15,6 @@
         <item quantity="other">Sellel klaviatuuril on %1$d klahvi, mida korduvalt vajutades saab märkide vahel liikuda. Sellel klaviatuurirakendusel selliseid klahve pole, seega on saadaval ainult igaühe esimene märk.</item>
     </plurals>
     <string name="core_keyman_rules_missing">See klaviatuur kasutab reegleid, et otsustada, mida selle klahvid trükivad. Rakendusel neid reegleid pole, seega trükib iga klahv sellele trükitud märgi.</string>
-    <string name="core_keyman_shift_layer_folded">Rakendus ühendas tõstuklahvi kihi klahvidega. Nende märkideni jõudmiseks hoia all Shifti.</string>
-    <string name="core_keyman_shift_layer_separate">Tõstuklahvi kihil on teistsugune kuju, seega rakendus jättis selle omaette kihiks.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahvi, mis teeks sama asja.</item>
         <item quantity="other">Rakendus eemaldas %1$d klahvi. Sellel klaviatuuril pole klahve, mis teeksid sama asja.</item>

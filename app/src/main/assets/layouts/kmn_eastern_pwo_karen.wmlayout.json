@@ -98,10 +98,20 @@
             },
             {
               "label": "ဍ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_100D"
+              },
               "width": 1.05
             },
             {
               "label": "ဝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_101D"
+              },
               "width": 1.05
             }
           ],
@@ -179,6 +189,11 @@
             },
             {
               "label": "သ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_101E"
+              },
               "width": 1.05
             },
             {
@@ -191,6 +206,11 @@
             },
             {
               "label": "ဏ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_100F"
+              },
               "width": 1.05
             }
           ],
@@ -284,10 +304,20 @@
             },
             {
               "label": "ၜ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_105C"
+              },
               "width": 1.05
             },
             {
               "label": "ဟ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_101F"
+              },
               "width": 1.05
             }
           ],
@@ -357,6 +387,11 @@
             },
             {
               "label": "ယ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_101A"
+              },
               "width": 1.05
             },
             {
@@ -385,6 +420,11 @@
             },
             {
               "label": "္",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1039"
+              },
               "width": 1.1
             },
             {
@@ -404,7 +444,7 @@
           ]
         ]
       },
-      "shift": {
+      "k:shift": {
         "rows": [
           [
             {
@@ -419,6 +459,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 49,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -428,6 +469,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 50,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -437,6 +479,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 51,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -446,6 +489,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 52,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -455,6 +499,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 53,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -464,6 +509,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 54,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -473,6 +519,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 55,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -482,6 +529,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 56,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -491,6 +539,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 57,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -500,6 +549,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 48,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -509,6 +559,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 189,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -518,6 +569,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 187,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -536,6 +588,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 81,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -545,6 +598,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 69,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -554,6 +608,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 82,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -563,6 +618,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 89,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -572,6 +628,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 85,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -581,6 +638,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 73,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -590,6 +648,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 79,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -599,6 +658,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 219,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -608,20 +668,42 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 221,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
             },
             {
               "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_002F"
+              },
               "width": 1.05
             },
             {
               "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0021"
+              },
               "width": 1.05
             },
             {
               "label": "☆",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_2606"
+              },
               "width": 1.05
             }
           ],
@@ -638,6 +720,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 65,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -647,6 +730,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 83,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -656,6 +740,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 68,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -665,6 +750,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 71,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -674,6 +760,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 72,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -683,6 +770,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 74,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -692,6 +780,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 75,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -701,6 +790,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 76,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -710,22 +800,42 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 186,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
             },
             {
               "label": "'",
-              "output": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0027"
+              },
               "width": 1.05
             },
             {
               "label": "\"",
-              "output": "\"",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_0022"
+              },
               "width": 1.05
             },
             {
               "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_003F"
+              },
               "width": 1.05
             }
           ],
@@ -742,6 +852,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 90,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -751,6 +862,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 88,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -760,6 +872,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 67,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -769,12 +882,20 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 86,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
             },
             {
               "label": "ယှ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_101A_103E"
+              },
               "width": 1.05
             },
             {
@@ -782,6 +903,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 78,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -791,6 +913,7 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 188,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
@@ -800,13 +923,20 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 190,
+                "modifiers": 16,
                 "nextLayer": "letters"
               },
               "width": 1.05
             },
             {
               "label": ",",
-              "output": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "letters",
+                "id": "U_002C"
+              },
               "width": 1.05
             },
             {

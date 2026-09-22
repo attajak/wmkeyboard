@@ -105,11 +105,20 @@ fun <T> KeymanResult<T>.faultOrNull(): KeymanFault? = (this as? KeymanResult.Fai
 object KeymanLimits {
     // --- Per keystroke ---
     /**
-     * Key-array entries examined for one keystroke across every group. Real
-     * keyboards top out in the low hundreds; the corpus measured a maximum
-     * around 500 rules in a single keyboard, so this is roughly 8x the worst.
+     * Key-array entries examined for one keystroke across every group, before
+     * [ruleScanBudget] scales it for a large keyboard. Most keyboards hold a
+     * few hundred rules; the Vietnamese and Chinese telex keyboards hold tens of
+     * thousands, and a keystroke there legitimately walks most of them.
      */
     const val MAX_RULE_SCANS: Int = 4_000
+
+    /**
+     * The scan budget for a keyboard of [ruleCount] rules: room to walk every
+     * rule several times over — `use()` re-enters groups — and never less than
+     * [MAX_RULE_SCANS]. A fixed number would fault the largest keyboards on
+     * their first keystroke and switch their rules off.
+     */
+    fun ruleScanBudget(ruleCount: Int): Int = maxOf(MAX_RULE_SCANS, ruleCount * 8)
 
     /** Keyman's own `use()` limit, counted globally per keystroke, not per call. */
     const val MAX_USE_DEPTH: Int = 50
@@ -124,14 +133,17 @@ object KeymanLimits {
     const val MAX_OUTPUT_UNITS: Int = 512
 
     // --- Load time ---
-    const val MAX_KMX_BYTES: Int = 2 shl 20
+    // Load-time ceilings sit above the largest keyboard upstream ships — the
+    // telex keyboards compile to 3.3 MB and about 60,000 rules — with room to
+    // grow, and far below anything that would strain a phone.
+    const val MAX_KMX_BYTES: Int = 16 shl 20
     const val MAX_JS_BYTES: Int = 4 shl 20
     const val MAX_TOUCH_LAYOUT_BYTES: Int = 4 shl 20
     const val MAX_PACKAGE_BYTES: Long = 16L shl 20
     const val MAX_PACKAGE_ENTRIES: Int = 200
-    const val MAX_GROUPS: Int = 512
-    const val MAX_RULES: Int = 20_000
-    const val MAX_STORES: Int = 4_000
+    const val MAX_GROUPS: Int = 4_096
+    const val MAX_RULES: Int = 500_000
+    const val MAX_STORES: Int = 100_000
 
     /**
      * Keyman Core's context window, in UTF-16 code units — not characters. A

@@ -15,8 +15,6 @@
         <item quantity="other">Este teclado tem %1$d teclas que toca repetidamente para percorrer os carateres. Esta aplicação de teclado não tem essas teclas, pelo que apenas o primeiro caráter de cada uma está disponível.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Este teclado utiliza regras para decidir o que as suas teclas escrevem. A aplicação não possui essas regras, pelo que cada tecla escreve o caráter impresso na mesma.</string>
-    <string name="core_keyman_shift_layer_folded">O aplicativo mesclou a camada shift nas teclas. Segure Shift para alcançar esses caracteres.</string>
-    <string name="core_keyman_shift_layer_separate">A camada shift tem um formato diferente, por isso o aplicativo a manteve como sua própria camada.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">O aplicativo removeu %1$d tecla. Este teclado não possui uma tecla que faça a mesma coisa.</item>
         <item quantity="other">O aplicativo removeu %1$d teclas. Este teclado não possui teclas que façam a mesma coisa.</item>

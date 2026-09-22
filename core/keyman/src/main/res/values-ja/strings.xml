@@ -15,8 +15,6 @@
         <item quantity="other">このキーボードには、繰り返しタップして文字を切り替えるキーが %1$d つあります。このキーボードアプリにはそのようなキーがないため、それぞれの最初の文字のみ使用可能です。</item>
     </plurals>
     <string name="core_keyman_rules_missing">このキーボードはルールを使用してキーの入力内容を決定します。アプリにそのルールがないため、各キーは印字された文字を入力します。</string>
-    <string name="core_keyman_shift_layer_folded">アプリがシフトレイヤーをキーに統合しました。Shiftキーを押したままにすると、それらの文字にアクセスできます。</string>
-    <string name="core_keyman_shift_layer_separate">シフトレイヤーの形状が異なるため、アプリはそれを独自のレイヤーとして保持しました。</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">アプリが %1$d 個のキーを削除しました。このキーボードには同じ機能を持つキーがありません。</item>
         <item quantity="other">アプリが %1$d 個のキーを削除しました。このキーボードには同じ機能を持つキーがありません。</item>

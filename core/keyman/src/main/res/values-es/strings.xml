@@ -15,8 +15,6 @@
         <item quantity="other">Este teclado tiene %1$d teclas que presionas repetidamente para recorrer los caracteres. Esta aplicación de teclado no tiene dichas teclas, por lo que solo está disponible el primer carácter de cada una.</item>
     </plurals>
     <string name="core_keyman_rules_missing">Este teclado utiliza reglas para decidir qué escriben sus teclas. La aplicación no dispone de esas reglas, por lo que cada tecla escribe el carácter impreso en ella.</string>
-    <string name="core_keyman_shift_layer_folded">La aplicación fusionó la capa de mayúsculas en las teclas. Mantén pulsada la tecla Mayús para acceder a esos caracteres.</string>
-    <string name="core_keyman_shift_layer_separate">La capa de mayúsculas tiene una forma diferente, por lo que la aplicación la mantuvo como su propia capa.</string>
     <plurals name="core_keyman_special_keys_dropped">
         <item quantity="one">La aplicación eliminó %1$d tecla. Este teclado no tiene ninguna tecla que haga lo mismo.</item>
         <item quantity="other">La aplicación eliminó %1$d teclas. Este teclado no tiene ninguna tecla que haga lo mismo.</item>

@@ -11,114 +11,279 @@
           [
             {
               "label": "ຢ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA2"
+              },
               "width": 0.1
             },
             {
-              "label": "ຟ"
+              "label": "ຟ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9F"
+              }
             },
             {
-              "label": "ໂ"
+              "label": "ໂ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC2"
+              }
             },
             {
-              "label": "ໟ"
+              "label": "ໟ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EDF"
+              }
             },
             {
               "label": "ກຸ",
-              "output": "ຸ"
+              "output": "ຸ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB8"
+              }
             },
             {
               "label": "ກູ",
-              "output": "ູ"
+              "output": "ູ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB9"
+              }
             },
             {
-              "label": "ຄ"
+              "label": "ຄ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E84"
+              }
             },
             {
-              "label": "ຕ"
+              "label": "ຕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E95"
+              }
             },
             {
-              "label": "ຈ"
+              "label": "ຈ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E88"
+              }
             },
             {
-              "label": "ຊ"
+              "label": "ຊ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E8A"
+              }
             },
             {
               "label": "ກໍ",
-              "output": "ໍ"
+              "output": "ໍ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ECD"
+              }
             }
           ],
           [
             {
-              "label": "ໄ"
+              "label": "ໄ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC4"
+              }
             },
             {
               "label": "ກຳ",
-              "output": "ຳ"
+              "output": "ຳ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB3"
+              }
             },
             {
-              "label": "ພ"
+              "label": "ພ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9E"
+              }
             },
             {
-              "label": "ະ"
+              "label": "ະ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB0"
+              }
             },
             {
               "label": "ກິ",
-              "output": "ິ"
+              "output": "ິ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB4"
+              }
             },
             {
               "label": "ກີ",
-              "output": "ີ"
+              "output": "ີ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB5"
+              }
             },
             {
-              "label": "ຣ"
+              "label": "ຣ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA3"
+              }
             },
             {
-              "label": "ນ"
+              "label": "ນ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E99"
+              }
             },
             {
-              "label": "ຍ"
+              "label": "ຍ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E8D"
+              }
             },
             {
-              "label": "ບ"
+              "label": "ບ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9A"
+              }
             },
             {
-              "label": "ລ"
+              "label": "ລ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA5"
+              }
             }
           ],
           [
             {
-              "label": "ຫ"
+              "label": "ຫ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAB"
+              }
             },
             {
-              "label": "ກ"
+              "label": "ກ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E81"
+              }
             },
             {
-              "label": "ດ"
+              "label": "ດ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E94"
+              }
             },
             {
-              "label": "ເ"
+              "label": "ເ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC0"
+              }
             },
             {
-              "label": "ໞ"
+              "label": "ໞ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EDE"
+              }
             },
             {
               "label": "ກ່",
-              "output": "່"
+              "output": "່",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC8"
+              }
             },
             {
-              "label": "າ"
+              "label": "າ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB2"
+              }
             },
             {
-              "label": "ສ"
+              "label": "ສ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAA"
+              }
             },
             {
-              "label": "ວ"
+              "label": "ວ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA7"
+              }
             },
             {
-              "label": "ງ"
+              "label": "ງ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E87"
+              }
             },
             {
-              "label": "ຽ"
+              "label": "ຽ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EBD"
+              }
             }
           ],
           [
@@ -130,35 +295,80 @@
               "width": 0.5
             },
             {
-              "label": "ປ"
+              "label": "ປ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9B"
+              }
             },
             {
-              "label": "ແ"
+              "label": "ແ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC1"
+              }
             },
             {
-              "label": "ອ"
+              "label": "ອ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAD"
+              }
             },
             {
               "label": "ກຶ",
-              "output": "ຶ"
+              "output": "ຶ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB6"
+              }
             },
             {
               "label": "ກື",
-              "output": "ື"
+              "output": "ື",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB7"
+              }
             },
             {
-              "label": "ທ"
+              "label": "ທ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E97"
+              }
             },
             {
-              "label": "ມ"
+              "label": "ມ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA1"
+              }
             },
             {
               "label": "ກົ",
-              "output": "ົ"
+              "output": "ົ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EBB"
+              }
             },
             {
               "label": "ກັ",
-              "output": "ັ"
+              "output": "ັ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB1"
+              }
             },
             {
               "label": "⌫",
@@ -172,7 +382,9 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols2"
               },
               "width": 1.5
             },
@@ -208,7 +420,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 49,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED1"
+                  }
+                ]
               },
               "longPress": [
                 "໑"
@@ -219,7 +436,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 50,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED2"
+                  }
+                ]
               },
               "longPress": [
                 "໒"
@@ -230,7 +452,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 51,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED3"
+                  }
+                ]
               },
               "longPress": [
                 "໓"
@@ -241,7 +468,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 52,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED4"
+                  }
+                ]
               },
               "longPress": [
                 "໔"
@@ -252,7 +484,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 55,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED5"
+                  }
+                ]
               },
               "longPress": [
                 "໕"
@@ -263,7 +500,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 56,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED6"
+                  }
+                ]
               },
               "longPress": [
                 "໖"
@@ -274,7 +516,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 57,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED7"
+                  }
+                ]
               },
               "longPress": [
                 "໗"
@@ -285,7 +532,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 48,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED8"
+                  }
+                ]
               },
               "longPress": [
                 "໘"
@@ -296,7 +548,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 189,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED9"
+                  }
+                ]
               },
               "longPress": [
                 "໙"
@@ -307,7 +564,12 @@
               "action": {
                 "type": "keyman_key",
                 "vkey": 87,
-                "modifiers": 16
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "id": "U_0ED0"
+                  }
+                ]
               },
               "longPress": [
                 "໐"
@@ -357,7 +619,17 @@
                 "type": "keyman_key",
                 "vkey": 88,
                 "modifiers": 16,
-                "nextLayer": "letters"
+                "nextLayer": "letters",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_007B"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_005B"
+                  }
+                ]
               },
               "longPress": [
                 "{",
@@ -370,7 +642,17 @@
                 "type": "keyman_key",
                 "vkey": 191,
                 "modifiers": 16,
-                "nextLayer": "letters"
+                "nextLayer": "letters",
+                "longPress": [
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_007D"
+                  },
+                  {
+                    "nextLayer": "letters",
+                    "id": "U_005D"
+                  }
+                ]
               },
               "longPress": [
                 "}",
@@ -378,16 +660,40 @@
               ]
             },
             {
-              "label": "“"
+              "label": "“",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_201C"
+              }
             },
             {
-              "label": "”"
+              "label": "”",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_201D"
+              }
             },
             {
-              "label": "ຯ"
+              "label": "ຯ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0EAF"
+              }
             },
             {
-              "label": "ໆ"
+              "label": "ໆ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0EC6"
+              }
             }
           ],
           [
@@ -437,7 +743,13 @@
               }
             },
             {
-              "label": "'"
+              "label": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0027"
+              }
             },
             {
               "label": "!",
@@ -484,28 +796,76 @@
               "width": 0.5
             },
             {
-              "label": "₭"
+              "label": "₭",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_20AD"
+              }
             },
             {
-              "label": "฿"
+              "label": "฿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0E3F"
+              }
             },
             {
-              "label": "@"
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0040"
+              }
             },
             {
-              "label": "#"
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0023"
+              }
             },
             {
-              "label": "*"
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_002A"
+              }
             },
             {
-              "label": "&"
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_0026"
+              }
             },
             {
-              "label": "<"
+              "label": "<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_003C"
+              }
             },
             {
-              "label": ">"
+              "label": ">",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "U_003E"
+              }
             },
             {
               "label": "⌫",
@@ -519,7 +879,7 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "letters"
               },
               "width": 1.5
             },
@@ -543,13 +903,6 @@
                 "type": "enter"
               },
               "width": 1.55
-            },
-            {
-              "label": "ABC",
-              "action": {
-                "type": "letters"
-              },
-              "width": 1.5
             }
           ]
         ]

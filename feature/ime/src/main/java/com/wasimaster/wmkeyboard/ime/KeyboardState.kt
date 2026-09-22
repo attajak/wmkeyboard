@@ -239,7 +239,22 @@ data class Modifiers(
  * beside the symbol layers rather than replacing the active layout, so the
  * language, dictionary and composer stay those of the layout underneath.
  */
-enum class LayoutMode { LETTERS, SYMBOLS, SYMBOLS_SHIFTED, FN, SECONDARY }
+enum class LayoutMode {
+    LETTERS,
+    SYMBOLS,
+    SYMBOLS_SHIFTED,
+    FN,
+    SECONDARY,
+
+    /**
+     * One of a converted Keyman layout's own further layers — a right-Alt
+     * page, a page of one consonant's vowel forms — named by
+     * [KeyboardUiState.namedLayer] and drawn from [LayoutSet.named]. Keyman
+     * reaches these by key and by rule, so they are part of the layout rather
+     * than something the user switched to, and the grid is sized for them.
+     */
+    NAMED,
+}
 
 /**
  * The layouts reachable from the focused field without a new `onStartInput`:
@@ -315,6 +330,27 @@ data class LayoutSet(
      * the letters layer's (issue #196).
      */
     val themeId: String? = null,
+    /**
+     * A converted Keyman layout's `shift` layer, drawn in place of [letters]
+     * while shift is on. It is the author's own set of shifted keys — often
+     * with other ids, layers and long presses than the keys under them — so it
+     * cannot be derived from [letters]. Null for every other layout.
+     */
+    val keymanShift: KeyboardLayout? = null,
+    /** The same for Keyman's `caps` layer, drawn while caps lock is on. */
+    val keymanCaps: KeyboardLayout? = null,
+    /**
+     * A converted Keyman layout's further layers, by their key in the layout
+     * (see [LayoutMode.NAMED]). Empty for every other layout.
+     */
+    val named: Map<String, KeyboardLayout> = emptyMap(),
+    /**
+     * Every layer a converted Keyman layout defines, by its key; null for any
+     * other layout. A Keyman switch to a layer not in here lands on the
+     * letters, as KeymanWeb's does — the symbols pages our own grids would
+     * otherwise lend it are not the keyboard's.
+     */
+    val keymanLayerKeys: Set<String>? = null,
 ) {
     /**
      * Rows the key grid reserves.
@@ -333,6 +369,9 @@ data class LayoutSet(
         symbolsShifted.rows.size,
         fn?.rows?.size ?: 0,
         numeric?.rows?.size ?: 0,
+        keymanShift?.rows?.size ?: 0,
+        keymanCaps?.rows?.size ?: 0,
+        named.values.maxOfOrNull { it.rows.size } ?: 0,
     ).coerceAtLeast(1)
 
     /**
@@ -2192,6 +2231,11 @@ data class KeyboardUiState(
      * returns to the same grid; an id the set no longer holds draws the letters.
      */
     val secondaryLayoutId: String? = null,
+    /**
+     * The Keyman layer [LayoutMode.NAMED] shows, as a key into
+     * [LayoutSet.named]. An id the set no longer holds draws the letters.
+     */
+    val namedLayer: String? = null,
     /**
      * Power saving is in force, from either source: the manual switch or an
      * automatic trigger (low battery, the system's own battery saver).

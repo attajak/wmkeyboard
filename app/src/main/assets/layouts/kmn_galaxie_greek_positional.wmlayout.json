@@ -83,7 +83,6 @@
           [
             {
               "label": "θ",
-              "shiftLabel": "Θ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -91,7 +90,6 @@
             },
             {
               "label": "ω",
-              "shiftLabel": "Ω",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -99,7 +97,6 @@
             },
             {
               "label": "ε",
-              "shiftLabel": "Ε",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -107,7 +104,6 @@
             },
             {
               "label": "ρ",
-              "shiftLabel": "Ρ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 82
@@ -115,7 +111,6 @@
             },
             {
               "label": "τ",
-              "shiftLabel": "Τ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 84
@@ -123,7 +118,6 @@
             },
             {
               "label": "ψ",
-              "shiftLabel": "Ψ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89
@@ -131,7 +125,6 @@
             },
             {
               "label": "υ",
-              "shiftLabel": "Υ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85
@@ -139,7 +132,6 @@
             },
             {
               "label": "ι",
-              "shiftLabel": "Ι",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73
@@ -147,7 +139,6 @@
             },
             {
               "label": "ο",
-              "shiftLabel": "Ο",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79
@@ -155,7 +146,6 @@
             },
             {
               "label": "π",
-              "shiftLabel": "Π",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -165,7 +155,6 @@
           [
             {
               "label": "α",
-              "shiftLabel": "Α",
               "action": {
                 "type": "keyman_key",
                 "vkey": 65
@@ -173,7 +162,6 @@
             },
             {
               "label": "σ",
-              "shiftLabel": "Σ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 83
@@ -181,7 +169,6 @@
             },
             {
               "label": "δ",
-              "shiftLabel": "Δ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -189,7 +176,6 @@
             },
             {
               "label": "φ",
-              "shiftLabel": "Φ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -197,7 +183,6 @@
             },
             {
               "label": "γ",
-              "shiftLabel": "Γ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 71
@@ -205,7 +190,6 @@
             },
             {
               "label": "η",
-              "shiftLabel": "Η",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -213,7 +197,6 @@
             },
             {
               "label": "᾿",
-              "shiftLabel": "῾",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -221,7 +204,6 @@
             },
             {
               "label": "κ",
-              "shiftLabel": "Κ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 75
@@ -229,7 +211,6 @@
             },
             {
               "label": "λ",
-              "shiftLabel": "Λ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76
@@ -237,7 +218,6 @@
             },
             {
               "label": "ι",
-              "shiftLabel": "῀",
               "action": {
                 "type": "keyman_key",
                 "vkey": 220,
@@ -255,7 +235,6 @@
             },
             {
               "label": "ζ",
-              "shiftLabel": "Ζ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 90
@@ -263,7 +242,6 @@
             },
             {
               "label": "χ",
-              "shiftLabel": "Χ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 88
@@ -271,7 +249,6 @@
             },
             {
               "label": "ξ",
-              "shiftLabel": "Ξ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -279,7 +256,6 @@
             },
             {
               "label": "´",
-              "shiftLabel": "`",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -287,7 +263,6 @@
             },
             {
               "label": "β",
-              "shiftLabel": "Β",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66
@@ -295,7 +270,6 @@
             },
             {
               "label": "ν",
-              "shiftLabel": "Ν",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -303,7 +277,6 @@
             },
             {
               "label": "μ",
-              "shiftLabel": "Μ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -313,7 +286,84 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 50,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 189,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 189
+                  },
+                  {
+                    "id": "U_002B"
+                  },
+                  {
+                    "id": "U_007E"
+                  },
+                  {
+                    "vkey": 56,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_007B"
+                  },
+                  {
+                    "vkey": 57,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 48,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_007D"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_002F"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "vkey": 186
+                  },
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "!",
@@ -328,6 +378,468 @@
                 "(",
                 ")",
                 "}",
+                ">",
+                "?",
+                "/",
+                "\\",
+                "'",
+                "\"",
+                ":",
+                ";",
+                ",",
+                "·"
+              ]
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 0.9
+            }
+          ],
+          [
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.2
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 7.75
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.4
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "1",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 49
+              }
+            },
+            {
+              "label": "2",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 50
+              }
+            },
+            {
+              "label": "3",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 51
+              }
+            },
+            {
+              "label": "4",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 52
+              }
+            },
+            {
+              "label": "5",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 53
+              }
+            },
+            {
+              "label": "6",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 54
+              }
+            },
+            {
+              "label": "7",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 55
+              }
+            },
+            {
+              "label": "8",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 56
+              }
+            },
+            {
+              "label": "9",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 57
+              }
+            },
+            {
+              "label": "0",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 48
+              }
+            }
+          ],
+          [
+            {
+              "label": "Θ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ω",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ε",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ρ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Τ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ψ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Υ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ι",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ο",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Π",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "Α",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Σ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Δ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Φ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Γ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Η",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "῾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Κ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Λ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "῀",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 222,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.1
+            },
+            {
+              "label": "Ζ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Χ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ξ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "`",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 86,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Β",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Ν",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "Μ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 50,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 189,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 189
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_002B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007E"
+                  },
+                  {
+                    "vkey": 56,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 57,
+                    "modifiers": 16
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005D"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007D"
+                  },
+                  {
+                    "vkey": 48,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_002F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003A"
+                  },
+                  {
+                    "vkey": 186
+                  },
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  }
+                ]
+              },
+              "longPress": [
+                "!",
+                "@",
+                "_",
+                "-",
+                "+",
+                "~",
+                "*",
+                "<",
+                "(",
+                "{",
+                "[",
+                "]",
+                "}",
+                ")",
                 ">",
                 "?",
                 "/",

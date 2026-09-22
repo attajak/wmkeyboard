@@ -168,6 +168,7 @@ internal object KmxFormat {
     const val TSS_PLATFORM: Int = 31
     const val TSS_BASELAYOUT: Int = 32
     const val TSS_LAYER: Int = 33
+    const val TSS_VKDICTIONARY: Int = 34
     const val TSS_LAYOUTFILE: Int = 35
     const val TSS_KEYBOARDVERSION: Int = 36
     const val TSS_TARGETS: Int = 38

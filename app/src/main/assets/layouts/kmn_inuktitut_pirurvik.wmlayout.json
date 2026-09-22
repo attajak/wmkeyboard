@@ -17,7 +17,12 @@
               "width": 0.1
             },
             {
-              "label": "Q"
+              "label": "Q",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_Q"
+              }
             },
             {
               "label": "",
@@ -27,7 +32,12 @@
               "width": 0.1
             },
             {
-              "label": "W"
+              "label": "W",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_W"
+              }
             },
             {
               "label": "",
@@ -37,7 +47,12 @@
               "width": 0.1
             },
             {
-              "label": "E"
+              "label": "E",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_E"
+              }
             },
             {
               "label": "",
@@ -48,6 +63,16 @@
             },
             {
               "label": "R",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_R",
+                "longPress": [
+                  {
+                    "id": "T_TRANS_R_CARON"
+                  }
+                ]
+              },
               "longPress": [
                 "Ř"
               ]
@@ -60,7 +85,12 @@
               "width": 0.1
             },
             {
-              "label": "T"
+              "label": "T",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_T"
+              }
             },
             {
               "label": "",
@@ -70,7 +100,12 @@
               "width": 0.1
             },
             {
-              "label": "Y"
+              "label": "Y",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_Y"
+              }
             },
             {
               "label": "",
@@ -80,7 +115,12 @@
               "width": 0.1
             },
             {
-              "label": "U"
+              "label": "U",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_U"
+              }
             },
             {
               "label": "",
@@ -90,7 +130,12 @@
               "width": 0.1
             },
             {
-              "label": "I"
+              "label": "I",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_I"
+              }
             },
             {
               "label": "",
@@ -100,7 +145,12 @@
               "width": 0.1
             },
             {
-              "label": "Ł"
+              "label": "Ł",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_LH"
+              }
             },
             {
               "label": "",
@@ -110,7 +160,12 @@
               "width": 0.1
             },
             {
-              "label": "P"
+              "label": "P",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_P"
+              }
             }
           ],
           [
@@ -122,7 +177,12 @@
               "width": 0.65
             },
             {
-              "label": "A"
+              "label": "A",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_A"
+              }
             },
             {
               "label": "",
@@ -132,7 +192,12 @@
               "width": 0.1
             },
             {
-              "label": "S"
+              "label": "S",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_S"
+              }
             },
             {
               "label": "",
@@ -142,7 +207,12 @@
               "width": 0.1
             },
             {
-              "label": "D"
+              "label": "D",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_D"
+              }
             },
             {
               "label": "",
@@ -152,7 +222,12 @@
               "width": 0.1
             },
             {
-              "label": "F"
+              "label": "F",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_F"
+              }
             },
             {
               "label": "",
@@ -162,7 +237,12 @@
               "width": 0.1
             },
             {
-              "label": "G"
+              "label": "G",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_G"
+              }
             },
             {
               "label": "",
@@ -172,7 +252,12 @@
               "width": 0.1
             },
             {
-              "label": "H"
+              "label": "H",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_H"
+              }
             },
             {
               "label": "",
@@ -182,7 +267,12 @@
               "width": 0.1
             },
             {
-              "label": "J"
+              "label": "J",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_J"
+              }
             },
             {
               "label": "",
@@ -192,7 +282,12 @@
               "width": 0.1
             },
             {
-              "label": "K"
+              "label": "K",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_K"
+              }
             },
             {
               "label": "",
@@ -202,7 +297,12 @@
               "width": 0.1
             },
             {
-              "label": "L"
+              "label": "L",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_L"
+              }
             },
             {
               "label": "",
@@ -228,7 +328,12 @@
               "width": 1.8
             },
             {
-              "label": "Z"
+              "label": "Z",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_Z"
+              }
             },
             {
               "label": "",
@@ -238,7 +343,12 @@
               "width": 0.1
             },
             {
-              "label": "X"
+              "label": "X",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_X"
+              }
             },
             {
               "label": "",
@@ -248,7 +358,12 @@
               "width": 0.1
             },
             {
-              "label": "C"
+              "label": "C",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_C"
+              }
             },
             {
               "label": "",
@@ -258,7 +373,12 @@
               "width": 0.1
             },
             {
-              "label": "V"
+              "label": "V",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_V"
+              }
             },
             {
               "label": "",
@@ -268,7 +388,12 @@
               "width": 0.1
             },
             {
-              "label": "B"
+              "label": "B",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_B"
+              }
             },
             {
               "label": "",
@@ -278,7 +403,12 @@
               "width": 0.1
             },
             {
-              "label": "N"
+              "label": "N",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_N"
+              }
             },
             {
               "label": "",
@@ -288,7 +418,12 @@
               "width": 0.1
             },
             {
-              "label": "M"
+              "label": "M",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TRANS_M"
+              }
             },
             {
               "label": "",
@@ -359,7 +494,37 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -694,7 +859,20 @@
               "label": "[",
               "action": {
                 "type": "keyman_key",
-                "vkey": 219
+                "vkey": 219,
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "«",
@@ -743,7 +921,20 @@
               "label": "]",
               "action": {
                 "type": "keyman_key",
-                "vkey": 221
+                "vkey": 221,
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "»",
@@ -833,9 +1024,13 @@
               "width": 0.1
             },
             {
-              "label": "ABC",
+              "label": "abc",
+              "output": "",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "letters",
+                "id": "T_SYLLABIC"
               },
               "width": 1.4
             },
@@ -880,6 +1075,13 @@
                 "type": "enter"
               },
               "width": 1.9
+            },
+            {
+              "label": "ABC",
+              "action": {
+                "type": "letters"
+              },
+              "width": 1.5
             }
           ]
         ]

@@ -1,0 +1,400 @@
+{"w":0,"s":0,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ດ","layer":"default"}
+{"w":0,"s":1,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ດຸ","layer":"default"}
+{"w":0,"s":2,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ດຸນ","layer":"default"}
+{"w":0,"s":3,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ດຸນລ","layer":"default"}
+{"w":0,"s":4,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ດຸນລຶ","layer":"default"}
+{"w":0,"s":5,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ດຸນລຶລ","layer":"default"}
+{"w":0,"s":6,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ດຸນລຶລຮ","layer":"default"}
+{"w":0,"s":7,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ດຸນລຶລຮຊ","layer":"default"}
+{"w":0,"s":8,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ດຸນລຶລຮຊງ","layer":"default"}
+{"w":0,"s":9,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ດຸນລຶລຮຊງັ","layer":"default"}
+{"w":0,"s":10,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"ດຸນລຶລຮຊງັໃ","layer":"default"}
+{"w":0,"s":11,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ດຸນລຶລຮຊງັໃ","layer":"default"}
+{"w":0,"s":12,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ດຸນລຶລຮຊງັໃ","layer":"default"}
+{"w":0,"s":13,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ດຸນລຶລຮຊງັໃ\\","layer":"default"}
+{"w":0,"s":14,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ດຸນລຶລຮຊງັໃ\\ຶ","layer":"default"}
+{"w":0,"s":15,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ດຸນລຶລຮຊງັໃ\\ຶຕ","layer":"default"}
+{"w":0,"s":16,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາ","layer":"default"}
+{"w":0,"s":17,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກ","layer":"default"}
+{"w":0,"s":18,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັ","layer":"default"}
+{"w":0,"s":19,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແ","layer":"default"}
+{"w":0,"s":20,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກ","layer":"default"}
+{"w":0,"s":21,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍ","layer":"default"}
+{"w":0,"s":22,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝ","layer":"default"}
+{"w":0,"s":23,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝ","layer":"default"}
+{"w":0,"s":24,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝ","layer":"default"}
+{"w":0,"s":25,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊ","layer":"default"}
+{"w":0,"s":26,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພ","layer":"default"}
+{"w":0,"s":27,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີ","layer":"default"}
+{"w":0,"s":28,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນ","layer":"default"}
+{"w":0,"s":29,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸ","layer":"default"}
+{"w":0,"s":30,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖ","layer":"default"}
+{"w":0,"s":31,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລ","layer":"default"}
+{"w":0,"s":32,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ","layer":"default"}
+{"w":0,"s":33,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂຊ","layer":"default"}
+{"w":0,"s":34,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ","layer":"default"}
+{"w":0,"s":35,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ","layer":"rightalt"}
+{"w":0,"s":36,"start":"rightalt","L":"rightalt","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ","layer":"rightalt"}
+{"w":0,"s":37,"start":"rightalt","L":"rightalt","r":0,"k":8,"g":"k","id":"K_9","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ໗","layer":"rightalt"}
+{"w":0,"s":38,"start":"rightalt","L":"rightalt","r":0,"k":4,"g":"k","id":"K_5","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ໗","layer":"rightalt"}
+{"w":0,"s":39,"start":"rightalt","L":"rightalt","r":2,"k":2,"g":"k","id":"K_S","text":"ດຸນລຶລຮຊງັໃ\\ຶຕາກັແກໍຝຝຝຊພີນຸຖລຂ໗","layer":"rightalt"}
+{"w":1,"s":0,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ເ","layer":"default"}
+{"w":1,"s":1,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ເລ","layer":"default"}
+{"w":1,"s":2,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ເລບ","layer":"default"}
+{"w":1,"s":3,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ເລບຫ","layer":"default"}
+{"w":1,"s":4,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ເລບຫ ","layer":"default"}
+{"w":1,"s":5,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ເລບຫ ຄ","layer":"default"}
+{"w":1,"s":6,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ເລບຫ ຄູ","layer":"default"}
+{"w":1,"s":7,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ເລບຫ ຄູອ","layer":"default"}
+{"w":1,"s":8,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ເລບຫ ຄູອບ","layer":"default"}
+{"w":1,"s":9,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ເລບຫ ຄູອບ\\","layer":"default"}
+{"w":1,"s":10,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ເລບຫ ຄູອບ\\ງ","layer":"default"}
+{"w":1,"s":11,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ເລບຫ ຄູອບ\\ງເ","layer":"default"}
+{"w":1,"s":12,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ເລບຫ ຄູອບ\\ງເ ","layer":"default"}
+{"w":1,"s":13,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"ເລບຫ ຄູອບ\\ງເ ປ","layer":"default"}
+{"w":1,"s":14,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"ເລບຫ ຄູອບ\\ງເ ປໃ","layer":"default"}
+{"w":1,"s":15,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ເລບຫ ຄູອບ\\ງເ ປໃະ","layer":"default"}
+{"w":1,"s":16,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກ","layer":"default"}
+{"w":1,"s":17,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟ","layer":"default"}
+{"w":1,"s":18,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລ","layer":"default"}
+{"w":1,"s":19,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢ","layer":"default"}
+{"w":1,"s":20,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜ","layer":"default"}
+{"w":1,"s":21,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວ","layer":"default"}
+{"w":1,"s":22,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ","layer":"default"}
+{"w":1,"s":23,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ","layer":"default"}
+{"w":1,"s":24,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ","layer":"rightalt"}
+{"w":1,"s":25,"start":"rightalt","L":"rightalt","r":2,"k":5,"g":"k","id":"K_G","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ","layer":"rightalt"}
+{"w":1,"s":26,"start":"rightalt","L":"rightalt","r":0,"k":0,"g":"k","id":"K_1","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑","layer":"rightalt"}
+{"w":1,"s":27,"start":"rightalt","L":"rightalt","r":3,"k":1,"g":"k","id":"K_oE2","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑","layer":"rightalt"}
+{"w":1,"s":28,"start":"rightalt","L":"rightalt","r":0,"k":4,"g":"k","id":"K_5","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑","layer":"rightalt"}
+{"w":1,"s":29,"start":"rightalt","L":"rightalt","r":1,"k":2,"g":"k","id":"K_E","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑","layer":"rightalt"}
+{"w":1,"s":30,"start":"rightalt","L":"rightalt","r":1,"k":1,"g":"k","id":"K_W","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":31,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_Z","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":32,"start":"rightalt","L":"rightalt","r":1,"k":0,"g":"k","id":"K_Q","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":33,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":34,"start":"rightalt","L":"rightalt","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":35,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_Z","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":36,"start":"rightalt","L":"rightalt","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":37,"start":"rightalt","L":"rightalt","r":3,"k":5,"g":"k","id":"K_V","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":38,"start":"rightalt","L":"rightalt","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":1,"s":39,"start":"rightalt","L":"rightalt","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ເລບຫ ຄູອບ\\ງເ ປໃະກຟລຢຜວິ໑໐","layer":"rightalt"}
+{"w":2,"s":0,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ຶ","layer":"default"}
+{"w":2,"s":1,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ຶຄ","layer":"default"}
+{"w":2,"s":2,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ຶຄຂ","layer":"default"}
+{"w":2,"s":3,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ຶຄຂວ","layer":"default"}
+{"w":2,"s":4,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"ຶຄຂວປ","layer":"default"}
+{"w":2,"s":5,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ຶຄຂວປ່","layer":"default"}
+{"w":2,"s":6,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ຶຄຂວປ່ຮ","layer":"default"}
+{"w":2,"s":7,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຶຄຂວປ່ຮ\\","layer":"default"}
+{"w":2,"s":8,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຶຄຂວປ່ຮ\\ອ","layer":"default"}
+{"w":2,"s":9,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຶຄຂວປ່ຮ\\ອ ","layer":"default"}
+{"w":2,"s":10,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"ຶຄຂວປ່ຮ\\ອ ື","layer":"default"}
+{"w":2,"s":11,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ຶຄຂວປ່ຮ\\ອ ືຖ","layer":"default"}
+{"w":2,"s":12,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*","layer":"default"}
+{"w":2,"s":13,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃ","layer":"default"}
+{"w":2,"s":14,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບ","layer":"default"}
+{"w":2,"s":15,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳ","layer":"default"}
+{"w":2,"s":16,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖ","layer":"default"}
+{"w":2,"s":17,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ","layer":"default"}
+{"w":2,"s":18,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ","layer":"default"}
+{"w":2,"s":19,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ","layer":"default"}
+{"w":2,"s":20,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ","layer":"default"}
+{"w":2,"s":21,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ","layer":"default"}
+{"w":2,"s":22,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\","layer":"default"}
+{"w":2,"s":23,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີ","layer":"default"}
+{"w":2,"s":24,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບ","layer":"default"}
+{"w":2,"s":25,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍ","layer":"default"}
+{"w":2,"s":26,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈ","layer":"default"}
+{"w":2,"s":27,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ","layer":"default"}
+{"w":2,"s":28,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\","layer":"default"}
+{"w":2,"s":29,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວ","layer":"default"}
+{"w":2,"s":30,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ","layer":"default"}
+{"w":2,"s":31,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ","layer":"default"}
+{"w":2,"s":32,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\","layer":"default"}
+{"w":2,"s":33,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ","layer":"default"}
+{"w":2,"s":34,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່","layer":"default"}
+{"w":2,"s":35,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່ຝ","layer":"default"}
+{"w":2,"s":36,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່ຝຂ","layer":"default"}
+{"w":2,"s":37,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່ຝຂ","layer":"default"}
+{"w":2,"s":38,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່ຝຂໂ","layer":"default"}
+{"w":2,"s":39,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ຶຄຂວປ່ຮ\\ອ ືຖ*ໃບຳຖາ ູ ກ\\ີບໍຈຟ\\ວຸ\\ນ່ຝຂໂ","layer":"default"}
+{"w":3,"s":0,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ເ","layer":"default"}
+{"w":3,"s":1,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ເກ","layer":"default"}
+{"w":3,"s":2,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"ເກຜ","layer":"default"}
+{"w":3,"s":3,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ເກຜຳ","layer":"default"}
+{"w":3,"s":4,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ເກຜຳລ","layer":"default"}
+{"w":3,"s":5,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"ເກຜຳລົ","layer":"default"}
+{"w":3,"s":6,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ເກຜຳລົໂ","layer":"default"}
+{"w":3,"s":7,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ເກຜຳລົໂາ","layer":"default"}
+{"w":3,"s":8,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ເກຜຳລົໂາ","layer":"default"}
+{"w":3,"s":9,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"ເກຜຳລົໂາປ","layer":"default"}
+{"w":3,"s":10,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ເກຜຳລົໂາປວ","layer":"default"}
+{"w":3,"s":11,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"ເກຜຳລົໂາປວື","layer":"default"}
+{"w":3,"s":12,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ເກຜຳລົໂາປວື","layer":"default"}
+{"w":3,"s":13,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ເກຜຳລົໂາປວືອ","layer":"default"}
+{"w":3,"s":14,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ເກຜຳລົໂາປວືອ\\","layer":"default"}
+{"w":3,"s":15,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ເກຜຳລົໂາປວືອ\\\\","layer":"default"}
+{"w":3,"s":16,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ເກຜຳລົໂາປວືອ\\\\ນ","layer":"default"}
+{"w":3,"s":17,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ເກຜຳລົໂາປວືອ\\\\ນບ","layer":"default"}
+{"w":3,"s":18,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ເກຜຳລົໂາປວືອ\\\\ນບິ","layer":"default"}
+{"w":3,"s":19,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍ","layer":"default"}
+{"w":3,"s":20,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍຂ","layer":"default"}
+{"w":3,"s":21,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍ","layer":"default"}
+{"w":3,"s":22,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາ","layer":"default"}
+{"w":3,"s":23,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫ","layer":"default"}
+{"w":3,"s":24,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຈ","layer":"default"}
+{"w":3,"s":25,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫ","layer":"default"}
+{"w":3,"s":26,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶ","layer":"default"}
+{"w":3,"s":27,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແ","layer":"default"}
+{"w":3,"s":28,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແ","layer":"default"}
+{"w":3,"s":29,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບ","layer":"default"}
+{"w":3,"s":30,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕ","layer":"default"}
+{"w":3,"s":31,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍ","layer":"default"}
+{"w":3,"s":32,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍ","layer":"default"}
+{"w":3,"s":33,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສ","layer":"default"}
+{"w":3,"s":34,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄ","layer":"default"}
+{"w":3,"s":35,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄາ","layer":"default"}
+{"w":3,"s":36,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄາຮ","layer":"default"}
+{"w":3,"s":37,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄາຮອ","layer":"default"}
+{"w":3,"s":38,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄາຮອ\\","layer":"default"}
+{"w":3,"s":39,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ເກຜຳລົໂາປວືອ\\\\ນບິຍາຫຶແບຕໍສຄາຮອ\\ມ","layer":"default"}
+{"w":4,"s":0,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຝ","layer":"default"}
+{"w":4,"s":1,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຝບ","layer":"default"}
+{"w":4,"s":2,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"ຝບປ","layer":"default"}
+{"w":4,"s":3,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຝບປເ","layer":"default"}
+{"w":4,"s":4,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ຝບປເຈ","layer":"default"}
+{"w":4,"s":5,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ຝບປເຈະ","layer":"default"}
+{"w":4,"s":6,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຝບປເຈະຝ","layer":"default"}
+{"w":4,"s":7,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ຝບປເຈະຝຟ","layer":"default"}
+{"w":4,"s":8,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ຝບປເຈະຝຟຢ","layer":"default"}
+{"w":4,"s":9,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ຝບປເຈະຝຟຢຖ","layer":"default"}
+{"w":4,"s":10,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ຝບປເຈະຝຟຢຖ່","layer":"default"}
+{"w":4,"s":11,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຝບປເຈະຝຟຢຖ່","layer":"default"}
+{"w":4,"s":12,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ຝບປເຈະຝຟຢຖ່","layer":"default"}
+{"w":4,"s":13,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ຝບປເຈະຝຟຢຖ່ແ","layer":"default"}
+{"w":4,"s":14,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ຝບປເຈະຝຟຢຖ່ແ","layer":"default"}
+{"w":4,"s":15,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຝບປເຈະຝຟຢຖ່ແ","layer":"default"}
+{"w":4,"s":16,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຝບປເຈະຝຟຢຖ່ແ","layer":"default"}
+{"w":4,"s":17,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"ຝບປເຈະຝຟຢຖ່ແພ","layer":"default"}
+{"w":4,"s":18,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຝບປເຈະຝຟຢຖ່ແພມ","layer":"default"}
+{"w":4,"s":19,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ຝບປເຈະຝຟຢຖ່ແພມຮ","layer":"default"}
+{"w":4,"s":20,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":21,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":22,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":23,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":24,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":25,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":26,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະ","layer":"default"}
+{"w":4,"s":27,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂ","layer":"default"}
+{"w":4,"s":28,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອ","layer":"default"}
+{"w":4,"s":29,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາ","layer":"default"}
+{"w":4,"s":30,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂ","layer":"default"}
+{"w":4,"s":31,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູ","layer":"default"}
+{"w":4,"s":32,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູ","layer":"default"}
+{"w":4,"s":33,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂ","layer":"default"}
+{"w":4,"s":34,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂ","layer":"default"}
+{"w":4,"s":35,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂຍ","layer":"default"}
+{"w":4,"s":36,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂຍງ","layer":"default"}
+{"w":4,"s":37,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂຍງຫ","layer":"default"}
+{"w":4,"s":38,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂຍງຫບ","layer":"default"}
+{"w":4,"s":39,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຝບປເຈະຝຟຢຖ່ແພມຮະຂອາຂູໂຍງຫບບ","layer":"default"}
+{"w":5,"s":0,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"ສ","layer":"default"}
+{"w":5,"s":1,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ສດ","layer":"default"}
+{"w":5,"s":2,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ສດ","layer":"default"}
+{"w":5,"s":3,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"ສດຜ","layer":"default"}
+{"w":5,"s":4,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ສດຜລ","layer":"default"}
+{"w":5,"s":5,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ສດຜລ*","layer":"default"}
+{"w":5,"s":6,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ສດຜລ*ງ","layer":"default"}
+{"w":5,"s":7,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ສດຜລ*ງໍ","layer":"default"}
+{"w":5,"s":8,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ສດຜລ*ງໍງ","layer":"default"}
+{"w":5,"s":9,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ສດຜລ*ງໍງຳ","layer":"default"}
+{"w":5,"s":10,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ສດຜລ*ງໍງຳ","layer":"default"}
+{"w":5,"s":11,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ສດຜລ*ງໍງຳນ","layer":"default"}
+{"w":5,"s":12,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ສດຜລ*ງໍງຳນຊ","layer":"default"}
+{"w":5,"s":13,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ສດຜລ*ງໍງຳນ","layer":"default"}
+{"w":5,"s":14,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ສດຜລ*ງໍງຳນາ","layer":"default"}
+{"w":5,"s":15,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"ສດຜລ*ງໍງຳນາໄ","layer":"default"}
+{"w":5,"s":16,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ສດຜລ*ງໍງຳນາໄ*","layer":"default"}
+{"w":5,"s":17,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ສດຜລ*ງໍງຳນາໄ*ຕ","layer":"default"}
+{"w":5,"s":18,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ສດຜລ*ງໍງຳນາໄ*ຕດ","layer":"default"}
+{"w":5,"s":19,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູ","layer":"default"}
+{"w":5,"s":20,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄ","layer":"default"}
+{"w":5,"s":21,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີ","layer":"default"}
+{"w":5,"s":22,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແ","layer":"default"}
+{"w":5,"s":23,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແ","layer":"default"}
+{"w":5,"s":24,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະ","layer":"default"}
+{"w":5,"s":25,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖ","layer":"default"}
+{"w":5,"s":26,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸ","layer":"default"}
+{"w":5,"s":27,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ","layer":"default"}
+{"w":5,"s":28,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່","layer":"default"}
+{"w":5,"s":29,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄ","layer":"default"}
+{"w":5,"s":30,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄື","layer":"default"}
+{"w":5,"s":31,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢ","layer":"default"}
+{"w":5,"s":32,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ","layer":"default"}
+{"w":5,"s":33,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ","layer":"default"}
+{"w":5,"s":34,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈ","layer":"default"}
+{"w":5,"s":35,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈາ","layer":"default"}
+{"w":5,"s":36,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈາເ","layer":"default"}
+{"w":5,"s":37,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈາເຄ","layer":"default"}
+{"w":5,"s":38,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈາເຄ","layer":"default"}
+{"w":5,"s":39,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ສດຜລ*ງໍງຳນາໄ*ຕດູຄີແະຖຸຈ່ຄືຢີ ຈາເຄງ","layer":"default"}
+{"w":6,"s":0,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ຊ","layer":"default"}
+{"w":6,"s":1,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຊມ","layer":"default"}
+{"w":6,"s":2,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ຊມແ","layer":"default"}
+{"w":6,"s":3,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຊມແ","layer":"default"}
+{"w":6,"s":4,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຊມແມ","layer":"default"}
+{"w":6,"s":5,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"ຊມແມົ","layer":"default"}
+{"w":6,"s":6,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ຊມແມົ\\","layer":"default"}
+{"w":6,"s":7,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຊມແມົ\\ໂ","layer":"default"}
+{"w":6,"s":8,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"ຊມແມົ\\ໂທ","layer":"default"}
+{"w":6,"s":9,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຊມແມົ\\ໂທໂ","layer":"default"}
+{"w":6,"s":10,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຊມແມົ\\ໂທໂ","layer":"default"}
+{"w":6,"s":11,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"ຊມແມົ\\ໂທໂຜ","layer":"default"}
+{"w":6,"s":12,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ຊມແມົ\\ໂທໂຜ*","layer":"default"}
+{"w":6,"s":13,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ຊມແມົ\\ໂທໂຜ*ຫ","layer":"default"}
+{"w":6,"s":14,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ຊມແມົ\\ໂທໂຜ*ຫຂ","layer":"default"}
+{"w":6,"s":15,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸ","layer":"default"}
+{"w":6,"s":16,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸ","layer":"default"}
+{"w":6,"s":17,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝ","layer":"default"}
+{"w":6,"s":18,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວ","layer":"default"}
+{"w":6,"s":19,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄ","layer":"default"}
+{"w":6,"s":20,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນ","layer":"default"}
+{"w":6,"s":21,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄ","layer":"default"}
+{"w":6,"s":22,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍ","layer":"default"}
+{"w":6,"s":23,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເ","layer":"default"}
+{"w":6,"s":24,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເ","layer":"default"}
+{"w":6,"s":25,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເ","layer":"default"}
+{"w":6,"s":26,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເ","layer":"default"}
+{"w":6,"s":27,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບ","layer":"default"}
+{"w":6,"s":28,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກ","layer":"default"}
+{"w":6,"s":29,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ","layer":"default"}
+{"w":6,"s":30,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ","layer":"default"}
+{"w":6,"s":31,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\","layer":"default"}
+{"w":6,"s":32,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທ","layer":"default"}
+{"w":6,"s":33,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມ","layer":"default"}
+{"w":6,"s":34,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມ","layer":"default"}
+{"w":6,"s":35,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມຶ","layer":"default"}
+{"w":6,"s":36,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມຶພ","layer":"default"}
+{"w":6,"s":37,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມຶພ\\","layer":"default"}
+{"w":6,"s":38,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມຶພ\\ກ","layer":"default"}
+{"w":6,"s":39,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ຊມແມົ\\ໂທໂຜ*ຫຂຸຝວໄນຄໍເບກະ\\ທມຶພ\\ກຕ","layer":"default"}
+{"w":7,"s":0,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ຸ","layer":"default"}
+{"w":7,"s":1,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ຸ້","layer":"default"}
+{"w":7,"s":2,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຸ້ຝ","layer":"default"}
+{"w":7,"s":3,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"ຸ້ຝສ","layer":"default"}
+{"w":7,"s":4,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_PERIOD","text":"ຸ້ຝສໃ","layer":"default"}
+{"w":7,"s":5,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ຸ້ຝສໃ","layer":"default"}
+{"w":7,"s":6,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ຸ້ຝສໃວ","layer":"default"}
+{"w":7,"s":7,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຸ້ຝສໃວ\\","layer":"default"}
+{"w":7,"s":8,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"ຸ້ຝສໃວ\\ື","layer":"default"}
+{"w":7,"s":9,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ຸ້ຝສໃວ\\ືຊ","layer":"default"}
+{"w":7,"s":10,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ຸ້ຝສໃວ\\ືຊັ","layer":"default"}
+{"w":7,"s":11,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຸ້ຝສໃວ\\ືຊັອ","layer":"default"}
+{"w":7,"s":12,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຸ້ຝສໃວ\\ືຊັອອ","layer":"default"}
+{"w":7,"s":13,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຸ້ຝສໃວ\\ືຊັອອ\\","layer":"default"}
+{"w":7,"s":14,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ","layer":"default"}
+{"w":7,"s":15,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟ","layer":"default"}
+{"w":7,"s":16,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມ","layer":"default"}
+{"w":7,"s":17,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍ","layer":"default"}
+{"w":7,"s":18,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະ","layer":"default"}
+{"w":7,"s":19,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟ","layer":"default"}
+{"w":7,"s":20,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫ","layer":"default"}
+{"w":7,"s":21,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັ","layer":"default"}
+{"w":7,"s":22,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝ","layer":"default"}
+{"w":7,"s":23,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທ","layer":"default"}
+{"w":7,"s":24,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄ","layer":"default"}
+{"w":7,"s":25,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ","layer":"default"}
+{"w":7,"s":26,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\","layer":"default"}
+{"w":7,"s":27,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\","layer":"rightalt"}
+{"w":7,"s":28,"start":"rightalt","L":"rightalt","r":2,"k":7,"g":"k","id":"K_J","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\","layer":"rightalt"}
+{"w":7,"s":29,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\","layer":"rightalt"}
+{"w":7,"s":30,"start":"rightalt","L":"rightalt","r":2,"k":6,"g":"k","id":"K_H","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\","layer":"rightalt"}
+{"w":7,"s":31,"start":"rightalt","L":"rightalt","r":0,"k":3,"g":"k","id":"K_4","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":32,"start":"rightalt","L":"rightalt","r":1,"k":0,"g":"k","id":"K_Q","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":33,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":34,"start":"rightalt","L":"rightalt","r":2,"k":6,"g":"k","id":"K_H","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":35,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":36,"start":"rightalt","L":"rightalt","r":1,"k":2,"g":"k","id":"K_E","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":37,"start":"rightalt","L":"rightalt","r":3,"k":7,"g":"k","id":"K_N","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"rightalt"}
+{"w":7,"s":38,"start":"rightalt","L":"rightalt","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔","layer":"shift"}
+{"w":7,"s":39,"start":"shift","L":"shift","r":0,"k":6,"g":"k","id":"K_7","text":"ຸ້ຝສໃວ\\ືຊັອອ\\ ຟມໍະຟຫັຝທຄຢ\\໔5","layer":"shift"}
+{"w":8,"s":0,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"\\","layer":"default"}
+{"w":8,"s":1,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"\\ພ","layer":"default"}
+{"w":8,"s":2,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"\\ພຳ","layer":"default"}
+{"w":8,"s":3,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"\\ພຳດ","layer":"default"}
+{"w":8,"s":4,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"\\ພຳດຟ","layer":"default"}
+{"w":8,"s":5,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"\\ພຳດຟດ","layer":"default"}
+{"w":8,"s":6,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"\\ພຳດຟດຕ","layer":"default"}
+{"w":8,"s":7,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"\\ພຳດຟດຕຟ","layer":"default"}
+{"w":8,"s":8,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"\\ພຳດຟດຕຟ່","layer":"default"}
+{"w":8,"s":9,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"\\ພຳດຟດຕຟ່ສ","layer":"default"}
+{"w":8,"s":10,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"\\ພຳດຟດຕຟ່ສກ","layer":"default"}
+{"w":8,"s":11,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"\\ພຳດຟດຕຟ່ສກະ","layer":"default"}
+{"w":8,"s":12,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"\\ພຳດຟດຕຟ່ສກະດ","layer":"default"}
+{"w":8,"s":13,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"\\ພຳດຟດຕຟ່ສກະດຜ","layer":"default"}
+{"w":8,"s":14,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"\\ພຳດຟດຕຟ່ສກະດຜນ","layer":"default"}
+{"w":8,"s":15,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊ","layer":"default"}
+{"w":8,"s":16,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ","layer":"default"}
+{"w":8,"s":17,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ","layer":"default"}
+{"w":8,"s":18,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທ","layer":"default"}
+{"w":8,"s":19,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_N","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທື","layer":"default"}
+{"w":8,"s":20,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮ","layer":"default"}
+{"w":8,"s":21,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂ","layer":"default"}
+{"w":8,"s":22,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_X","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂປ","layer":"default"}
+{"w":8,"s":23,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂ","layer":"default"}
+{"w":8,"s":24,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊ","layer":"default"}
+{"w":8,"s":25,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລ","layer":"default"}
+{"w":8,"s":26,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ","layer":"default"}
+{"w":8,"s":27,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_oE2","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\","layer":"default"}
+{"w":8,"s":28,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳ","layer":"default"}
+{"w":8,"s":29,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_B","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳ","layer":"default"}
+{"w":8,"s":30,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງ","layer":"default"}
+{"w":8,"s":31,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈ","layer":"default"}
+{"w":8,"s":32,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດ","layer":"default"}
+{"w":8,"s":33,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ","layer":"default"}
+{"w":8,"s":34,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ","layer":"rightalt"}
+{"w":8,"s":35,"start":"rightalt","L":"rightalt","r":3,"k":4,"g":"k","id":"K_C","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ","layer":"rightalt"}
+{"w":8,"s":36,"start":"rightalt","L":"rightalt","r":1,"k":9,"g":"k","id":"K_P","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ","layer":"rightalt"}
+{"w":8,"s":37,"start":"rightalt","L":"rightalt","r":1,"k":4,"g":"k","id":"K_T","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ","layer":"rightalt"}
+{"w":8,"s":38,"start":"rightalt","L":"rightalt","r":0,"k":2,"g":"k","id":"K_3","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ໓","layer":"rightalt"}
+{"w":8,"s":39,"start":"rightalt","L":"rightalt","r":0,"k":8,"g":"k","id":"K_9","text":"\\ພຳດຟດຕຟ່ສກະດຜນຊິ ທືຮໂຊລົ\\ຳງຈດແ໓໗","layer":"rightalt"}
+{"w":9,"s":0,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ໍ","layer":"default"}
+{"w":9,"s":1,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"","layer":"default"}
+{"w":9,"s":2,"start":"default","L":"default","r":3,"k":11,"g":"k","id":"K_SLASH","text":"ຝ","layer":"default"}
+{"w":9,"s":3,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຝບ","layer":"default"}
+{"w":9,"s":4,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ຝບ*","layer":"default"}
+{"w":9,"s":5,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ຝບ*ຖ","layer":"default"}
+{"w":9,"s":6,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"ຝບ*ຖຫ","layer":"default"}
+{"w":9,"s":7,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຝບ*ຖຫ ","layer":"default"}
+{"w":9,"s":8,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຝບ*ຖຫ ູ","layer":"default"}
+{"w":9,"s":9,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ຝບ*ຖຫ ູ້","layer":"default"}
+{"w":9,"s":10,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ຝບ*ຖຫ ູ້ບ","layer":"default"}
+{"w":9,"s":11,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ຝບ*ຖຫ ູ້ບລ","layer":"default"}
+{"w":9,"s":12,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ຝບ*ຖຫ ູ້ບລລ","layer":"default"}
+{"w":9,"s":13,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"ຝບ*ຖຫ ູ້ບລລທ","layer":"default"}
+{"w":9,"s":14,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ຝບ*ຖຫ ູ້ບລລທ*","layer":"default"}
+{"w":9,"s":15,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_COMMA","text":"ຝບ*ຖຫ ູ້ບລລທ*ມ","layer":"default"}
+{"w":9,"s":16,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄ","layer":"default"}
+{"w":9,"s":17,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍ","layer":"default"}
+{"w":9,"s":18,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_Z","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜ","layer":"default"}
+{"w":9,"s":19,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາ","layer":"default"}
+{"w":9,"s":20,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍ","layer":"default"}
+{"w":9,"s":21,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອ","layer":"default"}
+{"w":9,"s":22,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_V","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອ","layer":"default"}
+{"w":9,"s":23,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕ","layer":"default"}
+{"w":9,"s":24,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍ","layer":"default"}
+{"w":9,"s":25,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍ","layer":"default"}
+{"w":9,"s":26,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາ","layer":"default"}
+{"w":9,"s":27,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາ","layer":"default"}
+{"w":9,"s":28,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_C","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແ","layer":"default"}
+{"w":9,"s":29,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແ","layer":"default"}
+{"w":9,"s":30,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແ","layer":"default"}
+{"w":9,"s":31,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_M","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທ","layer":"default"}
+{"w":9,"s":32,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເ","layer":"default"}
+{"w":9,"s":33,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເ","layer":"default"}
+{"w":9,"s":34,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດ","layer":"default"}
+{"w":9,"s":35,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດເ","layer":"default"}
+{"w":9,"s":36,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດເ ","layer":"default"}
+{"w":9,"s":37,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດເ ໂ","layer":"default"}
+{"w":9,"s":38,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດເ ໂ","layer":"default"}
+{"w":9,"s":39,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"ຝບ*ຖຫ ູ້ບລລທ*ມໄຍຜາຍອອຕໍາແທເດເ ໂ","layer":"default"}

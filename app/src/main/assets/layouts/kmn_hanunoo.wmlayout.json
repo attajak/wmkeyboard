@@ -54,6 +54,11 @@
             },
             {
               "label": "ᜥ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1725"
+              },
               "width": 1.4
             },
             {
@@ -199,7 +204,12 @@
               "label": "᜴",
               "action": {
                 "type": "keyman_key",
-                "vkey": 191
+                "vkey": 191,
+                "longPress": [
+                  {
+                    "id": "T_NEW_2204"
+                  }
+                ]
               },
               "longPress": [
                 "//"
@@ -216,7 +226,37 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -315,7 +355,12 @@
           ],
           [
             {
-              "label": "₱"
+              "label": "₱",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_PESO"
+              }
             },
             {
               "label": "@",
@@ -373,10 +418,20 @@
               }
             },
             {
-              "label": "᜵"
+              "label": "᜵",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_DANDA"
+              }
             },
             {
-              "label": "᜶"
+              "label": "᜶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_DOUBLE_DANDA"
+              }
             }
           ],
           [
@@ -384,7 +439,20 @@
               "label": "[",
               "action": {
                 "type": "keyman_key",
-                "vkey": 219
+                "vkey": 219,
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "«",
@@ -412,7 +480,20 @@
               "label": "]",
               "action": {
                 "type": "keyman_key",
-                "vkey": 221
+                "vkey": 221,
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "»",
@@ -445,7 +526,12 @@
             },
             {
               "label": "/",
-              "output": "⁄"
+              "output": "⁄",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_2044"
+              }
             },
             {
               "label": "\\",

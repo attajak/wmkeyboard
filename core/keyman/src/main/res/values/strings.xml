@@ -26,9 +26,7 @@
         <item quantity="other">%1$d keys type the characters printed on them. The original keyboard used rules to decide what they type.</item>
     </plurals>
 
-    <string name="core_keyman_shift_layer_folded">The app merged the shift layer into the keys. Hold Shift to reach those characters.</string>
 
-    <string name="core_keyman_shift_layer_separate">The shift layer has a different shape, so the app kept it as its own layer.</string>
 
     <string name="core_keyman_rules_missing">This keyboard uses rules to decide what its keys type. The app does not have those rules, so each key types the character printed on it.</string>
 

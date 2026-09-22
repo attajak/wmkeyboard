@@ -1,0 +1,400 @@
+{"w":0,"s":0,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"ཞ","layer":"default"}
+{"w":0,"s":1,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ཞཇ","layer":"default"}
+{"w":0,"s":2,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"ཞཇཧ","layer":"default"}
+{"w":0,"s":3,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ཞཇཧཛ","layer":"default"}
+{"w":0,"s":4,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ཞཇཧཛན","layer":"default"}
+{"w":0,"s":5,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ཞཇཧཛན༥","layer":"default"}
+{"w":0,"s":6,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ཞཇཧཛན༥།","layer":"default"}
+{"w":0,"s":7,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ཞཇཧཛན༥།༔","layer":"default"}
+{"w":0,"s":8,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ཞཇཧཛན༥།༔ི","layer":"default"}
+{"w":0,"s":9,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ཞཇཧཛན༥།༔ིུ","layer":"default"}
+{"w":0,"s":10,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ཞཇཧཛན༥།༔ིེུ","layer":"default"}
+{"w":0,"s":11,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ཞཇཧཛན༥།༔ིེུ༔","layer":"default"}
+{"w":0,"s":12,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ཞཇཧཛན༥།༔ིེུ༔ུ","layer":"default"}
+{"w":0,"s":13,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞ","layer":"default"}
+{"w":0,"s":14,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ","layer":"default"}
+{"w":0,"s":15,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦","layer":"default"}
+{"w":0,"s":16,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅ","layer":"default"}
+{"w":0,"s":17,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ","layer":"default"}
+{"w":0,"s":18,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡","layer":"default"}
+{"w":0,"s":19,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུ","layer":"default"}
+{"w":0,"s":20,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུས","layer":"default"}
+{"w":0,"s":21,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསག","layer":"default"}
+{"w":0,"s":22,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ","layer":"default"}
+{"w":0,"s":23,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠","layer":"default"}
+{"w":0,"s":24,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅ","layer":"default"}
+{"w":0,"s":25,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད","layer":"default"}
+{"w":0,"s":26,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢","layer":"default"}
+{"w":0,"s":27,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢ག","layer":"default"}
+{"w":0,"s":28,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉ","layer":"default"}
+{"w":0,"s":29,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟ","layer":"default"}
+{"w":0,"s":30,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁ","layer":"default"}
+{"w":0,"s":31,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ","layer":"default"}
+{"w":0,"s":32,"start":"default","L":"default","r":4,"k":0,"g":"sk","i":0,"id":"K_LCONTROL","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ","layer":"rightalt-shift"}
+{"w":0,"s":33,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙","layer":"rightalt-shift"}
+{"w":0,"s":34,"start":"rightalt-shift","L":"rightalt-shift","r":1,"k":1,"g":"k","id":"K_W","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ","layer":"rightalt-shift"}
+{"w":0,"s":35,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ࿐","layer":"rightalt-shift"}
+{"w":0,"s":36,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ࿐࿐","layer":"rightalt-shift"}
+{"w":0,"s":37,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":2,"g":"k","id":"K_3","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ࿐࿐༺","layer":"rightalt-shift"}
+{"w":0,"s":38,"start":"rightalt-shift","L":"rightalt-shift","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ࿐࿐༺","layer":"default"}
+{"w":0,"s":39,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"ཞཇཧཛན༥།༔ིེུ༔ུཞམ༦ཅལ༡ུསགོ༠ཅད༢གཉཟཁེ࿙ྎ࿐࿐༺མ","layer":"default"}
+{"w":1,"s":0,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"ལ","layer":"default"}
+{"w":1,"s":1,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ལས","layer":"default"}
+{"w":1,"s":2,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"ལསཆ","layer":"default"}
+{"w":1,"s":3,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ལསཆ༨","layer":"default"}
+{"w":1,"s":4,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ལསཆ༨༢","layer":"default"}
+{"w":1,"s":5,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ལསཆ༨༢ི","layer":"default"}
+{"w":1,"s":6,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_SLASH","text":"ལསཆ༨༢ིཨ","layer":"default"}
+{"w":1,"s":7,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ལསཆ༨༢ིཨཏ","layer":"default"}
+{"w":1,"s":8,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ལསཆ༨༢ིཨཏཛ","layer":"default"}
+{"w":1,"s":9,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ལསཆ༨༢ིཨཏཛ་","layer":"default"}
+{"w":1,"s":10,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"ལསཆ༨༢ིཨཏཛ་ོ","layer":"default"}
+{"w":1,"s":11,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ལསཆ༨༢ིཨཏཛ་ོ།","layer":"default"}
+{"w":1,"s":12,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡","layer":"default"}
+{"w":1,"s":13,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༢","layer":"default"}
+{"w":1,"s":14,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༢","layer":"shift"}
+{"w":1,"s":15,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡","layer":"shift"}
+{"w":1,"s":16,"start":"shift","L":"shift","r":0,"k":6,"g":"k","id":"K_7","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸","layer":"shift"}
+{"w":1,"s":17,"start":"shift","L":"shift","r":1,"k":9,"g":"k","id":"K_P","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖ","layer":"shift"}
+{"w":1,"s":18,"start":"shift","L":"shift","r":2,"k":1,"g":"k","id":"K_A","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟ","layer":"shift"}
+{"w":1,"s":19,"start":"shift","L":"shift","r":1,"k":6,"g":"k","id":"K_U","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻ","layer":"shift"}
+{"w":1,"s":20,"start":"shift","L":"shift","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶ","layer":"shift"}
+{"w":1,"s":21,"start":"shift","L":"shift","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ","layer":"shift"}
+{"w":1,"s":22,"start":"shift","L":"shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ","layer":"shift"}
+{"w":1,"s":23,"start":"shift","L":"shift","r":3,"k":7,"g":"k","id":"K_M","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴ","layer":"shift"}
+{"w":1,"s":24,"start":"shift","L":"shift","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗ","layer":"shift"}
+{"w":1,"s":25,"start":"shift","L":"shift","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫ","layer":"shift"}
+{"w":1,"s":26,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿ","layer":"shift"}
+{"w":1,"s":27,"start":"shift","L":"shift","r":2,"k":8,"g":"k","id":"K_K","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨ","layer":"shift"}
+{"w":1,"s":28,"start":"shift","L":"shift","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷ","layer":"shift"}
+{"w":1,"s":29,"start":"shift","L":"shift","r":2,"k":1,"g":"k","id":"K_A","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟ","layer":"shift"}
+{"w":1,"s":30,"start":"shift","L":"shift","r":2,"k":9,"g":"k","id":"K_L","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ","layer":"shift"}
+{"w":1,"s":31,"start":"shift","L":"shift","r":0,"k":9,"g":"k","id":"K_0","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽","layer":"shift"}
+{"w":1,"s":32,"start":"shift","L":"shift","r":0,"k":3,"g":"k","id":"K_4","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽","layer":"shift"}
+{"w":1,"s":33,"start":"shift","L":"shift","r":2,"k":3,"g":"k","id":"K_D","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽D","layer":"shift"}
+{"w":1,"s":34,"start":"shift","L":"shift","r":1,"k":4,"g":"k","id":"K_T","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ","layer":"shift"}
+{"w":1,"s":35,"start":"shift","L":"shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ ","layer":"shift"}
+{"w":1,"s":36,"start":"shift","L":"shift","r":0,"k":1,"g":"k","id":"K_2","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ ༅","layer":"shift"}
+{"w":1,"s":37,"start":"shift","L":"shift","r":0,"k":5,"g":"k","id":"K_6","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ ༅༈","layer":"shift"}
+{"w":1,"s":38,"start":"shift","L":"shift","r":1,"k":7,"g":"k","id":"K_I","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ ༅༈ཽ","layer":"shift"}
+{"w":1,"s":39,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ལསཆ༨༢ིཨཏཛ་ོ།༡༸ྖྟཻྶྶ ྴྗྫཿྨྷྟྩ༽Dྀ ༅༈","layer":"shift"}
+{"w":2,"s":0,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"།","layer":"default"}
+{"w":2,"s":1,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"།༣","layer":"default"}
+{"w":2,"s":2,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_B","text":"།༣ར","layer":"default"}
+{"w":2,"s":3,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"།༣རབ","layer":"default"}
+{"w":2,"s":4,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"།༣རབ༧","layer":"default"}
+{"w":2,"s":5,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"།༣རབ༧བ","layer":"default"}
+{"w":2,"s":6,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"།༣རབ༧བཟ","layer":"default"}
+{"w":2,"s":7,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"།༣རབ༧བཟ༡","layer":"default"}
+{"w":2,"s":8,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"།༣རབ༧བཟ༡༉","layer":"default"}
+{"w":2,"s":9,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"།༣རབ༧བཟ༡༉༔","layer":"default"}
+{"w":2,"s":10,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"།༣རབ༧བཟ༡༉༔ཁ","layer":"default"}
+{"w":2,"s":11,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"།༣རབ༧བཟ༡༉༔ཁ༩","layer":"default"}
+{"w":2,"s":12,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨","layer":"default"}
+{"w":2,"s":13,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔","layer":"default"}
+{"w":2,"s":14,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_C","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འ","layer":"default"}
+{"w":2,"s":15,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབ","layer":"default"}
+{"w":2,"s":16,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝ","layer":"default"}
+{"w":2,"s":17,"start":"default","L":"default","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝ","layer":"shift"}
+{"w":2,"s":18,"start":"shift","L":"shift","r":2,"k":9,"g":"k","id":"K_L","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩ","layer":"shift"}
+{"w":2,"s":19,"start":"shift","L":"shift","r":2,"k":5,"g":"k","id":"K_G","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ","layer":"shift"}
+{"w":2,"s":20,"start":"shift","L":"shift","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊","layer":"shift"}
+{"w":2,"s":21,"start":"shift","L":"shift","r":3,"k":1,"g":"k","id":"K_Z","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮ","layer":"shift"}
+{"w":2,"s":22,"start":"shift","L":"shift","r":1,"k":4,"g":"k","id":"K_T","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀ","layer":"shift"}
+{"w":2,"s":23,"start":"shift","L":"shift","r":1,"k":9,"g":"k","id":"K_P","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖ","layer":"shift"}
+{"w":2,"s":24,"start":"shift","L":"shift","r":2,"k":7,"g":"k","id":"K_J","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦ","layer":"shift"}
+{"w":2,"s":25,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ","layer":"shift"}
+{"w":2,"s":26,"start":"shift","L":"shift","r":0,"k":4,"g":"k","id":"K_5","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎","layer":"shift"}
+{"w":2,"s":27,"start":"shift","L":"shift","r":0,"k":1,"g":"k","id":"K_2","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅","layer":"shift"}
+{"w":2,"s":28,"start":"shift","L":"shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿ","layer":"shift"}
+{"w":2,"s":29,"start":"shift","L":"shift","r":1,"k":0,"g":"k","id":"K_Q","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐ","layer":"shift"}
+{"w":2,"s":30,"start":"shift","L":"shift","r":2,"k":5,"g":"k","id":"K_G","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ","layer":"shift"}
+{"w":2,"s":31,"start":"shift","L":"shift","r":0,"k":4,"g":"k","id":"K_5","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎","layer":"shift"}
+{"w":2,"s":32,"start":"shift","L":"shift","r":3,"k":8,"g":"k","id":"K_COMMA","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶ","layer":"shift"}
+{"w":2,"s":33,"start":"shift","L":"shift","r":2,"k":7,"g":"k","id":"K_J","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦ","layer":"shift"}
+{"w":2,"s":34,"start":"shift","L":"shift","r":2,"k":2,"g":"k","id":"K_S","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ","layer":"shift"}
+{"w":2,"s":35,"start":"shift","L":"shift","r":1,"k":5,"g":"k","id":"K_Y","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ྄","layer":"shift"}
+{"w":2,"s":36,"start":"shift","L":"shift","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ྄ྗ","layer":"shift"}
+{"w":2,"s":37,"start":"shift","L":"shift","r":3,"k":3,"g":"k","id":"K_C","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ྄ྗཱ","layer":"shift"}
+{"w":2,"s":38,"start":"shift","L":"shift","r":3,"k":5,"g":"k","id":"K_B","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ྄ྗཱྲ","layer":"shift"}
+{"w":2,"s":39,"start":"shift","L":"shift","r":0,"k":6,"g":"k","id":"K_7","text":"།༣རབ༧བཟ༡༉༔ཁ༩༨༔འབཝྩྤ༊ྮྀྖྦྐ༎༅ཿྐྤ༎ྶྦྠ྄ྗཱྲ༸","layer":"shift"}
+{"w":3,"s":0,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_B","text":"ར","layer":"default"}
+{"w":3,"s":1,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_V","text":"རཡ","layer":"default"}
+{"w":3,"s":2,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_B","text":"རཡར","layer":"default"}
+{"w":3,"s":3,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"རཡརད","layer":"default"}
+{"w":3,"s":4,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"རཡརད","layer":"rightalt"}
+{"w":3,"s":5,"start":"rightalt","L":"rightalt","r":2,"k":3,"g":"k","id":"K_D","text":"རཡརདཌ","layer":"rightalt"}
+{"w":3,"s":6,"start":"rightalt","L":"rightalt","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"རཡརདཌ","layer":"default"}
+{"w":3,"s":7,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"རཡརདཌཕ","layer":"default"}
+{"w":3,"s":8,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"རཡརདཌཕཕ","layer":"default"}
+{"w":3,"s":9,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"རཡརདཌཕཕཧ","layer":"default"}
+{"w":3,"s":10,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"རཡརདཌཕཕཧཕ","layer":"default"}
+{"w":3,"s":11,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_SLASH","text":"རཡརདཌཕཕཧཕཨ","layer":"default"}
+{"w":3,"s":12,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"རཡརདཌཕཕཧཕཨཐ","layer":"default"}
+{"w":3,"s":13,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"རཡརདཌཕཕཧཕཨཐཉ","layer":"default"}
+{"w":3,"s":14,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"རཡརདཌཕཕཧཕཨཐཉ༩","layer":"default"}
+{"w":3,"s":15,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ","layer":"default"}
+{"w":3,"s":16,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣","layer":"default"}
+{"w":3,"s":17,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ","layer":"default"}
+{"w":3,"s":18,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠","layer":"default"}
+{"w":3,"s":19,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།","layer":"default"}
+{"w":3,"s":20,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པ","layer":"default"}
+{"w":3,"s":21,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_V","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡ","layer":"default"}
+{"w":3,"s":22,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_COMMA","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡས","layer":"default"}
+{"w":3,"s":23,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_V","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ","layer":"default"}
+{"w":3,"s":24,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢","layer":"default"}
+{"w":3,"s":25,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉","layer":"default"}
+{"w":3,"s":26,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚ","layer":"default"}
+{"w":3,"s":27,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུ","layer":"default"}
+{"w":3,"s":28,"start":"default","L":"default","r":3,"k":8,"g":"k","id":"K_COMMA","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུས","layer":"default"}
+{"w":3,"s":29,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབ","layer":"default"}
+{"w":3,"s":30,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐ","layer":"default"}
+{"w":3,"s":31,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབ","layer":"default"}
+{"w":3,"s":32,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོ","layer":"default"}
+{"w":3,"s":33,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ","layer":"default"}
+{"w":3,"s":34,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔","layer":"default"}
+{"w":3,"s":35,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔༤","layer":"default"}
+{"w":3,"s":36,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔༤༩","layer":"default"}
+{"w":3,"s":37,"start":"default","L":"default","r":2,"k":8,"g":"k","id":"K_K","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔༤༩མ","layer":"default"}
+{"w":3,"s":38,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔༤༩མོ","layer":"default"}
+{"w":3,"s":39,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"རཡརདཌཕཕཧཕཨཐཉ༩ཏ༣ཐ༠།པཡསཡ༢༉ཚུསབཐབོལ༔༤༩མོལ","layer":"default"}
+{"w":4,"s":0,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"ེ","layer":"default"}
+{"w":4,"s":1,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"","layer":"default"}
+{"w":4,"s":2,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"༡","layer":"default"}
+{"w":4,"s":3,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"༡ཉ","layer":"default"}
+{"w":4,"s":4,"start":"default","L":"default","r":4,"k":0,"g":"sk","i":0,"id":"K_LCONTROL","text":"༡ཉ","layer":"rightalt-shift"}
+{"w":4,"s":5,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":5,"g":"k","id":"K_G","text":"༡ཉ","layer":"rightalt-shift"}
+{"w":4,"s":6,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":8,"g":"k","id":"K_K","text":"༡ཉ྆","layer":"rightalt-shift"}
+{"w":4,"s":7,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"༡ཉ྆࿚","layer":"rightalt-shift"}
+{"w":4,"s":8,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"༡ཉ྆࿚","layer":"shift"}
+{"w":4,"s":9,"start":"shift","L":"shift","r":1,"k":9,"g":"k","id":"K_P","text":"༡ཉ྆࿚ྖ","layer":"shift"}
+{"w":4,"s":10,"start":"shift","L":"shift","r":2,"k":9,"g":"k","id":"K_L","text":"༡ཉ྆࿚ྖྩ","layer":"shift"}
+{"w":4,"s":11,"start":"shift","L":"shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"༡ཉ྆࿚ྖ","layer":"shift"}
+{"w":4,"s":12,"start":"shift","L":"shift","r":1,"k":4,"g":"k","id":"K_T","text":"༡ཉ྆࿚ྖྀ","layer":"shift"}
+{"w":4,"s":13,"start":"shift","L":"shift","r":2,"k":9,"g":"k","id":"K_L","text":"༡ཉ྆࿚ྖྀྩ","layer":"shift"}
+{"w":4,"s":14,"start":"shift","L":"shift","r":1,"k":7,"g":"k","id":"K_I","text":"༡ཉ྆࿚ྖྀྩཽ","layer":"shift"}
+{"w":4,"s":15,"start":"shift","L":"shift","r":0,"k":7,"g":"k","id":"K_8","text":"༡ཉ྆࿚ྖྀྩཽ༴","layer":"shift"}
+{"w":4,"s":16,"start":"shift","L":"shift","r":1,"k":4,"g":"k","id":"K_T","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀ","layer":"shift"}
+{"w":4,"s":17,"start":"shift","L":"shift","r":1,"k":7,"g":"k","id":"K_I","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽ","layer":"shift"}
+{"w":4,"s":18,"start":"shift","L":"shift","r":2,"k":2,"g":"k","id":"K_S","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠ","layer":"shift"}
+{"w":4,"s":19,"start":"shift","L":"shift","r":3,"k":1,"g":"k","id":"K_Z","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ","layer":"shift"}
+{"w":4,"s":20,"start":"shift","L":"shift","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ","layer":"rightalt"}
+{"w":4,"s":21,"start":"rightalt","L":"rightalt","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(","layer":"rightalt"}
+{"w":4,"s":22,"start":"rightalt","L":"rightalt","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\","layer":"rightalt"}
+{"w":4,"s":23,"start":"rightalt","L":"rightalt","r":0,"k":1,"g":"k","id":"K_2","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2","layer":"rightalt"}
+{"w":4,"s":24,"start":"rightalt","L":"rightalt","r":1,"k":0,"g":"k","id":"K_Q","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ","layer":"rightalt"}
+{"w":4,"s":25,"start":"rightalt","L":"rightalt","r":1,"k":8,"g":"k","id":"K_O","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞","layer":"rightalt"}
+{"w":4,"s":26,"start":"rightalt","L":"rightalt","r":3,"k":10,"g":"k","id":"K_SLASH","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/","layer":"rightalt"}
+{"w":4,"s":27,"start":"rightalt","L":"rightalt","r":0,"k":0,"g":"k","id":"K_1","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1","layer":"rightalt"}
+{"w":4,"s":28,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_X","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾","layer":"rightalt"}
+{"w":4,"s":29,"start":"rightalt","L":"rightalt","r":4,"k":2,"g":"k","id":"K_SPACE","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌","layer":"rightalt"}
+{"w":4,"s":30,"start":"rightalt","L":"rightalt","r":3,"k":8,"g":"k","id":"K_COMMA","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,","layer":"rightalt"}
+{"w":4,"s":31,"start":"rightalt","L":"rightalt","r":1,"k":0,"g":"k","id":"K_Q","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ","layer":"rightalt"}
+{"w":4,"s":32,"start":"rightalt","L":"rightalt","r":2,"k":10,"g":"k","id":"K_COLON","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;","layer":"rightalt"}
+{"w":4,"s":33,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_X","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾","layer":"rightalt"}
+{"w":4,"s":34,"start":"rightalt","L":"rightalt","r":3,"k":5,"g":"k","id":"K_B","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ","layer":"rightalt"}
+{"w":4,"s":35,"start":"rightalt","L":"rightalt","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ-","layer":"rightalt"}
+{"w":4,"s":36,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ-༝","layer":"rightalt"}
+{"w":4,"s":37,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ-༝༝","layer":"rightalt"}
+{"w":4,"s":38,"start":"rightalt","L":"rightalt","r":2,"k":3,"g":"k","id":"K_D","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ-༝༝ཌ","layer":"rightalt"}
+{"w":4,"s":39,"start":"rightalt","L":"rightalt","r":2,"k":8,"g":"k","id":"K_K","text":"༡ཉ྆࿚ྖྀྩཽ༴ྀཽྠྮ(\\2ྈ༞/1྾༌,ྈ;྾ཪ-༝༝ཌཾ","layer":"rightalt"}
+{"w":5,"s":0,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"༡","layer":"default"}
+{"w":5,"s":1,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"༡ཙ","layer":"default"}
+{"w":5,"s":2,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"༡ཙ༧","layer":"default"}
+{"w":5,"s":3,"start":"default","L":"default","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"༡ཙ༧ཇ","layer":"default"}
+{"w":5,"s":4,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_C","text":"༡ཙ༧ཇའ","layer":"default"}
+{"w":5,"s":5,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"༡ཙ༧ཇའཉ","layer":"default"}
+{"w":5,"s":6,"start":"default","L":"default","r":4,"k":2,"g":"k","id":"K_SPACE","text":"༡ཙ༧ཇའཉ་","layer":"default"}
+{"w":5,"s":7,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"༡ཙ༧ཇའཉ་ཝ","layer":"default"}
+{"w":5,"s":8,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_M","text":"༡ཙ༧ཇའཉ་ཝཤ","layer":"default"}
+{"w":5,"s":9,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"༡ཙ༧ཇའཉ་ཝཤ།","layer":"default"}
+{"w":5,"s":10,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"༡ཙ༧ཇའཉ་ཝཤ།ག","layer":"default"}
+{"w":5,"s":11,"start":"default","L":"default","r":4,"k":0,"g":"sk","i":0,"id":"K_LCONTROL","text":"༡ཙ༧ཇའཉ་ཝཤ།ག","layer":"rightalt-shift"}
+{"w":5,"s":12,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":2,"g":"k","id":"K_X","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿","layer":"rightalt-shift"}
+{"w":5,"s":13,"start":"rightalt-shift","L":"rightalt-shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ","layer":"rightalt-shift"}
+{"w":5,"s":14,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":3,"g":"k","id":"K_D","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜ","layer":"rightalt-shift"}
+{"w":5,"s":15,"start":"rightalt-shift","L":"rightalt-shift","r":1,"k":2,"g":"k","id":"K_E","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ","layer":"rightalt-shift"}
+{"w":5,"s":16,"start":"rightalt-shift","L":"rightalt-shift","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿","layer":"rightalt-shift"}
+{"w":5,"s":17,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒","layer":"rightalt-shift"}
+{"w":5,"s":18,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":4,"g":"k","id":"K_5","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅","layer":"rightalt-shift"}
+{"w":5,"s":19,"start":"rightalt-shift","L":"rightalt-shift","r":1,"k":4,"g":"k","id":"K_T","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ","layer":"rightalt-shift"}
+{"w":5,"s":20,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚","layer":"rightalt-shift"}
+{"w":5,"s":21,"start":"rightalt-shift","L":"rightalt-shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ","layer":"rightalt-shift"}
+{"w":5,"s":22,"start":"rightalt-shift","L":"rightalt-shift","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ","layer":"default"}
+{"w":5,"s":23,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞ","layer":"default"}
+{"w":5,"s":24,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞད","layer":"default"}
+{"w":5,"s":25,"start":"default","L":"default","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ","layer":"default"}
+{"w":5,"s":26,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦","layer":"default"}
+{"w":5,"s":27,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ","layer":"default"}
+{"w":5,"s":28,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣","layer":"default"}
+{"w":5,"s":29,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐ","layer":"default"}
+{"w":5,"s":30,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ","layer":"default"}
+{"w":5,"s":31,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩","layer":"default"}
+{"w":5,"s":32,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤","layer":"default"}
+{"w":5,"s":33,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆ","layer":"default"}
+{"w":5,"s":34,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔ","layer":"default"}
+{"w":5,"s":35,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_SLASH","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔཨ","layer":"default"}
+{"w":5,"s":36,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔཨོ","layer":"default"}
+{"w":5,"s":37,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔཨོཟ","layer":"default"}
+{"w":5,"s":38,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔཨོཟང","layer":"default"}
+{"w":5,"s":39,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"༡ཙ༧ཇའཉ་ཝཤ།ག྿ ྜྏ༿࿒྅ྋྙ࿚ ཞདཝ༦ེ༣ཐལ༩༤ཆཔཨོཟང༠","layer":"default"}
+{"w":6,"s":0,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"༨","layer":"default"}
+{"w":6,"s":1,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"༨ཧ","layer":"default"}
+{"w":6,"s":2,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"༨ཧཁ","layer":"default"}
+{"w":6,"s":3,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"༨ཧཁད","layer":"default"}
+{"w":6,"s":4,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"༨ཧཁད༠","layer":"default"}
+{"w":6,"s":5,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"༨ཧཁད༠ག","layer":"default"}
+{"w":6,"s":6,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"༨ཧཁད༠གཅ","layer":"default"}
+{"w":6,"s":7,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_M","text":"༨ཧཁད༠གཅཤ","layer":"default"}
+{"w":6,"s":8,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"༨ཧཁད༠གཅཤལ","layer":"default"}
+{"w":6,"s":9,"start":"default","L":"default","r":2,"k":0,"g":"k","id":"K_BKQUOTE","text":"༨ཧཁད༠གཅཤལ༉","layer":"default"}
+{"w":6,"s":10,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"༨ཧཁད༠གཅཤལ","layer":"default"}
+{"w":6,"s":11,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"༨ཧཁད༠གཅཤལཞ","layer":"default"}
+{"w":6,"s":12,"start":"default","L":"default","r":3,"k":5,"g":"k","id":"K_B","text":"༨ཧཁད༠གཅཤལཞར","layer":"default"}
+{"w":6,"s":13,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"༨ཧཁད༠གཅཤལཞརཟ","layer":"default"}
+{"w":6,"s":14,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_M","text":"༨ཧཁད༠གཅཤལཞརཟཤ","layer":"default"}
+{"w":6,"s":15,"start":"default","L":"default","r":0,"k":9,"g":"k","id":"K_0","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠","layer":"default"}
+{"w":6,"s":16,"start":"default","L":"default","r":1,"k":8,"g":"k","id":"K_O","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅ","layer":"default"}
+{"w":6,"s":17,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁ","layer":"default"}
+{"w":6,"s":18,"start":"default","L":"default","r":3,"k":4,"g":"k","id":"K_V","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡ","layer":"default"}
+{"w":6,"s":19,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེ","layer":"default"}
+{"w":6,"s":20,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞ","layer":"default"}
+{"w":6,"s":21,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_SLASH","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨ","layer":"default"}
+{"w":6,"s":22,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧ","layer":"default"}
+{"w":6,"s":23,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུ","layer":"default"}
+{"w":6,"s":24,"start":"default","L":"default","r":4,"k":0,"g":"sk","i":0,"id":"K_LCONTROL","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུ","layer":"rightalt-shift"}
+{"w":6,"s":25,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":4,"g":"k","id":"K_F","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ","layer":"rightalt-shift"}
+{"w":6,"s":26,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":8,"g":"k","id":"K_K","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆","layer":"rightalt-shift"}
+{"w":6,"s":27,"start":"rightalt-shift","L":"rightalt-shift","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾","layer":"rightalt-shift"}
+{"w":6,"s":28,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"","layer":"rightalt-shift"}
+{"w":6,"s":29,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":8,"g":"k","id":"K_COMMA","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙","layer":"rightalt-shift"}
+{"w":6,"s":30,"start":"rightalt-shift","L":"rightalt-shift","r":3,"k":4,"g":"k","id":"K_V","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ","layer":"rightalt-shift"}
+{"w":6,"s":31,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":5,"g":"k","id":"K_6","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁","layer":"rightalt-shift"}
+{"w":6,"s":32,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":1,"g":"k","id":"K_2","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔","layer":"rightalt-shift"}
+{"w":6,"s":33,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":1,"g":"k","id":"K_A","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚ","layer":"rightalt-shift"}
+{"w":6,"s":34,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚྺ","layer":"rightalt-shift"}
+{"w":6,"s":35,"start":"rightalt-shift","L":"rightalt-shift","r":0,"k":12,"g":"k","id":"K_BKSP","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚ","layer":"rightalt-shift"}
+{"w":6,"s":36,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":4,"g":"k","id":"K_F","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚྞ","layer":"rightalt-shift"}
+{"w":6,"s":37,"start":"rightalt-shift","L":"rightalt-shift","r":2,"k":12,"g":"k","id":"K_BKSLASH","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚྞྺ","layer":"rightalt-shift"}
+{"w":6,"s":38,"start":"rightalt-shift","L":"rightalt-shift","r":4,"k":0,"g":"sk","i":0,"id":"K_LCONTROL","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚྞྺ","layer":"rightalt"}
+{"w":6,"s":39,"start":"rightalt","L":"rightalt","r":2,"k":6,"g":"k","id":"K_H","text":"༨ཧཁད༠གཅཤལཞརཟཤ༠ཅཁཡེཞཨཧུྞ྆༾\"࿙ྻ༁࿔ྚྞྺ","layer":"rightalt"}
+{"w":7,"s":0,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"ཀ","layer":"default"}
+{"w":7,"s":1,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ཀ༩","layer":"default"}
+{"w":7,"s":2,"start":"default","L":"default","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ཀ༩ཉ","layer":"default"}
+{"w":7,"s":3,"start":"default","L":"default","r":2,"k":7,"g":"k","id":"K_J","text":"ཀ༩ཉབ","layer":"default"}
+{"w":7,"s":4,"start":"default","L":"default","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ཀ༩ཉབ","layer":"rightalt"}
+{"w":7,"s":5,"start":"rightalt","L":"rightalt","r":1,"k":6,"g":"k","id":"K_U","text":"ཀ༩ཉབ༜","layer":"rightalt"}
+{"w":7,"s":6,"start":"rightalt","L":"rightalt","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ཀ༩ཉབ༜'","layer":"rightalt"}
+{"w":7,"s":7,"start":"rightalt","L":"rightalt","r":1,"k":3,"g":"k","id":"K_R","text":"ཀ༩ཉབ༜'ྃ","layer":"rightalt"}
+{"w":7,"s":8,"start":"rightalt","L":"rightalt","r":0,"k":4,"g":"k","id":"K_5","text":"ཀ༩ཉབ༜'ྃ5","layer":"rightalt"}
+{"w":7,"s":9,"start":"rightalt","L":"rightalt","r":3,"k":2,"g":"k","id":"K_X","text":"ཀ༩ཉབ༜'ྃ5྾","layer":"rightalt"}
+{"w":7,"s":10,"start":"rightalt","L":"rightalt","r":0,"k":1,"g":"k","id":"K_2","text":"ཀ༩ཉབ༜'ྃ5྾2","layer":"rightalt"}
+{"w":7,"s":11,"start":"rightalt","L":"rightalt","r":3,"k":5,"g":"k","id":"K_B","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ","layer":"rightalt"}
+{"w":7,"s":12,"start":"rightalt","L":"rightalt","r":0,"k":3,"g":"k","id":"K_4","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4","layer":"rightalt"}
+{"w":7,"s":13,"start":"rightalt","L":"rightalt","r":3,"k":8,"g":"k","id":"K_COMMA","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,","layer":"rightalt"}
+{"w":7,"s":14,"start":"rightalt","L":"rightalt","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=","layer":"rightalt"}
+{"w":7,"s":15,"start":"rightalt","L":"rightalt","r":2,"k":3,"g":"k","id":"K_D","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌ","layer":"rightalt"}
+{"w":7,"s":16,"start":"rightalt","L":"rightalt","r":3,"k":0,"g":"k","id":"K_SHIFT","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌ","layer":"shift"}
+{"w":7,"s":17,"start":"shift","L":"shift","r":1,"k":10,"g":"k","id":"K_LBRKT","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗ","layer":"shift"}
+{"w":7,"s":18,"start":"shift","L":"shift","r":1,"k":9,"g":"k","id":"K_P","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖ","layer":"shift"}
+{"w":7,"s":19,"start":"shift","L":"shift","r":2,"k":3,"g":"k","id":"K_D","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡ","layer":"shift"}
+{"w":7,"s":20,"start":"shift","L":"shift","r":1,"k":11,"g":"k","id":"K_RBRKT","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ","layer":"shift"}
+{"w":7,"s":21,"start":"shift","L":"shift","r":0,"k":1,"g":"k","id":"K_2","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅","layer":"shift"}
+{"w":7,"s":22,"start":"shift","L":"shift","r":2,"k":8,"g":"k","id":"K_K","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ","layer":"shift"}
+{"w":7,"s":23,"start":"shift","L":"shift","r":4,"k":2,"g":"k","id":"K_SPACE","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ","layer":"shift"}
+{"w":7,"s":24,"start":"shift","L":"shift","r":3,"k":1,"g":"k","id":"K_Z","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ","layer":"shift"}
+{"w":7,"s":25,"start":"shift","L":"shift","r":0,"k":4,"g":"k","id":"K_5","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎","layer":"shift"}
+{"w":7,"s":26,"start":"shift","L":"shift","r":3,"k":10,"g":"k","id":"K_SLASH","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ","layer":"shift"}
+{"w":7,"s":27,"start":"shift","L":"shift","r":0,"k":1,"g":"k","id":"K_2","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅","layer":"shift"}
+{"w":7,"s":28,"start":"shift","L":"shift","r":0,"k":2,"g":"k","id":"K_3","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆","layer":"shift"}
+{"w":7,"s":29,"start":"shift","L":"shift","r":4,"k":0,"g":"k","id":"K_LCONTROL","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆","layer":"rightalt"}
+{"w":7,"s":30,"start":"rightalt","L":"rightalt","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-","layer":"rightalt"}
+{"w":7,"s":31,"start":"rightalt","L":"rightalt","r":3,"k":4,"g":"k","id":"K_V","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏","layer":"rightalt"}
+{"w":7,"s":32,"start":"rightalt","L":"rightalt","r":1,"k":3,"g":"k","id":"K_R","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏ྃ","layer":"rightalt"}
+{"w":7,"s":33,"start":"rightalt","L":"rightalt","r":2,"k":7,"g":"k","id":"K_J","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ","layer":"rightalt"}
+{"w":7,"s":34,"start":"rightalt","L":"rightalt","r":1,"k":7,"g":"k","id":"K_I","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝","layer":"rightalt"}
+{"w":7,"s":35,"start":"rightalt","L":"rightalt","r":0,"k":2,"g":"k","id":"K_3","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝3","layer":"rightalt"}
+{"w":7,"s":36,"start":"rightalt","L":"rightalt","r":3,"k":4,"g":"k","id":"K_V","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝3༏","layer":"rightalt"}
+{"w":7,"s":37,"start":"rightalt","L":"rightalt","r":2,"k":6,"g":"k","id":"K_H","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝3༏","layer":"rightalt"}
+{"w":7,"s":38,"start":"rightalt","L":"rightalt","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝3","layer":"rightalt"}
+{"w":7,"s":39,"start":"rightalt","L":"rightalt","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"ཀ༩ཉབ༜'ྃ5྾2ཪ4,=ཌྗྖྡྙ༅ྨ ྮ༎ྸ༅༆-༏༷ྃ༝3.","layer":"rightalt"}
+{"w":8,"s":0,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"ཟ","layer":"default"}
+{"w":8,"s":1,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ཟཕ","layer":"default"}
+{"w":8,"s":2,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"ཟཕཟ","layer":"default"}
+{"w":8,"s":3,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ཟཕཟཔ","layer":"default"}
+{"w":8,"s":4,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ཟཕཟཔ༧","layer":"default"}
+{"w":8,"s":5,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"ཟཕཟཔ༧༡","layer":"default"}
+{"w":8,"s":6,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ཟཕཟཔ༧༡ཕ","layer":"default"}
+{"w":8,"s":7,"start":"default","L":"default","r":2,"k":5,"g":"k","id":"K_G","text":"ཟཕཟཔ༧༡ཕཔ","layer":"default"}
+{"w":8,"s":8,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ཟཕཟཔ༧༡ཕཔ༔","layer":"default"}
+{"w":8,"s":9,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ཟཕཟཔ༧༡ཕཔ༔༥","layer":"default"}
+{"w":8,"s":10,"start":"default","L":"default","r":2,"k":1,"g":"k","id":"K_A","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏ","layer":"default"}
+{"w":8,"s":11,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུ","layer":"default"}
+{"w":8,"s":12,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན","layer":"default"}
+{"w":8,"s":13,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨","layer":"default"}
+{"w":8,"s":14,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞ","layer":"default"}
+{"w":8,"s":15,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང","layer":"default"}
+{"w":8,"s":16,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢","layer":"default"}
+{"w":8,"s":17,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_M","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ","layer":"default"}
+{"w":8,"s":18,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔","layer":"default"}
+{"w":8,"s":19,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥","layer":"default"}
+{"w":8,"s":20,"start":"default","L":"default","r":1,"k":4,"g":"k","id":"K_T","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ི","layer":"default"}
+{"w":8,"s":21,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ི༢","layer":"default"}
+{"w":8,"s":22,"start":"default","L":"default","r":0,"k":12,"g":"k","id":"K_BKSP","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ི","layer":"default"}
+{"w":8,"s":23,"start":"default","L":"default","r":1,"k":3,"g":"k","id":"K_R","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིང","layer":"default"}
+{"w":8,"s":24,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕ","layer":"default"}
+{"w":8,"s":25,"start":"default","L":"default","r":3,"k":9,"g":"k","id":"K_PERIOD","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ","layer":"default"}
+{"w":8,"s":26,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩","layer":"default"}
+{"w":8,"s":27,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_C","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ","layer":"default"}
+{"w":8,"s":28,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦","layer":"default"}
+{"w":8,"s":29,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩","layer":"default"}
+{"w":8,"s":30,"start":"default","L":"default","r":0,"k":3,"g":"k","id":"K_4","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤","layer":"default"}
+{"w":8,"s":31,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ","layer":"default"}
+{"w":8,"s":32,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦","layer":"default"}
+{"w":8,"s":33,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།","layer":"default"}
+{"w":8,"s":34,"start":"default","L":"default","r":0,"k":6,"g":"k","id":"K_7","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧","layer":"default"}
+{"w":8,"s":35,"start":"default","L":"default","r":2,"k":9,"g":"k","id":"K_L","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧ཙ","layer":"default"}
+{"w":8,"s":36,"start":"default","L":"default","r":2,"k":11,"g":"k","id":"K_QUOTE","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧ཙཛ","layer":"default"}
+{"w":8,"s":37,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧ཙཛ།","layer":"default"}
+{"w":8,"s":38,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧ཙཛ།༨","layer":"default"}
+{"w":8,"s":39,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"ཟཕཟཔ༧༡ཕཔ༔༥ཏུན༨ཞང༢ཤ༔༥ིངཕཧ༩འ༦༩༤ཚ༦།༧ཙཛ།༨ཚ","layer":"default"}
+{"w":9,"s":0,"start":"default","L":"default","r":0,"k":7,"g":"k","id":"K_8","text":"༨","layer":"default"}
+{"w":9,"s":1,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"༨༢","layer":"default"}
+{"w":9,"s":2,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"༨༢༣","layer":"default"}
+{"w":9,"s":3,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"༨༢༣ཞ","layer":"default"}
+{"w":9,"s":4,"start":"default","L":"default","r":0,"k":0,"g":"k","id":"K_1","text":"༨༢༣ཞ༡","layer":"default"}
+{"w":9,"s":5,"start":"default","L":"default","r":0,"k":5,"g":"k","id":"K_6","text":"༨༢༣ཞ༡༦","layer":"default"}
+{"w":9,"s":6,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"༨༢༣ཞ༡༦ལ","layer":"default"}
+{"w":9,"s":7,"start":"default","L":"default","r":2,"k":3,"g":"k","id":"K_D","text":"༨༢༣ཞ༡༦ལད","layer":"default"}
+{"w":9,"s":8,"start":"default","L":"default","r":3,"k":6,"g":"k","id":"K_N","text":"༨༢༣ཞ༡༦ལདལ","layer":"default"}
+{"w":9,"s":9,"start":"default","L":"default","r":0,"k":4,"g":"k","id":"K_5","text":"༨༢༣ཞ༡༦ལདལ༥","layer":"default"}
+{"w":9,"s":10,"start":"default","L":"default","r":3,"k":7,"g":"k","id":"K_M","text":"༨༢༣ཞ༡༦ལདལ༥ཤ","layer":"default"}
+{"w":9,"s":11,"start":"default","L":"default","r":3,"k":3,"g":"k","id":"K_C","text":"༨༢༣ཞ༡༦ལདལ༥ཤའ","layer":"default"}
+{"w":9,"s":12,"start":"default","L":"default","r":3,"k":1,"g":"k","id":"K_Z","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞ","layer":"default"}
+{"w":9,"s":13,"start":"default","L":"default","r":1,"k":1,"g":"k","id":"K_W","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁ","layer":"default"}
+{"w":9,"s":14,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕ","layer":"default"}
+{"w":9,"s":15,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕག","layer":"default"}
+{"w":9,"s":16,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགན","layer":"default"}
+{"w":9,"s":17,"start":"default","L":"default","r":2,"k":6,"g":"k","id":"K_H","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕ","layer":"default"}
+{"w":9,"s":18,"start":"default","L":"default","r":1,"k":5,"g":"k","id":"K_Y","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕུ","layer":"default"}
+{"w":9,"s":19,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུ","layer":"default"}
+{"w":9,"s":20,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚ","layer":"default"}
+{"w":9,"s":21,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐ","layer":"default"}
+{"w":9,"s":22,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐ","layer":"default"}
+{"w":9,"s":23,"start":"default","L":"default","r":1,"k":2,"g":"k","id":"K_E","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག","layer":"default"}
+{"w":9,"s":24,"start":"default","L":"default","r":0,"k":1,"g":"k","id":"K_2","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢","layer":"default"}
+{"w":9,"s":25,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔","layer":"default"}
+{"w":9,"s":26,"start":"default","L":"default","r":0,"k":8,"g":"k","id":"K_9","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩","layer":"default"}
+{"w":9,"s":27,"start":"default","L":"default","r":1,"k":0,"g":"k","id":"K_Q","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ","layer":"default"}
+{"w":9,"s":28,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།","layer":"default"}
+{"w":9,"s":29,"start":"default","L":"default","r":3,"k":2,"g":"k","id":"K_X","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ","layer":"default"}
+{"w":9,"s":30,"start":"default","L":"default","r":0,"k":11,"g":"k","id":"K_EQUAL","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།","layer":"default"}
+{"w":9,"s":31,"start":"default","L":"default","r":2,"k":4,"g":"k","id":"K_F","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན","layer":"default"}
+{"w":9,"s":32,"start":"default","L":"default","r":0,"k":10,"g":"k","id":"K_HYPHEN","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔","layer":"default"}
+{"w":9,"s":33,"start":"default","L":"default","r":1,"k":6,"g":"k","id":"K_U","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེ","layer":"default"}
+{"w":9,"s":34,"start":"default","L":"default","r":2,"k":10,"g":"k","id":"K_COLON","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚ","layer":"default"}
+{"w":9,"s":35,"start":"default","L":"default","r":1,"k":7,"g":"k","id":"K_I","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚོ","layer":"default"}
+{"w":9,"s":36,"start":"default","L":"default","r":3,"k":10,"g":"k","id":"K_SLASH","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚོཨ","layer":"default"}
+{"w":9,"s":37,"start":"default","L":"default","r":2,"k":2,"g":"k","id":"K_S","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚོཨཐ","layer":"default"}
+{"w":9,"s":38,"start":"default","L":"default","r":1,"k":9,"g":"k","id":"K_P","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚོཨཐཆ","layer":"default"}
+{"w":9,"s":39,"start":"default","L":"default","r":0,"k":2,"g":"k","id":"K_3","text":"༨༢༣ཞ༡༦ལདལ༥ཤའཞཁཕགནཕེུཚཐཐག༢༔༩ཀ།ཟ།ན༔ེཚོཨཐཆ༣","layer":"default"}

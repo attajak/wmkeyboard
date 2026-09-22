@@ -36,6 +36,8 @@ class KmxProcessor(
 
     private val context = KeymanContext()
 
+    private val ruleScanBudget = KeymanLimits.ruleScanBudget(keyboard.ruleCount)
+
     private val platformWords: Set<String> =
         platform.lowercase().split(' ').filter { it.isNotEmpty() }.toSet()
 
@@ -80,6 +82,16 @@ class KmxProcessor(
     private var modifiers = 0
     private var charCode = 0
 
+    /**
+     * The key and modifiers a rule's key test sees, as KeymanWeb builds them:
+     * the virtual key on a positional keyboard, and on a mnemonic one the
+     * character the key types on a US layout — shifted only when the key sits
+     * on a shift layer, and flipped in case by caps lock, with its shift bit
+     * flipped to match. Space keeps its key code on a mnemonic keyboard too.
+     */
+    private var eventKey = 0
+    private var eventModifiers = 0
+
     // Per-keystroke outputs.
     private val output = StringBuilder()
     private var visibleDeleted = 0
@@ -96,6 +108,25 @@ class KmxProcessor(
         context.reset(before)
     }
 
+    /** The context with deadkeys spelled out, for test traces. */
+    internal fun debugContext(): String = buildString {
+        val raw = context.raw
+        var i = 0
+        while (i < raw.length) {
+            if (raw[i].code == KmxFormat.UC_SENTINEL && i + 2 < raw.length) {
+                append("<dk${raw[i + 2].code - 1}>")
+                i += 3
+            } else {
+                append(raw[i])
+                i++
+            }
+        }
+    }
+
+    override fun onTextTyped(text: CharSequence) {
+        context.append(text)
+    }
+
     override fun syncContext(before: CharSequence): SyncDecision {
         val decision = context.decideSync(before)
         if (decision == SyncDecision.RESET) context.reset(before)
@@ -109,15 +140,17 @@ class KmxProcessor(
      * asymmetry is on purpose.
      */
     override fun matches(vkey: Int, modifiers: Int): Boolean {
-        val char = VirtualKeys.toChar(vkey, modifiers).code
+        // Anything a key branch could enter for this key. Erring towards yes
+        // costs a scan; saying no wrongly would lose a keystroke.
+        val key = if (keyboard.mnemonic && vkey != VK_SPACE && vkey in 1..KmxFormat.VK_MAX) {
+            VirtualKeys.toChar(vkey, modifiers and KmxFormat.K_SHIFTFLAG).code
+        } else {
+            vkey
+        }
         for (group in keyboard.groups) {
             if (!group.usingKeys) continue
-            for (rule in group.rules) {
-                // A character rule matches what the key types; every other
-                // kind matches the key itself.
-                val wanted = if (rule.kind == KmxKeyKind.CHARACTER) char else vkey
-                if (rule.key == wanted) return true
-            }
+            val list = branches.getOrPut(group) { KeyBranches.of(keyboard, group) }.branches
+            if (list.any { it.reachable && (it.key == key || it.key == vkey) }) return true
         }
         return false
     }
@@ -148,11 +181,38 @@ class KmxProcessor(
         )
     }
 
-    override fun onNewContext(before: CharSequence): String? =
-        runReadonly(keyboard.newContextGroup, before)
+    override val hasPostKeystroke: Boolean get() = keyboard.postKeystrokeGroup in keyboard.groups.indices
 
-    override fun onPostKeystroke(): String? =
-        runReadonly(keyboard.postKeystrokeGroup, null)
+    override val hasNewContext: Boolean get() = keyboard.newContextGroup in keyboard.groups.indices
+
+    /** `&newLayer` and `&oldLayer`, set only for the length of a PostKeystroke pass. */
+    private var newLayer = ""
+    private var oldLayer = ""
+
+    /** The keyboard's `T_`/`U_` key names, upper-cased, by the code the rules use. */
+    private val vkeyDictionary: Map<String, Int> by lazy {
+        val names = keyboard.systemStore(KmxFormat.TSS_VKDICTIONARY).orEmpty()
+            .split(' ').filter { it.isNotEmpty() }
+        names.withIndex().associate { (i, name) -> name.uppercase() to FIRST_DICTIONARY_KEY + i }
+    }
+
+    override fun keyForName(name: String): Int? = vkeyDictionary[name.uppercase()]
+
+    override fun onNewContext(before: CharSequence): String? {
+        context.reset(before)
+        return runReadonly(keyboard.newContextGroup)
+    }
+
+    override fun onPostKeystroke(newLayer: String, oldLayer: String): String? {
+        this.newLayer = newLayer
+        this.oldLayer = oldLayer
+        return try {
+            runReadonly(keyboard.postKeystrokeGroup)
+        } finally {
+            this.newLayer = ""
+            this.oldLayer = ""
+        }
+    }
 
     /**
      * `begin NewContext` and `begin PostKeystroke` target `readonly` groups, in
@@ -164,12 +224,18 @@ class KmxProcessor(
      * there is no C++ reference to check this against. A keyboard that uses them
      * still types correctly without — it just will not switch layers by itself.
      */
-    private fun runReadonly(group: Int, before: CharSequence?): String? {
+    private fun runReadonly(group: Int): String? {
         if (group !in keyboard.groups.indices) return null
-        before?.let { context.reset(it) }
+        // A readonly group's every output has an implicit leading `context`, so
+        // it can neither delete nor type. The interpreter does not special-case
+        // that, so the context is put back afterwards instead: a rule written
+        // `> layer('default')` would otherwise delete what it matched from the
+        // engine's view of the field while the field kept it, and every later
+        // keystroke would be computed against text that is not there.
+        val saved = context.snapshot()
         beginKeystroke(ProcessorKey(0, 0))
         runCatching { processGroup(keyboard.groups[group]) }
-        // Text output is discarded by contract; only a `layer()` survives.
+        context.restore(saved)
         output.setLength(0)
         visibleDeleted = 0
         return layerSet
@@ -179,6 +245,17 @@ class KmxProcessor(
         vkey = key.vkey
         modifiers = key.modifiers
         charCode = VirtualKeys.toChar(key.vkey, key.modifiers).code.takeIf { it != ' '.code || key.vkey == 32 } ?: 0
+        eventKey = key.vkey
+        eventModifiers = key.modifiers
+        if (keyboard.mnemonic && key.vkey != VK_SPACE && key.vkey in 1..KmxFormat.VK_MAX) {
+            val shifted = key.modifiers and KmxFormat.K_SHIFTFLAG != 0
+            val base = VirtualKeys.toChar(key.vkey, if (shifted) KmxFormat.K_SHIFTFLAG else 0).code
+            eventKey = base
+            if (key.modifiers and KmxFormat.CAPITALFLAG != 0 && (base in 'A'.code..'Z'.code || base in 'a'.code..'z'.code)) {
+                eventModifiers = eventModifiers xor KmxFormat.K_SHIFTFLAG
+                eventKey = base xor 0x20
+            }
+        }
         output.setLength(0)
         visibleDeleted = 0
         alert = false
@@ -214,31 +291,21 @@ class KmxProcessor(
         }
 
         var matched: KmxRule? = null
-        for (rule in group.rules) {
-            if (++ruleScans > KeymanLimits.MAX_RULE_SCANS) {
-                fault = KeymanFault.RULE_BUDGET
-                return false
-            }
-            if (!contextMatches(rule)) continue
-
-            if (!group.usingKeys) {
+        if (group.usingKeys) {
+            matched = matchKeyGroup(group)
+            if (fault != null) return false
+        } else {
+            for (rule in group.rules) {
+                if (++ruleScans > ruleScanBudget) {
+                    fault = KeymanFault.RULE_BUDGET
+                    return false
+                }
                 // A context-only group takes the first rule with any context and
                 // stops; one with an empty context cannot match here at all.
-                if (rule.context.isNotEmpty()) {
+                if (rule.context.isNotEmpty() && contextMatches(rule)) {
                     matched = rule
                     break
                 }
-                continue
-            }
-
-            if (isEquivalentShift(rule.shiftFlags, modifiers)) {
-                if (rule.key == vkey) {
-                    matched = rule
-                    break
-                }
-            } else if (rule.shiftFlags == 0 && rule.key == charCode && charCode != 0) {
-                matched = rule
-                break
             }
         }
 
@@ -257,6 +324,41 @@ class KmxProcessor(
         return true
     }
 
+    /** Each key group's branches, built once. */
+    private val branches = java.util.IdentityHashMap<KmxGroup, KeyBranches>()
+
+    /**
+     * A key group, the way KeymanWeb's compiled JavaScript runs it; see
+     * [KeyBranches]. The first branch whose key test passes is the only one
+     * tried until the next ladder break.
+     */
+    private fun matchKeyGroup(group: KmxGroup): KmxRule? {
+        val list = branches.getOrPut(group) { KeyBranches.of(keyboard, group) }.branches
+        var i = 0
+        while (i < list.size) {
+            val branch = list[i]
+            if (++ruleScans > ruleScanBudget) {
+                fault = KeymanFault.RULE_BUDGET
+                return null
+            }
+            if (branch.reachable && branch.key == eventKey && isEquivalentShift(branch.shift, eventModifiers)) {
+                for (rule in branch.rules) {
+                    if (++ruleScans > ruleScanBudget) {
+                        fault = KeymanFault.RULE_BUDGET
+                        return null
+                    }
+                    if (contextMatches(rule)) return rule
+                }
+                // This branch's key matched and none of its rules did: the
+                // rest of its `else` chain is not looked at.
+                i = (i / KeyBranches.LADDER + 1) * KeyBranches.LADDER
+                continue
+            }
+            i++
+        }
+        return null
+    }
+
     /** The reference's no-match branch, in its order. */
     private fun handleNoMatch(group: KmxGroup) {
         // A key that types no character, in a group that matches keys: only
@@ -266,16 +368,30 @@ class KmxProcessor(
         // pass on, or the whole keystroke's output would be thrown away.
         if (group.usingKeys && charCode == 0) {
             if (vkey == VK_BACKSPACE && (modifiers and CTRL_ALT_MASK) == 0) {
-                // Pop a trailing deadkey, then a real character. If the context
-                // is already empty the host has to do it, because the text to
-                // delete is behind what the engine can see.
-                while (context.endsWithDeadkey) context.deleteLastElement()
-                if (context.isEmpty) {
+                // KeymanWeb's default backspace, which is not Keyman Core's.
+                // Its deadkeys are positions in the text, and deleting a
+                // character moves only those after the caret: a deadkey waiting
+                // at the caret is left one past the end, where nothing can
+                // match it again, while one before the deleted character is
+                // left exactly at the caret, armed for the next key. So: the
+                // trailing deadkeys go, the character goes, the ones before it
+                // stay. With no character left to delete the host has it — the
+                // text is behind what the engine can see, or there is none.
+                // With no character at all before the caret, KeymanWeb does
+                // nothing whatever, deadkeys included.
+                if (!context.hasVisibleText) {
                     emitKeystroke = true
                     return
                 }
-                deleteLastElement()
                 while (context.endsWithDeadkey) context.deleteLastElement()
+                val units = context.deleteLastVisibleElement()
+                if (units == 0) {
+                    emitKeystroke = true
+                    return
+                }
+                val pending = minOf(units, output.length)
+                output.setLength(output.length - pending)
+                visibleDeleted += units - pending
                 return
             }
             emitKeystroke = true
@@ -334,7 +450,9 @@ class KmxProcessor(
                 continue
             }
             when (code) {
-                KmxFormat.CODE_DEADKEY -> context.appendDeadkey(KmxString.operandAt(s, i, 0))
+                // Kept biased, as Keyman Core keeps it: the first deadkey's id
+                // de-biased is 0, and a NUL in the buffer ends every walk over it.
+                KmxFormat.CODE_DEADKEY -> context.appendDeadkey(KmxString.operandAt(s, i, 0) + 1)
                 KmxFormat.CODE_BEEP -> alert = true
                 KmxFormat.CODE_CONTEXT -> postString(miniContext)
                 KmxFormat.CODE_CONTEXTEX -> emitContextElement(
@@ -407,8 +525,10 @@ class KmxProcessor(
             seen++
         }
         if (i >= miniContext.length) return
-        val end = KmxString.next(miniContext, i)
-        for (k in i until end.coerceAtMost(miniContext.length)) emitChar(miniContext[k])
+        val end = KmxString.next(miniContext, i).coerceAtMost(miniContext.length)
+        // Through postString, not unit by unit: the element can be a deadkey,
+        // and its marker must go back into the context, never into the field.
+        postString(miniContext.substring(i, end))
     }
 
     /** `index(store, n)`: emit the store element at the position `any()` recorded. */
@@ -423,8 +543,9 @@ class KmxProcessor(
             seen++
         }
         if (i >= value.length) return
-        val end = KmxString.next(value, i)
-        for (k in i until end.coerceAtMost(value.length)) emitChar(value[k])
+        val end = KmxString.next(value, i).coerceAtMost(value.length)
+        // A store element can be a deadkey as well as a character.
+        postString(value.substring(i, end))
     }
 
     /**
@@ -540,7 +661,7 @@ class KmxProcessor(
             KmxFormat.CODE_DEADKEY -> q + 2 < live.length &&
                 live[q].code == KmxFormat.UC_SENTINEL &&
                 live[q + 1].code == KmxFormat.CODE_DEADKEY &&
-                live[q + 2].code == KmxString.operandAt(pattern, p, 0)
+                live[q + 2].code == KmxString.operandAt(pattern, p, 0) + 1
             // `index()` in context: the element an earlier `any()` in this same
             // rule picked, from a parallel store — how "the same letter twice"
             // is written.
@@ -593,6 +714,8 @@ class KmxProcessor(
         val equal = when (system) {
             KmxFormat.TSS_PLATFORM -> platformMatches(wanted)
             KmxFormat.TSS_LAYER -> layer == wanted
+            KmxFormat.TSS_NEWLAYER -> newLayer == wanted
+            KmxFormat.TSS_OLDLAYER -> oldLayer == wanted
             // The US layout, which every virtual key here is spelled against.
             KmxFormat.TSS_BASELAYOUT ->
                 wanted.equals(BASE_LAYOUT, ignoreCase = true) ||
@@ -670,19 +793,14 @@ class KmxProcessor(
     }
 
     /**
-     * `IsEquivalentShift`, in the reduced form this engine implements.
+     * Whether a key pressed with [keyModifiers] matches a rule written for
+     * [ruleFlags] — KeymanWeb's `keyMatch`, because a touch layout is
+     * KeymanWeb's to interpret and it is what the keys here come from.
      *
-     * The reference compares through a 24x18 truth table that also encodes
-     * RAlt-as-Ctrl+Alt emulation for keyboards written against Windows layouts.
-     * What is here is the exact-match core plus the caps constraints, which
-     * covers every rule shape the shipped corpus actually uses — rules are
-     * written with `[SHIFT K_A]` and `[RALT K_QUOTE]`, not with the exotic
-     * left/right distinctions the table exists to reconcile.
-     *
-     * The gap is real and is why the conformance corpus is the gate on this
-     * engine rather than these unit tests. A rule that needs the table will not
-     * match, and a rule that does not match falls through to the key's own
-     * output rather than typing something wrong.
+     * A key on a `rightalt` or `leftctrl` layer is pressed with one hand's
+     * modifier; a rule that names no hand (`[ALT K_x]`) matches it as the
+     * generic one, and a rule that names a hand matches that hand only. Caps
+     * lock is a state rather than a modifier and is compared on its own.
      */
     private fun isEquivalentShift(ruleFlags: Int, keyModifiers: Int): Boolean {
         if (ruleFlags == 0) return false
@@ -696,7 +814,14 @@ class KmxProcessor(
         ) {
             return false
         }
-        return (ruleFlags and KmxFormat.K_MODIFIERFLAG) == (keyModifiers and KmxFormat.K_MODIFIERFLAG)
+        var mods = keyModifiers and KmxFormat.K_MODIFIERFLAG
+        if (ruleFlags and CHIRAL_ALT == 0 && mods and CHIRAL_ALT != 0) {
+            mods = (mods and CHIRAL_ALT.inv()) or KmxFormat.K_ALTFLAG
+        }
+        if (ruleFlags and CHIRAL_CTRL == 0 && mods and CHIRAL_CTRL != 0) {
+            mods = (mods and CHIRAL_CTRL.inv()) or KmxFormat.K_CTRLFLAG
+        }
+        return (ruleFlags and KmxFormat.K_MODIFIERFLAG) == mods
     }
 
     companion object {
@@ -709,9 +834,14 @@ class KmxProcessor(
         /** Keyman's name for the base layer, which `&layer` starts on. */
         const val LAYER_DEFAULT: String = "default"
 
+        /** Where a keyboard's own key names are numbered from. */
+        private const val FIRST_DICTIONARY_KEY = 256
+        private const val CHIRAL_ALT = KmxFormat.LALTFLAG or KmxFormat.RALTFLAG
+        private const val CHIRAL_CTRL = KmxFormat.LCTRLFLAG or KmxFormat.RCTRLFLAG
         private const val BASE_LAYOUT = "kbdus.dll"
         private const val BASE_LAYOUT_ALT = "en-US"
         private const val VK_BACKSPACE = 8
+        private const val VK_SPACE = 32
         private const val MAX_INDEX_STACK = 16
         private const val CTRL_ALT_MASK =
             KmxFormat.K_CTRLFLAG or KmxFormat.K_ALTFLAG or

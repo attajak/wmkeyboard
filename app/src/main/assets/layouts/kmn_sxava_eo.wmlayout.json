@@ -13,7 +13,12 @@
               "label": "𐑕",
               "action": {
                 "type": "keyman_key",
-                "vkey": 83
+                "vkey": 83,
+                "longPress": [
+                  {
+                    "vkey": 90
+                  }
+                ]
               },
               "longPress": [
                 "𐑟"
@@ -23,7 +28,12 @@
               "label": "𐑒",
               "action": {
                 "type": "keyman_key",
-                "vkey": 75
+                "vkey": 75,
+                "longPress": [
+                  {
+                    "vkey": 71
+                  }
+                ]
               },
               "longPress": [
                 "𐑜"
@@ -33,7 +43,12 @@
               "label": "𐑐",
               "action": {
                 "type": "keyman_key",
-                "vkey": 80
+                "vkey": 80,
+                "longPress": [
+                  {
+                    "vkey": 66
+                  }
+                ]
               },
               "longPress": [
                 "𐑚"
@@ -43,7 +58,12 @@
               "label": "𐑖",
               "action": {
                 "type": "keyman_key",
-                "vkey": 87
+                "vkey": 87,
+                "longPress": [
+                  {
+                    "vkey": 222
+                  }
+                ]
               },
               "longPress": [
                 "𐑠"
@@ -53,7 +73,12 @@
               "label": "𐑙",
               "action": {
                 "type": "keyman_key",
-                "vkey": 89
+                "vkey": 89,
+                "longPress": [
+                  {
+                    "vkey": 72
+                  }
+                ]
               },
               "longPress": [
                 "𐑣"
@@ -63,7 +88,12 @@
               "label": "𐑗",
               "action": {
                 "type": "keyman_key",
-                "vkey": 81
+                "vkey": 81,
+                "longPress": [
+                  {
+                    "vkey": 186
+                  }
+                ]
               },
               "longPress": [
                 "𐑡"
@@ -73,7 +103,12 @@
               "label": "𐑓",
               "action": {
                 "type": "keyman_key",
-                "vkey": 70
+                "vkey": 70,
+                "longPress": [
+                  {
+                    "vkey": 86
+                  }
+                ]
               },
               "longPress": [
                 "𐑝"
@@ -83,7 +118,12 @@
               "label": "𐑔",
               "action": {
                 "type": "keyman_key",
-                "vkey": 67
+                "vkey": 67,
+                "longPress": [
+                  {
+                    "vkey": 88
+                  }
+                ]
               },
               "longPress": [
                 "𐑞"
@@ -93,7 +133,12 @@
               "label": "𐑑",
               "action": {
                 "type": "keyman_key",
-                "vkey": 84
+                "vkey": 84,
+                "longPress": [
+                  {
+                    "vkey": 68
+                  }
+                ]
               },
               "longPress": [
                 "𐑛"
@@ -105,7 +150,12 @@
               "label": "𐑨",
               "action": {
                 "type": "keyman_key",
-                "vkey": 65
+                "vkey": 65,
+                "longPress": [
+                  {
+                    "vkey": 219
+                  }
+                ]
               },
               "longPress": [
                 "𐑲"
@@ -115,7 +165,12 @@
               "label": "𐑧",
               "action": {
                 "type": "keyman_key",
-                "vkey": 69
+                "vkey": 69,
+                "longPress": [
+                  {
+                    "vkey": 221
+                  }
+                ]
               },
               "longPress": [
                 "𐑱"
@@ -167,7 +222,12 @@
               "label": "𐑦",
               "action": {
                 "type": "keyman_key",
-                "vkey": 73
+                "vkey": 73,
+                "longPress": [
+                  {
+                    "vkey": 74
+                  }
+                ]
               },
               "longPress": [
                 "𐑰"
@@ -193,7 +253,24 @@
               "label": "·",
               "action": {
                 "type": "keyman_key",
-                "vkey": 226
+                "vkey": 226,
+                "longPress": [
+                  {
+                    "vkey": 189
+                  },
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 190
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 187
+                  }
+                ]
               },
               "width": 0.1,
               "longPress": [

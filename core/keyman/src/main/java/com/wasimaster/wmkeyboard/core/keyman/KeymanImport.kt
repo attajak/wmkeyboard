@@ -99,10 +99,6 @@ object KeymanImport {
                 ),
             )
         }
-        if (report.shiftLayerFolded) add(LayoutMessage(stringRes = R.string.core_keyman_shift_layer_folded))
-        if (report.shiftLayerKeptSeparate) {
-            add(LayoutMessage(stringRes = R.string.core_keyman_shift_layer_separate))
-        }
         addAll(converted.repairNotes)
     }
 

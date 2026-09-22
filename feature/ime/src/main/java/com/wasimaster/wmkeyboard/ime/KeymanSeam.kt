@@ -1,10 +1,12 @@
 package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.keyman.KeyProcessor
+import com.wasimaster.wmkeyboard.core.keyman.KeymanLayers
 import com.wasimaster.wmkeyboard.core.keyman.KmxModifiers
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorKey
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorResult
 import com.wasimaster.wmkeyboard.core.keyman.SyncDecision
+import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 
 /**
  * The decisions the Keyman seam makes, pulled out of [WMKeyboardService] so they
@@ -36,30 +38,49 @@ object KeymanSeam {
         anchor >= 0 && newSelStart == newSelEnd && newSelStart == anchor
 
     /**
-     * The keyboard's shift and caps state as a Keyman modifier mask.
+     * The layer on screen, as its key in the layout's layers — what `&layer`
+     * reads once [com.wasimaster.wmkeyboard.core.keyman.KeymanLayers.keymanId]
+     * has turned it back into Keyman's name.
      *
-     * Deliberately narrow: our soft keyboard has no ctrl or alt of its own, and
-     * inventing them would let a rule written for `[CTRL K_A]` fire on a plain
-     * `a`. Hardware modifiers reach the engine through the hardware path, which
-     * has real meta state to convert.
+     * Shift is state here, not a place, so a shifted letters page is Keyman's
+     * `shift` layer whether or not the layout drew one of its own, and caps lock
+     * is `caps` only where the layout has a caps page to show — KeymanWeb has no
+     * caps lock on a touch layout that does not.
      */
-    fun modifiersFor(shifted: Boolean, capsLocked: Boolean): Int {
-        var mask = 0
-        if (shifted || capsLocked) mask = mask or KmxModifiers.SHIFT
-        if (capsLocked) mask = mask or KmxModifiers.CAPS
-        return mask
+    fun activeLayerKey(
+        mode: LayoutMode,
+        shift: ShiftState,
+        namedLayer: String?,
+        hasCapsGrid: Boolean,
+    ): String = when (mode) {
+        LayoutMode.SYMBOLS -> LayoutLayer.SYMBOLS.key
+        LayoutMode.SYMBOLS_SHIFTED -> LayoutLayer.SYMBOLS_SHIFTED.key
+        LayoutMode.NAMED -> namedLayer ?: LayoutLayer.LETTERS.key
+        else -> when {
+            shift == ShiftState.CAPS_LOCK && hasCapsGrid -> KeymanLayers.CAPS
+            shift != ShiftState.OFF -> KeymanLayers.SHIFT
+            else -> LayoutLayer.LETTERS.key
+        }
     }
 
     /**
-     * The grid on screen as the Keyman layer a rule would name in
-     * `if(&layer = ...)`. The converter folds Keyman's `shift` layer into our
-     * shift state and maps `default`, `numeric` and `symbol` onto our own
-     * three, so this is that mapping run backwards.
+     * Modifiers a key is pressed with that its own grid does not already say.
+     *
+     * A key on a Keyman grid carries the modifiers of the layer it sits on, so
+     * a key on the drawn `shift` page already matches `[SHIFT K_x]`. Only a
+     * layout with no shift page of its own — shift then re-cases the letters
+     * page rather than replacing it — needs shift and caps added at the press.
+     *
+     * Deliberately narrow otherwise: our soft keyboard has no ctrl or alt of
+     * its own, and inventing them would let a rule written for `[CTRL K_A]`
+     * fire on a plain `a`.
      */
-    fun layerName(mode: LayoutMode, shifted: Boolean): String = when (mode) {
-        LayoutMode.SYMBOLS -> "numeric"
-        LayoutMode.SYMBOLS_SHIFTED -> "symbol"
-        else -> if (shifted) "shift" else "default"
+    fun runtimeModifiers(mode: LayoutMode, shift: ShiftState, hasShiftGrid: Boolean): Int {
+        if (mode != LayoutMode.LETTERS || hasShiftGrid) return 0
+        var mask = 0
+        if (shift != ShiftState.OFF) mask = mask or KmxModifiers.SHIFT
+        if (shift == ShiftState.CAPS_LOCK) mask = mask or KmxModifiers.CAPS
+        return mask
     }
 }
 

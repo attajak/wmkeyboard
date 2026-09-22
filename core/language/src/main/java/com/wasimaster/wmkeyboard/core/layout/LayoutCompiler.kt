@@ -48,10 +48,36 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
         appearance = appearanceFor(resolved),
         persistent = resolved.persistent,
         themeId = resolved.themeId ?: themeId,
+        keymanFrames = resolved.keymanFrames.orEmpty(),
     )
     compileCache[cacheKey] = this to built
     built
 }
+
+/**
+ * The runtime grid for the layer keyed [name] — one of a converted Keyman
+ * layout's own layers, which have no [LayoutLayer] of their own — or null when
+ * this layout does not define it. No fallback: a layer the layout does not have
+ * is not one to draw a borrowed grid for.
+ */
+fun LayoutSpec.compileNamed(name: String): KeyboardLayout? = synchronized(namedCompileCache) {
+    val resolved = layers[name] ?: return null
+    val cacheKey = id to name
+    namedCompileCache[cacheKey]?.let { (spec, built) -> if (spec == this) return built }
+    val built = KeyboardLayout(
+        name = "$id/$name",
+        rows = fillSpaceRows(resolved.rows, gridWeightOf(resolved.rows)),
+        rowHeights = resolved.rowHeights,
+        appearance = appearanceFor(resolved),
+        persistent = resolved.persistent,
+        themeId = resolved.themeId ?: themeId,
+        keymanFrames = resolved.keymanFrames.orEmpty(),
+    )
+    namedCompileCache[cacheKey] = this to built
+    built
+}
+
+private val namedCompileCache = HashMap<Pair<String, String>, Pair<LayoutSpec, KeyboardLayout>>()
 
 /**
  * This layout's appearance as it applies to one compiled layer: the layout's

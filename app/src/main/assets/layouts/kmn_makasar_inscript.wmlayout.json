@@ -10,60 +10,150 @@
         "rows": [
           [
             {
-              "label": "𑻲"
+              "label": "𑻲",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF2"
+              }
             },
             {
-              "label": "𑻵"
+              "label": "𑻵",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF5"
+              }
             },
             {
-              "label": "𑻭"
+              "label": "𑻭",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EED"
+              }
             },
             {
-              "label": "𑻦"
+              "label": "𑻦",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE6"
+              }
             },
             {
-              "label": "𑻬"
+              "label": "𑻬",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EEC"
+              }
             },
             {
-              "label": "𑻴"
+              "label": "𑻴",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF4"
+              }
             },
             {
-              "label": "𑻳"
+              "label": "𑻳",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF3"
+              }
             },
             {
-              "label": "𑻶"
+              "label": "𑻶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF6"
+              }
             },
             {
-              "label": "𑻣"
+              "label": "𑻣",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE3"
+              }
             }
           ],
           [
             {
-              "label": "𑻱"
+              "label": "𑻱",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF1"
+              }
             },
             {
-              "label": "𑻰"
+              "label": "𑻰",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF0"
+              }
             },
             {
-              "label": "𑻧"
+              "label": "𑻧",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE7"
+              }
             },
             {
-              "label": "𑻢"
+              "label": "𑻢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE2"
+              }
             },
             {
-              "label": "𑻡"
+              "label": "𑻡",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE1"
+              }
             },
             {
-              "label": "𑻫"
+              "label": "𑻫",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EEB"
+              }
             },
             {
-              "label": "𑻪"
+              "label": "𑻪",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EEA"
+              }
             },
             {
-              "label": "𑻠"
+              "label": "𑻠",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE0"
+              }
             },
             {
-              "label": "𑻮"
+              "label": "𑻮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EEE"
+              }
             },
             {
               "label": "",
@@ -82,25 +172,90 @@
               "width": 0.75
             },
             {
-              "label": "𑻷"
+              "label": "𑻷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF7"
+              }
             },
             {
-              "label": "𑻩"
+              "label": "𑻩",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE9"
+              }
             },
             {
-              "label": "𑻯"
+              "label": "𑻯",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EEF"
+              }
             },
             {
-              "label": "𑻤"
+              "label": "𑻤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE4"
+              }
             },
             {
-              "label": "𑻨"
+              "label": "𑻨",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE8"
+              }
             },
             {
-              "label": "𑻥"
+              "label": "𑻥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EE5"
+              }
             },
             {
               "label": "𑻸",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_11EF8",
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186
+                  }
+                ]
+              },
               "longPress": [
                 ",",
                 "!",
@@ -323,7 +478,20 @@
               "label": "[",
               "action": {
                 "type": "keyman_key",
-                "vkey": 219
+                "vkey": 219,
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "«",
@@ -351,7 +519,20 @@
               "label": "]",
               "action": {
                 "type": "keyman_key",
-                "vkey": 221
+                "vkey": 221,
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "»",
@@ -398,7 +579,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },

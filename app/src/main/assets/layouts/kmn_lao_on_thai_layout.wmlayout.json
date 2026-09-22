@@ -11,150 +11,295 @@
           [
             {
               "label": "ຽ",
-              "shiftLabel": "+"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EBD"
+              }
             },
             {
               "label": "/",
-              "shiftLabel": "1"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              }
             },
             {
               "label": "-",
-              "shiftLabel": "2"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002D"
+              }
             },
             {
               "label": "ພ",
-              "shiftLabel": "3"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9E"
+              }
             },
             {
               "label": "ຖ",
-              "shiftLabel": "4"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E96"
+              }
             },
             {
               "label": "ຸ",
-              "shiftLabel": "ູ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB8"
+              }
             },
             {
               "label": "ຶ",
-              "shiftLabel": "฿"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB6"
+              }
             },
             {
               "label": "ຄ",
-              "shiftLabel": "5"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E84"
+              }
             },
             {
               "label": "ຕ",
-              "shiftLabel": "6"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E95"
+              }
             },
             {
               "label": "ຈ",
-              "shiftLabel": "7"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E88"
+              }
             },
             {
               "label": "ຂ",
-              "shiftLabel": "8"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E82"
+              }
             },
             {
               "label": "ຊ",
-              "shiftLabel": "9"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E8A"
+              }
             }
           ],
           [
             {
               "label": "ໆ",
-              "shiftLabel": "0"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC6"
+              }
             },
             {
               "label": "ໄ",
-              "shiftLabel": "\""
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC4"
+              }
             },
             {
               "label": "ຳ",
-              "shiftLabel": "ຕ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB3"
+              }
             },
             {
               "label": "ພ",
-              "shiftLabel": "່"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9E"
+              }
             },
             {
               "label": "ະ",
-              "shiftLabel": "ທ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB0"
+              }
             },
             {
               "label": "ັ",
-              "shiftLabel": "ໍ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB1"
+              }
             },
             {
               "label": "ີ",
-              "shiftLabel": "໊"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB5"
+              }
             },
             {
               "label": "ຣ",
-              "shiftLabel": "ນ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA3"
+              }
             },
             {
               "label": "ນ",
-              "shiftLabel": "ໜ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E99"
+              }
             },
             {
               "label": "ຍ",
-              "shiftLabel": "ຢ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E8D"
+              }
             },
             {
               "label": "ບ",
-              "shiftLabel": "ຖ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9A"
+              }
             },
             {
               "label": "ລ",
-              "shiftLabel": ","
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA5"
+              }
             }
           ],
           [
             {
               "label": "_",
-              "shiftLabel": "%"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005F"
+              }
             },
             {
               "label": "ຟ",
-              "shiftLabel": "ົ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9F"
+              }
             },
             {
               "label": "ຫ",
-              "shiftLabel": "ຄ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAB"
+              }
             },
             {
               "label": "ກ",
-              "shiftLabel": "ດ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E81"
+              }
             },
             {
               "label": "ດ",
-              "shiftLabel": "ໂ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E94"
+              }
             },
             {
               "label": "ເ",
-              "shiftLabel": ":"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC0"
+              }
             },
             {
               "label": "້",
-              "shiftLabel": "ັ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC9"
+              }
             },
             {
               "label": "່",
-              "shiftLabel": "໋"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC8"
+              }
             },
             {
               "label": "າ",
-              "shiftLabel": "ສ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB2"
+              }
             },
             {
-              "label": "ສ"
+              "label": "ສ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAA"
+              }
             },
             {
               "label": "ວ",
-              "shiftLabel": "ຊ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA7"
+              }
             },
             {
               "label": "ງ",
-              "shiftLabel": "."
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E87"
+              }
             }
           ],
           [
@@ -166,43 +311,83 @@
             },
             {
               "label": "ຜ",
-              "shiftLabel": "("
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9C"
+              }
             },
             {
               "label": "ປ",
-              "shiftLabel": ")"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9B"
+              }
             },
             {
               "label": "ແ",
-              "shiftLabel": "ສ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC1"
+              }
             },
             {
               "label": "ອ",
-              "shiftLabel": "ຮ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAD"
+              }
             },
             {
               "label": "ິ",
-              "shiftLabel": "‌"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB4"
+              }
             },
             {
               "label": "ື",
-              "shiftLabel": "໌"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EB7"
+              }
             },
             {
               "label": "ທ",
-              "shiftLabel": "?"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E97"
+              }
             },
             {
               "label": "ມ",
-              "shiftLabel": "ໝ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EA1"
+              }
             },
             {
               "label": "ໃ",
-              "shiftLabel": "ຫຼ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EC3"
+              }
             },
             {
               "label": "ຝ",
-              "shiftLabel": "ຼ"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E9D"
+              }
             },
             {
               "label": "⌫",
@@ -229,6 +414,11 @@
             {
               "label": "␣",
               "output": "​",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_200B"
+              },
               "width": 8.5
             },
             {
@@ -248,64 +438,625 @@
           ]
         ]
       },
-      "symbols": {
+      "k:shift": {
         "rows": [
           [
             {
-              "label": "๑"
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002B"
+              }
             },
             {
-              "label": "໒"
+              "label": "1",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0031"
+              }
             },
             {
-              "label": "໓"
+              "label": "2",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0032"
+              }
             },
             {
-              "label": "໔"
+              "label": "3",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0033"
+              }
             },
             {
-              "label": "໕"
+              "label": "4",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0034"
+              }
             },
             {
-              "label": "໖"
+              "label": "ູ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EB9"
+              }
             },
             {
-              "label": "໗"
+              "label": "฿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E3F"
+              }
             },
             {
-              "label": "໘"
+              "label": "5",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0035"
+              }
             },
             {
-              "label": "໙"
+              "label": "6",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0036"
+              }
+            },
+            {
+              "label": "7",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0037"
+              }
+            },
+            {
+              "label": "8",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0038"
+              }
+            },
+            {
+              "label": "9",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0039"
+              }
             }
           ],
           [
             {
-              "label": "!"
+              "label": "0",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0030"
+              }
             },
             {
-              "label": "@"
+              "label": "\"",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0022"
+              }
             },
             {
-              "label": "#"
+              "label": "ຕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E95"
+              }
             },
             {
-              "label": "$"
+              "label": "່",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EC8"
+              }
             },
             {
-              "label": "₭"
+              "label": "ທ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E97"
+              }
             },
             {
-              "label": "^"
+              "label": "ໍ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0ECD"
+              }
             },
             {
-              "label": "&"
+              "label": "໊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0ECA"
+              }
             },
             {
-              "label": "*"
+              "label": "ນ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E99"
+              }
             },
             {
-              "label": "ຯ"
+              "label": "ໜ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EDC"
+              }
+            },
+            {
+              "label": "ຢ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EA2"
+              }
+            },
+            {
+              "label": "ຖ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E96"
+              }
+            },
+            {
+              "label": ",",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002C"
+              }
+            }
+          ],
+          [
+            {
+              "label": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0025"
+              }
+            },
+            {
+              "label": "ົ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EBB"
+              }
+            },
+            {
+              "label": "ຄ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E84"
+              }
+            },
+            {
+              "label": "ດ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E94"
+              }
+            },
+            {
+              "label": "ໂ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EC2"
+              }
+            },
+            {
+              "label": ":",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_003A"
+              }
+            },
+            {
+              "label": "ັ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EB1"
+              }
+            },
+            {
+              "label": "໋",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0ECB"
+              }
+            },
+            {
+              "label": "ສ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EAA"
+              }
+            },
+            {
+              "label": "ສ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EAA"
+              }
+            },
+            {
+              "label": "ຊ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0E8A"
+              }
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002E"
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            },
+            {
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0028"
+              }
+            },
+            {
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0029"
+              }
+            },
+            {
+              "label": "ສ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EAA"
+              }
+            },
+            {
+              "label": "ຮ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EAE"
+              }
+            },
+            {
+              "label": "◌│◌",
+              "output": "‍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_200D"
+              }
+            },
+            {
+              "label": "໌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0ECC"
+              }
+            },
+            {
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_003F"
+              }
+            },
+            {
+              "label": "ໝ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EDD"
+              }
+            },
+            {
+              "label": "ຫຼ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EAB_0EBC"
+              }
+            },
+            {
+              "label": "ຼ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0EBC"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
+              },
+              "width": 1.3
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.3
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 8.5
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 2.1
+            }
+          ]
+        ]
+      },
+      "symbols": {
+        "rows": [
+          [
+            {
+              "label": "๑",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0E51"
+              }
+            },
+            {
+              "label": "໒",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED2"
+              }
+            },
+            {
+              "label": "໓",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED3"
+              }
+            },
+            {
+              "label": "໔",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED4"
+              }
+            },
+            {
+              "label": "໕",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED5"
+              }
+            },
+            {
+              "label": "໖",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED6"
+              }
+            },
+            {
+              "label": "໗",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED7"
+              }
+            },
+            {
+              "label": "໘",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED8"
+              }
+            },
+            {
+              "label": "໙",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0ED9"
+              }
+            }
+          ],
+          [
+            {
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0021"
+              }
+            },
+            {
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0040"
+              }
+            },
+            {
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0023"
+              }
+            },
+            {
+              "label": "$",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0024"
+              }
+            },
+            {
+              "label": "₭",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_20AD"
+              }
+            },
+            {
+              "label": "^",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005E"
+              }
+            },
+            {
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0026"
+              }
+            },
+            {
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002A"
+              }
+            },
+            {
+              "label": "ຯ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0EAF"
+              }
             }
           ],
           [
@@ -317,28 +1068,68 @@
               "width": 0.75
             },
             {
-              "label": "<"
+              "label": "<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003C"
+              }
             },
             {
-              "label": ">"
+              "label": ">",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003E"
+              }
             },
             {
-              "label": "'"
+              "label": "'",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0027"
+              }
             },
             {
-              "label": "\""
+              "label": "\"",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0022"
+              }
             },
             {
-              "label": "€"
+              "label": "€",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_20AC"
+              }
             },
             {
-              "label": "["
+              "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B"
+              }
             },
             {
-              "label": "]"
+              "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D"
+              }
             },
             {
-              "label": "~"
+              "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007E"
+              }
             },
             {
               "label": "",
@@ -350,29 +1141,69 @@
           ],
           [
             {
-              "label": "©"
+              "label": "©",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_00A9"
+              }
             },
             {
-              "label": "="
+              "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003D"
+              }
             },
             {
-              "label": ";"
+              "label": ";",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003B"
+              }
             },
             {
-              "label": "{"
+              "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007B"
+              }
             },
             {
               "label": "}",
-              "output": "{"
+              "output": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007B"
+              }
             },
             {
-              "label": ":"
+              "label": ":",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003A"
+              }
             },
             {
-              "label": "`"
+              "label": "`",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0060"
+              }
             },
             {
-              "label": "•"
+              "label": "•",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_2022"
+              }
             },
             {
               "label": "⌫",

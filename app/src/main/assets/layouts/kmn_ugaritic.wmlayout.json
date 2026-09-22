@@ -198,7 +198,7 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "symbols"
               },
               "width": 1.6
             },
@@ -500,22 +500,53 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "letters"
               },
               "width": 1.6
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B",
+                "longPress": [
+                  {
+                    "id": "U_007B"
+                  },
+                  {
+                    "id": "U_003C"
+                  }
+                ]
+              },
               "longPress": [
                 "{",
                 "<"
               ]
             },
             {
-              "label": "|"
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007C"
+              }
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D",
+                "longPress": [
+                  {
+                    "id": "U_007D"
+                  },
+                  {
+                    "id": "U_003E"
+                  }
+                ]
+              },
               "longPress": [
                 "}",
                 ">"
@@ -594,13 +625,6 @@
                 "type": "enter"
               },
               "width": 1.45
-            },
-            {
-              "label": "ABC",
-              "action": {
-                "type": "letters"
-              },
-              "width": 1.5
             }
           ]
         ]

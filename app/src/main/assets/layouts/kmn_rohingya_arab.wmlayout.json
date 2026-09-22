@@ -11,10 +11,14 @@
           [
             {
               "label": "۱",
-              "shiftLabel": "!",
               "action": {
                 "type": "keyman_key",
-                "vkey": 49
+                "vkey": 49,
+                "longPress": [
+                  {
+                    "id": "U_0031"
+                  }
+                ]
               },
               "longPress": [
                 "1"
@@ -22,10 +26,14 @@
             },
             {
               "label": "۲",
-              "shiftLabel": "@",
               "action": {
                 "type": "keyman_key",
-                "vkey": 50
+                "vkey": 50,
+                "longPress": [
+                  {
+                    "id": "U_0032"
+                  }
+                ]
               },
               "longPress": [
                 "2"
@@ -33,10 +41,14 @@
             },
             {
               "label": "۳",
-              "shiftLabel": "࣯",
               "action": {
                 "type": "keyman_key",
-                "vkey": 51
+                "vkey": 51,
+                "longPress": [
+                  {
+                    "id": "U_0033"
+                  }
+                ]
               },
               "longPress": [
                 "3"
@@ -44,10 +56,14 @@
             },
             {
               "label": "۴",
-              "shiftLabel": "࣭",
               "action": {
                 "type": "keyman_key",
-                "vkey": 52
+                "vkey": 52,
+                "longPress": [
+                  {
+                    "id": "U_0034"
+                  }
+                ]
               },
               "longPress": [
                 "4"
@@ -55,10 +71,14 @@
             },
             {
               "label": "۵",
-              "shiftLabel": "࣮",
               "action": {
                 "type": "keyman_key",
-                "vkey": 53
+                "vkey": 53,
+                "longPress": [
+                  {
+                    "id": "U_0035"
+                  }
+                ]
               },
               "longPress": [
                 "5"
@@ -66,10 +86,14 @@
             },
             {
               "label": "۶",
-              "shiftLabel": "^",
               "action": {
                 "type": "keyman_key",
-                "vkey": 54
+                "vkey": 54,
+                "longPress": [
+                  {
+                    "id": "U_0036"
+                  }
+                ]
               },
               "longPress": [
                 "6"
@@ -77,10 +101,14 @@
             },
             {
               "label": "۷",
-              "shiftLabel": "&",
               "action": {
                 "type": "keyman_key",
-                "vkey": 55
+                "vkey": 55,
+                "longPress": [
+                  {
+                    "id": "U_0037"
+                  }
+                ]
               },
               "longPress": [
                 "7"
@@ -88,10 +116,14 @@
             },
             {
               "label": "۸",
-              "shiftLabel": "*",
               "action": {
                 "type": "keyman_key",
-                "vkey": 56
+                "vkey": 56,
+                "longPress": [
+                  {
+                    "id": "U_0038"
+                  }
+                ]
               },
               "longPress": [
                 "8"
@@ -99,10 +131,14 @@
             },
             {
               "label": "۹",
-              "shiftLabel": "(",
               "action": {
                 "type": "keyman_key",
-                "vkey": 57
+                "vkey": 57,
+                "longPress": [
+                  {
+                    "id": "U_0039"
+                  }
+                ]
               },
               "longPress": [
                 "9"
@@ -110,10 +146,14 @@
             },
             {
               "label": "۰",
-              "shiftLabel": ")",
               "action": {
                 "type": "keyman_key",
-                "vkey": 48
+                "vkey": 48,
+                "longPress": [
+                  {
+                    "id": "U_0030"
+                  }
+                ]
               },
               "longPress": [
                 "0"
@@ -121,10 +161,14 @@
             },
             {
               "label": "ـ",
-              "shiftLabel": "_",
               "action": {
                 "type": "keyman_key",
-                "vkey": 189
+                "vkey": 189,
+                "longPress": [
+                  {
+                    "id": "U_002D"
+                  }
+                ]
               },
               "longPress": [
                 "-"
@@ -132,7 +176,6 @@
             },
             {
               "label": "=",
-              "shiftLabel": "+",
               "action": {
                 "type": "keyman_key",
                 "vkey": 187
@@ -155,7 +198,6 @@
             },
             {
               "label": "ق",
-              "shiftLabel": "ڠ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 81
@@ -163,7 +205,6 @@
             },
             {
               "label": "و",
-              "shiftLabel": "ّ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 87
@@ -171,10 +212,14 @@
             },
             {
               "label": "ࣦ",
-              "shiftLabel": "ے",
               "action": {
                 "type": "keyman_key",
-                "vkey": 69
+                "vkey": 69,
+                "longPress": [
+                  {
+                    "id": "U_08E9"
+                  }
+                ]
               },
               "longPress": [
                 "ࣩ"
@@ -182,10 +227,14 @@
             },
             {
               "label": "ر",
-              "shiftLabel": "ڑ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 82
+                "vkey": 82,
+                "longPress": [
+                  {
+                    "id": "U_0698"
+                  }
+                ]
               },
               "longPress": [
                 "ژ"
@@ -193,10 +242,14 @@
             },
             {
               "label": "ت",
-              "shiftLabel": "ٹ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 84
+                "vkey": 84,
+                "longPress": [
+                  {
+                    "id": "U_0629"
+                  }
+                ]
               },
               "longPress": [
                 "ة"
@@ -204,7 +257,6 @@
             },
             {
               "label": "ي",
-              "shiftLabel": "ى",
               "action": {
                 "type": "keyman_key",
                 "vkey": 89
@@ -212,10 +264,14 @@
             },
             {
               "label": "ُ",
-              "shiftLabel": "ࢪ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 85
+                "vkey": 85,
+                "longPress": [
+                  {
+                    "id": "U_064C"
+                  }
+                ]
               },
               "longPress": [
                 "ٌ"
@@ -225,7 +281,12 @@
               "label": "ِ ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 73
+                "vkey": 73,
+                "longPress": [
+                  {
+                    "id": "U_064D"
+                  }
+                ]
               },
               "longPress": [
                 "ٍ"
@@ -233,10 +294,14 @@
             },
             {
               "label": "ࣤ",
-              "shiftLabel": "ࣥ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 79
+                "vkey": 79,
+                "longPress": [
+                  {
+                    "id": "U_08E7"
+                  }
+                ]
               },
               "longPress": [
                 "ࣧ"
@@ -244,7 +309,6 @@
             },
             {
               "label": "ۡ",
-              "shiftLabel": "پ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -252,7 +316,6 @@
             },
             {
               "label": "࣪",
-              "shiftLabel": "{",
               "action": {
                 "type": "keyman_key",
                 "vkey": 219
@@ -260,7 +323,6 @@
             },
             {
               "label": "࣫",
-              "shiftLabel": "}",
               "action": {
                 "type": "keyman_key",
                 "vkey": 221
@@ -284,10 +346,14 @@
             },
             {
               "label": "َ",
-              "shiftLabel": "ا",
               "action": {
                 "type": "keyman_key",
-                "vkey": 65
+                "vkey": 65,
+                "longPress": [
+                  {
+                    "id": "U_064B"
+                  }
+                ]
               },
               "longPress": [
                 "ً"
@@ -295,7 +361,6 @@
             },
             {
               "label": "س",
-              "shiftLabel": "ش",
               "action": {
                 "type": "keyman_key",
                 "vkey": 83
@@ -303,7 +368,6 @@
             },
             {
               "label": "د",
-              "shiftLabel": "ڈ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -311,7 +375,6 @@
             },
             {
               "label": "ف",
-              "shiftLabel": "ط",
               "action": {
                 "type": "keyman_key",
                 "vkey": 70
@@ -319,7 +382,6 @@
             },
             {
               "label": "گ",
-              "shiftLabel": "ع",
               "action": {
                 "type": "keyman_key",
                 "vkey": 71
@@ -327,7 +389,6 @@
             },
             {
               "label": "ه",
-              "shiftLabel": "ح",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -335,7 +396,6 @@
             },
             {
               "label": "ج",
-              "shiftLabel": "ث",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -343,7 +403,6 @@
             },
             {
               "label": "ك",
-              "shiftLabel": "خ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 75
@@ -351,7 +410,6 @@
             },
             {
               "label": "ل",
-              "shiftLabel": "آ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 76
@@ -359,7 +417,6 @@
             },
             {
               "label": "؛",
-              "shiftLabel": ":",
               "action": {
                 "type": "keyman_key",
                 "vkey": 186
@@ -367,7 +424,6 @@
             },
             {
               "label": "'",
-              "shiftLabel": "”",
               "action": {
                 "type": "keyman_key",
                 "vkey": 222
@@ -375,7 +431,6 @@
             },
             {
               "label": "࣬",
-              "shiftLabel": "|",
               "action": {
                 "type": "keyman_key",
                 "vkey": 220
@@ -392,7 +447,6 @@
             },
             {
               "label": "ز",
-              "shiftLabel": "ذ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 90
@@ -400,7 +454,6 @@
             },
             {
               "label": "ص",
-              "shiftLabel": "ض",
               "action": {
                 "type": "keyman_key",
                 "vkey": 88
@@ -408,7 +461,6 @@
             },
             {
               "label": "چ",
-              "shiftLabel": "غ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -416,7 +468,6 @@
             },
             {
               "label": "ࢬ",
-              "shiftLabel": "ࢫ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 86
@@ -424,7 +475,6 @@
             },
             {
               "label": "ب",
-              "shiftLabel": "ظ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 66
@@ -432,7 +482,6 @@
             },
             {
               "label": "ن",
-              "shiftLabel": "ں",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -440,7 +489,6 @@
             },
             {
               "label": "م",
-              "shiftLabel": "ء",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -448,7 +496,6 @@
             },
             {
               "label": "،",
-              "shiftLabel": "ٔ",
               "action": {
                 "type": "keyman_key",
                 "vkey": 188
@@ -456,10 +503,14 @@
             },
             {
               "label": "۔",
-              "shiftLabel": "ٕ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "id": "U_002E"
+                  }
+                ]
               },
               "longPress": [
                 "."
@@ -467,10 +518,14 @@
             },
             {
               "label": "/",
-              "shiftLabel": "؟",
               "action": {
                 "type": "keyman_key",
-                "vkey": 191
+                "vkey": 191,
+                "longPress": [
+                  {
+                    "id": "U_005C"
+                  }
+                ]
               },
               "longPress": [
                 "\\"
@@ -478,10 +533,479 @@
             },
             {
               "label": "`",
-              "shiftLabel": "~",
               "action": {
                 "type": "keyman_key",
                 "vkey": 192
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 1.4
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 9.3
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.45
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 49,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 50,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "࣯",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 51,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "࣭",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 52,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "࣮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 53,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "^",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 54,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 55,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "*",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 56,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "(",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 57,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": ")",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 48,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "_",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 189,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 187,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.7
+            },
+            {
+              "label": "ڠ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 81,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ّ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 87,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ے",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 69,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ڑ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 82,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ٹ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 84,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ى",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 89,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ࢪ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 85,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 73,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ࣥ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 79,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_08E8"
+                  }
+                ]
+              },
+              "longPress": [
+                "ࣨ"
+              ]
+            },
+            {
+              "label": "پ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 80,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "{",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 219,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "}",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 221,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.1
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 1.05
+            },
+            {
+              "label": "ا",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 65,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ش",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 83,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ڈ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 68,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ط",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 70,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ع",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 71,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ح",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 72,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ث",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 74,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "خ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 75,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "آ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 76,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": ":",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 186,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "”",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 222,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_201C"
+                  }
+                ]
+              },
+              "longPress": [
+                "“"
+              ]
+            },
+            {
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 220,
+                "modifiers": 16
+              }
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              },
+              "width": 1.6
+            },
+            {
+              "label": "ذ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 90,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ض",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 88,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "غ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 67,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ࢫ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 86,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ظ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 66,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ں",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 78,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ء",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 77,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ٔ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 188,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "ٕ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 190,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "؟",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 191,
+                "modifiers": 16
+              }
+            },
+            {
+              "label": "~",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 192,
+                "modifiers": 16
               }
             },
             {

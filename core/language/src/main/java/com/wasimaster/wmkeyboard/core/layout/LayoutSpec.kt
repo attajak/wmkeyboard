@@ -124,6 +124,16 @@ data class LayerSpec(
      * pairing once the theme arrives.
      */
     val themeId: String? = null,
+    /**
+     * A converted Keyman layer's own word on its space, backspace and enter
+     * keys, by Keyman key id (`K_SPACE`, `K_BKSP`, `K_ENTER`): the modifiers
+     * the rules see them pressed with, where the key's `layer` says something
+     * other than the layer it sits on, and the layer it switches to. The keys
+     * themselves stay our space, backspace and enter, so they keep repeating,
+     * swiping and naming the language; this is what they add when pressed on
+     * a Keyman layout. Null everywhere else.
+     */
+    val keymanFrames: Map<String, KeymanTarget>? = null,
 )
 
 /**

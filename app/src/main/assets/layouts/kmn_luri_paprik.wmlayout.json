@@ -20,7 +20,12 @@
               "label": "ص",
               "action": {
                 "type": "keyman_key",
-                "vkey": 50
+                "vkey": 50,
+                "longPress": [
+                  {
+                    "vkey": 49
+                  }
+                ]
               },
               "longPress": [
                 "ض"
@@ -37,7 +42,12 @@
               "label": "ف",
               "action": {
                 "type": "keyman_key",
-                "vkey": 53
+                "vkey": 53,
+                "longPress": [
+                  {
+                    "vkey": 84
+                  }
+                ]
               },
               "longPress": [
                 "ڤ"
@@ -59,6 +69,16 @@
             },
             {
               "label": "ط",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_TA",
+                "longPress": [
+                  {
+                    "id": "T_ZA"
+                  }
+                ]
+              },
               "longPress": [
                 "ظ"
               ]
@@ -67,7 +87,12 @@
               "label": "ک",
               "action": {
                 "type": "keyman_key",
-                "vkey": 186
+                "vkey": 186,
+                "longPress": [
+                  {
+                    "vkey": 88
+                  }
+                ]
               },
               "longPress": [
                 "کٛ"
@@ -81,7 +106,12 @@
               }
             },
             {
-              "label": "ڳ"
+              "label": "ڳ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_GAF_INVERTED"
+              }
             }
           ],
           [
@@ -131,7 +161,12 @@
               "label": "ت",
               "action": {
                 "type": "keyman_key",
-                "vkey": 74
+                "vkey": 74,
+                "longPress": [
+                  {
+                    "vkey": 51
+                  }
+                ]
               },
               "longPress": [
                 "ث"
@@ -145,10 +180,20 @@
               }
             },
             {
-              "label": "ب"
+              "label": "ب",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_BE"
+              }
             },
             {
-              "label": "م"
+              "label": "م",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_MIM"
+              }
             }
           ],
           [
@@ -163,7 +208,12 @@
               "label": "ئ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 76
+                "vkey": 76,
+                "longPress": [
+                  {
+                    "id": "U_0621"
+                  }
+                ]
               },
               "longPress": [
                 "ء"
@@ -184,16 +234,40 @@
               }
             },
             {
-              "label": "لٛ"
+              "label": "لٛ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LAM_HIGH"
+              }
             },
             {
-              "label": "ل"
+              "label": "ل",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_LAM"
+              }
             },
             {
               "label": "ا",
               "action": {
                 "type": "keyman_key",
-                "vkey": 222
+                "vkey": 222,
+                "longPress": [
+                  {
+                    "vkey": 70
+                  },
+                  {
+                    "id": "T_A_MADD"
+                  },
+                  {
+                    "id": "T_HAMZA_BELOW"
+                  },
+                  {
+                    "id": "T_ALEF_HIGH"
+                  }
+                ]
               },
               "longPress": [
                 "ٱ",
@@ -203,16 +277,36 @@
               ]
             },
             {
-              "label": "ۏ"
+              "label": "ۏ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_WAW_RING"
+              }
             },
             {
               "label": "و",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_WAW",
+                "longPress": [
+                  {
+                    "id": "T_WAW_HAMZA"
+                  }
+                ]
+              },
               "longPress": [
                 "ؤ"
               ]
             },
             {
-              "label": "ن"
+              "label": "ن",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_NUN"
+              }
             },
             {
               "label": "ݩ",
@@ -247,33 +341,58 @@
               "label": "ر",
               "action": {
                 "type": "keyman_key",
-                "vkey": 86
+                "vkey": 86,
+                "longPress": [
+                  {
+                    "id": "T_REH_SMALL_V"
+                  }
+                ]
               },
               "longPress": [
                 "ڒ"
               ]
             },
             {
-              "label": "ڌ"
+              "label": "ڌ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_DAL_INVERTED_V"
+              }
             },
             {
               "label": "د",
               "action": {
                 "type": "keyman_key",
-                "vkey": 78
+                "vkey": 78,
+                "longPress": [
+                  {
+                    "vkey": 66
+                  }
+                ]
               },
               "longPress": [
                 "ذ"
               ]
             },
             {
-              "label": "ۉ"
+              "label": "ۉ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_WAW_INVERTED_V"
+              }
             },
             {
               "label": "ۊ",
               "action": {
                 "type": "keyman_key",
-                "vkey": 79
+                "vkey": 79,
+                "longPress": [
+                  {
+                    "vkey": 87
+                  }
+                ]
               },
               "longPress": [
                 "ۋ"
@@ -281,6 +400,16 @@
             },
             {
               "label": "َ◌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_FATHA",
+                "longPress": [
+                  {
+                    "id": "T_TATWEEL"
+                  }
+                ]
+              },
               "longPress": [
                 "ـ"
               ]
@@ -302,6 +431,11 @@
             },
             {
               "label": ">|<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_ZWNJ"
+              },
               "width": 0.8
             },
             {
@@ -315,7 +449,39 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "id": "T_ARABIC_COMMA"
+                  },
+                  {
+                    "vkey": 191
+                  },
+                  {
+                    "id": "T_ARABIC_QUESTION"
+                  },
+                  {
+                    "id": "T_QUESTION"
+                  },
+                  {
+                    "id": "T_EXCLAMATION"
+                  },
+                  {
+                    "id": "T_COLON"
+                  },
+                  {
+                    "id": "T_LEFT_PAREN"
+                  },
+                  {
+                    "id": "T_RIGHT_PAREN"
+                  },
+                  {
+                    "id": "T_ARABIC_SEMICOLON"
+                  },
+                  {
+                    "id": "T_INTERROBANG"
+                  }
+                ]
               },
               "longPress": [
                 "،",
@@ -331,7 +497,12 @@
               ]
             },
             {
-              "label": "ِ◌"
+              "label": "ِ◌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_KASRA"
+              }
             },
             {
               "label": "⏎",
@@ -343,84 +514,117 @@
           ]
         ]
       },
-      "shift": {
+      "k:shift": {
         "rows": [
           [
             {
               "label": "۱",
               "action": {
                 "type": "keyman_key",
-                "vkey": 49
+                "vkey": 49,
+                "modifiers": 16
               }
             },
             {
               "label": "۲",
               "action": {
                 "type": "keyman_key",
-                "vkey": 50
+                "vkey": 50,
+                "modifiers": 16
               }
             },
             {
               "label": "۳",
               "action": {
                 "type": "keyman_key",
-                "vkey": 51
+                "vkey": 51,
+                "modifiers": 16
               }
             },
             {
               "label": "۴",
               "action": {
                 "type": "keyman_key",
-                "vkey": 52
+                "vkey": 52,
+                "modifiers": 16
               }
             },
             {
               "label": "۵",
               "action": {
                 "type": "keyman_key",
-                "vkey": 53
+                "vkey": 53,
+                "modifiers": 16
               }
             },
             {
               "label": "۶",
               "action": {
                 "type": "keyman_key",
-                "vkey": 54
+                "vkey": 54,
+                "modifiers": 16
               }
             },
             {
               "label": "۷",
               "action": {
                 "type": "keyman_key",
-                "vkey": 55
+                "vkey": 55,
+                "modifiers": 16
               }
             },
             {
               "label": "۸",
               "action": {
                 "type": "keyman_key",
-                "vkey": 56
+                "vkey": 56,
+                "modifiers": 16
               }
             },
             {
               "label": "۹",
               "action": {
                 "type": "keyman_key",
-                "vkey": 57
+                "vkey": 57,
+                "modifiers": 16
               }
             },
             {
               "label": "۰",
               "action": {
                 "type": "keyman_key",
-                "vkey": 48
+                "vkey": 48,
+                "modifiers": 16
               }
             },
             {
               "label": "+",
               "action": {
                 "type": "keyman_key",
-                "vkey": 187
+                "vkey": 187,
+                "modifiers": 16,
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_PLUS_MINUS"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_MULTIPLY"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_DIVIDE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_NOT_EQUAL"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_APPROXIMATE"
+                  }
+                ]
               },
               "longPress": [
                 "±",
@@ -432,6 +636,38 @@
             },
             {
               "label": "—",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_DASH_KEY",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_EN_DASH"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_EM_DASH"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_MIDDLE_DOT"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_INVERTED_QUESTION"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_ARABIC_DECIMAL"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_ARABIC_THOUSANDS"
+                  }
+                ]
+              },
               "longPress": [
                 "–",
                 "—",
@@ -444,40 +680,112 @@
           ],
           [
             {
-              "label": "<"
+              "label": "<",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_LESS_THAN"
+              }
             },
             {
-              "label": ">"
+              "label": ">",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_GREATER_THAN"
+              }
             },
             {
-              "label": "≤"
+              "label": "≤",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_LESS_EQUAL"
+              }
             },
             {
-              "label": "≥"
+              "label": "≥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_GREATER_EQUAL"
+              }
             },
             {
-              "label": "«"
+              "label": "«",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_LEFT_DOUBLE_ANGLE"
+              }
             },
             {
-              "label": "»"
+              "label": "»",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_RIGHT_DOUBLE_ANGLE"
+              }
             },
             {
-              "label": "‹"
+              "label": "‹",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_SINGLE_LEFT_ANGLE"
+              }
             },
             {
-              "label": "›"
+              "label": "›",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_SINGLE_RIGHT_ANGLE"
+              }
             },
             {
-              "label": "⟨"
+              "label": "⟨",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_LEFT_MATH_ANGLE"
+              }
             },
             {
-              "label": "⟩"
+              "label": "⟩",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_RIGHT_MATH_ANGLE"
+              }
             },
             {
-              "label": "﴾"
+              "label": "﴾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ORNATE_LEFT_PAREN"
+              }
             },
             {
-              "label": "﴿"
+              "label": "﴿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ORNATE_RIGHT_PAREN"
+              }
             }
           ],
           [
@@ -489,40 +797,112 @@
               "width": 0.35
             },
             {
-              "label": "٬"
+              "label": "٬",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ARABIC_THOUSANDS"
+              }
             },
             {
-              "label": "٫"
+              "label": "٫",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ARABIC_DECIMAL"
+              }
             },
             {
-              "label": "·"
+              "label": "·",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_MIDDLE_DOT"
+              }
             },
             {
-              "label": "¿"
+              "label": "¿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_INVERTED_QUESTION"
+              }
             },
             {
-              "label": "℅"
+              "label": "℅",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_CARE_OF"
+              }
             },
             {
-              "label": "#"
+              "label": "#",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_NUMBER_SIGN"
+              }
             },
             {
-              "label": "%"
+              "label": "%",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_PERCENT"
+              }
             },
             {
-              "label": "&"
+              "label": "&",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_AMPERSAND"
+              }
             },
             {
-              "label": "@"
+              "label": "@",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_AT"
+              }
             },
             {
-              "label": "إ"
+              "label": "إ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ALEF_HAMZA_BELOW"
+              }
             },
             {
-              "label": "?"
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_QUESTION"
+              }
             },
             {
-              "label": "!"
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_EXCLAMATION"
+              }
             }
           ],
           [
@@ -534,34 +914,144 @@
               "width": 1.3
             },
             {
-              "label": "€"
+              "label": "€",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_EURO"
+              }
             },
             {
-              "label": "£"
+              "label": "£",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_POUND"
+              }
             },
             {
-              "label": "¥"
+              "label": "¥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_YEN"
+              }
             },
             {
-              "label": "﷼"
+              "label": "﷼",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_RIAL"
+              }
             },
             {
-              "label": "¢"
+              "label": "¢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_CENT"
+              }
             },
             {
-              "label": "‰"
+              "label": "‰",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_PER_MILLE"
+              }
             },
             {
-              "label": "َ◌"
+              "label": "َ◌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_FATHA"
+              }
             },
             {
-              "label": "ُ◌"
+              "label": "ُ◌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_DAMMA"
+              }
             },
             {
-              "label": "ِ◌"
+              "label": "ِ◌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_KASRA"
+              }
             },
             {
               "label": "$",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_CURRENCY_KEY",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_DOLLAR"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_EURO"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_POUND"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_YEN"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_CENT"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_RIAL"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_CARE_OF"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_PER_MILLE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_PERCENT"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_NUMBER_SIGN"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_AMPERSAND"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_AT"
+                  }
+                ]
+              },
               "longPress": [
                 "$",
                 "€",
@@ -593,7 +1083,14 @@
               "width": 1.4
             },
             {
-              "label": "😊"
+              "label": "😊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "nextLayer": "k:emoji",
+                "id": "T_EMOJI_KEY"
+              }
             },
             {
               "label": " ",
@@ -603,17 +1100,80 @@
               "width": 6.1
             },
             {
-              "label": "؟"
+              "label": "؟",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_ARABIC_QUESTION"
+              }
             },
             {
               "label": "_",
               "action": {
                 "type": "keyman_key",
-                "vkey": 189
+                "vkey": 189,
+                "modifiers": 16
               }
             },
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "T_BRACKET_KEY",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "T_LEFT_SQUARE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_RIGHT_SQUARE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_LEFT_CURLY"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_RIGHT_CURLY"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_LEFT_DOUBLE_ANGLE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_RIGHT_DOUBLE_ANGLE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_SINGLE_LEFT_ANGLE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_SINGLE_RIGHT_ANGLE"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_LESS_THAN"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_GREATER_THAN"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_LESS_EQUAL"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "T_GREATER_EQUAL"
+                  }
+                ]
+              },
               "longPress": [
                 "[",
                 "]",
@@ -639,87 +1199,250 @@
           ]
         ]
       },
-      "emoji": {
+      "k:emoji": {
         "rows": [
           [
             {
-              "label": "😀"
+              "label": "😀",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_GRINNING"
+              }
             },
             {
-              "label": "😃"
+              "label": "😃",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SMILEY"
+              }
             },
             {
-              "label": "😄"
+              "label": "😄",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SMILE"
+              }
             },
             {
-              "label": "😁"
+              "label": "😁",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_GRIN"
+              }
             },
             {
-              "label": "😆"
+              "label": "😆",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_LAUGH"
+              }
             },
             {
-              "label": "😅"
+              "label": "😅",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SWEAT"
+              }
             },
             {
-              "label": "🤣"
+              "label": "🤣",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_ROFL"
+              }
             },
             {
-              "label": "😂"
+              "label": "😂",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_JOY"
+              }
             },
             {
-              "label": "😉"
+              "label": "😉",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_WINK"
+              }
             },
             {
-              "label": "😊"
+              "label": "😊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_BLUSH"
+              }
             },
             {
-              "label": "😍"
+              "label": "😍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_HEART_EYES"
+              }
             },
             {
-              "label": "🤩"
+              "label": "🤩",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_STAR_STRUCK"
+              }
             }
           ],
           [
             {
-              "label": "🤔"
+              "label": "🤔",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_THINKING"
+              }
             },
             {
-              "label": "😒"
+              "label": "😒",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_UNAMUSED"
+              }
             },
             {
-              "label": "🙄"
+              "label": "🙄",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_ROLL_EYES"
+              }
             },
             {
-              "label": "😳"
+              "label": "😳",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_FLUSHED"
+              }
             },
             {
-              "label": "😛"
+              "label": "😛",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_STUCK_OUT"
+              }
             },
             {
-              "label": "😜"
+              "label": "😜",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_STUCK_OUT_WINK"
+              }
             },
             {
-              "label": "😝"
+              "label": "😝",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_YUM"
+              }
             },
             {
-              "label": "😌"
+              "label": "😌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_RELIEVED"
+              }
             },
             {
-              "label": "😔"
+              "label": "😔",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_PENSIVE"
+              }
             },
             {
-              "label": "😎"
+              "label": "😎",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SUNGLASSES"
+              }
             },
             {
-              "label": "😏"
+              "label": "😏",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SMIRK"
+              }
             },
             {
-              "label": "😐"
+              "label": "😐",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_NEUTRAL"
+              }
             }
           ],
           [
             {
               "label": "Confused",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_CONFUSED",
+                "longPress": [
+                  {
+                    "id": "T_E_CONFUSED"
+                  },
+                  {
+                    "id": "T_E_UPSIDE"
+                  },
+                  {
+                    "id": "T_E_MONEY"
+                  },
+                  {
+                    "id": "T_E_ASTONISHED"
+                  },
+                  {
+                    "id": "T_E_SLEEPING"
+                  },
+                  {
+                    "id": "T_E_VOMIT"
+                  },
+                  {
+                    "id": "T_E_PARTYING"
+                  },
+                  {
+                    "id": "T_E_CRY"
+                  },
+                  {
+                    "id": "T_E_SOB"
+                  },
+                  {
+                    "id": "T_E_SCREAM"
+                  },
+                  {
+                    "id": "T_E_HEAD_EXPLODE"
+                  },
+                  {
+                    "id": "T_E_HEART_BROKEN"
+                  }
+                ]
+              },
               "longPress": [
                 "😕",
                 "🙃",
@@ -737,6 +1460,73 @@
             },
             {
               "label": "🙌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_HANDS",
+                "longPress": [
+                  {
+                    "id": "T_E_CLAP"
+                  },
+                  {
+                    "id": "T_E_HANDSHAKE"
+                  },
+                  {
+                    "id": "T_E_THUMBSUP"
+                  },
+                  {
+                    "id": "T_E_THUMBSDOWN"
+                  },
+                  {
+                    "id": "T_E_PEACE"
+                  },
+                  {
+                    "id": "T_E_FINGERS_CROSSED"
+                  },
+                  {
+                    "id": "T_E_ROCK"
+                  },
+                  {
+                    "id": "T_E_OK"
+                  },
+                  {
+                    "id": "T_E_CALL"
+                  },
+                  {
+                    "id": "T_E_LEFT"
+                  },
+                  {
+                    "id": "T_E_RIGHT"
+                  },
+                  {
+                    "id": "T_E_UP"
+                  },
+                  {
+                    "id": "T_E_DOWN"
+                  },
+                  {
+                    "id": "T_E_HAND"
+                  },
+                  {
+                    "id": "T_E_RAISED"
+                  },
+                  {
+                    "id": "T_E_FINGERS"
+                  },
+                  {
+                    "id": "T_E_VULCAN"
+                  },
+                  {
+                    "id": "T_E_HEART_HANDS"
+                  },
+                  {
+                    "id": "T_E_MUSCLE"
+                  },
+                  {
+                    "id": "T_E_PRAY"
+                  }
+                ]
+              },
               "longPress": [
                 "👏",
                 "🤝",
@@ -762,6 +1552,61 @@
             },
             {
               "label": "❤️",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_HEART",
+                "longPress": [
+                  {
+                    "id": "T_E_ORANGE_HEART"
+                  },
+                  {
+                    "id": "T_E_YELLOW_HEART"
+                  },
+                  {
+                    "id": "T_E_GREEN_HEART"
+                  },
+                  {
+                    "id": "T_E_BLUE_HEART"
+                  },
+                  {
+                    "id": "T_E_LIGHT_BLUE_HEART"
+                  },
+                  {
+                    "id": "T_E_PURPLE_HEART"
+                  },
+                  {
+                    "id": "T_E_BLACK_HEART"
+                  },
+                  {
+                    "id": "T_E_WHITE_HEART"
+                  },
+                  {
+                    "id": "T_E_BROWN_HEART"
+                  },
+                  {
+                    "id": "T_E_GROWING_HEART"
+                  },
+                  {
+                    "id": "T_E_BEATING_HEART"
+                  },
+                  {
+                    "id": "T_E_TWO_HEARTS"
+                  },
+                  {
+                    "id": "T_E_REVOLVING"
+                  },
+                  {
+                    "id": "T_E_SPARKLING"
+                  },
+                  {
+                    "id": "T_E_ARROW_HEART"
+                  },
+                  {
+                    "id": "T_E_GIFT_HEART"
+                  }
+                ]
+              },
               "longPress": [
                 "🧡",
                 "💛",
@@ -783,6 +1628,49 @@
             },
             {
               "label": "🔥",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_FIRE",
+                "longPress": [
+                  {
+                    "id": "T_E_STAR"
+                  },
+                  {
+                    "id": "T_E_GLOWING_STAR"
+                  },
+                  {
+                    "id": "T_E_SPARKLES"
+                  },
+                  {
+                    "id": "T_E_DIZZY"
+                  },
+                  {
+                    "id": "T_E_RAINBOW"
+                  },
+                  {
+                    "id": "T_E_SUN"
+                  },
+                  {
+                    "id": "T_E_MOON"
+                  },
+                  {
+                    "id": "T_E_LIGHTNING"
+                  },
+                  {
+                    "id": "T_E_FIRE"
+                  },
+                  {
+                    "id": "T_E_DROPLET"
+                  },
+                  {
+                    "id": "T_E_SNOWFLAKE"
+                  },
+                  {
+                    "id": "T_E_WAVE"
+                  }
+                ]
+              },
               "longPress": [
                 "⭐",
                 "🌟",
@@ -800,6 +1688,73 @@
             },
             {
               "label": "🐶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_DOG",
+                "longPress": [
+                  {
+                    "id": "T_E_CAT"
+                  },
+                  {
+                    "id": "T_E_MOUSE"
+                  },
+                  {
+                    "id": "T_E_HAMSTER"
+                  },
+                  {
+                    "id": "T_E_RABBIT"
+                  },
+                  {
+                    "id": "T_E_FOX"
+                  },
+                  {
+                    "id": "T_E_BEAR"
+                  },
+                  {
+                    "id": "T_E_PANDA"
+                  },
+                  {
+                    "id": "T_E_KOALA"
+                  },
+                  {
+                    "id": "T_E_TIGER"
+                  },
+                  {
+                    "id": "T_E_LION"
+                  },
+                  {
+                    "id": "T_E_COW"
+                  },
+                  {
+                    "id": "T_E_PIG"
+                  },
+                  {
+                    "id": "T_E_FROG"
+                  },
+                  {
+                    "id": "T_E_MONKEY"
+                  },
+                  {
+                    "id": "T_E_CHICKEN"
+                  },
+                  {
+                    "id": "T_E_PENGUIN"
+                  },
+                  {
+                    "id": "T_E_BIRD"
+                  },
+                  {
+                    "id": "T_E_EAGLE"
+                  },
+                  {
+                    "id": "T_E_DUCK"
+                  },
+                  {
+                    "id": "T_E_OWL"
+                  }
+                ]
+              },
               "longPress": [
                 "🐱",
                 "🐭",
@@ -825,6 +1780,58 @@
             },
             {
               "label": "🍕",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_FOOD",
+                "longPress": [
+                  {
+                    "id": "T_E_BURGER"
+                  },
+                  {
+                    "id": "T_E_FRIES"
+                  },
+                  {
+                    "id": "T_E_HOTDOG"
+                  },
+                  {
+                    "id": "T_E_POPCORN"
+                  },
+                  {
+                    "id": "T_E_CAKE"
+                  },
+                  {
+                    "id": "T_E_SHORTCAKE"
+                  },
+                  {
+                    "id": "T_E_DONUT"
+                  },
+                  {
+                    "id": "T_E_COOKIE"
+                  },
+                  {
+                    "id": "T_E_CHOCOLATE"
+                  },
+                  {
+                    "id": "T_E_CANDY"
+                  },
+                  {
+                    "id": "T_E_COFFEE"
+                  },
+                  {
+                    "id": "T_E_TEA"
+                  },
+                  {
+                    "id": "T_E_CUP_STRAW"
+                  },
+                  {
+                    "id": "T_E_BEER"
+                  },
+                  {
+                    "id": "T_E_WINE"
+                  }
+                ]
+              },
               "longPress": [
                 "🍔",
                 "🍟",
@@ -845,6 +1852,43 @@
             },
             {
               "label": "🏠",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_HOME",
+                "longPress": [
+                  {
+                    "id": "T_E_GARDEN"
+                  },
+                  {
+                    "id": "T_E_OFFICE"
+                  },
+                  {
+                    "id": "T_E_HOSPITAL"
+                  },
+                  {
+                    "id": "T_E_SCHOOL"
+                  },
+                  {
+                    "id": "T_E_CASTLE"
+                  },
+                  {
+                    "id": "T_E_TOWER"
+                  },
+                  {
+                    "id": "T_E_STATUE"
+                  },
+                  {
+                    "id": "T_E_CHURCH"
+                  },
+                  {
+                    "id": "T_E_MOSQUE"
+                  },
+                  {
+                    "id": "T_E_SHRINE"
+                  }
+                ]
+              },
               "longPress": [
                 "🏡",
                 "🏢",
@@ -860,6 +1904,37 @@
             },
             {
               "label": "🚗",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_CAR",
+                "longPress": [
+                  {
+                    "id": "T_E_TAXI"
+                  },
+                  {
+                    "id": "T_E_BUS"
+                  },
+                  {
+                    "id": "T_E_ROCKET"
+                  },
+                  {
+                    "id": "T_E_PLANE"
+                  },
+                  {
+                    "id": "T_E_TRAIN"
+                  },
+                  {
+                    "id": "T_E_SHIP"
+                  },
+                  {
+                    "id": "T_E_BIKE"
+                  },
+                  {
+                    "id": "T_E_MOTORCYCLE"
+                  }
+                ]
+              },
               "longPress": [
                 "🚕",
                 "🚌",
@@ -873,6 +1948,37 @@
             },
             {
               "label": "📱",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_PHONE",
+                "longPress": [
+                  {
+                    "id": "T_E_LAPTOP"
+                  },
+                  {
+                    "id": "T_E_DESKTOP"
+                  },
+                  {
+                    "id": "T_E_KEYBOARD"
+                  },
+                  {
+                    "id": "T_E_PRINTER"
+                  },
+                  {
+                    "id": "T_E_CAMERA"
+                  },
+                  {
+                    "id": "T_E_MOVIE"
+                  },
+                  {
+                    "id": "T_E_TV"
+                  },
+                  {
+                    "id": "T_E_RADIO"
+                  }
+                ]
+              },
               "longPress": [
                 "💻",
                 "🖥️",
@@ -886,6 +1992,34 @@
             },
             {
               "label": "👖",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_PANTS",
+                "longPress": [
+                  {
+                    "id": "T_E_DRESS"
+                  },
+                  {
+                    "id": "T_E_TIE"
+                  },
+                  {
+                    "id": "T_E_BIKINI"
+                  },
+                  {
+                    "id": "T_E_HAT"
+                  },
+                  {
+                    "id": "T_E_SHOE"
+                  },
+                  {
+                    "id": "T_E_PURSE"
+                  },
+                  {
+                    "id": "T_E_BACKPACK"
+                  }
+                ]
+              },
               "longPress": [
                 "👗",
                 "👔",
@@ -898,6 +2032,70 @@
             },
             {
               "label": "❤️",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SYMBOL",
+                "longPress": [
+                  {
+                    "id": "T_E_PEACE"
+                  },
+                  {
+                    "id": "T_E_CROSS"
+                  },
+                  {
+                    "id": "T_E_STAR_CRESCENT"
+                  },
+                  {
+                    "id": "T_E_OM"
+                  },
+                  {
+                    "id": "T_E_YINYANG"
+                  },
+                  {
+                    "id": "T_E_STAR_DAVID"
+                  },
+                  {
+                    "id": "T_E_SIX_POINTED"
+                  },
+                  {
+                    "id": "T_E_ARIES"
+                  },
+                  {
+                    "id": "T_E_TAURUS"
+                  },
+                  {
+                    "id": "T_E_GEMINI"
+                  },
+                  {
+                    "id": "T_E_CANCER"
+                  },
+                  {
+                    "id": "T_E_LEO"
+                  },
+                  {
+                    "id": "T_E_VIRGO"
+                  },
+                  {
+                    "id": "T_E_LIBRA"
+                  },
+                  {
+                    "id": "T_E_SCORPIO"
+                  },
+                  {
+                    "id": "T_E_SAGITTARIUS"
+                  },
+                  {
+                    "id": "T_E_CAPRICORN"
+                  },
+                  {
+                    "id": "T_E_AQUARIUS"
+                  },
+                  {
+                    "id": "T_E_PISCES"
+                  }
+                ]
+              },
               "longPress": [
                 "☮️",
                 "✝️",
@@ -922,6 +2120,37 @@
             },
             {
               "label": "⚽",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_BALL",
+                "longPress": [
+                  {
+                    "id": "T_E_BASKETBALL"
+                  },
+                  {
+                    "id": "T_E_FOOTBALL"
+                  },
+                  {
+                    "id": "T_E_BASEBALL"
+                  },
+                  {
+                    "id": "T_E_TENNIS"
+                  },
+                  {
+                    "id": "T_E_VOLLEYBALL"
+                  },
+                  {
+                    "id": "T_E_GAME"
+                  },
+                  {
+                    "id": "T_E_DART"
+                  },
+                  {
+                    "id": "T_E_TROPHY"
+                  }
+                ]
+              },
               "longPress": [
                 "🏀",
                 "🏈",
@@ -943,6 +2172,55 @@
             },
             {
               "label": "🏁",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_FLAG",
+                "longPress": [
+                  {
+                    "id": "T_E_RED_FLAG"
+                  },
+                  {
+                    "id": "T_E_CROSSED_FLAGS"
+                  },
+                  {
+                    "id": "T_E_BLACK_FLAG"
+                  },
+                  {
+                    "id": "T_E_WHITE_FLAG"
+                  },
+                  {
+                    "id": "T_E_US"
+                  },
+                  {
+                    "id": "T_E_UK"
+                  },
+                  {
+                    "id": "T_E_FRANCE"
+                  },
+                  {
+                    "id": "T_E_GERMANY"
+                  },
+                  {
+                    "id": "T_E_ITALY"
+                  },
+                  {
+                    "id": "T_E_SPAIN"
+                  },
+                  {
+                    "id": "T_E_RUSSIA"
+                  },
+                  {
+                    "id": "T_E_CHINA"
+                  },
+                  {
+                    "id": "T_E_JAPAN"
+                  },
+                  {
+                    "id": "T_E_KOREA"
+                  }
+                ]
+              },
               "longPress": [
                 "🚩",
                 "🎌",
@@ -962,6 +2240,43 @@
             },
             {
               "label": "✅",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_CHECK",
+                "longPress": [
+                  {
+                    "id": "T_E_CROSS"
+                  },
+                  {
+                    "id": "T_E_CIRCLE"
+                  },
+                  {
+                    "id": "T_E_EXCLAMATION"
+                  },
+                  {
+                    "id": "T_E_QUESTION"
+                  },
+                  {
+                    "id": "T_E_DOUBLE_EXCL"
+                  },
+                  {
+                    "id": "T_E_INTERROBANG"
+                  },
+                  {
+                    "id": "T_E_ZZZ"
+                  },
+                  {
+                    "id": "T_E_SPEECH"
+                  },
+                  {
+                    "id": "T_E_THOUGHT"
+                  },
+                  {
+                    "id": "T_E_ANGRY"
+                  }
+                ]
+              },
               "longPress": [
                 "❌",
                 "⭕",
@@ -977,6 +2292,58 @@
             },
             {
               "label": "➡️",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_ARROW",
+                "longPress": [
+                  {
+                    "id": "T_E_LEFT_ARROW"
+                  },
+                  {
+                    "id": "T_E_UP_ARROW"
+                  },
+                  {
+                    "id": "T_E_DOWN_ARROW"
+                  },
+                  {
+                    "id": "T_E_NE_ARROW"
+                  },
+                  {
+                    "id": "T_E_SE_ARROW"
+                  },
+                  {
+                    "id": "T_E_SW_ARROW"
+                  },
+                  {
+                    "id": "T_E_NW_ARROW"
+                  },
+                  {
+                    "id": "T_E_UPDOWN"
+                  },
+                  {
+                    "id": "T_E_LEFTRIGHT"
+                  },
+                  {
+                    "id": "T_E_REFRESH"
+                  },
+                  {
+                    "id": "T_E_ARROWS"
+                  },
+                  {
+                    "id": "T_E_END"
+                  },
+                  {
+                    "id": "T_E_ON"
+                  },
+                  {
+                    "id": "T_E_SOON"
+                  },
+                  {
+                    "id": "T_E_TOP"
+                  }
+                ]
+              },
               "longPress": [
                 "⬅️",
                 "⬆️",
@@ -997,6 +2364,46 @@
             },
             {
               "label": "#️⃣",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_NUMBER",
+                "longPress": [
+                  {
+                    "id": "T_E_0"
+                  },
+                  {
+                    "id": "T_E_1"
+                  },
+                  {
+                    "id": "T_E_2"
+                  },
+                  {
+                    "id": "T_E_3"
+                  },
+                  {
+                    "id": "T_E_4"
+                  },
+                  {
+                    "id": "T_E_5"
+                  },
+                  {
+                    "id": "T_E_6"
+                  },
+                  {
+                    "id": "T_E_7"
+                  },
+                  {
+                    "id": "T_E_8"
+                  },
+                  {
+                    "id": "T_E_9"
+                  },
+                  {
+                    "id": "T_E_10"
+                  }
+                ]
+              },
               "longPress": [
                 "0️⃣",
                 "1️⃣",
@@ -1013,6 +2420,49 @@
             },
             {
               "label": "⏰",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_CLOCK",
+                "longPress": [
+                  {
+                    "id": "T_E_CLOCK_1"
+                  },
+                  {
+                    "id": "T_E_CLOCK_2"
+                  },
+                  {
+                    "id": "T_E_CLOCK_3"
+                  },
+                  {
+                    "id": "T_E_CLOCK_4"
+                  },
+                  {
+                    "id": "T_E_CLOCK_5"
+                  },
+                  {
+                    "id": "T_E_CLOCK_6"
+                  },
+                  {
+                    "id": "T_E_CLOCK_7"
+                  },
+                  {
+                    "id": "T_E_CLOCK_8"
+                  },
+                  {
+                    "id": "T_E_CLOCK_9"
+                  },
+                  {
+                    "id": "T_E_CLOCK_10"
+                  },
+                  {
+                    "id": "T_E_CLOCK_11"
+                  },
+                  {
+                    "id": "T_E_CLOCK_12"
+                  }
+                ]
+              },
               "longPress": [
                 "🕐",
                 "🕑",
@@ -1030,6 +2480,52 @@
             },
             {
               "label": "💎",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_SPARKLE",
+                "longPress": [
+                  {
+                    "id": "T_E_BALLOON"
+                  },
+                  {
+                    "id": "T_E_PARTY"
+                  },
+                  {
+                    "id": "T_E_CONFETTI"
+                  },
+                  {
+                    "id": "T_E_RIBBON"
+                  },
+                  {
+                    "id": "T_E_GIFT"
+                  },
+                  {
+                    "id": "T_E_RIBBON2"
+                  },
+                  {
+                    "id": "T_E_TICKET"
+                  },
+                  {
+                    "id": "T_E_TICKETS"
+                  },
+                  {
+                    "id": "T_E_MEDAL"
+                  },
+                  {
+                    "id": "T_E_SPORTS_MEDAL"
+                  },
+                  {
+                    "id": "T_E_GOLD"
+                  },
+                  {
+                    "id": "T_E_SILVER"
+                  },
+                  {
+                    "id": "T_E_BRONZE"
+                  }
+                ]
+              },
               "longPress": [
                 "🎈",
                 "🎉",
@@ -1048,6 +2544,55 @@
             },
             {
               "label": "🔧",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_TOOL",
+                "longPress": [
+                  {
+                    "id": "T_E_HAMMER"
+                  },
+                  {
+                    "id": "T_E_PICK"
+                  },
+                  {
+                    "id": "T_E_WRENCH"
+                  },
+                  {
+                    "id": "T_E_NUT"
+                  },
+                  {
+                    "id": "T_E_GEAR"
+                  },
+                  {
+                    "id": "T_E_CLIP"
+                  },
+                  {
+                    "id": "T_E_PIN"
+                  },
+                  {
+                    "id": "T_E_PIN2"
+                  },
+                  {
+                    "id": "T_E_SCISSORS"
+                  },
+                  {
+                    "id": "T_E_PEN"
+                  },
+                  {
+                    "id": "T_E_PENCIL"
+                  },
+                  {
+                    "id": "T_E_NOTE"
+                  },
+                  {
+                    "id": "T_E_FOLDER"
+                  },
+                  {
+                    "id": "T_E_OPEN_FOLDER"
+                  }
+                ]
+              },
               "longPress": [
                 "🔨",
                 "⚒️",
@@ -1067,6 +2612,46 @@
             },
             {
               "label": "💡",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_LIGHT",
+                "longPress": [
+                  {
+                    "id": "T_E_FLASHLIGHT"
+                  },
+                  {
+                    "id": "T_E_CANDLE"
+                  },
+                  {
+                    "id": "T_E_BARREL"
+                  },
+                  {
+                    "id": "T_E_MONEY_WINGS"
+                  },
+                  {
+                    "id": "T_E_DOLLAR"
+                  },
+                  {
+                    "id": "T_E_YEN"
+                  },
+                  {
+                    "id": "T_E_EURO"
+                  },
+                  {
+                    "id": "T_E_POUND"
+                  },
+                  {
+                    "id": "T_E_MONEYBAG"
+                  },
+                  {
+                    "id": "T_E_CARD"
+                  },
+                  {
+                    "id": "T_E_PACKAGE"
+                  }
+                ]
+              },
               "longPress": [
                 "🔦",
                 "🕯️",
@@ -1083,6 +2668,43 @@
             },
             {
               "label": "📧",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_MAIL",
+                "longPress": [
+                  {
+                    "id": "T_E_INCOMING"
+                  },
+                  {
+                    "id": "T_E_ENVELOPE"
+                  },
+                  {
+                    "id": "T_E_OUTBOX"
+                  },
+                  {
+                    "id": "T_E_INBOX"
+                  },
+                  {
+                    "id": "T_E_EMAIL"
+                  },
+                  {
+                    "id": "T_E_MAILBOX"
+                  },
+                  {
+                    "id": "T_E_CLOSED_MAILBOX"
+                  },
+                  {
+                    "id": "T_E_OPEN_MAILBOX"
+                  },
+                  {
+                    "id": "T_E_NO_MAIL"
+                  },
+                  {
+                    "id": "T_E_POSTBOX"
+                  }
+                ]
+              },
               "longPress": [
                 "📨",
                 "📩",
@@ -1098,6 +2720,58 @@
             },
             {
               "label": "☀️",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_WEATHER",
+                "longPress": [
+                  {
+                    "id": "T_E_SUN_SMALL"
+                  },
+                  {
+                    "id": "T_E_PARTLY_SUNNY"
+                  },
+                  {
+                    "id": "T_E_CLOUDY"
+                  },
+                  {
+                    "id": "T_E_SUN_RAIN"
+                  },
+                  {
+                    "id": "T_E_RAIN"
+                  },
+                  {
+                    "id": "T_E_STORM"
+                  },
+                  {
+                    "id": "T_E_LIGHTNING_CLOUD"
+                  },
+                  {
+                    "id": "T_E_SNOW"
+                  },
+                  {
+                    "id": "T_E_SNOWFLAKE2"
+                  },
+                  {
+                    "id": "T_E_SNOWMAN"
+                  },
+                  {
+                    "id": "T_E_SNOWMAN2"
+                  },
+                  {
+                    "id": "T_E_WIND"
+                  },
+                  {
+                    "id": "T_E_DROPLET2"
+                  },
+                  {
+                    "id": "T_E_SWEAT_DROPS"
+                  },
+                  {
+                    "id": "T_E_WAVE2"
+                  }
+                ]
+              },
               "longPress": [
                 "🌤️",
                 "⛅",
@@ -1140,6 +2814,43 @@
             },
             {
               "label": "⏱️",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "T_E_CLOCK2",
+                "longPress": [
+                  {
+                    "id": "T_E_TIMER"
+                  },
+                  {
+                    "id": "T_E_ALARM"
+                  },
+                  {
+                    "id": "T_E_MANTELPIECE"
+                  },
+                  {
+                    "id": "T_E_CALENDAR"
+                  },
+                  {
+                    "id": "T_E_CALENDAR2"
+                  },
+                  {
+                    "id": "T_E_CARD_INDEX"
+                  },
+                  {
+                    "id": "T_E_CHART_UP"
+                  },
+                  {
+                    "id": "T_E_CHART_DOWN"
+                  },
+                  {
+                    "id": "T_E_BAR_CHART"
+                  },
+                  {
+                    "id": "T_E_CLIPBOARD"
+                  }
+                ]
+              },
               "longPress": [
                 "⏲️",
                 "⏰",

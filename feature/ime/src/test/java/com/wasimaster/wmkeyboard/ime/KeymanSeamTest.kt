@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.keyman.KeyProcessor
 import com.wasimaster.wmkeyboard.core.keyman.KeymanFault
+import com.wasimaster.wmkeyboard.core.keyman.KeymanLayers
 import com.wasimaster.wmkeyboard.core.keyman.KmxModifiers
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorKey
 import com.wasimaster.wmkeyboard.core.keyman.ProcessorResult
@@ -50,7 +51,7 @@ class KeymanSeamTest {
 
         override fun process(key: ProcessorKey) = answer
         override fun onNewContext(before: CharSequence): String? = null
-        override fun onPostKeystroke(): String? = null
+        override fun onPostKeystroke(newLayer: String, oldLayer: String): String? = null
         override val deadKeyPending = false
     }
 
@@ -107,13 +108,20 @@ class KeymanSeamTest {
     // --- modifiers ---
 
     @Test
-    fun `shift and caps map onto keyman's own bits`() {
-        assertEquals(0, KeymanSeam.modifiersFor(shifted = false, capsLocked = false))
-        assertEquals(KmxModifiers.SHIFT, KeymanSeam.modifiersFor(shifted = true, capsLocked = false))
+    fun `shift and caps are added only where the layout drew no shift page`() {
+        assertEquals(0, KeymanSeam.runtimeModifiers(LayoutMode.LETTERS, ShiftState.OFF, hasShiftGrid = false))
+        assertEquals(
+            KmxModifiers.SHIFT,
+            KeymanSeam.runtimeModifiers(LayoutMode.LETTERS, ShiftState.ON, hasShiftGrid = false),
+        )
         assertEquals(
             KmxModifiers.SHIFT or KmxModifiers.CAPS,
-            KeymanSeam.modifiersFor(shifted = false, capsLocked = true),
+            KeymanSeam.runtimeModifiers(LayoutMode.LETTERS, ShiftState.CAPS_LOCK, hasShiftGrid = false),
         )
+        // The shift page's keys already carry shift; adding it again is harmless
+        // but a caps bit would change which rules match.
+        assertEquals(0, KeymanSeam.runtimeModifiers(LayoutMode.LETTERS, ShiftState.CAPS_LOCK, hasShiftGrid = true))
+        assertEquals(0, KeymanSeam.runtimeModifiers(LayoutMode.NAMED, ShiftState.ON, hasShiftGrid = false))
     }
 
     /**
@@ -203,10 +211,15 @@ class KeymanSeamTest {
 
     /** `if(&layer = ...)` sees Keyman's names for the grid we are showing. */
     @Test
-    fun `layer names follow keyman's own`() {
-        assertEquals("default", KeymanSeam.layerName(LayoutMode.LETTERS, shifted = false))
-        assertEquals("shift", KeymanSeam.layerName(LayoutMode.LETTERS, shifted = true))
-        assertEquals("numeric", KeymanSeam.layerName(LayoutMode.SYMBOLS, shifted = false))
-        assertEquals("symbol", KeymanSeam.layerName(LayoutMode.SYMBOLS_SHIFTED, shifted = false))
+    fun `the active layer follows shift, caps and named layers`() {
+        fun layer(mode: LayoutMode, shift: ShiftState, named: String? = null, caps: Boolean = false) =
+            KeymanLayers.keymanId(KeymanSeam.activeLayerKey(mode, shift, named, caps))
+        assertEquals("default", layer(LayoutMode.LETTERS, ShiftState.OFF))
+        assertEquals("shift", layer(LayoutMode.LETTERS, ShiftState.ON))
+        assertEquals("shift", layer(LayoutMode.LETTERS, ShiftState.CAPS_LOCK))
+        assertEquals("caps", layer(LayoutMode.LETTERS, ShiftState.CAPS_LOCK, caps = true))
+        assertEquals("numeric", layer(LayoutMode.SYMBOLS, ShiftState.OFF))
+        assertEquals("symbol", layer(LayoutMode.SYMBOLS_SHIFTED, ShiftState.OFF))
+        assertEquals("rightalt", layer(LayoutMode.NAMED, ShiftState.OFF, named = "k:rightalt"))
     }
 }

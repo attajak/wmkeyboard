@@ -10,7 +10,12 @@
         "rows": [
           [
             {
-              "label": "𐩿"
+              "label": "𐩿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A7F"
+              }
             },
             {
               "label": "𐩽",
@@ -83,7 +88,12 @@
               }
             },
             {
-              "label": "𐩾"
+              "label": "𐩾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A7E"
+              }
             }
           ],
           [
@@ -130,7 +140,12 @@
               }
             },
             {
-              "label": "𐩷"
+              "label": "𐩷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A77"
+              }
             },
             {
               "label": "𐩺",
@@ -140,13 +155,28 @@
               }
             },
             {
-              "label": "𐩻"
+              "label": "𐩻",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A7B"
+              }
             },
             {
-              "label": "𐩼"
+              "label": "𐩼",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A7C"
+              }
             },
             {
-              "label": "𐩮"
+              "label": "𐩮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A6E"
+              }
             },
             {
               "label": "",
@@ -166,6 +196,11 @@
             },
             {
               "label": "𐩲",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A72"
+              },
               "width": 0.1
             },
             {
@@ -179,7 +214,20 @@
               "label": "𐩪",
               "action": {
                 "type": "keyman_key",
-                "vkey": 83
+                "vkey": 83,
+                "longPress": [
+                  {
+                    "id": "U_10A6A",
+                    "text": "𐩪"
+                  },
+                  {
+                    "id": "U_10ABE",
+                    "text": "𐪾"
+                  },
+                  {
+                    "id": "U_10A6F"
+                  }
+                ]
               },
               "longPress": [
                 "𐩦",
@@ -212,7 +260,15 @@
               "label": "𐩠",
               "action": {
                 "type": "keyman_key",
-                "vkey": 72
+                "vkey": 72,
+                "longPress": [
+                  {
+                    "id": "U_10A62"
+                  },
+                  {
+                    "id": "U_10A6D"
+                  }
+                ]
               },
               "longPress": [
                 "𐩢",
@@ -234,7 +290,12 @@
               }
             },
             {
-              "label": "𐩢"
+              "label": "𐩢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A62"
+              }
             },
             {
               "label": "",
@@ -267,13 +328,28 @@
               }
             },
             {
-              "label": "𐩳"
+              "label": "𐩳",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A73"
+              }
             },
             {
-              "label": "𐩹"
+              "label": "𐩹",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A79"
+              }
             },
             {
-              "label": "𐩶"
+              "label": "𐩶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A76"
+              }
             },
             {
               "label": "𐩨",
@@ -297,10 +373,20 @@
               }
             },
             {
-              "label": "𐩦"
+              "label": "𐩦",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A66"
+              }
             },
             {
-              "label": "𐩯"
+              "label": "𐩯",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_10A6F"
+              }
             },
             {
               "label": "⌫",

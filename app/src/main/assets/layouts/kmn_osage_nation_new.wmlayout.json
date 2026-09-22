@@ -10,7 +10,12 @@
         "rows": [
           [
             {
-              "label": "𐒾"
+              "label": "𐒾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_104BE"
+              }
             },
             {
               "label": "𐓏",
@@ -21,7 +26,6 @@
             },
             {
               "label": "𐒷",
-              "shiftLabel": "𐒸",
               "action": {
                 "type": "keyman_key",
                 "vkey": 69
@@ -50,7 +54,6 @@
             },
             {
               "label": "𐓎",
-              "shiftLabel": "𐒳",
               "action": {
                 "type": "keyman_key",
                 "vkey": 85
@@ -58,7 +61,6 @@
             },
             {
               "label": "𐒻",
-              "shiftLabel": "𐒱",
               "action": {
                 "type": "keyman_key",
                 "vkey": 73
@@ -66,7 +68,6 @@
             },
             {
               "label": "𐓂",
-              "shiftLabel": "𐓃",
               "action": {
                 "type": "keyman_key",
                 "vkey": 79
@@ -74,7 +75,6 @@
             },
             {
               "label": "𐓄",
-              "shiftLabel": "𐓅",
               "action": {
                 "type": "keyman_key",
                 "vkey": 80
@@ -91,7 +91,6 @@
             },
             {
               "label": "𐒰",
-              "shiftLabel": "𐒲",
               "action": {
                 "type": "keyman_key",
                 "vkey": 65
@@ -106,7 +105,6 @@
             },
             {
               "label": "𐓈",
-              "shiftLabel": "𐓉",
               "action": {
                 "type": "keyman_key",
                 "vkey": 68
@@ -114,7 +112,6 @@
             },
             {
               "label": "𐒼",
-              "shiftLabel": "𐒽",
               "action": {
                 "type": "keyman_key",
                 "vkey": 71
@@ -122,7 +119,6 @@
             },
             {
               "label": "𐒹",
-              "shiftLabel": "𐒺",
               "action": {
                 "type": "keyman_key",
                 "vkey": 72
@@ -130,7 +126,6 @@
             },
             {
               "label": "͘   ",
-              "shiftLabel": "͘",
               "action": {
                 "type": "keyman_key",
                 "vkey": 74
@@ -145,10 +140,19 @@
             },
             {
               "label": "𐓋",
-              "shiftLabel": "𐓌"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_104CB"
+              }
             },
             {
-              "label": "𐓑"
+              "label": "𐓑",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_104D1"
+              }
             },
             {
               "label": "",
@@ -181,7 +185,6 @@
             },
             {
               "label": "𐒵",
-              "shiftLabel": "𐒶",
               "action": {
                 "type": "keyman_key",
                 "vkey": 67
@@ -203,7 +206,6 @@
             },
             {
               "label": "𐓁",
-              "shiftLabel": "̄",
               "action": {
                 "type": "keyman_key",
                 "vkey": 78
@@ -211,7 +213,6 @@
             },
             {
               "label": "𐓀",
-              "shiftLabel": "́",
               "action": {
                 "type": "keyman_key",
                 "vkey": 77
@@ -219,7 +220,11 @@
             },
             {
               "label": "'",
-              "shiftLabel": "̋"
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0027"
+              }
             },
             {
               "label": "⌫",
@@ -252,6 +257,41 @@
             },
             {
               "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "id": "U_002C"
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_003B"
+                  },
+                  {
+                    "id": "U_007E"
+                  }
+                ]
+              },
               "longPress": [
                 ",",
                 "!",
@@ -316,7 +356,12 @@
               "label": "6",
               "action": {
                 "type": "keyman_key",
-                "vkey": 54
+                "vkey": 54,
+                "longPress": [
+                  {
+                    "id": "U_005E"
+                  }
+                ]
               },
               "longPress": [
                 "^"
@@ -353,7 +398,12 @@
           ],
           [
             {
-              "label": "!"
+              "label": "!",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0021"
+              }
             },
             {
               "label": "$",
@@ -396,21 +446,59 @@
               }
             },
             {
-              "label": "_"
+              "label": "_",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005F"
+              }
             },
             {
-              "label": "="
+              "label": "=",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003D"
+              }
             },
             {
-              "label": "|"
+              "label": "|",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_007C"
+              }
             },
             {
-              "label": "\\"
+              "label": "\\",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005C"
+              }
             }
           ],
           [
             {
               "label": "[",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005B",
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
+              },
               "longPress": [
                 "«",
                 "<",
@@ -435,6 +523,24 @@
             },
             {
               "label": "]",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_005D",
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
+              },
               "longPress": [
                 "»",
                 ">",
@@ -442,10 +548,21 @@
               ]
             },
             {
-              "label": "+"
+              "label": "+",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002B"
+              }
             },
             {
-              "label": "-"
+              "label": "-",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002D"
+              }
             },
             {
               "label": "*",
@@ -456,10 +573,20 @@
               }
             },
             {
-              "label": "/"
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              }
             },
             {
-              "label": "?"
+              "label": "?",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_003F"
+              }
             },
             {
               "label": "⌫",
@@ -472,7 +599,7 @@
             {
               "label": "⇧",
               "action": {
-                "type": "shift"
+                "type": "letters"
               }
             },
             {
@@ -491,6 +618,41 @@
             },
             {
               "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "id": "U_002C"
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "id": "U_003F"
+                  },
+                  {
+                    "id": "U_0027"
+                  },
+                  {
+                    "id": "U_0022"
+                  },
+                  {
+                    "id": "U_005C"
+                  },
+                  {
+                    "id": "U_003A"
+                  },
+                  {
+                    "id": "U_003B"
+                  },
+                  {
+                    "id": "U_007E"
+                  }
+                ]
+              },
               "longPress": [
                 ",",
                 "!",
@@ -509,11 +671,377 @@
                 "type": "enter"
               },
               "width": 1.5
+            }
+          ]
+        ]
+      },
+      "k:shift": {
+        "rows": [
+          [
+            {
+              "label": "𐒾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104BE"
+              }
             },
             {
-              "label": "ABC",
+              "label": "𐓏",
               "action": {
-                "type": "letters"
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104CF"
+              }
+            },
+            {
+              "label": "𐒸",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B8"
+              }
+            },
+            {
+              "label": "𐓊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104CA"
+              }
+            },
+            {
+              "label": "𐓍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104CD"
+              }
+            },
+            {
+              "label": "𐓓",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104D3"
+              }
+            },
+            {
+              "label": "𐒳",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B3"
+              }
+            },
+            {
+              "label": "𐒱",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B1"
+              }
+            },
+            {
+              "label": "𐓃",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104C3"
+              }
+            },
+            {
+              "label": "𐓅",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104C5"
+              }
+            }
+          ],
+          [
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.65
+            },
+            {
+              "label": "𐒲",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B2"
+              }
+            },
+            {
+              "label": "𐓆",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104C6"
+              }
+            },
+            {
+              "label": "𐓉",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104C9"
+              }
+            },
+            {
+              "label": "𐒽",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104BD"
+              }
+            },
+            {
+              "label": "𐒺",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104BA"
+              }
+            },
+            {
+              "label": "͘   ",
+              "output": "͘",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0358"
+              }
+            },
+            {
+              "label": "𐒿",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104BF"
+              }
+            },
+            {
+              "label": "𐓌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104CC"
+              }
+            },
+            {
+              "label": "𐓑",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104D1"
+              }
+            },
+            {
+              "label": "",
+              "action": {
+                "type": "none"
+              },
+              "width": 0.48
+            }
+          ],
+          [
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            },
+            {
+              "label": "𐓒",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104D2"
+              }
+            },
+            {
+              "label": "𐓐",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104D0"
+              }
+            },
+            {
+              "label": "𐒶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B6"
+              }
+            },
+            {
+              "label": "𐓇",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104C7"
+              }
+            },
+            {
+              "label": "𐒴",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_104B4"
+              }
+            },
+            {
+              "label": "̄ ",
+              "output": "̄",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0304"
+              }
+            },
+            {
+              "label": "́ ",
+              "output": "́",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_0301"
+              }
+            },
+            {
+              "label": "̋ ",
+              "output": "̋",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_030B"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "nextLayer": "symbols"
+              },
+              "width": 0.1
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              },
+              "width": 0.1
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 5.75
+            },
+            {
+              "label": ".",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "modifiers": 16,
+                "id": "U_002E",
+                "longPress": [
+                  {
+                    "modifiers": 16,
+                    "id": "U_002C"
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003F"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0027"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_0022"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_005C"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003A"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_003B"
+                  },
+                  {
+                    "modifiers": 16,
+                    "id": "U_007E"
+                  }
+                ]
+              },
+              "longPress": [
+                ",",
+                "!",
+                "?",
+                "'",
+                "\"",
+                "\\",
+                ":",
+                ";",
+                "~"
+              ]
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
               },
               "width": 1.5
             }

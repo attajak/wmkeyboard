@@ -295,7 +295,12 @@
           ],
           [
             {
-              "label": " "
+              "label": " ",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_0020"
+              }
             },
             {
               "label": "\\",

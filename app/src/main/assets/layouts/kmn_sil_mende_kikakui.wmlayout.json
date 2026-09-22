@@ -11,6 +11,34 @@
           [
             {
               "label": "𞠀",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E800",
+                "longPress": [
+                  {
+                    "id": "U_1E801"
+                  },
+                  {
+                    "id": "U_1E802"
+                  },
+                  {
+                    "id": "U_1E803"
+                  },
+                  {
+                    "id": "U_1E804"
+                  },
+                  {
+                    "id": "U_1E805"
+                  },
+                  {
+                    "id": "U_1E806"
+                  },
+                  {
+                    "id": "U_1E807"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠁",
                 "𞠂",
@@ -23,6 +51,37 @@
             },
             {
               "label": "𞠈",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E808",
+                "longPress": [
+                  {
+                    "id": "U_1E809"
+                  },
+                  {
+                    "id": "U_1E80A"
+                  },
+                  {
+                    "id": "U_1E80B"
+                  },
+                  {
+                    "id": "U_1E80C"
+                  },
+                  {
+                    "id": "U_1E80D"
+                  },
+                  {
+                    "id": "U_1E80E"
+                  },
+                  {
+                    "id": "U_1E80F"
+                  },
+                  {
+                    "id": "U_1E810"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠉",
                 "𞠊",
@@ -36,6 +95,19 @@
             },
             {
               "label": "𞠑",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E811",
+                "longPress": [
+                  {
+                    "id": "U_1E812"
+                  },
+                  {
+                    "id": "U_1E813"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠒",
                 "𞠓"
@@ -43,6 +115,31 @@
             },
             {
               "label": "𞠔",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E814",
+                "longPress": [
+                  {
+                    "id": "U_1E815"
+                  },
+                  {
+                    "id": "U_1E816"
+                  },
+                  {
+                    "id": "U_1E817"
+                  },
+                  {
+                    "id": "U_1E818"
+                  },
+                  {
+                    "id": "U_1E819"
+                  },
+                  {
+                    "id": "U_1E81A"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠕",
                 "𞠖",
@@ -54,6 +151,31 @@
             },
             {
               "label": "𞠛",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E81B",
+                "longPress": [
+                  {
+                    "id": "U_1E81C"
+                  },
+                  {
+                    "id": "U_1E81D"
+                  },
+                  {
+                    "id": "U_1E81E"
+                  },
+                  {
+                    "id": "U_1E81F"
+                  },
+                  {
+                    "id": "U_1E820"
+                  },
+                  {
+                    "id": "U_1E821"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠜",
                 "𞠝",
@@ -65,6 +187,46 @@
             },
             {
               "label": "𞠢",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E822",
+                "longPress": [
+                  {
+                    "id": "U_1E823"
+                  },
+                  {
+                    "id": "U_1E824"
+                  },
+                  {
+                    "id": "U_1E825"
+                  },
+                  {
+                    "id": "U_1E826"
+                  },
+                  {
+                    "id": "U_1E827"
+                  },
+                  {
+                    "id": "U_1E828"
+                  },
+                  {
+                    "id": "U_1E829"
+                  },
+                  {
+                    "id": "U_1E82A"
+                  },
+                  {
+                    "id": "U_1E82B"
+                  },
+                  {
+                    "id": "U_1E82C"
+                  },
+                  {
+                    "id": "U_1E82D"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠣",
                 "𞠤",
@@ -81,6 +243,34 @@
             },
             {
               "label": "𞠮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E82E",
+                "longPress": [
+                  {
+                    "id": "U_1E82F"
+                  },
+                  {
+                    "id": "U_1E830"
+                  },
+                  {
+                    "id": "U_1E831"
+                  },
+                  {
+                    "id": "U_1E832"
+                  },
+                  {
+                    "id": "U_1E833"
+                  },
+                  {
+                    "id": "U_1E834"
+                  },
+                  {
+                    "id": "U_1E835"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠯",
                 "𞠰",
@@ -93,6 +283,34 @@
             },
             {
               "label": "𞠶",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E836",
+                "longPress": [
+                  {
+                    "id": "U_1E837"
+                  },
+                  {
+                    "id": "U_1E838"
+                  },
+                  {
+                    "id": "U_1E839"
+                  },
+                  {
+                    "id": "U_1E83A"
+                  },
+                  {
+                    "id": "U_1E83B"
+                  },
+                  {
+                    "id": "U_1E83C"
+                  },
+                  {
+                    "id": "U_1E83D"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠷",
                 "𞠸",
@@ -105,6 +323,28 @@
             },
             {
               "label": "𞠾",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E83E",
+                "longPress": [
+                  {
+                    "id": "U_1E83F"
+                  },
+                  {
+                    "id": "U_1E840"
+                  },
+                  {
+                    "id": "U_1E841"
+                  },
+                  {
+                    "id": "U_1E842"
+                  },
+                  {
+                    "id": "U_1E843"
+                  }
+                ]
+              },
               "longPress": [
                 "𞠿",
                 "𞡀",
@@ -123,6 +363,31 @@
           [
             {
               "label": "𞡄",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E844",
+                "longPress": [
+                  {
+                    "id": "U_1E845"
+                  },
+                  {
+                    "id": "U_1E846"
+                  },
+                  {
+                    "id": "U_1E847"
+                  },
+                  {
+                    "id": "U_1E848"
+                  },
+                  {
+                    "id": "U_1E849"
+                  },
+                  {
+                    "id": "U_1E84A"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡅",
                 "𞡆",
@@ -134,6 +399,34 @@
             },
             {
               "label": "𞡋",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E84B",
+                "longPress": [
+                  {
+                    "id": "U_1E84C"
+                  },
+                  {
+                    "id": "U_1E84D"
+                  },
+                  {
+                    "id": "U_1E84E"
+                  },
+                  {
+                    "id": "U_1E84F"
+                  },
+                  {
+                    "id": "U_1E850"
+                  },
+                  {
+                    "id": "U_1E851"
+                  },
+                  {
+                    "id": "U_1E852"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡌",
                 "𞡍",
@@ -146,6 +439,31 @@
             },
             {
               "label": "𞡓",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E853",
+                "longPress": [
+                  {
+                    "id": "U_1E854"
+                  },
+                  {
+                    "id": "U_1E855"
+                  },
+                  {
+                    "id": "U_1E856"
+                  },
+                  {
+                    "id": "U_1E857"
+                  },
+                  {
+                    "id": "U_1E858"
+                  },
+                  {
+                    "id": "U_1E859"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡔",
                 "𞡕",
@@ -157,6 +475,37 @@
             },
             {
               "label": "𞡚",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E85A",
+                "longPress": [
+                  {
+                    "id": "U_1E85B"
+                  },
+                  {
+                    "id": "U_1E85C"
+                  },
+                  {
+                    "id": "U_1E85D"
+                  },
+                  {
+                    "id": "U_1E85E"
+                  },
+                  {
+                    "id": "U_1E85F"
+                  },
+                  {
+                    "id": "U_1E860"
+                  },
+                  {
+                    "id": "U_1E861"
+                  },
+                  {
+                    "id": "U_1E862"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡛",
                 "𞡜",
@@ -170,6 +519,25 @@
             },
             {
               "label": "𞡣",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E863",
+                "longPress": [
+                  {
+                    "id": "U_1E864"
+                  },
+                  {
+                    "id": "U_1E865"
+                  },
+                  {
+                    "id": "U_1E866"
+                  },
+                  {
+                    "id": "U_1E867"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡤",
                 "𞡥",
@@ -179,6 +547,55 @@
             },
             {
               "label": "𞡨",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E868",
+                "longPress": [
+                  {
+                    "id": "U_1E869"
+                  },
+                  {
+                    "id": "U_1E86A"
+                  },
+                  {
+                    "id": "U_1E86B"
+                  },
+                  {
+                    "id": "U_1E86C"
+                  },
+                  {
+                    "id": "U_1E86D"
+                  },
+                  {
+                    "id": "U_1E86E"
+                  },
+                  {
+                    "id": "U_1E86F"
+                  },
+                  {
+                    "id": "U_1E870"
+                  },
+                  {
+                    "id": "U_1E871"
+                  },
+                  {
+                    "id": "U_1E872"
+                  },
+                  {
+                    "id": "U_1E873"
+                  },
+                  {
+                    "id": "U_1E874"
+                  },
+                  {
+                    "id": "U_1E875"
+                  },
+                  {
+                    "id": "U_1E876"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡩",
                 "𞡪",
@@ -198,6 +615,46 @@
             },
             {
               "label": "𞡷",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E877",
+                "longPress": [
+                  {
+                    "id": "U_1E878"
+                  },
+                  {
+                    "id": "U_1E879"
+                  },
+                  {
+                    "id": "U_1E87A"
+                  },
+                  {
+                    "id": "U_1E87B"
+                  },
+                  {
+                    "id": "U_1E87C"
+                  },
+                  {
+                    "id": "U_1E87D"
+                  },
+                  {
+                    "id": "U_1E87E"
+                  },
+                  {
+                    "id": "U_1E87F"
+                  },
+                  {
+                    "id": "U_1E880"
+                  },
+                  {
+                    "id": "U_1E881"
+                  },
+                  {
+                    "id": "U_1E882"
+                  }
+                ]
+              },
               "longPress": [
                 "𞡸",
                 "𞡹",
@@ -214,6 +671,28 @@
             },
             {
               "label": "𞢃",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E883",
+                "longPress": [
+                  {
+                    "id": "U_1E884"
+                  },
+                  {
+                    "id": "U_1E885"
+                  },
+                  {
+                    "id": "U_1E886"
+                  },
+                  {
+                    "id": "U_1E887"
+                  },
+                  {
+                    "id": "U_1E888"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢄",
                 "𞢅",
@@ -224,6 +703,19 @@
             },
             {
               "label": "𞢉",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E889",
+                "longPress": [
+                  {
+                    "id": "U_1E88A"
+                  },
+                  {
+                    "id": "U_1E88B"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢊",
                 "𞢋"
@@ -231,6 +723,31 @@
             },
             {
               "label": "𞢌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E88C",
+                "longPress": [
+                  {
+                    "id": "U_1E88D"
+                  },
+                  {
+                    "id": "U_1E88E"
+                  },
+                  {
+                    "id": "U_1E88F"
+                  },
+                  {
+                    "id": "U_1E890"
+                  },
+                  {
+                    "id": "U_1E891"
+                  },
+                  {
+                    "id": "U_1E892"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢍",
                 "𞢎",
@@ -250,6 +767,46 @@
             },
             {
               "label": "𞢓",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E893",
+                "longPress": [
+                  {
+                    "id": "U_1E894"
+                  },
+                  {
+                    "id": "U_1E895"
+                  },
+                  {
+                    "id": "U_1E896"
+                  },
+                  {
+                    "id": "U_1E897"
+                  },
+                  {
+                    "id": "U_1E898"
+                  },
+                  {
+                    "id": "U_1E899"
+                  },
+                  {
+                    "id": "U_1E89A"
+                  },
+                  {
+                    "id": "U_1E89B"
+                  },
+                  {
+                    "id": "U_1E89C"
+                  },
+                  {
+                    "id": "U_1E89D"
+                  },
+                  {
+                    "id": "U_1E89E"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢔",
                 "𞢕",
@@ -266,6 +823,31 @@
             },
             {
               "label": "𞢟",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E89F",
+                "longPress": [
+                  {
+                    "id": "U_1E8A0"
+                  },
+                  {
+                    "id": "U_1E8A1"
+                  },
+                  {
+                    "id": "U_1E8A2"
+                  },
+                  {
+                    "id": "U_1E8A3"
+                  },
+                  {
+                    "id": "U_1E8A4"
+                  },
+                  {
+                    "id": "U_1E8A5"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢠",
                 "𞢡",
@@ -277,6 +859,31 @@
             },
             {
               "label": "𞢦",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8A6",
+                "longPress": [
+                  {
+                    "id": "U_1E8A7"
+                  },
+                  {
+                    "id": "U_1E8A8"
+                  },
+                  {
+                    "id": "U_1E8A9"
+                  },
+                  {
+                    "id": "U_1E8AA"
+                  },
+                  {
+                    "id": "U_1E8AB"
+                  },
+                  {
+                    "id": "U_1E8AC"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢧",
                 "𞢨",
@@ -287,10 +894,40 @@
               ]
             },
             {
-              "label": "𞢭"
+              "label": "𞢭",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8AD"
+              }
             },
             {
               "label": "𞢮",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8AE",
+                "longPress": [
+                  {
+                    "id": "U_1E8AF"
+                  },
+                  {
+                    "id": "U_1E8B0"
+                  },
+                  {
+                    "id": "U_1E8B1"
+                  },
+                  {
+                    "id": "U_1E8B2"
+                  },
+                  {
+                    "id": "U_1E8B3"
+                  },
+                  {
+                    "id": "U_1E8B4"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢯",
                 "𞢰",
@@ -302,6 +939,22 @@
             },
             {
               "label": "𞢵",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8B5",
+                "longPress": [
+                  {
+                    "id": "U_1E8B6"
+                  },
+                  {
+                    "id": "U_1E8B7"
+                  },
+                  {
+                    "id": "U_1E8B8"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢶",
                 "𞢷",
@@ -310,6 +963,31 @@
             },
             {
               "label": "𞢹",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8B9",
+                "longPress": [
+                  {
+                    "id": "U_1E8BA"
+                  },
+                  {
+                    "id": "U_1E8BB"
+                  },
+                  {
+                    "id": "U_1E8BC"
+                  },
+                  {
+                    "id": "U_1E8BD"
+                  },
+                  {
+                    "id": "U_1E8BE"
+                  },
+                  {
+                    "id": "U_1E8BF"
+                  }
+                ]
+              },
               "longPress": [
                 "𞢺",
                 "𞢻",
@@ -321,6 +999,25 @@
             },
             {
               "label": "𞣀",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8C0",
+                "longPress": [
+                  {
+                    "id": "U_1E8C1"
+                  },
+                  {
+                    "id": "U_1E8C2"
+                  },
+                  {
+                    "id": "U_1E8C3"
+                  },
+                  {
+                    "id": "U_1E8C4"
+                  }
+                ]
+              },
               "longPress": [
                 "𞣁",
                 "𞣂",
@@ -332,7 +1029,37 @@
               "label": ".",
               "action": {
                 "type": "keyman_key",
-                "vkey": 190
+                "vkey": 190,
+                "longPress": [
+                  {
+                    "vkey": 188
+                  },
+                  {
+                    "vkey": 49,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 191,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 222
+                  },
+                  {
+                    "vkey": 222,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 220
+                  },
+                  {
+                    "vkey": 186,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 186
+                  }
+                ]
               },
               "longPress": [
                 ",",
@@ -376,37 +1103,107 @@
           [
             {
               "label": "𞣀",
-              "output": "𞣇"
+              "output": "𞣇",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8C7"
+              }
             },
             {
               "label": "𞣁",
-              "output": "𞣈"
+              "output": "𞣈",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8C8"
+              }
             },
             {
               "label": "𞣂",
-              "output": "𞣉"
+              "output": "𞣉",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8C9"
+              }
             },
             {
               "label": "𞣃",
-              "output": "𞣊"
+              "output": "𞣊",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CA"
+              }
             },
             {
-              "label": "𞣋"
+              "label": "𞣋",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CB"
+              }
             },
             {
-              "label": "𞣌"
+              "label": "𞣌",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CC"
+              }
             },
             {
-              "label": "𞣍"
+              "label": "𞣍",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CD"
+              }
             },
             {
-              "label": "𞣎"
+              "label": "𞣎",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CE"
+              }
             },
             {
-              "label": "𞣏"
+              "label": "𞣏",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8CF"
+              }
             },
             {
               "label": "𞣐",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_1E8D0",
+                "longPress": [
+                  {
+                    "id": "U_1E8D1"
+                  },
+                  {
+                    "id": "U_1E8D2"
+                  },
+                  {
+                    "id": "U_1E8D3"
+                  },
+                  {
+                    "id": "U_1E8D4"
+                  },
+                  {
+                    "id": "U_1E8D5"
+                  },
+                  {
+                    "id": "U_1E8D6"
+                  }
+                ]
+              },
               "longPress": [
                 "𞣑",
                 "𞣒",
@@ -515,7 +1312,20 @@
               "label": "[",
               "action": {
                 "type": "keyman_key",
-                "vkey": 219
+                "vkey": 219,
+                "longPress": [
+                  {
+                    "id": "U_00AB"
+                  },
+                  {
+                    "vkey": 188,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 219,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "«",
@@ -543,7 +1353,20 @@
               "label": "]",
               "action": {
                 "type": "keyman_key",
-                "vkey": 221
+                "vkey": 221,
+                "longPress": [
+                  {
+                    "id": "U_00BB"
+                  },
+                  {
+                    "vkey": 190,
+                    "modifiers": 16
+                  },
+                  {
+                    "vkey": 221,
+                    "modifiers": 16
+                  }
+                ]
               },
               "longPress": [
                 "»",
@@ -575,7 +1398,12 @@
               }
             },
             {
-              "label": "/"
+              "label": "/",
+              "action": {
+                "type": "keyman_key",
+                "vkey": 0,
+                "id": "U_002F"
+              }
             },
             {
               "label": "⌫",
@@ -586,7 +1414,7 @@
           ],
           [
             {
-              "label": "ABC",
+              "label": "abc",
               "action": {
                 "type": "letters"
               },
