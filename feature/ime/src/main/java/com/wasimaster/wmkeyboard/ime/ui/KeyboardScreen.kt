@@ -15487,10 +15487,12 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     } else {
         grid.withoutGlobeKey()
     }
-    // Email and URI fields keep the letter layouts but trade the bottom-row
-    // comma — punctuation neither field uses — for the character they are
-    // full of, and put domain endings on the period key's long press. Both
-    // are otherwise a trip through the symbols layer for every address.
+    // Email and URI fields keep the letter layouts but put the character they
+    // are full of on the bottom-row comma slot, and domain endings on the
+    // period key's long press. Both are otherwise a trip through the symbols
+    // layer for every address. An email box has no use for the comma, so "@"
+    // takes the key outright; a browser's address bar is its search box too,
+    // so there the comma stays and "/" leads its popup instead.
     val lettersLayer = state.layoutMode == LayoutMode.LETTERS
     // The character and its popup, not a finished key: the key is built by
     // copying the slot it replaces, so a comma the layout drew wide stays wide.
@@ -15499,7 +15501,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     val fieldKey: Pair<String, List<String>>? = when {
         !lettersLayer -> null
         state.fieldKind == FieldKind.EMAIL -> "@" to emptyList()
-        state.fieldKind == FieldKind.URI -> "/" to listOf("?", "#", "&", "=")
+        state.fieldKind == FieldKind.URI -> "," to listOf("/", "?", "#", "&", "=")
         else -> null
     }
     val domainAlternates = when {

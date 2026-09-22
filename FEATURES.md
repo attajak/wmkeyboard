@@ -737,7 +737,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Broadcast-intent key — Fires an Android broadcast so a key can drive Tasker or any receiver; user-authored only
     - Per-row height multipliers — rowHeights, index-aligned with rows; short or over-long lists tolerated
     - Explicit typo-proximity rows — proximityRows lets a staggered/split grid state its own key neighbourhoods
-    - Field-adaptation roles — KeyRole.Comma/Period tag the slots that become @ or / in email and URI fields, with a legacy label-match fallback
+    - Field-adaptation roles — KeyRole.Comma/Period tag the slots that become @ in email fields and gain / on hold in URI fields, with a legacy label-match fallback
     - Unknown actions survive decoding — A key written by a newer build decodes to Unknown(tag), is reported, and is dropped by repair instead of failing the file
   - Tablet auto-expansion `RARE` — Render-time transform widens an eligible grid by one column each side and mints Tab, backslash, caps lock, a mirrored shift and arrows
     - Row count never changes — The IME window is sized from layer row counts, so the transform only moves and widens keys
@@ -3315,7 +3315,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Key-preview bubble suppressed on keypads by default — Echoing a PIN digit large enough to read is a shoulder-surfing risk
   - Email and URL bottom-row key swaps — Letters layer only, so a Dvorak layout's real . and , keys elsewhere stay untouched
     - Email: comma becomes @, period long-press gains .com .net .org .edu .co
-    - URL: comma becomes / with ? # & = on hold; period long-press gains .com .org .net www. https:// /
+    - URL: comma stays (address bar is a search box too), / ? # & = on its hold; period long-press gains .com .org .net www. https:// /
     - Field adaptation outranks the comma-as-emoji preference
   - secureField as a separate flag from FieldKind `uncommon` — A masked box reports TEXT; a PIN box is NUMBER and secure at once
     - Covers text, visible-password, web-password and numeric-PIN variations
