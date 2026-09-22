@@ -340,6 +340,17 @@ internal fun AppearanceToolbarSettings(
                     default = SettingsDefaults.toolbarBehavior.placement,
                 )
             }
+            // Only under Always: with A button the strip's arrow is the way
+            // into the tools row, so the strip cannot go (#302).
+            if (settings.toolbarBehavior.placement == ToolbarPlacement.ALWAYS_ROW) item {
+                ToggleSetting(
+                    R.string.appearance_toolbar_show_strip_title,
+                    stringResource(R.string.appearance_toolbar_show_strip_subtitle),
+                    settings.toolbarBehavior.showStrip,
+                    info = stringResource(R.string.appearance_toolbar_show_strip_info),
+                    default = SettingsDefaults.toolbarBehavior.showStrip,
+                ) { scope.launch { repository.setToolbarShowStrip(it) } }
+            }
             item {
                 ToggleSetting(
                     R.string.appearance_toolbar_swipe_down_title,

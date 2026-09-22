@@ -1524,6 +1524,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Strip stops flipping — With a row of their own the strip is only ever candidates, so the surface swap, the emoji handoff and the settle beat all rest
     - Chevron changes job — Opens and closes the row on ON_DEMAND_ROW, and disappears on ALWAYS_ROW where it would do nothing
     - Same row, one renderer — The standalone row wraps the same ToolbarRow the strip hosts, so widths, labels, drag and RTL mirroring are identical
+    - Strip can go (#302) — showStrip off under ALWAYS_ROW drops the suggestion strip and its height, leaving only the tools row; compact dictation still takes the row, and full-bleed panels stop counting it
   - Press-and-hold actions on the toolbar `RARE` — Per-tool holdActions map: a hold runs another tool's tap instead of opening that tool's settings page
     - Any tool is a target — "Holding this does what tapping that does" needs no second action vocabulary; the bound tool goes through the same dispatcher a tap uses
     - Toolbar only — The toolbox hold keeps opening settings pages, so no page loses its way in

@@ -1417,6 +1417,16 @@ data class ToolbarBehavior(
      */
     val placement: ToolbarPlacement = ToolbarPlacement.STRIP,
     /**
+     * Whether the suggestion strip keeps its row while the tools have one of
+     * their own and it is always open ([ToolbarPlacement.ALWAYS_ROW]). On by
+     * default. Off is for someone who has turned suggestions off and was left
+     * with an empty band over the tools (#302): the tools row stays, and the
+     * strip's height goes back to the keys. Read only under ALWAYS_ROW, since
+     * the other own-row placement opens its row from the strip's chevron. See
+     * [stripHidden].
+     */
+    val showStrip: Boolean = true,
+    /**
      * What a press and hold on a pinned tool does, per tool, as tool name →
      * action token (see [ToolHoldActions]).
      *
@@ -1470,6 +1480,13 @@ enum class ToolbarPlacement { STRIP, ON_DEMAND_ROW, ALWAYS_ROW }
 
 /** True while the tools have a row of their own rather than sharing the strip. */
 val ToolbarPlacement.isOwnRow: Boolean get() = this != ToolbarPlacement.STRIP
+
+/**
+ * True while the suggestion strip has given up its row (#302): the tools are
+ * on an always-open row of their own and [ToolbarBehavior.showStrip] is off.
+ */
+val ToolbarBehavior.stripHidden: Boolean
+    get() = enabled && placement == ToolbarPlacement.ALWAYS_ROW && !showStrip
 
 /**
  * The `tool=action` CSV behind [ToolbarBehavior.holdActions].
@@ -7017,6 +7034,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOLBAR_PADDING_TOP = intPreferencesKey("toolbar_padding_top")
         private val TOOLBAR_PADDING_BOTTOM = intPreferencesKey("toolbar_padding_bottom")
         private val TOOLBAR_PLACEMENT = stringPreferencesKey("toolbar_placement")
+        private val TOOLBAR_SHOW_STRIP = booleanPreferencesKey("toolbar_show_strip")
         private val TOOLBAR_HOLD_ACTIONS = stringPreferencesKey("toolbar_hold_actions")
         private val TOOLBAR_DRAG_REARRANGE = booleanPreferencesKey("toolbar_drag_rearrange")
         private val THEMES_PANEL_BUILTINS = stringSetPreferencesKey("themes_panel_builtins")
@@ -8357,6 +8375,7 @@ class SettingsRepository(private val context: Context) {
                 placement = p[TOOLBAR_PLACEMENT]
                     ?.let { runCatching { ToolbarPlacement.valueOf(it) }.getOrNull() }
                     ?: defaults.toolbarBehavior.placement,
+                showStrip = p[TOOLBAR_SHOW_STRIP] ?: defaults.toolbarBehavior.showStrip,
                 holdActions = ToolHoldActions.decode(p[TOOLBAR_HOLD_ACTIONS]),
             ),
             toolbarHeightDp = p[TOOLBAR_HEIGHT] ?: defaults.toolbarHeightDp,
@@ -9816,6 +9835,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setToolbarPlacement(value: ToolbarPlacement) =
         editPrefs { it[TOOLBAR_PLACEMENT] = value.name }
+
+    suspend fun setToolbarShowStrip(value: Boolean) =
+        editPrefs { it[TOOLBAR_SHOW_STRIP] = value }
 
     /**
      * Sets or clears one tool's press-and-hold action. Null puts that tool back

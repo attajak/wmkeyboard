@@ -55,6 +55,9 @@
     <string name="appearance_toolbar_placement_always_label">Always</string>
     <string name="appearance_toolbar_placement_strip_desc">The tools and the suggestions share one row, and the arrow flips between them</string>
     <string name="appearance_toolbar_placement_button_desc">The tools get a row of their own, opened and closed from the arrow</string>
+    <string name="appearance_toolbar_show_strip_title">Suggestion strip</string>
+    <string name="appearance_toolbar_show_strip_subtitle">Keep the suggestion row above the tools row</string>
+    <string name="appearance_toolbar_show_strip_info">Turn this off to remove the suggestion row and keep only the row of tools. The keyboard gets one row shorter. Useful if you have turned suggestions off and the row sits empty. Everything else that appears in that row goes too: the paste chip for your last copy, one-time codes, snippet offers and other chips. Voice typing\'s compact bar still shows there while you dictate.</string>
     <string name="appearance_toolbar_placement_always_desc">The tools keep a row of their own, always open</string>
 
     <string name="appearance_toolbar_swipe_down_title">Swipe down to hide</string>

@@ -367,6 +367,7 @@
   {"title":"Reset pinned tools","name":"home_reset_pinned_tools_title","route":"appearance","screens":["Appearance"],"screen":false},
   {"title":"Show the toolbar","name":"appearance_toolbar_show_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Where the tools go","name":"appearance_toolbar_placement_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
+  {"title":"Suggestion strip","name":"appearance_toolbar_show_strip_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Swipe down to hide","name":"appearance_toolbar_swipe_down_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Rearrange by dragging","name":"appearance_toolbar_drag_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Only the toolbar with a hardware keyboard","name":"appearance_toolbar_hardware_only_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
