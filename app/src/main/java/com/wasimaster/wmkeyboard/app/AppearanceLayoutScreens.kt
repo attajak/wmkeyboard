@@ -1,7 +1,5 @@
 package com.wasimaster.wmkeyboard.app
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
@@ -838,17 +836,10 @@ internal fun LayoutSettings(
             var returnChars by remember {
                 mutableStateOf(settings.layoutBehavior.symbolsReturnCharSet())
             }
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        stringResource(R.string.layout_symbols_return_chars_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    InfoButton(
-                        stringResource(R.string.layout_symbols_return_chars_title),
-                        stringResource(R.string.layout_symbols_return_chars_info),
-                    )
-                }
+            ControlSetting(
+                R.string.layout_symbols_return_chars_title,
+                info = stringResource(R.string.layout_symbols_return_chars_info),
+            ) {
                 OutlinedTextField(
                     value = returnChars,
                     onValueChange = {

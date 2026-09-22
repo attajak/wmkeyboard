@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -230,9 +228,9 @@ internal fun WhisperModelManager(repository: SettingsRepository, settings: Keybo
         onEdit = { routingFor = it },
     )
 
-    WhisperSectionHeader(
+    SectionHeader(
         stringResource(R.string.models_whisper_yours_title),
-        if (onDisk.isEmpty()) "" else formatBytes(onDisk.sumOf { it.sizeBytes }),
+        trailing = if (onDisk.isEmpty()) null else formatBytes(onDisk.sumOf { it.sizeBytes }),
     )
     if (onDisk.isEmpty()) {
         CaptionText(stringResource(R.string.models_whisper_empty))
@@ -271,8 +269,7 @@ internal fun WhisperModelManager(repository: SettingsRepository, settings: Keybo
     }
 
     if (suggestions.isNotEmpty()) {
-        WhisperSectionHeader(stringResource(R.string.models_whisper_suggested_title), "")
-        SettingsGroup {
+        SettingsGroup(stringResource(R.string.models_whisper_suggested_title)) {
             for (model in suggestions) item { modelRow(model) }
         }
     }
@@ -387,53 +384,48 @@ private fun WhisperRoutingCard(
                 // That failure is silent and total, which makes it worth a line of
                 // its own rather than leaving it to be discovered in use.
                 val detectOnly = code != null && WhisperCatalog.autoDetectOnly(code)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(18.dp))
-                        .then(
-                            if (code != null && anyDownloaded) {
-                                Modifier.clickable { onEdit(language) }
-                            } else {
-                                Modifier
-                            },
-                        )
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(language.englishName, style = MaterialTheme.typography.bodyLarge)
-                        Text(
-                            detail,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = if (code != null && model != null && !covered) {
-                                MaterialTheme.colorScheme.error
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            },
-                            modifier = Modifier.padding(top = 2.dp),
-                        )
-                        if (detectOnly && model != null) {
+                val editable = code != null && anyDownloaded
+                WmRow(
+                    title = language.englishName,
+                    supporting = {
+                        Column {
                             Text(
-                                stringResource(
-                                    R.string.models_whisper_language_detect_only,
-                                    language.englishName,
-                                ),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                                modifier = Modifier.padding(top = 4.dp),
+                                detail,
+                                color = if (code != null && model != null && !covered) {
+                                    MaterialTheme.colorScheme.error
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                            )
+                            if (detectOnly && model != null) {
+                                Text(
+                                    stringResource(
+                                        R.string.models_whisper_language_detect_only,
+                                        language.englishName,
+                                    ),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(top = 4.dp),
+                                )
+                            }
+                        }
+                    },
+                    trailing = if (editable) {
+                        {
+                            Text(
+                                stringResource(R.string.models_whisper_change_action),
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
-                    }
-                    if (code != null && anyDownloaded) {
-                        Text(
-                            stringResource(R.string.models_whisper_change_action),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 12.dp),
-                        )
-                    }
-                }
+                    } else {
+                        null
+                    },
+                    onClick = if (editable) {
+                        { onEdit(language) }
+                    } else {
+                        null
+                    },
+                )
             }
         }
     }
@@ -613,48 +605,16 @@ private fun WhisperBrowseSection(
         CaptionText(stringResource(R.string.models_whisper_no_size_match))
     }
     if (anyLanguage.isNotEmpty()) {
-        WhisperSectionHeader(
-            stringResource(R.string.models_whisper_group_any_language_title),
-            "",
-        )
-        SettingsGroup {
+        SettingsGroup(stringResource(R.string.models_whisper_group_any_language_title)) {
             for (model in anyLanguage) item { row(model) }
         }
     }
     if (oneLanguage.isNotEmpty()) {
-        WhisperSectionHeader(
-            stringResource(R.string.models_whisper_group_one_language_title),
-            "",
-        )
-        SettingsGroup {
+        SettingsGroup(stringResource(R.string.models_whisper_group_one_language_title)) {
             for (model in oneLanguage) item { row(model) }
         }
     }
     CaptionText(stringResource(R.string.models_whisper_sizes_info))
-}
-
-@Composable
-private fun WhisperSectionHeader(title: String, trailing: String) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp, top = 12.dp, bottom = 8.dp),
-    ) {
-        Text(
-            title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        if (trailing.isNotEmpty()) {
-            Text(
-                trailing,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
 }
 
 /**
@@ -693,20 +653,16 @@ private fun WhisperModelRow(
             .clickable(onClick = onToggleExpand)
             .animateContentSize(),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 12.dp, bottom = 12.dp),
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    model.displayName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = if (inUse) FontWeight.SemiBold else null,
-                )
-                Spacer(Modifier.height(6.dp))
+        WmRow(
+            title = model.displayName,
+            titleContent = {
+                Text(model.displayName, fontWeight = if (inUse) FontWeight.SemiBold else null)
+            },
+            supporting = {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(top = 6.dp),
                 ) {
                     if (inUse) {
                         WhisperChip(
@@ -741,38 +697,40 @@ private fun WhisperModelRow(
                     }
                     WhisperChip(formatBytes(model.sizeBytes), WhisperChipTone.NEUTRAL)
                 }
-            }
-            when (status) {
-                is DownloadStatus.Downloaded -> IconButton(onClick = onDelete) {
-                    Icon(
-                        Icons.Outlined.Delete,
-                        contentDescription = stringResource(
-                            R.string.models_delete_model_desc,
-                            model.displayName,
-                        ),
-                    )
-                }
-                is DownloadStatus.Downloading -> IconButton(onClick = onCancel) {
-                    Icon(
-                        Icons.Outlined.Close,
-                        contentDescription = stringResource(R.string.models_cancel_download_desc),
-                    )
-                }
-                is DownloadStatus.Paused -> TextButton(onClick = onDownload, enabled = !downloadBusy) {
-                    Text(stringResource(R.string.models_resume_action))
-                }
-                is DownloadStatus.NotDownloaded, is DownloadStatus.Failed ->
-                    TextButton(onClick = onDownload, enabled = !downloadBusy) {
-                        Text(
-                            if (status is DownloadStatus.Failed) {
-                                stringResource(CommonR.string.common_retry)
-                            } else {
-                                stringResource(CommonR.string.common_download)
-                            },
+            },
+            trailing = {
+                when (status) {
+                    is DownloadStatus.Downloaded -> IconButton(onClick = onDelete) {
+                        Icon(
+                            Icons.Outlined.Delete,
+                            contentDescription = stringResource(
+                                R.string.models_delete_model_desc,
+                                model.displayName,
+                            ),
                         )
                     }
-            }
-        }
+                    is DownloadStatus.Downloading -> IconButton(onClick = onCancel) {
+                        Icon(
+                            Icons.Outlined.Close,
+                            contentDescription = stringResource(R.string.models_cancel_download_desc),
+                        )
+                    }
+                    is DownloadStatus.Paused -> TextButton(onClick = onDownload, enabled = !downloadBusy) {
+                        Text(stringResource(R.string.models_resume_action))
+                    }
+                    is DownloadStatus.NotDownloaded, is DownloadStatus.Failed ->
+                        TextButton(onClick = onDownload, enabled = !downloadBusy) {
+                            Text(
+                                if (status is DownloadStatus.Failed) {
+                                    stringResource(CommonR.string.common_retry)
+                                } else {
+                                    stringResource(CommonR.string.common_download)
+                                },
+                            )
+                        }
+                }
+            },
+        )
 
         if (expanded) {
             Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp)) {

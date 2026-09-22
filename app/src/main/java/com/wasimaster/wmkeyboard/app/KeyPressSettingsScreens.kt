@@ -114,27 +114,15 @@ internal fun KeySoundGroup(
             }
         }
         item {
-            // Hand-built rather than a ChoiceSetting (the chips need their own
-            // row), so the highlight wrapper every other control gets for free
-            // is spelled out here — this is where the Sound addon's Use button
-            // lands. The anchor is the row's own string resource, so the match
-            // holds in every language.
-            HighlightableRow(null, highlightKey = R.string.hardware_sound_style_title) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        stringResource(R.string.hardware_sound_style_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    InfoButton(
-                        stringResource(R.string.hardware_sound_style_title),
-                        stringResource(R.string.hardware_sound_style_info),
-                    )
-                }
+            // A ControlSetting rather than a ChoiceSetting: each chip acts the
+            // moment it is tapped (it previews the sound, and Custom and Pack
+            // pick a sound as well as a style). The row keys its highlight on
+            // its own string resource — this is where the Sound addon's Use
+            // button lands — so the match holds in every language.
+            ControlSetting(
+                R.string.hardware_sound_style_title,
+                info = stringResource(R.string.hardware_sound_style_info),
+            ) {
                 // Custom is a segment like any other, so the styles read as one
                 // choice rather than five here and a sixth hidden in a list. It
                 // names a file rather than a fixed waveform, so it needs a sound
@@ -160,9 +148,9 @@ internal fun KeySoundGroup(
                 // has to. Same control the addon type filter uses.
                 Row(
                     modifier = Modifier
+                        .padding(top = 8.dp)
                         .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState())
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     for (style in KeySoundStyle.entries) {
@@ -941,42 +929,32 @@ internal fun KeyPressHapticsSettings(
             }
         }
         item {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
+            ControlSetting(
+                R.string.keypress_haptic_style_title,
+                info = stringResource(R.string.keypress_haptic_style_info),
             ) {
-                Text(
-                    stringResource(R.string.keypress_haptic_style_title),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                InfoButton(
-                    stringResource(R.string.keypress_haptic_style_title),
-                    stringResource(R.string.keypress_haptic_style_info),
-                )
-            }
-            // Six styles overflow a segmented row; wrapping chips give each a
-            // full, readable label. Ordered best-to-worst via HapticStyle.entries.
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-            ) {
-                HapticStyle.entries.forEach { style ->
-                    FilterChip(
-                        selected = settings.haptics.style == style,
-                        onClick = {
-                            scope.launch { repository.setHapticStyle(style) }
-                            // Fire the motor with the freshly picked style so the
-                            // user feels the choice immediately.
-                            HapticPlayer.preview(
-                                context, style, settings.haptics.amplitude, settings.haptics.strengthMs, view,
-                            )
-                        },
-                        label = { Text(stringResource(style.labelRes), maxLines = 1) },
-                    )
+                // Six styles overflow a segmented row; wrapping chips give each a
+                // full, readable label. Ordered best-to-worst via HapticStyle.entries.
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                ) {
+                    HapticStyle.entries.forEach { style ->
+                        FilterChip(
+                            selected = settings.haptics.style == style,
+                            onClick = {
+                                scope.launch { repository.setHapticStyle(style) }
+                                // Fire the motor with the freshly picked style so the
+                                // user feels the choice immediately.
+                                HapticPlayer.preview(
+                                    context, style, settings.haptics.amplitude, settings.haptics.strengthMs, view,
+                                )
+                            },
+                            label = { Text(stringResource(style.labelRes), maxLines = 1) },
+                        )
+                    }
                 }
             }
         }
@@ -1336,17 +1314,10 @@ internal fun KeyPressShortcutsSettings(
                         .joinToString(" "),
                 )
             }
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        stringResource(R.string.keypress_currency_keys_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    InfoButton(
-                        stringResource(R.string.keypress_currency_keys_title),
-                        stringResource(R.string.keypress_currency_keys_info),
-                    )
-                }
+            ControlSetting(
+                R.string.keypress_currency_keys_title,
+                info = stringResource(R.string.keypress_currency_keys_info),
+            ) {
                 OutlinedTextField(
                     value = currencyText,
                     onValueChange = {

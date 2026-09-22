@@ -1,7 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -442,31 +441,23 @@ private fun TokenPresetSetting(
     numberFormat: String,
     onPick: (Int) -> Unit,
 ) {
-    HighlightableRow(title) {
-        Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
-            Text(
-                subtitle,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(top = 8.dp),
-            ) {
-                for (preset in presets) {
-                    FilterChip(
-                        selected = value == preset,
-                        onClick = { onPick(preset) },
-                        label = { Text(numberFormat.format(preset), maxLines = 1) },
-                    )
-                }
+    ControlSetting(title, subtitle = subtitle) {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(top = 8.dp),
+        ) {
+            for (preset in presets) {
                 FilterChip(
-                    selected = value <= 0,
-                    onClick = { onPick(0) },
-                    label = { Text(unlimitedLabel, maxLines = 1) },
+                    selected = value == preset,
+                    onClick = { onPick(preset) },
+                    label = { Text(numberFormat.format(preset), maxLines = 1) },
                 )
             }
+            FilterChip(
+                selected = value <= 0,
+                onClick = { onPick(0) },
+                label = { Text(unlimitedLabel, maxLines = 1) },
+            )
         }
     }
 }

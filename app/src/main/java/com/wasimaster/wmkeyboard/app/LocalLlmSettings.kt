@@ -193,9 +193,9 @@ internal fun LocalLlmModelManager(repository: SettingsRepository, settings: Keyb
     if (yours.isNotEmpty() || customModels.isNotEmpty()) {
         val downloadedBytes = yours.sumOf { it.sizeBytes } +
             customModels.sumOf { it.length() }
-        ModelsSectionHeader(
+        SectionHeader(
             stringResource(R.string.models_llm_yours_title),
-            formatBytes(downloadedBytes),
+            trailing = formatBytes(downloadedBytes),
         )
     }
     SettingsGroup {
@@ -301,33 +301,6 @@ internal fun LocalLlmModelManager(repository: SettingsRepository, settings: Keyb
         )
     }
     if (meteredBlocked) MeteredBlockedDialog { meteredBlocked = false }
-}
-
-/**
- * A section header with a muted, right-aligned trailing value — used to hang
- * the combined download size off the "Your models" title. Padding mirrors
- * [SectionHeader] so the label and trailing text line up with row content.
- */
-@Composable
-private fun ModelsSectionHeader(title: String, trailing: String) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp, top = 12.dp, bottom = 8.dp),
-    ) {
-        Text(
-            title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-        )
-        Text(
-            trailing,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
 }
 
 @Composable

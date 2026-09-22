@@ -29,7 +29,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -507,19 +506,15 @@ private fun OAuthRow(
     }
 
     Column {
-        ListItem(
-            headlineContent = { Text(stringResource(titleRes)) },
-            supportingContent = {
-                Text(
-                    stringResource(
-                        when {
-                            signingIn -> R.string.backup_auto_oauth_signing_in
-                            token.isNotEmpty() -> R.string.backup_auto_oauth_signed_in
-                            else -> R.string.backup_auto_oauth_signed_out
-                        },
-                    ),
-                )
-            },
+        WmRow(
+            title = stringResource(titleRes),
+            subtitle = stringResource(
+                when {
+                    signingIn -> R.string.backup_auto_oauth_signing_in
+                    token.isNotEmpty() -> R.string.backup_auto_oauth_signed_in
+                    else -> R.string.backup_auto_oauth_signed_out
+                },
+            ),
         )
         // The browser hands back before the code has been traded for a
         // token, which is a round trip or two. Without this the row said

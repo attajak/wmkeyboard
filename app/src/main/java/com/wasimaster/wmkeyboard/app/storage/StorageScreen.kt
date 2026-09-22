@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -142,9 +141,9 @@ internal fun StorageScreen(
         val visible = inGroup.filter { showEmpty || report.bytesOf(it.id) > 0L }
         if (visible.size < inGroup.size) anyHidden = true
         if (visible.isEmpty()) continue
-        StorageSectionHeader(
-            title = stringResource(group.title),
-            bytes = inGroup.sumOf { report.bytesOf(it.id) },
+        SectionHeader(
+            stringResource(group.title),
+            trailing = formatBytes(inGroup.sumOf { report.bytesOf(it.id) }),
         )
         StorageBar(
             slices = inGroup.map { StorageSlice(it.accent, report.bytesOf(it.id)) },
@@ -309,36 +308,6 @@ private fun StorageSummary(report: StorageReport, busy: Boolean, onRefresh: () -
                 }
             }
         }
-    }
-}
-
-/**
- * A group's name with its total on the right. The same metrics as
- * [SectionHeader], which cannot carry a trailing value: on this screen the
- * question "which of these is the big one" is answered at the group level
- * before it is answered at the row level.
- */
-@Composable
-private fun StorageSectionHeader(title: String, bytes: Long) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            // Matches SectionHeader's start inset, and ends level with the
-            // right edge of the row content in the card below.
-            .padding(start = 32.dp, end = 32.dp, top = 12.dp, bottom = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            title,
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.weight(1f),
-        )
-        Text(
-            formatBytes(bytes),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
     }
 }
 

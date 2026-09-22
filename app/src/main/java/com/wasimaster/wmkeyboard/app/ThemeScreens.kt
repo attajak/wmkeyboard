@@ -77,7 +77,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.TriStateCheckbox
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -2365,18 +2364,14 @@ fun ThemeEditorScreen(
             }
         }
         item {
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_background_image_title)) },
-                supportingContent = {
-                    Text(
-                        stringResource(
-                            if (theme.backgroundImage == null) R.string.theme_background_image_none
-                            else R.string.theme_background_image_replace,
-                        ),
-                    )
-                },
-                leadingContent = { ImageThumb(theme.backgroundImage) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_background_image_title),
+                subtitle = stringResource(
+                    if (theme.backgroundImage == null) R.string.theme_background_image_none
+                    else R.string.theme_background_image_replace,
+                ),
+                leading = { ImageThumb(theme.backgroundImage) },
+                trailing = {
                     val existingImage = theme.backgroundImage
                     if (existingImage != null) {
                         TextButton(onClick = {
@@ -2395,8 +2390,7 @@ fun ThemeEditorScreen(
                         }) { Text(stringResource(CommonR.string.common_delete)) }
                     }
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { sourceDialogSlot = BackgroundSlot.PORTRAIT },
+                onClick = { sourceDialogSlot = BackgroundSlot.PORTRAIT },
             )
         }
         theme.backgroundPhoto?.let { credit ->
@@ -2446,23 +2440,17 @@ fun ThemeEditorScreen(
             }
         }
         item {
-            ListItem(
-                headlineContent = {
-                    Text(stringResource(R.string.theme_background_image_landscape_title))
-                },
-                supportingContent = {
-                    Text(
-                        stringResource(
-                            if (theme.backgroundImageLandscape == null) {
-                                R.string.theme_background_image_landscape_none
-                            } else {
-                                R.string.theme_background_image_replace
-                            },
-                        ),
-                    )
-                },
-                leadingContent = { ImageThumb(theme.backgroundImageLandscape) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_background_image_landscape_title),
+                subtitle = stringResource(
+                    if (theme.backgroundImageLandscape == null) {
+                        R.string.theme_background_image_landscape_none
+                    } else {
+                        R.string.theme_background_image_replace
+                    },
+                ),
+                leading = { ImageThumb(theme.backgroundImageLandscape) },
+                trailing = {
                     val existingLandscapeImage = theme.backgroundImageLandscape
                     if (existingLandscapeImage != null) {
                         TextButton(onClick = {
@@ -2471,8 +2459,7 @@ fun ThemeEditorScreen(
                         }) { Text(stringResource(CommonR.string.common_delete)) }
                     }
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { sourceDialogSlot = BackgroundSlot.LANDSCAPE },
+                onClick = { sourceDialogSlot = BackgroundSlot.LANDSCAPE },
             )
         }
         theme.backgroundPhotoLandscape?.let { credit ->
@@ -2655,18 +2642,17 @@ fun ThemeEditorScreen(
             // A row plus a dialog, not a segmented row: a dozen shapes never fit
             // side by side, and a name on its own ("Squircle", "Leaf") does not
             // say what the key will look like. The dialog draws each one.
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_key_shape_title)) },
-                supportingContent = { Text(keyShapeName(theme.keyShape)) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_key_shape_title),
+                subtitle = keyShapeName(theme.keyShape),
+                trailing = {
                     KeyShapeSwatch(
                         kind = theme.keyShape,
                         radiusDp = keyRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { shapePickerOpen = true },
+                onClick = { shapePickerOpen = true },
             )
         }
         item {
@@ -2801,21 +2787,17 @@ fun ThemeEditorScreen(
         for (slot in slots) {
             item {
                 val path = slot.pathIn(theme)
-                ListItem(
-                    headlineContent = { Text(stringResource(slot.titleRes)) },
-                    supportingContent = {
-                        Text(
-                            stringResource(
-                                if (path != null) {
-                                    R.string.theme_texture_set_label
-                                } else {
-                                    R.string.theme_texture_unset_label
-                                },
-                            ),
-                        )
-                    },
-                    leadingContent = { ImageThumb(path) },
-                    trailingContent = {
+                WmRow(
+                    title = stringResource(slot.titleRes),
+                    subtitle = stringResource(
+                        if (path != null) {
+                            R.string.theme_texture_set_label
+                        } else {
+                            R.string.theme_texture_unset_label
+                        },
+                    ),
+                    leading = { ImageThumb(path) },
+                    trailing = {
                         if (path != null) {
                             IconButton(
                                 onClick = {
@@ -2833,8 +2815,7 @@ fun ThemeEditorScreen(
                             }
                         }
                     },
-                    colors = transparentListColors(),
-                    modifier = Modifier.clickable {
+                    onClick = {
                         texturePickerSlot = slot
                         texturePicker.launch(
                             PickVisualMediaRequest(
@@ -2886,9 +2867,9 @@ fun ThemeEditorScreen(
     ) {
         for (id in theme.keyOverrides.keys.sorted()) {
             item {
-                ListItem(
-                    headlineContent = { Text(keyOverrideDisplayName(id)) },
-                    trailingContent = {
+                WmRow(
+                    title = keyOverrideDisplayName(id),
+                    trailing = {
                         IconButton(
                             onClick = {
                                 update { t -> t.copy(keyOverrides = t.keyOverrides - id) }
@@ -2900,8 +2881,7 @@ fun ThemeEditorScreen(
                             )
                         }
                     },
-                    colors = transparentListColors(),
-                    modifier = Modifier.clickable { overrideEditorId = id },
+                    onClick = { overrideEditorId = id },
                 )
             }
         }
@@ -2970,12 +2950,10 @@ fun ThemeEditorScreen(
     ) {
         theme.decals.forEachIndexed { index, decal ->
             item {
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.theme_decal_item_label, index + 1))
-                    },
-                    leadingContent = { Icon(Icons.Outlined.Image, contentDescription = null) },
-                    trailingContent = {
+                WmRow(
+                    title = stringResource(R.string.theme_decal_item_label, index + 1),
+                    leading = { Icon(Icons.Outlined.Image, contentDescription = null) },
+                    trailing = {
                         IconButton(
                             onClick = {
                                 update { t ->
@@ -2990,8 +2968,7 @@ fun ThemeEditorScreen(
                             )
                         }
                     },
-                    colors = transparentListColors(),
-                    modifier = Modifier.clickable { decalEditorId = decal.id },
+                    onClick = { decalEditorId = decal.id },
                 )
             }
         }
@@ -3060,18 +3037,17 @@ fun ThemeEditorScreen(
             // and a theme that wants round popups on the standard radii had to
             // turn a slider group on to reach it.
             val popupShape = keyShapeKindOrNull(theme.popupShape) ?: settings.popup.shape
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_popup_shape_title)) },
-                supportingContent = { Text(keyShapeName(popupShape)) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_popup_shape_title),
+                subtitle = keyShapeName(popupShape),
+                trailing = {
                     KeyShapeSwatch(
                         kind = popupShape,
                         radiusDp = theme.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { popupShapePickerOpen = true },
+                onClick = { popupShapePickerOpen = true },
             )
         }
         // The preview bubble is the only thing that reads the placement, and
@@ -3164,29 +3140,24 @@ fun ThemeEditorScreen(
             val effective = menuShape ?: safeContainerKind(
                 keyShapeKindOrNull(theme.popupShape) ?: settings.popup.shape,
             )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_menu_shape_title)) },
-                supportingContent = {
-                    Text(
-                        if (menuShape == null) {
-                            stringResource(
-                                R.string.theme_shape_auto_safe_value,
-                                keyShapeName(effective),
-                            )
-                        } else {
-                            keyShapeName(menuShape)
-                        },
+            WmRow(
+                title = stringResource(R.string.theme_menu_shape_title),
+                subtitle = if (menuShape == null) {
+                    stringResource(
+                        R.string.theme_shape_auto_safe_value,
+                        keyShapeName(effective),
                     )
+                } else {
+                    keyShapeName(menuShape)
                 },
-                trailingContent = {
+                trailing = {
                     KeyShapeSwatch(
                         kind = effective,
                         radiusDp = theme.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { menuShapePickerOpen = true },
+                onClick = { menuShapePickerOpen = true },
             )
         }
     }
@@ -3194,18 +3165,17 @@ fun ThemeEditorScreen(
     SettingsGroup(stringResource(R.string.theme_toolbar_section_title), foldKey = "theme/toolbar") {
         item {
             val toolShape = keyShapeKindOrNull(theme.toolShape) ?: settings.toolShape
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_tool_shape_title)) },
-                supportingContent = { Text(keyShapeName(toolShape)) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_tool_shape_title),
+                subtitle = keyShapeName(toolShape),
+                trailing = {
                     KeyShapeSwatch(
                         kind = toolShape,
                         radiusDp = theme.toolCircleRadiusDp ?: settings.toolCircleRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { toolShapePickerOpen = true },
+                onClick = { toolShapePickerOpen = true },
             )
         }
         item {
@@ -3369,18 +3339,17 @@ fun ThemeEditorScreen(
         }
         item {
             val chipShape = keyShapeKindOrNull(theme.chipShape) ?: KeyShapeKind.ROUNDED
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_chip_shape_title)) },
-                supportingContent = { Text(keyShapeName(chipShape)) },
-                trailingContent = {
+            WmRow(
+                title = stringResource(R.string.theme_chip_shape_title),
+                subtitle = keyShapeName(chipShape),
+                trailing = {
                     KeyShapeSwatch(
                         kind = chipShape,
                         radiusDp = theme.chipCornerRadiusDp ?: DefaultChipRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { chipShapePickerOpen = true },
+                onClick = { chipShapePickerOpen = true },
             )
         }
         if (keyShapeKindOrNull(theme.chipShape).let {
@@ -3403,29 +3372,24 @@ fun ThemeEditorScreen(
             val effective = cardShape ?: safeContainerKind(
                 keyShapeKindOrNull(theme.chipShape) ?: KeyShapeKind.ROUNDED,
             )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.theme_card_shape_title)) },
-                supportingContent = {
-                    Text(
-                        if (cardShape == null) {
-                            stringResource(
-                                R.string.theme_shape_auto_safe_value,
-                                keyShapeName(effective),
-                            )
-                        } else {
-                            keyShapeName(cardShape)
-                        },
+            WmRow(
+                title = stringResource(R.string.theme_card_shape_title),
+                subtitle = if (cardShape == null) {
+                    stringResource(
+                        R.string.theme_shape_auto_safe_value,
+                        keyShapeName(effective),
                     )
+                } else {
+                    keyShapeName(cardShape)
                 },
-                trailingContent = {
+                trailing = {
                     KeyShapeSwatch(
                         kind = effective,
                         radiusDp = theme.chipCornerRadiusDp ?: DefaultChipRadiusDp,
                         color = MaterialTheme.colorScheme.primary,
                     )
                 },
-                colors = transparentListColors(),
-                modifier = Modifier.clickable { cardShapePickerOpen = true },
+                onClick = { cardShapePickerOpen = true },
             )
         }
     }
@@ -3766,17 +3730,13 @@ fun ThemeEditorScreen(
         if (keyEffectKindOrNull(theme.keyEffect) == KeyEffectKind.CUSTOM_IMAGE) {
             theme.keyEffectImages.forEachIndexed { index, path ->
                 item {
-                    ListItem(
-                        headlineContent = {
-                            Text(
-                                stringResource(
-                                    R.string.theme_effect_image_item_label,
-                                    index + 1,
-                                ),
-                            )
-                        },
-                        leadingContent = { ImageThumb(path) },
-                        trailingContent = {
+                    WmRow(
+                        title = stringResource(
+                            R.string.theme_effect_image_item_label,
+                            index + 1,
+                        ),
+                        leading = { ImageThumb(path) },
+                        trailing = {
                             IconButton(
                                 onClick = {
                                     update { t ->
@@ -3797,7 +3757,6 @@ fun ThemeEditorScreen(
                                 )
                             }
                         },
-                        colors = transparentListColors(),
                     )
                 }
             }
@@ -4517,23 +4476,17 @@ private fun KeyOverrideDialog(
                         onChange = { onChange(override.copy(popupText = it)) },
                     )
                 }
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.theme_key_override_texture_title))
-                    },
-                    supportingContent = {
-                        Text(
-                            stringResource(
-                                if (override.texture != null) {
-                                    R.string.theme_texture_set_label
-                                } else {
-                                    R.string.theme_key_override_texture_unset
-                                },
-                            ),
-                        )
-                    },
-                    leadingContent = { ImageThumb(override.texture) },
-                    trailingContent = {
+                WmRow(
+                    title = stringResource(R.string.theme_key_override_texture_title),
+                    subtitle = stringResource(
+                        if (override.texture != null) {
+                            R.string.theme_texture_set_label
+                        } else {
+                            R.string.theme_key_override_texture_unset
+                        },
+                    ),
+                    leading = { ImageThumb(override.texture) },
+                    trailing = {
                         if (override.texture != null) {
                             IconButton(
                                 onClick = {
@@ -4549,8 +4502,7 @@ private fun KeyOverrideDialog(
                             }
                         }
                     },
-                    colors = transparentListColors(),
-                    modifier = Modifier.clickable {
+                    onClick = {
                         texturePicker.launch(
                             PickVisualMediaRequest(
                                 ActivityResultContracts.PickVisualMedia.ImageOnly,
@@ -4602,18 +4554,11 @@ private fun KeyOverrideDialog(
                         )
                     }
                 }
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.theme_key_override_shape_title))
-                    },
-                    supportingContent = {
-                        Text(
-                            keyShapeKindOrNull(override.shape)?.let { keyShapeName(it) }
-                                ?: stringResource(CommonR.string.common_auto),
-                        )
-                    },
-                    colors = transparentListColors(),
-                    modifier = Modifier.clickable { shapePickerOpen = true },
+                WmRow(
+                    title = stringResource(R.string.theme_key_override_shape_title),
+                    subtitle = keyShapeKindOrNull(override.shape)?.let { keyShapeName(it) }
+                        ?: stringResource(CommonR.string.common_auto),
+                    onClick = { shapePickerOpen = true },
                 )
                 ChoiceControl(
                     options = listOf(
@@ -4625,26 +4570,12 @@ private fun KeyOverrideDialog(
                     modifier = Modifier.padding(vertical = 8.dp),
                     label = stringResource(R.string.theme_key_override_bold_label),
                 ) { bold -> onChange(override.copy(bold = bold)) }
-                ListItem(
-                    headlineContent = {
-                        Text(stringResource(R.string.theme_key_override_label_size_title))
-                    },
-                    supportingContent = {
-                        Text(
-                            override.labelScale?.let { "${(it * 100).toInt()}%" }
-                                ?: stringResource(CommonR.string.common_auto),
-                        )
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = override.labelScale != null,
-                            onCheckedChange = { on ->
-                                onChange(override.copy(labelScale = if (on) 1f else null))
-                            },
-                        )
-                    },
-                    colors = transparentListColors(),
-                )
+                ToggleSetting(
+                    title = stringResource(R.string.theme_key_override_label_size_title),
+                    subtitle = override.labelScale?.let { "${(it * 100).toInt()}%" }
+                        ?: stringResource(CommonR.string.common_auto),
+                    checked = override.labelScale != null,
+                ) { on -> onChange(override.copy(labelScale = if (on) 1f else null)) }
                 override.labelScale?.let { scale ->
                     SliderRow(
                         stringResource(R.string.theme_key_override_label_size_title),
@@ -4876,17 +4807,9 @@ private fun GradientEditor(
     defaultGradient: GradientSpec,
     onChange: (GradientSpec?) -> Unit,
 ) {
-    ListItem(
-        headlineContent = { Text(title) },
-        supportingContent = { Text(subtitle) },
-        trailingContent = {
-            Switch(
-                checked = gradient != null,
-                onCheckedChange = { on -> onChange(if (on) defaultGradient else null) },
-            )
-        },
-        colors = transparentListColors(),
-    )
+    ToggleSetting(title = title, subtitle = subtitle, checked = gradient != null) { on ->
+        onChange(if (on) defaultGradient else null)
+    }
     if (gradient == null) return
     Box(
         modifier = Modifier
@@ -5129,26 +5052,18 @@ internal fun SliderRow(
     info: String? = null,
     onChange: (Float) -> Unit,
 ) {
-    // Local drag state, and one of the few sliders that keeps writing while the
-    // finger is down (`live`): this row's own screen draws the theme it is
-    // editing, so the preview above it has to follow the thumb. See
-    // rememberLiveSlider; without the local state the thumb itself would wait
-    // for the theme to round-trip through DataStore.
-    val slider = rememberLiveSlider(value, onChange, live = true)
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
-            if (info != null) InfoButton(title = title, detail = info)
-            Spacer(Modifier.weight(1f))
-            Text(display(slider.value), style = MaterialTheme.typography.labelLarge)
-        }
-        WmSlider(
-            value = slider.value,
-            onValueChange = slider::onDrag,
-            onValueChangeFinished = slider::onRelease,
-            valueRange = range,
-        )
-    }
+    // One of the few sliders that keeps writing while the finger is down
+    // (`live`): this row's own screen draws the theme it is editing, so the
+    // preview above it has to follow the thumb. See rememberLiveSlider.
+    SliderSetting(
+        title = title,
+        value = value,
+        range = range,
+        display = display,
+        info = info,
+        live = true,
+        onChange = onChange,
+    )
 }
 
 /** A required color: tap the swatch to edit. */
@@ -5161,16 +5076,15 @@ private fun ColorRow(
     onChange: (Long) -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
-    ListItem(
-        headlineContent = { Text(title) },
-        trailingContent = {
+    WmRow(
+        title = title,
+        trailing = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (info != null) InfoButton(title = title, detail = info)
                 Swatch(color)
             }
         },
-        colors = transparentListColors(),
-        modifier = Modifier.clickable { open = true },
+        onClick = { open = true },
     )
     if (open) {
         ColorPickerDialog(
@@ -5200,9 +5114,9 @@ private fun NullableColorRow(
     onChange: (Long?) -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
-    ListItem(
-        headlineContent = { Text(title) },
-        supportingContent = if (color == null) {
+    WmRow(
+        title = title,
+        supporting = if (color == null) {
             {
                 Text(
                     stringResource(CommonR.string.common_auto),
@@ -5212,14 +5126,13 @@ private fun NullableColorRow(
         } else {
             null
         },
-        trailingContent = {
+        trailing = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (info != null) InfoButton(title = title, detail = info)
                 Swatch(color ?: fallback)
             }
         },
-        colors = transparentListColors(),
-        modifier = Modifier.clickable { open = true },
+        onClick = { open = true },
     )
     if (open) {
         ColorPickerDialog(

@@ -3113,6 +3113,11 @@ internal fun hasUsageAccess(context: Context): Boolean {
  * that rows already use rather than as a paragraph under the heading: the
  * explanation is there for whoever wants it and takes no room from anyone
  * who does not.
+ *
+ * [trailing] is a figure that belongs to the whole group — the total size of
+ * the models or files listed under it — drawn muted on the heading's right,
+ * level with the right edge of the rows' content. It answers "which of these
+ * is the big one" at the group before the rows are read.
  */
 @Composable
 internal fun SectionHeader(
@@ -3122,7 +3127,33 @@ internal fun SectionHeader(
     // rows' own 16dp content inset.
     modifier: Modifier = Modifier.padding(start = 32.dp, end = 16.dp, top = 12.dp, bottom = 8.dp),
     action: (@Composable () -> Unit)? = null,
+    trailing: String? = null,
 ) {
+    if (trailing != null) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.fillMaxWidth()) {
+            Text(
+                text,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.weight(1f),
+            )
+            if (info != null || action != null) {
+                HeadingControls {
+                    if (info != null) InfoButton(title = text, detail = info)
+                    action?.invoke()
+                }
+            }
+            Text(
+                trailing,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                // The heading ends 16dp short of the card; the rows' own
+                // content ends 16dp further in, and so does this.
+                modifier = Modifier.padding(start = 8.dp, end = 16.dp),
+            )
+        }
+        return
+    }
     if (info == null && action == null) {
         Text(
             text,
@@ -3549,6 +3580,56 @@ private fun Modifier.revealInset(reveal: IconReveal): Modifier = layout { measur
     layout(placeable.width + inset, placeable.height) { placeable.placeRelative(inset, 0) }
 }
 
+/** [ControlSetting] for a row named by a string resource. */
+@Composable
+internal fun ControlSetting(
+    @StringRes title: Int,
+    subtitle: String? = null,
+    info: String? = null,
+    icon: ImageVector? = SettingsRowIcons[title],
+    content: @Composable ColumnScope.() -> Unit,
+) = ControlSetting(
+    title = stringResource(title),
+    subtitle = subtitle,
+    info = info,
+    icon = icon,
+    highlightKey = title,
+    content = content,
+)
+
+/**
+ * A titled row whose control sits under the title and spans the row: a text
+ * field, a run of chips that each act as they are tapped, a slider with presets
+ * beside it — anything the other `*Setting` helpers have no shape for.
+ *
+ * The name, "?", subtitle and tile lane are [SliderSetting]'s and
+ * [ChoiceSetting]'s, so a bespoke control still reads as one of the page's rows
+ * rather than a label someone set above a widget. [content] starts right under
+ * the subtitle; it brings its own top gap.
+ */
+@Composable
+internal fun ControlSetting(
+    title: String,
+    subtitle: String? = null,
+    info: String? = null,
+    icon: ImageVector? = null,
+    @StringRes highlightKey: Int = 0,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    HighlightableRow(title, highlightKey) {
+        IconedRow(
+            icon = icon,
+            subtitle = subtitle,
+            header = {
+                ReflowingText(title, style = MaterialTheme.typography.bodyLarge)
+                if (info != null) InfoButton(title, info)
+                Spacer(Modifier.weight(1f))
+            },
+            content = content,
+        )
+    }
+}
+
 /** [SliderSetting] for a row named by a string resource. */
 @Composable
 internal fun SliderSetting(
@@ -3609,9 +3690,15 @@ internal fun SliderSetting(
      * haptic's strength. [onChange] still runs once, on release.
      */
     preview: ((Float) -> Unit)? = null,
+    /**
+     * Writes [onChange] on a throttle while the finger is down, for the theme
+     * and sticker editors, whose screens draw the stored value they edit. See
+     * `rememberLiveSlider`; everywhere else one write on release is the point.
+     */
+    live: Boolean = false,
     onChange: (Float) -> Unit,
 ) {
-    val slider = rememberLiveSlider(value, onChange, preview = preview)
+    val slider = rememberLiveSlider(value, onChange, live = live, preview = preview)
     // The readout is the slider's detent: this row's values are continuous, so
     // the steps the user is actually aiming at are the ones the number they can
     // read changes on. Keyed on the string rather than the float, so a drag

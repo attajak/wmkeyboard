@@ -327,12 +327,8 @@ fun PhotoDetailScreen(
 
 @Composable
 private fun SlotChoice(slot: BackgroundSlot, onSlot: (BackgroundSlot) -> Unit) {
-    Text(
-        stringResource(R.string.photo_use_slot_title),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-    )
     ChoiceControl(
+        label = stringResource(R.string.photo_use_slot_title),
         options = BackgroundSlot.entries.map { entry ->
             entry to stringResource(
                 when (entry) {

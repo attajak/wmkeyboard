@@ -1837,43 +1837,35 @@ internal fun ModeEditor(
             .joinToString("\n\n"),
     ) {
         item {
-            Text(
-                stringResource(R.string.modes_field_types_title),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-            )
-            FlowRow(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-            ) {
-                for (field in ModeField.entries) {
-                    FilterChip(
-                        selected = field in mode.fieldKinds,
-                        onClick = {
-                            save(
-                                mode.copy(
-                                    fieldKinds =
-                                        if (field in mode.fieldKinds) mode.fieldKinds - field
-                                        else mode.fieldKinds + field,
-                                ),
-                            )
-                        },
-                        label = { Text(modeFieldLabel(field), maxLines = 1) },
-                    )
+            ControlSetting(R.string.modes_field_types_title) {
+                FlowRow(
+                    modifier = Modifier.padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    for (field in ModeField.entries) {
+                        FilterChip(
+                            selected = field in mode.fieldKinds,
+                            onClick = {
+                                save(
+                                    mode.copy(
+                                        fieldKinds =
+                                            if (field in mode.fieldKinds) mode.fieldKinds - field
+                                            else mode.fieldKinds + field,
+                                    ),
+                                )
+                            },
+                            label = { Text(modeFieldLabel(field), maxLines = 1) },
+                        )
+                    }
                 }
             }
         }
         item {
-            Text(
-                stringResource(R.string.modes_field_hints_title),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-            )
-            Text(
-                stringResource(R.string.modes_field_hints_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            // The heading of the hint rows under it, which is why it is a row
+            // with nothing to press rather than a control.
+            WmRow(
+                title = stringResource(R.string.modes_field_hints_title),
+                subtitle = stringResource(R.string.modes_field_hints_body),
             )
         }
         for (hint in mode.hints) {

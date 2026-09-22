@@ -4388,13 +4388,11 @@ private fun ActionAlternatesRows(
     // Same for a secondary layout.
     var pickingLayoutAt by remember { mutableStateOf<Int?>(null) }
 
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            stringResource(R.string.layout_editor_action_alternates_label),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        CaptionText(stringResource(R.string.layout_editor_action_alternates_hint))
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    ControlSetting(
+        stringResource(R.string.layout_editor_action_alternates_label),
+        subtitle = stringResource(R.string.layout_editor_action_alternates_hint),
+    ) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
             alternates.forEachIndexed { index, alternate ->
                 InputChip(
                     selected = false,
@@ -4722,11 +4720,7 @@ internal fun RowHeightRow(
         ceiling = MaxRowHeightScale,
         hardMax = MaxRowHeightScale,
     )
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            stringResource(R.string.layout_editor_row_height_label, height),
-            style = MaterialTheme.typography.bodyLarge,
-        )
+    ControlSetting(stringResource(R.string.layout_editor_row_height_label, height)) {
         WmSlider(
             value = sliderPosition(height, travel),
             onValueChange = { onChange(roundGridUnit(it)) },
@@ -4789,16 +4783,7 @@ internal fun LayoutFontScaleRow(
         ceiling = LayoutFontScaleRange.endInclusive,
         hardMax = LayoutFontScaleRange.endInclusive,
     )
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            if (scale == null) autoTitle else title,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            hint,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+    ControlSetting(if (scale == null) autoTitle else title, subtitle = hint) {
         WmSlider(
             value = sliderPosition(shown, travel),
             onValueChange = { onChange(roundGridUnit(it)) },
@@ -4847,20 +4832,14 @@ private fun KeyLabelScaleRow(key: Key, onChange: (Float?) -> Unit) {
         ceiling = KeyLabelScaleRange.endInclusive,
         hardMax = KeyLabelScaleRange.endInclusive,
     )
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            if (scale == null) {
-                stringResource(R.string.layout_editor_key_label_scale_auto_label)
-            } else {
-                stringResource(R.string.layout_editor_key_label_scale_label, scale)
-            },
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            stringResource(R.string.layout_editor_key_label_scale_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+    ControlSetting(
+        if (scale == null) {
+            stringResource(R.string.layout_editor_key_label_scale_auto_label)
+        } else {
+            stringResource(R.string.layout_editor_key_label_scale_label, scale)
+        },
+        subtitle = stringResource(R.string.layout_editor_key_label_scale_hint),
+    ) {
         if (scale != null) {
             WmSlider(
                 value = sliderPosition(shown, travel),
@@ -4941,17 +4920,11 @@ private fun KeyRowSpanRow(span: Int, rowsBelow: Int, onChange: (Int) -> Unit) {
     // one choice, which is not a choice.
     if (rowsBelow <= 0 && span <= 1) return
     val choices = (1..maxOf(rowsBelow + 1, span)).toList()
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            pluralStringResource(R.plurals.layout_editor_key_row_span_label, span, span),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Text(
-            stringResource(R.string.layout_editor_key_row_span_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    ControlSetting(
+        pluralStringResource(R.plurals.layout_editor_key_row_span_label, span, span),
+        subtitle = stringResource(R.string.layout_editor_key_row_span_hint),
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
             for (choice in choices) {
                 FilterChip(
                     selected = choice == span,
@@ -4973,11 +4946,7 @@ private fun KeyWidthRow(
 ) {
     val remaining = gridWeight - otherWidthsInRow
     val travel = sliderTravel(width, floor = 0.5f, ceiling = 5f, hardMax = MaxKeyWidth)
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
-        Text(
-            stringResource(R.string.layout_editor_key_width_label, width),
-            style = MaterialTheme.typography.bodyLarge,
-        )
+    ControlSetting(stringResource(R.string.layout_editor_key_width_label, width)) {
         // Continuous, landing on hundredths. It used to move in quarters, on the
         // grounds that a free slider writes 1.0374 into a file people are invited
         // to hand-edit — true, but quarters cannot express the 1.43 that seven
