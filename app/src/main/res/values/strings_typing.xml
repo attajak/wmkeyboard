@@ -148,8 +148,8 @@
     <string name="typing_space_after_suggestion_info">This setting is on by default. When you press a suggestion, the keyboard types the word and a space after it, so the next word starts clean. Turn it off to type the word without the space. This helps in the languages or fields where a space after a word is usually wrong. If you go back to a word and continue it, the keyboard never adds a second space.</string>
 
     <string name="typing_wrap_selection_title">Wrap the selection with brackets</string>
-    <string name="typing_wrap_selection_subtitle">Press ( [ { &lt; \" \' or ` to put the pair around the selected text</string>
-    <string name="typing_wrap_selection_info">When you select text and press a bracket, a brace or a quote key, the keyboard puts the pair around the selection. It does not replace the selection. Example: select \"foo\", press ( and you get \"(foo)\". The wrapped text stays selected, so you can wrap it again. Turn this off to make these keys always replace the selection, like any other character.</string>
+    <string name="typing_wrap_selection_subtitle">Press either half of ( ) [ ] { } &lt; &gt; \" \' or ` to put the pair around the selected text</string>
+    <string name="typing_wrap_selection_info">When you select text and press a bracket, a brace or a quote key, the keyboard puts the pair around the selection. It does not replace the selection. Either half of the pair works. Example: select \"foo\", press ( or ) and you get \"(foo)\". The wrapped text stays selected, so you can wrap it again. Turn this off to make these keys always replace the selection, like any other character.</string>
 
     <string name="typing_auto_close_brackets_title">Close brackets for me</string>
     <string name="typing_auto_close_brackets_subtitle">Press ( [ { and the keyboard types the closing half, with the cursor between them</string>

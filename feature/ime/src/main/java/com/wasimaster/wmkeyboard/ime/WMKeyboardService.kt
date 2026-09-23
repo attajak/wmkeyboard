@@ -7595,17 +7595,19 @@ open class WMKeyboardService : InputMethodService() {
             dropComposingForSelectionEdit(ic)
             // Bracket/brace/quote over a selection wraps it in the pair
             // ("foo" → "(foo)") instead of replacing it, and leaves the inner
-            // text selected so it can be wrapped or re-cased again.
-            val closer = if (state.settings.textEditing.wrapSelectionWithPair && text.length == 1) {
-                WRAP_PAIRS[text[0]]
+            // text selected so it can be wrapped or re-cased again. Either half
+            // of the pair wraps: ")" over "foo" is "(foo)" too.
+            val pair = if (state.settings.textEditing.wrapSelectionWithPair && text.length == 1) {
+                WRAP_PAIRS[text[0]]?.let { text to it } ?: WRAP_OPENERS[text[0]]?.let { it to text }
             } else {
                 null
             }
-            if (closer != null) {
+            if (pair != null) {
+                val (opener, closer) = pair
                 val selected = ic.getSelectedText(0)?.toString().orEmpty()
                 invalidateExpectedSelection()
                 ic.beginBatchEdit()
-                ic.commitText("$text$selected$closer", 1)
+                ic.commitText("$opener$selected$closer", 1)
                 val end = ic.getExtractedText(ExtractedTextRequest(), 0)?.selectionEnd
                 if (end != null) {
                     val innerEnd = end - closer.length
@@ -31470,6 +31472,9 @@ open class WMKeyboardService : InputMethodService() {
             '"' to "\"", '\'' to "'", '`' to "`",
             '“' to "”", '‘' to "’", '«' to "»", '｢' to "｣",
         )
+        /** Closer → opener of [WRAP_PAIRS], so either half of a pair wraps a selection. */
+        private val WRAP_OPENERS: Map<Char, String> =
+            WRAP_PAIRS.entries.associate { (opener, closer) -> closer[0] to opener.toString() }
         /** Cap on files recorded from one multi-select copy. */
         private const val MAX_FILE_CLIPS_PER_COPY = 20
         /**
