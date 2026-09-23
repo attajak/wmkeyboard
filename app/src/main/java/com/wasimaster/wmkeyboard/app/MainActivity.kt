@@ -1226,6 +1226,15 @@ private fun SettingsNavGraph(
                 ) { id -> navController.navigate("theme_edit/$id") }
             }
         }
+        composable(RBOARD_THEMES_ROUTE) {
+            SettingsScreen(
+                stringResource(R.string.rboard_screen_title),
+                { navController.popBackStack() },
+                route = RBOARD_THEMES_ROUTE,
+            ) {
+                RboardThemesScreen(repository, settings) { navController.popBackStack() }
+            }
+        }
         composable("theme_edit/{themeId}") { backStackEntry ->
             val themeId = backStackEntry.arguments?.getString("themeId").orEmpty()
             // The look's own name, not "Edit theme": it is what the gallery

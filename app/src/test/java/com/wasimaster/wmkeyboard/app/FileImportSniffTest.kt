@@ -166,6 +166,16 @@ class FileImportSniffTest {
     }
 
     @Test
+    fun `a Gboard theme and an Rboard pack are recognised by their manifests`() {
+        assertTrue(WMFileTypes.isGboardManifest("""{"name":"Dusk","style_sheets":["style_sheet_md2.css"]}"""))
+        assertTrue(WMFileTypes.isGboardManifest("name=Gradients\r\nauthor=RKBDI"))
+        // One of this app's own pack manifests names a pack too, as JSON.
+        assertFalse(WMFileTypes.isGboardManifest("""{"format":"wm-sticker-pack","name":"x"}"""))
+        assertFalse(WMFileTypes.isGboardManifest("""{"${'$'}":"${FlexTheme.FORMAT}"}"""))
+        assertFalse(WMFileTypes.isGboardManifest("just some text"))
+    }
+
+    @Test
     fun `a sound pack is told apart from the other pack_json formats`() {
         // Sticker, icon and sound packs all name their manifest pack.json, so
         // the format tag is the whole decision. A sound pack sent to the sticker
