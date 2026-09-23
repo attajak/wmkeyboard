@@ -2598,7 +2598,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Type tag per value — boolean/int/long/float/double/string/stringSet, since JSON numbers are untyped.
     - Unreadable entries counted, not fatal — One bad line costs that setting, not the other two hundred.
   - Secrets excluded by default `RARE` — 19 named SECRET_KEYS held out of every export unless "Include API keys" is on.
-    - Covers backup credentials too — Passphrase, WebDAV password, S3 secret, FTP password, Dropbox and OneDrive refresh tokens.
+    - Covers backup credentials too — Passphrase, WebDAV password, S3 secret, FTP, SFTP, SMB and IMAP passwords, SFTP keys, Git tokens, Dropbox and OneDrive refresh tokens.
     - Covers 13 service keys — Translate, Klipy, Brave, Giphy, five AI providers plus compatible, HF, Unsplash, Pexels.
     - Warning after export and before import — "Treat that file as a password"; the import dialog warns keys will overwrite existing ones.
     - Same set LockedSettings refuses — One list drives both export redaction and device-protected-storage filtering.
@@ -2614,15 +2614,22 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Opening from a file manager uses the same dialog — No silent import path exists.
   - Legacy settings-only format `uncommon` — `.wmsettings.json` still accepted on import; nothing writes one anymore.
 - **Automatic backup** `RARE` — Scheduled unattended export of the same bundle to a destination the user owns.
-  - 7 destinations `RARE` — SAF folder, WebDAV, Google Drive appdata, S3, Dropbox, OneDrive, FTP. No first-party server.
+  - 11 destinations `RARE` — SAF folder, WebDAV, Google Drive (appdata or a visible folder), S3, Dropbox, OneDrive, FTP, SFTP, SMB, Git, IMAP. No first-party server.
     - SAF folder — Persisted tree URI; reaches any DocumentsProvider, needs no account, works without Play services.
     - WebDAV — Nextcloud/ownCloud and friends; plain http refused because the password crosses the wire.
+      - Service presets — Nextcloud, ownCloud, Seafile, Koofr, pCloud, Yandex, kDrive, Storage Box, 4shared build the URL; missing folder made by MKCOL.
+      - Nextcloud Login Flow v2 — Browser sign-in hands back an app password; the account password never reaches the app.
     - S3-compatible — AWS, MinIO, R2, B2, Wasabi, Garage; own SigV4 signer, path-style toggle.
-    - Google Drive appDataFolder — drive.appdata scope, hidden per-app space; gms source set only.
+      - Service presets — 14 providers fill endpoint, region examples and addressing from a region or account field.
+    - Google Drive — appDataFolder with drive.appdata, or a visible My Drive folder with drive.file; gms source set only.
+    - SFTP `RARE` — JSch for SSH only, own SFTP v3 client (JSch's ChannelSftp dies on API 24); ML-KEM, curve25519, ed25519 and chacha20 via Bouncy Castle; trust-on-first-use host key pinning.
+    - SMB 2/3 `RARE` — Hand-written client: NTLMv2 in SPNEGO with MIC, signing, 3.1.1 preauth integrity, AES-GCM/CCM encryption on by default; guest fallback refused.
+    - Git repository `RARE` — GitHub, GitLab, Gitea/Forgejo REST contents APIs; every backup a commit; public repos refused; message template, author, branch, [skip ci].
+    - IMAP `uncommon` — One message per backup in a dedicated folder; APPENDUID, UID EXPUNGE, hostname-verified TLS.
     - Dropbox and OneDrive — App-folder scopes via PKCE in a real browser, no SDK and no client secret.
     - FTP — Hand-rolled socket client, AUTH TLS on by default; plain FTP allowed with a stated cost.
     - Five-verb sink interface — readiness, write, list, read, delete; every method returns Result, never throws.
-    - Typed failure reasons — NOT_CONFIGURED, PERMISSION_LOST, TARGET_MISSING, OUT_OF_SPACE, IO; only IO is retried.
+    - Typed failure reasons — NOT_CONFIGURED, PERMISSION_LOST, TARGET_MISSING, OUT_OF_SPACE, UNSAFE, IO; only IO is retried.
   - Scheduling `uncommon` — JobScheduler periodic job, charging-required, 6/12/24/168-hour intervals.
     - Idempotent sync — An already-correct job is left alone, so process start does not restart its period.
     - Not setPersisted — Avoids RECEIVE_BOOT_COMPLETED; the keyboard re-establishes it seconds after a reboot.

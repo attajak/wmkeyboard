@@ -228,6 +228,14 @@ internal fun autoBackupErrorText(
         },
     )
     SinkError.OUT_OF_SPACE.name -> context.getString(R.string.backup_auto_error_space)
+    SinkError.UNSAFE.name -> context.getString(
+        when (destination) {
+            BackupDestination.SFTP -> R.string.backup_auto_error_unsafe_sftp
+            BackupDestination.GIT -> R.string.backup_auto_error_unsafe_git
+            BackupDestination.SMB -> R.string.backup_auto_error_unsafe_smb
+            else -> R.string.backup_auto_error_unsafe
+        },
+    )
     else -> context.getString(R.string.backup_auto_error_io)
 }
 /**
@@ -252,6 +260,8 @@ internal fun StoredTextField(
     supporting: String,
     password: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
+    /** For a pasted key or a template: lets the field grow instead of scrolling one line. */
+    multiLine: Boolean = false,
     onChange: (String) -> Unit,
 ) {
     var text by remember { mutableStateOf(value) }
@@ -271,7 +281,8 @@ internal fun StoredTextField(
         },
         label = { Text(label) },
         supportingText = if (supporting.isEmpty()) null else ({ Text(supporting) }),
-        singleLine = true,
+        singleLine = !multiLine,
+        maxLines = if (multiLine) MULTI_LINE_MAX else 1,
         visualTransformation =
         if (masked) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
@@ -327,6 +338,10 @@ internal fun destinationDescRes(destination: BackupDestination): Int = when (des
     BackupDestination.FTP -> R.string.backup_auto_dest_ftp_desc
     BackupDestination.DROPBOX -> R.string.backup_auto_dest_dropbox_desc
     BackupDestination.ONEDRIVE -> R.string.backup_auto_dest_onedrive_desc
+    BackupDestination.SFTP -> R.string.backup_auto_dest_sftp_desc
+    BackupDestination.SMB -> R.string.backup_auto_dest_smb_desc
+    BackupDestination.GIT -> R.string.backup_auto_dest_git_desc
+    BackupDestination.IMAP -> R.string.backup_auto_dest_imap_desc
 }
 
 /** One sentence for whatever a backup run turned out to be. */
@@ -1319,3 +1334,6 @@ internal fun BackupContentsSettings(repository: SettingsRepository, settings: Ke
     }
     Spacer(Modifier.height(16.dp))
 }
+
+/** How tall a multi-line [StoredTextField] grows before it scrolls. */
+private const val MULTI_LINE_MAX = 6

@@ -25,10 +25,10 @@ interface DriveAuthorizer {
     val available: Boolean
 
     /**
-     * Whether the user has already granted the `drive.appdata` scope, without
-     * asking them anything.
+     * Whether the user has already granted [scope], without asking them
+     * anything. One of `DriveSink.SCOPE` and `DriveSink.SCOPE_FILE`.
      */
-    suspend fun authorized(context: Context): Boolean
+    suspend fun authorized(context: Context, scope: String): Boolean
 
     /**
      * Asks for the scope, showing Google's consent screen if it is needed.
@@ -41,6 +41,7 @@ interface DriveAuthorizer {
      */
     suspend fun authorize(
         activity: Activity,
+        scope: String,
         onConsent: (IntentSender) -> Unit,
     ): Boolean
 }
@@ -58,8 +59,8 @@ interface DriveAuthorizer {
 /** The authorizer that refuses everything, for builds with no Play services. */
 object NoDriveAuthorizer : DriveAuthorizer {
     override val available: Boolean get() = false
-    override suspend fun authorized(context: Context): Boolean = false
-    override suspend fun authorize(activity: Activity, onConsent: (IntentSender) -> Unit) = false
+    override suspend fun authorized(context: Context, scope: String): Boolean = false
+    override suspend fun authorize(activity: Activity, scope: String, onConsent: (IntentSender) -> Unit) = false
 }
 
 /**

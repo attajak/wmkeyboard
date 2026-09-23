@@ -1,7 +1,7 @@
 package com.wasimaster.wmkeyboard.core.settings
 
 import android.app.job.JobInfo
-import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
+import com.wasimaster.wmkeyboard.core.settings.sink.DriveSink
 import com.wasimaster.wmkeyboard.core.settings.sink.DropboxSink
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
 import org.junit.Assert.assertEquals
@@ -18,22 +18,22 @@ class CloudSinkErrorsTest {
 
     @Test
     fun `Drive names a full account as out of space, not as a lost grant`() {
-        assertEquals(SinkError.OUT_OF_SPACE, DriveAppDataSink.statusError(403, "storageQuotaExceeded"))
+        assertEquals(SinkError.OUT_OF_SPACE, DriveSink.statusError(403, "storageQuotaExceeded"))
     }
 
     @Test
     fun `Drive rate limits are transient`() {
-        assertEquals(SinkError.IO, DriveAppDataSink.statusError(403, "userRateLimitExceeded"))
-        assertEquals(SinkError.IO, DriveAppDataSink.statusError(403, "rateLimitExceeded"))
-        assertEquals(SinkError.IO, DriveAppDataSink.statusError(429))
-        assertEquals(SinkError.IO, DriveAppDataSink.statusError(503))
+        assertEquals(SinkError.IO, DriveSink.statusError(403, "userRateLimitExceeded"))
+        assertEquals(SinkError.IO, DriveSink.statusError(403, "rateLimitExceeded"))
+        assertEquals(SinkError.IO, DriveSink.statusError(429))
+        assertEquals(SinkError.IO, DriveSink.statusError(503))
     }
 
     @Test
     fun `Drive refusals are still a lost grant`() {
-        assertEquals(SinkError.PERMISSION_LOST, DriveAppDataSink.statusError(401))
-        assertEquals(SinkError.PERMISSION_LOST, DriveAppDataSink.statusError(403, "insufficientPermissions"))
-        assertEquals(SinkError.PERMISSION_LOST, DriveAppDataSink.statusError(403, null))
+        assertEquals(SinkError.PERMISSION_LOST, DriveSink.statusError(401))
+        assertEquals(SinkError.PERMISSION_LOST, DriveSink.statusError(403, "insufficientPermissions"))
+        assertEquals(SinkError.PERMISSION_LOST, DriveSink.statusError(403, null))
     }
 
     @Test
@@ -70,6 +70,10 @@ class CloudSinkErrorsTest {
                 webDavUser = "u",
                 s3 = S3Config(bucket = "b", accessKeyId = "k", secretAccessKey = "s"),
                 ftp = FtpConfig(host = "h", user = "u"),
+                sftp = SftpConfig(host = "h", user = "u", password = "p"),
+                smb = SmbConfig(host = "h", share = "s", user = "u"),
+                git = GitConfig(repository = "o/r", token = "t"),
+                imap = ImapConfig(host = "h", user = "u", password = "p"),
                 refreshToken = "t",
             )
         },

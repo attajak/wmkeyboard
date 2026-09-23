@@ -160,6 +160,24 @@ private val bundledAttributions: List<Attribution> = buildList {
     )
     add(
         Attribution(
+            "JSch",
+            R.string.about_bundled_jsch_used,
+            "Copyright (c) 2002-2015 Atsuhiko Yamanaka, JCraft, Inc.; jBCrypt copyright (c) 2006 Damien Miller",
+            "BSD-3-Clause", "bsd-jsch.txt",
+            "https://github.com/mwiede/jsch",
+        ),
+    )
+    add(
+        Attribution(
+            "Bouncy Castle",
+            R.string.about_bundled_bouncycastle_used,
+            "Copyright (c) 2000-2026 The Legion of the Bouncy Castle Inc.",
+            "MIT", "mit-bouncycastle.txt",
+            "https://www.bouncycastle.org",
+        ),
+    )
+    add(
+        Attribution(
             "APNG4Android",
             R.string.about_bundled_apng_used,
             "Copyright Pengfei Zhou",

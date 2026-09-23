@@ -71,6 +71,17 @@ coil = "3.2.0"
 # backup sink can use it directly. HttpURLConnection cannot: it validates the
 # request method against a fixed list and rejects PROPFIND and MOVE outright.
 okhttp = "4.12.0"
+# SSH transport for the SFTP backup sink: key exchange, host keys, ciphers.
+# The SFTP file protocol on top is our own (sink/sftp), because JSch's
+# ChannelSftp builds a java.time formatter in a static initializer and dies
+# on Android 7. JSch picks algorithm classes by name, so app/proguard-rules.pro
+# keeps exactly the ones SftpAlgorithms turns on and R8 drops the rest.
+jsch = "2.28.7"
+# Lightweight crypto only, never registered as a JCE provider. JSch uses it for
+# the algorithms Android's own providers lack (curve25519, ML-KEM, sntrup761,
+# ed25519, chacha20-poly1305), and the SMB sink for MD4, AES-CMAC and AES-CCM.
+# Every class is reached by a direct reference, so R8 keeps only those.
+bouncycastle = "1.86"
 # APNG decoding, for animated Signal stickers. Pure Java, Apache-2.0. Its one
 # runtime dependency is appcompat, which the app already carries.
 apng4android = "3.0.5"
@@ -181,6 +192,8 @@ coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref 
 coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+jsch = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch" }
+bouncycastle-prov = { group = "org.bouncycastle", name = "bcprov-jdk18on", version.ref = "bouncycastle" }
 apng4android-apng = { group = "com.github.penfeizhou.android.animation", name = "apng", version.ref = "apng4android" }
 androidx-vectordrawable-animated = { group = "androidx.vectordrawable", name = "vectordrawable-animated", version.ref = "vectordrawableAnimated" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }

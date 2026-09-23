@@ -9,14 +9,18 @@ import com.wasimaster.wmkeyboard.core.settings.sink.AutoBackupNaming
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSink
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
-import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
+import com.wasimaster.wmkeyboard.core.settings.sink.DriveSink
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveAuth
 import com.wasimaster.wmkeyboard.core.settings.sink.DropboxSink
 import com.wasimaster.wmkeyboard.core.settings.sink.FtpSink
+import com.wasimaster.wmkeyboard.core.settings.sink.GitSink
+import com.wasimaster.wmkeyboard.core.settings.sink.ImapSink
 import com.wasimaster.wmkeyboard.core.settings.sink.OneDriveSink
 import com.wasimaster.wmkeyboard.core.settings.sink.S3Sink
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
 import com.wasimaster.wmkeyboard.core.settings.sink.SafFolderSink
+import com.wasimaster.wmkeyboard.core.settings.sink.SftpSink
+import com.wasimaster.wmkeyboard.core.settings.sink.SmbSink
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
 import com.wasimaster.wmkeyboard.core.settings.sink.WebDavSink
 import com.wasimaster.wmkeyboard.core.util.runCancellable
@@ -166,7 +170,9 @@ object AutoBackupRunner {
                 user = location.webDavUser,
                 password = location.webDavPassword,
             )
-            BackupDestination.DRIVE -> DriveAuth.provider?.let(::DriveAppDataSink)
+            BackupDestination.DRIVE -> DriveAuth.provider?.let {
+                DriveSink(it, location.driveSpace, location.driveFolder)
+            }
             BackupDestination.S3 -> S3Sink(location.s3)
             BackupDestination.FTP -> FtpSink(location.ftp)
             BackupDestination.DROPBOX -> BackupClients.dropbox()?.let {
@@ -177,7 +183,28 @@ object AutoBackupRunner {
                     storeRefreshToken(context, location.id, rotated)
                 }
             }
+            BackupDestination.SFTP -> SftpSink(location.sftp) { key ->
+                storeHostKey(context, location.id, key)
+            }
+            BackupDestination.SMB -> SmbSink(location.smb)
+            BackupDestination.GIT -> GitSink(location.git, BackupInstall.deviceLabel(context))
+            BackupDestination.IMAP -> ImapSink(location.imap)
         }
+
+    /**
+     * Saves the host key the first SFTP connection saw, so every later one is
+     * held to it. Blocking for the same reason as [storeRefreshToken]. Only
+     * fills an empty slot: a key already there is never replaced from here.
+     */
+    private fun storeHostKey(context: Context, id: String, key: String) {
+        runCatching {
+            runBlocking {
+                SettingsRepository(context.applicationContext).updateBackupLocation(id) {
+                    if (it.sftp.hostKey.isEmpty()) it.copy(sftp = it.sftp.copy(hostKey = key)) else it
+                }
+            }
+        }.onFailure { BackupLog.w("could not store the SFTP host key for $id", it) }
+    }
 
     /**
      * Saves the refresh token a service sent in place of [BackupLocation.refreshToken].

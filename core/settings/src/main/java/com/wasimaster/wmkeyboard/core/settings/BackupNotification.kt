@@ -64,6 +64,7 @@ internal object BackupNotification {
             R.string.core_settings_notify_backup_target_remote
         }
         SinkError.OUT_OF_SPACE -> R.string.core_settings_notify_backup_space
+        SinkError.UNSAFE -> R.string.core_settings_notify_backup_unsafe
         SinkError.NOT_CONFIGURED, SinkError.IO -> R.string.core_settings_notify_backup_io
     }
 }

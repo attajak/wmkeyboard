@@ -83,12 +83,47 @@ class WebDavSink(
             // Depth 0: ask about the collection itself and nothing in it. The
             // point is to fail before a bundle has been built, so it must not
             // pull a directory listing to do it.
-            call(
-                request(base)
-                    .header("Depth", "0")
-                    .method("PROPFIND", EMPTY_XML.toRequestBody(XML_MEDIA_TYPE))
-                    .build(),
-            ) { }
+            try {
+                propfindSelf(base)
+            } catch (missing: BackupSinkException) {
+                if (missing.reason != SinkError.TARGET_MISSING) throw missing
+                // A preset names a folder the user may not have made yet.
+                makeCollection(base, MKCOL_DEPTH)
+                propfindSelf(base)
+            }
+        }
+    }
+
+    private fun propfindSelf(url: String) {
+        call(
+            request(url)
+                .header("Depth", "0")
+                .method("PROPFIND", EMPTY_XML.toRequestBody(XML_MEDIA_TYPE))
+                .build(),
+        ) { }
+    }
+
+    /**
+     * MKCOL on [url], making up to [depth] missing parents first. A server
+     * answers 409 when the parent is missing, and 405 when the collection is
+     * already there, which is also fine.
+     */
+    private fun makeCollection(url: String, depth: Int) {
+        val response = try {
+            client.newCall(request(url).method("MKCOL", null).build()).execute()
+        } catch (failure: Throwable) {
+            throw BackupSinkException(SinkError.IO, failure)
+        }
+        val code = response.use { it.code }
+        when {
+            code in 200..299 || code == HTTP_METHOD_NOT_ALLOWED -> Unit
+            code == HTTP_CONFLICT && depth > 0 -> {
+                val parent = url.trimEnd('/').substringBeforeLast('/') + "/"
+                if (parent.length <= "https://x/".length) throw BackupSinkException(SinkError.TARGET_MISSING)
+                makeCollection(parent, depth - 1)
+                makeCollection(url, 0)
+            }
+            else -> throw BackupSinkException(statusError(code))
         }
     }
 
@@ -237,6 +272,8 @@ class WebDavSink(
         private const val HTTP_FORBIDDEN = 403
         private const val HTTP_NOT_FOUND = 404
         private const val HTTP_CONFLICT = 409
+        private const val HTTP_METHOD_NOT_ALLOWED = 405
+        private const val MKCOL_DEPTH = 3
         private const val HTTP_PAYLOAD_TOO_LARGE = 413
         private const val HTTP_INSUFFICIENT_STORAGE = 507
 

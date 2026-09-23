@@ -78,6 +78,9 @@ class NetworkCallSitesTest {
             "core/kdeconnect/LanTransport.kt" to "links counted in Link.kt; UDP discovery",
             // Wraps sockets already opened elsewhere in TLS; opens nothing itself.
             "core/kdeconnect/Tls.kt" to "wraps existing sockets",
+            // Opens the socket for SmbSink, which holds the log row and counts
+            // every frame through the traffic callback it hands in.
+            "sink/smb/Smb2Client.kt" to "logged by SmbSink",
         ).mapKeys { (key, _) ->
             // Written short above; matched against the full source path.
             key.replace("core/kdeconnect/", "core/kdeconnect/src/main/java/com/wasimaster/wmkeyboard/core/kdeconnect/")

@@ -57,7 +57,7 @@ and the source it builds from.
 | **Google Play in-app updates** | asks the Play Store whether a newer version exists | nothing: F-Droid's own client handles updates |
 | **The self-updater** | downloads an APK from the project's GitHub releases and installs it | nothing, and it could not have worked here anyway: F-Droid signs its builds with its own key, so an APK from GitHub cannot install over an F-Droid install. This build has no `REQUEST_INSTALL_PACKAGES` permission and no installer code. What it has instead is a check that asks F-Droid, described below |
 | **Play Feature Delivery** | downloads the on-device AI runtime as a separate module | nothing: this edition has no on-device AI |
-| **Google Play services auth** | gets an OAuth token for Google Drive | Drive as a backup destination. Local storage, WebDAV, an S3-compatible bucket, an FTP server, Dropbox and OneDrive all still work |
+| **Google Play services auth** | gets an OAuth token for Google Drive | Drive as a backup destination. Local storage, WebDAV, an S3-compatible bucket, an SFTP, SMB or FTP server, a Git repository, a mail account, Dropbox and OneDrive all still work |
 | **LiteRT-LM** | runs a language model on the device | on-device AI models. Cloud AI providers still work if you supply your own key |
 | **Whisper speech models** | offline dictation | offline voice typing. Android's own recognizer still works |
 | **Harper grammar engine** | grammar checking | the grammar tool |
@@ -169,7 +169,8 @@ leaves the rest of the keyboard working. The full list is on
 
 Backups are optional and written to the destination you choose. That can be
 local storage, a cloud drive you connect, a WebDAV server, an S3-compatible
-bucket, or an FTP server you run. Google Drive is not offered in this edition.
+bucket, an SFTP, SMB or FTP server you run, a Git repository you own, or a
+folder in your own mail account. Google Drive is not offered in this edition.
 By default the file is plain JSON. Turn on a backup passphrase and it is
 encrypted with AES-GCM under a PBKDF2-derived key. Nothing is uploaded
 anywhere by default and no copy is sent to the developer. See

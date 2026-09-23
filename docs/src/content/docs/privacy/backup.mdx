@@ -110,8 +110,8 @@ keys**, which only appears while the Settings section itself is included.
 That's more than the tool keys: Translate, Klipy, GIPHY, Brave, Unsplash,
 Pexels, every AI provider key including Grok, DeepSeek and the
 OpenAI-compatible one, the Hugging Face token, and the passwords and tokens
-for your backup locations (WebDAV, S3, FTP, Dropbox, OneDrive) plus your
-backup passphrase.
+for your backup locations (WebDAV, S3, SFTP, SMB, FTP, Git, IMAP, Dropbox,
+OneDrive) plus your backup passphrase.
 
 [AI history](/tools/ai/#history) never travels, with or without that switch,
 and there is no section for it to travel in. The two settings that control it
@@ -142,10 +142,14 @@ as you like, of any kind, on the Backup & restore screen:
 | Location | What it needs | Works without Google |
 |---|---|---|
 | **Folder** | A folder you pick, anywhere with a files app behind it: your device, an SD card, Drive, Dropbox, Nextcloud, OneDrive | Yes |
-| **WebDAV** | The address of a Nextcloud, ownCloud or other WebDAV folder, and a login | Yes |
-| **S3** | A bucket on Amazon S3, MinIO, Cloudflare R2, Backblaze B2 or anything else that speaks S3, and an access key pair | Yes |
+| **WebDAV** | A Nextcloud, ownCloud, Seafile, Koofr, pCloud, Yandex Disk, kDrive, Hetzner Storage Box, 4shared or other WebDAV folder, and a login. Nextcloud can sign in through the browser | Yes |
+| **S3** | A bucket on Amazon S3, Cloudflare R2, Backblaze B2, Wasabi, Google Cloud Storage, DigitalOcean, Hetzner, Scaleway, OVHcloud, Akamai, Storj, IDrive e2, MinIO, Garage or anything else that speaks S3, and an access key pair | Yes |
+| **SFTP** | An SSH server, and a password or a private key | Yes |
+| **Windows share (SMB)** | A shared folder on a Windows computer or a NAS, and a login. Encrypted unless you turn it off | Yes |
 | **FTP** | An FTP server, a login, and TLS unless you turn it off | Yes |
-| **Google Drive** | A one-time permission. The app gets a hidden folder of its own and can see nothing else | No, needs Play services |
+| **Git repository** | A private repository on GitHub, GitLab, Gitea or Forgejo (Codeberg included), and an access token | Yes |
+| **Email (IMAP)** | A mail account, and usually an app password. Each backup is one email in a folder of its own | Yes |
+| **Google Drive** | A one-time permission, for a hidden folder of the app's own or for a folder you can see in My Drive. Either way the app can see nothing else | No, needs Play services |
 | **Dropbox** | Signing in. The app gets a folder of its own under Apps | Yes |
 | **OneDrive** | Signing in. The app gets a folder of its own under Apps | Yes |
 
@@ -199,7 +203,14 @@ could read the keys. It doesn't refuse.
 
 **Some locations send a credential with every upload.** WebDAV sends your
 password on every request, so a WebDAV address on plain `http` is refused
-outright. FTP without TLS is allowed, because some older servers offer
+outright. A Git server typed as `http://` gets a warning, because the token
+crosses in the clear, and so does IMAP with security set to None. SFTP is
+always encrypted, and remembers the server's key from the first connection:
+a server that later shows a different key is refused, because that is what a
+machine in the middle looks like. SMB encrypts the whole session by default
+and refuses a server that can't. A Git repository that isn't private is
+refused unless you allow it, since its history keeps every backup ever
+written to it. FTP without TLS is allowed, because some older servers offer
 nothing else, and the screen says plainly what it costs. An S3 endpoint on
 plain `http` is allowed too, for the MinIO box on your own network: the
 request is signed rather than carrying the secret key, but the signature and
@@ -219,8 +230,10 @@ automatic backup there, from every device that uses it, newest first, with
 "This device" marking this phone's. Pick one and the app downloads it and
 shows the same confirmation as importing a file, listing what's inside before
 anything changes. An encrypted backup opens with your stored passphrase, or
-asks for one when it doesn't. For Google Drive this is the only way back:
-the app's Drive folder is hidden from every other app, the Drive app included.
+asks for one when it doesn't. For a Google Drive location in the hidden
+app folder this is the only way back: that folder is hidden from every other
+app, the Drive app included. Choose **A folder you can see** instead and the
+backups are ordinary files in My Drive as well.
 
 ## Sync between devices
 

@@ -176,8 +176,9 @@ what's already in the table above:
   (`www.googleapis.com`), Dropbox (`www.dropbox.com` to sign in, then
   `api.dropbox.com`, `api.dropboxapi.com` and `content.dropboxapi.com`),
   OneDrive (`login.microsoftonline.com` to sign in, then
-  `graph.microsoft.com`), or the S3, WebDAV or FTP server whose address you
-  typed in yourself. Nothing is contacted until you add a location, so none of
+  `graph.microsoft.com`), or the S3, WebDAV, SFTP, SMB, FTP, Git or IMAP
+  server whose address you typed in yourself. A Nextcloud WebDAV location can
+  also sign in through your own server's login page. Nothing is contacted until you add a location, so none of
   these are contacted on a fresh install. What travels is your backup file,
   and your sync file if you turn on sync between devices, and nothing else.
   See [Backup & restore](/privacy/backup/).
@@ -361,8 +362,9 @@ place.
   self-hosted AI server possible at all. It doesn't weaken HTTPS anywhere
   the app picks the address: every tool in the table above is contacted over
   HTTPS, and an addon repository URL on plain `http` is rejected rather than
-  quietly upgraded. The two places a plain address is your own choice are the
-  self-hosted AI server and an S3 backup endpoint you type with `http://`.
+  quietly upgraded. The places a plain address is your own choice are the
+  self-hosted AI server, and an S3 backup endpoint or a Git backup server you
+  type with `http://`.
 
 See [Data collection](/privacy/data/) for what the keyboard learns from you
 locally, and [Backup & restore](/privacy/backup/) for how API keys and the

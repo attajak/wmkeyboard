@@ -1,6 +1,6 @@
 package com.wasimaster.wmkeyboard.core.settings
 
-import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
+import com.wasimaster.wmkeyboard.core.settings.sink.DriveSink
 import com.wasimaster.wmkeyboard.core.settings.sink.S3Sink
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -43,7 +43,7 @@ class BackupDestinationTest {
         // Stored as ids, so renaming an enum constant must not silently move
         // every user's backups back to the default.
         assertEquals(
-            listOf("folder", "webdav", "drive", "s3", "dropbox", "onedrive", "ftp"),
+            listOf("folder", "webdav", "drive", "s3", "dropbox", "onedrive", "ftp", "sftp", "smb", "git", "imap"),
             BackupDestination.entries.map { it.id },
         )
         assertEquals(
@@ -117,29 +117,29 @@ class BackupDestinationTest {
     fun `the drive scope is the narrow one`() {
         // drive.appdata sees only this app's own hidden folder. Anything wider
         // would be asking for sight of the user's documents to store a backup.
-        assertEquals("https://www.googleapis.com/auth/drive.appdata", DriveAppDataSink.SCOPE)
+        assertEquals("https://www.googleapis.com/auth/drive.appdata", DriveSink.SCOPE)
     }
 
     @Test
     fun `drive timestamps parse`() {
         assertEquals(
             1_754_575_353_000L,
-            DriveAppDataSink.parseRfc3339("2025-08-07T14:02:33.000Z"),
+            DriveSink.parseRfc3339("2025-08-07T14:02:33.000Z"),
         )
         // Fractional seconds vary, and some responses have none at all.
         assertEquals(
             1_754_575_353_000L,
-            DriveAppDataSink.parseRfc3339("2025-08-07T14:02:33Z"),
+            DriveSink.parseRfc3339("2025-08-07T14:02:33Z"),
         )
         assertEquals(
             1_754_575_353_000L,
-            DriveAppDataSink.parseRfc3339("2025-08-07T14:02:33.123456Z"),
+            DriveSink.parseRfc3339("2025-08-07T14:02:33.123456Z"),
         )
     }
 
     @Test
     fun `an unreadable drive timestamp sorts by name instead of throwing`() {
-        assertEquals(0L, DriveAppDataSink.parseRfc3339(""))
-        assertEquals(0L, DriveAppDataSink.parseRfc3339("yesterday"))
+        assertEquals(0L, DriveSink.parseRfc3339(""))
+        assertEquals(0L, DriveSink.parseRfc3339("yesterday"))
     }
 }

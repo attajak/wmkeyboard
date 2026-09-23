@@ -47,6 +47,14 @@ enum class SinkError {
 
     /** Everything else. Assumed transient, so the next run tries again. */
     IO,
+
+    /**
+     * The destination answered, and what it showed is not safe to write to: an
+     * SFTP server whose host key changed, a public Git repository, an SMB
+     * server that cannot encrypt when encryption is required. Not transient,
+     * and not a credential problem either.
+     */
+    UNSAFE,
 }
 
 /** The failure a [BackupSink] reports, carrying the [reason] the UI reads. */

@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.core.settings.sink
 
 import com.wasimaster.wmkeyboard.core.net.BackupTraffic
+import com.wasimaster.wmkeyboard.core.settings.DriveSpace
 import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.util.runCancellable
@@ -32,7 +33,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 
 /**
- * Hands out an OAuth access token for `drive.appdata`, or nothing.
+ * Hands out an OAuth access token for one Drive scope, or nothing.
  *
  * The interface is here, in a module with no Google dependency, and the only
  * implementation that can actually produce a token lives behind the build's
@@ -52,7 +53,7 @@ interface DriveTokenProvider {
      * [BackupSinkException] with [SinkError.IO] rather than answer null: null
      * is reported to the user as a grant to renew.
      */
-    suspend fun accessToken(): String?
+    suspend fun accessToken(scope: String): String?
 }
 
 /**
@@ -73,12 +74,19 @@ object DriveAuth {
 }
 
 /**
- * A [BackupSink] over the app's own hidden folder in the user's Google Drive.
+ * A [BackupSink] over Google Drive, in one of two places.
  *
- * `appDataFolder` is a per-app, per-user space that does not appear in the
- * Drive UI alongside the user's documents. It cannot be tidied away by
- * accident, and the only scope it needs is `drive.appdata`, which grants no
- * sight of anything else in the account.
+ * [DriveSpace.APP_DATA]: `appDataFolder`, a per-app, per-user space that does
+ * not appear in the Drive UI alongside the user's documents. It cannot be
+ * tidied away by accident, and the only scope it needs is `drive.appdata`,
+ * which grants no sight of anything else in the account. Only this app can
+ * ever read it back.
+ *
+ * [DriveSpace.FOLDER]: an ordinary folder in My Drive, [folder] by path,
+ * made on first use. Scope `drive.file`, which lets the app see the files it
+ * made itself and nothing else. The user can open, download and share the
+ * backups from the Drive app. A folder of that name made by hand is invisible
+ * to the app under this scope, so the app makes its own beside it.
  *
  * Written against the REST API directly rather than through the Drive client
  * library. The requests are four ordinary HTTP calls, and the client library
@@ -89,9 +97,20 @@ object DriveAuth {
  * completes, so a killed upload leaves nothing rather than a truncated
  * something. The caller still verifies before it rotates.
  */
-class DriveAppDataSink(
+class DriveSink(
     private val tokens: DriveTokenProvider,
+    private val space: DriveSpace = DriveSpace.APP_DATA,
+    folder: String = DriveSpace.DEFAULT_FOLDER,
 ) : BackupSink {
+
+    private val folderPath: List<String> =
+        folder.split('/').map { it.trim() }.filter { it.isNotEmpty() }.ifEmpty { listOf(DriveSpace.DEFAULT_FOLDER) }
+
+    private val scope: String get() = scopeFor(space)
+
+    /** The folder's id once found or made, for [DriveSpace.FOLDER]. */
+    @Volatile
+    private var folderId: String? = null
 
     override val id: String get() = ID
 
@@ -110,7 +129,7 @@ class DriveAppDataSink(
     }
 
     private suspend fun authorized(url: String): Request.Builder {
-        val token = tokens.accessToken()
+        val token = tokens.accessToken(scope)
             ?: throw BackupSinkException(SinkError.PERMISSION_LOST)
                 .also { BackupLog.w("drive: no token (not authorized)") }
         return Request.Builder().url(url).header("Authorization", "Bearer $token")
@@ -120,6 +139,12 @@ class DriveAppDataSink(
         runCancellable {
             // One page of one file. Cheap, and it proves both that the token is
             // good and that Drive is reachable, which is the whole contract.
+            if (space == DriveSpace.FOLDER) {
+                // Finding (or making) the folder proves the same, and a first
+                // backup then has somewhere to go.
+                parentId()
+                return@runCancellable
+            }
             val url = FILES_URL.toHttpUrl().newBuilder()
                 .addQueryParameter("spaces", APP_DATA_FOLDER)
                 .addQueryParameter("pageSize", "1")
@@ -130,6 +155,46 @@ class DriveAppDataSink(
         }
     }
 
+    /** Where files go: `appDataFolder`, or the id of the visible folder. */
+    private suspend fun parentId(): String {
+        if (space == DriveSpace.APP_DATA) return APP_DATA_FOLDER
+        folderId?.let { return it }
+        var parent = "root"
+        for (segment in folderPath) {
+            parent = findFolder(segment, parent) ?: makeFolder(segment, parent)
+        }
+        folderId = parent
+        return parent
+    }
+
+    private suspend fun findFolder(name: String, parent: String): String? {
+        val q = "name = '${escapeQuery(name)}' and mimeType = '$FOLDER_MIME' and '$parent' in parents and trashed = false"
+        val url = FILES_URL.toHttpUrl().newBuilder()
+            .addQueryParameter("q", q)
+            .addQueryParameter("spaces", "drive")
+            .addQueryParameter("pageSize", "1")
+            .addQueryParameter("fields", "files(id)")
+            .build()
+            .toString()
+        val page = call(authorized(url).get().build()) { it.body?.string().orEmpty() }
+        return runCatching {
+            json.parseToJsonElement(page).jsonObject["files"]?.jsonArray?.firstOrNull()
+                ?.jsonObject?.get("id")?.jsonPrimitive?.contentOrNull
+        }.getOrNull()
+    }
+
+    private suspend fun makeFolder(name: String, parent: String): String {
+        val metadata = buildJsonObject {
+            put("name", JsonPrimitive(name))
+            put("mimeType", JsonPrimitive(FOLDER_MIME))
+            put("parents", JsonArray(listOf(JsonPrimitive(parent))))
+        }.toString()
+        val url = "$FILES_URL?fields=id"
+        val created = call(authorized(url).post(metadata.toRequestBody(JSON_MEDIA_TYPE)).build()) { it.body?.string().orEmpty() }
+        return runCatching { json.parseToJsonElement(created).jsonObject["id"]?.jsonPrimitive?.contentOrNull }.getOrNull()
+            ?: throw BackupSinkException(SinkError.IO).also { BackupLog.w("drive: folder create returned no id") }
+    }
+
     override suspend fun write(
         name: String,
         mimeType: String,
@@ -137,11 +202,12 @@ class DriveAppDataSink(
     ): Result<SinkEntry> = withContext(Dispatchers.IO) {
         runCancellable {
             val bytes = ByteArrayOutputStream().also(body).toByteArray()
+            val parent = parentId()
             val metadata = json.encodeToString(
                 JsonObject.serializer(),
                 buildJsonObject {
                     put("name", JsonPrimitive(name))
-                    put("parents", JsonArray(listOf(JsonPrimitive(APP_DATA_FOLDER))))
+                    put("parents", JsonArray(listOf(JsonPrimitive(parent))))
                 },
             )
             BackupLog.d("drive write $name ${bytes.size} B via ${if (bytes.size <= MULTIPART_MAX) "multipart" else "resumable"}")
@@ -211,9 +277,13 @@ class DriveAppDataSink(
         runCancellable {
             val out = ArrayList<SinkEntry>()
             var pageToken: String? = null
+            val parent = parentId()
             do {
                 val url = FILES_URL.toHttpUrl().newBuilder()
-                    .addQueryParameter("spaces", APP_DATA_FOLDER)
+                    .addQueryParameter("spaces", if (space == DriveSpace.APP_DATA) APP_DATA_FOLDER else "drive")
+                    .apply {
+                        if (space == DriveSpace.FOLDER) addQueryParameter("q", "'$parent' in parents and trashed = false")
+                    }
                     .addQueryParameter("pageSize", PAGE_SIZE)
                     .addQueryParameter("fields", "nextPageToken,files($FILE_FIELDS)")
                     .apply { pageToken?.let { addQueryParameter("pageToken", it) } }
@@ -301,8 +371,21 @@ class DriveAppDataSink(
     companion object {
         const val ID = "drive"
 
-        /** The scope this sink needs, and the only one it should ever ask for. */
+        /** The scope for [DriveSpace.APP_DATA]: the hidden folder, and nothing else. */
         const val SCOPE = "https://www.googleapis.com/auth/drive.appdata"
+
+        /** The scope for [DriveSpace.FOLDER]: files this app made, and nothing else. */
+        const val SCOPE_FILE = "https://www.googleapis.com/auth/drive.file"
+
+        fun scopeFor(space: DriveSpace): String = when (space) {
+            DriveSpace.APP_DATA -> SCOPE
+            DriveSpace.FOLDER -> SCOPE_FILE
+        }
+
+        private const val FOLDER_MIME = "application/vnd.google-apps.folder"
+
+        /** Drive's query language quotes with ' and escapes with a backslash. */
+        private fun escapeQuery(s: String): String = s.replace("\\", "\\\\").replace("'", "\\'")
 
         /**
          * Drive answers 403 for three unrelated things and names which in the

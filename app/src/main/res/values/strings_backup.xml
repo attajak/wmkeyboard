@@ -343,6 +343,10 @@
     <string name="backup_auto_error_target_remote">The app cannot find the backup location. Check the details of this location.</string>
     <string name="backup_auto_error_target">The app cannot find your backup folder. It may be deleted, or the card may be out.</string>
     <string name="backup_auto_error_space">There is not enough space for a backup.</string>
+    <string name="backup_auto_error_unsafe">The app did not write here, because the location is not safe.</string>
+    <string name="backup_auto_error_unsafe_sftp">The server key changed since the first connection. This can be a new server, or a device that intercepts your connection. If you changed the server, open this location and select Forget the server key.</string>
+    <string name="backup_auto_error_unsafe_git">The repository is public. Anybody can read a backup in it, and its history keeps every old backup. Make the repository private, or turn on Allow a public repository.</string>
+    <string name="backup_auto_error_unsafe_smb">The server cannot encrypt the connection. Turn off Encrypt the connection only if you trust every device on this network.</string>
     <string name="backup_auto_error_io">The last backup did not finish. The app tries again later.</string>
 
     <!-- ==== Where the automatic backup goes. ==== -->
@@ -354,6 +358,10 @@
     <string name="backup_auto_dest_ftp_desc">An FTP server. It needs a host, a user name and a password</string>
     <string name="backup_auto_dest_dropbox_desc">Your Dropbox account, in the app folder</string>
     <string name="backup_auto_dest_onedrive_desc">Your Microsoft account, in the app folder</string>
+    <string name="backup_auto_dest_sftp_desc">An SSH server. It needs a host, a user name, and a password or a key</string>
+    <string name="backup_auto_dest_smb_desc">A shared folder on a Windows computer or a NAS</string>
+    <string name="backup_auto_dest_git_desc">A private repository on GitHub, GitLab, Gitea or Forgejo. It needs a token</string>
+    <string name="backup_auto_dest_imap_desc">A folder in your email account. It needs the IMAP server and a password</string>
     <string name="backup_auto_dest_folder">Folder</string>
     <string name="backup_auto_dest_webdav">WebDAV</string>
     <string name="backup_auto_dest_drive">Google Drive</string>
@@ -370,7 +378,7 @@
     <string name="backup_auto_drive_authorized">The app can write to its folder in your Drive.</string>
     <string name="backup_auto_drive_not_authorized">The app needs your permission first.</string>
     <string name="backup_auto_drive_authorize">Allow access to Drive</string>
-    <string name="backup_auto_drive_info">The app writes to a hidden folder of its own in your Drive. It cannot see your other files, and the folder does not show up beside your documents. To take this permission back, go to your Google account and open the list of apps with account access. To keep backups you can see in the Drive app, add a Folder location that points at a Drive folder.</string>
+    <string name="backup_auto_drive_info">The app writes to a hidden folder of its own in your Drive. It cannot see your other files, and the folder does not show up beside your documents. To take this permission back, go to your Google account and open the list of apps with account access. To keep backups you can see in the Drive app, select A folder you can see above.</string>
 
     <!-- ==== The other four destinations. ==== -->
 
@@ -378,6 +386,10 @@
     <string name="backup_auto_dest_ftp">FTP</string>
     <string name="backup_auto_dest_dropbox">Dropbox</string>
     <string name="backup_auto_dest_onedrive">OneDrive</string>
+    <string name="backup_auto_dest_sftp" translatable="false">SFTP</string>
+    <string name="backup_auto_dest_smb">Windows share (SMB)</string>
+    <string name="backup_auto_dest_git">Git repository</string>
+    <string name="backup_auto_dest_imap">Email (IMAP)</string>
 
     <string name="backup_auto_s3_endpoint_label">Endpoint</string>
     <string name="backup_auto_s3_endpoint_hint">Leave this empty for Amazon S3. For other services, put their address here, for example https://your-account.r2.cloudflarestorage.com or the address of your own MinIO server.</string>
@@ -450,6 +462,10 @@
     <string name="backup_location_name_hint_drive">Optional. For example, Personal Drive.</string>
     <string name="backup_location_name_hint_dropbox">Optional. For example, Family Dropbox.</string>
     <string name="backup_location_name_hint_onedrive">Optional. For example, Work OneDrive.</string>
+    <string name="backup_location_name_hint_sftp">Optional. For example, Home server or VPS.</string>
+    <string name="backup_location_name_hint_smb">Optional. For example, NAS or Office PC.</string>
+    <string name="backup_location_name_hint_git">Optional. For example, Private repo.</string>
+    <string name="backup_location_name_hint_imap">Optional. For example, Mail archive.</string>
     <string name="backup_location_not_backed_up">Automatic backups do not go here</string>
     <!-- %1$s is the location's backup state, such as "Last backup: 2 hours ago". -->
     <string name="backup_location_state_syncs"><xliff:g id="state">%1$s</xliff:g>. Syncs here.</string>
@@ -555,4 +571,111 @@
     <string name="backup_blacklist_language_label">Block in</string>
     <string name="backup_blacklist_all_languages_label">All languages</string>
     <string name="backup_blacklist_language_word_subtitle">Only in <xliff:g id="language" example="French">%1$s</xliff:g></string>
+
+    <!-- Shared by the new location kinds. -->
+    <string name="backup_location_folder_label">Folder</string>
+    <string name="backup_location_folder_made_hint">The app makes this folder if it is not there.</string>
+    <!-- %1$s is a full server address, for example https://cloud.example.com/remote.php/dav/files/me/WM%20Keyboard/ -->
+    <string name="backup_location_address">Address: <xliff:g id="address" example="https://cloud.example.com/remote.php/dav/files/me/">%1$s</xliff:g></string>
+
+    <!-- WebDAV services -->
+    <string name="backup_webdav_preset_title">Service</string>
+    <string name="backup_webdav_preset_other">Other WebDAV server</string>
+    <string name="backup_webdav_server_label">Server</string>
+    <string name="backup_webdav_server_hint">The name of your server, for example cloud.example.com</string>
+    <string name="backup_webdav_server_id_label">kDrive ID</string>
+    <string name="backup_webdav_server_id_hint">The number in the address of your kDrive</string>
+    <string name="backup_webdav_nextcloud_sign_in">Sign in with Nextcloud</string>
+    <string name="backup_webdav_nextcloud_waiting">Waiting for the browser…</string>
+    <string name="backup_webdav_nextcloud_failed">The app could not finish the Nextcloud sign-in. Check the server name, or type a user name and an app password.</string>
+
+    <!-- S3 services -->
+    <string name="backup_s3_preset_title">Service</string>
+    <string name="backup_s3_preset_other">Other S3 service</string>
+    <string name="backup_s3_account_id_label">Account ID</string>
+    <string name="backup_s3_account_id_hint">The account ID from the dashboard of the service</string>
+    <string name="backup_s3_account_endpoint_label">Endpoint</string>
+    <string name="backup_s3_account_endpoint_hint">The endpoint host from the console of the service, without https://</string>
+    <string name="backup_s3_account_server_label">Server and port</string>
+    <string name="backup_s3_account_server_hint">For example, nas.local:9000</string>
+    <!-- %1$s is a list of region codes, for example "us-east-1, eu-west-1". -->
+    <string name="backup_s3_region_examples">For example, <xliff:g id="regions" example="us-east-1, eu-west-1">%1$s</xliff:g></string>
+    <!-- %1$s is the endpoint address the app uses. -->
+    <string name="backup_s3_endpoint_is">Endpoint: <xliff:g id="endpoint" example="https://s3.us-west-004.backblazeb2.com">%1$s</xliff:g></string>
+
+    <!-- Google Drive: which part of Drive -->
+    <string name="backup_drive_space_title">Where in Drive</string>
+    <string name="backup_drive_space_hidden">Hidden app folder</string>
+    <string name="backup_drive_space_folder">A folder you can see</string>
+    <string name="backup_drive_folder_label">Folder in My Drive</string>
+    <string name="backup_drive_folder_hint">The app makes this folder. Use / for a folder in a folder.</string>
+    <string name="backup_drive_folder_info">The backups go into this folder, and you can open them in the Drive app. The app can see only the files it made, and none of your other files. The app cannot see a folder of this name that you made yourself, so it makes its own. To take this permission back, go to your Google account and open the list of apps with account access.</string>
+
+    <!-- SFTP -->
+    <string name="backup_sftp_password_hint">Leave this empty if you use a key.</string>
+    <string name="backup_sftp_key_label">Private key</string>
+    <string name="backup_sftp_key_hint">Optional. Paste a whole OpenSSH or PEM private key: Ed25519, ECDSA or RSA. The app tries the key before the password.</string>
+    <string name="backup_sftp_key_passphrase_label">Key passphrase</string>
+    <string name="backup_sftp_key_passphrase_hint">Only if the key is encrypted.</string>
+    <string name="backup_sftp_path_hint">Leave this empty to use your home folder. The app makes the folder if it is not there.</string>
+    <string name="backup_sftp_host_key_title">Server key</string>
+    <!-- %1$s is the key type, for example ssh-ed25519. %2$s is its fingerprint, for example SHA256:abc… -->
+    <string name="backup_sftp_host_key_value"><xliff:g id="type" example="ssh-ed25519">%1$s</xliff:g> <xliff:g id="fingerprint" example="SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8">%2$s</xliff:g></string>
+    <string name="backup_sftp_host_key_none">The app saves the key of the server at the first connection, and after that it connects only to a server with the same key. Select Test the connection to save it now.</string>
+    <string name="backup_sftp_host_key_forget">Forget the server key</string>
+    <string name="backup_sftp_legacy_title">Allow old algorithms</string>
+    <string name="backup_sftp_legacy_subtitle">Also offers SHA-1, for old NAS devices. Keep this off unless the connection fails without it.</string>
+
+    <!-- SMB -->
+    <string name="backup_smb_host_hint">A name or an IP address, for example 192.168.1.20</string>
+    <string name="backup_smb_share_label">Share</string>
+    <string name="backup_smb_share_hint">Only the name of the share. For \\nas\backups, type backups.</string>
+    <string name="backup_smb_path_hint">A folder in the share. Leave this empty to use the top of the share. The app makes the folder if it is not there.</string>
+    <string name="backup_smb_domain_label">Domain</string>
+    <string name="backup_smb_domain_hint">Usually empty. Only for a computer in a Windows domain.</string>
+    <string name="backup_smb_encrypt_title">Encrypt the connection</string>
+    <string name="backup_smb_encrypt_subtitle">Needs SMB 3. Turn this off only for an old server that cannot encrypt.</string>
+    <string name="backup_smb_cleartext">Without encryption, your backup crosses the network as plain bytes. The sign-in stays protected. If you must keep this off, turn on Protect with a passphrase in Automatic backup.</string>
+
+    <!-- Git -->
+    <string name="backup_git_provider_title">Host</string>
+    <string name="backup_git_provider_github" translatable="false">GitHub</string>
+    <string name="backup_git_provider_gitlab" translatable="false">GitLab</string>
+    <string name="backup_git_provider_gitea" translatable="false">Gitea / Forgejo</string>
+    <string name="backup_git_server_label">Server</string>
+    <!-- %1$s is the host name of the public service, for example github.com -->
+    <string name="backup_git_server_hint">Leave this empty for <xliff:g id="host" example="github.com">%1$s</xliff:g>. For your own server, type its address.</string>
+    <string name="backup_git_cleartext">This address is not https. The token and every backup cross the network as plain text. Use it only on a network you trust.</string>
+    <string name="backup_git_repository_label">Repository</string>
+    <string name="backup_git_repository_hint">The owner and the name, for example me/keyboard-backups. You can also paste the address of the repository.</string>
+    <string name="backup_git_token_label">Access token</string>
+    <string name="backup_git_token_hint_github">A fine-grained token for this repository only, with Contents set to Read and write.</string>
+    <string name="backup_git_token_hint_gitlab">A project access token with the api scope and the Developer role.</string>
+    <string name="backup_git_token_hint_gitea">An access token with Read and write for repositories.</string>
+    <string name="backup_git_branch_label">Branch</string>
+    <string name="backup_git_branch_hint">Leave this empty to use the default branch.</string>
+    <string name="backup_git_path_hint">Leave this empty to use the top of the repository.</string>
+    <string name="backup_git_message_label">Commit message</string>
+    <string name="backup_git_message_hint">{action}, {file}, {device} and {date} change into the action, the file name, this device and the time. Empty is {action} {file}.</string>
+    <string name="backup_git_author_name_label">Commit author name</string>
+    <string name="backup_git_author_email_label">Commit author email</string>
+    <string name="backup_git_author_hint">Leave the author empty to use the account of the token.</string>
+    <string name="backup_git_skip_ci_title">Add [skip ci]</string>
+    <string name="backup_git_skip_ci_subtitle">Stops a backup from starting the CI of the repository</string>
+    <string name="backup_git_allow_public_title">Allow a public repository</string>
+    <string name="backup_git_allow_public_subtitle">Anybody can read a backup in a public repository</string>
+    <string name="backup_git_info">Each backup and each deleted old backup is a commit. The history of the repository keeps all of them. The app refuses a public repository. Turn on Protect with a passphrase in Automatic backup.</string>
+    <string name="backup_git_public_warning">Anybody can read a backup in a public repository, and its history keeps every old backup after the app deletes it. Turn on Protect with a passphrase in Automatic backup.</string>
+
+    <!-- IMAP -->
+    <string name="backup_imap_host_hint">The IMAP server of your mail service, for example imap.gmail.com</string>
+    <string name="backup_imap_security_title">Security</string>
+    <string name="backup_imap_security_tls" translatable="false">TLS</string>
+    <string name="backup_imap_security_starttls" translatable="false">STARTTLS</string>
+    <string name="backup_imap_security_none">None</string>
+    <string name="backup_imap_password_hint">Most mail services need an app password here. Make one in the security settings of your account.</string>
+    <string name="backup_imap_mailbox_label">Mail folder</string>
+    <string name="backup_imap_mailbox_hint">The app makes this folder. Keep only backups in it, because the app deletes old backups from it.</string>
+    <string name="backup_imap_cleartext">Without TLS, your password and your backup cross the network as plain text that anyone in between can read.</string>
+    <string name="backup_imap_info">Each backup is one email in this folder. Some services, such as Gmail, keep a deleted email in another folder, so old backups can still use space in your account.</string>
 </resources>

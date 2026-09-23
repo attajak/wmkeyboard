@@ -3139,7 +3139,7 @@ data class OtpSettings(
 /**
  * Where an automatic backup goes.
  *
- * Three destinations, none of them a server of ours. That is the whole shape of
+ * Eleven destinations, none of them a server of ours. That is the whole shape of
  * this feature: the app writes a file somewhere the user already has, and never
  * holds a copy.
  */
@@ -3191,6 +3191,18 @@ enum class BackupDestination(
      * because a lot of home NAS boxes and cheap web hosts offer nothing else.
      */
     FTP("ftp"),
+
+    /** An SSH server's SFTP subsystem. See [SftpConfig]. */
+    SFTP("sftp"),
+
+    /** A Windows or Samba share, over SMB 2 or 3. See [SmbConfig]. */
+    SMB("smb"),
+
+    /** A folder in a GitHub, GitLab, Gitea or Forgejo repository. See [GitConfig]. */
+    GIT("git"),
+
+    /** A folder of messages in a mail account. See [ImapConfig]. */
+    IMAP("imap"),
 }
 
 /**
@@ -3224,6 +3236,10 @@ data class S3Config(
      * a bucket name cannot be prepended to one.
      */
     val pathStyle: Boolean = false,
+    /** An [S3Preset] id, for the screen. Empty: the endpoint was typed. */
+    val preset: String = "",
+    /** The `{account}` part of the preset's endpoint. See [S3Account]. */
+    val account: String = "",
 )
 
 /** An FTP server. */
@@ -3251,7 +3267,7 @@ data class FtpConfig(
  * where the user chose, on a schedule.
  *
  * Nothing here reaches a server of ours, which is why this exists in this shape
- * and not as an account. See [BackupDestination] for the three places it can go.
+ * and not as an account. See [BackupDestination] for the places it can go.
  *
  * Grouped (see [CameraSettings] for why); DataStore keys stay flat.
  *
@@ -3629,6 +3645,9 @@ val AutoBackupSettings.destinationConfigured: Boolean
         BackupDestination.DROPBOX -> dropboxRefreshToken.isNotEmpty()
         BackupDestination.ONEDRIVE -> oneDriveRefreshToken.isNotEmpty()
         BackupDestination.FTP -> ftp.host.isNotEmpty() && ftp.user.isNotEmpty()
+        // Only ever a location in the list. The single destination these
+        // settings describe predates them and cannot name one.
+        BackupDestination.SFTP, BackupDestination.SMB, BackupDestination.GIT, BackupDestination.IMAP -> false
     }
 
 /**

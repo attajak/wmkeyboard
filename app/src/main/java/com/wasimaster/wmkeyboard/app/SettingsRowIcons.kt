@@ -451,6 +451,11 @@ internal object SettingsRowIcons {
         put(R.string.backup_auto_s3_path_style_title) { Icons.Outlined.Link }
         put(R.string.backup_auto_ftp_host_label) { Icons.Outlined.Link }
         put(R.string.backup_auto_ftp_secure_title) { Icons.Outlined.Lock }
+        put(R.string.backup_sftp_host_key_title) { Icons.Outlined.Key }
+        put(R.string.backup_sftp_legacy_title) { Icons.Outlined.History }
+        put(R.string.backup_smb_encrypt_title) { Icons.Outlined.Lock }
+        put(R.string.backup_git_skip_ci_title) { Icons.Outlined.Block }
+        put(R.string.backup_git_allow_public_title) { Icons.Outlined.Public }
         put(R.string.backup_auto_dest_dropbox) { Icons.Outlined.CloudUpload }
         put(R.string.backup_auto_dest_onedrive) { Icons.Outlined.CloudUpload }
         put(R.string.backup_auto_enabled_title) { Icons.Outlined.CloudUpload }

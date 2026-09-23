@@ -48,8 +48,22 @@ data class BackupLocation(
     val webDavUrl: String = "",
     val webDavUser: String = "",
     val webDavPassword: String = "",
+    /** A [WebDavPreset] id, for the screen. [webDavUrl] is what the sink reads. */
+    val webDavPreset: String = "",
+    /** The preset's `{server}` part. */
+    val webDavServer: String = "",
+    /** The preset's `{folder}` part. */
+    val webDavFolder: String = "",
     val s3: S3Config = S3Config(),
     val ftp: FtpConfig = FtpConfig(),
+    val sftp: SftpConfig = SftpConfig(),
+    val smb: SmbConfig = SmbConfig(),
+    val git: GitConfig = GitConfig(),
+    val imap: ImapConfig = ImapConfig(),
+    /** [BackupDestination.DRIVE]: the hidden app folder, or a visible one. */
+    val driveSpace: DriveSpace = DriveSpace.APP_DATA,
+    /** [DriveSpace.FOLDER]: the folder's path from the top of My Drive. */
+    val driveFolder: String = DriveSpace.DEFAULT_FOLDER,
     /** Dropbox or OneDrive refresh token. Empty means signed out. */
     val refreshToken: String = "",
 ) {
@@ -68,6 +82,10 @@ data class BackupLocation(
                 s3.bucket.isNotEmpty() && s3.accessKeyId.isNotEmpty() && s3.secretAccessKey.isNotEmpty()
             BackupDestination.DROPBOX, BackupDestination.ONEDRIVE -> refreshToken.isNotEmpty()
             BackupDestination.FTP -> ftp.host.isNotEmpty() && ftp.user.isNotEmpty()
+            BackupDestination.SFTP -> sftp.configured
+            BackupDestination.SMB -> smb.configured
+            BackupDestination.GIT -> git.configured
+            BackupDestination.IMAP -> imap.configured
         }
 
     /** Enabled and configured: what a run actually writes to. */
@@ -101,11 +119,22 @@ data class BackupLocation(
 
         private fun JsonObject.str(key: String): String = this[key]?.jsonPrimitive?.contentOrNull.orEmpty()
 
+        private fun JsonObject.flag(key: String, default: Boolean): Boolean =
+            this[key]?.jsonPrimitive?.booleanOrNull ?: default
+
+        private fun JsonObject.int(key: String, default: Int): Int = this[key]?.jsonPrimitive?.intOrNull ?: default
+
+        private fun JsonObject.section(key: String): JsonObject? = runCatching { this[key]?.jsonObject }.getOrNull()
+
         private fun decode(o: JsonObject): BackupLocation? {
             val type = BackupDestination.entries.firstOrNull { it.id == o.str("type") } ?: return null
             val id = o.str("id").ifEmpty { return null }
             val s3 = o["s3"]?.jsonObject
             val ftp = o["ftp"]?.jsonObject
+            val sftp = o.section("sftp")
+            val smb = o.section("smb")
+            val git = o.section("git")
+            val imap = o.section("imap")
             return BackupLocation(
                 id = id,
                 type = type,
@@ -116,6 +145,9 @@ data class BackupLocation(
                 webDavUrl = o.str("webDavUrl"),
                 webDavUser = o.str("webDavUser"),
                 webDavPassword = o.str("webDavPassword"),
+                webDavPreset = o.str("webDavPreset"),
+                webDavServer = o.str("webDavServer"),
+                webDavFolder = o.str("webDavFolder"),
                 s3 = if (s3 == null) {
                     S3Config()
                 } else {
@@ -127,6 +159,8 @@ data class BackupLocation(
                         accessKeyId = s3.str("accessKeyId"),
                         secretAccessKey = s3.str("secretAccessKey"),
                         pathStyle = s3["pathStyle"]?.jsonPrimitive?.booleanOrNull ?: false,
+                        preset = s3.str("preset"),
+                        account = s3.str("account"),
                     )
                 },
                 ftp = if (ftp == null) {
@@ -141,6 +175,59 @@ data class BackupLocation(
                         secure = ftp["secure"]?.jsonPrimitive?.booleanOrNull ?: true,
                     )
                 },
+                sftp = sftp?.let {
+                    SftpConfig(
+                        host = it.str("host"),
+                        port = it.int("port", SftpConfig().port),
+                        user = it.str("user"),
+                        password = it.str("password"),
+                        privateKey = it.str("privateKey"),
+                        keyPassphrase = it.str("keyPassphrase"),
+                        path = it.str("path"),
+                        hostKey = it.str("hostKey"),
+                        legacyAlgorithms = it.flag("legacy", false),
+                    )
+                } ?: SftpConfig(),
+                smb = smb?.let {
+                    SmbConfig(
+                        host = it.str("host"),
+                        port = it.int("port", SmbConfig().port),
+                        share = it.str("share"),
+                        path = it.str("path"),
+                        domain = it.str("domain"),
+                        user = it.str("user"),
+                        password = it.str("password"),
+                        encrypt = it.flag("encrypt", true),
+                    )
+                } ?: SmbConfig(),
+                git = git?.let {
+                    GitConfig(
+                        provider = GitProvider.of(it.str("provider")),
+                        server = it.str("server"),
+                        repository = it.str("repository"),
+                        branch = it.str("branch"),
+                        path = it.str("path"),
+                        token = it.str("token"),
+                        authorName = it.str("authorName"),
+                        authorEmail = it.str("authorEmail"),
+                        message = it.str("message"),
+                        skipCi = it.flag("skipCi", true),
+                        allowPublic = it.flag("allowPublic", false),
+                    )
+                } ?: GitConfig(),
+                imap = imap?.let {
+                    val security = ImapSecurity.of(it.str("security"))
+                    ImapConfig(
+                        host = it.str("host"),
+                        port = it.int("port", security.defaultPort),
+                        security = security,
+                        user = it.str("user"),
+                        password = it.str("password"),
+                        mailbox = it.str("mailbox").ifEmpty { ImapConfig.DEFAULT_MAILBOX },
+                    )
+                } ?: ImapConfig(),
+                driveSpace = DriveSpace.of(o.str("driveSpace")),
+                driveFolder = o.str("driveFolder").ifEmpty { DriveSpace.DEFAULT_FOLDER },
                 refreshToken = o.str("refreshToken"),
             )
         }
@@ -157,6 +244,11 @@ data class BackupLocation(
                     put("webDavUrl", JsonPrimitive(l.webDavUrl))
                     put("webDavUser", JsonPrimitive(l.webDavUser))
                     put("webDavPassword", JsonPrimitive(l.webDavPassword))
+                    if (l.webDavPreset.isNotEmpty()) {
+                        put("webDavPreset", JsonPrimitive(l.webDavPreset))
+                        put("webDavServer", JsonPrimitive(l.webDavServer))
+                        put("webDavFolder", JsonPrimitive(l.webDavFolder))
+                    }
                 }
                 BackupDestination.S3 -> put(
                     "s3",
@@ -168,6 +260,10 @@ data class BackupLocation(
                         put("accessKeyId", JsonPrimitive(l.s3.accessKeyId))
                         put("secretAccessKey", JsonPrimitive(l.s3.secretAccessKey))
                         put("pathStyle", JsonPrimitive(l.s3.pathStyle))
+                        if (l.s3.preset.isNotEmpty()) {
+                            put("preset", JsonPrimitive(l.s3.preset))
+                            put("account", JsonPrimitive(l.s3.account))
+                        }
                     },
                 )
                 BackupDestination.FTP -> put(
@@ -181,9 +277,66 @@ data class BackupLocation(
                         put("secure", JsonPrimitive(l.ftp.secure))
                     },
                 )
+                BackupDestination.SFTP -> put(
+                    "sftp",
+                    buildJsonObject {
+                        put("host", JsonPrimitive(l.sftp.host))
+                        put("port", JsonPrimitive(l.sftp.port))
+                        put("user", JsonPrimitive(l.sftp.user))
+                        put("password", JsonPrimitive(l.sftp.password))
+                        put("privateKey", JsonPrimitive(l.sftp.privateKey))
+                        put("keyPassphrase", JsonPrimitive(l.sftp.keyPassphrase))
+                        put("path", JsonPrimitive(l.sftp.path))
+                        put("hostKey", JsonPrimitive(l.sftp.hostKey))
+                        put("legacy", JsonPrimitive(l.sftp.legacyAlgorithms))
+                    },
+                )
+                BackupDestination.SMB -> put(
+                    "smb",
+                    buildJsonObject {
+                        put("host", JsonPrimitive(l.smb.host))
+                        put("port", JsonPrimitive(l.smb.port))
+                        put("share", JsonPrimitive(l.smb.share))
+                        put("path", JsonPrimitive(l.smb.path))
+                        put("domain", JsonPrimitive(l.smb.domain))
+                        put("user", JsonPrimitive(l.smb.user))
+                        put("password", JsonPrimitive(l.smb.password))
+                        put("encrypt", JsonPrimitive(l.smb.encrypt))
+                    },
+                )
+                BackupDestination.GIT -> put(
+                    "git",
+                    buildJsonObject {
+                        put("provider", JsonPrimitive(l.git.provider.id))
+                        put("server", JsonPrimitive(l.git.server))
+                        put("repository", JsonPrimitive(l.git.repository))
+                        put("branch", JsonPrimitive(l.git.branch))
+                        put("path", JsonPrimitive(l.git.path))
+                        put("token", JsonPrimitive(l.git.token))
+                        put("authorName", JsonPrimitive(l.git.authorName))
+                        put("authorEmail", JsonPrimitive(l.git.authorEmail))
+                        put("message", JsonPrimitive(l.git.message))
+                        put("skipCi", JsonPrimitive(l.git.skipCi))
+                        put("allowPublic", JsonPrimitive(l.git.allowPublic))
+                    },
+                )
+                BackupDestination.IMAP -> put(
+                    "imap",
+                    buildJsonObject {
+                        put("host", JsonPrimitive(l.imap.host))
+                        put("port", JsonPrimitive(l.imap.port))
+                        put("security", JsonPrimitive(l.imap.security.id))
+                        put("user", JsonPrimitive(l.imap.user))
+                        put("password", JsonPrimitive(l.imap.password))
+                        put("mailbox", JsonPrimitive(l.imap.mailbox))
+                    },
+                )
                 BackupDestination.DROPBOX, BackupDestination.ONEDRIVE ->
                     put("refreshToken", JsonPrimitive(l.refreshToken))
-                BackupDestination.DRIVE -> Unit
+                BackupDestination.DRIVE -> {
+                    put("driveSpace", JsonPrimitive(l.driveSpace.id))
+                    if (l.driveSpace == DriveSpace.FOLDER) put("driveFolder", JsonPrimitive(l.driveFolder))
+                }
             }
         }
 

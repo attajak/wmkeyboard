@@ -66,13 +66,23 @@ import com.wasimaster.wmkeyboard.core.settings.AutoBackupScheduler
 import com.wasimaster.wmkeyboard.core.settings.AutoBackupSettings
 import com.wasimaster.wmkeyboard.core.settings.BackupDestination
 import com.wasimaster.wmkeyboard.core.settings.BackupLocation
+import com.wasimaster.wmkeyboard.core.settings.DriveSpace
+import com.wasimaster.wmkeyboard.core.settings.GitProvider
+import com.wasimaster.wmkeyboard.core.settings.ImapSecurity
+import com.wasimaster.wmkeyboard.core.settings.S3Account
+import com.wasimaster.wmkeyboard.core.settings.S3Preset
+import com.wasimaster.wmkeyboard.core.settings.WebDavPreset
 import com.wasimaster.wmkeyboard.core.settings.LocationStatus
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.signsIn
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupClients
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
+import com.wasimaster.wmkeyboard.core.settings.sink.DriveSink
+import com.wasimaster.wmkeyboard.core.settings.sink.GitSink
+import com.wasimaster.wmkeyboard.core.settings.sink.NextcloudLogin
 import com.wasimaster.wmkeyboard.core.settings.sink.S3Sink
+import com.wasimaster.wmkeyboard.core.settings.sink.SftpSink
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -87,6 +97,10 @@ internal val BackupDestination.accent: Color
         BackupDestination.DRIVE -> Color(0xFF1E8E3E)
         BackupDestination.DROPBOX -> Color(0xFF0061FE)
         BackupDestination.ONEDRIVE -> Color(0xFF0078D4)
+        BackupDestination.SFTP -> Color(0xFF37474F)
+        BackupDestination.SMB -> Color(0xFF5C6BC0)
+        BackupDestination.GIT -> Color(0xFFF05032)
+        BackupDestination.IMAP -> Color(0xFFC62828)
     }
 
 /** The destination's own name: "Dropbox", "WebDAV", "Folder". */
@@ -99,6 +113,10 @@ internal fun destinationName(context: Context, type: BackupDestination): String 
         BackupDestination.DRIVE -> R.string.backup_auto_dest_drive
         BackupDestination.DROPBOX -> R.string.backup_auto_dest_dropbox
         BackupDestination.ONEDRIVE -> R.string.backup_auto_dest_onedrive
+        BackupDestination.SFTP -> R.string.backup_auto_dest_sftp
+        BackupDestination.SMB -> R.string.backup_auto_dest_smb
+        BackupDestination.GIT -> R.string.backup_auto_dest_git
+        BackupDestination.IMAP -> R.string.backup_auto_dest_imap
     },
 )
 
@@ -123,6 +141,11 @@ internal fun BackupLocation.detail(context: Context): String? = when (type) {
     }
     BackupDestination.S3 -> s3.bucket.ifEmpty { null }
     BackupDestination.FTP -> ftp.host.ifEmpty { null }
+    BackupDestination.SFTP -> sftp.host.ifEmpty { null }
+    BackupDestination.SMB -> smb.host.takeIf { it.isNotEmpty() }?.let { "\\\\$it\\${smb.share}" }
+    BackupDestination.GIT -> git.repository.ifEmpty { null }
+    BackupDestination.IMAP -> imap.user.takeIf { it.isNotEmpty() }?.let { if (it.contains('@')) it else "$it@${imap.host}" }
+    BackupDestination.DRIVE -> driveFolder.takeIf { driveSpace == DriveSpace.FOLDER }
     else -> null
 }?.takeIf { name.isEmpty() || it != name } ?: if (name.isNotEmpty()) destinationName(context, type) else null
 
@@ -134,7 +157,11 @@ internal fun availableDestinations(): List<BackupDestination> = buildList {
     if (BackupClients.oneDriveAvailable) add(BackupDestination.ONEDRIVE)
     add(BackupDestination.WEBDAV)
     add(BackupDestination.S3)
+    add(BackupDestination.SFTP)
+    add(BackupDestination.SMB)
     add(BackupDestination.FTP)
+    add(BackupDestination.GIT)
+    add(BackupDestination.IMAP)
 }
 
 /** An example name for [type], under the optional Name field. */
@@ -146,6 +173,10 @@ private fun nameHintRes(type: BackupDestination): Int = when (type) {
     BackupDestination.DRIVE -> R.string.backup_location_name_hint_drive
     BackupDestination.DROPBOX -> R.string.backup_location_name_hint_dropbox
     BackupDestination.ONEDRIVE -> R.string.backup_location_name_hint_onedrive
+    BackupDestination.SFTP -> R.string.backup_location_name_hint_sftp
+    BackupDestination.SMB -> R.string.backup_location_name_hint_smb
+    BackupDestination.GIT -> R.string.backup_location_name_hint_git
+    BackupDestination.IMAP -> R.string.backup_location_name_hint_imap
 }
 
 /** What a location that cannot be tried yet is missing, in the words for its kind. */
@@ -461,8 +492,20 @@ private fun LocationEditorSheet(
     }
     var testing by remember { mutableStateOf(false) }
     var testResult by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
+    // Set by Forget the server key, so the key a backup stored meanwhile does
+    // not come straight back from [live].
+    var keyForgotten by remember { mutableStateOf(false) }
     // The stored token wins over the draft's: it is what the sign-in wrote.
-    val current = draft.copy(refreshToken = live?.refreshToken ?: draft.refreshToken)
+    // An SFTP host key the draft lacks comes from the stored copy the same way,
+    // since a backup that ran meanwhile may have recorded it.
+    val current = draft.copy(
+        refreshToken = live?.refreshToken ?: draft.refreshToken,
+        sftp = if (draft.sftp.hostKey.isEmpty() && !keyForgotten) {
+            draft.sftp.copy(hostKey = live?.sftp?.hostKey.orEmpty())
+        } else {
+            draft.sftp
+        },
+    )
 
     fun save(then: () -> Unit = {}) = scope.launch {
         repository.upsertBackupLocation(current)
@@ -522,7 +565,30 @@ private fun LocationEditorSheet(
                 }
                 BackupDestination.DROPBOX, BackupDestination.ONEDRIVE ->
                     SignInPart(repository, current, onMessage)
-                BackupDestination.DRIVE -> DrivePart(onMessage)
+                BackupDestination.DRIVE -> DrivePart(draft, onMessage) {
+                    draft = it
+                    testResult = null
+                }
+                BackupDestination.SFTP -> SftpPart(current, onForget = {
+                    keyForgotten = true
+                    draft = draft.copy(sftp = draft.sftp.copy(hostKey = ""))
+                    testResult = null
+                }) {
+                    draft = it
+                    testResult = null
+                }
+                BackupDestination.SMB -> SmbPart(draft) {
+                    draft = it
+                    testResult = null
+                }
+                BackupDestination.GIT -> GitPart(draft) {
+                    draft = it
+                    testResult = null
+                }
+                BackupDestination.IMAP -> ImapPart(draft) {
+                    draft = it
+                    testResult = null
+                }
             }
 
             // Test: the readiness call a backup makes first, with what is on
@@ -539,7 +605,16 @@ private fun LocationEditorSheet(
                             testing = true
                             testResult = null
                             scope.launch {
-                                val sink = AutoBackupRunner.sinkFor(context, current)
+                                // SFTP records the server key here, into the
+                                // draft, so Save keeps what this test saw.
+                                val sink = if (current.type == BackupDestination.SFTP) {
+                                    SftpSink(current.sftp) { key ->
+                                        draft = draft.copy(sftp = draft.sftp.copy(hostKey = key))
+                                        keyForgotten = false
+                                    }
+                                } else {
+                                    AutoBackupRunner.sinkFor(context, current)
+                                }
                                 val failure = sink?.readiness()?.exceptionOrNull()
                                     ?: if (sink == null) BackupSinkException(SinkError.NOT_CONFIGURED) else null
                                 testing = false
@@ -630,71 +705,233 @@ private fun FolderPart(draft: BackupLocation, onPicked: (String) -> Unit) {
     }
 }
 
+/**
+ * WebDAV: a service from the list, which turns a server name and a folder into
+ * the address, or the whole address typed by hand. Nextcloud can also sign in
+ * through the browser and hand back an app password.
+ */
 @Composable
 private fun WebDavPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
-    StoredTextField(
-        label = stringResource(R.string.backup_auto_webdav_url_label),
-        value = draft.webDavUrl,
-        supporting = stringResource(R.string.backup_auto_webdav_url_hint),
-        keyboardType = KeyboardType.Uri,
-    ) { onChange(draft.copy(webDavUrl = it)) }
+    val preset = WebDavPreset.of(draft.webDavPreset)
+    val other = stringResource(R.string.backup_webdav_preset_other)
+    // Rebuilds the address from the parts whenever one of them changes.
+    fun withParts(next: BackupLocation): BackupLocation {
+        val p = WebDavPreset.of(next.webDavPreset)
+        if (p == WebDavPreset.CUSTOM) return next
+        return next.copy(webDavUrl = p.url(next.webDavServer, next.webDavUser, next.webDavFolder))
+    }
+    ChoiceSetting(
+        title = stringResource(R.string.backup_webdav_preset_title),
+        options = WebDavPreset.entries.map { it to if (it == WebDavPreset.CUSTOM) other else it.label },
+        selected = preset,
+    ) { picked ->
+        onChange(
+            withParts(
+                draft.copy(
+                    webDavPreset = picked.id,
+                    webDavFolder = draft.webDavFolder.ifEmpty { WebDavPreset.DEFAULT_FOLDER },
+                ),
+            ),
+        )
+    }
+    if (preset == WebDavPreset.CUSTOM) {
+        StoredTextField(
+            label = stringResource(R.string.backup_auto_webdav_url_label),
+            value = draft.webDavUrl,
+            supporting = stringResource(R.string.backup_auto_webdav_url_hint),
+            keyboardType = KeyboardType.Uri,
+        ) { onChange(draft.copy(webDavUrl = it)) }
+    } else if (preset.needsServer) {
+        StoredTextField(
+            label = stringResource(
+                if (preset.serverIsId) R.string.backup_webdav_server_id_label else R.string.backup_webdav_server_label,
+            ),
+            value = draft.webDavServer,
+            supporting = stringResource(
+                if (preset.serverIsId) R.string.backup_webdav_server_id_hint else R.string.backup_webdav_server_hint,
+            ),
+            keyboardType = KeyboardType.Uri,
+        ) { onChange(withParts(draft.copy(webDavServer = it))) }
+    }
+    if (preset == WebDavPreset.NEXTCLOUD) NextcloudSignIn(draft) { onChange(withParts(it)) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_webdav_user_label),
         value = draft.webDavUser,
         supporting = "",
-    ) { onChange(draft.copy(webDavUser = it)) }
+    ) { onChange(withParts(draft.copy(webDavUser = it))) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_webdav_password_label),
         value = draft.webDavPassword,
         supporting = stringResource(R.string.backup_auto_webdav_password_hint),
         password = true,
     ) { onChange(draft.copy(webDavPassword = it)) }
+    if (preset != WebDavPreset.CUSTOM) {
+        StoredTextField(
+            label = stringResource(R.string.backup_location_folder_label),
+            value = draft.webDavFolder,
+            supporting = stringResource(R.string.backup_location_folder_made_hint),
+        ) { onChange(withParts(draft.copy(webDavFolder = it))) }
+        if (draft.webDavUrl.isNotEmpty()) {
+            Text(
+                stringResource(R.string.backup_location_address, draft.webDavUrl),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+            )
+        }
+    }
     if (draft.webDavUrl.isNotEmpty() && !draft.webDavUrl.trim().startsWith("https://", ignoreCase = true)) {
         StateBanner(stringResource(R.string.backup_auto_webdav_needs_https), tone = BannerTone.WARNING)
     }
 }
 
+/**
+ * Nextcloud's browser sign-in: opens the server's own login page, waits for
+ * the approval, and fills in the user name and a new app password.
+ */
+@Composable
+private fun NextcloudSignIn(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var waiting by remember { mutableStateOf(false) }
+    var failed by remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+    ) {
+        FilledTonalButton(
+            enabled = !waiting && draft.webDavServer.isNotBlank(),
+            onClick = {
+                waiting = true
+                failed = false
+                scope.launch {
+                    val started = NextcloudLogin.start(draft.webDavServer)
+                    val opened = started?.takeIf {
+                        runCatching {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse(it.loginUrl)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                            )
+                        }.isSuccess
+                    }
+                    val got = opened?.let { NextcloudLogin.await(it) }
+                    waiting = false
+                    if (got == null) {
+                        failed = true
+                    } else {
+                        val host = got.server.removePrefix("https://").removePrefix("http://").trimEnd('/')
+                        onChange(
+                            draft.copy(
+                                webDavServer = host.ifEmpty { draft.webDavServer },
+                                webDavUser = got.loginName,
+                                webDavPassword = got.appPassword,
+                            ),
+                        )
+                    }
+                }
+            },
+        ) { Text(stringResource(R.string.backup_webdav_nextcloud_sign_in)) }
+        if (waiting) {
+            Spacer(Modifier.size(12.dp))
+            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+            Spacer(Modifier.size(8.dp))
+            Text(stringResource(R.string.backup_webdav_nextcloud_waiting), style = MaterialTheme.typography.bodyMedium)
+        }
+    }
+    if (failed) StateBanner(stringResource(R.string.backup_webdav_nextcloud_failed), tone = BannerTone.WARNING)
+}
+
+/** S3: a service from the list, which fills in the endpoint and addressing, or everything typed by hand. */
 @Composable
 private fun S3Part(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
     val s3 = draft.s3
-    StoredTextField(
-        label = stringResource(R.string.backup_auto_s3_endpoint_label),
-        value = s3.endpoint,
-        supporting = stringResource(R.string.backup_auto_s3_endpoint_hint),
-        keyboardType = KeyboardType.Uri,
-    ) { onChange(draft.copy(s3 = s3.copy(endpoint = it))) }
+    val preset = S3Preset.of(s3.preset)
+    val other = stringResource(R.string.backup_s3_preset_other)
+    fun apply(next: com.wasimaster.wmkeyboard.core.settings.S3Config) {
+        val p = S3Preset.of(next.preset)
+        val fixed = if (p == S3Preset.CUSTOM) next else next.copy(endpoint = p.endpoint(next.region, next.account), pathStyle = p.pathStyle)
+        onChange(draft.copy(s3 = fixed))
+    }
+    ChoiceSetting(
+        title = stringResource(R.string.backup_s3_preset_title),
+        options = S3Preset.entries.map { it to if (it == S3Preset.CUSTOM) other else it.label },
+        selected = preset,
+    ) { picked ->
+        val region = if (picked == S3Preset.CUSTOM) s3.region else picked.defaultRegion
+        apply(s3.copy(preset = picked.id, region = region))
+    }
+    if (preset == S3Preset.CUSTOM) {
+        StoredTextField(
+            label = stringResource(R.string.backup_auto_s3_endpoint_label),
+            value = s3.endpoint,
+            supporting = stringResource(R.string.backup_auto_s3_endpoint_hint),
+            keyboardType = KeyboardType.Uri,
+        ) { apply(s3.copy(endpoint = it)) }
+    }
+    if (preset.account != S3Account.NONE) {
+        StoredTextField(
+            label = stringResource(
+                when (preset.account) {
+                    S3Account.ACCOUNT_ID -> R.string.backup_s3_account_id_label
+                    S3Account.ENDPOINT -> R.string.backup_s3_account_endpoint_label
+                    else -> R.string.backup_s3_account_server_label
+                },
+            ),
+            value = s3.account,
+            supporting = stringResource(
+                when (preset.account) {
+                    S3Account.ACCOUNT_ID -> R.string.backup_s3_account_id_hint
+                    S3Account.ENDPOINT -> R.string.backup_s3_account_endpoint_hint
+                    else -> R.string.backup_s3_account_server_hint
+                },
+            ),
+            keyboardType = KeyboardType.Uri,
+        ) { apply(s3.copy(account = it)) }
+    }
     StoredTextField(
         label = stringResource(R.string.backup_auto_s3_bucket_label),
         value = s3.bucket,
         supporting = "",
-    ) { onChange(draft.copy(s3 = s3.copy(bucket = it))) }
+    ) { apply(s3.copy(bucket = it)) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_s3_region_label),
         value = s3.region,
-        supporting = stringResource(R.string.backup_auto_s3_region_hint),
-    ) { onChange(draft.copy(s3 = s3.copy(region = it))) }
+        supporting = if (preset.regions.isEmpty()) {
+            stringResource(R.string.backup_auto_s3_region_hint)
+        } else {
+            stringResource(R.string.backup_s3_region_examples, preset.regions.joinToString(", "))
+        },
+    ) { apply(s3.copy(region = it)) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_s3_prefix_label),
         value = s3.prefix,
         supporting = stringResource(R.string.backup_auto_s3_prefix_hint),
-    ) { onChange(draft.copy(s3 = s3.copy(prefix = it))) }
+    ) { apply(s3.copy(prefix = it)) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_s3_key_label),
         value = s3.accessKeyId,
         supporting = "",
-    ) { onChange(draft.copy(s3 = s3.copy(accessKeyId = it))) }
+    ) { apply(s3.copy(accessKeyId = it)) }
     StoredTextField(
         label = stringResource(R.string.backup_auto_s3_secret_label),
         value = s3.secretAccessKey,
         supporting = "",
         password = true,
-    ) { onChange(draft.copy(s3 = s3.copy(secretAccessKey = it))) }
-    ToggleSetting(
-        R.string.backup_auto_s3_path_style_title,
-        stringResource(R.string.backup_auto_s3_path_style_subtitle),
-        s3.pathStyle,
-        default = SettingsDefaults.autoBackup.s3.pathStyle,
-    ) { on -> onChange(draft.copy(s3 = s3.copy(pathStyle = on))) }
+    ) { apply(s3.copy(secretAccessKey = it)) }
+    if (preset == S3Preset.CUSTOM) {
+        ToggleSetting(
+            R.string.backup_auto_s3_path_style_title,
+            stringResource(R.string.backup_auto_s3_path_style_subtitle),
+            s3.pathStyle,
+            default = SettingsDefaults.autoBackup.s3.pathStyle,
+        ) { on -> apply(s3.copy(pathStyle = on)) }
+    } else if (s3.endpoint.isNotEmpty()) {
+        Text(
+            stringResource(R.string.backup_s3_endpoint_is, s3.endpoint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
+        )
+    }
     if (S3Sink.isCleartext(s3.endpoint)) {
         StateBanner(stringResource(R.string.backup_auto_s3_cleartext), tone = BannerTone.WARNING)
     }
@@ -740,6 +977,286 @@ private fun FtpPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
     if (!ftp.secure) {
         StateBanner(stringResource(R.string.backup_auto_ftp_cleartext), tone = BannerTone.WARNING)
     }
+}
+
+/** SFTP: the server, a password or a key, and the server key the first connection saw. */
+@Composable
+private fun SftpPart(draft: BackupLocation, onForget: () -> Unit, onChange: (BackupLocation) -> Unit) {
+    val sftp = draft.sftp
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_host_label),
+        value = sftp.host,
+        supporting = "",
+        keyboardType = KeyboardType.Uri,
+    ) { onChange(draft.copy(sftp = sftp.copy(host = it.trim()))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_port_label),
+        value = sftp.port.toString(),
+        supporting = "",
+        keyboardType = KeyboardType.Number,
+    ) { entered -> entered.toIntOrNull()?.let { onChange(draft.copy(sftp = sftp.copy(port = it))) } }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_user_label),
+        value = sftp.user,
+        supporting = "",
+    ) { onChange(draft.copy(sftp = sftp.copy(user = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_password_label),
+        value = sftp.password,
+        supporting = stringResource(R.string.backup_sftp_password_hint),
+        password = true,
+    ) { onChange(draft.copy(sftp = sftp.copy(password = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_sftp_key_label),
+        value = sftp.privateKey,
+        supporting = stringResource(R.string.backup_sftp_key_hint),
+        multiLine = true,
+    ) { onChange(draft.copy(sftp = sftp.copy(privateKey = it))) }
+    if (sftp.privateKey.isNotBlank()) {
+        StoredTextField(
+            label = stringResource(R.string.backup_sftp_key_passphrase_label),
+            value = sftp.keyPassphrase,
+            supporting = stringResource(R.string.backup_sftp_key_passphrase_hint),
+            password = true,
+        ) { onChange(draft.copy(sftp = sftp.copy(keyPassphrase = it))) }
+    }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_path_label),
+        value = sftp.path,
+        supporting = stringResource(R.string.backup_sftp_path_hint),
+    ) { onChange(draft.copy(sftp = sftp.copy(path = it))) }
+    WmRow(
+        title = stringResource(R.string.backup_sftp_host_key_title),
+        subtitle = SftpSink.fingerprint(sftp.hostKey)?.let {
+            stringResource(R.string.backup_sftp_host_key_value, sftp.hostKey.substringBefore(' '), it)
+        } ?: stringResource(R.string.backup_sftp_host_key_none),
+        icon = SettingsRowIcons[R.string.backup_sftp_host_key_title],
+    )
+    if (sftp.hostKey.isNotEmpty()) {
+        OutlinedButton(onClick = onForget, modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+            Text(stringResource(R.string.backup_sftp_host_key_forget))
+        }
+    }
+    ToggleSetting(
+        R.string.backup_sftp_legacy_title,
+        stringResource(R.string.backup_sftp_legacy_subtitle),
+        sftp.legacyAlgorithms,
+        default = false,
+    ) { on -> onChange(draft.copy(sftp = sftp.copy(legacyAlgorithms = on))) }
+}
+
+/** SMB: the server, the share and a folder in it, the sign-in, and encryption. */
+@Composable
+private fun SmbPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
+    val smb = draft.smb
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_host_label),
+        value = smb.host,
+        supporting = stringResource(R.string.backup_smb_host_hint),
+        keyboardType = KeyboardType.Uri,
+    ) { onChange(draft.copy(smb = smb.copy(host = it.trim().trimStart('\\', '/')))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_smb_share_label),
+        value = smb.share,
+        supporting = stringResource(R.string.backup_smb_share_hint),
+    ) { onChange(draft.copy(smb = smb.copy(share = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_location_folder_label),
+        value = smb.path,
+        supporting = stringResource(R.string.backup_smb_path_hint),
+    ) { onChange(draft.copy(smb = smb.copy(path = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_user_label),
+        value = smb.user,
+        supporting = "",
+    ) { onChange(draft.copy(smb = smb.copy(user = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_password_label),
+        value = smb.password,
+        supporting = "",
+        password = true,
+    ) { onChange(draft.copy(smb = smb.copy(password = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_smb_domain_label),
+        value = smb.domain,
+        supporting = stringResource(R.string.backup_smb_domain_hint),
+    ) { onChange(draft.copy(smb = smb.copy(domain = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_port_label),
+        value = smb.port.toString(),
+        supporting = "",
+        keyboardType = KeyboardType.Number,
+    ) { entered -> entered.toIntOrNull()?.let { onChange(draft.copy(smb = smb.copy(port = it))) } }
+    ToggleSetting(
+        R.string.backup_smb_encrypt_title,
+        stringResource(R.string.backup_smb_encrypt_subtitle),
+        smb.encrypt,
+        default = true,
+    ) { on -> onChange(draft.copy(smb = smb.copy(encrypt = on))) }
+    if (!smb.encrypt) StateBanner(stringResource(R.string.backup_smb_cleartext), tone = BannerTone.WARNING)
+}
+
+/**
+ * Git: the host, the repository, where in it, the token, and how commits
+ * look. A whole repository address pasted into the repository field is split
+ * into server and repository on the spot.
+ */
+@Composable
+private fun GitPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
+    val git = draft.git
+    ChoiceSetting(
+        title = stringResource(R.string.backup_git_provider_title),
+        options = listOf(
+            GitProvider.GITHUB to stringResource(R.string.backup_git_provider_github),
+            GitProvider.GITLAB to stringResource(R.string.backup_git_provider_gitlab),
+            GitProvider.GITEA to stringResource(R.string.backup_git_provider_gitea),
+        ),
+        selected = git.provider,
+    ) { onChange(draft.copy(git = git.copy(provider = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_server_label),
+        value = git.server,
+        supporting = stringResource(R.string.backup_git_server_hint, git.provider.defaultServer.removePrefix("https://")),
+        keyboardType = KeyboardType.Uri,
+    ) { onChange(draft.copy(git = git.copy(server = it.trim()))) }
+    if (git.server.trim().startsWith("http://", ignoreCase = true)) {
+        StateBanner(stringResource(R.string.backup_git_cleartext), tone = BannerTone.WARNING)
+    }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_repository_label),
+        value = git.repository,
+        supporting = stringResource(R.string.backup_git_repository_hint),
+        keyboardType = KeyboardType.Uri,
+    ) { typed ->
+        val remote = GitSink.parseRemote(typed)
+        onChange(
+            if (remote == null) {
+                draft.copy(git = git.copy(repository = typed.trim()))
+            } else {
+                val (server, repository) = remote
+                val public = git.provider.defaultServer.equals(server, ignoreCase = true)
+                draft.copy(
+                    git = git.copy(
+                        repository = repository,
+                        server = if (public) "" else server,
+                        provider = when {
+                            server.contains("github", ignoreCase = true) -> GitProvider.GITHUB
+                            server.contains("gitlab", ignoreCase = true) -> GitProvider.GITLAB
+                            server.contains("codeberg", ignoreCase = true) -> GitProvider.GITEA
+                            else -> git.provider
+                        },
+                    ),
+                )
+            },
+        )
+    }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_token_label),
+        value = git.token,
+        supporting = stringResource(
+            when (git.provider) {
+                GitProvider.GITHUB -> R.string.backup_git_token_hint_github
+                GitProvider.GITLAB -> R.string.backup_git_token_hint_gitlab
+                GitProvider.GITEA -> R.string.backup_git_token_hint_gitea
+            },
+        ),
+        password = true,
+    ) { onChange(draft.copy(git = git.copy(token = it.trim()))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_branch_label),
+        value = git.branch,
+        supporting = stringResource(R.string.backup_git_branch_hint),
+    ) { onChange(draft.copy(git = git.copy(branch = it.trim()))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_location_folder_label),
+        value = git.path,
+        supporting = stringResource(R.string.backup_git_path_hint),
+    ) { onChange(draft.copy(git = git.copy(path = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_message_label),
+        value = git.message,
+        supporting = stringResource(R.string.backup_git_message_hint),
+    ) { onChange(draft.copy(git = git.copy(message = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_author_name_label),
+        value = git.authorName,
+        supporting = "",
+    ) { onChange(draft.copy(git = git.copy(authorName = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_git_author_email_label),
+        value = git.authorEmail,
+        supporting = stringResource(R.string.backup_git_author_hint),
+        keyboardType = KeyboardType.Email,
+    ) { onChange(draft.copy(git = git.copy(authorEmail = it.trim()))) }
+    ToggleSetting(
+        R.string.backup_git_skip_ci_title,
+        stringResource(R.string.backup_git_skip_ci_subtitle),
+        git.skipCi,
+        default = true,
+    ) { on -> onChange(draft.copy(git = git.copy(skipCi = on))) }
+    ToggleSetting(
+        R.string.backup_git_allow_public_title,
+        stringResource(R.string.backup_git_allow_public_subtitle),
+        git.allowPublic,
+        default = false,
+    ) { on -> onChange(draft.copy(git = git.copy(allowPublic = on))) }
+    StateBanner(
+        stringResource(if (git.allowPublic) R.string.backup_git_public_warning else R.string.backup_git_info),
+        tone = if (git.allowPublic) BannerTone.WARNING else BannerTone.INFO,
+    )
+}
+
+/** IMAP: the mail server, how it is protected, the login, and the folder. */
+@Composable
+private fun ImapPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
+    val imap = draft.imap
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_host_label),
+        value = imap.host,
+        supporting = stringResource(R.string.backup_imap_host_hint),
+        keyboardType = KeyboardType.Uri,
+    ) { onChange(draft.copy(imap = imap.copy(host = it.trim()))) }
+    ChoiceSetting(
+        title = stringResource(R.string.backup_imap_security_title),
+        options = listOf(
+            ImapSecurity.TLS to stringResource(R.string.backup_imap_security_tls),
+            ImapSecurity.STARTTLS to stringResource(R.string.backup_imap_security_starttls),
+            ImapSecurity.NONE to stringResource(R.string.backup_imap_security_none),
+        ),
+        selected = imap.security,
+        default = ImapSecurity.TLS,
+    ) { picked ->
+        // A port still at the old mode's default follows the new mode.
+        val port = if (imap.port == imap.security.defaultPort) picked.defaultPort else imap.port
+        onChange(draft.copy(imap = imap.copy(security = picked, port = port)))
+    }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_port_label),
+        value = imap.port.toString(),
+        supporting = "",
+        keyboardType = KeyboardType.Number,
+    ) { entered -> entered.toIntOrNull()?.let { onChange(draft.copy(imap = imap.copy(port = it))) } }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_user_label),
+        value = imap.user,
+        supporting = "",
+        keyboardType = KeyboardType.Email,
+    ) { onChange(draft.copy(imap = imap.copy(user = it.trim()))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_auto_ftp_password_label),
+        value = imap.password,
+        supporting = stringResource(R.string.backup_imap_password_hint),
+        password = true,
+    ) { onChange(draft.copy(imap = imap.copy(password = it))) }
+    StoredTextField(
+        label = stringResource(R.string.backup_imap_mailbox_label),
+        value = imap.mailbox,
+        supporting = stringResource(R.string.backup_imap_mailbox_hint),
+    ) { onChange(draft.copy(imap = imap.copy(mailbox = it))) }
+    if (imap.security == ImapSecurity.NONE) {
+        StateBanner(stringResource(R.string.backup_imap_cleartext), tone = BannerTone.WARNING)
+    }
+    StateBanner(stringResource(R.string.backup_imap_info))
 }
 
 /**
@@ -804,13 +1321,17 @@ private fun SignInPart(repository: SettingsRepository, location: BackupLocation,
     )
 }
 
-/** Google Drive: whether the app may use its hidden folder, and the button that asks. */
+/**
+ * Google Drive: which part of it, the folder when it is a visible one, whether
+ * the app may use that part, and the button that asks.
+ */
 @Composable
-private fun DrivePart(onMessage: (String) -> Unit) {
+private fun DrivePart(draft: BackupLocation, onMessage: (String) -> Unit, onChange: (BackupLocation) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val authorizer = remember { driveAuthorizer() }
-    var authorized by remember { mutableStateOf<Boolean?>(null) }
+    val driveScope = DriveSink.scopeFor(draft.driveSpace)
+    var authorized by remember(driveScope) { mutableStateOf<Boolean?>(null) }
     var asking by remember { mutableStateOf(false) }
 
     val consent = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
@@ -818,13 +1339,29 @@ private fun DrivePart(onMessage: (String) -> Unit) {
         // grant after the consent screen closed is worth a sentence; see
         // BackupScreens history for the account picker that did nothing.
         scope.launch {
-            val granted = authorizer.authorized(context)
+            val granted = authorizer.authorized(context, driveScope)
             authorized = granted
             if (!granted) onMessage(context.getString(R.string.backup_auto_oauth_failed))
         }
     }
-    LaunchedEffect(Unit) { authorized = authorizer.authorized(context) }
+    LaunchedEffect(driveScope) { authorized = authorizer.authorized(context, driveScope) }
 
+    ChoiceSetting(
+        title = stringResource(R.string.backup_drive_space_title),
+        options = listOf(
+            DriveSpace.APP_DATA to stringResource(R.string.backup_drive_space_hidden),
+            DriveSpace.FOLDER to stringResource(R.string.backup_drive_space_folder),
+        ),
+        selected = draft.driveSpace,
+        default = DriveSpace.APP_DATA,
+    ) { onChange(draft.copy(driveSpace = it)) }
+    if (draft.driveSpace == DriveSpace.FOLDER) {
+        StoredTextField(
+            label = stringResource(R.string.backup_drive_folder_label),
+            value = draft.driveFolder,
+            supporting = stringResource(R.string.backup_drive_folder_hint),
+        ) { onChange(draft.copy(driveFolder = it)) }
+    }
     WmRow(
         title = stringResource(
             when (authorized) {
@@ -842,7 +1379,7 @@ private fun DrivePart(onMessage: (String) -> Unit) {
                 val activity = context.hostActivity() ?: return@FilledTonalButton
                 asking = true
                 scope.launch {
-                    val granted = authorizer.authorize(activity) { sender ->
+                    val granted = authorizer.authorize(activity, driveScope) { sender ->
                         consent.launch(IntentSenderRequest.Builder(sender).build())
                     }
                     asking = false
@@ -852,5 +1389,13 @@ private fun DrivePart(onMessage: (String) -> Unit) {
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         ) { Text(stringResource(R.string.backup_auto_drive_authorize)) }
     }
-    StateBanner(stringResource(R.string.backup_auto_drive_info))
+    StateBanner(
+        stringResource(
+            if (draft.driveSpace == DriveSpace.FOLDER) {
+                R.string.backup_drive_folder_info
+            } else {
+                R.string.backup_auto_drive_info
+            },
+        ),
+    )
 }

@@ -11,7 +11,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSinkException
-import com.wasimaster.wmkeyboard.core.settings.sink.DriveAppDataSink
+import com.wasimaster.wmkeyboard.core.settings.sink.DriveSink
 import com.wasimaster.wmkeyboard.core.settings.sink.DriveTokenProvider
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
 import java.util.concurrent.CancellationException
@@ -28,15 +28,15 @@ import kotlinx.coroutines.suspendCancellableCoroutine
  *
  * `AuthorizationClient` rather than the deprecated `GoogleSignIn`. It also fits
  * better: this app wants one narrow scope and does not want to know who the
- * user is. The only scope ever requested is
- * [DriveAppDataSink.SCOPE] — the app's own hidden folder, which grants no sight
- * of anything else in the account.
+ * user is. The only scopes ever requested are [DriveSink.SCOPE], the app's
+ * own hidden folder, and [DriveSink.SCOPE_FILE], the files the app made
+ * itself. Neither grants sight of anything else in the account. Each location
+ * asks for the one its space needs, and only that one.
  */
 
-private val request: AuthorizationRequest
-    get() = AuthorizationRequest.builder()
-        .setRequestedScopes(listOf(Scope(DriveAppDataSink.SCOPE)))
-        .build()
+private fun request(scope: String): AuthorizationRequest = AuthorizationRequest.builder()
+    .setRequestedScopes(listOf(Scope(scope)))
+    .build()
 
 /** Suspends on a [Task] without pulling in kotlinx-coroutines-play-services. */
 private suspend fun <T> Task<T>.awaitResult(): Result<T> = suspendCancellableCoroutine { cont ->
@@ -62,13 +62,13 @@ private class GmsDriveTokenProvider(context: Context) : DriveTokenProvider {
 
     private val appContext = context.applicationContext
 
-    override suspend fun accessToken(): String? {
+    override suspend fun accessToken(scope: String): String? {
         // A failed call is not a refusal. Refusal comes back as a *successful*
         // answer carrying a resolution; a failure is Play services unable to ask
         // at all, most often because the phone is offline, and saying "authorize
         // again" for that sends the user to fix something that is not broken.
         val result = Identity.getAuthorizationClient(appContext)
-            .authorize(request)
+            .authorize(request(scope))
             .awaitResult()
             .getOrElse {
                 BackupLog.w("drive authorize failed: ${describe(it)}", it)
@@ -83,9 +83,9 @@ private object GmsDriveAuthorizer : DriveAuthorizer {
 
     override val available: Boolean get() = true
 
-    override suspend fun authorized(context: Context): Boolean {
+    override suspend fun authorized(context: Context, scope: String): Boolean {
         val result = Identity.getAuthorizationClient(context.applicationContext)
-            .authorize(request)
+            .authorize(request(scope))
             .awaitResult()
             .onFailure { BackupLog.w("drive authorized? failed: ${describe(it)}", it) }
             .getOrNull()
@@ -96,10 +96,11 @@ private object GmsDriveAuthorizer : DriveAuthorizer {
 
     override suspend fun authorize(
         activity: Activity,
+        scope: String,
         onConsent: (IntentSender) -> Unit,
     ): Boolean {
         val result: AuthorizationResult = Identity.getAuthorizationClient(activity)
-            .authorize(request)
+            .authorize(request(scope))
             .awaitResult()
             .onFailure { BackupLog.w("drive authorize (ui) failed: ${describe(it)}", it) }
             .getOrNull()
