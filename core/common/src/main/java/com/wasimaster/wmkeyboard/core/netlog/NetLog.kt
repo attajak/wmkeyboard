@@ -99,6 +99,7 @@ object NetLog {
         if (attached) return
         attached = true
         val app = context.applicationContext ?: context
+        InternetPermission.attach(app)
         if (DirectBoot.isUserUnlocked(app)) {
             // Off the main thread: this runs on every process start, the
             // keyboard's included, and the rows file can be a few hundred KB.
@@ -134,6 +135,10 @@ object NetLog {
      * Starts recording a request to [url]. [route] is the address to show after
      * the host; leave it null when the path could carry anything the user typed.
      * Whatever is passed, a query string or fragment in it is cut off.
+     *
+     * Throws [NoInternetPermissionException] in a build without the internet
+     * permission, before anything is recorded: every request passes through
+     * here before its socket opens, so this is where such a build stops them.
      */
     fun call(
         source: NetSource,
@@ -172,6 +177,7 @@ object NetLog {
         background: Boolean = source.background,
         live: Boolean = true,
     ): NetCall {
+        InternetPermission.check()
         val call = NetCall(
             source = source,
             method = method.uppercase(),

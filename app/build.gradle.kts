@@ -70,12 +70,19 @@ val gmsSourceDir = if (gmsChannel) "src/gms/java" else "src/nogms/java"
 
 val channelSourceDirs = listOfNotNull(playServicesSourceDir, updaterSourceDir, gmsSourceDir)
 
+// A build with no internet permission at all (#292), for anyone who wants one:
+// `-Pwmkb.noInternet=true`. Not a release variant, there are enough of those.
+// Everything on the device keeps working; each feature that fetches something
+// fails the way it does offline.
+val noInternet = flag("wmkb.noInternet", "WMKB_NO_INTERNET")
+
 // Manifest entries that belong to exactly one channel. REQUEST_INSTALL_PACKAGES
 // and the install-result receiver must not exist in a Play or F-Droid APK, and
 // the Play Store package query is pointless anywhere but Play.
 val channelManifests = listOfNotNull(
     "src/play/AndroidManifest.xml".takeIf { playStoreChannel },
     "src/github/AndroidManifest.xml".takeIf { githubChannel },
+    "src/nointernet/AndroidManifest.xml".takeIf { noInternet },
 )
 
 // Every interface language the repo has a translation for, as BCP-47 tags

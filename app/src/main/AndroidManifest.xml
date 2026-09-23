@@ -18,7 +18,9 @@
            wait for a tap before they fetch;
          - backups to a destination the user configures;
          - clipboard link previews, off by default;
-         - the check-for-updates button. -->
+         - the check-for-updates button.
+         Nothing breaks without it (#292): build with -Pwmkb.noInternet=true,
+         which also strips the copy ML Kit's manifest brings in. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Read by the model downloaders to ask "is this connection metered?"
          before pulling hundreds of megabytes. Declared here rather than

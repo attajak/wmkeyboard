@@ -93,9 +93,12 @@ class NetworkWatcher(private val context: Context) {
      */
     fun refresh() {
         val cm = connectivity
-        val capabilities = cm?.activeNetwork?.let { network ->
-            runCatching { cm.getNetworkCapabilities(network) }.getOrNull()
-        }
+        // runCatching around the whole read: without ACCESS_NETWORK_STATE
+        // (a fork that stripped the network permissions, #292) activeNetwork
+        // itself throws SecurityException.
+        val capabilities = runCatching {
+            cm?.activeNetwork?.let { network -> cm.getNetworkCapabilities(network) }
+        }.getOrNull()
         publish(capabilities)
     }
 

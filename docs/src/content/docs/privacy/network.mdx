@@ -330,6 +330,11 @@ place.
 
 ## Details & edge cases
 
+- **You can build a keyboard with no internet permission at all.** Build it
+  with `-Pwmkb.noInternet=true` and the permission is left out of the APK.
+  Everything on the device keeps working, and every tool on this page fails
+  the way it does offline. See
+  [Building](/development/building/#a-build-with-no-internet-permission).
 - **The in-app Privacy screen lists the tools, not the fetches.** Its note
   names translate, weather, web search, image search, GIFs, stickers,
   dictionary lookup and the AI tools, and says the network is used only at

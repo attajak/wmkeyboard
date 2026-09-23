@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.settings.sink
 
 import com.wasimaster.wmkeyboard.core.net.BackupTraffic
 import com.wasimaster.wmkeyboard.core.settings.DriveSpace
+import com.wasimaster.wmkeyboard.core.net.InternetGate
 import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.util.runCancellable
@@ -121,6 +122,7 @@ class DriveSink(
 
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .addInterceptor(InternetGate)
             .addNetworkInterceptor(NetLogInterceptor(NetSource.BACKUP, NetLogInterceptor.PATH) { BackupTraffic.unattended })
             .connectTimeout(CONNECT_TIMEOUT_S, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT_S, TimeUnit.SECONDS)

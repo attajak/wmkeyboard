@@ -76,6 +76,7 @@ import com.wasimaster.wmkeyboard.app.SpecialAccessActivity
 import com.wasimaster.wmkeyboard.app.StoragePermissionActivity
 import com.wasimaster.wmkeyboard.core.media.GallerySaver
 import com.wasimaster.wmkeyboard.core.media.MediaMime
+import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
@@ -6026,8 +6027,10 @@ open class WMKeyboardService : InputMethodService() {
                 sources = ToolApiKeys.photoSources(current),
                 conditions = PhotoNetworkConditions(
                     unlocked = userUnlocked,
-                    online = true,
-                    metered = connectivity?.isActiveNetworkMetered ?: true,
+                    // A build without the internet permission (#292) never
+                    // fetches, so it never tops up.
+                    online = InternetPermission.granted,
+                    metered = runCatching { connectivity?.isActiveNetworkMetered }.getOrNull() ?: true,
                     powerSaving = current.powerSaving.dropBackgroundNetwork,
                     highContrastKeys = current.accessibility.highContrast,
                 ),

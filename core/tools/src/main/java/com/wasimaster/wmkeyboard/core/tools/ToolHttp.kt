@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.core.netlog.NetCall
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.netlog.NoInternetPermissionException
 import com.wasimaster.wmkeyboard.core.netlog.track
 import com.wasimaster.wmkeyboard.tools.R
 import java.io.File
@@ -377,6 +378,7 @@ object ToolHttp {
      */
     fun friendlyMessage(context: Context, t: Throwable): String = when (t) {
         is ToolHttpException -> httpText(context, t)
+        is NoInternetPermissionException -> context.getString(CommonR.string.common_error_no_internet_permission)
         is UnknownHostException -> context.getString(CommonR.string.common_error_network)
         is SocketTimeoutException -> context.getString(CommonR.string.common_error_timeout)
         is ConnectException -> context.getString(R.string.core_tools_error_server_unreachable)

@@ -5,6 +5,7 @@ import android.os.SystemClock
 import com.wasimaster.wmkeyboard.core.modules.FeatureModules
 import com.wasimaster.wmkeyboard.core.modules.FeatureModules.awaitInstalled
 import com.wasimaster.wmkeyboard.core.modules.ModuleState
+import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptId
@@ -278,6 +279,9 @@ object HandwritingModels {
         onProgress: (HandwritingDownloadProgress) -> Unit = {},
     ) {
         require(hasModel(tag)) { "No model for $tag" }
+        // ML Kit fetches through the system DownloadManager, which refuses a
+        // caller without the internet permission with a SecurityException (#292).
+        InternetPermission.check()
         val moduleHere = FeatureModules.handwriting.awaitInstalled { bytes, total ->
             onProgress(HandwritingDownloadProgress(bytes = bytes, totalBytes = total))
         }

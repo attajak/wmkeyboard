@@ -226,8 +226,9 @@ internal fun rememberVocabSpeaker(): VocabSpeaker {
 
 internal fun vocabToday(): Int = TypingStatsMath.localEpochDay(System.currentTimeMillis(), TimeZone.getDefault())
 
-private fun isMeteredNetwork(context: Context): Boolean =
+private fun isMeteredNetwork(context: Context): Boolean = runCatching {
     (context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager)?.isActiveNetworkMetered == true
+}.getOrDefault(false)
 
 /** What data saving says about one vocabulary fetch right now. */
 internal fun vocabDecisionNow(context: Context, settings: KeyboardSettings, feature: MeteredFeature): MeteredDecision {

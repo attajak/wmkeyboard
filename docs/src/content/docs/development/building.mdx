@@ -61,6 +61,20 @@ The practical consequence is that the two halves of the project disagree about v
 
 See [full vs. lite](/start/editions/) for what this means from the user's side, and [architecture](/development/architecture/) for how the module graph is laid out.
 
+## A build with no internet permission
+
+The released APKs declare `android.permission.INTERNET`, because the online tools, the downloads and the backups need it. If you want a keyboard that cannot reach the network at all, build one yourself with a single property:
+
+```bash
+./gradlew assembleFullEnDebug -Pwmkb.noInternet=true
+```
+
+It works on any variant, and `wmkb.noInternet=true` in `local.properties` or `WMKB_NO_INTERNET=true` in the environment does the same. The property adds `app/src/nointernet/AndroidManifest.xml`, which removes the permission from the merged manifest. Deleting the line from `app/src/main/AndroidManifest.xml` is not enough on the full edition: ML Kit declares the permission in its own manifest, and the merge puts it back. Check the result with `aapt dump permissions` on the APK.
+
+Nothing else changes. Typing, prediction, autocorrect, gesture typing, learning, the clipboard, the local tools and the on-device models you already have keep working. Every feature that fetches something fails the way it does with the phone offline, and the tools that show an error say that this build cannot connect to the internet. KDE Connect stays off, because its connections need the same permission even on your own network. There is no release variant of this build: it is for people who build their own.
+
+In the code, every request passes through `NetLog` (or, for the OkHttp clients, the `InternetGate` interceptor) before its socket opens, and both refuse with an `IOException` when the permission is missing. That matters because Android does not fail politely without it: a host name lookup throws `SecurityException`, which the offline paths are not written to catch. `NetworkCallSitesTest` fails the build if an OkHttp client is added without the gate.
+
 ## Rebuilding the native grammar engine
 
 <Flavor edition="full" />: the grammar checker's native library only ships in full builds.

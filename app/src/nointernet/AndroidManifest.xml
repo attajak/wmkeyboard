@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Builds made with `-Pwmkb.noInternet=true` only (#292). Added by
+   `channelManifests` in build.gradle.kts.
+
+   Removing the line from src/main is not enough on its own: ML Kit declares
+   INTERNET in its own manifest too, and the merge would put it straight back.
+   `tools:node="remove"` takes it out of the merged manifest whoever declared
+   it. Everything that fetches then fails the way it does offline; see
+   InternetPermission in :core:common.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+
+</manifest>

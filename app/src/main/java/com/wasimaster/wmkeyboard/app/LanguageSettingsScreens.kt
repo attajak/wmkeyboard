@@ -488,8 +488,9 @@ internal fun languageData(langId: String): LanguageData {
  * the platform errs: a wrong "metered" would block a download on a connection
  * that costs nothing, and the user has no way to see why.
  */
-internal fun isMeteredNow(context: Context): Boolean =
-    context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered ?: false
+internal fun isMeteredNow(context: Context): Boolean = runCatching {
+    context.getSystemService(ConnectivityManager::class.java)?.isActiveNetworkMetered
+}.getOrNull() ?: false
 
 /**
  * Fetches everything [data] offers, as the prompt's Download does, with the

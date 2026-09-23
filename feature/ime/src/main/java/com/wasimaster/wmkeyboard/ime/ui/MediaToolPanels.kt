@@ -73,6 +73,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import com.wasimaster.wmkeyboard.core.net.InternetGate
 import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import kotlin.math.roundToInt
@@ -335,6 +336,7 @@ fun mediaImageLoader(context: Context): ImageLoader =
                     OkHttpNetworkFetcherFactory(
                         callFactory = {
                             OkHttpClient.Builder()
+                                .addInterceptor(InternetGate)
                                 .addNetworkInterceptor(NetLogInterceptor(NetSource.MEDIA_IMAGES))
                                 .build()
                         },

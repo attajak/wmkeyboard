@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.SystemClock
 import com.wasimaster.wmkeyboard.core.mlkit.MlKitInit
+import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import java.io.IOException
 import kotlinx.coroutines.CoroutineScope
@@ -180,6 +181,9 @@ object OnDeviceTranslator {
 
     private suspend fun fetch(context: Context, code: String) {
         val engine = runtime(context) ?: throw IOException("The translation module is not installed")
+        // The system DownloadManager refuses a caller without the internet
+        // permission with a SecurityException (#292).
+        InternetPermission.check()
         // ML Kit hands the fetch to the system DownloadManager, which treats
         // "no network" as a reason to wait, indefinitely and in silence. A
         // button that spins forever on a plane is worse than one that says no.

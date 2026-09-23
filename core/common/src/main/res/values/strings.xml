@@ -82,6 +82,7 @@
 
     <string name="common_error_generic">Something did not work. Try again.</string>
     <string name="common_error_network">No connection. Check your network and try again.</string>
+    <string name="common_error_no_internet_permission">This build of the keyboard cannot connect to the internet.</string>
     <string name="common_error_timeout">The request took too long. Try again.</string>
 
 </resources>

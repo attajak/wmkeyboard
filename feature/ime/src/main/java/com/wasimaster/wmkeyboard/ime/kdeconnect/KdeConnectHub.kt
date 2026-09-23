@@ -26,6 +26,7 @@ import com.wasimaster.wmkeyboard.core.kdeconnect.KdePhoneMedia
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeState
 import com.wasimaster.wmkeyboard.core.media.MediaControlManager
 import com.wasimaster.wmkeyboard.core.media.MediaSnapshot
+import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.notify.NotificationIds
 import com.wasimaster.wmkeyboard.core.notify.NotificationKind
 import com.wasimaster.wmkeyboard.core.notify.WmNotifications
@@ -193,6 +194,8 @@ object KdeConnectHub {
     private fun wanted(): Boolean {
         val context = app ?: return false
         if (!settings.enabled || !DirectBoot.isUserUnlocked(context)) return false
+        // Every KDE Connect socket needs the internet permission, LAN or not (#292).
+        if (!InternetPermission.granted) return false
         if (reasons.any { it == Reason.PANEL || it == Reason.SETTINGS || it == Reason.SHARE }) return true
         val lingering = System.currentTimeMillis() - keyboardLeftAtMs < KEYBOARD_LINGER_MS
         return when (settings.lifetime) {

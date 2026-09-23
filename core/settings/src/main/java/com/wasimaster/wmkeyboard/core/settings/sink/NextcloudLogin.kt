@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.settings.sink
 
+import com.wasimaster.wmkeyboard.core.net.InternetGate
 import com.wasimaster.wmkeyboard.core.net.NetLogInterceptor
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import java.util.concurrent.TimeUnit
@@ -41,6 +42,7 @@ object NextcloudLogin {
 
     private val client: OkHttpClient by lazy {
         OkHttpClient.Builder()
+            .addInterceptor(InternetGate)
             .addNetworkInterceptor(NetLogInterceptor(NetSource.BACKUP, NetLogInterceptor.PATH) { false })
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

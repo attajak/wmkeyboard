@@ -67,6 +67,7 @@ import com.wasimaster.wmkeyboard.core.kdeconnect.KdeDeviceType
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdePairState
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdePluginKeys
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
+import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.settings.KdeConnectSettings
 import com.wasimaster.wmkeyboard.core.settings.KdeLinkLifetime
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
@@ -76,6 +77,7 @@ import com.wasimaster.wmkeyboard.ime.kdeconnect.KdeConnectHub
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import com.wasimaster.wmkeyboard.common.R as CommonR
 
 object KdeDevices {
     const val ROUTE = KdeConnectHub.DEVICES_ROUTE
@@ -109,6 +111,10 @@ internal fun KdeConnectToolSettings(
     when {
         !kde.enabled -> StateBanner(stringResource(R.string.kdeconnect_banner_off))
         !DirectBoot.isUserUnlocked(context) -> StateBanner(stringResource(R.string.kdeconnect_banner_locked), tone = BannerTone.WARNING)
+        !InternetPermission.granted -> StateBanner(
+            stringResource(CommonR.string.common_error_no_internet_permission),
+            tone = BannerTone.WARNING,
+        )
         connected.isNotEmpty() -> StateBanner(
             stringResource(R.string.kdeconnect_banner_connected, connected.joinToString { it.name }),
             action = stringResource(R.string.kdeconnect_banner_action_devices),
@@ -354,6 +360,10 @@ internal fun KdeDevicesScreen(repository: SettingsRepository, settings: Keyboard
         StateBanner(stringResource(R.string.kdeconnect_devices_off), action = stringResource(R.string.kdeconnect_enabled_title)) {
             scope.launch { repository.setKdeEnabled(true) }
         }
+        return
+    }
+    if (!InternetPermission.granted) {
+        StateBanner(stringResource(CommonR.string.common_error_no_internet_permission), tone = BannerTone.WARNING)
         return
     }
     val engine = KdeConnectHub.engine

@@ -118,9 +118,9 @@ internal fun meteredLinkOf(cellular: Boolean, vpn: Boolean, wifi: Boolean): Mete
 /** The [MeteredLink] of the connection in use right now. */
 internal fun meteredLinkNow(context: Context): MeteredLink {
     val cm = context.getSystemService(ConnectivityManager::class.java)
-    val capabilities = cm?.activeNetwork?.let { network ->
-        runCatching { cm.getNetworkCapabilities(network) }.getOrNull()
-    } ?: return MeteredLink.OTHER
+    val capabilities = runCatching {
+        cm?.activeNetwork?.let { network -> cm.getNetworkCapabilities(network) }
+    }.getOrNull() ?: return MeteredLink.OTHER
     return meteredLinkOf(
         cellular = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR),
         vpn = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN),
