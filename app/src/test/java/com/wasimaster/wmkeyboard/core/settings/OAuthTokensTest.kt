@@ -66,6 +66,27 @@ class OAuthTokensTest {
     }
 
     @Test
+    fun `a rotated refresh token is handed back once and answers from the cache`() {
+        val url = serve(200, """{"access_token":"abc","expires_in":3600,"refresh_token":"next"}""")
+        val tokens = OAuthTokens(url, clientId = "id")
+        val rotated = ArrayList<String>()
+        assertEquals("abc", tokens.accessToken("refresh", nowMs = 0, onRotated = rotated::add))
+        assertEquals(listOf("next"), rotated)
+        // The sink moves on to the new token; the cache still answers for it.
+        assertEquals("abc", tokens.accessToken("next", nowMs = 1_000, onRotated = rotated::add))
+        assertEquals(1, hits.get())
+        assertEquals(listOf("next"), rotated)
+    }
+
+    @Test
+    fun `the same refresh token sent back is not a rotation`() {
+        val url = serve(200, """{"access_token":"abc","expires_in":3600,"refresh_token":"refresh"}""")
+        val rotated = ArrayList<String>()
+        OAuthTokens(url, clientId = "id").accessToken("refresh", nowMs = 0, onRotated = rotated::add)
+        assertEquals(emptyList<String>(), rotated)
+    }
+
+    @Test
     fun `invalid_grant is a refusal`() {
         val url = serve(400, """{"error":"invalid_grant"}""")
         assertNull(OAuthTokens(url, clientId = "id").accessToken("refresh"))

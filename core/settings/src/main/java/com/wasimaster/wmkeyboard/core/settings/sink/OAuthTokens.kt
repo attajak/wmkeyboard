@@ -45,8 +45,9 @@ class OAuthTokens(
     @Volatile
     private var cached: String? = null
 
+    /** The refresh tokens [cached] answers for: the one asked with, and its replacement if any. */
     @Volatile
-    private var cachedFor: String? = null
+    private var cachedFor: Set<String> = emptySet()
 
     @Volatile
     private var expiresAtMs: Long = 0L
@@ -63,11 +64,21 @@ class OAuthTokens(
      * [BackupSinkException] with [SinkError.IO] instead: no network, a timeout,
      * or the service having a bad minute. Folding those into null told a user
      * whose phone was offline at backup time to sign in again.
+     *
+     * [onRotated] gets the new refresh token when the service sent one in
+     * place of [refreshToken]. Microsoft does on every refresh, and its tokens
+     * die 90 days after they were issued however often they are used: keep
+     * only the first and every OneDrive backup fails three months after the
+     * sign-in. Dropbox never rotates, so for it this is never called.
      */
-    fun accessToken(refreshToken: String, nowMs: Long = System.currentTimeMillis()): String? {
+    fun accessToken(
+        refreshToken: String,
+        nowMs: Long = System.currentTimeMillis(),
+        onRotated: (String) -> Unit = {},
+    ): String? {
         if (refreshToken.isEmpty() || clientId.isEmpty()) return null
         val hit = cached
-        if (hit != null && cachedFor == refreshToken && nowMs < expiresAtMs) return hit
+        if (hit != null && refreshToken in cachedFor && nowMs < expiresAtMs) return hit
 
         val form = FormBody.Builder()
             .add("grant_type", "refresh_token")
@@ -96,12 +107,18 @@ class OAuthTokens(
             ?: throw BackupSinkException(SinkError.IO)
         val token = root["access_token"]?.jsonPrimitive?.contentOrNull ?: return null
         val lifetime = root["expires_in"]?.jsonPrimitive?.intOrNull ?: DEFAULT_LIFETIME_S
+        val rotated = root["refresh_token"]?.jsonPrimitive?.contentOrNull
+            ?.takeIf { it.isNotEmpty() && it != refreshToken }
 
         cached = token
-        cachedFor = refreshToken
+        cachedFor = setOfNotNull(refreshToken, rotated)
         // A minute of slack, so a token does not expire between the check and
         // the request it was fetched for.
         expiresAtMs = nowMs + (lifetime - SLACK_S).coerceAtLeast(0) * 1000L
+        if (rotated != null) {
+            BackupLog.d("refresh at $tokenUrl rotated the refresh token")
+            onRotated(rotated)
+        }
         return token
     }
 

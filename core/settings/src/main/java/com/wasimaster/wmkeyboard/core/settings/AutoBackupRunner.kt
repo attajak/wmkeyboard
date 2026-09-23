@@ -24,6 +24,7 @@ import java.io.File
 import java.io.OutputStreamWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
@@ -172,9 +173,30 @@ object AutoBackupRunner {
                 DropboxSink(location.refreshToken, it)
             }
             BackupDestination.ONEDRIVE -> BackupClients.oneDrive()?.let {
-                OneDriveSink(location.refreshToken, it)
+                OneDriveSink(location.refreshToken, it) { rotated ->
+                    storeRefreshToken(context, location.id, rotated)
+                }
             }
         }
+
+    /**
+     * Saves the refresh token a service sent in place of [BackupLocation.refreshToken].
+     *
+     * Blocking, and before the call that needed the token goes on: a run the
+     * system stops right after would otherwise leave only the old token saved.
+     * The old token keeps working until its own expiry, so a lost write costs
+     * nothing at once, but three months later it is a location that has to be
+     * signed in to again.
+     */
+    private fun storeRefreshToken(context: Context, id: String, token: String) {
+        runCatching {
+            runBlocking {
+                SettingsRepository(context.applicationContext).updateBackupLocation(id) {
+                    it.copy(refreshToken = token)
+                }
+            }
+        }.onFailure { BackupLog.w("could not store the new refresh token for $id", it) }
+    }
 
     /**
      * Whether enough wall-clock time has passed since the last good run.

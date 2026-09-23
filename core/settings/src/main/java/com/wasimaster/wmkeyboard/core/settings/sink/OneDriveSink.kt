@@ -37,9 +37,14 @@ import okhttp3.Response
  * separates a path from an action.
  */
 class OneDriveSink(
-    private val refreshToken: String,
+    refreshToken: String,
     private val tokens: OAuthTokens,
+    /** Stores the refresh token Microsoft sent in place of the old one; see [OAuthTokens.accessToken]. */
+    private val onRefreshTokenRotated: (String) -> Unit = {},
 ) : BackupSink {
+
+    @Volatile
+    private var refreshToken: String = refreshToken
 
     override val id: String get() = ID
 
@@ -54,8 +59,11 @@ class OneDriveSink(
             .build()
     }
 
-    private fun bearer(): String = tokens.accessToken(refreshToken)
-        ?: throw BackupSinkException(SinkError.PERMISSION_LOST)
+    private fun bearer(): String =
+        tokens.accessToken(refreshToken, onRotated = { rotated ->
+            refreshToken = rotated
+            onRefreshTokenRotated(rotated)
+        }) ?: throw BackupSinkException(SinkError.PERMISSION_LOST)
 
     private fun authorized(url: String): Request.Builder =
         Request.Builder().url(url).header("Authorization", "Bearer ${bearer()}")
@@ -92,30 +100,40 @@ class OneDriveSink(
     /**
      * An upload session, for anything over Graph's 4 MB simple-upload cap.
      *
-     * Sent as one chunk rather than many. The session exists to allow resuming,
-     * which nothing here does: a backup that fails is retried whole on the next
-     * run, and half a bundle on the server is worse than none.
+     * Sent in [CHUNK] pieces, because Graph refuses a single request over
+     * 60 MiB and a bundle with stickers in it can pass that. Each piece but
+     * the last must be a multiple of 320 KiB. Nothing resumes a failed
+     * session: a backup that fails is retried whole on the next run, and half
+     * a bundle on the server is worse than none.
      */
     private fun uploadLarge(name: String, bytes: ByteArray): String {
         val session = call(
             authorized("$APP_ROOT:/${escape(name)}:/createUploadSession")
-                .post("{}".toRequestBody(JSON_MEDIA_TYPE))
+                // Replace, as the simple upload does: a sync file keeps its name.
+                .post(SESSION_BODY.toRequestBody(JSON_MEDIA_TYPE))
                 .build(),
         ) { it.body?.string().orEmpty() }
         val uploadUrl = runCatching {
             json.parseToJsonElement(session).jsonObject["uploadUrl"]?.jsonPrimitive?.contentOrNull
         }.getOrNull() ?: throw BackupSinkException(SinkError.IO)
 
-        val last = bytes.size - 1L
-        return call(
-            Request.Builder()
-                .url(uploadUrl)
-                // No Authorization: the session URL carries its own credential,
-                // and Graph rejects the request if both are present.
-                .header("Content-Range", "bytes 0-$last/${bytes.size}")
-                .put(bytes.toRequestBody(OCTET_STREAM))
-                .build(),
-        ) { it.body?.string().orEmpty() }
+        var start = 0
+        var last = ""
+        while (start < bytes.size) {
+            val end = minOf(start + CHUNK, bytes.size)
+            last = call(
+                Request.Builder()
+                    .url(uploadUrl)
+                    // No Authorization: the session URL carries its own credential,
+                    // and Graph rejects the request if both are present.
+                    .header("Content-Range", "bytes $start-${end - 1}/${bytes.size}")
+                    .put(bytes.toRequestBody(OCTET_STREAM, start, end - start))
+                    .build(),
+            ) { it.body?.string().orEmpty() }
+            start = end
+        }
+        // The last piece's answer is the finished item.
+        return last
     }
 
     override suspend fun list(): Result<List<SinkEntry>> = withContext(Dispatchers.IO) {
@@ -217,6 +235,11 @@ class OneDriveSink(
 
         /** Graph's cap on a plain PUT. Above it an upload session is required. */
         private const val SIMPLE_UPLOAD_MAX = 4 * 1024 * 1024
+
+        /** One upload-session piece: 32 × 320 KiB, 10 MiB, well under Graph's 60 MiB per request. */
+        internal const val CHUNK = 32 * 320 * 1024
+
+        private const val SESSION_BODY = """{"item":{"@microsoft.graph.conflictBehavior":"replace"}}"""
 
         private const val CONNECT_TIMEOUT_S = 15L
         private const val READ_TIMEOUT_S = 30L
