@@ -235,6 +235,11 @@ platform :android do
       # the two differ; uploading the F-Droid text here would advertise
       # handwriting and scanning as missing on a build that has them.
       metadata_path: PLAY_METADATA_PATH,
+      # Listing text belongs to the app, not to a track, but supply still looks
+      # up a release on `track` to hang release notes on, skipped or not, and
+      # fails when it finds none. Its default is production, which is empty
+      # until the first production release; internal always has one.
+      track: "internal",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_images: true,
@@ -265,6 +270,8 @@ platform :android do
       )
     end
     upload_to_play_store(
+      # See the listing lane: a track with a release, not the default production.
+      track: "internal",
       skip_upload_aab: true,
       skip_upload_apk: true,
       skip_upload_metadata: true,
