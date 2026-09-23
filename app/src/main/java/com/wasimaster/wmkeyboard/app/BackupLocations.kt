@@ -14,12 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -37,6 +34,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.BottomSheetDefaults
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -437,7 +437,12 @@ private fun LocationTypeSheet(onPick: (BackupDestination) -> Unit, onDismiss: ()
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) {
-        Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 16.dp)) {
+        // The sheet already keeps its content clear of the navigation bar.
+        // Padding for it again inside the scroll made the content's height
+        // depend on where the sheet was, and a scroll that nudged the sheet
+        // set it chasing its own resting place up and down. The rail says the
+        // list goes on: a dozen kinds of place do not fit a phone.
+        ScrollRail(state = rememberScrollRailState(), fadeColor = BottomSheetDefaults.ContainerColor) {
             Text(
                 stringResource(R.string.backup_location_type_title),
                 style = MaterialTheme.typography.titleLarge,
@@ -458,6 +463,7 @@ private fun LocationTypeSheet(onPick: (BackupDestination) -> Unit, onDismiss: ()
                     onClick = { onPick(type) },
                 )
             }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
@@ -521,12 +527,9 @@ private fun LocationEditorSheet(
         onDismissRequest = cancel,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) {
-        Column(
-            Modifier
-                .verticalScroll(rememberScrollState())
-                .navigationBarsPadding()
-                .padding(bottom = 16.dp),
-        ) {
+        // As the kind picker above: no inset padding of its own, and a rail
+        // for a form that runs past the screen with Save at the bottom.
+        ScrollRail(state = rememberScrollRailState(), fadeColor = BottomSheetDefaults.ContainerColor) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
@@ -667,6 +670,7 @@ private fun LocationEditorSheet(
                     Text(stringResource(if (isNew) CommonR.string.common_add else CommonR.string.common_save))
                 }
             }
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
