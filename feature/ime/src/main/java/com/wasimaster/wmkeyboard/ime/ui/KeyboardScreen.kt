@@ -17263,6 +17263,7 @@ internal fun KeyButton(
                     onLayoutSelect = onLayoutSelect,
                     pickerIsCarousel =
                         settings.layoutBehavior.languagePickerStyle == LanguagePickerStyle.CAROUSEL,
+                    pickerForLongRing = settings.layoutBehavior.spaceHoldPickerForLongRing,
                     openLanguagePicker = { pickerDragIndex = null; showLanguagePicker = true },
                     closeLanguagePicker = { showLanguagePicker = false; pickerDragIndex = null },
                     setPickerDragIndex = { pickerDragIndex = it },
@@ -19444,6 +19445,11 @@ private fun Modifier.pointerInputKey(
      * and down by the list's row height.
      */
     pickerIsCarousel: Boolean = false,
+    /**
+     * A hold with more than four layouts on opens the picker. Off keeps the
+     * inline preview at any ring length; it windows and scrolls itself.
+     */
+    pickerForLongRing: Boolean = true,
     setLanguagePreview: (String?) -> Unit,
     /** Keeps a just-switched-to language on screen briefly after the lift. */
     echoLanguageSwitch: (String) -> Unit = {},
@@ -19467,7 +19473,7 @@ private fun Modifier.pointerInputKey(
         Modifier.pointerInput(
             key, spaceShortSwipe, spaceLongSwipe, enabledLayoutIds, currentLayoutId, longPressDelayMs,
             hapticOnLongPress, hapticOnLongPressRelease, vibrateOnSpace, spaceCursor2d,
-            spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel,
+            spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel, pickerForLongRing,
         ) {
             val slopPx = 12.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
@@ -19564,9 +19570,10 @@ private fun Modifier.pointerInputKey(
                                 openAlternates()
                                 return@launch
                             }
-                            // List for a long ring (> 4) or when the swipe can't
-                            // cycle languages; otherwise the inline swipe preview.
-                            val useList = enabledLayoutIds.size > 4 ||
+                            // List for a long ring (> 4, unless the user keeps
+                            // the preview for every length) or when the swipe
+                            // can't cycle languages; otherwise the inline preview.
+                            val useList = (pickerForLongRing && enabledLayoutIds.size > 4) ||
                                 spaceShortSwipe != SpaceSwipeAction.LANGUAGE
                             if (useList) {
                                 pickerOpened = true

@@ -661,6 +661,9 @@
     <string name="typing_language_picker_style_info">This is the chooser that opens when you hold the spacebar with more than four layouts on, or press and hold the 🌐 key. List shows your layouts top to bottom, and a hold on the spacebar walks it up and down. Carousel shows them side by side, centred on the one you are typing in, and the same hold walks it left and right, the way the spacebar swipe already moves. Both let you tap a layout, and both keep Other keyboards… at the end.</string>
     <string name="typing_language_picker_style_list_label">List</string>
     <string name="typing_language_picker_style_carousel_label">Carousel</string>
+    <string name="typing_space_hold_picker_long_ring_title">Picker for more than four layouts</string>
+    <string name="typing_space_hold_picker_long_ring_subtitle">Hold the spacebar to open the picker when more than four layouts are on</string>
+    <string name="typing_space_hold_picker_long_ring_info">With four layouts or fewer, holding the spacebar shows the sideways preview above it, and a drag steps through your layouts. Past four, the hold opens the picker instead, as a list or a carousel. Turn this off to keep the sideways preview however many layouts are on. It shows five at a time and slides along as you drag, so every layout is still in reach. The 🌐 key\'s long press still opens the picker. If the quick swipe is not set to Language, the hold opens the picker at any length.</string>
 
     <string name="typing_spacebar_text_label">Spacebar text</string>
     <!-- %1$s is the literal token %s, which the user types into the field. Keep it as it is. -->

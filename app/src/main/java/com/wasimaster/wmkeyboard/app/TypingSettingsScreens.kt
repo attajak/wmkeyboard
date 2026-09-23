@@ -2075,6 +2075,17 @@ internal fun TypingGesturesSettings(
             ) { scope.launch { repository.setLanguagePickerStyle(it) } }
         }
         item {
+            // Off: the spacebar hold keeps the sideways preview at any ring
+            // length instead of switching to the picker past four layouts.
+            ToggleSetting(
+                R.string.typing_space_hold_picker_long_ring_title,
+                stringResource(R.string.typing_space_hold_picker_long_ring_subtitle),
+                settings.layoutBehavior.spaceHoldPickerForLongRing,
+                info = stringResource(R.string.typing_space_hold_picker_long_ring_info),
+                default = SettingsDefaults.layoutBehavior.spaceHoldPickerForLongRing,
+            ) { scope.launch { repository.setSpaceHoldPickerForLongRing(it) } }
+        }
+        item {
             TextFieldSetting(
                 label = stringResource(R.string.typing_spacebar_text_label),
                 value = settings.spacebarLabel,

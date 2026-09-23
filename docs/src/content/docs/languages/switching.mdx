@@ -51,6 +51,12 @@ With that done, press and hold the spacebar. Shortly before the long-press delay
 - **The inline preview** from the section above, if you have four or fewer layouts enabled and the quick-swipe slot is set to Language.
 - **A scrollable picker list**, once you have more than four layouts enabled, or if you've reassigned the quick-swipe slot to something other than Language.
 
+### Keeping the preview past four layouts
+
+<SettingsPath path="Typing / Gestures / Picker for more than four layouts" />
+
+The switch to the list at five layouts is a setting. **Picker for more than four layouts** ships on. Turn it off and the hold keeps the sideways inline preview however many layouts you have on. The preview shows five layouts at a time and slides along as you drag, so the ones off screen are still in reach, and the hold-drag keeps moving the same way the swipe does. The quick-swipe rule still applies: with that slot set to something other than Language, the hold opens the picker at any length. The 🌐 key's long press always opens the picker.
+
 Once the list is open, drag vertically to walk it one row at a time. The first bit of finger movement after the list appears is absorbed as calibration, so drift from before the hold fired never selects a neighbor by accident. Lift your finger after moving and the highlighted row is selected. Lift without moving at all and the list stays open, so you can tap the row you want.
 
 ### Keeping the drag sideways: the carousel
@@ -61,7 +67,7 @@ The list has one awkward side. The swipe that switches language moves left and r
 
 With the carousel on, a spacebar hold-drag walks left and right, one chip per 44dp, the same step the plain swipe uses, and the strip slides to keep the highlighted chip in the middle so your finger never has to chase it. Everything else about the hold is unchanged: the first bit of movement is still absorbed as calibration, lifting after a move selects the highlighted chip, and lifting without moving leaves the strip up so you can tap a chip or scroll it by hand. The 🌐 key's long press opens the same carousel.
 
-The setting ships on **List**, so nothing changes until you pick the carousel. It only decides what the picker looks like. The four-layout threshold above, and the quick-swipe slot, still decide whether the picker or the inline preview opens.
+The setting ships on **List**, so nothing changes until you pick the carousel. It only decides what the picker looks like. The four-layout threshold above (and whether it applies at all), and the quick-swipe slot, still decide whether the picker or the inline preview opens.
 
 A second setting takes this whole gesture away on purpose, the same way the hold + swipe slot does. Put characters into **Spacebar long press keys** under Typing → Gestures and the hold opens [your own popup](/typing/gestures/#your-own-keys-on-the-spacebar-long-press) instead of the picker, which is what you want if you type in one language and would rather have your emoji there. The globe key and the spacebar swipe still switch language. Clear the field to get the picker back.
 
@@ -119,7 +125,7 @@ On the **Languages** screen:
 - **Add language** searches the whole catalogue and enables an unadded language's first layout. A language with data to fetch asks about the download first (see [Downloads & mobile data](/languages/downloads/)), and its Cancel backs out of the language too.
 - **Switch order** appears once you have more than one layout enabled. Drag to reorder the raw layout list, so two English layouts (QWERTY and AZERTY, say) keep independent slots in the ring even though they're both "English."
 
-There's no "maximum visible" setting. (The one recently-used option, [🌐 goes back to the last language](#going-back-to-the-last-language), only changes which layout the key visits next, not which ones are in the ring.) The ring is exactly as long as your enabled-layout list, so reordering or removing is the only way to shorten it. Ring length changes behavior on its own at three thresholds: two layouts swipe as a toggle rather than a cycle, more than four turn the hold-drag gesture from an inline preview into a full list, and more than five shrink the swipe preview to a sliding five-chip window.
+There's no "maximum visible" setting. (The one recently-used option, [🌐 goes back to the last language](#going-back-to-the-last-language), only changes which layout the key visits next, not which ones are in the ring.) The ring is exactly as long as your enabled-layout list, so reordering or removing is the only way to shorten it. Ring length changes behavior on its own at three thresholds: two layouts swipe as a toggle rather than a cycle, more than four turn the hold-drag gesture from an inline preview into a full list (unless **Picker for more than four layouts** is off), and more than five shrink the swipe preview to a sliding five-chip window.
 
 <PhoneFrame caption="The Languages screen: Your languages, Add language, and Switch order.">
   <Shot id="languages/languages-screen-order" alt="The Languages screen: Your languages, Add language, and Switch order." />

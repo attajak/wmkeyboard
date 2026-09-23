@@ -5739,6 +5739,13 @@ data class LayoutBehaviorSettings(
      */
     val languagePickerStyle: LanguagePickerStyle = LanguagePickerStyle.LIST,
     /**
+     * Whether a spacebar hold with more than four layouts on opens the full
+     * picker ([languagePickerStyle]) rather than the inline preview. On is what
+     * shipped. Off keeps the sideways preview at every ring length: it scrolls
+     * and windows itself, so a long ring stays reachable from it.
+     */
+    val spaceHoldPickerForLongRing: Boolean = true,
+    /**
      * Size multiplier for the small corner hint character on each key (the
      * first long-press alternate, shown when [KeyboardSettings.longPressHints]
      * is on). 1.0 keeps the default 10sp base.
@@ -7117,6 +7124,7 @@ class SettingsRepository(private val context: Context) {
         private val AUTOPILOT_VISUAL_SCALE = floatPreferencesKey("autopilot_visual_scale")
         private val SPACEBAR_DISPLAY = stringPreferencesKey("spacebar_display")
         private val LANGUAGE_PICKER_STYLE = stringPreferencesKey("language_picker_style")
+        private val SPACE_HOLD_PICKER_FOR_LONG_RING = booleanPreferencesKey("space_hold_picker_for_long_ring")
         private val NUMERAL_SYSTEM_BY_LANG = stringPreferencesKey("numeral_system_by_lang")
         private val NUMERAL_COMMIT_SCOPE = stringPreferencesKey("numeral_commit_scope")
         private val SHIFT_ENTER_NEWLINE = booleanPreferencesKey("shift_enter_newline")
@@ -8716,6 +8724,8 @@ class SettingsRepository(private val context: Context) {
                 languagePickerStyle = p[LANGUAGE_PICKER_STYLE]
                     ?.let { runCatching { LanguagePickerStyle.valueOf(it) }.getOrNull() }
                     ?: defaults.layoutBehavior.languagePickerStyle,
+                spaceHoldPickerForLongRing = p[SPACE_HOLD_PICKER_FOR_LONG_RING]
+                    ?: defaults.layoutBehavior.spaceHoldPickerForLongRing,
                 numeralSystemByLang = p[NUMERAL_SYSTEM_BY_LANG]
                     ?.let { decodeNumeralSystems(it) }
                     ?: defaults.layoutBehavior.numeralSystemByLang,
@@ -13470,6 +13480,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setLanguagePickerStyle(value: LanguagePickerStyle) =
         editPrefs { it[LANGUAGE_PICKER_STYLE] = value.name }
+
+    suspend fun setSpaceHoldPickerForLongRing(value: Boolean) =
+        editPrefs { it[SPACE_HOLD_PICKER_FOR_LONG_RING] = value }
 
     suspend fun setNumeralCommitScope(value: NumeralCommitScope) =
         editPrefs { it[NUMERAL_COMMIT_SCOPE] = value.name }

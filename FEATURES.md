@@ -924,6 +924,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Spacebar label modes — Language / Layout / Both, auto-falling back to both when two enabled layouts share a language
   - Hold-drag picker `RARE` — Hold the spacebar and walk a scrollable list without lifting
     - Threshold at four layouts — Inline preview at four or fewer, scrollable list above that
+    - Threshold can be switched off — Picker for more than four layouts (default on); off keeps the windowed, scrolling inline preview at every ring length. The quick-swipe rule and the 🌐 long press still open the picker
     - List or carousel — Language picker shape (default List) picks the vertical list or the sideways strip; the threshold and the swipe slots are untouched by it (#150)
     - First movement absorbed as calibration — Drift from before the hold fired cannot select a neighbour
     - Held-but-unmoved leaves the list open — So it can be tapped directly

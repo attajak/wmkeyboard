@@ -288,6 +288,7 @@
   {"title":"Arrows on the spacebar","name":"typing_spacebar_language_arrows_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"The spacebar shows","name":"typing_spacebar_display_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Language picker shape","name":"typing_language_picker_style_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
+  {"title":"Picker for more than four layouts","name":"typing_space_hold_picker_long_ring_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Spacebar text","name":"typing_spacebar_text_label","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Process the physical keys","name":"typing_hardware_input_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
   {"title":"Tool shortcuts","name":"typing_hw_shortcuts_title","route":"typing/hardware","screens":["Typing","Physical keyboard"],"screen":false},
