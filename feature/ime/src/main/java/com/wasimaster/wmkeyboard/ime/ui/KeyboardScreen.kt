@@ -8276,7 +8276,13 @@ private fun RowScope.ToolbarRow(
                         holdAction = holdActionFor(tool, fromToolbar = true, state = state),
                         dragEnabled = state.settings.toolbarBehavior.dragToRearrange,
                         holdArms = holdArmsSelection(tool, fromToolbar = true, state = state),
-                        holdPanel = holdOpensTrackpad(tool, fromToolbar = true, state = state),
+                        // Not while the toolbox is open (#320): the trackpad
+                        // took the toolbox's place under the held finger, so a
+                        // drag back to the grid found no grid to land on and
+                        // the tool could never leave the bar. Customizing, a
+                        // hold is for arranging, the way it is in the grid.
+                        holdPanel = !customizing &&
+                            holdOpensTrackpad(tool, fromToolbar = true, state = state),
                         holdMenu = holdPicksVoiceMode(tool, fromToolbar = true, state = state),
                         onHoldMenu = { voiceMenuOpen = true },
                     ) { dragModifier ->
