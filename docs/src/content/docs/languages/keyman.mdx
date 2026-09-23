@@ -11,7 +11,7 @@ import khmer from '../../../../../app/src/main/assets/layouts/kmn_khmer_angkor.w
 
 862 of the layouts in WM Keyboard started life as [Keyman](https://keyman.com/) keyboards. That's where most of the language catalogue's long tail comes from: Adyghe, Hatran, Osage, Cypro-Minoan, and several hundred more that no other Android keyboard ships a layout for.
 
-They behave like any other layout once enabled. Each appears under its language in <SettingsPath path="Languages & layouts" />, is editable in the layout editor, and exports as a file like any other. Before that, most sit behind a **More layouts** row on the language's own screen, since Amharic or Arabic alone can have hundreds.
+They behave like any other layout once enabled. Each appears under its language in <SettingsPath path="Languages & layouts" />, is editable in the layout editor, and exports as a file like any other. Before that, most sit behind a **More layouts** card at the end of the language's row of layout cards, so its own layouts stay up front.
 
 <LayoutExplorer layout={khmer} />
 
@@ -54,7 +54,9 @@ The grids ship with WM Keyboard; the rules are downloaded per keyboard, from key
 
 **When you switch a layout on, the app asks.** If that layout needs rules and doesn't have them yet, a prompt offers to fetch them there and then, which is the moment you're deciding to type in the language rather than the moment you notice the output looks wrong. Choose Not now and nothing is lost: the row is still there.
 
-Each layout has its own **Typing rules for (layout name)** row directly beneath it. The name is in the row on purpose, because a language can offer several Keyman keyboards and their rows stack one after another. Press it to download; press it again later to remove them. Nothing is fetched until you ask.
+The **More layouts** page shows every Keyman layout the language has as a card with a small preview of the keyboard, in your theme. Tap a card to turn that layout on or off. With more than six layouts a search box sits at the top, and once any of them is on, **All** and **On** filters show either the whole list or only the ones you use. The order never changes when you turn one on, so a card doesn't move out from under your finger.
+
+Under each card is that layout's typing rules: **Typing rules ready** once they are on the phone, or a **Get typing rules** button while they are not. The button turns red when the layout is already on without its rules, because that is the case where your typing comes out wrong. The delete button next to downloaded rules asks before it removes them. Once a Keyman layout is on, a **Typing rules for (layout name)** row also sits under the layout cards on the language's own screen, and does the same thing. Nothing is fetched until you ask.
 
 Until you do, the layout types its key caps. The grid is still right, the long-press alternates are still there, and nothing damages your text. It just isn't doing the character mapping its author wrote. If you enable one of these and the output doesn't match the caps, that's this.
 

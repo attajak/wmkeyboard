@@ -4,8 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -713,12 +716,6 @@ internal fun addLanguage(
 }
 
 /**
- * The route of a language's [MoreLayoutsScreen]. One function so the row that
- * opens it and the graph that declares it cannot drift apart.
- */
-internal fun moreLayoutsRoute(langId: String): String = "language/$langId/more"
-
-/**
  * The layouts of [lang] that the detail screen sends to [MoreLayoutsScreen]:
  * converted Keyman grids the user has not switched on.
  *
@@ -735,61 +732,14 @@ private fun overflowLayoutIds(lang: LanguageDef, settings: KeyboardSettings): Li
     }
 
 /**
- * A toggle per layout, and under each converted Keyman layout the row that
- * fetches its typing rules.
- *
- * An extension on the group scope rather than a composable of its own, so the
- * detail screen and [MoreLayoutsScreen] draw the same rows into their own cards
- * without one of them owning the other's. The `keyman` test stays outside
- * `item` because an item that composes nothing still takes a slot in the card.
- */
-private fun SettingsGroupScope.layoutRows(
-    layoutIds: List<String>,
-    settings: KeyboardSettings,
-    repository: SettingsRepository,
-    scope: CoroutineScope,
-    enableGate: (String, () -> Unit) -> Unit,
-    promptForRules: (KeymanBinding, String) -> Unit,
-    rulesRefresh: Int,
-) {
-    for (layoutId in layoutIds) {
-        val spec = resolveLayout(settings.customLayouts, layoutId)
-        item {
-            ToggleSetting(
-                spec.name,
-                null,
-                layoutId in settings.enabledLayoutIds,
-                default = layoutId in SettingsDefaults.enabledLayoutIds,
-            ) { enable ->
-                fun write() {
-                    scope.launch {
-                        val next =
-                            if (enable) settings.enabledLayoutIds + layoutId
-                            else settings.enabledLayoutIds - layoutId
-                        // At least one layout must stay enabled somewhere.
-                        if (next.isNotEmpty()) repository.setEnabledLayoutIds(next.distinct())
-                    }
-                    // Asked at the moment of switching on, because that is
-                    // when the user is deciding to type in this language.
-                    // Finding out later that the keys produce Latin letters
-                    // is the outcome this exists to prevent.
-                    if (enable) spec.keyman?.let { promptForRules(it, spec.name) }
-                }
-                if (enable) enableGate(layoutId) { write() } else write()
-            }
-        }
-        // A converted Keyman layout can only type what its author wrote once
-        // its rules are on the device, so the row that fetches them sits
-        // directly under the layout it belongs to, and names it.
-        spec.keyman?.let { binding ->
-            item { KeymanRulesRow(binding, spec.name, rulesRefresh) }
-        }
-    }
-}
-
-/**
  * The Layouts group for one language: the layouts we wrote for it plus whichever
- * converted ones are switched on, and a row down to the rest.
+ * converted ones are switched on, as a row of keyboard cards (see
+ * [LayoutCarousel]) that ends on a card down to the rest.
+ *
+ * The rules row a switched-on Keyman layout needs sits under the cards, named
+ * for its layout, rather than under the layout's own card: a card is a picture
+ * of a keyboard, and a download row squeezed under one would make that card
+ * taller than its neighbours.
  *
  * Split out of [LanguageDetailScreen] rather than left inline. That function was
  * already past detekt's complexity ceiling before the Keyman rows went in, and
@@ -804,68 +754,110 @@ private fun LayoutsGroup(
     scope: CoroutineScope,
     onNavigate: (String) -> Unit,
 ) {
-    val enableGate = rememberLayoutEnableGate(settings)
     // Bumped when the enable prompt installs rules, so the row underneath stops
     // offering to download what it just got.
     var rulesRefresh by remember { mutableStateOf(0) }
-    val promptForRules = rememberKeymanRulesPrompt { rulesRefresh++ }
+    val toggle = rememberLayoutToggle(settings, repository, scope) { rulesRefresh++ }
 
     val overflow = overflowLayoutIds(lang, settings)
     val listed = lang.layoutIds - overflow.toSet()
+    val title = stringResource(R.string.languages_layouts_title)
 
-    SettingsGroup(stringResource(R.string.languages_layouts_title)) {
-        layoutRows(listed, settings, repository, scope, enableGate, promptForRules, rulesRefresh)
-        if (overflow.isNotEmpty()) {
-            item {
-                NavRow(
-                    R.string.languages_more_layouts_title,
-                    subtitle = pluralStringResource(
-                        R.plurals.languages_more_layouts_subtitle,
-                        overflow.size,
-                        overflow.size,
-                    ),
-                    route = moreLayoutsRoute(lang.id),
-                ) { onNavigate(moreLayoutsRoute(lang.id)) }
-            }
+    HighlightableRow(title, coarse = true) {
+        Column {
+            SectionHeader(
+                title,
+                info = stringResource(R.string.languages_layouts_info),
+                modifier = Modifier.padding(start = 32.dp, end = 16.dp, top = 4.dp, bottom = 8.dp),
+            )
+            LayoutCarousel(
+                layoutIds = listed,
+                settings = settings,
+                onToggle = toggle,
+                moreCount = overflow.size,
+                onMore = { onNavigate(moreLayoutsRoute(lang.id)) },
+            )
+            Spacer(Modifier.height(16.dp))
+        }
+    }
+
+    val keymanListed = listed.mapNotNull { id ->
+        val spec = resolveLayout(settings.customLayouts, id)
+        spec.keyman?.let { it to spec.name }
+    }
+    SettingsGroup {
+        // A converted Keyman layout can only type what its author wrote once
+        // its rules are on the device, so each one on the cards gets the row
+        // that fetches them, naming it.
+        for ((binding, name) in keymanListed) {
+            item { KeymanRulesRow(binding, name, rulesRefresh) }
         }
     }
 }
 
 /**
- * One language's converted Keyman layouts, a tap off its detail screen.
+ * What a layout card does when it is tapped, for every screen that has them:
+ * switch the layout, through the validation gate on the way on and the Keyman
+ * rules prompt once it is on, and refuse, out loud, to switch off the last
+ * layout left. Answers whether the switch happened.
  *
- * Lists every Keyman grid the language has, not only the ones the detail screen
- * left behind: this page is the catalogue, and a layout vanishing from it the
- * moment it is switched on would read as the toggle having deleted something.
- * The overlap is two rows for one setting, which both write the same value.
- *
- * Named "More layouts" rather than "Keyman layouts" because the name has to mean
- * something to a user who has never heard of Keyman, and the description says
- * where they come from for the user who has.
+ * [onRulesInstalled] fires when the prompt installs a layout's rules, so the
+ * screen can tell its rules rows to look again.
  */
 @Composable
-internal fun MoreLayoutsScreen(
-    langId: String,
-    repository: SettingsRepository,
+internal fun rememberLayoutToggle(
     settings: KeyboardSettings,
-) {
-    val scope = rememberCoroutineScope()
-    val lang = LanguageRegistry.byId(langId)
+    repository: SettingsRepository,
+    scope: CoroutineScope,
+    onRulesInstalled: () -> Unit,
+): (layoutId: String, enable: Boolean) -> Boolean {
+    val context = LocalContext.current
     val enableGate = rememberLayoutEnableGate(settings)
-    var rulesRefresh by remember { mutableStateOf(0) }
-    val promptForRules = rememberKeymanRulesPrompt { rulesRefresh++ }
-
-    val layoutIds = lang.layoutIds.filter {
-        resolveLayout(settings.customLayouts, it).keyman != null
+    val promptForRules = rememberKeymanRulesPrompt(onRulesInstalled)
+    return { layoutId, enable ->
+        // At least one layout must stay enabled somewhere. Said out loud here,
+        // where the old switch just sprang back.
+        if (!enable && settings.enabledLayoutIds.all { it == layoutId }) {
+            Toast.makeText(context, R.string.languages_layout_keep_one, Toast.LENGTH_SHORT).show()
+            false
+        } else {
+            setLayoutEnabled(layoutId, enable, settings, repository, scope, enableGate, promptForRules)
+            true
+        }
     }
+}
 
-    // Guarded, or a language reached with no converted layouts at all — a stale
-    // deep link, a build that dropped them — draws a description of nothing.
-    if (layoutIds.isEmpty()) return
-    CaptionText(stringResource(R.string.languages_more_layouts_body))
-    SettingsGroup(stringResource(R.string.languages_layouts_title)) {
-        layoutRows(layoutIds, settings, repository, scope, enableGate, promptForRules, rulesRefresh)
+/**
+ * Switches [layoutId] on or off: through the validation gate on the way on,
+ * never on the way off, and with the Keyman rules prompt at the moment a
+ * converted layout is switched on.
+ */
+private fun setLayoutEnabled(
+    layoutId: String,
+    enable: Boolean,
+    settings: KeyboardSettings,
+    repository: SettingsRepository,
+    scope: CoroutineScope,
+    enableGate: (String, () -> Unit) -> Unit,
+    promptForRules: (KeymanBinding, String) -> Unit,
+) {
+    fun write() {
+        scope.launch {
+            val next =
+                if (enable) settings.enabledLayoutIds + layoutId
+                else settings.enabledLayoutIds - layoutId
+            // At least one layout must stay enabled somewhere.
+            if (next.isNotEmpty()) repository.setEnabledLayoutIds(next.distinct())
+        }
+        // Asked at the moment of switching on, because that is when the user
+        // is deciding to type in this language. Finding out later that the
+        // keys produce Latin letters is the outcome this exists to prevent.
+        if (enable) {
+            val spec = resolveLayout(settings.customLayouts, layoutId)
+            spec.keyman?.let { promptForRules(it, spec.name) }
+        }
     }
+    if (enable) enableGate(layoutId) { write() } else write()
 }
 
 /**

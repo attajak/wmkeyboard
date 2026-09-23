@@ -1633,17 +1633,15 @@ private fun SettingsNavGraph(
         // One segment longer than "language/{langId}", so the two patterns
         // cannot match each other's URLs.
         composable("language/{langId}/more") { backStackEntry ->
-            val langId = backStackEntry.arguments?.getString("langId").orEmpty()
-            SettingsScreen(
-                stringResource(R.string.languages_more_layouts_title),
-                { navController.popBackStack() },
-                route = moreLayoutsRoute(langId),
-                // The heading says which language's catalogue this is: "More
-                // layouts" on its own is the same title under all 843 of them.
-                subtitle = LanguageRegistry.byId(langId).displayName,
-            ) {
-                MoreLayoutsScreen(langId, repository, settings)
-            }
+            // Its own frame rather than SettingsScreen's column: the page is a
+            // lazy grid of keyboard cards (see MoreLayoutsScreen).
+            MoreLayoutsScreen(
+                anim = this,
+                langId = backStackEntry.arguments?.getString("langId").orEmpty(),
+                repository = repository,
+                settings = settings,
+                onBack = { navController.popBackStack() },
+            )
         }
         composable("emoji") {
             SettingsScreen(

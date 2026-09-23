@@ -1970,6 +1970,14 @@ internal enum class KeyPreviewBandMode {
     INSIDE,
 }
 
+/**
+ * True under a host that draws the board as a picture of the keyboard rather
+ * than as the keyboard: the theme editor's preview and the layout cards on a
+ * language's screen. Such a board still draws and animates exactly as the real
+ * one, but publishes nothing process-wide that the real keyboard owns.
+ */
+internal val LocalKeyboardPreviewHost = staticCompositionLocalOf { false }
+
 /** How the host wants the key-preview band handled; see [KeyPreviewBandMode]. */
 internal val LocalKeyPreviewBand = staticCompositionLocalOf { KeyPreviewBandMode.WINDOW }
 
@@ -3036,20 +3044,25 @@ private fun TopBar(
     //    appears, so the whole toolbar — emoji included — fades in together, no
     //    stagger. [toolsFade] starts at 0 so it fades from blank instead of
     //    painting one frame opaque, snapping to 0, and refading (the jitter).
+    //
+    // A board drawn as a picture (a layout card, the theme editor) has no
+    // panel it is returning from: its mount is just the card scrolling into
+    // view, so the tools are simply there, as they would be in a screenshot.
+    val preview = LocalKeyboardPreviewHost.current
     val toolsFade = remember {
-        Animatable(if (showToolbar && !state.settings.reduceMotion) 0f else 1f)
+        Animatable(if (showToolbar && !state.settings.reduceMotion && !preview) 0f else 1f)
     }
     // Whether the emoji joins the tools' fade (fresh mount) or sits it out and
     // slides (in-place flip). Seeded for a mount that opens on the toolbar.
     var toolsFadeMounted by remember { mutableStateOf(false) }
     var emojiFadesWithTools by remember {
-        mutableStateOf(showToolbar && !state.settings.reduceMotion)
+        mutableStateOf(showToolbar && !state.settings.reduceMotion && !preview)
     }
     val toolbarJustRevealed = !prevShowToolbar && showToolbar && !state.settings.reduceMotion
     LaunchedEffect(showToolbar, state.settings.reduceMotion) {
         val freshMount = !toolsFadeMounted
         toolsFadeMounted = true
-        if (!showToolbar || state.settings.reduceMotion) {
+        if (!showToolbar || state.settings.reduceMotion || (preview && freshMount)) {
             emojiFadesWithTools = false
             toolsFade.snapTo(1f)
         } else {
@@ -13408,7 +13421,13 @@ private fun KeyRows(
         state.settings.accessibility.screenReader == ScreenReaderMode.PASSTHROUGH &&
         LocalPassthroughService.current
     val hostView = LocalView.current
-    LaunchedEffect(passthroughKeys, boxOrigin, boxSize, hostView) {
+    // A board drawn as a picture in the settings app (the theme editor, the
+    // layout cards) is not the keyboard: it must neither carve a pass-through
+    // hole in the app nor clear the one the real keyboard holds, which lives in
+    // the same process and publishes to the same place.
+    val ownsPassthrough = !LocalKeyboardPreviewHost.current
+    LaunchedEffect(passthroughKeys, boxOrigin, boxSize, hostView, ownsPassthrough) {
+        if (!ownsPassthrough) return@LaunchedEffect
         if (!passthroughKeys || boxSize.width == 0 || boxSize.height == 0) {
             KeyboardPassthrough.publishRegion(null)
         } else {
@@ -13422,8 +13441,8 @@ private fun KeyRows(
             )
         }
     }
-    DisposableEffect(Unit) {
-        onDispose { KeyboardPassthrough.publishRegion(null) }
+    DisposableEffect(ownsPassthrough) {
+        onDispose { if (ownsPassthrough) KeyboardPassthrough.publishRegion(null) }
     }
 
     // Drives the age fade. Keyed on `visible`, which flips twice a stroke, so

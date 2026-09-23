@@ -50,6 +50,8 @@
     <!-- ===== One language: layouts, clusters, numerals ===== -->
 
     <string name="languages_layouts_title">Layouts</string>
+    <string name="languages_layouts_info">Each card shows the keyboard as it looks with your theme and settings. Tap a card to turn that layout on or off. Scroll the row sideways to see all the layouts.</string>
+    <string name="languages_layout_keep_one">At least one layout must stay on.</string>
 
     <!--
       The Keyman rules row. "Rules" is the word the Keyman project uses for the
@@ -88,6 +90,24 @@
         <item quantity="other">%1$d more layouts from the Keyman project</item>
     </plurals>
     <string name="languages_more_layouts_body">These come from the Keyman project, an open collection of keyboards for languages that rarely get one. Many of them decide what a key types from rules rather than from the character printed on it, and those download a few kilobytes from keyman.com the first time you switch one on.</string>
+    <string name="languages_more_layouts_count">+<xliff:g id="count" example="12">%1$d</xliff:g></string>
+    <plurals name="languages_more_layouts_card_body">
+        <item quantity="one">layout from the Keyman project</item>
+        <item quantity="other">layouts from the Keyman project</item>
+    </plurals>
+    <string name="languages_more_layouts_search_hint">Search layouts</string>
+    <string name="languages_more_layouts_search_empty">No layouts match “<xliff:g id="search_term" example="phonetic">%1$s</xliff:g>”.</string>
+    <string name="languages_more_layouts_on_empty">None of these layouts is on. Tap a card to turn one on.</string>
+    <string name="languages_more_layouts_filter_all">All</string>
+    <string name="languages_more_layouts_filter_on">On</string>
+    <string name="languages_keyman_card_rules_get">Get typing rules</string>
+    <string name="languages_keyman_card_rules_retry">Download failed. Try again</string>
+    <string name="languages_keyman_card_rules_retry_desc">Try again to download typing rules for <xliff:g id="layout" example="Khmer Angkor">%1$s</xliff:g></string>
+    <string name="languages_keyman_card_rules_ready">Typing rules ready</string>
+    <string name="languages_keyman_card_rules_download_desc">Download typing rules for <xliff:g id="layout" example="Khmer Angkor">%1$s</xliff:g></string>
+    <string name="languages_keyman_card_rules_remove_desc">Remove typing rules for <xliff:g id="layout" example="Khmer Angkor">%1$s</xliff:g></string>
+    <string name="languages_keyman_remove_title">Remove typing rules for <xliff:g id="layout" example="Khmer Angkor">%1$s</xliff:g>?</string>
+    <string name="languages_keyman_remove_body">Until you download them again, each key of this layout types the character printed on it.</string>
 
     <string name="languages_clusters_title">Clusters</string>
     <string name="languages_conjunct_backspace_title">Conjunct-aware backspace</string>

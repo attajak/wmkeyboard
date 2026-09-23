@@ -88,6 +88,7 @@ import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.ui.KeyPreviewBandMode
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen
 import com.wasimaster.wmkeyboard.ime.ui.LocalKeyPreviewBand
+import com.wasimaster.wmkeyboard.ime.ui.LocalKeyboardPreviewHost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -270,7 +271,10 @@ fun ThemeKeyboardPreview(
     // clamped to the top edge rather than cut in half.
     val bandMode = if (miniature) KeyPreviewBandMode.INSIDE else KeyPreviewBandMode.OUTSIDE
     val keyboard: @Composable () -> Unit = {
-        CompositionLocalProvider(LocalKeyPreviewBand provides bandMode) {
+        CompositionLocalProvider(
+            LocalKeyPreviewBand provides bandMode,
+            LocalKeyboardPreviewHost provides true,
+        ) {
             KeyboardScreen(
                 stateFlow = stateFlow,
                 onKey = actions.onKey,

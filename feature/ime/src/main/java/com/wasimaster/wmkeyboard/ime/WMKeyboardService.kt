@@ -272,10 +272,6 @@ import com.wasimaster.wmkeyboard.core.power.PowerSaver
 import com.wasimaster.wmkeyboard.core.net.NetworkWatcher
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
-import com.wasimaster.wmkeyboard.core.layout.expandForTablet
-import com.wasimaster.wmkeyboard.core.layout.gridForTelevision
-import com.wasimaster.wmkeyboard.core.layout.televisionGridColumns
-import com.wasimaster.wmkeyboard.core.layout.tabletGridWidth
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyDeviceForm
 import com.wasimaster.wmkeyboard.core.settings.applyMode
@@ -508,10 +504,7 @@ import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.commitsNoText
-import com.wasimaster.wmkeyboard.core.layout.fillRowFor
-import com.wasimaster.wmkeyboard.core.layout.numberRowFor
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
-import com.wasimaster.wmkeyboard.core.layout.repair
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
 import com.wasimaster.wmkeyboard.core.input.composer.CjkConfig
@@ -544,11 +537,7 @@ import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.layoutAfterFancy
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.layout.script
-import com.wasimaster.wmkeyboard.core.layout.compile
-import com.wasimaster.wmkeyboard.core.layout.compileNamed
-import com.wasimaster.wmkeyboard.core.layout.secondaryLayouts
 import com.wasimaster.wmkeyboard.ime.ui.panelLayout
-import com.wasimaster.wmkeyboard.core.layout.panelLayers
 import com.wasimaster.wmkeyboard.ime.ui.currentLayout
 import com.wasimaster.wmkeyboard.ime.ui.GlideVerdict
 import com.wasimaster.wmkeyboard.ime.ui.caseAt
@@ -10166,9 +10155,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun secondaryGrids(customs: List<LayoutSpec>): Map<String, KeyboardLayout> {
         secondaryGridCache?.let { (cached, grids) -> if (cached === customs) return grids }
-        val grids = secondaryLayouts(customs).associate { spec ->
-            spec.id to spec.repair().spec.compile(LayoutLayer.LETTERS)
-        }
+        val grids = compileSecondaryGrids(customs)
         secondaryGridCache = customs to grids
         return grids
     }
@@ -10276,64 +10263,7 @@ open class WMKeyboardService : InputMethodService() {
         layoutSetCache[key]?.let { (cached, set) ->
             if (cached == spec && set.secondaries === secondaries) return set
         }
-        val safe = spec.repair().spec
-        val letters = safe.compile(LayoutLayer.LETTERS)
-        // Only the letters layer widens. The symbols and Fn layers have no shift
-        // key and so decline on their own, and the numeric keypads must never be
-        // stretched to twelve columns — a four-column PIN pad at that width is
-        // not a keypad any more.
-        // A television takes the grid transform instead of the tablet one, even
-        // though its screen reports as a large tablet's: the two want opposite
-        // things. A tablet widens the board so two hands can reach more keys at
-        // once; a remote wants the *fewest* presses between keys, which is an
-        // even rectangle. `tabletExpand` gates both — a layout whose geometry is
-        // authored (T9, the kana pads) says no to being rebuilt at all.
-        val reflow = television && safe.tabletExpand && televisionGridColumns(letters) != null
-        val expand = !reflow && form.isTablet && safe.tabletExpand
-        val gridWidth = if (expand) tabletGridWidth(letters, form) else null
-        val set = LayoutSet(
-            letters = when {
-                reflow -> letters.gridForTelevision()
-                gridWidth != null -> letters.expandForTablet(form, numberRowShown)
-                else -> letters
-            },
-            symbols = safe.compile(LayoutLayer.SYMBOLS),
-            symbolsShifted = safe.compile(LayoutLayer.SYMBOLS_SHIFTED),
-            // Only when the layout actually defines one: compile() falls back
-            // to the shipped grid for a missing layer, which would give every
-            // layout an Fn layer that is really a second copy of the letters.
-            fn = safe.layer(LayoutLayer.FN)?.let { safe.compile(LayoutLayer.FN) },
-            numeric = fieldKind.numericLayer?.let(safe::compile),
-            // Same "only when authored" rule as Fn: the Numpad panel draws its
-            // own hardcoded pad otherwise, with the calculator-order setting.
-            number = safe.layer(LayoutLayer.NUMBER)?.let { safe.compile(LayoutLayer.NUMBER) },
-            // The layout's own panel grids, already through the panel repair
-            // as part of `safe`. Not through the panel-layout cache: they are
-            // this layout's, so they live and die with its set.
-            panels = safe.panelLayers.mapValues { (kind, grid) ->
-                PanelLayoutSpec(kind, grid, appearance = safe.appearance)
-            },
-            numberRows = buildMap {
-                safe.numberRowFor(LayoutLayer.LETTERS)?.let { put(LayoutMode.LETTERS, it) }
-                safe.numberRowFor(LayoutLayer.SYMBOLS)?.let { put(LayoutMode.SYMBOLS, it) }
-                safe.numberRowFor(LayoutLayer.SYMBOLS_SHIFTED)
-                    ?.let { put(LayoutMode.SYMBOLS_SHIFTED, it) }
-                safe.numberRowFor(LayoutLayer.FN)?.let { put(LayoutMode.FN, it) }
-            },
-            symbolsFillRow = safe.fillRowFor(LayoutLayer.SYMBOLS),
-            gridWidth = gridWidth,
-            secondaries = secondaries,
-            themeId = safe.themeId,
-            keymanShift = safe.compileNamed(KeymanLayers.SHIFT),
-            keymanCaps = safe.compileNamed(KeymanLayers.CAPS),
-            named = safe.layers.keys
-                .filter { it.startsWith(KeymanLayers.PREFIX) && it != KeymanLayers.SHIFT && it != KeymanLayers.CAPS }
-                .mapNotNull { name -> safe.compileNamed(name)?.let { name to it } }
-                .toMap(),
-            keymanLayerKeys = safe.layers.keys.takeIf { keys ->
-                safe.keyman != null || keys.any { it.startsWith(KeymanLayers.PREFIX) }
-            },
-        )
+        val set = compileLayoutSet(spec, fieldKind, form, numberRowShown, secondaries, television)
         layoutSetCache[key] = spec to set
         return set
     }
