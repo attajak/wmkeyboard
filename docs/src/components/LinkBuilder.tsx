@@ -810,15 +810,15 @@ function DecodeMode({ initial }: { initial: string }) {
 type Mode = 'screen' | 'setting' | 'addon' | 'custom' | 'decode';
 
 const MODES: { id: Mode; label: string }[] = [
-	{ id: 'screen', label: 'A settings screen' },
 	{ id: 'setting', label: 'One setting' },
+	{ id: 'screen', label: 'A settings screen' },
 	{ id: 'addon', label: 'The addon store' },
 	{ id: 'custom', label: 'By hand' },
 	{ id: 'decode', label: 'Read a link' },
 ];
 
 export default function LinkBuilder() {
-	const [mode, setMode] = useState<Mode>('screen');
+	const [mode, setMode] = useState<Mode>('setting');
 	const [rows, setRows] = useState<SettingRow[] | null>(null);
 	const [languages, setLanguages] = useState<Language[]>([]);
 	const [pasted, setPasted] = useState('');
