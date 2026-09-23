@@ -1219,149 +1219,26 @@ fun KeyboardScreen(
     /** Dismiss the keyboard — the hide-keyboard tool and the toolbar swipe-down. */
     onHideKeyboard: () -> Unit = {},
 ) {
-    val rawState by stateFlow.collectAsState()
-
-    // Sizing is resolved once, here, for the screen shape we are actually
-    // drawing on: a folded phone in landscape can want a shorter key than
-    // the same phone upright, and a tablet wants neither. Everything below
-    // reads `state.settings.keyHeightDp` as before and never learns that
-    // screen variants exist.
-    val configuration = LocalConfiguration.current
-    val variant = ScreenVariant.of(
-        landscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE,
-        // Smallest dimension, not the current width: a phone turned sideways
-        // is wide but still a phone, while an opened foldable is wide either
-        // way round.
-        unfolded = configuration.smallestScreenWidthDp >= ScreenVariant.UNFOLDED_MIN_DP,
-    )
-    // Resolved on its own, and remembered on the settings rather than on the
-    // whole state: the keys downstream take `settings` as a parameter and Compose
-    // reads it as unstable (it is full of lists and maps), so it is compared by
-    // instance. Folding this into the state.copy below handed out a fresh
-    // settings object on every keystroke whenever the variant had an override,
-    // which is enough on its own to stop every key from skipping.
-    //
-    // Overlay order: the shape's own defaults first (a landscape phone starts
-    // at a landscape-sized board, not a portrait one -- issue #251), then the
-    // active theme's layout overrides, then the screen-variant sizing — a per-screen override the user set by hand is
-    // more specific than the theme and wins. The spec here is resolved by the
-    // same helpers KeyboardThemeProvider uses, so the theme that paints the
-    // board and the one that reshapes it are always the same theme.
-    // Before all of that: the grid on screen may name a theme of its own
-    // (issue #61) — a layer's, else its layout's, resolved onto the compiled
-    // grid. Laid over the settings first so the theme that then paints and
-    // reshapes the board is that one; a grid naming nothing hands back the
-    // same instance, so the remembers below keep their keys.
-    // Through the remembered layout: `screenThemeId` builds the grid afresh —
-    // every key copied — and this line runs on every keystroke, where the
-    // grid it asks about has not changed.
-    val screenLayout = rememberCurrentLayout(rawState)
-    val layerThemeId = screenThemeId(rawState, screenLayout)
-    val baseSettings = remember(rawState.settings, layerThemeId) {
-        rawState.settings.applyLayoutTheme(layerThemeId)
-    }
-    val systemDark = isSystemInDarkTheme()
-    val darkSlot = rememberAutoThemeDarkSlot(baseSettings, systemDark)
-    val activeSpec = remember(baseSettings, darkSlot) {
-        baseSettings.activeThemeSpec(darkSlot)
-    }
-    val settings = remember(baseSettings, variant, activeSpec) {
-        baseSettings.applyScreenDefaults(variant).applyThemeOverrides(activeSpec).resolvedFor(variant)
-    }
-    // The layout's own font, which is deliberately NOT part of that chain. The
-    // chain produces one KeyboardSettings for the whole board, and a layout's
-    // type is per grid: its label size is per *layer* on top of that, and rides
-    // the compiled KeyboardLayout down to the keys instead (see keyVisual). Only
-    // the font is layout-wide, so only the font is read here.
-    val layoutFontId = remember(rawState.settings.customLayouts, rawState.layoutId) {
-        resolveLayout(rawState.settings.customLayouts, rawState.layoutId).appearance?.fontId
-    }
-    // The inline resize tool's live preview. Stored-space values, folded in
-    // AFTER the resolve so a drag previews exactly what Done would persist;
-    // null (resting, and every non-resize frame) short-circuits to the same
-    // `settings` instance, so the block above keeps its skipping behaviour.
-    val resizePreview = remember { mutableStateOf<ResizeValues?>(null) }
-    LaunchedEffect(rawState.resize) { if (!rawState.resize) resizePreview.value = null }
-    val preview = if (rawState.resize) resizePreview.value else null
-    val previewScale = if (preview == null) 1f else {
-        rawState.settings.sizingOverrides[variant]?.keyboardScale ?: 1f
-    }
-    val shown = remember(settings, preview, previewScale) {
-        if (preview == null) settings else settings.copy(
-            keyHeightDp = (preview.keyHeightDp * previewScale).roundToInt(),
-            numberRowHeightDp = (preview.numberRowHeightDp * previewScale).roundToInt(),
-            bottomPaddingDp = preview.bottomPaddingDp,
-            layoutBehavior = settings.layoutBehavior.copy(
-                sidePadLeftScale = preview.sidePadLeft,
-                sidePadRightScale = preview.sidePadRight,
-            ),
-        )
-    }
-    val state = remember(rawState, shown) { rawState.copy(settings = shown) }
-    val autoBottomPadding = autoBottomPaddingDp(gestureBarAtBottom())
-    val resizeSession = if (!rawState.resize) null else {
-        remember(rawState.settings, variant, resizePreview, autoBottomPadding) {
-            val values = rawState.settings.sizingValuesFor(variant)
-            val scale = values.keyboardScale ?: 1f
-            val entry = ResizeValues(
-                keyHeightDp = values.keyHeightDp ?: rawState.settings.keyHeightDp,
-                numberRowHeightDp = values.numberRowHeightDp
-                    ?: rawState.settings.numberRowHeightDp,
-                bottomPaddingDp = values.bottomPaddingDp ?: rawState.settings.bottomPaddingDp
-                    ?: autoBottomPadding,
-                sidePadLeft = values.sidePadLeftScale
-                    ?: rawState.settings.layoutBehavior.sidePadLeftScale,
-                sidePadRight = values.sidePadRightScale
-                    ?: rawState.settings.layoutBehavior.sidePadRightScale,
-            )
-            // How much taller the keyboard could get from here: the frame
-            // reserves this on entry so nothing under the finger moves during
-            // a drag (see ResizeSession.headroomDp).
-            val gridDp = { v: ResizeValues ->
-                keyRowsHeight(
-                    rawState.copy(
-                        settings = settings.copy(
-                            keyHeightDp = (v.keyHeightDp * scale).roundToInt(),
-                            numberRowHeightDp = (v.numberRowHeightDp * scale).roundToInt(),
-                        ),
-                    ),
-                ).value
-            }
-            val tallest = entry.copy(
-                keyHeightDp = SettingsRepository.KEY_HEIGHT_MAX_DP,
-                numberRowHeightDp = SettingsRepository.KEY_HEIGHT_MAX_DP,
-            )
-            val headroomDp = (
-                (gridDp(tallest) - gridDp(entry)) +
-                    (SettingsRepository.MAX_BOTTOM_PADDING_DP - entry.bottomPaddingDp)
-                ).roundToInt().coerceAtLeast(0)
-            ResizeSession(
-                entry = entry,
-                keyboardScale = scale,
-                maxBottomPaddingDp = SettingsRepository.MAX_BOTTOM_PADDING_DP,
-                headroomDp = headroomDp,
-                preview = resizePreview,
-                onCommit = { result ->
-                    onSizingAction(resizeCommitAction(variant, entry, result))
-                },
-            )
-        }
-    }
-
-    // Resolved off the main thread, so the first frame or two after a cold
-    // start draw the built-in icons and a pack swaps in behind them.
-    val iconSet by rememberIconSet(state.settings.icons)
+    // Collected here and read only in [KeyboardScreenFrame]. The service
+    // publishes a new state on every keystroke, and whatever reads it
+    // recomposes with it. This function's parameter list and the body lambda
+    // below compile to one method of ~15,700 dex instructions and 562
+    // registers: past ART's huge-method limit, so it is never compiled, and
+    // too big a frame for its fast interpreter, so it ran in the slow one.
+    // Reading the state here put all of that on every keystroke (14% of the
+    // main thread in a typing burst on a CPH2481). Now this runs when the
+    // service recomposes it, which is rarely, and the per-keystroke work is in
+    // a function small enough to be compiled.
+    val stateHolder = stateFlow.collectAsState()
     // The bubbles, owned here so the frame can draw them over everything it
     // holds while the keys deep inside the body publish to them.
     val keyPreview = remember { KeyPreviewState() }
     val languageSwitchEcho = remember { LanguageSwitchEcho() }
-    LaunchedEffect(languageSwitchEcho.shown) {
-        val shown = languageSwitchEcho.shown ?: return@LaunchedEffect
-        delay(LanguageSwitchEchoMs)
-        if (languageSwitchEcho.shown == shown) languageSwitchEcho.clear()
-    }
 
     val body:@Composable ColumnScope.(KeyboardUiState) -> Unit = { bodyState ->
+        // Resolved off the main thread, so the first frame or two after a cold
+        // start draw the built-in icons and a pack swaps in behind them.
+        val iconSet by rememberIconSet(bodyState.settings.icons)
         CompositionLocalProvider(
             LocalIconSet provides iconSet,
             LocalKeyPreviewState provides keyPreview,
@@ -1384,7 +1261,7 @@ fun KeyboardScreen(
             ),
             LocalOctopusPick provides onOctopusPick,
             LocalPossessiveFlick provides onPossessiveFlick,
-            LocalOctopusWords provides rememberUpdatedState(state.octopus),
+            LocalOctopusWords provides rememberUpdatedState(bodyState.octopus),
             LocalOctopusOccupancy provides remember { OctopusOccupancy() },
             LocalTransliterationPreview provides rememberTransliterationPreview(bodyState),
             LocalSelectionHold provides toolHold.onSelectionHold,
@@ -1567,6 +1444,197 @@ fun KeyboardScreen(
             currentBody(bodyState)
         }
     }
+
+    KeyboardScreenFrame(
+        stateHolder = stateHolder,
+        keyPreview = keyPreview,
+        languageSwitchEcho = languageSwitchEcho,
+        panelFocus = panelFocus,
+        body = movableBody,
+        onKey = onKey,
+        onText = onText,
+        onLayoutSelect = onLayoutSelect,
+        onToolTap = onToolTap,
+        onVoiceToggle = onVoiceToggle,
+        onVoiceUndo = onVoiceUndo,
+        onVoicePermissionRequest = onVoicePermissionRequest,
+        onOpenVoiceSettings = onOpenVoiceSettings,
+        onVoiceRailKey = onVoiceRailKey,
+        onOneHanded = onOneHanded,
+        onOneHandedSide = onOneHandedSide,
+        onFloatingChange = onFloatingChange,
+        onFloatingMoved = onFloatingMoved,
+        onSizingAction = onSizingAction,
+        onFloatingBounds = onFloatingBounds,
+        onWindowHeadroom = onWindowHeadroom,
+    )
+}
+
+/**
+ * The per-keystroke half of [KeyboardScreen]: reads the state, resolves the
+ * settings for the screen and the theme, and hands the body to the floating or
+ * docked frame. Split off so the function every keystroke recomposes is small
+ * enough for ART to compile; see the note at the top of [KeyboardScreen]'s body.
+ */
+@Composable
+private fun KeyboardScreenFrame(
+    stateHolder: State<KeyboardUiState>,
+    keyPreview: KeyPreviewState,
+    languageSwitchEcho: LanguageSwitchEcho,
+    panelFocus: PanelFocusController,
+    body: @Composable ColumnScope.(KeyboardUiState) -> Unit,
+    onKey: (Key) -> Unit,
+    onText: (String) -> Unit,
+    onLayoutSelect: (String) -> Unit,
+    onToolTap: (ToolbarTool) -> Unit,
+    onVoiceToggle: () -> Unit,
+    onVoiceUndo: () -> Unit,
+    onVoicePermissionRequest: () -> Unit,
+    onOpenVoiceSettings: () -> Unit,
+    onVoiceRailKey: (VoiceBarAction) -> Unit,
+    onOneHanded: (OneHandedMode) -> Unit,
+    onOneHandedSide: (Boolean, OneHandedSide) -> Unit,
+    onFloatingChange: (Boolean) -> Unit,
+    onFloatingMoved: (Float, Float) -> Unit,
+    onSizingAction: (SizingAction) -> Unit,
+    onFloatingBounds: (IntRect) -> Unit,
+    onWindowHeadroom: (Int) -> Unit,
+) {
+    val movableBody = body
+    LaunchedEffect(languageSwitchEcho.shown) {
+        val shown = languageSwitchEcho.shown ?: return@LaunchedEffect
+        delay(LanguageSwitchEchoMs)
+        if (languageSwitchEcho.shown == shown) languageSwitchEcho.clear()
+    }
+    val rawState by stateHolder
+
+    // Sizing is resolved once, here, for the screen shape we are actually
+    // drawing on: a folded phone in landscape can want a shorter key than
+    // the same phone upright, and a tablet wants neither. Everything below
+    // reads `state.settings.keyHeightDp` as before and never learns that
+    // screen variants exist.
+    val configuration = LocalConfiguration.current
+    val variant = ScreenVariant.of(
+        landscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE,
+        // Smallest dimension, not the current width: a phone turned sideways
+        // is wide but still a phone, while an opened foldable is wide either
+        // way round.
+        unfolded = configuration.smallestScreenWidthDp >= ScreenVariant.UNFOLDED_MIN_DP,
+    )
+    // Resolved on its own, and remembered on the settings rather than on the
+    // whole state: the keys downstream take `settings` as a parameter and Compose
+    // reads it as unstable (it is full of lists and maps), so it is compared by
+    // instance. Folding this into the state.copy below handed out a fresh
+    // settings object on every keystroke whenever the variant had an override,
+    // which is enough on its own to stop every key from skipping.
+    //
+    // Overlay order: the shape's own defaults first (a landscape phone starts
+    // at a landscape-sized board, not a portrait one -- issue #251), then the
+    // active theme's layout overrides, then the screen-variant sizing — a per-screen override the user set by hand is
+    // more specific than the theme and wins. The spec here is resolved by the
+    // same helpers KeyboardThemeProvider uses, so the theme that paints the
+    // board and the one that reshapes it are always the same theme.
+    // Before all of that: the grid on screen may name a theme of its own
+    // (issue #61) — a layer's, else its layout's, resolved onto the compiled
+    // grid. Laid over the settings first so the theme that then paints and
+    // reshapes the board is that one; a grid naming nothing hands back the
+    // same instance, so the remembers below keep their keys.
+    // Through the remembered layout: `screenThemeId` builds the grid afresh —
+    // every key copied — and this line runs on every keystroke, where the
+    // grid it asks about has not changed.
+    val screenLayout = rememberCurrentLayout(rawState)
+    val layerThemeId = screenThemeId(rawState, screenLayout)
+    val baseSettings = remember(rawState.settings, layerThemeId) {
+        rawState.settings.applyLayoutTheme(layerThemeId)
+    }
+    val systemDark = isSystemInDarkTheme()
+    val darkSlot = rememberAutoThemeDarkSlot(baseSettings, systemDark)
+    val activeSpec = remember(baseSettings, darkSlot) {
+        baseSettings.activeThemeSpec(darkSlot)
+    }
+    val settings = remember(baseSettings, variant, activeSpec) {
+        baseSettings.applyScreenDefaults(variant).applyThemeOverrides(activeSpec).resolvedFor(variant)
+    }
+    // The layout's own font, which is deliberately NOT part of that chain. The
+    // chain produces one KeyboardSettings for the whole board, and a layout's
+    // type is per grid: its label size is per *layer* on top of that, and rides
+    // the compiled KeyboardLayout down to the keys instead (see keyVisual). Only
+    // the font is layout-wide, so only the font is read here.
+    val layoutFontId = remember(rawState.settings.customLayouts, rawState.layoutId) {
+        resolveLayout(rawState.settings.customLayouts, rawState.layoutId).appearance?.fontId
+    }
+    // The inline resize tool's live preview. Stored-space values, folded in
+    // AFTER the resolve so a drag previews exactly what Done would persist;
+    // null (resting, and every non-resize frame) short-circuits to the same
+    // `settings` instance, so the block above keeps its skipping behaviour.
+    val resizePreview = remember { mutableStateOf<ResizeValues?>(null) }
+    LaunchedEffect(rawState.resize) { if (!rawState.resize) resizePreview.value = null }
+    val preview = if (rawState.resize) resizePreview.value else null
+    val previewScale = if (preview == null) 1f else {
+        rawState.settings.sizingOverrides[variant]?.keyboardScale ?: 1f
+    }
+    val shown = remember(settings, preview, previewScale) {
+        if (preview == null) settings else settings.copy(
+            keyHeightDp = (preview.keyHeightDp * previewScale).roundToInt(),
+            numberRowHeightDp = (preview.numberRowHeightDp * previewScale).roundToInt(),
+            bottomPaddingDp = preview.bottomPaddingDp,
+            layoutBehavior = settings.layoutBehavior.copy(
+                sidePadLeftScale = preview.sidePadLeft,
+                sidePadRightScale = preview.sidePadRight,
+            ),
+        )
+    }
+    val state = remember(rawState, shown) { rawState.copy(settings = shown) }
+    val autoBottomPadding = autoBottomPaddingDp(gestureBarAtBottom())
+    val resizeSession = if (!rawState.resize) null else {
+        remember(rawState.settings, variant, resizePreview, autoBottomPadding) {
+            val values = rawState.settings.sizingValuesFor(variant)
+            val scale = values.keyboardScale ?: 1f
+            val entry = ResizeValues(
+                keyHeightDp = values.keyHeightDp ?: rawState.settings.keyHeightDp,
+                numberRowHeightDp = values.numberRowHeightDp
+                    ?: rawState.settings.numberRowHeightDp,
+                bottomPaddingDp = values.bottomPaddingDp ?: rawState.settings.bottomPaddingDp
+                    ?: autoBottomPadding,
+                sidePadLeft = values.sidePadLeftScale
+                    ?: rawState.settings.layoutBehavior.sidePadLeftScale,
+                sidePadRight = values.sidePadRightScale
+                    ?: rawState.settings.layoutBehavior.sidePadRightScale,
+            )
+            // How much taller the keyboard could get from here: the frame
+            // reserves this on entry so nothing under the finger moves during
+            // a drag (see ResizeSession.headroomDp).
+            val gridDp = { v: ResizeValues ->
+                keyRowsHeight(
+                    rawState.copy(
+                        settings = settings.copy(
+                            keyHeightDp = (v.keyHeightDp * scale).roundToInt(),
+                            numberRowHeightDp = (v.numberRowHeightDp * scale).roundToInt(),
+                        ),
+                    ),
+                ).value
+            }
+            val tallest = entry.copy(
+                keyHeightDp = SettingsRepository.KEY_HEIGHT_MAX_DP,
+                numberRowHeightDp = SettingsRepository.KEY_HEIGHT_MAX_DP,
+            )
+            val headroomDp = (
+                (gridDp(tallest) - gridDp(entry)) +
+                    (SettingsRepository.MAX_BOTTOM_PADDING_DP - entry.bottomPaddingDp)
+                ).roundToInt().coerceAtLeast(0)
+            ResizeSession(
+                entry = entry,
+                keyboardScale = scale,
+                maxBottomPaddingDp = SettingsRepository.MAX_BOTTOM_PADDING_DP,
+                headroomDp = headroomDp,
+                preview = resizePreview,
+                onCommit = { result ->
+                    onSizingAction(resizeCommitAction(variant, entry, result))
+                },
+            )
+        }
+    }
+
 
     val rotationStates by PhotoBackgroundManager.rotationStates.collectAsState()
     KeyboardThemeProvider(
