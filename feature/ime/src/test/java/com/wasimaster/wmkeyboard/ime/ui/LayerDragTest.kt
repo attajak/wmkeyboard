@@ -152,6 +152,19 @@ class LayerDragTest {
     }
 
     /**
+     * The spacebar keeps them off its swipes too (#333): sideways, a key is
+     * wider than a row is tall, and the letter-distance test reached the whole
+     * spacebar, so a language swipe glided a word.
+     */
+    @Test
+    fun `a stroke from the spacebar never starts a glide`() {
+        assertTrue(Key(" ", action = KeyAction.Space).ownsSpaceStroke())
+        assertFalse(Key("m").ownsSpaceStroke())
+        assertFalse(Key("", action = KeyAction.Enter).ownsSpaceStroke())
+        assertFalse(null.ownsSpaceStroke())
+    }
+
+    /**
      * And the text-editing pad's own delete keys are delete keys (#226): they
      * carry an `Edit` action rather than [KeyAction.Delete], which is why a ⌫
      * placed on a panel used to tap and repeat and never swipe, and glided.

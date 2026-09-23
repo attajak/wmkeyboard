@@ -9264,9 +9264,10 @@ internal fun FullBleedTool(
         // make the keyboard grow a row. Never below the header, which is the
         // panel's own search bar and way back — a panel already collapsed to
         // just that has nothing left to give, and the strip costs height.
-        (compactHeight - captureStripHeight(state)).coerceAtLeast(FullBleedHeaderHeight)
+        toolPanelHeight(state, wanted = compactHeight - captureStripHeight(state), floor = FullBleedHeaderHeight)
     } else {
-        keyRowsHeight(state) + fullBleedHiddenRows(state) + extraHeight
+        val board = keyRowsHeight(state) + fullBleedHiddenRows(state)
+        toolPanelHeight(state, wanted = board + extraHeight, floor = board)
     }
     Column(
         modifier = Modifier
@@ -9311,7 +9312,56 @@ internal fun FullBleedTool(
 }
 
 /** The slim header every full-bleed tool draws, and the floor its height has. */
-private val FullBleedHeaderHeight = 40.dp
+internal val FullBleedHeaderHeight = 40.dp
+
+/**
+ * The height a panel over the keyboard gets, fitted to the screen by
+ * [fitToolPanelHeight]: what it [wanted], less whatever the window cannot
+ * spare once everything else in it is paid for, and never below [floor].
+ *
+ * "Everything else" is the rows above the panel when it is not standing in
+ * for them, the key rows and their strip when one of the keyboard's own
+ * fields has them under the panel ([keyRowsUnderPanel]), and the padding
+ * under the lot.
+ */
+@Composable
+internal fun toolPanelHeight(state: KeyboardUiState, wanted: Dp, floor: Dp): Dp {
+    val rowsStandIn = barFullBleed(state) || barClipboardSearching(state) ||
+        (state.panel == PanelMode.EMOJI && state.emojiSearchActive)
+    val around = (if (rowsStandIn) 0.dp else fullBleedHiddenRows(state)) +
+        (if (keyRowsUnderPanel(state)) keyRowsHeight(state) + captureStripHeight(state) else 0.dp) +
+        state.settings.bottomPaddingDp.dp
+    return fitToolPanelHeight(wanted, floor, LocalConfiguration.current.screenHeightDp.dp, around)
+}
+
+/**
+ * The height a [FullBleedTool] panel gets: the [wanted] height, cut down to
+ * what is left of [ToolPanelMaxScreenShare] of the screen once everything
+ * [around] it is paid for, and never below [floor].
+ *
+ * Issue #333. The panels ask in fixed dp — 180dp for Translate's box while it
+ * is typed into, with the key rows back underneath, or 120–160dp on top of the
+ * board for the converters, the calendar and the AI — which is a slice of a
+ * phone held upright and nearly the whole of one turned sideways. The panel is
+ * the first thing in the column and took its height whole; the key rows came
+ * after and were measured against what was left, so on a landscape phone the
+ * bottom row was squashed to a sliver and the board ran up under the status
+ * bar. The panel is what gives now: the keys are the part being typed on.
+ *
+ * The floor wins over the budget. For a panel over the board it is the
+ * board's own height, which opening the panel never changes the window from;
+ * for a collapsed one it is the header, which holds the panel's search box and
+ * its way back.
+ */
+internal fun fitToolPanelHeight(wanted: Dp, floor: Dp, screenHeight: Dp, around: Dp): Dp =
+    minOf(wanted, screenHeight * ToolPanelMaxScreenShare - around).coerceAtLeast(floor)
+
+/**
+ * The most of the screen a tool panel may grow the keyboard to, with the keys
+ * it types on counted: the resize mode's own ceiling, for the same reason —
+ * the app the keyboard is over still shows something.
+ */
+private const val ToolPanelMaxScreenShare = 0.8f
 
 /**
  * Whether a keyboard-owned field draws a suggestion strip of its own (#161).
@@ -10592,18 +10642,8 @@ private fun KeyboardBody(
             // callback, the touch model's key centres and keyboard handwriting
             // all quietly stopped at the panel's edge. They are all here now,
             // exactly as [PanelMode.NONE] passes them.
-            val captureRows = when (state.captureTarget()) {
-                null, CaptureTarget.CALC, CaptureTarget.CONVERTER, CaptureTarget.WORD_SPELL -> false
-                // The emoji and clipboard panels reroute their search pills;
-                // the rest are only ever up with their own panel open.
-                CaptureTarget.EMOJI_SEARCH -> state.panel == PanelMode.EMOJI
-                CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.CLIP_EDIT -> clipboardSearching
-                CaptureTarget.DICTIONARY_SEARCH -> state.panel == PanelMode.DICTIONARY
-                CaptureTarget.MEDIA_SEARCH -> state.panel.hasMediaSearch
-                else -> true
-            }
             // …and always under the grammar strip, which follows the field live.
-            if (captureRows || state.panel == PanelMode.GRAMMAR) {
+            if (keyRowsUnderPanel(state) || state.panel == PanelMode.GRAMMAR) {
                 // The suggestions go where the keyboard's suggestions always
                 // go — the row directly above the keys, in the same slots and
                 // at the same size — so a word offered for a query reads
@@ -11618,6 +11658,21 @@ internal fun Key?.startsPossessiveSwipe(possessiveChar: Char?): Boolean =
  */
 internal fun Key?.ownsDeleteStroke(): Boolean =
     this?.action?.let { it.deletesBackward() || it.deletesForward() } == true
+
+/**
+ * Whether a stroke that starts on this key belongs to it as the spacebar: its
+ * swipes switch language, move the caret or hide the keyboard, and held with
+ * none of them set it repeats. Refused at the down by glide typing,
+ * handwriting and the octopus, like [ownsDeleteStroke] and for the same
+ * reason: no word begins on the spacebar.
+ *
+ * The letter-distance test does not keep it out on its own (#333). It asks
+ * for one key *width* of a letter's centre, and turned sideways a phone's keys
+ * are twice as wide as its rows are tall, so the whole spacebar lay within
+ * reach of the bottom letter row and a language swipe glided a word instead.
+ * Upright, only a thin band along its top edge did.
+ */
+internal fun Key?.ownsSpaceStroke(): Boolean = this?.action == KeyAction.Space
 
 /**
  * Whether a short flick down off this key types its corner hint (issue #178).
@@ -13624,9 +13679,10 @@ private fun KeyRows(
                     // space, and a flick off either must not take the
                     // neighbouring key's word. A delete swipe is the same
                     // (#243): backspace sits against the bottom letter row.
+                    // So is a spacebar swipe (#333).
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() ||
-                        downKey.ownsDeleteStroke()
+                        downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
                     }
@@ -13738,10 +13794,11 @@ private fun KeyRows(
                     // (#243) are the others: backspace sits beside the bottom
                     // letter row, and a layout may put the possessive key beside
                     // a letter, so the letter-distance test below would
-                    // otherwise start a glide from either.
+                    // otherwise start a glide from either. The spacebar's
+                    // swipes too (#333), which sideways lie wholly inside it.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
-                        downKey.ownsDeleteStroke()
+                        downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
                     }
@@ -14161,12 +14218,13 @@ private fun KeyRows(
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
                     // A drag off a modifier or shift key is a chord (issue
                     // #67), one off a mode key is a layer peek (issue #108),
-                    // one off the possessive key is its swipe (#169), and one
-                    // off a delete key deletes (#243); none of them must be
-                    // drawn as ink either.
+                    // one off the possessive key is its swipe (#169), one off
+                    // a delete key deletes (#243), and one off the spacebar is
+                    // its own swipe (#333); none of them must be drawn as ink
+                    // either.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
-                        downKey.ownsDeleteStroke()
+                        downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
                     }
@@ -16657,6 +16715,23 @@ internal fun barLockHidden(state: KeyboardUiState): Boolean =
  */
 internal fun barClipboardSearching(state: KeyboardUiState): Boolean =
     state.clipboardTakesKeys && !barLockHidden(state)
+
+/**
+ * Whether the key rows are drawn under the open panel: one of the keyboard's
+ * own fields has taken the keys, and a focused field needs something on screen
+ * to type into it. Asked by the body, which draws them, and by
+ * [FullBleedTool], which has to leave them room.
+ */
+internal fun keyRowsUnderPanel(state: KeyboardUiState): Boolean = when (state.captureTarget()) {
+    null, CaptureTarget.CALC, CaptureTarget.CONVERTER, CaptureTarget.WORD_SPELL -> false
+    // The emoji and clipboard panels reroute their search pills;
+    // the rest are only ever up with their own panel open.
+    CaptureTarget.EMOJI_SEARCH -> state.panel == PanelMode.EMOJI
+    CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.CLIP_EDIT -> barClipboardSearching(state)
+    CaptureTarget.DICTIONARY_SEARCH -> state.panel == PanelMode.DICTIONARY
+    CaptureTarget.MEDIA_SEARCH -> state.panel.hasMediaSearch
+    else -> true
+}
 
 /** A panel is claiming the strip's height, so the rows above the keys are gone. */
 internal fun barFullBleed(state: KeyboardUiState): Boolean =

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.core.layout.BuiltInPanelLayouts
 import com.wasimaster.wmkeyboard.core.layout.Key
@@ -225,7 +226,7 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
             state, edit, callbacks.clipboard.actions,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(ClipboardSearchHeight + topBarHeight(state.settings) - captureStripHeight(state)),
+                .height(clipboardSearchPanelHeight(state)),
         )
         return
     }
@@ -239,7 +240,7 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
                 .fillMaxWidth()
                 // Less the row the query's own suggestion strip takes below
                 // the panel (#161), for the same reason.
-                .height(ClipboardSearchHeight + topBarHeight(state.settings) - captureStripHeight(state)),
+                .height(clipboardSearchPanelHeight(state)),
         )
         return
     }
@@ -376,3 +377,15 @@ private val HeaderToggleWidth = 44.dp
 
 /** Panel height while the clipboard search bar is capturing the keys. */
 internal val ClipboardSearchHeight = 132.dp
+
+/**
+ * The search's and the clip editor's height: [ClipboardSearchHeight] plus the
+ * toolbar row it stands in for, less the query's own strip below (#161), and
+ * fitted to the screen with the keys underneath it (#333).
+ */
+@Composable
+private fun clipboardSearchPanelHeight(state: KeyboardUiState): Dp = toolPanelHeight(
+    state,
+    wanted = ClipboardSearchHeight + topBarHeight(state.settings) - captureStripHeight(state),
+    floor = FullBleedHeaderHeight,
+)

@@ -527,11 +527,14 @@ internal fun EmojiSearchPanel(
     // the keys (#161); it comes out of the panel, so opening search still does
     // not resize the window.
     val strip = captureStripHeight(state)
-    val height = if (fullBleed) {
+    val wanted = if (fullBleed) {
         EmojiSearchPanelHeight + fullBleedHiddenRows(state) - strip
     } else {
         EmojiSearchPanelHeight + topBarHeight(state.settings) + barCompensation - strip
     }
+    // Fitted to the screen with the keys underneath (#333): sideways, the
+    // panel and the keys together outgrew the window and squashed the keys.
+    val height = toolPanelHeight(state, wanted, floor = FullBleedHeaderHeight)
     Column(
         modifier = Modifier
             .fillMaxWidth()
