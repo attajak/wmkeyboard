@@ -1733,7 +1733,7 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         mode(R.string.modes_emoji_row_title, R.string.modes_active_subtitle),
         mode(R.string.modes_symbol_row_title),
         // Named after the global feature each one only overrides, so DETAIL:
-        // a search for "autocorrect" means the Typing switch.
+        // a search for 'autocorrect' means the Typing switch.
         mode(R.string.modes_autocorrect_title, R.string.modes_active_subtitle, EntryWeight.DETAIL),
         mode(R.string.modes_autocapitalize_title, weight = EntryWeight.DETAIL),
         mode(R.string.modes_suggestions_title, weight = EntryWeight.DETAIL),

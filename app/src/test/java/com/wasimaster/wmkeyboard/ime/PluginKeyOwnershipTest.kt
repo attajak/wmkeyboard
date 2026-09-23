@@ -144,7 +144,7 @@ class PluginKeyOwnershipTest {
         assertTrue(
             "no KeyRows are drawn for a capture target, so a focused box " +
                 "would have nothing on screen to type into it",
-            Regex("""val captureRows = when \(state\.captureTarget\(\)\)""")
+            Regex("""fun keyRowsUnderPanel\(state: KeyboardUiState\): Boolean = when \(state\.captureTarget\(\)\)""")
                 .containsMatchIn(screenSource),
         )
     }

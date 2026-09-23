@@ -178,7 +178,7 @@
     <string name="search_kw_typing_suggestions">candidates wordbar</string>
     <string name="search_kw_typing_swipe_start_distance">accidental unwanted stray</string>
     <string name="search_kw_typing_undo_autocorrect">revert original</string>
-    <string name="search_kw_typing_auto_close_brackets">autoclose pair parentheses braces parenthesis matching complete closing</string>
+    <string name="search_kw_typing_auto_close_brackets">autoclose pair parentheses braces parenthesis matching complete</string>
     <string name="search_kw_typing_wrap_selection">surround parentheses quotes auto braces</string>
     <string name="search_kw_update_row_check">upgrade latest release</string>
     <string name="search_kw_voice_engine">offline whisper device model server transcription selfhosted hosted speaches remote</string>
@@ -186,8 +186,8 @@
     <string name="search_kw_sticker_suggest">suggestions suggest tray prediction autocomplete</string>
     <string name="search_kw_translate_engine">offline private internet airplane local device ml kit google model download cloud</string>
     <string name="search_kw_translate_models">offline translation model download delete storage ml kit google</string>
-    <string name="search_kw_translate_downloaded_first">order sort top offline model picker menu language list</string>
-    <string name="search_kw_translate_only_downloaded">hide filter offline model picker menu language list short</string>
+    <string name="search_kw_translate_downloaded_first">order sort top offline model picker menu list</string>
+    <string name="search_kw_translate_only_downloaded">hide filter offline model picker menu short</string>
 
     <string-array name="search_word_groups">
         <item>haptics haptic vibration vibrate vibrations vibrator buzz rumble</item>
