@@ -211,8 +211,15 @@ enum class WebDavPreset(
     val serverIsId: Boolean = false,
 ) {
     CUSTOM("", "", ""),
-    NEXTCLOUD("nextcloud", "Nextcloud", "https://{server}/remote.php/dav/files/{user}/{folder}"),
-    OWNCLOUD("owncloud", "ownCloud", "https://{server}/remote.php/dav/files/{user}/{folder}"),
+
+    /**
+     * `remote.php/webdav`, not `remote.php/dav/files/<user>`: the second needs
+     * the internal user id, and what the user signs in with (and what the
+     * browser sign-in hands back) can be an email address instead. Both
+     * servers still serve the older path as the signed-in user's files.
+     */
+    NEXTCLOUD("nextcloud", "Nextcloud", "https://{server}/remote.php/webdav/{folder}"),
+    OWNCLOUD("owncloud", "ownCloud", "https://{server}/remote.php/webdav/{folder}"),
     SEAFILE("seafile", "Seafile", "https://{server}/seafdav/{folder}"),
     KOOFR("koofr", "Koofr", "https://app.koofr.net/dav/Koofr/{folder}"),
     PCLOUD_US("pcloud-us", "pCloud (US)", "https://webdav.pcloud.com/{folder}"),

@@ -73,11 +73,12 @@ class NewBackupLocationsTest {
     @Test
     fun `webdav presets build the address, encoding each part`() {
         assertEquals(
-            "https://cloud.example.com/remote.php/dav/files/me%40x/WM%20Keyboard/",
+            "https://cloud.example.com/remote.php/webdav/WM%20Keyboard/",
             WebDavPreset.NEXTCLOUD.url("https://cloud.example.com/", "me@x", "WM Keyboard"),
         )
         assertEquals("https://app.koofr.net/dav/Koofr/a/b/", WebDavPreset.KOOFR.url("", "u", "/a/b/"))
         assertEquals("https://u123.your-storagebox.de/bk/", WebDavPreset.STORAGE_BOX.url("", "u123", "bk"))
+        assertEquals("https://p.example/seafdav/Lib/", WebDavPreset.SEAFILE.url("p.example", "u", "Lib"))
         assertTrue(WebDavPreset.KDRIVE.needsServer)
         assertFalse(WebDavPreset.YANDEX.needsServer)
     }
