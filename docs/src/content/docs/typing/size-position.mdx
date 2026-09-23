@@ -50,6 +50,10 @@ Each padding is claimed at its own edge before **Keyboard position** gets a say,
 
 Portrait is the base size: everything in the two sections above. Three other screen shapes can each override any of it, namely **Landscape**, **Portrait, unfolded** and **Landscape, unfolded**. Whatever you leave untouched on an override follows portrait, so tuning one shape never means setting up the rest.
 
+<PhoneFrame side caption="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider.">
+  <Shot id="typing/size-position-per-screen" alt="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider." />
+</PhoneFrame>
+
 Landscape is the one exception, and it starts shorter rather than following portrait. A phone turned sideways keeps its width but has less than half the height, so a portrait-sized board would take the whole screen. See [what landscape starts at](#what-landscape-starts-at) below.
 
 "Unfolded" isn't read from a fold sensor. It's decided by the screen's smallest dimension being at least 600dp, checked live as the configuration changes. That deliberately reads a phone turned sideways as still "not unfolded", since it's wide but still a phone. A genuinely large screen counts as "unfolded" however it's held, whether that's an opened foldable's inner display or a tablet that never folded at all. There's no separate "folded" state in the code. Portrait's values are what a folded or ordinary phone always used, which is why the settings screen's own caption calls portrait your "folded" size.
@@ -60,10 +64,6 @@ Tap a shape's row to expand its editor:
 - **Key height**, **Number row height** (if the number row is on), **Bottom padding**, **Keyboard width**, **Font size**, **Key spacing**, **Left padding**, **Right padding**, **Bottom row height**, and, when width is under 100%, **Keyboard position**. Same ranges as their portrait counterparts above.
 - **Number row**, the one override that isn't a number at all. Landscape is what it's there for: it has the least room for a sixth row and the most need for the keys underneath it, which is why sideways starts without it unless you've set the digit row by hand.
 - **Follow portrait again**, which appears only once a shape has at least one override set. It clears every override for that shape in one tap. On landscape that returns it to the landscape defaults below, not to your portrait numbers.
-
-<PhoneFrame caption="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider.">
-  <Shot id="typing/size-position-per-screen" alt="Per-screen sizing: Landscape expanded, showing the Keyboard scale slider." />
-</PhoneFrame>
 
 Everything in [one-handed, split and floating](#one-handed-mode) below is global instead. It applies the same whichever screen shape you're on.
 
@@ -152,15 +152,15 @@ Pin the **One-handed** tool to your toolbar and tapping it toggles one-handed on
 
 **Floating keyboard** detaches the keyboard from the bottom of the screen into a small, movable panel that hovers over whatever app is open. It's off by default. Turn it on and two sliders appear: **Floating keyboard width**, 240dp to 500dp, default **320dp**, and **Floating keyboard height**, 60% to 160% of the keyboard's normal height, default **100%**. The resize grip on the panel drives the same two values, and shares the 240dp floor and the 60–160% height range. It doesn't share the width ceiling: see the edge case below. A **Reset the floating panel** row appears below the sliders once you've moved or resized the panel, and puts its size and position back.
 
+<PhoneFrame side caption="The floating panel's handle bar: dock button, drag pill, and resize grip.">
+  <Shot id="typing/size-position-floating" alt="The floating panel's handle bar: dock button, drag pill, and resize grip." />
+</PhoneFrame>
+
 The panel's handle bar carries three controls, left to right:
 
 - **Dock button**, a fullscreen icon that returns the keyboard to its normal, docked position.
 - **Drag pill**. Dragging anywhere across the middle of the handle bar moves the panel, not just the small pill drawn there. Its position is saved as a fraction of the free space around it rather than as a pixel coordinate, so it survives rotation. By default that's centered horizontally and pinned to the bottom of the available space.
 - **Resize grip**, drawn as two short diagonal lines rather than a diagonal-arrows icon, deliberately, so it doesn't read as another fullscreen button. Dragging it resizes width and height together: width tracks your finger directly, height tracks it inverted, because the grip sits on the panel's *top* bar. Drag up to grow the panel and down to shrink it.
-
-<PhoneFrame caption="The floating panel's handle bar: dock button, drag pill, and resize grip.">
-  <Shot id="typing/size-position-floating" alt="The floating panel's handle bar: dock button, drag pill, and resize grip." />
-</PhoneFrame>
 
 Floating mode replaces the normal layout logic rather than combining with it. While it's on:
 

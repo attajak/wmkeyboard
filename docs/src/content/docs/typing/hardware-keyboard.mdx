@@ -35,6 +35,10 @@ Android composes a physical dead key (an accent key that combines with the next 
 
 <SettingsPath path="Typing / Physical keyboard / Tool shortcuts list" />
 
+<PhoneFrame side caption="Hotkey badges under the toolbar icons after double-tapping Ctrl.">
+  {/* shot: typing/hardware-tool-picker */}
+</PhoneFrame>
+
 **Tool shortcuts** (on by default) let you open any tool without touching the screen at all. Double-tap <KeyCap>Ctrl</KeyCap>, a combination nothing else uses, and every button on the keyboard sprouts a small badge under its icon showing the key that operates it. Press that key and the button fires. Press nothing and the badges disappear on their own.
 
 The badges cover everything on screen:
@@ -51,10 +55,6 @@ The badges spell their modifier out, `Ctrl+2` and `Shift+Q`, because those are t
 
 <SettingsPath path="Typing / Physical keyboard / Time to press a key" /> sets how long they stay up: eight seconds by default, anywhere from one to thirty. Keep it long while you're learning them and short once you aren't. The keyboard does nothing else until the time runs out or you press a key.
 
-<PhoneFrame caption="Hotkey badges under the toolbar icons after double-tapping Ctrl.">
-  {/* shot: typing/hardware-tool-picker */}
-</PhoneFrame>
-
 <KeyCap>T</KeyCap> still opens the full toolbox from anywhere, and <KeyCap>?</KeyCap> opens the cheat sheet: a complete legend of every key, including the tools that aren't on screen to wear a badge. While the badges are up, a small `? for all keys` pill in the bottom-right corner points at it. The legend has a close button of its own, so you're never stuck in it without a keyboard.
 
 ### Ctrl and a number, with no leader
@@ -66,6 +66,10 @@ The toolbar's numbers also work as a direct chord, so the common tools are one k
 That's the one setting here worth a second thought before you leave it on. Browsers and editors use <KeyCap>Ctrl</KeyCap>+number to switch tabs, and while you're writing in a text field the keyboard takes the key first. Turn it off and the same numbers still work after the leader key.
 
 ### The tool letters
+
+<PhoneFrame side caption="The Tool shortcuts list screen: every tool with the letter that opens it.">
+  <Shot id="typing/hardware-shortcuts-list" alt="The Tool shortcuts list screen: every tool with the letter that opens it." />
+</PhoneFrame>
 
 The default letter for each tool is close to its own initial, wherever that letter was still free:
 
@@ -87,10 +91,6 @@ The default letter for each tool is close to its own initial, wherever that lett
 | <KeyCap>N</KeyCap> | Numpad | | |
 
 Open **Tool shortcuts list** to change any of it. (The screen is reachable only while Tool shortcuts is on.) Tap the shortcut key row to pick a different double-tapped modifier, <KeyCap>Ctrl</KeyCap>, <KeyCap>Alt</KeyCap> or <KeyCap>Shift</KeyCap>, or to capture an arbitrary chord live from an attached keyboard. Tap any tool's row to type a new single letter or digit for it. **Reset to defaults** puts every letter and the shortcut key itself back the way they started.
-
-<PhoneFrame caption="The Tool shortcuts list screen: every tool with the letter that opens it.">
-  <Shot id="typing/hardware-shortcuts-list" alt="The Tool shortcuts list screen: every tool with the letter that opens it." />
-</PhoneFrame>
 
 <KeyCap>T</KeyCap> and <KeyCap>?</KeyCap> are reserved and can never be bound to a tool: they always open the toolbox and the cheat sheet, respectively. The full binding table and cheat sheet also live in [Hardware shortcuts](/reference/shortcuts/).
 
@@ -138,6 +138,10 @@ One thing to know: some apps want <KeyCap>Ctrl</KeyCap>+<KeyCap>Space</KeyCap> f
 
 <SettingsPath path="Typing / Physical keyboard / Arrow keys move a highlight" />
 
+<PhoneFrame side caption="The focus ring highlighting a result inside an open panel after an arrow-key press.">
+  {/* shot: typing/hardware-focus-ring */}
+</PhoneFrame>
+
 Once a tool is open, **Arrow keys move a highlight** (on by default) lets you drive it without touching the screen. The arrow keys move a highlighted outline over the panel's results, chips or search box. <KeyCap>Enter</KeyCap> activates whatever's highlighted. <KeyCap>Tab</KeyCap> jumps between the panel's sections (search, category chips, then results) once the highlight exists. <KeyCap>Home</KeyCap> and <KeyCap>End</KeyCap> jump to a section's first and last item, and <KeyCap>PageUp</KeyCap>/<KeyCap>PageDown</KeyCap> move four rows at a time through a long grid. The highlight is a filled, outlined ring in your theme's accent color, and it only ever appears after you press a key. It never shows up while you're using the keyboard by touch.
 
 This covers nearly every tool, searchable or not: the AI panel's actions and Replace/Insert buttons, translate's language picker, media controls' transport, the password generator's options, a running plugin's buttons and text boxes, the calendar's month arrows and day grid, the sound & haptics switches and style chips, the weather refresh, the voice tool's mic. The camera and scanner tools join in once they're showing a captured photo or a scanned result. The live viewfinder itself stays touch-only.
@@ -145,10 +149,6 @@ This covers nearly every tool, searchable or not: the AI panel's actions and Rep
 The grammar strip is navigable too, with one difference. You're usually mid-sentence while it's open, so the arrows keep moving your cursor. The highlight appears only when you open the tool from the shortcut key, and <KeyCap>Enter</KeyCap> on an issue applies its top suggestion.
 
 A few tools work by typing rather than highlighting. The calculator and the unit and currency converters take digits and operators straight from the physical keys (type `2*3` and the display shows `2×3`), and in the calculator <KeyCap>Enter</KeyCap> is the <KeyCap>=</KeyCap> key. The text-editing and numpad panels stay touch-only on purpose, since a physical keyboard already does everything they offer. The compass, level and moon phase have no buttons at all, and the handwriting canvas is for fingers and pens.
-
-<PhoneFrame caption="The focus ring highlighting a result inside an open panel after an arrow-key press.">
-  {/* shot: typing/hardware-focus-ring */}
-</PhoneFrame>
 
 <SettingsPath path="Typing / Physical keyboard / Esc closes the tool" />
 

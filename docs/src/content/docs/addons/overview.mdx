@@ -53,6 +53,10 @@ Browsing a repository, or even opening a `wmkeyboard://` link from someone else'
 
 ## What a repository can and can't do
 
+<PhoneFrame side caption="A plugin's detail page shows what it can do before you install it. This is the one addon type that isn't pure data.">
+  <Shot id="addons/plugin-trust-preview" alt="A plugin's detail page shows what it can do before you install it — this is the one addon type that isn't pure data." />
+</PhoneFrame>
+
 With one exception, every addon type is plain data. No code runs when you install or use one. A theme is colors and shapes, a dictionary is a word list, a sound is an audio file. Nothing in any of those formats can do anything besides be read.
 
 A few rules keep that trust model intact even before an addon reaches your device:
@@ -61,10 +65,6 @@ A few rules keep that trust model intact even before an addon reaches your devic
 - **A relative path stays inside the repository.** A reference written relative to the manifest resolves under the manifest's own folder and nowhere else: a `../` walking up, a `/`-rooted path, or a protocol-relative `//host/path` are all refused, so one manifest can't quietly serve files that belong to somebody else on the same host. A publisher can still name an absolute `https://` URL, on any host, which is how a release asset or a CDN gets used.
 - **Checksums, verified when present.** A repository can publish a `sha256` for any file. If it does, the app verifies it after download and refuses the install on a mismatch.
 - **Size caps are enforced mid-download.** A download that exceeds its type's limit (the table above) is aborted in flight rather than flagged after the fact.
-
-<PhoneFrame caption="A plugin's detail page shows what it can do before you install it. This is the one addon type that isn't pure data.">
-  <Shot id="addons/plugin-trust-preview" alt="A plugin's detail page shows what it can do before you install it — this is the one addon type that isn't pure data." />
-</PhoneFrame>
 
 Plugins are the sole exception: they carry Lua that actually runs. That code is sandboxed with no way to read what you type and no access to the text field, the clipboard, or the network. The sandbox has no such API to withhold in the first place. A plugin can ask for local on-device storage and nothing else, and because nothing in the sandbox can reach the network, whatever it stores can't leave the device either.
 

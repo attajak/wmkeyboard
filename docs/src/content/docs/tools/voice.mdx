@@ -54,15 +54,15 @@ By default, dictation owns the field while it runs. The words being recognized s
 - **Type while you speak** keeps the mic running through everything you do. Nothing goes into the field until you pause: each phrase lands whole, at wherever your cursor is by then. Keys, glide typing, suggestions, cursor moves, layout switches and panels-that-aren't-a-panel all carry on around it.
 - **Type while you speak, plain text** is the same, minus every text rule. No spoken punctuation, no punctuation from the recognizer, and no spaces added around what lands. You control all of it from the keys. It's the one to pick for code, terminals, and anywhere you want exactly the words you said and nothing else.
 
+<PhoneFrame side caption="An interactive session: one pulsing mic at the left of the suggestion strip, keys and candidates untouched.">
+{/* shot: tools/voice-mic-chip */}
+</PhoneFrame>
+
 A pause is not a full stop. The recognizer capitalizes the first word of every phrase as if it opened a sentence, because it can't see the field; the keyboard can, and it keeps that capital only where the words in front of your cursor end a sentence — nothing at all, a new line, or a full stop, question mark or exclamation mark, in whatever script wrote it. A phrase that lands after a comma, or after a word you just typed, starts small. This is about what's written, not about the keys: the capital lands on the first word of an empty field whether or not that field asks the keyboard for sentence capitals, and whether or not **Automatic capitals** is on. The word I and its contractions keep their capital anywhere, and so does anything with a second capital inside it (NASA, McKinsey). A name at the start of a phrase can't be told from a sentence capital, so shift it the way you would a typed one. Spacing and the capital are read again after every phrase, so a long dictation with pauses in it comes out as one sentence rather than a row of them. Plain text is judged the same way. It asks the recognizer for no capitals, so usually there is nothing to decide, but the system recognizer puts one on regardless and Whisper has no such switch at all — and when a capital does arrive, where your cursor sits still decides it. What plain text drops is the punctuation and the spacing, not the first letter of a sentence.
 
 The reason the default can't do this is worth knowing: a partial result is cumulative. Each one rewrites the whole phrase, not just the new words, so a letter you type into the middle of it gets overwritten by the next partial a moment later. The two interactive modes solve that by never putting a partial in the field at all. You lose the live preview of the sentence, and in exchange you get the whole keyboard back while the mic is open.
 
 Pair them with **Compact bar over the keys**, which is where they make the most sense. In that view an interactive session shrinks to a single pulsing mic at the left of the suggestion strip, and the strip keeps its room, so your candidates, the emoji row and the clipboard chip all stay reachable while you talk. Tap the mic to end the session. Tapping the voice tool does the same and puts the mic away once the last phrase has landed; with nothing running it just puts it away. If something goes wrong (no permission, no recognizer, no offline model), the full compact bar comes back for as long as it has something to tell you.
-
-<PhoneFrame caption="An interactive session: one pulsing mic at the left of the suggestion strip, keys and candidates untouched.">
-{/* shot: tools/voice-mic-chip */}
-</PhoneFrame>
 
 Two smaller things change in these modes. They always keep listening, whatever **Keep listening** is set to, because a session that ended at the first pause would leave you typing into a closed mic. And they're far more patient with silence: twelve quiet retries instead of two, which is roughly a minute and a half of not talking, because silence is the normal state of a mode where you speak a line and then spend a while fixing it by hand.
 
@@ -70,7 +70,7 @@ Two smaller things change in these modes. They always keep listening, whatever *
 
 The third surface isn't a keyboard at all. Pick **Collapsed bar, keyboard hidden**, or tap the collapse button in the panel or the compact bar, and the keyboard gives its whole window back to the app you're typing in. What's left is a small pill of dictation controls floating on top. Only the pill itself is touchable: taps anywhere around it go through to the app underneath, so you can scroll the thing you're dictating into while you talk.
 
-<PhoneFrame caption="The collapsed bar floating over an app, with the keyboard out of the way.">
+<PhoneFrame side caption="The collapsed bar floating over an app, with the keyboard out of the way.">
 {/* shot: tools/voice-collapsed-bar */}
 </PhoneFrame>
 

@@ -144,6 +144,10 @@ Every word you've typed or added sits in one list, with the highest weight first
 
 **Date added** is when a word joined your dictionary, not when you last typed it, so a word you type every day stays where it joined. That makes **Newest first** the quick way to review what the keyboard picked up recently. Words saved by a version from before this order existed have no date of their own, so they sort by when you last typed them instead. Words learned in the same typing session share a date and sit A to Z among themselves.
 
+<PhoneFrame side caption="Adding a word by hand from the Add word dialog.">
+  ![Adding a word by hand from the Add word dialog.](@assets/screens/smart/personal-dictionary-add.webp)
+</PhoneFrame>
+
 **Add word** opens a dialog with a single field. Confirm and the word goes in at a weight of one, or one more than it already had, marked as added by hand. Adding a word says it is a word, not that it is a frequent one, so it earns weight the way every other word does, by being typed. What the mark buys is that the word is immediately safe from autocorrect whatever the **Learn a word after** threshold says, and that it is the last thing compaction (see below) would ever remove. A trash icon on each row removes that word, and drops it out of any word pairs it was part of.
 
 **Press any row to edit it.** The dialog that opens holds the spelling, the weight and a **Keep these capitals** switch, and you can change any of them. Fix the spelling and the word keeps everything it had: its weight, the language it was learned under, and every word pair and triple it was part of, so "have a good" still predicts the corrected word afterwards. Respell a word onto one that's already in the list and the two merge into one entry. The weight is the same number the row reads out as "Seen N times", typed straight in or nudged with the minus and plus buttons beside it, which step by one below 10, by ten below 100, and so on up a decade at a time. Anything from 1 to 1,000,000 is accepted. Raising a weight makes the word win the strip sooner; lowering it does the reverse, and a word taken down to 1 is back in reach of **Remove one-off words** unless you added it by hand. Weight has no effect on autocorrect protection: every word on this list is shielded whatever its number, subject only to the **Learn a word after** threshold.
@@ -153,10 +157,6 @@ Every word you've typed or added sits in one list, with the highest weight first
 To add a lot of words at once from something you already wrote, open the [Learn from text](/tools/learn-from-text/) tool in that note or draft. It lists the words the keyboard doesn't know yet, and adds the ones you keep checked exactly as **Add word** would.
 
 Words are capped at 32 characters, counted after the word is lowercased. Anything longer is dropped on the floor by both paths: typing it teaches nothing, and **Add word** closes the dialog as though it worked while the list stays exactly as it was. There's no error and no warning, so if a long entry never turns up in the list, count the characters.
-
-<PhoneFrame caption="Adding a word by hand from the Add word dialog.">
-  ![Adding a word by hand from the Add word dialog.](@assets/screens/smart/personal-dictionary-add.webp)
-</PhoneFrame>
 
 Every add, edit or remove here updates a version marker the running keyboard watches. If the keyboard is open in another app while you edit the list, it reloads your change instead of silently overwriting it the next time it saves. Before you've typed or added anything, the screen reads "Nothing here yet. Words appear as you type, if 'Learn from typing' is on in Privacy. You can also add a word above."
 
@@ -197,14 +197,14 @@ The learned-word file this screen deletes *is* your personal dictionary, so this
 
 Your personal dictionary is a single JSON file in the app's private storage, never uploaded anywhere on its own. Two things are true by default, and two are opt-in:
 
+<PhoneFrame side caption="The Dictionary section of a manual export, off by default.">
+  <Shot id="smart/personal-dictionary-backup-toggle" alt="The Dictionary section of a manual export, off by default." />
+</PhoneFrame>
+
 - **It's inert during direct boot.** Between a restart and your first unlock, the file is unreachable, since it lives in credential-encrypted storage. The keyboard runs with an empty, in-memory-only vocabulary: nothing is read, and nothing you type in that state is written anywhere. Once you unlock, the real file is reattached and the temporary in-memory copy is discarded rather than merged in.
 - **Nothing mirrors outside the app by default.** An opt-in toggle can additionally copy newly-learned words (not autocorrect targets) into Android's own shared personal dictionary, so other keyboards and spell checkers can see them too. It's off by default, one-directional, and forced off automatically during direct boot however you've set it, since nothing typed on a lock screen should be learned anywhere. A separate toggle, on by default, does the reverse for a different field of that same system list. It reads back any shortcut entries you've defined there (like "omw" → "on my way") and offers the full phrase as you type the shortcut. Glide the shortcut instead and the full phrase is typed straight away; while you swipe, the floating word, the suggestion strip and the words offered when you hold still show it as `omw = on my way`, and one backspace puts the shortcut back. To move words across by hand in either direction, see [Android's dictionary](#androids-dictionary).
 - **Android's own backup is opt-in.** Turning on "Back up with Android" includes your whole keyboard, learned words included, in Android's standard app-data backup and phone-to-phone transfer.
 - **A manual export leaves it out by default.** The Backup & restore screen's "Dictionary" section covers your personal vocabulary, next-word patterns, rank adjustments, the fixes you have taught autocorrect and where your taps land, and it starts unchecked. A settings file you export and share out of habit carries no typing data along unless you deliberately opt in. Restoring that section does signal a running keyboard to reload, the same as adding or removing a word does.
-
-<PhoneFrame caption="The Dictionary section of a manual export, off by default.">
-  <Shot id="smart/personal-dictionary-backup-toggle" alt="The Dictionary section of a manual export, off by default." />
-</PhoneFrame>
 
 See [Incognito & secure fields](/privacy/incognito/) for the rest of how incognito and secure fields work, and [Backup & restore](/privacy/backup/) for the full export/restore and Android-backup picture.
 

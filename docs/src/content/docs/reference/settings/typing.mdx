@@ -110,6 +110,10 @@ Full writeup: [Autocorrect](/smart/autocorrect/) covers the confidence math, wha
 | Adjust rank changes | Choice | Both | always |
 | Delete edits imported lists | Toggle | On | always |
 
+<PhoneFrame side caption="The Suggestions group, including the three dictionary and blacklist navigation rows.">
+  <Shot id="reference/settings/typing-suggestions-group" alt="The Suggestions group, including the three dictionary and blacklist navigation rows." />
+</PhoneFrame>
+
 **Suggestions** is the master switch for the whole strip: word completions, typo corrections offered as candidates, and next-word prediction. **Punctuation marks** sets which marks the punctuation chips offer, one per character, in the order you want them. Leave it blank and it falls back to the shipped `.,?!'`. **Number of suggestions** splits the strip evenly, so raising it on a narrow screen buys candidates at the cost of reading each one. **Scroll the suggestions** lifts that trade: each word keeps its natural size and the strip scrolls sideways when they overrun it, so five or six candidates read fine on a narrow phone. Short words still fill the strip exactly as before. **Shorten long words** picks where a word that still overruns its slot is cut: in the middle, so both its start and its ending stay readable (`Punct…tion`), or at the end (`Punctuat…`). The color the strip paints a correction in lives with the rest of its looks, under [Look & feel / Toolbar](/reference/settings/appearance/).
 
 **Remember a new word after** is how many times you have to type a word *nothing recognises* before it's saved to your personal dictionary at all. It only counts a use once you've moved on and left the word alone, so a typo you go back and fix never counts. Set it to 1 to save every new word straight away, which is what versions before this did. Words already in a dictionary skip this entirely and are counted the moment you type them.
@@ -127,10 +131,6 @@ All three are covered in full on [Personal dictionary](/smart/personal-dictionar
 **Offer corrections it isn't sure about** puts a fix that came close to firing on the strip as a chip rather than dropping it. It never applies anything on its own, and a correction you have already undone once is never offered. See [Autocorrect](/smart/autocorrect/#corrections-it-offers-instead-of-applying).
 
 The three navigation rows at the bottom open their own screens rather than an inline setting. The subtitle on **Suggestion blacklist** starts as "Words to never suggest or autocorrect to" and becomes a running count ("3 words never suggested") once you've added something. All three are documented in full on [Dictionaries & words](/reference/settings/dictionaries/).
-
-<PhoneFrame caption="The Suggestions group, including the three dictionary and blacklist navigation rows.">
-  <Shot id="reference/settings/typing-suggestions-group" alt="The Suggestions group, including the three dictionary and blacklist navigation rows." />
-</PhoneFrame>
 
 Full writeup: [Suggestions & prediction](/smart/suggestions/) for the strip itself, [Contact-aware typing](/smart/contacts/) for the three permission-gated toggles, [Password manager chips & smart replies](/smart/autofill/) for the two Android-11 toggles, [Autocorrect](/smart/autocorrect/#reducing-typos-before-they-happen) for autopilot, and [Words on the keys](/typing/words-on-the-keys/) for the octopus screen.
 
@@ -286,13 +286,13 @@ Full writeup: [One-time codes](/smart/one-time-codes/), and [Permissions](/priva
 **Two settings are named almost the same thing.** This one, "Swipe down to hide the keyboard" under Typing → Gestures, dismisses the keyboard on a downward swipe of the **spacebar**. A separate, independent toggle under <SettingsPath path="Appearance / Toolbar / Swipe down to hide" /> does the same for a downward flick on the **toolbar** strip instead. Search results for "swipe down" bring back both. See [Gestures](/typing/gestures/#swiping-down-to-hide-the-keyboard) for the full disambiguation.
 :::
 
+<PhoneFrame side caption="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers.">
+  <Shot id="reference/settings/typing-gestures-group" alt="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers." />
+</PhoneFrame>
+
 **Handwrite with swipes** is a two-option picker rather than a toggle. It decides what a letter-area swipe *means*, and it only appears in the full edition, which is the one that bundles the ML Kit handwriting model. **Extra time for a dot or a cross** is the mirror image of **Delay after typing**. One guards against reading a tap as the start of a glide, the other against reading a tap as a handwriting dot. Only one of the pair is ever on screen, since they hang off opposite `Handwrite with swipes` choices.
 
 **Ask when a glide is unclear** covers the strokes that have no single right answer. Hold your finger still at the end of one and the closest words appear just above your fingertip. Slide onto one and lift to take it. Lift without choosing and you get the best guess, as before. The stroke is finished the moment the words appear, so sliding to one does not redraw it, and sliding down away from the words and lifting types nothing at all. It matters most on a fixed Bangla layout, where ক and খ share a key, so a word and its aspirated twin are drawn identically. The four rows under it set **When to ask** (how close a call a stroke has to be, from Near ties to Every pause), **Time to hold still** (the pause before the words appear), **Hold longer to always ask** (a confident stroke still asks after twice the pause) and **Words to choose from** (two to five). See [When a swipe is a genuine toss-up](/typing/glide-typing/#when-a-swipe-is-a-genuine-toss-up).
-
-<PhoneFrame caption="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers.">
-  <Shot id="reference/settings/typing-gestures-group" alt="The Gestures group: the spacebar's Quick swipe and Hold + swipe pickers." />
-</PhoneFrame>
 
 Full writeup: [Gestures](/typing/gestures/) for the spacebar/backspace/volume-key drags, [Glide typing](/typing/glide-typing/) for the glide sub-settings, and [Handwriting](/tools/handwriting/#handwriting-without-opening-the-panel) for handwrite mode.
 
@@ -379,7 +379,7 @@ Three rows decide how much the keyboard takes from your apps. Check them first i
 
 **Number keys select suggestions** ships on **Alt + number**, so a digit picks a strip candidate with no shortcut key first. **Show the suggestion numbers** only appears in that mode. It puts the key under each suggestion for as long as a physical keyboard is attached, and on "After the shortcut key" the numbers already show at the moment they work. **Time to press a key** is how long the badges stay up after the shortcut key. Nothing else happens until they clear or you press one.
 
-<PhoneFrame caption="The Physical keyboard group, with Tool shortcuts list showing the current shortcut key.">
+<PhoneFrame side caption="The Physical keyboard group, with Tool shortcuts list showing the current shortcut key.">
   <Shot id="reference/settings/typing-physical-keyboard-group" alt="The Physical keyboard group, with Tool shortcuts list showing the current shortcut key." />
 </PhoneFrame>
 

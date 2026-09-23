@@ -26,11 +26,11 @@ Setting **Press and hold, then swipe** to Cursor or Numpad costs one thing: hold
 
 ## Moving the cursor with a spacebar swipe
 
-Set a slot to **Cursor** and the drag moves the text cursor instead of typing. The caret steps one character for every 16&nbsp;dp of horizontal travel, in whichever direction you drag. That distance is a slider of its own, **Cursor speed**, which sits under the two swipe pickers and runs 8–32&nbsp;dp. Shorter moves the caret faster. Any composing text in progress (a word mid-transliteration, say) commits first, without autocorrect, so the cursor lands where you can see it rather than jumping past a word that was still being corrected.
-
-<PhoneFrame caption="Dragging the spacebar moves the text cursor a character at a time.">
+<PhoneFrame side caption="Dragging the spacebar moves the text cursor a character at a time.">
   {/* shot: typing/spacebar-cursor-swipe */}
 </PhoneFrame>
+
+Set a slot to **Cursor** and the drag moves the text cursor instead of typing. The caret steps one character for every 16&nbsp;dp of horizontal travel, in whichever direction you drag. That distance is a slider of its own, **Cursor speed**, which sits under the two swipe pickers and runs 8–32&nbsp;dp. Shorter moves the caret faster. Any composing text in progress (a word mid-transliteration, say) commits first, without autocorrect, so the cursor lands where you can see it rather than jumping past a word that was still being corrected.
 
 <SettingsPath path="Typing / Gestures / 2-D cursor touchpad" />
 
@@ -120,16 +120,16 @@ A layout can carry its own set instead. Open a layout in the [layout editor](/la
 
 <SettingsPath path="Key press / Delete keys" />
 
+<PhoneFrame side caption="Dragging backspace to the left deletes text a word at a time instead of a character at a time.">
+  {/* shot: typing/backspace-word-swipe */}
+</PhoneFrame>
+
 **Swipe to delete** (on by default) lets a leftward drag on <KeyCap>⌫</KeyCap> take out more than the one character a press does. Backspace treats tap, hold-to-repeat and this swipe as one gesture. A press that stays still starts the normal hold-to-repeat once **Time before a key repeats** has elapsed, exactly as described on [Keys & typing basics](/typing/basics/#multi-touch-and-key-repeat). Moving left past a small slop cancels that repeat and switches to the swipe. Backspace owns the whole stroke: glide typing, handwriting and the floating-word flick never start from it, even though the key sits right beside the bottom letter row, so neither a swipe nor a held, repeating backspace that drifts onto the letters types a word on top of what it deletes. That holds with **Swipe to delete** off too, and the same goes for <KeyCap>⌦</KeyCap>.
 
 **Swipe deletes** picks what one step of that swipe takes off:
 
 - **Words** (the default) clears a sentence in one pull.
 - **Characters** walks back a letter at a time, which is the finer tool when the fix is inside a word rather than at the end of it. A whole multi-part emoji, or a whole conjunct in a script that asks for it, still counts as one character, the same as a backspace press does.
-
-<PhoneFrame caption="Dragging backspace to the left deletes text a word at a time instead of a character at a time.">
-  {/* shot: typing/backspace-word-swipe */}
-</PhoneFrame>
 
 Each step costs a certain amount of leftward travel. In Words mode the cost shrinks as you go, so clearing a whole sentence is one long pull rather than a series of flicks. The first word costs the most: **Word delete distance**, 72&nbsp;dp by default and adjustable 32–120&nbsp;dp in the same Delete keys group. Every word after it costs less, on a fixed curve derived from that one number, down to a floor past which extra words get no cheaper. In Characters mode there is no curve at all: every character costs the same **Character delete distance**, 20&nbsp;dp by default and adjustable 8–48&nbsp;dp, so the count stays easy to follow.
 

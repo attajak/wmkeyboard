@@ -20,6 +20,10 @@ install one addon at a time.
 
 ## Adding a repository
 
+<PhoneFrame side caption="Pasting a repository address. The preview line under the field shows exactly what will be fetched.">
+  {/* shot: addons/add-repository-dialog */}
+</PhoneFrame>
+
 Open **Add repository**. Paste an address into the field. As you type, the
 dialog shows what the address resolved to (`The app reads <url>`), so you can
 see where the data comes from before anything is fetched:
@@ -36,10 +40,6 @@ see where the data comes from before anything is fetched:
 Plain `http://` is rejected rather than silently upgraded to https, and so is
 anything with a non-https scheme. The **Add** button stays disabled until the
 address resolves.
-
-<PhoneFrame caption="Pasting a repository address. The preview line under the field shows exactly what will be fetched.">
-  {/* shot: addons/add-repository-dialog */}
-</PhoneFrame>
 
 If the address doesn't resolve, or the resulting page can't be read as an
 addon repository, you get an error dialog rather than a half-added entry.
@@ -83,6 +83,10 @@ information at all gets no licence row, rather than a row saying it has none.
 
 ## Installing an addon
 
+<PhoneFrame side caption="The prompt after a first install, offering to switch to what you just installed.">
+  <Shot id="addons/apply-prompt" alt="The prompt after a first install, offering to switch to what you just installed." />
+</PhoneFrame>
+
 Tap the download arrow on a card, or **Install** on its detail page. Installing
 always does two things and stops. It puts the file on your device, and then,
 for themes, layouts, icon packs, emoji fonts, key sounds, sound packs and
@@ -93,10 +97,6 @@ They're live the moment they land.
 That split matters because a repository is meant to be safe to browse.
 Installing three themes while you're comparing them should not repaint your
 keyboard three times.
-
-<PhoneFrame caption="The prompt after a first install, offering to switch to what you just installed.">
-  <Shot id="addons/apply-prompt" alt="The prompt after a first install, offering to switch to what you just installed." />
-</PhoneFrame>
 
 The question only appears the first time you install something with a slot to
 fill: updating an addon that wasn't already active just updates it quietly.

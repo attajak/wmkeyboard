@@ -35,13 +35,13 @@ Typing `:cat:` is a different feature entirely: it searches or auto-commits an e
 
 ## Searching for an emoji
 
+<PhoneFrame side caption="Typing 'cat' and 'বিড়াল' in the panel's search field, both surfacing the same cat emoji.">
+  {/* shot: emoji/panel-search */}
+</PhoneFrame>
+
 Tap the magnifying-glass tab at the start of the tab strip. The panel switches into search mode and a search pill appears. With the full-screen panel on (the default) the pill takes the header row beside the back button, in place of the tab strip. With it off, the pill sits under the results instead, just above the keys that type into it, so the emoji stay at the top of the panel where your thumb left them.
 
 The pill is not a text field you type into directly. Tap it, and the letter keys underneath become a query editor: what you type appends to the pill instead of going to your document, and the keyboard's own backspace key deletes from the pill. A small backspace icon inside the pill deletes from your actual text field instead, without leaving search. Tapping the pill again unlatches typing, and the tab strip returns once the query is empty, so backspacing your query away is the way back to browsing.
-
-<PhoneFrame caption="Typing 'cat' and 'বিড়াল' in the panel's search field, both surfacing the same cat emoji.">
-  {/* shot: emoji/panel-search */}
-</PhoneFrame>
 
 Search understands more than an exact keyword match, layered in this order, where matches on more than one query word add up:
 
@@ -122,13 +122,13 @@ Full reference: [Emoji categories](/reference/settings/emoji/#emoji-categories).
 
 <SettingsPath path="Emoji / Emoji panel / Animated emoji" />
 
+<PhoneFrame side caption="Long-pressing 😀 shows its animation looping, over the send button.">
+  {/* shot: emoji/animated-popup */}
+</PhoneFrame>
+
 Around 880 emoji have an animated version published by Google as part of [Noto Animated Emoji](https://googlefonts.github.io/noto-emoji-animation/). Long-press any of them in the panel and the popup loops the animation, with a **Send animated emoji** button under it that sends the 512×512 GIF into the field you're typing in.
 
 The button normally appears once the animation has loaded, so it doesn't offer to send something you haven't seen. The one exception is when no preview is coming at all, held back by data saving's "ask each time" or lost to a failed fetch. The button still appears there, since pressing it is the only way to answer that. The popup stays open afterward, preview and all, so you can fire off two in a row or pick a skin tone next.
-
-<PhoneFrame caption="Long-pressing 😀 shows its animation looping, over the send button.">
-  {/* shot: emoji/animated-popup */}
-</PhoneFrame>
 
 Two files exist for every animation, and the popup uses them for different jobs. Opening it fetches the WebP (around 350 KB) to loop in the preview. Pressing the button fetches the GIF (around 800 KB) and sends that. Long-press is also how you reach skin tones and favourites, so most long-presses send nothing and shouldn't cost the larger file. The GIF is what goes out because an app that accepts `image/webp` may still draw only its first frame, which would make a "send animated emoji" button a liar.
 

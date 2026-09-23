@@ -62,6 +62,10 @@ Each half of the pair is independent: one can hold a single theme while the othe
 |---|---|---|---|
 | Theme gallery style | Segmented row | Auto / Grouped / Separate | Auto |
 
+<PhoneFrame side caption="Deleting a custom theme asks for confirmation before removing it.">
+<Shot id="reference/settings/themes-delete-confirm" alt="Deleting a custom theme asks for confirmation before removing it." />
+</PhoneFrame>
+
 **Grouped** draws a theme that has more than one look as a single card with a dot per look. **Separate** gives every look its own card. **Auto** reads your answer to the setup wizard's "how much do you want to tweak" question: "keep it simple" gets Separate, and every other answer (including never having answered) gets Grouped. A caption above the control says which way it's currently resolving. See [Theme families and looks](/themes/families/).
 
 | Control | What it does |
@@ -78,10 +82,6 @@ Each half of the pair is independent: one can hold a single theme while the othe
 | Card delete *(custom themes only)* | Confirms first, then removes the theme. Its background and texture images are swept off disk once nothing else still points at them, since looks and family copies share image files. Deleting a variant's own card (Separate style) removes just that look and falls the selection back to the family; deleting a family card, or the first look's card, removes the whole family and falls back to Default |
 
 The grid runs two cards per row. **Default (system)** comes first, with no edit, export, or delete, since it's generated live rather than stored. Then **Your themes**, which only shows once you have at least one. Then **Built-in**, under its own note: "Press a theme to use it. The pencil icon makes a copy that you can edit." Built-in cards never show a delete button. A second caption explains the pin: your own themes always show in the Appearance tool, built-ins only when pinned.
-
-<PhoneFrame caption="Deleting a custom theme asks for confirmation before removing it.">
-<Shot id="reference/settings/themes-delete-confirm" alt="Deleting a custom theme asks for confirmation before removing it." />
-</PhoneFrame>
 
 There are 29 built-in themes: 19 original WM Keyboard designs, plus 10 ports of well-known editor colour schemes (Dracula, Alucard, Nord, Solarized Dark, Solarized Light, Catppuccin Mocha, Catppuccin Latte, Catppuccin Frappé, Catppuccin Macchiato, Tokyo Night). Cyberpunk sits with the ports in the source but isn't one: it's ours, and it's the theme that uses the whole feature set at once (animated board gradient, cut keys, translucent faces, neon outline). Twenty-four of the 29 sit in six families (Nightfall, Pastel, Gradients, Dracula, Solarized, Catppuccin), so the grouped grid shows eleven built-in cards. See [Theming overview](/themes/overview/#choosing-a-theme) for the full list and what each one showcases.
 

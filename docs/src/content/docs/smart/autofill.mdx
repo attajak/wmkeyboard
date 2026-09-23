@@ -24,13 +24,13 @@ They look similar, but the keyboard keeps them well apart. Each lane has its own
 
 Focus a login field with a password manager set as your system autofill service, and its saved entries (if it has any for that app or site) appear as chips across the suggestion strip. The chips take over the strip completely while they're up, so word suggestions don't share the row with them. That's deliberate: a saved login answers the field directly, which beats anything the dictionary could offer. Tap one to fill the field the same way you would from the manager's own dropdown.
 
+<PhoneFrame side caption="Dismissing the chip row to type normally instead.">
+  {/* shot: smart/autofill-dismiss */}
+</PhoneFrame>
+
 There's a dismiss button (✕) at the end of the row if you'd rather ignore the chips and type or search normally. Tapping it clears the chips until the next response comes in, which in practice usually means the next field you focus.
 
 The keyboard asks for up to six chips and sizes them to the strip's height, and no single chip may be wider than half the screen — a long address is ellipsized rather than taking the whole row, so you can always see that there's another entry beside it. The row scrolls horizontally for the rest.
-
-<PhoneFrame caption="Dismissing the chip row to type normally instead.">
-  {/* shot: smart/autofill-dismiss */}
-</PhoneFrame>
 
 Chips are also cleared automatically the moment you leave the field, so a login suggestion for one app never lingers into the next field you tap, in this app or another one.
 

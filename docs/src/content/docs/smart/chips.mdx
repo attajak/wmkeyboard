@@ -29,6 +29,10 @@ The chip's gear icon opens **Calculator** with your expression prefilled. Result
 
 ## Converting currencies and units
 
+<PhoneFrame side caption="A currency chip: amount and source on the left, the converted amount on the right, gear button to open the full converter.">
+  {/* shot: smart/currency-chip */}
+</PhoneFrame>
+
 Type an amount next to a currency (`150 usd`, `150$`, `$150`, or `150 dollars`) and the strip converts it into your other currency. Symbols, spelled-out words and 3-letter codes all work. Big amounts can be written the short way or the long way: `1.5k usd`, `2m dollars`, `3 crore taka`, `2 million dollars`, even `1 thousand 500 dollars`. `k`, `m` and `b` are thousand, million and billion, and `lakh` and `crore` work as well. If what you typed is already in your target currency, the chip flips and converts the other way, so either side of your currency pair gets an answer. The result shows a currency's name rather than its code (`Taka`, not `BDT`), unless you pick the symbol (`৳18,000.00`) or the code under **Write the result as** in the [Currency converter](/tools/utilities/) options. If exchange rates haven't loaded yet, the chip shows a brief spinner while they fetch. In the F-Droid edition it reads **Get the rate** instead and fetches only when you tap it, unless **Fetch rates as you type** is on in the [Currency converter](/tools/utilities/) options.
 
 Coins work the same way, and they're on out of the box. `1 btc`, `0.5 ETH`, `2 bitcoin`, `100 doge` and `100000 sats` all convert into your currency. Point your pair at a coin and the conversion runs the other way, so `1000000 bdt` becomes a fraction of a bitcoin, with enough digits to actually read. Tickers that double as ordinary English words, such as `DOT`, `LINK` and `NEAR`, only count in capitals, so "meet me in 1 near future" stays a sentence. Coin prices load the first time you type a coin amount, not before.
@@ -42,10 +46,6 @@ Anything landing in feet is read as feet plus inches, since that's how people sa
 A conversion chip prefers to echo what you actually wrote: type `100 dollar` and the left side reads `100 Dollar`, not `100 USD`. When the full answer doesn't fit the strip, the chip gives things up one at a time instead of cutting the number off mid-digit. First to go is a `.00` tail on the result, then exact decimals (a rounded preview wears a `~`, as in `~৳122,001`), then names shrink to codes and codes to symbols, then the font steps down a size. Only as a last resort does a spelled-out amount flatten to digits, so `1 thousand` becomes `1000`.
 
 Unit chips walk the same ladder. `1609.344 km` rounds to `1609.34 km` and then `~1609 km`, and a spelled-out unit shrinks to its symbol (`miles` to `mi`) before the amount gives up its words. A feet-and-inches answer walks its own version: it drops the spelled-out names first (`3 feet 3.37 inches` to `3 ft 3.37 in`), then the fraction of an inch (`~3 ft 3 in`), and finally the units themselves, for the prime marks everyone reads as feet and inches anyway (`~3'3"`). None of this changes what a tap types. The inserted amount is always the exact, full-precision result.
-
-<PhoneFrame caption="A currency chip: amount and source on the left, the converted amount on the right, gear button to open the full converter.">
-  {/* shot: smart/currency-chip */}
-</PhoneFrame>
 
 Both chip types share the same wide look (`[icon] query → result [gear]`) and take the full width of the strip, since a recognized calculation or conversion is a better use of that space than word candidates. The date and weather chips further down this page are drawn the same way.
 
@@ -117,6 +117,10 @@ Each detector has guards against the shapes of text that look like a trigger but
 
 <SettingsPath path="Typing / Smart chips" />
 
+<PhoneFrame side caption="Smart chips settings under Typing: master switch and the per-family toggles.">
+  <Shot id="smart/options" alt="Smart chips settings under Typing: master switch and the four per-family toggles." />
+</PhoneFrame>
+
 - **Smart chips**: the master switch, default **on**. Turn it off and all ten chip families below go at once.
 - **Calculate as you type**: default **on**.
 - **Convert currencies**: default **on**.
@@ -138,10 +142,6 @@ A few related settings live under each tool instead:
 - **Decimal places** for currency (0–6, default **2**), **Write the result as** (Name, Symbol or Code, default **Name**) and **Refresh the rates every** (1–48 hours, default **6**), under <SettingsPath path="Tools / Currency converter / Options" />.
 - **Convert coins** (default **on**), **Coin decimal places** (Auto to 12, default **Auto**), **Refresh coin prices every** (1–60 minutes, default **5**) and the **Coins** chip grid, under <SettingsPath path="Tools / Currency converter / Cryptocurrency" />. The same screen picks which source each kind of rate is fetched from.
 - **Detect codes, numbers and links** (default **on**), under <SettingsPath path="Clipboard" />, governs the Clipboard panel's entity strip. The fresh-copy code chip is a separate pair of settings on that same screen: **Suggest the last copy** (default **on**), since the code chip is a variant of that chip, and **Suggest copied codes** (default **Any field**), which is what allows a copied code onto the strip at all.
-
-<PhoneFrame caption="Smart chips settings under Typing: master switch and the per-family toggles.">
-  <Shot id="smart/options" alt="Smart chips settings under Typing: master switch and the four per-family toggles." />
-</PhoneFrame>
 
 ## Details & edge cases
 

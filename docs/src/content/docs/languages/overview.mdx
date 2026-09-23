@@ -38,6 +38,10 @@ Suggestions stay suggestions: nothing is enabled until you tap it. A brand-new i
 
 ## Adding a language
 
+<PhoneFrame side caption="Add language: search matches endonym, English name, id, and locale.">
+  <Shot id="languages/add-language-search" alt="Add language: search matches endonym, English name, id, and locale." />
+</PhoneFrame>
+
 Tap **Add language** to search the whole registry. The screen that opens leads with the suggestions above the search results. The search box matches on endonym, English name, id, locale tag, and the names and ids of the layouts the language ships, so "german", "Deutsch", "de", "de-DE" and "QWERTZ" all find the same entry. Tap an unadded language and it's enabled immediately on its first layout, then that language's own screen opens so you can pick a different layout or turn on suggestions from another enabled language.
 
 If the language has data to download (a word list, emoji keywords, an n-gram pack of word pairs, or any mix of the three) you're asked once, right there, with the rough size for the lot on the dialog. **Download** starts all of them in the background. **Not now** adds the language without them. **Cancel** backs out of the whole thing, for the tap that landed on the wrong row. Nothing is enabled until you answer, so Cancel really does leave your language list as it was. You can start any of them by hand later from the language's own screen. Emoji keywords also have an automatic download of their own, covered in [Emoji search in your language](/emoji/customization/#emoji-search-in-your-language), but the prompt is the one chance to get the word list at the same time.
@@ -45,10 +49,6 @@ If the language has data to download (a word list, emoji keywords, an n-gram pac
 Removing a language asks the mirror question when it has files on disk: delete its downloaded word list and keywords to get the storage back, or keep them for next time. The language goes either way, because the dialog is only about the files. Deleting the keywords also tells the automatic download to leave that language alone, so they don't quietly come back.
 
 Language names in the list are shown as `endonym · English`, for example "বাংলা · Bangla" or "Русский · Russian". The native name comes first and the English name after it, so you can find a language whether or not you can already read its script. English itself is just "English", since repeating it would say nothing.
-
-<PhoneFrame caption="Add language: search matches endonym, English name, id, and locale.">
-  <Shot id="languages/add-language-search" alt="Add language: search matches endonym, English name, id, and locale." />
-</PhoneFrame>
 
 :::tip[Typing a language in Latin letters]
 Fifteen languages (including Bangla, Hindi, Arabic, and Russian) have a separate Romanized entry in the catalogue: Banglish, Hinglish, Arabizi, Translit, and so on. These type on a plain Latin QWERTY layout and draw suggestions from a transliterated word list. Romi Konkani is one of them but its list is not transliterated: Romi is the Latin spelling Konkani has been written in since the 16th century, so its words come from text people wrote that way. Each one is its own selectable language rather than a mode switch on the native-script one. Phonetic typing is different again: Bangla's Avro and Hindi phonetic take Latin letters and commit native script. They're covered on [Bangla](/languages/bengali/) and [Hindi](/languages/hindi/).
@@ -58,6 +58,10 @@ Fifteen languages (including Bangla, Hindi, Arabic, and Russian) have a separate
 
 Tap any enabled language to reach its screen. **Layouts** and **Dictionaries** are always there. The rest of the groups appear only where they mean something, so most languages show four or five in all:
 
+<PhoneFrame side caption="A language's own screen: layout cards, numeral system, and other enabled languages to suggest from.">
+  <Shot id="languages/language-detail-screen" alt="A language's own screen: a row of layout cards, numeral system, and other enabled languages to suggest from." />
+</PhoneFrame>
+
 - **Layouts**: a row of cards, one per layout the language ships. Each card is the keyboard itself drawn small, with your theme, fonts, key height, number row and toolbar, so you see what typing on that layout looks like before you pick it. The first time a card comes into view it shows a grey outline of keys while its keyboard is drawn, one card at a time. After that the drawing is kept, even across restarts, so the row opens straight onto the finished cards. Change your theme, fonts or key size and the cards keep their old picture until the new one is ready. A tick and a tinted card mark the layouts that are on. Tap a card to turn its layout on or off, and scroll the row sideways for the rest. Where a language has more layouts from the Keyman project, the row ends on a **More layouts** card that opens them, as the same kind of cards, with a search box and the download for each one's typing rules. See [Keyman layouts](/languages/keyman/). A card shows its layout as it looks once it is on, so the spacebar already names it if another layout of the same language is on too. At least one layout has to stay enabled somewhere across your whole set, so tapping the last one says so and leaves it on.
 - **Numerals**: which digits the number row and keypad show while this language is active. Two options: the language's own digits (the default) or plain `0-9`. This is set per language, so Arabic can show `٠-٩` while English next to it stays on `0-9`. Languages that already use `0-9` don't get the group at all, and no language offers another language's digits, since nobody writes Bangla with Persian numerals.
 - **Also suggest from**: appears once you have more than one language enabled. Toggle other enabled languages on to blend their words into suggestions while you type this one. Words pulled in this way are never autocorrected away.
@@ -65,10 +69,6 @@ Tap any enabled language to reach its screen. **Layouts** and **Dictionaries** a
 - For Chinese, Japanese, and Cantonese, a conversion-dictionary group with a larger conversion dictionary plus script and input-scheme options. [Chinese, Japanese & Korean](/languages/cjk/) covers it.
 
 Three more groups turn up on the languages that have them: **Clusters** on a conjunct script (see the note below), **Spellings** on Bangla, whose "Use known spellings" switch turns "tmr" into তোমার and "table" into টেবিল, and **Style** on the Fancy Text entry, which is where its 31 styles are listed.
-
-<PhoneFrame caption="A language's own screen: layout cards, numeral system, and other enabled languages to suggest from.">
-  <Shot id="languages/language-detail-screen" alt="A language's own screen: a row of layout cards, numeral system, and other enabled languages to suggest from." />
-</PhoneFrame>
 
 A **Remove** button sits at the bottom once you have more than one language enabled. Removing a language turns off every layout that belongs to it.
 

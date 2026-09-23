@@ -40,7 +40,7 @@ On the Play Store build the interpreter that runs these models is not in the app
 
 The catalog has 29 downloadable models. Ten are multilingual graphs: seven auto-detect the spoken language, and three are grouped models you can pin to one language. The other 19 are single-language models covering 13 languages, several at more than one size: English, German, Spanish, French, Hindi, Italian, Japanese, Portuguese, Russian, Tamil, Telugu, Urdu, and Chinese. A single-language model only appears in the catalog once you've enabled that language on the Languages screen.
 
-<PhoneFrame caption="The model catalog, with a row of size filter chips over the list.">
+<PhoneFrame side caption="The model catalog, with a row of size filter chips over the list.">
 <Shot id="tools/whisper-catalog" alt="Model catalog with size and language filters, grouped by tier." />
 </PhoneFrame>
 
@@ -61,6 +61,10 @@ Whisper itself has an "initial prompt" that biases spelling and vocabulary, and 
 
 ### Picking a model per language
 
+<PhoneFrame caption="Model-per-language routing list, with a coverage warning on one row.">
+![Model-per-language routing list, with a coverage warning on one row.](@assets/screens/tools/whisper-routing.webp)
+</PhoneFrame>
+
 Rather than one global model for every language, WM Keyboard resolves a model per enabled language and falls back in this order:
 
 1. A model you've explicitly pinned to that language, if it's downloaded and covers it.
@@ -71,21 +75,17 @@ Rather than one global model for every language, WM Keyboard resolves a model pe
 
 That last step is deliberate: it produces wrong words rather than a dead microphone. When a language's assigned model can't cover it, the row is flagged in the error color with a note to download one that does.
 
-<PhoneFrame caption="Model-per-language routing list, with a coverage warning on one row.">
-![Model-per-language routing list, with a coverage warning on one row.](@assets/screens/tools/whisper-routing.webp)
-</PhoneFrame>
-
 ## Downloading and managing models
+
+<PhoneFrame side caption="A model mid-download, with progress and the storage summary below the list.">
+![A model mid-download, with progress and the storage summary below the list.](@assets/screens/tools/whisper-download-progress.webp)
+</PhoneFrame>
 
 Each catalog row carries its own **Download** button on the right. Tapping the row itself does something else. It expands the row to show what the model is and which languages it covers, so you can read up before spending the bandwidth. Once a model is on disk, that button becomes a delete icon. A failed attempt offers **Retry**, and an interrupted one offers **Resume**.
 
 Each model downloads as two files (the `.tflite` graph and a companion vocabulary/filterbank file), with the smaller vocabulary file fetched first so a broken connection fails fast. Downloads are resumable: if you lose connection or leave the app, the next attempt picks up where it left off instead of restarting.
 
 Only one model downloads at a time. Before it starts, WM Keyboard checks that you have enough free space: the remaining bytes plus a safety margin. If you don't, the download stops with a message telling you roughly how much to free up. On a metered connection, any model at or above roughly 150 MB asks you to confirm before it uses mobile data.
-
-<PhoneFrame caption="A model mid-download, with progress and the storage summary below the list.">
-![A model mid-download, with progress and the storage summary below the list.](@assets/screens/tools/whisper-download-progress.webp)
-</PhoneFrame>
 
 Downloaded models live in the app's private storage, not shared storage: the screen shows total space used and lets you delete a model to reclaim it. Deleting a model also clears any per-language pin that pointed at it, and clears the app's own fallback if that was the deleted model. If an app update ever drops a model from the catalog, leftover files show up as reclaimable space with a one-tap "Free up" button.
 

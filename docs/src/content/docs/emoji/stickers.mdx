@@ -17,6 +17,10 @@ The sticker tool searches Klipy and GIPHY. Where the app on the other end suppor
 
 ## Searching and sending
 
+<PhoneFrame side caption="The standing notice a field that can't take images shows, with results dimmed underneath.">
+  {/* shot: emoji/sticker-panel-unsupported-field */}
+</PhoneFrame>
+
 Open the tool from the toolbox, or from the toolbar once you've pinned it there. Type to search Klipy and GIPHY, or switch to **My stickers** for packs you've built yourself. Tap a result to download and insert it. While it downloads, the tile dims and shows a spinner over the preview.
 
 With the search box empty, a scrollable row of category chips (Trending, Love, Happy, Sad, Cute…) sits above the grid. Tap one to run it as a search, and tap the active chip to go back to trending. It works the same as the [GIF panel's row](/emoji/gifs/#searching-for-a-gif), and like that one it steps aside as soon as you type. **My stickers** doesn't get the row, because its pack chips already fill that job.
@@ -28,10 +32,6 @@ If the field can't take images at all, the tool doesn't download first and fail 
 An animated sticker is its own case. Accepting `image/webp` and playing an animated one are two different things, and nearly every chat app does only the first: Messenger and Telegram both take the file and show one frame of it. A field can't be asked which kind it is, so the keyboard goes by the one type that is a promise. Where the field offers WhatsApp's sticker type, an animated sticker goes out as the animated WebP it is, and WhatsApp plays it. Anywhere else that takes GIFs, it goes out as a GIF, because a GIF moves in all of them. The keyboard draws the animation frame by frame and writes a 512×512 GIF with a transparent background. A toast says so, since the first send of a sticker takes a moment. The GIF is kept in the cache, so sending the same sticker again is immediate. A GIF is a rougher picture (256 colours a frame, and edges that are either there or not), and in Telegram it arrives as a GIF and not as a sticker. That is the price of it moving. If the GIF can't be made, the WebP is sent after all, still. If you've moved to another field by the time the conversion is done, the sticker is not dropped into a field you didn't send it to.
 
 If the field does take images but rejects a still sticker, the keyboard tries a format the field does take before it gives up: a still WebP goes as a PNG. Only when nothing gets through does the file land on the system clipboard with a toast telling you to paste it. That's the same thing the clipboard tool's own image and file commits do when a field refuses them.
-
-<PhoneFrame caption="The standing notice a field that can't take images shows, with results dimmed underneath.">
-  {/* shot: emoji/sticker-panel-unsupported-field */}
-</PhoneFrame>
 
 ## Long-pressing a sticker
 
@@ -49,6 +49,10 @@ Long-pressing a sticker from **My stickers** starts with what the sticker is and
 
 ## My stickers and your own packs
 
+<PhoneFrame side caption="A sticker pack's management screen, with reorder and export controls.">
+  <Shot id="emoji/sticker-pack-manage" alt="A sticker pack's management screen, with reorder and export controls." />
+</PhoneFrame>
+
 **My stickers** is always its own tab or chip. Your packs are never interleaved into the Klipy or GIPHY grid, in either source layout mode. With more than one pack, a second row of filter chips (All, then one per pack name) appears above the grid, and search there matches a sticker's title, its keywords and its pack name together.
 
 The **+** chip at the start of that row is the quick way to add a sticker. It opens the app on the pack with the photo picker already up, so adding one sticker is a tap and a pick. The pack is the one you filtered the grid to, or your only pack if you have one. Under **All** with several packs, it asks which pack first. With just one pack the row holds only the **+** chip, since there's nothing to filter. With no packs yet, the empty grid's **Manage packs** button is the way in instead.
@@ -61,10 +65,6 @@ Building and managing packs happens in the app, not the keyboard, under <Setting
 - Per sticker, you can set its **title** and its **keywords**, reorder it within the pack, move it to a different pack, or delete it. The title is the sticker's name, and it's what a screen reader reads out for it. Keywords are anything else you'd want to type to find it: words, short phrases or emoji. Put a comma between words and phrases ("cat, good night"). Emoji need nothing between them, so "😂🐱" is two keywords. Both fields feed the search in **My stickers**, and both can [offer the sticker while you type](#stickers-as-you-type).
 - Per pack, you can rename it, **export** it as a `.wmstickers` file to share or back up, or delete it. Deleting warns you to export first if you want to keep a copy.
 - A pack tops out at 200 stickers. You can have up to 50 packs in total.
-
-<PhoneFrame caption="A sticker pack's management screen, with reorder and export controls.">
-  <Shot id="emoji/sticker-pack-manage" alt="A sticker pack's management screen, with reorder and export controls." />
-</PhoneFrame>
 
 ### The sticker editor
 

@@ -33,7 +33,7 @@ The first time you ever open this screen, it seeds the two repositories the app 
 
 Tapping a loaded repository opens its catalogue. At the top is a **Search** field matching name, description, author and tags case-insensitively, then a row of type filter chips: **All**, plus one chip per addon type the manifest actually contains. Results render as a two-column card grid. Each card shows the addon's first screenshot, or a centered type glyph if it has none, then its name, type, and a "vX.Y · size · author" line. A status badge in the corner doubles as the install button: a download arrow when not installed, a check when installed, an "Update" chip when a newer version exists, a spinner while downloading, or an X on failure. Tapping the badge installs directly from the grid without opening the addon's own page. An empty result set says nothing matches your search. A repository that can't be read at all tells you so, and points you at Refresh on the Addons screen.
 
-<PhoneFrame caption="An addon's detail page: previews, description, licence, and the install action.">
+<PhoneFrame side caption="An addon's detail page: previews, description, licence, and the install action.">
   <Shot id="reference/settings/addon-detail-page" alt="An addon's detail page: previews, description, licence, and the install action." />
 </PhoneFrame>
 
@@ -74,7 +74,7 @@ A repository manifest can declare an "Unknown" type too, but the app filters tho
 
 ## Managing sticker packs
 
-<PhoneFrame caption="Sticker packs: your own packs, plus New pack and Import a pack.">
+<PhoneFrame side caption="Sticker packs: your own packs, plus New pack and Import a pack.">
   <Shot id="reference/settings/sticker-packs-list" alt="Sticker packs: your own packs, plus New pack and Import a pack." />
 </PhoneFrame>
 
@@ -92,7 +92,7 @@ Sticker packs have two separate ways to end up in **Your packs**: the manual New
 
 ## Turning on plugins
 
-<PhoneFrame caption="Plugins: the Allow plugins switch and what a plugin can and can't do.">
+<PhoneFrame side caption="Plugins: the Allow plugins switch and what a plugin can and can't do.">
   <Shot id="reference/settings/plugins-screen" alt="Plugins: the Allow plugins switch and what a plugin can and can't do." />
 </PhoneFrame>
 
@@ -104,7 +104,7 @@ Below that, a **Write your own** group always shows, whether or not Allow plugin
 
 With plugins allowed, two more groups appear. **Installed** carries one row per plugin: its name, then "Version X by Y" underneath, with ". Turned off" appended for a disabled one. The row is the link, so tapping anywhere on it opens that plugin. With nothing installed the group says so instead. **Add** carries a **Download more** row into the addon catalogue and **Install from a file**, which asks for a `.wmplugin` file, plus a note that plugins also install from Addons. Either install path shows the same confirmation dialog first: name, description, version, author, and either a line saying it doesn't ask for anything outside its own panel or an "It can:" list of the permissions it declared. Installing reports success by name. A wrong file reports that it isn't a WM Keyboard plugin, the cap reports how many plugins you already have, and anything else reports that the plugin could not be installed. The cap is **50 plugins**.
 
-<PhoneFrame caption="A plugin's own screen: enabled switch, capabilities, stored data, and the log.">
+<PhoneFrame side caption="A plugin's own screen: enabled switch, capabilities, stored data, and the log.">
   <Shot id="reference/settings/plugin-detail-screen" alt="A plugin's own screen: enabled switch, capabilities, stored data, and the log." />
 </PhoneFrame>
 

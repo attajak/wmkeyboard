@@ -28,7 +28,7 @@ The panel opens on a row of action chips. Eleven ship with the keyboard, and the
 
 If nothing is configured yet, the panel shows a short explanation in place of the chip row. You get an **Open settings** shortcut when no provider is set up, which is where a fresh install starts, or a **Download a model** shortcut when On-device is selected and nothing has come down yet. A model that's downloading right now takes over that empty state with its progress. Once you're past the empty state, a one-line progress strip sits above the chips, so a download you started in Settings stays visible while you carry on typing.
 
-<PhoneFrame caption="The empty state shown before any provider or local model is set up.">
+<PhoneFrame side caption="The empty state shown before any provider or local model is set up.">
   <Shot id="tools/ai-need-setup" alt="The AI panel's empty state, before any provider or local model is set up." />
 </PhoneFrame>
 
@@ -42,7 +42,7 @@ If a model stops mid-answer because it hit the length ceiling, the panel says so
 
 ### Seeing what changed
 
-<PhoneFrame caption="A Fix grammar result in the Changes view, with the old spellings struck through.">
+<PhoneFrame side caption="A Fix grammar result in the Changes view, with the old spellings struck through.">
   {/* shot: tools/ai-result-changes */}
 </PhoneFrame>
 
@@ -77,7 +77,7 @@ For bugs in the keyboard itself rather than something a model wrote, use the **F
 
 A row of provider chips sits at the top of the tool's settings: **Claude**, **OpenAI**, **Gemini**, **Grok**, **DeepSeek**, **Ollama**, **LM Studio**, **Other service**, and **On-device**. The pick isn't for life. Switching providers is another tap.
 
-<PhoneFrame caption="The provider row and a cloud provider's API key and model fields.">
+<PhoneFrame side caption="The provider row and a cloud provider's API key and model fields.">
   <Shot id="tools/ai-settings-providers" alt="The provider row and a cloud provider's API key and model fields." />
 </PhoneFrame>
 
@@ -121,7 +121,7 @@ Traffic to a self-hosted server is plain HTTP, and the app allows cleartext traf
 
 The **On-device** provider runs a model entirely on the phone, no network involved. It's the only provider option that needs a download first, and it's the one provider chip that doesn't appear at all in a Lite build.
 
-<PhoneFrame caption="The on-device model catalog, with tier badges and a params/size subtitle per model.">
+<PhoneFrame side caption="The on-device model catalog, with tier badges and a params/size subtitle per model.">
   <Shot id="tools/ai-settings-local-catalog" alt="The on-device model catalog, with tier badges and a size/RAM subtitle per model." />
 </PhoneFrame>
 

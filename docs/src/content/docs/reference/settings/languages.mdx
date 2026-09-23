@@ -36,7 +36,7 @@ Adding a language, from anywhere (the search list, Suggested for you, or the set
 
 Tapping **Add language** opens a full-screen search:
 
-<PhoneFrame caption="Add language: search matches endonym, English name, id, and locale tag.">
+<PhoneFrame side caption="Add language: search matches endonym, English name, id, and locale tag.">
   <Shot id="reference/settings/add-language-screen" alt="Add language: search matches endonym, English name, id, and locale tag." />
 </PhoneFrame>
 
@@ -47,6 +47,10 @@ Tapping **Add language** opens a full-screen search:
 - Tapping an unadded language asks the **Download language data?** question first, then (on Download or Not now) enables its first layout and opens that language's detail screen. Tapping an already-added one just opens its detail screen; it doesn't re-enable anything.
 
 ## Reordering, per-app memory, and the system switcher
+
+<PhoneFrame side caption="Further down the screen: Per-app language and System language switcher.">
+  <Shot id="reference/settings/languages-bottom" alt="Further down the screen: Per-app language, System language switcher, and Complex scripts." />
+</PhoneFrame>
 
 A pencil icon on the **Your languages** card appears only once more than one layout is enabled, which is true on most fresh installs, since the starting set is seeded from your phone's language list plus English, but *not* on a phone set to English only, which starts with QWERTY alone and no Switch order row at all. Tapping it turns the list into one you drag by the handles; it reorders every enabled *layout*, not language, so two English layouts keep independent slots in the ring even though they're both "English." A dialog row reads "*language* (*layout*)", or just the language where the layout is named after it, because a layout name alone can't tell two languages on one grid apart. Each row also carries a bin, which takes the layout it sits on: a language with two layouts loses one and stays enabled, and losing its last one removes the language, though the list itself always keeps at least one row. This is the same list the <KeyCap>🌐</KeyCap> key and spacebar swipe cycle through; full behavior is on [Switching languages](/languages/switching/#reordering-and-trimming-the-ring).
 
@@ -59,15 +63,11 @@ Two more groups sit below Language data:
 
 Conjunct-aware backspace used to sit here too, as a single **Complex scripts** switch across every cluster-forming script at once. It is per language now, on each language's own screen (below). An install that had the old switch on keeps cluster deletion in whichever cluster-forming languages it had enabled at the time.
 
-<PhoneFrame caption="Further down the screen: Per-app language and System language switcher.">
-  <Shot id="reference/settings/languages-bottom" alt="Further down the screen: Per-app language, System language switcher, and Complex scripts." />
-</PhoneFrame>
-
 ## Each language's own screen
 
 Tapping a language (from Your languages or straight after adding one) opens a screen titled with that language's own name, built from up to twelve sections depending on what it supports (eleven named groups plus the Remove button at the foot). They're listed below in the order the screen draws them.
 
-<PhoneFrame caption="Bangla's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji.">
+<PhoneFrame side caption="Bangla's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji.">
   <Shot id="reference/settings/language-detail-bengali" alt="Bengali's own screen: Layouts, Numerals, Also suggest from, Dictionary, and Emoji." />
 </PhoneFrame>
 
@@ -120,7 +120,7 @@ Whether the emoji keywords and word pairs download by themselves depends on **Do
 
 Three languages, `zh`, `ja`, and `yue`, get an extra group named after themselves (for example "Chinese options"), holding a downloadable conversion dictionary plus extra input-scheme settings. It's the only part of a language's screen that isn't identical in shape across every language, so it's covered separately here and in full on [Chinese, Japanese & Korean](/languages/cjk/).
 
-<PhoneFrame caption="Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin.">
+<PhoneFrame side caption="Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin.">
   <Shot id="reference/settings/cjk-options-chinese" alt="Chinese options: the conversion-dictionary packs, Traditional characters, Fuzzy Pinyin, and Double Pinyin." />
 </PhoneFrame>
 

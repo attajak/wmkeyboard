@@ -26,6 +26,10 @@ However you flip it, the manual switch is sticky. It survives the keyboard being
 
 <SettingsPath path="Tools / Power saving" />
 
+<PhoneFrame side caption="The Power saving group: the switch, the automatic trigger picker, and the battery slider.">
+  <Shot id="typing/power-saving-settings-triggers" alt="The Power saving group: the switch, the automatic trigger picker, and the battery slider." />
+</PhoneFrame>
+
 Beyond the manual switch, **Turn on by itself** decides whether power saving also arms automatically:
 
 - **Only when I turn it on**, the default. The manual switch is the only way in, so the keyboard never changes how it feels on its own.
@@ -35,10 +39,6 @@ Beyond the manual switch, **Turn on by itself** decides whether power saving als
 
 Two things temper the automatic triggers. **Off while charging** (on by default) suppresses them entirely while the charger is in, since there's nothing to save with power flowing in, and a phone sitting at 100% on the charger counts as charging too. An unread battery level, before the keyboard has taken a reading, is always treated as "not low", so it can never falsely trigger on startup. Neither of these touches the manual switch: turning it on by hand means it, charger or no charger.
 
-<PhoneFrame caption="The Power saving group: the switch, the automatic trigger picker, and the battery slider.">
-  <Shot id="typing/power-saving-settings-triggers" alt="The Power saving group: the switch, the automatic trigger picker, and the battery slider." />
-</PhoneFrame>
-
 :::note
 This is a one-way follow. Turning on the keyboard's own power saving never touches Android's system Battery Saver setting: only the reverse.
 :::
@@ -47,11 +47,11 @@ The keyboard watches a handful of coarse system broadcasts (battery low, battery
 
 ## What gets dropped
 
-Power saving is thirteen independent switches rather than one bundle of "reduce everything", plus a fourteenth drop with no switch of its own. Each switch defaults to whatever gives up the least for the most battery back. Turn any of the thirteen back on individually if that trade-off doesn't suit you.
-
-<PhoneFrame caption="The three drop cards: effects, typing helpers and background work.">
+<PhoneFrame side caption="The three drop cards: effects, typing helpers and background work.">
   <Shot id="typing/power-saving-what-to-drop" alt="The What to drop group — eleven independent switches." />
 </PhoneFrame>
+
+Power saving is thirteen independent switches rather than one bundle of "reduce everything", plus a fourteenth drop with no switch of its own. Each switch defaults to whatever gives up the least for the most battery back. Turn any of the thirteen back on individually if that trade-off doesn't suit you.
 
 | Switch | Default | What it drops |
 |---|---|---|

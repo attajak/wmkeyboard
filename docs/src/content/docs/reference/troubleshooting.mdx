@@ -20,13 +20,13 @@ If WM Keyboard *was* selected and something knocked you back to a different keyb
 
 ## A language's suggestions look empty
 
+<PhoneFrame side caption="A language with no built-in or downloaded dictionary yet. Suggestions come only from what you've typed.">
+  <Shot id="reference/troubleshooting-empty-dictionary-state" alt="A language with no built-in or downloaded dictionary yet — suggestions come only from what you've typed." />
+</PhoneFrame>
+
 This is almost always dictionary state. A language hasn't gone missing, because WM Keyboard can't drop your last enabled layout entirely from the [language settings](/languages/overview/). If suggestions vanish, look at the dictionary first.
 
 Only English and Bangla ship a built-in dictionary. Every other language starts with nothing but what you've typed yourself, until you download a wordlist or import your own. See [Downloadable dictionaries](/languages/dictionaries/) for the four states a language's Dictionary section can be in, the three size tiers, and why a failed download shows **Retry** instead of leaving you guessing.
-
-<PhoneFrame caption="A language with no built-in or downloaded dictionary yet. Suggestions come only from what you've typed.">
-  <Shot id="reference/troubleshooting-empty-dictionary-state" alt="A language with no built-in or downloaded dictionary yet — suggestions come only from what you've typed." />
-</PhoneFrame>
 
 One setting can also hide suggestions everywhere at once, which is worth ruling out before you suspect a single language:
 
@@ -72,7 +72,7 @@ None of the Camera, Voice typing, Calendar, or Media controls grants above are k
 
 This one is by design. Most tools that need typed input (search boxes, the AI prompt, the typing-test scorer, a plugin's own field) open a panel that **captures the keyboard**: what you type goes into the panel's own box, not into the app behind it. Backspace works the same way, deliberately, so it can't word-delete text in the field behind a panel you can't currently see.
 
-<PhoneFrame caption="An open tool panel capturing input. The toolbox button has become a back arrow.">
+<PhoneFrame side caption="An open tool panel capturing input. The toolbox button has become a back arrow.">
   <Shot id="reference/troubleshooting-panel-captures-input" alt="An open tool panel capturing input — the toolbox button has become a back arrow." />
 </PhoneFrame>
 
@@ -94,7 +94,7 @@ See [The toolbar](/tools/overview/#panels-and-captured-keys) for the full explan
 
 Diagnostics is what the keyboard has recorded about itself, kept specifically because a keyboard's failures are usually invisible: a crash swaps in a different IME with no on-screen error, a panel comes up empty, a model silently fails to load. Nothing you actually type is ever recorded here. Every entry is what happened, not what you wrote.
 
-<PhoneFrame caption="The Diagnostics screen: report actions at the top, the filterable app log below.">
+<PhoneFrame side caption="The Diagnostics screen: report actions at the top, the filterable app log below.">
   <Shot id="reference/troubleshooting-diagnostics-screen" alt="The Diagnostics screen: report actions at the top, the filterable app log below." />
 </PhoneFrame>
 

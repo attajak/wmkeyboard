@@ -57,15 +57,15 @@ Turning [clipboard history](#options) off stops capture entirely. Even with it o
 
 Clips are stored under seven kinds. The panel groups them like this:
 
+<PhoneFrame side caption="A file, video and folder clip side by side. Each keeps a reference to the source rather than the bytes.">
+  {/* shot: tools/clipboard-rich-media */}
+</PhoneFrame>
+
 - **Text and rich text**: the plain content, shown as-is.
 - **Links**: shown as the raw URL, or as a fetched title and description if [link previews](#options) are on.
 - **Images**: copied into the app's own storage, so the source app can discard its copy without losing yours. Also captures device screenshots directly, if you turn that on.
 - **Files and videos**: not copied. Only the file's URI, name, MIME type and size are kept, so copying a multi-gigabyte video costs nothing. A video card even shows a frame grabbed from the very start of the clip instead of a blank icon. Copying several files or a whole folder at once keeps up to 20 items from that one copy.
 - **Folders**: a reference, same as files. A folder can't be attached to anything, so tapping its card types the folder's name into the field and hands the folder's URI back to the system clipboard for a file manager to use.
-
-<PhoneFrame caption="A file, video and folder clip side by side. Each keeps a reference to the source rather than the bytes.">
-  {/* shot: tools/clipboard-rich-media */}
-</PhoneFrame>
 
 ### Pasting rich media
 
@@ -85,7 +85,7 @@ Matching is a case-insensitive substring search, and it reaches past a clip's ow
 
 Turn on entity detection and the panel scans your recent clips for one-time codes, phone numbers and links. Each one becomes a dashed-outline chip above the history grid, so the six digits inside a verification text are one tap away rather than a copy-select-paste. Tapping a chip pastes just that fragment and leaves the full clip in place. Press and hold a chip to see it highlighted inside the message it came from.
 
-<PhoneFrame caption="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message.">
+<PhoneFrame side caption="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message.">
   <Shot id="tools/clipboard-entity-chips" alt="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message." />
 </PhoneFrame>
 
@@ -117,7 +117,7 @@ The clipboard is already out of reach while the lock screen is showing, and no s
 
 Everything below lives on the Clipboard screen, under Features on the settings home screen, rather than on the tool page. Your copies land in the history whether or not the panel's button is on the toolbar, so these aren't really the tool's settings.
 
-<PhoneFrame caption="Clipboard settings: the History group and, below it, Passwords and codes.">
+<PhoneFrame side caption="Clipboard settings: the History group and, below it, Passwords and codes.">
   <Shot id="tools/clipboard-settings" alt="Clipboard settings: the History group and, below it, Passwords & codes." />
 </PhoneFrame>
 

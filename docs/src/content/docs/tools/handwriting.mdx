@@ -52,6 +52,10 @@ If the language you're typing in has no downloaded model yet, a one-time notice 
 
 <SettingsPath path="Tools / Handwriting / Recognition models" />
 
+<PhoneFrame side caption="Recognition models: one row per enabled language, each with its own download status.">
+  <Shot id="tools/handwriting-model-manager" alt="Recognition models: one row per enabled language, each with its own download status." />
+</PhoneFrame>
+
 The **Recognition models** section lists one row per enabled language that ML Kit can recognize, with its own status: not downloaded (with a download button, and the space that model would take), downloading (counting megabytes toward the total), downloaded and working offline (with a delete/trash icon), or download failed. Recognition runs entirely on-device once a model is on your phone, so after that one download the language works with no network connection at all. See [network policy](/privacy/network/) for what else does and doesn't touch the network.
 
 Model sizes vary more than you might expect, so each row shows its own rather than one rounded figure for everything. Bangla installs 24.6 MB, English (US) 25.8 MB, French 26.1 MB, and Chinese only 7.9 MB. Roughly half of that crosses the network, because the files travel compressed and get unpacked on the phone. The numbers come out of ML Kit's own manifest rather than an estimate, so the progress readout counts real megabytes toward a real total.
@@ -67,10 +71,6 @@ Downloads can also take longer than their size suggests, because the service can
 The list of available models isn't hardcoded in WM Keyboard. It's read straight out of ML Kit's own digital ink library, then filtered down to the languages you have enabled. So enabling a new keyboard language surfaces its handwriting model on its own, with nothing WM-Keyboard-specific to configure. The flip side: the catalog of *which languages have a model at all* only grows when ML Kit itself grows.
 
 If an enabled language has no ink model, it's called out separately underneath the list: writing in that language falls back to the nearest language that does have one, rather than failing outright. And if none of your enabled languages has a model, the list itself is replaced by a note asking you to add a language on the Languages screen first. A **Languages and layouts** row at the bottom of the section takes you straight there either way.
-
-<PhoneFrame caption="Recognition models: one row per enabled language, each with its own download status.">
-  <Shot id="tools/handwriting-model-manager" alt="Recognition models: one row per enabled language, each with its own download status." />
-</PhoneFrame>
 
 ## Options
 

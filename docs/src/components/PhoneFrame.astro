@@ -9,14 +9,20 @@
  * With no child, renders a “screenshot pending” placeholder so stub pages
  * still look intentional. `wide` lays two frames side by side when wrapped
  * in a normal markdown paragraph flow.
+ *
+ * `side` sets the frame aside: a smaller phone floated to the right of the
+ * prose that follows it, for a screenshot that illustrates a paragraph
+ * rather than being the thing the section is about. Below the float
+ * breakpoint it falls back to a centred, still-smaller frame.
  */
 interface Props {
 	caption?: string;
+	side?: boolean;
 }
-const { caption } = Astro.props;
+const { caption, side = false } = Astro.props;
 ---
 
-<figure class="phone">
+<figure class:list={['phone', { 'phone-side': side }]}>
 	<div class="phone-body">
 		<div class="phone-speaker" aria-hidden="true"></div>
 		<div class="phone-screen">
@@ -121,5 +127,24 @@ const { caption } = Astro.props;
 		color: var(--sl-color-gray-3);
 		font-size: var(--sl-text-sm);
 		text-align: center;
+	}
+
+	/* Set aside: centred and smaller on a phone, floated beside the prose
+	   once the column is wide enough to keep ~30rem of text next to it. */
+	.phone-side {
+		max-width: 16.8rem;
+	}
+	@media (min-width: 50rem) {
+		.phone-side {
+			float: right;
+			clear: right;
+			width: 14.4rem;
+			margin: 2.5rem 0 1rem 1.75rem;
+		}
+		.phone-side figcaption {
+			padding-inline: 0.25rem;
+			font-size: var(--sl-text-xs);
+			line-height: 1.4;
+		}
 	}
 </style>

@@ -26,6 +26,10 @@ Chinese and Japanese aren't typed directly: you type a *reading* (pinyin, bopomo
 
 Chinese carries six layouts. Adding it from the language catalogue turns on Pinyin alone, and the other five are a tap away on Chinese's own screen:
 
+<PhoneFrame side caption="Cangjie: radical keys build a shape code; the strip fills in once the code is complete.">
+  {/* shot: languages/cjk-cangjie-keys */}
+</PhoneFrame>
+
 | Layout | Reading unit | Buffer commits |
 |---|---|---|
 | Pinyin | Romanized syllables (`ni`, `hao`) | Prefix: a multi-syllable buffer offers the whole phrase plus its leading syllables |
@@ -38,10 +42,6 @@ Chinese carries six layouts. Adding it from the language catalogue turns on Piny
 Pinyin, T9 Pinyin, and Zhuyin are all **prefix-commit**: type `nihao` and the strip offers 你好 first, then leading-syllable candidates like 你 alone. Tapping one consumes only the part of the buffer it covers and re-converts the rest, so you don't have to clear the buffer between characters. Cangjie, Cangjie Quick, and Stroke are the opposite: shape and stroke codes map to exactly one character each, so a commit always consumes everything you've typed.
 
 Zhuyin and T9 Pinyin don't need their own dictionary. They reuse the Pinyin pack and translate each segmented syllable to its pinyin spelling. Cangjie and Cangjie Quick share one radical-code table. Stroke and Jyutping (below) each have their own pack.
-
-<PhoneFrame caption="Cangjie: radical keys build a shape code; the strip fills in once the code is complete.">
-  {/* shot: languages/cjk-cangjie-keys */}
-</PhoneFrame>
 
 ### Cantonese: Jyutping
 
@@ -98,6 +98,10 @@ Japanese and Chinese text is spaced with the ideographic space (U+3000, 「　�
 
 ## The candidate bar
 
+<PhoneFrame side caption="The expanded candidate grid: every ranked candidate, wrapped to fit, covering the key rows while it's open.">
+  {/* shot: languages/cjk-candidate-grid-expanded */}
+</PhoneFrame>
+
 Whenever a conversion composer has a non-empty buffer, the usual word-suggestion strip is replaced by a horizontally-scrolling row of ranked candidates. They're sized to their text and packed from the left rather than spaced evenly, so the best candidate stays in a consistent spot instead of jumping around as the list changes length. A chevron at the end opens an expanded view, and it sits outside the scrolling area so it never scrolls off. That expanded view is a wrapping grid, and it covers the key rows while it's open, the same way Sogou, Baidu, and QQ handle it. By then you're choosing a character rather than typing one. Neither view pages. Both scroll.
 
 Tapping a candidate (in the strip or the grid) resolves by its position in the ranked list, not by its text, because the same word can legitimately appear twice at different reading lengths (a Japanese reading might list 行 for both い and いき). Only the part of your typed buffer that the candidate covers gets deleted. The rest re-converts. Space is the fast path: it commits the top-ranked candidate for the leading syllables and moves on, so repeated space presses walk a whole sentence through without ever opening the strip. No path here adds a trailing space, since Chinese and Japanese don't put spaces between words. Any other commit (punctuation, Enter, moving the cursor, switching layout, or leaving the field) instead flushes the whole buffer by repeatedly taking the top candidate until nothing's left, so you're never stuck holding an unconverted reading.
@@ -105,10 +109,6 @@ Tapping a candidate (in the strip or the grid) resolves by its position in the r
 If a reading has no dictionary match at all, it always falls back to committing what you typed as-is (raw pinyin letters, kana, or a stroke code) rather than trapping you in an empty buffer.
 
 The candidate bar is not the ordinary suggestion strip wearing a different coat, and it isn't switched off by the things that switch that strip off. Turning **Suggestions** off, or typing into a field that asks for a silent strip (search and filter boxes, address bars, email fields, password boxes), leaves the candidates exactly where they are. For a conversion method the candidate list *is* the input method, so hiding it wouldn't quiet a guess, it would stop you typing the language at all. Password boxes convert too, and what they don't do is remember the pick afterwards, which is the same rule the rest of the keyboard's learning follows.
-
-<PhoneFrame caption="The expanded candidate grid: every ranked candidate, wrapped to fit, covering the key rows while it's open.">
-  {/* shot: languages/cjk-candidate-grid-expanded */}
-</PhoneFrame>
 
 ## Learning from your picks
 

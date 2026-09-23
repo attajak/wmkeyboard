@@ -398,7 +398,7 @@ resolution table rather than duplicating it here. If the address doesn't
 resolve, or an `addon` link is missing its `repo` or `id` parameter, the link
 goes nowhere rather than opening a broken screen.
 
-<PhoneFrame caption="Following a wmkeyboard://repo?url=… link pre-fills the add-repository dialog, but nothing is fetched until you tap Add.">
+<PhoneFrame side caption="Following a wmkeyboard://repo?url=… link pre-fills the add-repository dialog, but nothing is fetched until you tap Add.">
   {/* shot: reference/addon-link-prefilled-repo */}
 </PhoneFrame>
 
@@ -463,6 +463,10 @@ tapping a theme in a file manager shouldn't drop you into full settings. It
 always shows exactly one confirmation dialog before doing anything, and the
 dialog tells you what happens next.
 
+<PhoneFrame side caption="The one-time confirm dialog shown before any file import goes through.">
+  <Shot id="reference/file-import-dialog" alt="The one-time confirm dialog shown before any file import goes through." />
+</PhoneFrame>
+
 Most formats are also previewed above that wording. Themes and layouts are
 drawn as a miniature keyboard, sticker packs show their images, sound packs
 give a play button per recording, and snippet and vocabulary packs list their
@@ -510,10 +514,6 @@ permissions listed below are the whole question for those two.
   rules install with it when the package has any. A package with no
   on-screen keyboard has nothing to add.
 - **Plugin** (`.wmplugin`). This one has an extra gate. See below.
-
-<PhoneFrame caption="The one-time confirm dialog shown before any file import goes through.">
-  <Shot id="reference/file-import-dialog" alt="The one-time confirm dialog shown before any file import goes through." />
-</PhoneFrame>
 
 A `.wmtheme.json` file has no internal tag: any JSON object decodes
 successfully to an all-defaults theme, so the file's name is the only signal

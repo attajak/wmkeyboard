@@ -78,6 +78,10 @@ This group is a page of its own, opened from the Emoji panel row in the Access g
 | Emoji categories | Opens **Emoji categories** | n/a | n/a |
 | Emoji keywords | Opens **Emoji keywords** | n/a | n/a |
 
+<PhoneFrame side caption="The Emoji panel group, with the Emoji keywords row at the bottom.">
+  <Shot id="reference/settings/emoji-panel-group" alt="The Emoji panel group, with the Emoji keywords row at the bottom." />
+</PhoneFrame>
+
 **Grid size** is the least each cell of the emoji grid may be. A smaller size fits more columns. When **Emoji size** needs more room than that, the cells grow to fit it.
 
 **Emoji size** is how large each emoji is drawn, on every tab and in search results. The long-press popup keeps its own size regardless.
@@ -102,10 +106,6 @@ This group is a page of its own, opened from the Emoji panel row in the Access g
 
 **Emoji keywords** is a navigation row, not a setting stored here: it opens the sub-screen documented below.
 
-<PhoneFrame caption="The Emoji panel group, with the Emoji keywords row at the bottom.">
-  <Shot id="reference/settings/emoji-panel-group" alt="The Emoji panel group, with the Emoji keywords row at the bottom." />
-</PhoneFrame>
-
 ### Emoji row
 
 <SettingsPath path="Emoji / Emoji row" />
@@ -117,6 +117,10 @@ This group is a page of its own, opened from the Emoji panel row in the Access g
 | Emoji in the row *(same visibility gate)* | Slider | 3–16 | 8 |
 | Scroll the emoji row *(same visibility gate)* | Toggle | On / Off | On |
 
+<PhoneFrame side caption="The Emoji row group with Own row selected.">
+  <Shot id="reference/settings/emoji-row-group" alt="The Emoji row group with Own row selected." />
+</PhoneFrame>
+
 **Emoji row** controls a dedicated strip of your own emoji, similar to Gboard's. **Off** (default) hides it entirely. **Button** adds a toggle to the toolbar that swaps the suggestion strip for the emoji row on tap. **Own row** keeps it permanently visible between the toolbar and the keys.
 
 **Emoji row content** picks what fills the row: Favourites always sort first regardless of which of the three you choose.
@@ -126,10 +130,6 @@ This group is a page of its own, opened from the Emoji panel row in the Access g
 Until you've used enough emoji to fill the row from your own history, it falls back to a fixed set of 24 common ones, drawn in your **Default skin tone**.
 
 When Emoji row is set to **Own row**, a caption on this screen points to **Rows & bars** for where the row sits relative to the toolbar and symbol row; by default it's first, above both.
-
-<PhoneFrame caption="The Emoji row group with Own row selected.">
-  <Shot id="reference/settings/emoji-row-group" alt="The Emoji row group with Own row selected." />
-</PhoneFrame>
 
 ### Skin tone
 
@@ -155,6 +155,10 @@ When Emoji row is set to **Own row**, a caption on this screen points to **Rows 
 | Download more | Opens the addon catalogue, filtered to emoji fonts | n/a | n/a |
 | Hide emoji that your device cannot show | Toggle | On / Off | Off |
 
+<PhoneFrame side caption="The Emoji style group, with the live font preview row and font choices.">
+  <Shot id="reference/settings/emoji-style-group" alt="The Emoji style group, with the live font preview row and font choices." />
+</PhoneFrame>
+
 **Emoji font** decides which font draws emoji on the keyboard itself. WM Keyboard ships no emoji font of its own. A live preview row (😀😂🥰😎🤔👍❤️🎉) runs through the real shaping pipeline, so it shows exactly what the panel will draw. **System** uses your phone's own emoji pack. **Google** fetches Noto Color Emoji once through the system font provider and caches it. **Installed** picks from an emoji font installed via [Addons](/addons/installing/). **Custom** uses a single font file you import through a document picker. Whichever you choose, the text you send stays plain Unicode, and other apps and phones draw it with their own emoji font.
 
 **Get the newest emoji** is a card rather than a row, sitting just under the font choice and its preview. It's the one-tap route to emoji your phone is too old to draw. Tap **Download**. It fetches the current Noto Color Emoji (around 10 MB) from WM Keyboard's addon repository, installs it into the font library, and points **Emoji font** at it as **Installed**. The **Google** choice above can't do that job. A downloadable font is asked for by family name with no version in the request, so the system font provider serves whichever build it happens to have. On a phone with a recent system emoji font, that's the older of the two.
@@ -171,10 +175,6 @@ While the download runs the button becomes a progress bar, and a failure leaves 
 
 **Hide emoji that your device cannot show** is off by default. It hides an emoji from the panel, search, and suggestions only when *neither* the chosen font *nor* the phone's own system font can draw it. An emoji missing from just the chosen font is drawn quietly in the system font instead, in a different style.
 
-<PhoneFrame caption="The Emoji style group, with the live font preview row and font choices.">
-  <Shot id="reference/settings/emoji-style-group" alt="The Emoji style group, with the live font preview row and font choices." />
-</PhoneFrame>
-
 Long-pressing any emoji in the panel opens its favourite and skin-tone controls: two-person emoji like 🤝 let you set each person's tone independently.
 
 ## Emoji categories
@@ -182,6 +182,10 @@ Long-pressing any emoji in the panel opens its favourite and skin-tone controls:
 <SettingsPath path="Emoji / Emoji panel / Emoji categories" />
 
 The emoji panel ships its categories in the order Unicode defines them, which is rarely the order you reach for them in. This screen is where that changes. Nothing here touches the emoji themselves: it is an arrangement laid over the catalogue, and resetting it puts everything back.
+
+<PhoneFrame side caption="The Emoji categories screen: drag to reorder a tab, press the eye to hide one.">
+  {/* shot: reference/settings/emoji-categories-screen */}
+</PhoneFrame>
 
 | Control | What it does |
 |---|---|
@@ -201,15 +205,15 @@ Three tabs are deliberately not listed here:
 - **Recent** (or **Most used**) orders itself by what you use, with your favourites pinned to the front. Reorder those from any favourited emoji's long-press popup.
 - **Kaomoji** and **Emoticons** are switched on and off by the **Kaomoji and Emoticons** toggle above, and always sit at the end of the strip.
 
-<PhoneFrame caption="The Emoji categories screen: drag to reorder a tab, press the eye to hide one.">
-  {/* shot: reference/settings/emoji-categories-screen */}
-</PhoneFrame>
-
 ## Emoji keywords
 
 <SettingsPath path="Emoji / Emoji panel / Emoji keywords" />
 
 Reached from the **Emoji keywords** row in the Emoji panel group above, this sub-screen manages the per-language dictionaries emoji search matches against. English and Bangla keywords ship built in. Everything else needs a pack.
+
+<PhoneFrame side caption="The Emoji keywords screen, with per-language download and import controls.">
+  <Shot id="reference/settings/emoji-keywords-screen" alt="The Emoji keywords screen, with per-language download and import controls." />
+</PhoneFrame>
 
 | Setting | Control | Options / range | Default |
 |---|---|---|---|
@@ -227,10 +231,6 @@ Below that, one group appears per language you've enabled (plus any language tha
 - **Import pack** (a document picker) and **From URL** buttons.
 
 Packs stack on top of the bundled English and Bangla keywords rather than replacing them, and a language can have several at once. The import format is a tab-separated file: one emoji per line, then its comma-separated keywords, and optionally a display name. Lines starting `# ` are ignored. The JSON emoji dictionaries from the [wmkeyboard-data](https://github.com/wasi-master/wmkeyboard-data) repository import as they are, with no conversion needed.
-
-<PhoneFrame caption="The Emoji keywords screen, with per-language download and import controls.">
-  <Shot id="reference/settings/emoji-keywords-screen" alt="The Emoji keywords screen, with per-language download and import controls." />
-</PhoneFrame>
 
 The data repository currently covers 126 downloadable language packs: fewer than its raw language count because a handful of codes get remapped or merged with duplicates, and a few packs the source data leaves nearly empty are left out.
 

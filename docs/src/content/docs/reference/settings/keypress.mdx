@@ -47,7 +47,7 @@ The Key press screen is a hub. Haptics and sound, Key popup and Press and hold s
 
 Two of the per-event rows are odd ones out. **Click on key repeat** has nothing to do with vibration at all: it's the sound half of "Vibrate on key repeat", playing the key sound on every auto-repeat while <KeyCap>⌫</KeyCap> or <KeyCap>Space</KeyCap> is held, and it does nothing unless Key sound is on. **Follow the system touch feedback setting** isn't a per-event gate either. It hands the master switch over to Android's own touch-vibration toggle. It ships off, so turning off touch feedback in Android's sound settings leaves the keyboard buzzing. Turn this on if you expect the system switch to cover the keyboard too.
 
-<PhoneFrame caption="Haptic style set to Custom, showing the strength and intensity sliders.">
+<PhoneFrame side caption="Haptic style set to Custom, showing the strength and intensity sliders.">
   <Shot id="reference/settings/keypress-haptic-custom-sliders" alt="Haptic style set to Custom, showing the strength and intensity sliders." />
 </PhoneFrame>
 
@@ -104,7 +104,7 @@ A theme can carry a key sound of its own, and where it does, it wins over everyt
 
 **Popup shape** and **Popup corner radius** reach past the preview bubble. They set the outline of every popup surface the keyboard draws, press-and-hold alternates, the language picker and the panel menus included. The radius applies only to the rounded and cut shapes. The rest size their corners off the popup itself. A theme can override either one.
 
-<PhoneFrame caption="Key popup and Timing groups, mid-screen.">
+<PhoneFrame side caption="Key popup and Timing groups, mid-screen.">
   <Shot id="reference/settings/keypress-popup-timing" alt="Key popup and Timing groups, mid-screen." />
 </PhoneFrame>
 
@@ -195,6 +195,10 @@ The repeat interval is two sliders, because delete and space are held for opposi
 | Slide from 🌐 for shortcuts | Toggle | On / Off | Off |
 | Shortcut keys *(shown once a hold shortcut or the 🌐 slide is on)* | Nav row → dialog | one letter per action | a c v x z y |
 
+<PhoneFrame side caption="Press and hold shortcuts: the currency keys field and the hold-letter toggles.">
+  <Shot id="reference/settings/keypress-long-press-shortcuts" alt="Long-press shortcuts: the currency keys field and the Hold-letter toggles." />
+</PhoneFrame>
+
 **Press and hold hints** puts a small corner label on each key, previewing its first press-and-hold character.
 
 **All accents on press and hold** adds the complete accent set to every Latin letter's popup, on top of whatever the layout already lists. Letters only.
@@ -214,10 +218,6 @@ The repeat interval is two sliders, because delete and space are held for opposi
 **Slide from 🌐 for shortcuts** is off by default. On, pressing 🌐 and sliding onto one of the six shortcut keys runs that key's action when you lift, whether or not its hold shortcut is on. See [Switching languages](/languages/switching/#sliding-from--onto-a-shortcut).
 
 **Shortcut keys** is one row for all six bindings rather than six rows, and it appears whenever at least one of them, or the 🌐 slide, is on. The shipped `a c v x z y` is a QWERTY answer, so a layout without those letters (Bangla, Russian) needs the whole set moved onto keys it actually draws. The row's subtitle lists the keys currently bound. Tap it to open a dialog with one field per switched-on action, saved in one go.
-
-<PhoneFrame caption="Press and hold shortcuts: the currency keys field and the hold-letter toggles.">
-  <Shot id="reference/settings/keypress-long-press-shortcuts" alt="Long-press shortcuts: the currency keys field and the Hold-letter toggles." />
-</PhoneFrame>
 
 ## Details & edge cases
 

@@ -17,6 +17,10 @@ Every key does more than the letter printed on it. A tap commits that letter. A 
 
 <SettingsPath path="Key press / Key popup" />
 
+<PhoneFrame side caption="Holding a letter opens its accent and symbol alternates.">
+  <Shot id="typing/long-press-popup" alt="Holding a letter opens its accent and symbol alternates." />
+</PhoneFrame>
+
 While you hold a key, its character floats in a bubble above your finger. That bubble is the **key popup**, and it lets you confirm what you hit before you let go. It's on by default, and by default it grows upward out of the pressed key instead of hovering above it with a gap (the **Popup on key** toggle). Even a fast tap leaves it up for at least 140&nbsp;ms after you release, so a quick press still flashes something readable. On number, phone and date/time keypads it stays hidden by default, a numeric PIN field included. Echoing each digit large enough to read over your shoulder is not much of a favor. The **Popup on number pads** toggle brings it back on those keypads if you want it there.
 
 <GestureDemo type="long-press" caption="Hold a key past the long-press delay to open its alternates." />
@@ -33,10 +37,6 @@ Five settings under **Alternate keys** shape that popup. **Alternate key size** 
 
 The popup isn't only for characters. A key in a [custom layout](/languages/custom-layouts/) can carry action alternates too, so a hold on <KeyCap>Enter</KeyCap> can offer <KeyCap>Tab</KeyCap>, and a hold on any key can open voice typing or the editing pad. Every key can have alternates except the four that hold for something else already: <KeyCap>⌫</KeyCap>, <KeyCap>⌦</KeyCap> and <KeyCap>Space</KeyCap> hold to repeat, and a braille dot holds as part of its chord.
 
-<PhoneFrame caption="Holding a letter opens its accent and symbol alternates.">
-  <Shot id="typing/long-press-popup" alt="Holding a letter opens its accent and symbol alternates." />
-</PhoneFrame>
-
 A few more long-press behaviors live under the same **Press and hold shortcuts** settings group:
 
 <SettingsPath path="Key press / Press and hold shortcuts" />
@@ -50,11 +50,11 @@ A few more long-press behaviors live under the same **Press and hold shortcuts**
 
 <SettingsPath path="Key press / Timing" />
 
-<KeyCap>Shift</KeyCap> cycles through three states. From off, one tap arms a one-shot **Shift** that capitalizes only the next letter and then reverts on its own. A second tap inside the **caps-lock double-tap** window (350&nbsp;ms by default, adjustable 150–600&nbsp;ms) locks **Caps Lock** instead. From either state, a single tap that *isn't* a fast double-tap turns it back off. Getting out of caps lock takes one plain tap, not another double-tap.
-
-<PhoneFrame caption="Shift off, one-shot Shift, and Caps Lock: the three states the key cycles through.">
+<PhoneFrame side caption="Shift off, one-shot Shift, and Caps Lock: the three states the key cycles through.">
   ![Shift off, one-shot Shift, and Caps Lock: the three states the key cycles through.](@assets/screens/typing/shift-states.webp)
 </PhoneFrame>
+
+<KeyCap>Shift</KeyCap> cycles through three states. From off, one tap arms a one-shot **Shift** that capitalizes only the next letter and then reverts on its own. A second tap inside the **caps-lock double-tap** window (350&nbsp;ms by default, adjustable 150–600&nbsp;ms) locks **Caps Lock** instead. From either state, a single tap that *isn't* a fast double-tap turns it back off. Getting out of caps lock takes one plain tap, not another double-tap.
 
 Auto-capitalization arms Shift for you at the start of a sentence, but only when three things line up: **Automatic capital letters** is on (the default), the field is a plain text field rather than a structured keypad, and the active language's script has letter case at all. Bangla, for instance, doesn't, so auto-capitalize never fires while you type it. It re-checks after every sentence-ending mark (`.`, `!`, `?`, `।`) and whenever you move the cursor or switch fields. Caps Lock is off limits to it, so an all-caps line you locked in stays locked in.
 
@@ -86,13 +86,13 @@ This is a different mechanism from <KeyCap>Ctrl</KeyCap>+letter on a physical ke
 
 <SettingsPath path="Typing / Enter key" />
 
+<PhoneFrame side caption="Enter drawing a field's own action icon.">
+  <Shot id="typing/enter-action-icons" alt="Enter drawing a field's own action icon." />
+</PhoneFrame>
+
 The key's icon and behavior follow whatever the focused field asks for: Search, Send, Go, Next, Previous or Done, each with its own icon, or a plain newline when the field doesn't specify. When an app supplies its own label instead of a standard action ("Reply", "Post"), the key draws that text directly rather than an icon.
 
 A message box that asks for a line break gets one, even when the app also watches for the Enter key press itself. Discord's is the example: it declares Done and then asks the keyboard not to use it, so the key draws the newline symbol — and now types the break straight into the box rather than pressing a key the app would have read as Send.
-
-<PhoneFrame caption="Enter drawing a field's own action icon.">
-  <Shot id="typing/enter-action-icons" alt="Enter drawing a field's own action icon." />
-</PhoneFrame>
 
 **Shift and Enter type a new line** (on by default) lets you press <KeyCap>Shift</KeyCap> then <KeyCap>Enter</KeyCap>, or hold Shift on a physical keyboard, to force a line break in a field that would otherwise send or search. The key itself changes to the newline symbol while Shift is armed, so it never promises a Send it isn't about to do. Only a Shift you pressed yourself counts. The one-shot Shift that auto-capitalize arms at the start of a message is ignored, so the first line of a chat still sends normally, and Caps Lock is ignored too.
 
@@ -104,11 +104,11 @@ There's a second way in that doesn't need the setting at all: in any field where
 
 <SettingsPath path="Layout & size / Number row" />
 
-**Number row** (on by default) gives the digits 1–0 a dedicated row above the letters, so they don't need a long-press. While it's there, the digit that would otherwise be the top row's first long-press alternate is dropped, since the row makes it redundant. A few sub-settings sit under it. **Number row height** runs 32–100&nbsp;dp. **Symbols on shift** (off by default) swaps the row to `= \ < > [ ] { } | ~` while Shift is held, instead of digits. **Number row in symbols** (on by default) keeps the digit row up on the ?123 layer too. The symbols layer's own second page carries its arrow and comparison symbols either way. You can change the keys of the number row on each layer, and the row that takes the place of the digits on the symbols layer, in the [layout editor](/reference/settings/keymaps/#the-number-row-and-the-row-in-place-of-the-digits).
-
-<PhoneFrame caption="The number row above the letters.">
+<PhoneFrame side caption="The number row above the letters.">
   <Shot id="typing/number-row" alt="The number row above the letters." />
 </PhoneFrame>
+
+**Number row** (on by default) gives the digits 1–0 a dedicated row above the letters, so they don't need a long-press. While it's there, the digit that would otherwise be the top row's first long-press alternate is dropped, since the row makes it redundant. A few sub-settings sit under it. **Number row height** runs 32–100&nbsp;dp. **Symbols on shift** (off by default) swaps the row to `= \ < > [ ] { } | ~` while Shift is held, instead of digits. **Number row in symbols** (on by default) keeps the digit row up on the ?123 layer too. The symbols layer's own second page carries its arrow and comparison symbols either way. You can change the keys of the number row on each layer, and the row that takes the place of the digits on the symbols layer, in the [layout editor](/reference/settings/keymaps/#the-number-row-and-the-row-in-place-of-the-digits).
 
 <SettingsPath path="Layout & size / Numerals" />
 

@@ -176,11 +176,15 @@ A snippet's text can include any of these tokens. They're substituted the moment
 
 Find the list under Settings → Text expansion (see [Options](#options) below for the exact path). The Snippets tool page has one row that opens the same screen.
 
-<PhoneFrame caption="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.">
+<PhoneFrame side caption="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export.">
   <Shot id="tools/snippets-settings" alt="Snippets settings: the variable reference card, saved snippets with live insert previews, and Add / Import / Export." />
 </PhoneFrame>
 
 The settings screen opens with a reference card listing all 18 variables plus `{date:pattern}`, each with a live example. Below it:
+
+<PhoneFrame side caption="Adding a snippet: label, text with variables, and an optional trigger word.">
+  <Shot id="tools/snippets-add-dialog" alt="Adding a snippet: label, text with variables, and a Word or Pattern trigger." />
+</PhoneFrame>
 
 - **Add snippet** opens the editor screen: a label, an optional folder, the [expansions](#several-expansions) it can insert, and a Word / Pattern switch for how it expands as you type.
 - The section that holds both is called **Trigger**. Choosing **Word** gives you the [Triggers](#several-triggers) chip field and a **Match the trigger's capitals** switch that reveals its style choice when you turn it on. Choosing **Pattern** gives you the pattern itself, chips that write `(.+)`, `$1`, `^` and `$` at the cursor, a words-to-match picker, and a **Try it** box. Type into **Try it** what you'd type on the keyboard, and the result appears underneath. A pattern that won't compile is flagged as you type, with the regular-expression engine's own complaint under it. Save stays disabled until you fix it.
@@ -189,10 +193,6 @@ The settings screen opens with a reference card listing all 18 variables plus `{
 - Pressing a saved snippet reopens the same screen, filled in, to **edit** it. Nothing is saved until you press Save.
 - The trash icon at the end of the row **deletes** it immediately, and so does swiping the row aside in either direction. There is no confirmation prompt. Instead a bar appears at the foot of the screen naming what went, with **Undo** on it for a few seconds; undo puts the snippet back with its own id, its place in the list, and the links any other snippet had to it. Once that bar goes, the delete stands, so keep an [export](#import-and-export) around for anything that took a while to write. Deleting a second snippet replaces the bar rather than queueing behind it — only the last delete can be undone.
 - Every row also shows a live "Inserts as: …" preview whenever the expanded text would differ from what you typed, and "Expands by itself from: …" if you've set a trigger (or the pattern itself, if you set one of those). A snippet set to ask first says "Offers itself after: …" instead. A snippet with more than one expansion, or with links, counts them on a line of its own.
-
-<PhoneFrame caption="Adding a snippet: label, text with variables, and an optional trigger word.">
-  <Shot id="tools/snippets-add-dialog" alt="Adding a snippet: label, text with variables, and a Word or Pattern trigger." />
-</PhoneFrame>
 
 Snippets have a stored order. New ones append to the end, and the pencil button on the heading above a list of them turns that list into one you drag into order, so the ones you use daily can go back to the top. Press the tick to leave. That matters because the snippets panel draws in the same order and has no search of its own. Each list is ordered on its own: the snippets inside a folder, and the ones in no folder at all.
 

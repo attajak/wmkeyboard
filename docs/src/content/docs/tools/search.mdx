@@ -22,18 +22,18 @@ Open **Web search** or **Image search** from the toolbar, or from the toolbox if
 
 Both tools run on the Brave Search API by default, or on a SearXNG instance you name on the F-Droid build. Typing routes into the panel's own header search bar rather than your field, the same key-rerouting trick the GIF, sticker, and Wikipedia panels use. Unlike GIFs and stickers, neither search runs live as you type. Both wait for you to press the search action before firing a request.
 
-- **Web search**: tap a result to insert its URL at the cursor. A separate open-in-browser icon on each row launches the link in your browser instead, which leaves the keyboard entirely. They're two distinct actions. Each row shows the title, host, and an HTML-stripped snippet.
-- **Image search**: tap a thumbnail to download the full image and insert it directly, on the same `commitContent` path the clipboard and GIF tools use. Long-press a thumbnail to insert its URL as plain text instead. The grid dedupes results by image URL before drawing them, since Brave can return the same full-size image for more than one widely-reposted result.
-
-<PhoneFrame caption="Image search: tap a thumbnail to insert the image itself, or long-press to insert its link instead.">
+<PhoneFrame side caption="Image search: tap a thumbnail to insert the image itself, or long-press to insert its link instead.">
 {/* shot: tools/image-search-grid */}
 </PhoneFrame>
 
-Without something to search with, neither tool appears on the keyboard at all. There's no button that opens a panel with nothing behind it. Until then the two tools are off the toolbar, out of the toolbox, and out of the smart chips, and a hardware shortcut bound to either one does nothing. On the **Tools** screen they're still listed, with their switch greyed out and a reason in place of the usual description. Everywhere except the F-Droid build, that reads "Needs an API key. Press this row to add one." The F-Droid build reads "Needs a SearXNG instance" instead, since it offers a self-hosted server as another way in. Fill in whichever the screen is asking for and both tools come straight back.
+- **Web search**: tap a result to insert its URL at the cursor. A separate open-in-browser icon on each row launches the link in your browser instead, which leaves the keyboard entirely. They're two distinct actions. Each row shows the title, host, and an HTML-stripped snippet.
+- **Image search**: tap a thumbnail to download the full image and insert it directly, on the same `commitContent` path the clipboard and GIF tools use. Long-press a thumbnail to insert its URL as plain text instead. The grid dedupes results by image URL before drawing them, since Brave can return the same full-size image for more than one widely-reposted result.
 
-<PhoneFrame caption="The Tools screen before a Brave API key is configured: the switch is greyed out.">
+<PhoneFrame side caption="The Tools screen before a Brave API key is configured: the switch is greyed out.">
 <Shot id="tools/search-needs-key" alt="The web search panel before a Brave API key is configured." />
 </PhoneFrame>
+
+Without something to search with, neither tool appears on the keyboard at all. There's no button that opens a panel with nothing behind it. Until then the two tools are off the toolbar, out of the toolbox, and out of the smart chips, and a hardware shortcut bound to either one does nothing. On the **Tools** screen they're still listed, with their switch greyed out and a reason in place of the usual description. Everywhere except the F-Droid build, that reads "Needs an API key. Press this row to add one." The F-Droid build reads "Needs a SearXNG instance" instead, since it offers a self-hosted server as another way in. Fill in whichever the screen is asking for and both tools come straight back.
 
 ### Options
 
@@ -55,7 +55,7 @@ The settings page's own caption: "Web and image search share everything here. Th
 
 Open **Wikipedia** from the toolbar, or the toolbox if you haven't pinned it. It isn't pinned by default either. Unlike the other three tools on this page, Wikipedia has no [leader-key](/reference/shortcuts/) letter of its own out of the box. From a hardware keyboard the toolbox shortcut is the way in: double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>T</KeyCap>. You can also rebind a letter to it yourself. Search in the panel's header bar. Results list article titles with short descriptions, and tapping one opens the article.
 
-<PhoneFrame caption="An open Wikipedia article, with its Summary, Links and Full article tabs.">
+<PhoneFrame side caption="An open Wikipedia article, with its Summary, Links and Full article tabs.">
 {/* shot: tools/wikipedia-article */}
 </PhoneFrame>
 
@@ -83,7 +83,7 @@ The settings page's caption: "The searches and the article text come from the fr
 
 The dictionary looks up English words in a chain of sources you put in order (see [Dictionary sources](#dictionary-sources) below). None of them needs a key or an account. Open **Dictionary** with auto-lookup on, which is the default (see Options below), and it immediately looks up your current selection, or the word touching the cursor if nothing is selected.
 
-<PhoneFrame caption="A dictionary entry, showing serif headword, pronunciation audio, numbered definitions and synonym chips.">
+<PhoneFrame side caption="A dictionary entry, showing serif headword, pronunciation audio, numbered definitions and synonym chips.">
 {/* shot: tools/dictionary-entry */}
 </PhoneFrame>
 

@@ -26,6 +26,10 @@ If neither provider has a key configured, the panel shows a "needs an API key" n
 
 ## Sending a GIF
 
+<PhoneFrame side caption="A field that can't accept images. The panel dims and shows the standing notice.">
+  {/* shot: emoji/gif-no-rich-media */}
+</PhoneFrame>
+
 Tap a result and it downloads and lands in the field in one step. There's no separate "insert" confirmation. What happens next depends on what the field will accept:
 
 1. **The field doesn't take images at all.** Plain text boxes can't receive a GIF through Android's `commitContent` mechanism. The panel shows a standing notice, "This field does not accept GIFs. Try a chat app or a notes app.", and tapping a result does nothing beyond a short vibration. Nothing downloads. This is a pre-send check, not a failed attempt.
@@ -33,10 +37,6 @@ Tap a result and it downloads and lands in the field in one step. There's no sep
 3. **Nothing matches.** If the field won't take any form the tool can produce, the file goes to the system clipboard instead, with a toast: "This app does not accept images here. The keyboard copied the image. Paste it instead." Paste it in manually from there.
 
 Animated GIFs can never actually become stickers. Android has no animated-WebP encoder, so a GIF-format result keeps sending as a plain image no matter what `Send GIFs as` is set to. Only sources that already provide WebP can take the Sticker path.
-
-<PhoneFrame caption="A field that can't accept images. The panel dims and shows the standing notice.">
-  {/* shot: emoji/gif-no-rich-media */}
-</PhoneFrame>
 
 ## Long-pressing a result
 

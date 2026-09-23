@@ -44,7 +44,7 @@ The custom keypad (`7 8 9 ÷ ⌫`, `4 5 6 × (`, `1 2 3 − )`, `0 . % + =`, or 
 
 **Unit converter** and **Currency converter** share a layout: category or currency chips up top, a swap icon between the two sides, a live result, and the same digit keypad. Only one of them touches the network. That keypad is simpler than Calculator's, just digits, a decimal point and backspace, because neither converter evaluates an expression.
 
-<PhoneFrame caption="The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad.">
+<PhoneFrame side caption="The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad.">
   <Shot id="tools/unit-converter-panel" alt="The Unit converter panel: category chips, From/To unit rows, the swap icon, and the shared digit keypad." />
 </PhoneFrame>
 
@@ -52,7 +52,7 @@ The custom keypad (`7 8 9 ÷ ⌫`, `4 5 6 × (`, `1 2 3 − )`, `0 . % + =`, or 
 
 **Currency converter** needs live exchange rates. It fetches from `open.er-api.com` (roughly 160 currencies, updated daily) and falls back to `frankfurter.dev` (European Central Bank, roughly 30 currencies) if that fails. The F-Droid edition starts from the jsDelivr `currency-api` instead (about 340 codes, coins included, published as open data), with Frankfurter behind it, so a fresh install there reaches only sources that are free software. The others stay one setting away. None of them needs a key. Rates are quoted against USD and cross-converted locally, so one fetch covers every pair. A refresh icon on the panel forces a new fetch. Otherwise it only refetches once the cached rates are older than the refresh interval set below, and that cache doesn't survive the keyboard process restarting, so the first open after a while can show a brief "Downloading the exchange rates…" message.
 
-<PhoneFrame caption="The Currency converter panel: a From/To currency pair, live converted amount, and the refresh icon.">
+<PhoneFrame side caption="The Currency converter panel: a From/To currency pair, live converted amount, and the refresh icon.">
   {/* shot: tools/currency-converter-panel */}
 </PhoneFrame>
 
@@ -110,7 +110,7 @@ This tool is separate from the **symbol row** (off by default), a strip of one-t
 
 **QR code generator** turns whatever you type into a scannable code and sends it as an image. Like the typing test below, it keeps the letter rows on screen instead of replacing them, because you type into it. Opening it seeds its own editable buffer with the focused field's text as a starting point. From there it's independent: your keystrokes route into the QR content rather than the field, and the field itself is never touched until you send.
 
-<PhoneFrame caption="The QR generator panel: editable content line, live QR preview, and Send as image.">
+<PhoneFrame side caption="The QR generator panel: editable content line, live QR preview, and Send as image.">
   <Shot id="tools/qr-generator-panel" alt="The QR generator panel: editable content line, live QR preview, and Send as image." />
 </PhoneFrame>
 
@@ -130,7 +130,7 @@ The preview updates as you type, up to **Longest text** characters (500 to 4,000
 
 **Password generator** makes passwords or passphrases with `SecureRandom` entirely on the device. Nothing generated here is ever stored or logged, and there's no history to clear because none is kept.
 
-<PhoneFrame caption="The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs.">
+<PhoneFrame side caption="The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs.">
   <Shot id="tools/password-generator-panel" alt="The Password generator panel: generated result, entropy estimate, and the Password/Passphrase tabs." />
 </PhoneFrame>
 
@@ -158,7 +158,7 @@ The preview updates as you type, up to **Longest text** characters (500 to 4,000
 
 **Typing speed test** leaves the key rows alone while a run is going, the same way the QR generator does. You type the prompt on the real keys while the panel scores it from above. The results screen needs no keys, so the panel takes their height back for the scores. Shift is forced off the moment a run starts, so a field's auto-capitalization can't turn your first keystroke into a false miss. The clock doesn't start until you type your first character either, so time spent reading the prompt costs you nothing.
 
-<PhoneFrame caption="A typing test in progress: the prompt with per-character correctness coloring, above the live key rows.">
+<PhoneFrame side caption="A typing test in progress: the prompt with per-character correctness coloring, above the live key rows.">
   <Shot id="tools/typing-test-panel" alt="A typing test in progress: the prompt with per-character correctness coloring, above the live key rows." />
 </PhoneFrame>
 
@@ -179,7 +179,7 @@ Two more chips on the strip, **Glide** and **Suggestions**, let the keyboard's o
 
 Both switches also live under <SettingsPath path="Tools / Typing speed test / Typing aids" />.
 
-<PhoneFrame caption="Typing test results: WPM, accuracy, consistency, and the Insert score chip.">
+<PhoneFrame side caption="Typing test results: WPM, accuracy, consistency, and the Insert score chip.">
   {/* shot: tools/typing-test-results */}
 </PhoneFrame>
 

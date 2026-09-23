@@ -45,11 +45,11 @@ The emoji panel has had the same setting for a while, under Emoji → Return to 
 
 <SettingsPath path="Rows & bars / Symbol row" />
 
-The **symbol row** is a strip of one-tap characters and snippets that sits above the key grid, independent of the ?123 pages below it. It's for the character you reach for constantly without wanting to leave the letters layout. It's off by default.
-
-<PhoneFrame caption="The symbol row above the key grid, with its set picker open.">
+<PhoneFrame side caption="The symbol row above the key grid, with its set picker open.">
   {/* shot: typing/symbol-row-picker */}
 </PhoneFrame>
+
+The **symbol row** is a strip of one-tap characters and snippets that sits above the key grid, independent of the ?123 pages below it. It's for the character you reach for constantly without wanting to leave the letters layout. It's off by default.
 
 Five built-in sets ship with it, and every one is enabled by default: **Email** (`@`, common domain endings), **Web** (`https://`, `www.`, path characters), **Coding** (brackets, operators, `->`, `=>`, a tab key), **Math** (±, ×, ÷, fractions, Greek letters) and **Punctuation** (the set the row opens on by default). A chip at the row's left edge opens a dropdown of whichever sets you've enabled, but only when more than one is enabled. With just one, there's nothing to switch between.
 
@@ -96,11 +96,11 @@ This is a global setting. A keyboard mode (below) can turn the symbol row on or 
 
 ## Keyboard modes
 
-Beyond the global settings above, WM Keyboard can carry a different profile into different apps and fields, with its own theme, its own pinned toolbar tools and its own symbol row setup, switching automatically as you move between them.
-
-<PhoneFrame caption="The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary.">
+<PhoneFrame side caption="The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary.">
   <Shot id="typing/modes-tool-panel" alt="The Modes tool: Automatic at the top, then one row per mode with its auto-activation summary." />
 </PhoneFrame>
+
+Beyond the global settings above, WM Keyboard can carry a different profile into different apps and fields, with its own theme, its own pinned toolbar tools and its own symbol row setup, switching automatically as you move between them.
 
 <SettingsPath path="Advanced / Keyboard modes" />
 
@@ -135,6 +135,10 @@ Edits save immediately as you make them, so there's no save button, though a bra
 
 ## How a mode gets picked
 
+<PhoneFrame side caption="The Modes tool open, showing the manual override list.">
+  <Shot id="typing/modes-manual-picker" alt="The Modes tool open, showing the manual override list." />
+</PhoneFrame>
+
 WM Keyboard re-checks which mode should be active every time you focus a field. A field can match more than one kind at once, since a password box always adds **Password** on top of whatever else it reports. The built-in field-type categories used here (Password, Email, URL, Number, Phone, Text, Notification replies, Multi-line text, Single-line text, No suggestions) are deliberately narrower than the field-kind detection covered in [The keyboard adapts to the field](/typing/field-adaptation/). **Text** in particular means plain free text only. A password field also reports as text-capable at the OS level, but it's explicitly excluded from the Text category, so a mode bound to Text (a chat composer, a document body) can never take over a login form.
 
 The last three chips describe the *shape* of a text box rather than what goes in it, and a field reports one of them on top of its kind. **Multi-line text** is a box that takes line breaks (an editor, a note body); **Single-line text** is every one-line box (a rename dialog, a title, a search field); **No suggestions** is a field that asked the keyboard to keep its word suggestions to itself, which is what most code editors do. They exist for apps whose fields all look alike to the categories above. A file manager's rename box, text editor and code editor are all plain text as far as Android says, but only the editors are multi-line, and only the code editor turns suggestions off. Password boxes never report a shape, for the same reason they're excluded from Text.
@@ -148,10 +152,6 @@ A mode's **apps** list, **field-type** chips and **field hints** combine as an A
 When more than one mode's bindings match, the one that names a field hint wins over one that names a field type, which wins over one that only names apps. So a password box inside a coding app still gets the Passwords mode rather than Coding, and the "Extension" box of a rename dialog gets the mode written for it rather than the one for every single-line field. Beyond that, the first match in your mode list wins.
 
 You can also override the automatic pick from the keyboard itself. Open the **Modes** tool, from the toolbar or the toolbox, for a list starting with **Automatic** and its "Follow the app and field bindings of each mode" subtitle, then one row per mode. Tapping a mode pins it by hand. How long that pin lasts is **A mode you pick by hand**, under Keyboard modes: **Until you change app**, the default, or **Until you change it**, which keeps the mode on until you pick another or turn it off.
-
-<PhoneFrame caption="The Modes tool open, showing the manual override list.">
-  <Shot id="typing/modes-manual-picker" alt="The Modes tool open, showing the manual override list." />
-</PhoneFrame>
 
 ## Rearranging tools inside a mode
 

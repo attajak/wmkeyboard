@@ -29,6 +29,10 @@ You can also add a word without leaving the keyboard. Press and hold it on the s
 
 <SettingsPath path="Typing / Suggestions / Suggestion blacklist / Blocked from the keyboard" />
 
+<PhoneFrame side caption="Adding a word to the blacklist from the Add word dialog.">
+  ![Adding a word to the blacklist from the Add word dialog.](@assets/screens/smart/blacklist-add-dialog.webp)
+</PhoneFrame>
+
 A word can be a nuisance in one language and perfectly good in another: a French word the English strip keeps guessing, say. Blocking it for all languages would take it away from French too, so the blacklist keeps two kinds of entry. A word blocked for **All languages** is never suggested, whatever you are typing in. A word blocked for one language is kept out of the strip only while that language's keyboard is active, and offered as usual everywhere else.
 
 The Add dialog asks which you want each time. The keyboard's own **Never suggest** cannot ask, since it is one item on a hold menu, so **Blocked from the keyboard** at the top of the editor decides for it: **All languages** (the default, and how the menu has always behaved) or **Current language**, which blocks the word for the language you were typing when you held it. Deleting a word that only a downloaded word list still knows follows the same setting, since that deletion works by blacklisting.
@@ -36,10 +40,6 @@ The Add dialog asks which you want each time. The keyboard's own **Never suggest
 **Suggest again**, and adding a word by hand from the strip's menu or the word card, take the word off every list it is on. There is no per-language undo on the keyboard, because the opinion being reversed is "never", not "never in French".
 
 A word blocked in one language is not forgotten from your personal dictionary, unlike a word blocked everywhere: the dictionary is shared between your languages, and the word is still wanted in the others.
-
-<PhoneFrame caption="Adding a word to the blacklist from the Add word dialog.">
-  ![Adding a word to the blacklist from the Add word dialog.](@assets/screens/smart/blacklist-add-dialog.webp)
-</PhoneFrame>
 
 Before you add anything, the screen shows "No words in this list yet. Add a word above." The row back on the Typing screen reads "Words to never suggest or autocorrect to." Once the list has entries, that row's subtitle switches to a running count instead, like "3 words never suggested."
 

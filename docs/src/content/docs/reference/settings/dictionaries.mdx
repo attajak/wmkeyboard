@@ -15,6 +15,10 @@ WM Keyboard keeps your words in four separate screens, reached from two differen
 
 <SettingsPath path="Typing / Suggestions / Personal dictionary" />
 
+<PhoneFrame side caption="The Personal dictionary screen: learned and manually-added words, most-used first.">
+  <Shot id="reference/settings/dictionary-personal" alt="The Personal dictionary screen: learned and manually-added words, most-used first." />
+</PhoneFrame>
+
 Every word the keyboard has learned from your typing, plus any you add by hand, sorted with the highest weight first. **Sort by** above the list changes that to **Alphabetical** (words that start with a capital letter first) or **Date added**, and the button under it reverses the direction. The screen remembers the order. Each row reads "Seen N times". A word you added by hand reads "You added this word · Seen N times", so it shows its count like any other. Press a row to open an edit dialog where you can respell the word or change that weight, anywhere from 1 to 1,000,000. New words the keyboard is still counting are not on this screen: they only appear once they have been typed enough times to be saved. See [Personal dictionary](/smart/personal-dictionary/#words-wait-their-turn).
 
 Past 12 words the list grows a search box above it, with a clear button in the field. Type into it and only the matching words stay on screen; a term that matches nothing says so rather than showing an empty list. Below 12 words there's no box, since the list is short enough to read.
@@ -26,10 +30,6 @@ Past 12 words the list grows a search box above it, with a clear button in the f
 **Import from Android's dictionary** and **Export to Android's dictionary** sit above the list. Each opens a checklist of the words missing on the other side, all checked: import adds the checked words as words you added by hand, and export copies them into Android's own personal dictionary. Both need WM Keyboard to be your current keyboard, because Android shares its dictionary with no other app. See [Android's dictionary](/smart/personal-dictionary/#androids-dictionary). To add the new words from a note or draft instead, use the [Learn from text](/tools/learn-from-text/) tool.
 
 The dialog takes anything you type, but the store won't: a word over 32 characters (measured after lowercasing) is dropped silently, so the dialog closes and the list is exactly as it was. The same limit applies to words learned from typing.
-
-<PhoneFrame caption="The Personal dictionary screen: learned and manually-added words, most-used first.">
-  <Shot id="reference/settings/dictionary-personal" alt="The Personal dictionary screen: learned and manually-added words, most-used first." />
-</PhoneFrame>
 
 A row whose capitals are kept as written reads "capitals kept" after its count; the edit dialog's **Keep these capitals** switch turns that on or off. When you have moved words up or down from the keyboard's word card, a **Rank adjustments** group at the bottom lists them, each with a button to reset it. See [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip) for the card.
 
@@ -51,7 +51,7 @@ A **Download more** row leads, opening the add-on repositories' dictionaries. Un
 
 A language you've since switched off keeps its group, headed "*language* (language switched off)", so its lists stay reachable rather than sitting on disk with nothing pointing at them. That group has no import buttons, since a list imported there wouldn't be read, but the switches and trash icons still work.
 
-<PhoneFrame caption="Custom dictionaries, grouped by language, with Import and From URL actions.">
+<PhoneFrame side caption="Custom dictionaries, grouped by language, with Import and From URL actions.">
   <Shot id="reference/settings/dictionary-custom" alt="Custom dictionaries, grouped by language, with Import and From URL actions." />
 </PhoneFrame>
 
@@ -92,6 +92,10 @@ Before you add anything, the screen reads "No words in this list yet. Add a word
 
 <SettingsPath path="Emoji / Emoji panel / Emoji keywords" />
 
+<PhoneFrame side caption="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language.">
+  <Shot id="reference/settings/dictionary-emoji-keywords" alt="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language." />
+</PhoneFrame>
+
 The densest of the four screens. A **Downloads** group sits up top, holding the **Download automatically** toggle and a **Download more** row into the add-on repositories' keyword packs. Under it, one group per language, each holding up to two kinds of row.
 
 **Download automatically** (<SettingsPath path="Emoji / Emoji panel / Emoji keywords / Downloads" />) defaults to **on**, so turning a language on fetches its keywords in the background, around 100 KB, once. Off leaves the per-language Download buttons below as the only way to get them.
@@ -100,10 +104,6 @@ Each language group can carry a bundled-catalog row (only shown for the 126 lang
 
 - **Bundled catalog row**: reads "N emoji, size to download" before you download it (for example "3,943 emoji, 74 KB to download"), "Waiting…" while it's queued, then a progress bar and a Cancel button while it transfers, then "N emoji, size" plus a delete icon once it's there. A failure leaves an error message and a Retry button.
 - **Imported packs**: one row per file, headline the filename minus extension, subtitle "N emoji", trash to remove. **Import pack**/**Import another** and **From URL** buttons work exactly as they do on Custom dictionaries.
-
-<PhoneFrame caption="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language.">
-  <Shot id="reference/settings/dictionary-emoji-keywords" alt="Emoji keywords: the Downloads toggle, a bundled-catalog row, and an imported pack for one language." />
-</PhoneFrame>
 
 A language's group appears here if it's currently enabled, has a downloaded catalog, or has an imported pack. So you can still delete a pack for a language you've since turned off.
 

@@ -33,6 +33,10 @@ With haptics on, **Haptic style** picks how the buzz is produced:
 | Sharp | Hardware click primitive, strength follows the intensity slider | Android 11+ |
 | Custom | Drives the vibration motor directly by duration and intensity | Android 8+ |
 
+<PhoneFrame side caption="Haptic style chips, with the strength and intensity sliders shown for Custom.">
+  <Shot id="typing/haptic-style-custom-sliders" alt="Haptic style chips, with the strength and intensity sliders shown for Custom." />
+</PhoneFrame>
+
 Tap and Key are the two to reach for first. They hand the buzz to the same platform call stock keyboards use, so a phone with vendor-tuned haptics (Samsung, Pixel) gives you that crafted click, and it follows the system's own haptic-intensity slider on its own.
 
 Tap is the default, and on most phones it's the one you want. Vendors usually tune a separate waveform for keyboards, and Tap is what their own keyboard plays, so it tends to feel crisper than Key even though the two are only one constant apart. On a Galaxy S25 Ultra, for instance, Tap and Key resolve to genuinely different Samsung effects, and Tap is the one Samsung Keyboard uses. Switch to Key if Tap feels wrong on your device. That happens on phones whose vendor never bothered to tune a keyboard-specific effect.
@@ -40,10 +44,6 @@ Tap is the default, and on most phones it's the one you want. Vendors usually tu
 Click, Heavy, Sharp and Custom bypass the platform call and drive the motor more directly, which is useful if you want a feel the platform styles don't offer. When a style isn't available on a device, it falls back to a hardware Click and then to Custom, so every style produces some feedback everywhere.
 
 Custom exposes two sliders: **Haptic strength** (5–60&nbsp;ms, vibration length) and **Haptic intensity** (1–255, how hard the motor is driven). Sharp exposes intensity too, to control the punch of its click primitive, but not strength, since the hardware fixes the primitive's length. The system-wide touch-feedback vibration setting still scales the final strength on top of whatever you set here.
-
-<PhoneFrame caption="Haptic style chips, with the strength and intensity sliders shown for Custom.">
-  <Shot id="typing/haptic-style-custom-sliders" alt="Haptic style chips, with the strength and intensity sliders shown for Custom." />
-</PhoneFrame>
 
 Two more toggles cover the edges of a long press. **Long-press haptics** (on by default) buzzes the moment a long press registers, whether that's the alternate-character popup opening or a long-press action firing, so your finger knows it can let go. **Long-press release haptics** (off by default) adds a second buzz when you lift your finger afterward. It's off because a third vibration in one gesture reads as excessive to a lot of people.
 
@@ -68,6 +68,10 @@ Six more toggles, visible only while Key press haptics is on, let you keep the b
 
 **Key sound** plays a click on every key press. Unlike haptics, it's off by default. Turning it on immediately previews whatever style is currently selected, so you hear what you're about to turn on.
 
+<PhoneFrame side caption="Sound style chips with the volume slider below.">
+  <Shot id="typing/keysound-style-chips" alt="Sound style chips with the volume slider below." />
+</PhoneFrame>
+
 **Sound style** offers seven options as chips:
 
 | Style | Source |
@@ -83,10 +87,6 @@ Six more toggles, visible only while Key press haptics is on, let you keep the b
 Click and Standard come from the device's own system sound pack, so they vary phone to phone the way the stock keyboard's clicks do. Pop, Thock and Chime are synthesized in-app and sound the same everywhere.
 
 All seven chips are on the settings screen. On the keyboard's own Sound & haptics panel, Custom and Sound pack appear only once one of them is already selected, since neither names a fixed waveform and there's no file picker on the keyboard. Pick them from the settings screen the first time.
-
-<PhoneFrame caption="Sound style chips with the volume slider below.">
-  <Shot id="typing/keysound-style-chips" alt="Sound style chips with the volume slider below." />
-</PhoneFrame>
 
 **Sound volume** (5%–100%) is relative to the system media volume rather than an absolute level.
 

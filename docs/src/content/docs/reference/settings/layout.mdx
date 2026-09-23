@@ -120,7 +120,7 @@ The Size & position values above are your portrait sizes, and the in-app caption
 
 A **Follow portrait again** row appears at the bottom of the editor once any field is set, clearing the whole override back to "Follows portrait" in one tap. On landscape that returns the shape to its own defaults rather than to your portrait numbers.
 
-<PhoneFrame caption="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders.">
+<PhoneFrame side caption="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders.">
   <Shot id="reference/settings/layout-per-screen-editor" alt="A Per-screen sizing row expanded, with Keyboard scale and the other override sliders." />
 </PhoneFrame>
 
@@ -151,7 +151,7 @@ Landscape is also the one shape that doesn't fall back to portrait for the three
 
 One-handed mode tunes separately per orientation. The rail's arrow inside the keyboard flips the side, and it remembers the answer here for whichever orientation you're in. Split divides every row into left and right halves with a gap between them, and **Split only on wide screens** holds that back until you're in landscape or on an unfolded screen, so rotating out of landscape doesn't leave a portrait phone split in two. Floating detaches the keyboard into a movable, resizable panel. While it's active it replaces the width, position and bottom-padding logic above, though split still works alongside it. **Keep the keyboard on screen** stops the keyboard from closing when a text field loses focus, so it stays up over screens with no field at all until you hide it yourself. See [Keeping the keyboard on screen](/typing/size-position/#keeping-the-keyboard-on-screen) for what reaches the app and how to close it.
 
-<PhoneFrame caption="One-handed mode set to Right, with the Portrait width, height, and side sliders below it.">
+<PhoneFrame side caption="One-handed mode set to Right, with the Portrait width, height, and side sliders below it.">
   <Shot id="reference/settings/layout-one-handed-split-floating" alt="One-handed mode set to Right, with the Portrait width, height, and side sliders below it." />
 </PhoneFrame>
 
@@ -173,16 +173,16 @@ Full detail on all three (plus the floating panel's drag pill and resize grip) i
 **Emoji key instead of 🌐** is on by default. The bottom-row <KeyCap>🌐</KeyCap> key opens the emoji panel instead of switching language, and language switching moves to a spacebar swipe (Language, by default). **Comma key opens emoji** takes over the comma key the same way, with comma demoted to a long-press alternate. Turning it on also removes the emoji tool from the toolbar, since the key is meant to replace it.
 
 **Swap the comma and 🌐 keys** is on by default. Without it the bottom row reads `?123` · `,` · 🌐 · space · `.` · ⏎; with it the two keys either side of the spacebar trade places, so it reads `?123` · 🌐 · `,` · space · `.` · ⏎. It's a straight positional swap and it runs after the emoji rewrites, so whichever of the two you turned into an emoji key travels with its slot. On the default settings that puts the emoji key in the outer position and the comma next to the spacebar. It applies to every layout, imported and custom ones included, and to the symbol layers too, so the row doesn't reshuffle on the way into `?123`.
+<PhoneFrame side caption="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key.">
+  <Shot id="reference/settings/layout-bottom-row-keys" alt="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key." />
+</PhoneFrame>
+
 
 **Keep the 🌐 key in one place** is on by default. Layouts don't all agree on where the 🌐 key goes: many imported ones, most of the converted Keyman layouts among them, put it at the far left, straight after `?123`, or after the spacebar. With this on, the key moves to the slot the built-in layouts use, so it sits under the same spot on the screen in every language you switch between. That slot is measured as a share of the row, not counted in keys: the key starts a quarter of the way along the row and is a tenth of it wide, or, with **Swap the comma and 🌐 keys** on, it starts at 15% with the comma after it. The keys before it get wider or narrower to fill the space up to it, the spacebar grows or shrinks to fit, and every other key keeps its width and its order. When nothing sits before the key, the key itself widens to reach its slot, so a thumb aimed at the usual place still lands on it. A row where the move would squeeze keys to under half their width, stretch them past two and a half times it, or leave the spacebar under a fifth of the row is left as it is, and so is a row with a key that spans two rows. The built-in layouts already have the key in its slot, so nothing about them changes. A second layout you open from a key is always drawn as its author made it, and so is the expanded tablet grid.
 
 **Show the 🌐 key** is on by default. Turn it off and the key is gone from the bottom row of every layout, on the symbol layers too, and so is the emoji key that **Emoji key instead of 🌐** puts in its place. The spacebar takes its width, so the row stays the same length. While the key is hidden, **Emoji key instead of 🌐**, **Swap the comma and 🌐 keys** and **Keep the 🌐 key in one place** have nothing to change and are greyed out. Language switching stays on the spacebar: a quick swipe does it by default. See [Switching languages](/languages/switching/).
 
 **Ignore 🌐 right after typing** is off by default. Set a time and a tap on 🌐 that comes sooner than that after a typed key (a letter, space, backspace or enter) does nothing, so a thumb that misses the comma or the spacebar mid-word no longer changes the language. Holding 🌐 still opens the picker. Greyed out while the key is hidden. See [Switching languages](/languages/switching/#ignoring-a--tap-right-after-typing).
-
-<PhoneFrame caption="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key.">
-  <Shot id="reference/settings/layout-bottom-row-keys" alt="The Bottom-row keys group: Comma key opens emoji and Emoji key instead of the globe key." />
-</PhoneFrame>
 
 See [Switching languages](/languages/switching/#using-the-globe-key) and [Opening the emoji panel](/emoji/picker/) for what each toggle changes in daily use.
 
