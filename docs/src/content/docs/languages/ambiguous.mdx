@@ -1,6 +1,6 @@
 ---
 title: "T9 & Compact QWERTY"
-description: "Two English layouts that put more than one letter on a key and let the prediction engine work out which one you meant, including glide typing on both."
+description: "Layouts that put more than one letter on a key and let the prediction engine work out which one you meant: T9 in 272 languages and Compact QWERTY, with glide typing on both."
 sidebar:
   order: 7
 ---
@@ -13,7 +13,7 @@ Most keyboards give every letter its own key. Twenty-six keys across a phone scr
 
 Two of the shipped layouts don't do that. **T9** puts the alphabet on eight keys, the way phone keypads did. **Compact QWERTY** keeps QWERTY's exact letter order but pairs the keys up, five to a row instead of ten. Both give you keys two to four times the usual size, and both work out what you meant afterwards rather than asking you to be precise.
 
-Neither one starts enabled. Turn them on under <SettingsPath path="Languages & layouts / English" />, where they sit with English's other layouts alongside Dvorak and Colemak.
+Neither one starts enabled. Turn them on under <SettingsPath path="Languages & layouts / English" />, where they sit with English's other layouts alongside Dvorak and Colemak. T9 also comes in 271 more languages, each listed under its own language: see [T9 in other languages](#t9-in-other-languages).
 
 <PhoneFrame caption="The T9 keypad: eight letter keys, each carrying three or four letters.">
   {/* shot: languages/ambiguous-t9-field */}
@@ -48,6 +48,30 @@ Space commits whatever is showing. There's no confidence threshold here the way 
 Names, passwords, made-up words. Hold the key and its letters are in the popup, after the digit. Pick one and it goes in as itself: that position stops being a guess, and the rest of the word carries on being decoded normally. So you can spell the tricky part of a word by hand and let the keyboard handle the rest.
 
 Anything you spell out this way gets learned like any other word, so you only have to do it a couple of times.
+
+## T9 in other languages
+
+The same keypad ships for 271 more languages, so switching language on the globe key keeps you on the keypad instead of dropping you back onto a full keyboard. Each one is under its own language in <SettingsPath path="Languages & layouts" />, called **T9** with the language's name after it, and like the English one it starts switched off.
+
+The grid never changes: punctuation on <KeyCap>1</KeyCap>, letters on <KeyCap>2</KeyCap> to <KeyCap>9</KeyCap>, the same column down the right. Which letters each key carries, and in what order, comes from ETSI ES 202 130, the European standard phone makers followed for the 12-key keypad. It's the layout you'll remember if you texted on a Nokia or a Sony Ericsson in that language:
+
+- **Latin-script languages** keep `abc` on <KeyCap>2</KeyCap> through `wxyz` on <KeyCap>9</KeyCap> and add their own letters to the key of the letter they're built from: German puts `ä` on <KeyCap>2</KeyCap> and `ß` on <KeyCap>7</KeyCap>, Polish puts `ł` on <KeyCap>5</KeyCap>, Czech puts `ř` and `š` on <KeyCap>7</KeyCap>.
+- **Russian** runs `абвг` `деёжз` `ийкл` `мноп` `рсту` `фхцч` `шщъы` `ьэюя`, and Ukrainian, Belarusian and Bulgarian follow the same pattern with their own letters.
+- **Serbian Cyrillic** matches its keys to Serbian Latin, so `ц` and `ч` are on <KeyCap>2</KeyCap> with `а б`, the way `c` and `č` sit with `a b`.
+- **Greek** runs `αβγ` to `χψω`, with the accented vowels and `ς` on their letter's key.
+- **Hebrew** starts `דהו` on <KeyCap>2</KeyCap> and `אבג` on <KeyCap>3</KeyCap>, with the final forms beside their letter.
+- **Arabic, Persian and Urdu** each have their own table: Arabic starts `ب ت ة ث` on <KeyCap>2</KeyCap> and puts every form of alef and hamza on <KeyCap>3</KeyCap>.
+- **Armenian** fills <KeyCap>2</KeyCap> to <KeyCap>8</KeyCap> and keeps <KeyCap>9</KeyCap> for Armenian punctuation, and **Georgian** runs its alphabet in order across all eight.
+
+Where the standard assigns a language another's table, that's the one you get: Catalan and Galician use the Spanish keypad, Faroese and Greenlandic the Danish one, Rusyn the Ukrainian one, Occitan, Breton and Walloon the French one.
+
+Languages the standard doesn't cover start from the table of the language their phones were sold in (Bavarian and Swiss German from German, Kazakh, Tatar and the other Cyrillic-script languages of Russia and Central Asia from Russian, Pashto and Sorani from Persian, Sindhi and Saraiki from Urdu), or from the plain keypad for languages whose phones were sold with the English one, such as Indonesian, Swahili, Zulu and the romanized Hindi, Bangla and Urdu. Their own letters then go on the key the standard's language-independent table gives them, or on the key of the letter they're read as: Hausa's `ɓ` on <KeyCap>2</KeyCap>, Ewe's `ɛ` on <KeyCap>3</KeyCap>, Kazakh's `қ` on <KeyCap>4</KeyCap>. Tamazight in Tifinagh has no keypad standard, so its alphabet runs in order across the keys.
+
+Scripts with no capital letters (Georgian, Hebrew, Tifinagh and the Arabic-script languages) have a comma in the shift key's place in the right-hand column. The Arabic-script keypads use `،` `؟` `؛` on <KeyCap>1</KeyCap>, and Urdu, Sindhi, Saraiki and Punjabi add `۔`.
+
+Every letter a key carries is in its long-press popup too, so the rule from [Words the dictionary doesn't know](#words-the-dictionary-doesnt-know) still holds: hold the key, pick the letter, and that position is spelled exactly.
+
+Two limits worth knowing. The decoding runs on the language's word list, so the keypad needs that list on the device: adding a language offers to download it, and [Downloadable dictionaries](/languages/dictionaries/) covers getting it later. And a key carries letters, not accent marks on their own, so a language whose spelling needs a separate combining mark (Vietnamese tones, Yoruba tone dots, the scripts of India and Southeast Asia) has no T9 keypad yet.
 
 ## Compact QWERTY
 

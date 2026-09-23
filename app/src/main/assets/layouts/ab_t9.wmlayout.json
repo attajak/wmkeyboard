@@ -1,0 +1,187 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_ab_t9",
+    "name": "T9 (Аҧсуа)",
+    "langId": "ab",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "АБВГҔ",
+              "output": "а",
+              "longPress": [
+                "2",
+                "а",
+                "б",
+                "в",
+                "г",
+                "ҕ"
+              ],
+              "letters": "абвгҕ"
+            },
+            {
+              "label": "ДЏЕҼҾЖ",
+              "output": "д",
+              "longPress": [
+                "3",
+                "д",
+                "џ",
+                "е",
+                "ё",
+                "ҽ",
+                "ҿ",
+                "ж",
+                "з",
+                "ӡ"
+              ],
+              "letters": "дџеёҽҿжзӡ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ИКҚҞЛ",
+              "output": "и",
+              "longPress": [
+                "4",
+                "и",
+                "й",
+                "к",
+                "қ",
+                "ҟ",
+                "л"
+              ],
+              "letters": "ийкқҟл"
+            },
+            {
+              "label": "МНОҨПҦ",
+              "output": "м",
+              "longPress": [
+                "5",
+                "м",
+                "н",
+                "о",
+                "ҩ",
+                "п",
+                "ҧ"
+              ],
+              "letters": "мноҩпҧ"
+            },
+            {
+              "label": "РСТҬУ",
+              "output": "р",
+              "longPress": [
+                "6",
+                "р",
+                "с",
+                "т",
+                "ҭ",
+                "у"
+              ],
+              "letters": "рстҭу"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ФХҲЦҴЧ",
+              "output": "ф",
+              "longPress": [
+                "7",
+                "ф",
+                "х",
+                "ҳ",
+                "ц",
+                "ҵ",
+                "ч",
+                "ҷ"
+              ],
+              "letters": "фхҳцҵчҷ"
+            },
+            {
+              "label": "ШЩЪЫ",
+              "output": "ш",
+              "longPress": [
+                "8",
+                "ш",
+                "щ",
+                "ъ",
+                "ы"
+              ],
+              "letters": "шщъы"
+            },
+            {
+              "label": "ЬӘЭЮЯ",
+              "output": "ь",
+              "longPress": [
+                "9",
+                "ь",
+                "ә",
+                "э",
+                "ю",
+                "я"
+              ],
+              "letters": "ьәэюя"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

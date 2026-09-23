@@ -56,7 +56,7 @@ class TabletExpansionCorpusTest {
 
     @Test
     fun `the corpus is the whole shipped set`() {
-        assertEquals("built-ins plus hand-authored assets", 21 + 397, handAuthored.size)
+        assertEquals("built-ins plus hand-authored assets", 21 + 668, handAuthored.size)
         assertTrue(
             "converted Keyman grids are missing from the corpus",
             corpus.size - handAuthored.size > 800,
@@ -82,6 +82,8 @@ class TabletExpansionCorpusTest {
      */
     @Test
     fun `exactly the non-alphabetic layouts decline`() {
+        // The per-language T9 keypads (#332) decline for the reason builtin_t9 does.
+        val keypads = handAuthored.map { it.id }.filter { it.endsWith("_t9") }.toSet()
         val declined = handAuthored
             .filter { tabletGridWidth(it.letters, DeviceForm.LARGE_TABLET) == null }
             .map { it.id }
@@ -93,7 +95,7 @@ class TabletExpansionCorpusTest {
                 "braille_chord", "ja_flick", "ja_kana_jis", "morse", "zh_stroke",
                 "ipa", "music", "nqo_nko",
                 "zh_cangjie", "zh_cangjie_quick", "zh_pinyin_t9", "zh_zhuyin",
-            ),
+            ) + keypads,
             declined,
         )
     }

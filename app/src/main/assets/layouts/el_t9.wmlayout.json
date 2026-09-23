@@ -1,0 +1,176 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_el_t9",
+    "name": "T9 (Ελληνικά)",
+    "langId": "el",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ΑΒΓ",
+              "output": "α",
+              "longPress": [
+                "2",
+                "α",
+                "β",
+                "γ",
+                "ά"
+              ],
+              "letters": "αβγά"
+            },
+            {
+              "label": "ΔΕΖ",
+              "output": "δ",
+              "longPress": [
+                "3",
+                "δ",
+                "ε",
+                "ζ",
+                "έ"
+              ],
+              "letters": "δεζέ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ΗΘΙ",
+              "output": "η",
+              "longPress": [
+                "4",
+                "η",
+                "θ",
+                "ι",
+                "ή",
+                "ί",
+                "ϊ",
+                "ΐ"
+              ],
+              "letters": "ηθιήίϊΐ"
+            },
+            {
+              "label": "ΚΛΜ",
+              "output": "κ",
+              "longPress": [
+                "5",
+                "κ",
+                "λ",
+                "μ"
+              ],
+              "letters": "κλμ"
+            },
+            {
+              "label": "ΝΞΟ",
+              "output": "ν",
+              "longPress": [
+                "6",
+                "ν",
+                "ξ",
+                "ο",
+                "ό"
+              ],
+              "letters": "νξοό"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ΠΡΣ",
+              "output": "π",
+              "longPress": [
+                "7",
+                "π",
+                "ρ",
+                "σ",
+                "ς"
+              ],
+              "letters": "πρσς"
+            },
+            {
+              "label": "ΤΥΦ",
+              "output": "τ",
+              "longPress": [
+                "8",
+                "τ",
+                "υ",
+                "φ",
+                "ύ",
+                "ϋ",
+                "ΰ"
+              ],
+              "letters": "τυφύϋΰ"
+            },
+            {
+              "label": "ΧΨΩ",
+              "output": "χ",
+              "longPress": [
+                "9",
+                "χ",
+                "ψ",
+                "ω",
+                "ώ"
+              ],
+              "letters": "χψωώ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

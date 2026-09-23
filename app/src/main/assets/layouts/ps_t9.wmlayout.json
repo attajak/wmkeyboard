@@ -1,0 +1,193 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_ps_t9",
+    "name": "T9 (پښتو)",
+    "langId": "ps",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".،؟",
+              "output": ".",
+              "longPress": [
+                "1",
+                "،",
+                "؟",
+                "!",
+                "'",
+                "-",
+                ":",
+                "؛"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ب پ ت ة ث",
+              "output": "ب",
+              "longPress": [
+                "2",
+                "ب",
+                "پ",
+                "ت",
+                "ة",
+                "ث",
+                "ټ"
+              ],
+              "letters": "بپتةثټ"
+            },
+            {
+              "label": "ا ء",
+              "output": "ا",
+              "longPress": [
+                "3",
+                "ا",
+                "أ",
+                "إ",
+                "آ",
+                "ؤ",
+                "ئ",
+                "ء"
+              ],
+              "letters": "اأإآؤئء"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "س ش ص ض ښ",
+              "output": "س",
+              "longPress": [
+                "4",
+                "س",
+                "ش",
+                "ص",
+                "ض",
+                "ښ"
+              ],
+              "letters": "سشصضښ"
+            },
+            {
+              "label": "د ذ ر ز ژ",
+              "output": "د",
+              "longPress": [
+                "5",
+                "د",
+                "ذ",
+                "ر",
+                "ز",
+                "ژ",
+                "ډ",
+                "ړ",
+                "ږ"
+              ],
+              "letters": "دذرزژډړږ"
+            },
+            {
+              "label": "ج چ ح خ ځ",
+              "output": "ج",
+              "longPress": [
+                "6",
+                "ج",
+                "چ",
+                "ح",
+                "خ",
+                "ځ",
+                "څ"
+              ],
+              "letters": "جچحخځڅ"
+            },
+            {
+              "label": "،",
+              "longPress": [
+                "!",
+                "؟"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ن و ه ی ڼ",
+              "output": "ن",
+              "longPress": [
+                "7",
+                "ن",
+                "و",
+                "ه",
+                "ی",
+                "ڼ",
+                "ې",
+                "ۍ"
+              ],
+              "letters": "نوهیڼېۍ"
+            },
+            {
+              "label": "ف ق ک گ ل",
+              "output": "ف",
+              "longPress": [
+                "8",
+                "ف",
+                "ق",
+                "ک",
+                "گ",
+                "ل",
+                "م",
+                "ك",
+                "ګ"
+              ],
+              "letters": "فقکگلمكګ"
+            },
+            {
+              "label": "ط ظ ع غ",
+              "output": "ط",
+              "longPress": [
+                "9",
+                "ط",
+                "ظ",
+                "ع",
+                "غ"
+              ],
+              "letters": "طظعغ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

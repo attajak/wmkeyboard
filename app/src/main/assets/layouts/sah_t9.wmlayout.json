@@ -1,0 +1,178 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_sah_t9",
+    "name": "T9 (Саха)",
+    "langId": "sah",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "АБВГҔ",
+              "output": "а",
+              "longPress": [
+                "2",
+                "а",
+                "б",
+                "в",
+                "г",
+                "ҕ"
+              ],
+              "letters": "абвгҕ"
+            },
+            {
+              "label": "ДЕЖЗ",
+              "output": "д",
+              "longPress": [
+                "3",
+                "д",
+                "е",
+                "ё",
+                "ж",
+                "з"
+              ],
+              "letters": "деёжз"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ИКЛ",
+              "output": "и",
+              "longPress": [
+                "4",
+                "и",
+                "й",
+                "к",
+                "л"
+              ],
+              "letters": "ийкл"
+            },
+            {
+              "label": "МНОПҤӨ",
+              "output": "м",
+              "longPress": [
+                "5",
+                "м",
+                "н",
+                "о",
+                "п",
+                "ҥ",
+                "ө"
+              ],
+              "letters": "мнопҥө"
+            },
+            {
+              "label": "РСТУҮ",
+              "output": "р",
+              "longPress": [
+                "6",
+                "р",
+                "с",
+                "т",
+                "у",
+                "ү"
+              ],
+              "letters": "рстуү"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ФХЦЧҺ",
+              "output": "ф",
+              "longPress": [
+                "7",
+                "ф",
+                "х",
+                "ц",
+                "ч",
+                "һ"
+              ],
+              "letters": "фхцчһ"
+            },
+            {
+              "label": "ШЩЪЫ",
+              "output": "ш",
+              "longPress": [
+                "8",
+                "ш",
+                "щ",
+                "ъ",
+                "ы"
+              ],
+              "letters": "шщъы"
+            },
+            {
+              "label": "ЬЭЮЯ",
+              "output": "ь",
+              "longPress": [
+                "9",
+                "ь",
+                "э",
+                "ю",
+                "я"
+              ],
+              "letters": "ьэюя"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

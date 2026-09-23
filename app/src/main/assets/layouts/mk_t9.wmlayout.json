@@ -1,0 +1,179 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_mk_t9",
+    "name": "T9 (Македонски)",
+    "langId": "mk",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "АБВГ",
+              "output": "а",
+              "longPress": [
+                "2",
+                "а",
+                "б",
+                "в",
+                "г"
+              ],
+              "letters": "абвг"
+            },
+            {
+              "label": "ДЕЖЂ",
+              "output": "д",
+              "longPress": [
+                "3",
+                "д",
+                "ѓ",
+                "е",
+                "ж",
+                "ђ"
+              ],
+              "letters": "дѓежђ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ЗЅИЈК",
+              "output": "з",
+              "longPress": [
+                "4",
+                "з",
+                "ѕ",
+                "и",
+                "ј",
+                "й",
+                "к"
+              ],
+              "letters": "зѕијйк"
+            },
+            {
+              "label": "ЛЉМ",
+              "output": "л",
+              "longPress": [
+                "5",
+                "л",
+                "љ",
+                "м"
+              ],
+              "letters": "лљм"
+            },
+            {
+              "label": "НЊОП",
+              "output": "н",
+              "longPress": [
+                "6",
+                "н",
+                "њ",
+                "о",
+                "п"
+              ],
+              "letters": "нњоп"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "РСТ",
+              "output": "р",
+              "longPress": [
+                "7",
+                "р",
+                "с",
+                "т"
+              ],
+              "letters": "рст"
+            },
+            {
+              "label": "УФЋХ",
+              "output": "ќ",
+              "longPress": [
+                "8",
+                "ќ",
+                "у",
+                "ф",
+                "ћ",
+                "х"
+              ],
+              "letters": "ќуфћх"
+            },
+            {
+              "label": "ЦЧЏШЩЪ",
+              "output": "ц",
+              "longPress": [
+                "9",
+                "ц",
+                "ч",
+                "џ",
+                "ш",
+                "щ",
+                "ъ",
+                "ь",
+                "ю",
+                "я"
+              ],
+              "letters": "цчџшщъьюя"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

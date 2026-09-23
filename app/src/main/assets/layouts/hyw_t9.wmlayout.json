@@ -1,0 +1,184 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_hyw_t9",
+    "name": "T9 (Արեւմտահայերէն)",
+    "langId": "hyw",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ԱԲԳԴԵԶ",
+              "output": "ա",
+              "longPress": [
+                "2",
+                "ա",
+                "բ",
+                "գ",
+                "դ",
+                "ե",
+                "զ"
+              ],
+              "letters": "աբգդեզ"
+            },
+            {
+              "label": "ԷԸԹԺԻ",
+              "output": "է",
+              "longPress": [
+                "3",
+                "է",
+                "ը",
+                "թ",
+                "ժ",
+                "ի"
+              ],
+              "letters": "էըթժի"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ԼԽԾԿՀՁ",
+              "output": "լ",
+              "longPress": [
+                "4",
+                "լ",
+                "խ",
+                "ծ",
+                "կ",
+                "հ",
+                "ձ"
+              ],
+              "letters": "լխծկհձ"
+            },
+            {
+              "label": "ՂՃՄՅՆՇ",
+              "output": "ղ",
+              "longPress": [
+                "5",
+                "ղ",
+                "ճ",
+                "մ",
+                "յ",
+                "ն",
+                "շ"
+              ],
+              "letters": "ղճմյնշ"
+            },
+            {
+              "label": "ՈՉՊՋՌ",
+              "output": "ո",
+              "longPress": [
+                "6",
+                "ո",
+                "չ",
+                "պ",
+                "ջ",
+                "ռ"
+              ],
+              "letters": "ոչպջռ"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ՍՎՏՐՑՒ",
+              "output": "ս",
+              "longPress": [
+                "7",
+                "ս",
+                "վ",
+                "տ",
+                "ր",
+                "ց",
+                "ւ"
+              ],
+              "letters": "սվտրցւ"
+            },
+            {
+              "label": "ՓՔՕՖ",
+              "output": "փ",
+              "longPress": [
+                "8",
+                "փ",
+                "ք",
+                "և",
+                "օ",
+                "ֆ"
+              ],
+              "letters": "փքևօֆ"
+            },
+            {
+              "label": "։՝՞",
+              "output": "։",
+              "longPress": [
+                "9",
+                "՝",
+                "՞",
+                "՜",
+                "֊",
+                "՟",
+                "՛"
+              ]
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

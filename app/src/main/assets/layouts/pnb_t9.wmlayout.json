@@ -1,0 +1,189 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_pnb_t9",
+    "name": "T9 (پنجابی)",
+    "langId": "pnb",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".،؟",
+              "output": ".",
+              "longPress": [
+                "1",
+                "،",
+                "؟",
+                "!",
+                "'",
+                "-",
+                ":",
+                "؛",
+                "۔"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ب پ ت ٹ ث",
+              "output": "ب",
+              "longPress": [
+                "2",
+                "ب",
+                "پ",
+                "ت",
+                "ٹ",
+                "ث",
+                "ۃ"
+              ],
+              "letters": "بپتٹثۃ"
+            },
+            {
+              "label": "ا ء",
+              "output": "ا",
+              "longPress": [
+                "3",
+                "ا",
+                "آ",
+                "ؤ",
+                "ئ",
+                "ۓ",
+                "ء"
+              ],
+              "letters": "اآؤئۓء"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "س ش ص ض",
+              "output": "س",
+              "longPress": [
+                "4",
+                "س",
+                "ش",
+                "ص",
+                "ض"
+              ],
+              "letters": "سشصض"
+            },
+            {
+              "label": "د ڈ ذ ر ڑ",
+              "output": "د",
+              "longPress": [
+                "5",
+                "د",
+                "ڈ",
+                "ذ",
+                "ر",
+                "ڑ",
+                "ز",
+                "ژ"
+              ],
+              "letters": "دڈذرڑزژ"
+            },
+            {
+              "label": "ج چ ح خ",
+              "output": "ج",
+              "longPress": [
+                "6",
+                "ج",
+                "چ",
+                "ح",
+                "خ"
+              ],
+              "letters": "جچحخ"
+            },
+            {
+              "label": "،",
+              "longPress": [
+                "!",
+                "؟"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ن ں و ھ ہ",
+              "output": "ن",
+              "longPress": [
+                "7",
+                "ن",
+                "ں",
+                "و",
+                "ھ",
+                "ہ",
+                "ۂ",
+                "ی",
+                "ے",
+                "ݨ"
+              ],
+              "letters": "نںوھہۂیےݨ"
+            },
+            {
+              "label": "ف ق ک گ ل",
+              "output": "ف",
+              "longPress": [
+                "8",
+                "ف",
+                "ق",
+                "ک",
+                "گ",
+                "ل",
+                "م"
+              ],
+              "letters": "فقکگلم"
+            },
+            {
+              "label": "ط ظ ع غ",
+              "output": "ط",
+              "longPress": [
+                "9",
+                "ط",
+                "ظ",
+                "ع",
+                "غ"
+              ],
+              "letters": "طظعغ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

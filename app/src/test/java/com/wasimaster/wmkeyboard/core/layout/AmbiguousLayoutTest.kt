@@ -1,6 +1,9 @@
 package com.wasimaster.wmkeyboard.core.layout
 
 import com.wasimaster.wmkeyboard.core.prediction.KeyProximity
+import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
+import com.wasimaster.wmkeyboard.core.script.ScriptId
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -213,5 +216,99 @@ class AmbiguousLayoutTest {
             assertFalse("${spec.name} is secondary", spec.secondary)
             assertFalse("${spec.name} starts enabled", spec.id in BuiltInLayouts.defaultEnabledIds)
         }
+    }
+
+    /**
+     * The per-language keypads (issue #332), shipped as assets: the English
+     * grid with each language's own letter groups. Read off disk the way
+     * `AssetLayoutsTest` reads every asset, since the loader wants a device.
+     */
+    private val languageKeypads: List<LayoutSpec> =
+        File("src/main/assets/layouts")
+            .listFiles { f -> f.name.endsWith("_t9.${LayoutFile.FILE_EXTENSION}") }
+            .orEmpty()
+            .sortedBy { it.name }
+            .map { LayoutFile.decode(it.readText())!!.layout }
+            // The pinyin pad types digits for a composer; it has no letter sets.
+            .filterNot { it.id == AssetLayouts.ZH_PINYIN_T9_ID }
+
+    @Test
+    fun theLanguageKeypadsShip() {
+        assertEquals(271, languageKeypads.size)
+    }
+
+    @Test
+    fun everyLanguageKeypadKeepsTheEnglishOnesShape() {
+        // Same grid as builtin_t9, so a T9 typist switching language finds
+        // every key where it was: eight letter keys, the digits 2-9 on them in
+        // keypad order, one width throughout, and no tablet widening.
+        val englishShape = letterRows(BuiltInLayouts.T9).map { row -> row.map { it.width } }
+        for (spec in languageKeypads) {
+            // Keys 2-9 by their digit hint. Every one carries letters except
+            // Armenian's 9, which ETSI ES 202 130 keeps for the script's
+            // punctuation, as Armenian phones did.
+            val keys = textKeys(spec).filter { it.longPress.firstOrNull() in KEYPAD_DIGITS }
+            assertEquals("${spec.id} digit hints", KEYPAD_DIGITS, keys.map { it.longPress.first() })
+            assertTrue(
+                "${spec.id} has a digit key with no letters",
+                keys.count { it.isAmbiguous() } >= if (spec.langId in ARMENIAN) 7 else 8,
+            )
+            assertEquals(
+                "${spec.id} grid shape",
+                englishShape,
+                letterRows(spec).map { row -> row.map { it.width } },
+            )
+            assertFalse("${spec.id} asks for tablet expansion", spec.tabletExpand)
+        }
+    }
+
+    @Test
+    fun everyLanguageKeypadKeepsTheAnchorAndSpellingRules() {
+        for (spec in languageKeypads) {
+            for (key in textKeys(spec).filter { it.isAmbiguous() }) {
+                val set = key.letterSet()
+                assertEquals("${spec.id}: ${key.label} anchor", set.first().toString(), key.output)
+                assertEquals("${spec.id}: ${key.label} set", key, key.withLetters(set))
+                for (letter in set) {
+                    assertTrue(
+                        "${spec.id}: ${key.label} cannot spell '$letter'",
+                        letter.toString() in key.longPress,
+                    )
+                }
+            }
+            val letters = textKeys(spec).flatMap { it.letterSet().toList() }
+            assertEquals("${spec.id} puts a letter on two keys", letters.distinct(), letters)
+        }
+    }
+
+    @Test
+    fun aLatinKeypadAddsItsLettersToTheKeypadNotAroundIt() {
+        // The ITU groups stay the first letters of every key, so the anchor a
+        // tap commits and the keys a word's shape runs through are the English
+        // keypad's; what a language adds (ä, ł, ñ) rides on its base letter's key.
+        val itu = listOf("abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz")
+        for (spec in languageKeypads.filter { it.script().id == ScriptId.LATIN }) {
+            val sets = textKeys(spec).filter { it.isAmbiguous() }.map { it.letterSet() }
+            for ((set, group) in sets.zip(itu)) {
+                assertTrue("${spec.id}: $set does not start with $group", set.startsWith(group))
+            }
+        }
+    }
+
+    @Test
+    fun everyLanguageKeypadIsOfferedByItsLanguage() {
+        // An asset no language lists is shipped and unreachable, which is what
+        // happened to builtin_t9 for two days (a699c1ef).
+        for (spec in languageKeypads) {
+            assertTrue(
+                "${spec.id} is not listed under ${spec.langId}",
+                spec.id in LanguageRegistry.byId(spec.langId).layoutIds,
+            )
+        }
+    }
+
+    private companion object {
+        val KEYPAD_DIGITS = listOf("2", "3", "4", "5", "6", "7", "8", "9")
+        val ARMENIAN = setOf("hy", "hyw")
     }
 }
