@@ -31,9 +31,12 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "á",
+                "à",
+                "ā"
               ],
-              "letters": "abc"
+              "letters": "abcáàā"
             },
             {
               "label": "DEF",
@@ -61,9 +64,10 @@
                 "4",
                 "g",
                 "h",
-                "i"
+                "i",
+                "í"
               ],
-              "letters": "ghi"
+              "letters": "ghií"
             },
             {
               "label": "JKL",
@@ -114,9 +118,11 @@
                 "8",
                 "t",
                 "u",
-                "v"
+                "v",
+                "ü",
+                "ū"
               ],
-              "letters": "tuv"
+              "letters": "tuvüū"
             },
             {
               "label": "WXYZ",

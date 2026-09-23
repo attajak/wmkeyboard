@@ -31,9 +31,10 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "ꞌ"
               ],
-              "letters": "abc"
+              "letters": "abcꞌ"
             },
             {
               "label": "DEF",
@@ -85,9 +86,10 @@
                 "m",
                 "n",
                 "o",
-                "ɔ"
+                "ɔ",
+                "ŋ"
               ],
-              "letters": "mnoɔ"
+              "letters": "mnoɔŋ"
             },
             {
               "label": "⇧",
@@ -116,9 +118,10 @@
                 "8",
                 "t",
                 "u",
-                "v"
+                "v",
+                "ʋ"
               ],
-              "letters": "tuv"
+              "letters": "tuvʋ"
             },
             {
               "label": "WXYZ",

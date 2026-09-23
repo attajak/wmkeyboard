@@ -33,9 +33,12 @@
                 "b",
                 "c",
                 "ā",
-                "ʻ"
+                "ʻ",
+                "à",
+                "â",
+                "á"
               ],
-              "letters": "abcāʻ"
+              "letters": "abcāʻàâá"
             },
             {
               "label": "DEF",
@@ -45,9 +48,10 @@
                 "d",
                 "e",
                 "f",
-                "ē"
+                "ē",
+                "ê"
               ],
-              "letters": "defē"
+              "letters": "defēê"
             },
             {
               "label": "⌫",
@@ -65,9 +69,10 @@
                 "g",
                 "h",
                 "i",
-                "ī"
+                "ī",
+                "ì"
               ],
-              "letters": "ghiī"
+              "letters": "ghiīì"
             },
             {
               "label": "JKL",
@@ -88,9 +93,10 @@
                 "m",
                 "n",
                 "o",
-                "ō"
+                "ō",
+                "ò"
               ],
-              "letters": "mnoō"
+              "letters": "mnoōò"
             },
             {
               "label": "⇧",

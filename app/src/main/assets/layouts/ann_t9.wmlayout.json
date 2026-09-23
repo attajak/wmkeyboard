@@ -2,9 +2,9 @@
   "format": "wmkeyboard-layout",
   "version": 1,
   "layout": {
-    "id": "asset_tly_t9",
-    "name": "T9 (tolışi zıvon)",
-    "langId": "tly",
+    "id": "asset_ann_t9",
+    "name": "T9 (Obolo)",
+    "langId": "ann",
     "layers": {
       "letters": {
         "rows": [
@@ -32,9 +32,9 @@
                 "a",
                 "b",
                 "c",
-                "ç"
+                "à"
               ],
-              "letters": "abcç"
+              "letters": "abcà"
             },
             {
               "label": "DEF",
@@ -44,9 +44,9 @@
                 "d",
                 "e",
                 "f",
-                "ə"
+                "è"
               ],
-              "letters": "defə"
+              "letters": "defè"
             },
             {
               "label": "⌫",
@@ -64,10 +64,11 @@
                 "g",
                 "h",
                 "i",
-                "ğ",
-                "ı"
+                "ị",
+                "ì",
+                "î"
               ],
-              "letters": "ghiğı"
+              "letters": "ghiịìî"
             },
             {
               "label": "JKL",
@@ -88,9 +89,11 @@
                 "m",
                 "n",
                 "o",
-                "ö"
+                "ọ",
+                "ñ",
+                "ò"
               ],
-              "letters": "mnoö"
+              "letters": "mnoọñò"
             },
             {
               "label": "⇧",
@@ -108,10 +111,9 @@
                 "p",
                 "q",
                 "r",
-                "s",
-                "ş"
+                "s"
               ],
-              "letters": "pqrsş"
+              "letters": "pqrs"
             },
             {
               "label": "TUV",
@@ -121,9 +123,9 @@
                 "t",
                 "u",
                 "v",
-                "ü"
+                "ụ"
               ],
-              "letters": "tuvü"
+              "letters": "tuvụ"
             },
             {
               "label": "WXYZ",
@@ -133,9 +135,10 @@
                 "w",
                 "x",
                 "y",
-                "z"
+                "z",
+                "̄"
               ],
-              "letters": "wxyz"
+              "letters": "wxyz̄"
             },
             {
               "label": "⏎",

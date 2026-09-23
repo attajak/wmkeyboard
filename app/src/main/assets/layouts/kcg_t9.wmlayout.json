@@ -2,9 +2,9 @@
   "format": "wmkeyboard-layout",
   "version": 1,
   "layout": {
-    "id": "asset_ku_t9",
-    "name": "T9 (Kurdî)",
-    "langId": "ku",
+    "id": "asset_kcg_t9",
+    "name": "T9 (Tyap)",
+    "langId": "kcg",
     "layers": {
       "letters": {
         "rows": [
@@ -32,10 +32,11 @@
                 "a",
                 "b",
                 "c",
-                "ç",
-                "â"
+                "̱",
+                "á",
+                "ā"
               ],
-              "letters": "abcçâ"
+              "letters": "abc̱áā"
             },
             {
               "label": "DEF",
@@ -45,9 +46,9 @@
                 "d",
                 "e",
                 "f",
-                "ê"
+                "é"
               ],
-              "letters": "defê"
+              "letters": "defé"
             },
             {
               "label": "⌫",
@@ -65,11 +66,9 @@
                 "g",
                 "h",
                 "i",
-                "ğ",
-                "ı",
-                "î"
+                "í"
               ],
-              "letters": "ghiğıî"
+              "letters": "ghií"
             },
             {
               "label": "JKL",
@@ -90,9 +89,9 @@
                 "m",
                 "n",
                 "o",
-                "ö"
+                "ó"
               ],
-              "letters": "mnoö"
+              "letters": "mnoó"
             },
             {
               "label": "⇧",
@@ -110,10 +109,9 @@
                 "p",
                 "q",
                 "r",
-                "s",
-                "ş"
+                "s"
               ],
-              "letters": "pqrsş"
+              "letters": "pqrs"
             },
             {
               "label": "TUV",
@@ -122,11 +120,9 @@
                 "8",
                 "t",
                 "u",
-                "v",
-                "ü",
-                "û"
+                "v"
               ],
-              "letters": "tuvüû"
+              "letters": "tuv"
             },
             {
               "label": "WXYZ",

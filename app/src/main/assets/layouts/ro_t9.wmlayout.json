@@ -108,9 +108,10 @@
                 "q",
                 "r",
                 "s",
-                "ș"
+                "ș",
+                "ş"
               ],
-              "letters": "pqrsș"
+              "letters": "pqrsșş"
             },
             {
               "label": "TUV",
@@ -120,9 +121,10 @@
                 "t",
                 "u",
                 "v",
-                "ț"
+                "ț",
+                "ţ"
               ],
-              "letters": "tuvț"
+              "letters": "tuvțţ"
             },
             {
               "label": "WXYZ",

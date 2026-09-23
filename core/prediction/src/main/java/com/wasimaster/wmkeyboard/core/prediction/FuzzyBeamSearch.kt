@@ -222,6 +222,33 @@ class FuzzyBeamSearch {
                         viaLabel = label,
                     )
                 }
+                // A letter on the key that the word list spells in several
+                // characters (क़ as क + nukta): the same free match, walked
+                // edge by edge, one keystroke for the lot.
+                keys?.spellingsAt(pos)?.forEach { spelled ->
+                    var at = node
+                    var link = s
+                    for (j in 0 until spelled.length - 1) {
+                        at = walker.child(at, spelled[j])
+                        if (at < 0) return@forEach
+                        link = ws.pushRecord(
+                            node = at, pos = pos, cost = cost,
+                            editSpend = editSpend, edits = edits, comp = comp,
+                            accents = accents, parent = link, viaLabel = spelled[j],
+                        )
+                    }
+                    val last = walker.child(at, spelled[spelled.length - 1])
+                    if (last >= 0) {
+                        pushIfViable(
+                            ws, src, walker, floor,
+                            node = last, pos = pos + 1,
+                            cost = cost + matchCost(touch, pos, spelled[0]),
+                            editSpend = editSpend,
+                            edits = edits, comp = comp, accents = accents, parent = link,
+                            viaLabel = spelled[spelled.length - 1],
+                        )
+                    }
+                }
             }
 
             if (edits < maxEdits && editSpend < MAX_EDIT_COST) {

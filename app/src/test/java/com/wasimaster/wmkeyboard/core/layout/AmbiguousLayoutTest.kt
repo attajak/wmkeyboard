@@ -234,7 +234,7 @@ class AmbiguousLayoutTest {
 
     @Test
     fun theLanguageKeypadsShip() {
-        assertEquals(271, languageKeypads.size)
+        assertEquals(309, languageKeypads.size)
     }
 
     @Test
@@ -290,7 +290,10 @@ class AmbiguousLayoutTest {
         for (spec in languageKeypads.filter { it.script().id == ScriptId.LATIN }) {
             val sets = textKeys(spec).filter { it.isAmbiguous() }.map { it.letterSet() }
             for ((set, group) in sets.zip(itu)) {
-                assertTrue("${spec.id}: $set does not start with $group", set.startsWith(group))
+                // ETSI orders a key by alphabet, so Vietnamese's 2 reads a ă â b c:
+                // the key keeps its ITU letters and anchors on the first of them.
+                assertTrue("${spec.id}: $set is missing some of $group", group.all { it in set })
+                assertEquals("${spec.id}: $set anchor", group.first(), set.first())
             }
         }
     }
@@ -305,6 +308,38 @@ class AmbiguousLayoutTest {
                 spec.id in LanguageRegistry.byId(spec.langId).layoutIds,
             )
         }
+    }
+
+    /**
+     * The keypads of scripts written with combining marks (#332) put the
+     * script's signs on 1 -- candrabindu, anusvara, visarga, virama -- the way
+     * the phones of the Indian market did (ETSI ES 202 130 Annex A), so 1 is a
+     * letter key there and the sentence's punctuation takes the fourth column.
+     */
+    @Test
+    fun anIndicKeypadCarriesItsSignsOnOne() {
+        val hindi = languageKeypads.first { it.langId == "hi" }
+        val rows = letterRows(hindi)
+        val one = rows[0][0]
+        assertEquals("1", one.longPress.first())
+        for (sign in listOf('ँ', 'ं', 'ः', '्')) {
+            assertTrue("hi: 1 does not carry $sign", sign in one.letterSet())
+        }
+        // The vowels and their signs share a key: अ with ा on 2, ए with े on 3.
+        assertTrue('अ' in rows[0][1].letterSet() && 'ा' in rows[0][1].letterSet())
+        assertTrue('ए' in rows[0][2].letterSet() && 'े' in rows[0][2].letterSet())
+        val stop = rows[1][3]
+        assertEquals("।", stop.output)
+        assertEquals(KeyRole.Period, stop.role)
+    }
+
+    /** A combining mark is part of a written word, so a letter set keeps it. */
+    @Test
+    fun aLetterSetKeepsCombiningMarks() {
+        val key = Key("ं").withLetters("ँं्1 ")
+        assertEquals("ँं्", key.letters)
+        assertEquals("ँ", key.output)
+        assertTrue(key.isAmbiguous())
     }
 
     private companion object {

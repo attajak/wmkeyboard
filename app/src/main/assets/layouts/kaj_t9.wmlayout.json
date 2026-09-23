@@ -31,9 +31,11 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "̱",
+                "̰"
               ],
-              "letters": "abc"
+              "letters": "abc̱̰"
             },
             {
               "label": "DEF",

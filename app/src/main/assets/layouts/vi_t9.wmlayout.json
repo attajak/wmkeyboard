@@ -1,0 +1,238 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_vi_t9",
+    "name": "T9 (Tiếng Việt)",
+    "langId": "vi",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "ă",
+                "â",
+                "b",
+                "c",
+                "́",
+                "à",
+                "á",
+                "ả",
+                "ã",
+                "ạ",
+                "ằ",
+                "ắ",
+                "ẳ",
+                "ẵ",
+                "ặ",
+                "ầ",
+                "ấ",
+                "ẩ",
+                "ẫ",
+                "ậ"
+              ],
+              "letters": "aăâbćàáảãạằắẳẵặầấẩẫậ"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "đ",
+                "e",
+                "ê",
+                "f",
+                "̀",
+                "è",
+                "é",
+                "ẻ",
+                "ẽ",
+                "ẹ",
+                "ề",
+                "ế",
+                "ể",
+                "ễ",
+                "ệ"
+              ],
+              "letters": "dđeêf̀èéẻẽẹềếểễệ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i",
+                "̉",
+                "ì",
+                "í",
+                "ỉ",
+                "ĩ",
+                "ị"
+              ],
+              "letters": "ghỉìíỉĩị"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l",
+                "̃"
+              ],
+              "letters": "jkl̃"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o",
+                "ô",
+                "ơ",
+                "̣",
+                "ò",
+                "ó",
+                "ỏ",
+                "õ",
+                "ọ",
+                "ồ",
+                "ố",
+                "ổ",
+                "ỗ",
+                "ộ",
+                "ờ",
+                "ớ",
+                "ở",
+                "ỡ",
+                "ợ"
+              ],
+              "letters": "mnoôợòóỏõọồốổỗộờớởỡợ"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s"
+              ],
+              "letters": "pqrs"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "ư",
+                "v",
+                "ù",
+                "ú",
+                "ủ",
+                "ũ",
+                "ụ",
+                "ừ",
+                "ứ",
+                "ử",
+                "ữ",
+                "ự"
+              ],
+              "letters": "tuưvùúủũụừứửữự"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z",
+                "ỳ",
+                "ý",
+                "ỷ",
+                "ỹ",
+                "ỵ"
+              ],
+              "letters": "wxyzỳýỷỹỵ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

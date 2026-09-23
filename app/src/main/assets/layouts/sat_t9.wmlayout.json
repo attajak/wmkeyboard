@@ -1,0 +1,177 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_sat_t9",
+    "name": "T9 (ᱥᱟᱱᱛᱟᱲᱤ)",
+    "langId": "sat",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": "ᱸᱹᱺᱻ",
+              "output": "ᱸ",
+              "longPress": [
+                "1",
+                "ᱸ",
+                "ᱹ",
+                "ᱺ",
+                "ᱻ",
+                "ᱼ",
+                "ᱽ"
+              ],
+              "letters": "ᱸᱹᱺᱻᱼᱽ"
+            },
+            {
+              "label": "ᱚᱟᱤ",
+              "output": "ᱚ",
+              "longPress": [
+                "2",
+                "ᱚ",
+                "ᱟ",
+                "ᱤ"
+              ],
+              "letters": "ᱚᱟᱤ"
+            },
+            {
+              "label": "ᱩᱮᱳᱶ",
+              "output": "ᱩ",
+              "longPress": [
+                "3",
+                "ᱩ",
+                "ᱮ",
+                "ᱳ",
+                "ᱶ"
+              ],
+              "letters": "ᱩᱮᱳᱶ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ᱛᱜᱝᱞ",
+              "output": "ᱛ",
+              "longPress": [
+                "4",
+                "ᱛ",
+                "ᱜ",
+                "ᱝ",
+                "ᱞ"
+              ],
+              "letters": "ᱛᱜᱝᱞ"
+            },
+            {
+              "label": "ᱠᱡᱢᱣ",
+              "output": "ᱠ",
+              "longPress": [
+                "5",
+                "ᱠ",
+                "ᱡ",
+                "ᱢ",
+                "ᱣ"
+              ],
+              "letters": "ᱠᱡᱢᱣ"
+            },
+            {
+              "label": "ᱥᱦᱧᱨ",
+              "output": "ᱥ",
+              "longPress": [
+                "6",
+                "ᱥ",
+                "ᱦ",
+                "ᱧ",
+                "ᱨ"
+              ],
+              "letters": "ᱥᱦᱧᱨ"
+            },
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            }
+          ],
+          [
+            {
+              "label": "ᱪᱫᱬᱭ",
+              "output": "ᱪ",
+              "longPress": [
+                "7",
+                "ᱪ",
+                "ᱫ",
+                "ᱬ",
+                "ᱭ"
+              ],
+              "letters": "ᱪᱫᱬᱭ"
+            },
+            {
+              "label": "ᱯᱰᱱᱲ",
+              "output": "ᱯ",
+              "longPress": [
+                "8",
+                "ᱯ",
+                "ᱰ",
+                "ᱱ",
+                "ᱲ"
+              ],
+              "letters": "ᱯᱰᱱᱲ"
+            },
+            {
+              "label": "ᱴᱵᱷ",
+              "output": "ᱴ",
+              "longPress": [
+                "9",
+                "ᱴ",
+                "ᱵ",
+                "ᱷ"
+              ],
+              "letters": "ᱴᱵᱷ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}
