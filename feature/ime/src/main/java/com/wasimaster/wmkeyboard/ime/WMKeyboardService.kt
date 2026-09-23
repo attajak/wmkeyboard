@@ -237,6 +237,7 @@ import com.wasimaster.wmkeyboard.core.settings.isThemeShuffleDue
 import com.wasimaster.wmkeyboard.core.settings.rotates
 import com.wasimaster.wmkeyboard.core.tools.PhotoBackgroundManager
 import com.wasimaster.wmkeyboard.core.settings.AutomationPermission
+import com.wasimaster.wmkeyboard.core.settings.KeyboardAlignment
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.theme.BackgroundBitmapCache
 import com.wasimaster.wmkeyboard.core.settings.ModeField
@@ -5080,6 +5081,8 @@ open class WMKeyboardService : InputMethodService() {
                 fieldKind = fieldKind,
                 codeField = codeField,
                 nullField = nullField,
+                television = television,
+                fieldAlignment = if (television) info.requestedAlignment() else null,
                 fieldNoSuggestions = fieldNoSuggestions,
                 fieldIncognito = fieldIncognito,
                 emojiSearchActive = false,
@@ -31628,6 +31631,29 @@ open class WMKeyboardService : InputMethodService() {
          * [EditorInfo.privateImeOptions] is checked too because some apps
          * still only send the pre-Oreo Gboard-era string.
          */
+        /**
+         * Where the field wants the board: `horizontalAlignment=right` (or
+         * `left`, `center`) in [EditorInfo.privateImeOptions], the option
+         * Android TV's developer guide gives apps for placing Gboard. The
+         * string is a comma-separated list shared with other hints, so the
+         * key is looked for among its entries rather than matched whole.
+         */
+        private fun EditorInfo?.requestedAlignment(): KeyboardAlignment? {
+            val options = this?.privateImeOptions ?: return null
+            val value = options.split(',')
+                .map { it.trim() }
+                .firstOrNull { it.startsWith("horizontalAlignment=", ignoreCase = true) }
+                ?.substringAfter('=')
+                ?.trim()
+                ?: return null
+            return when (value.lowercase()) {
+                "left" -> KeyboardAlignment.LEFT
+                "center", "centre" -> KeyboardAlignment.CENTER
+                "right" -> KeyboardAlignment.RIGHT
+                else -> null
+            }
+        }
+
         private fun EditorInfo?.requestsNoPersonalizedLearning(): Boolean {
             val info = this ?: return false
             if (info.imeOptions and EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING != 0) return true

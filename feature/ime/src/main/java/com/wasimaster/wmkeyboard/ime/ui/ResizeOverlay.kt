@@ -309,7 +309,10 @@ internal fun BoxScope.ResizeOverlay(
     val density = LocalDensity.current
     val haptic = LocalHapticFeedback.current
     val current = session.preview.value ?: session.entry
-    val arrangement = dockedWidthArrangement(state.settings)
+    val arrangement = dockedWidthArrangement(
+        state.settings,
+        state.fieldAlignment ?: state.settings.keyboardAlignment,
+    )
     // What the height drags measure against: the key grid as it stands right
     // now. Captured into the gesture at drag start (not per frame) via
     // rememberUpdatedState so the pointerInput lambdas never go stale across

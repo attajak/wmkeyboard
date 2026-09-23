@@ -65,10 +65,18 @@ Three more are *defaults* rather than overrides, so a number you choose on the T
 
 - The number row is on, because reaching a digit through a layer switch costs a button press
 - The keys are slightly shorter than a phone's (40 dp), so six rows do not fill the screen
-- The board fills 60% of the width and sits in the middle, which keeps it clear of the edges older sets crop, and keeps the keys close enough together that the ring does not have far to travel
+- The board fills half the width and sits in the middle, which keeps it clear of the edges older sets crop, and keeps the keys close enough together that the ring does not have far to travel
 - The board is drawn as the grid described above
 
 Change any of them under <SettingsPath path="Layout & size" /> and your choice sticks.
+
+## The board floats over the app
+
+On a television the keyboard is a card rather than a strip across the bottom of the screen: rounded top corners, a soft shadow, your theme painted inside it, and the app still visible on both sides. Make the board wider or narrower under <SettingsPath path="Layout & size" /> and the card follows; at full width it spans the screen the way it does on a phone.
+
+The card sits where your alignment setting puts it (the middle, by default), unless the text field asks for a side. Apps built for Google TV can ask for the keyboard to sit on the left or the right, so that a form down one side of the screen stays visible beside it. WM Keyboard follows that request for as long as that field is focused, then goes back to your own setting.
+
+If you build TV apps: it is the same option Gboard reads. Set `android:privateImeOptions="horizontalAlignment=right"` (or `left`, or `center`) on the `EditText`. Other entries in the same comma-separated string are left alone.
 
 ## Options
 

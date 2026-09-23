@@ -1774,10 +1774,16 @@ private fun DockedKeyboardFrame(
                         },
                     ),
             ) {
-                BoardBackground(LocalKbTheme.current)
-                // Under the keys and over the board, so a theme that gives the
-                // gesture bar a colour of its own paints only that band (#109).
-                NavigationBarBackground(LocalKbTheme.current)
+                // A television draws the board as a card over the app (see
+                // [TelevisionCard]) and paints its own background, so the
+                // sides beside it stay clear.
+                val card = state.television && state.settings.oneHandedMode == OneHandedMode.OFF
+                if (!card) {
+                    BoardBackground(LocalKbTheme.current)
+                    // Under the keys and over the board, so a theme that gives the
+                    // gesture bar a colour of its own paints only that band (#109).
+                    NavigationBarBackground(LocalKbTheme.current)
+                }
                 // Below Android 15 the band above is never reached -- the IME
                 // window stops short of the bar -- so the window itself is
                 // asked for the colour instead (#255).
@@ -1786,8 +1792,6 @@ private fun DockedKeyboardFrame(
                 // their presentation spec long before this composition runs, so
                 // the resolved colours are reported out to it (#250).
                 InlineChipPaletteReport(LocalKbTheme.current)
-                // navigationBarsPadding keeps the bottom key row clear of the
-                // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows.
                 val oneHanded = state.settings.oneHandedMode
                 val ohProfile = state.settings.oneHanded.forLandscape(landscape)
                 // Entering, leaving or flipping one-handed mode slides the board
@@ -1796,7 +1800,9 @@ private fun DockedKeyboardFrame(
                 // already the new width, and taps already land on them); only
                 // the drawing starts displaced, in the same composition, and
                 // settles. Measured as the body's centre, a share of the row.
-                val bodyCenter = dockedBodyCenter(state.settings, oneHanded, ohProfile.widthPercent)
+                val alignment = state.fieldAlignment ?: state.settings.keyboardAlignment
+                val bodyCenter =
+                    dockedBodyCenter(state.settings, alignment, oneHanded, ohProfile.widthPercent)
                 val lastBodyCenter = remember { floatArrayOf(Float.NaN) }
                 // Not into resize mode, which leaves one-handed mode on its way in:
                 // its outline is drawn at the settled arrangement and holds still.
@@ -1813,13 +1819,19 @@ private fun DockedKeyboardFrame(
                 }
                 // A start-to-end share, so a right-to-left row moves the other way.
                 val slideSign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
+                // navigationBarsPadding keeps the bottom key row clear of the
+                // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows;
+                // the bottom padding is extra breathing room above it,
+                // adjustable in Settings → Appearance. Both are the board's own
+                // room, so the card takes them inside itself and runs down to
+                // the screen's edge.
+                val bottomRoom = Modifier
+                    .navigationBarsPadding()
+                    .padding(bottom = state.settings.bottomPaddingDp.dp)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .navigationBarsPadding()
-                        // Extra breathing room above the gesture bar, adjustable
-                        // in Settings → Appearance.
-                        .padding(bottom = state.settings.bottomPaddingDp.dp)
+                        .then(if (card) Modifier else bottomRoom)
                         // Read in the draw phase: the slide repaints, it never
                         // recomposes the keyboard. Key positions follow the
                         // layer as it moves, so they are exact once it settles.
@@ -1842,11 +1854,19 @@ private fun DockedKeyboardFrame(
                         // on top of the width setting, narrowing the keys toward the
                         // centre for thumb reach; it rides on the same slack/centering
                         // machinery below.
-                        val arrangement = dockedWidthArrangement(state.settings)
+                        val arrangement = dockedWidthArrangement(state.settings, alignment)
                         if (arrangement.leftSlack > 0.001f) {
                             Spacer(modifier = Modifier.weight(arrangement.leftSlack))
                         }
-                        Column(modifier = Modifier.weight(arrangement.widthFraction)) { revealingBody(state) }
+                        if (card) {
+                            TelevisionCard(modifier = Modifier.weight(arrangement.widthFraction)) {
+                                Column(modifier = Modifier.fillMaxWidth().then(bottomRoom)) {
+                                    revealingBody(state)
+                                }
+                            }
+                        } else {
+                            Column(modifier = Modifier.weight(arrangement.widthFraction)) { revealingBody(state) }
+                        }
                         if (arrangement.rightSlack > 0.001f) {
                             Spacer(modifier = Modifier.weight(arrangement.rightSlack))
                         }
@@ -2043,7 +2063,10 @@ internal class DockedWidthArrangement(
     val rightSlack: Float,
 )
 
-internal fun dockedWidthArrangement(settings: KeyboardSettings): DockedWidthArrangement {
+internal fun dockedWidthArrangement(
+    settings: KeyboardSettings,
+    alignment: KeyboardAlignment = settings.keyboardAlignment,
+): DockedWidthArrangement {
     // Issue #41: the two edges are padded independently, so each one is claimed
     // before the alignment gets a say. Whatever the width setting leaves over
     // after both pads is the free space alignment then distributes, which makes
@@ -2054,13 +2077,40 @@ internal fun dockedWidthArrangement(settings: KeyboardSettings): DockedWidthArra
     val widthFraction =
         (settings.keyboardWidthPercent / 100f * (1f - padLeft - padRight)).coerceAtLeast(0.2f)
     val free = (1f - widthFraction - padLeft - padRight).coerceAtLeast(0f)
-    val leftSlack = padLeft + when (settings.keyboardAlignment) {
+    val leftSlack = padLeft + when (alignment) {
         KeyboardAlignment.LEFT -> 0f
         KeyboardAlignment.CENTER -> free / 2f
         KeyboardAlignment.RIGHT -> free
     }
     return DockedWidthArrangement(widthFraction, leftSlack, 1f - widthFraction - leftSlack)
 }
+
+/**
+ * The docked board on a television: a card with rounded top corners and a
+ * soft shadow, standing on the bottom edge of the screen, with the app left
+ * visible on either side of it. It is how Gboard draws itself on Android TV,
+ * and it is what the width setting's slack is for there — on a phone the
+ * slack beside a narrowed board is still board, painted, because a thumb
+ * resting on it should not reach the app behind; a television has no thumb.
+ *
+ * The card paints the theme itself ([BoardBackground]), so an image, gradient
+ * or animation is clipped to it rather than spread across the whole screen.
+ * The theme's navigation-bar colour is left out: a TV draws no bar.
+ */
+@Composable
+private fun TelevisionCard(modifier: Modifier, content: @Composable () -> Unit) {
+    val shape = RoundedCornerShape(topStart = TelevisionCardCorner, topEnd = TelevisionCardCorner)
+    Box(modifier = modifier.shadow(TelevisionCardElevation, shape, clip = true)) {
+        BoardBackground(LocalKbTheme.current)
+        content()
+    }
+}
+
+/** Corner radius of [TelevisionCard]'s two top corners. */
+private val TelevisionCardCorner = 12.dp
+
+/** How far [TelevisionCard]'s shadow reaches over the app beside it. */
+private val TelevisionCardElevation = 12.dp
 
 /** How long the floating panel takes to fade up once it has been placed. */
 private const val FloatingAppearMs = 160
@@ -2075,9 +2125,14 @@ private fun oneHandedWidthFraction(widthPercent: Int): Float = (widthPercent / 1
  * one-handed weights sum to one, the body first on the left and last on the
  * right, which is all the one-handed half needs.
  */
-private fun dockedBodyCenter(settings: KeyboardSettings, mode: OneHandedMode, widthPercent: Int): Float =
+private fun dockedBodyCenter(
+    settings: KeyboardSettings,
+    alignment: KeyboardAlignment,
+    mode: OneHandedMode,
+    widthPercent: Int,
+): Float =
     when (mode) {
-        OneHandedMode.OFF -> dockedWidthArrangement(settings).let { it.leftSlack + it.widthFraction / 2f }
+        OneHandedMode.OFF -> dockedWidthArrangement(settings, alignment).let { it.leftSlack + it.widthFraction / 2f }
         OneHandedMode.LEFT -> oneHandedWidthFraction(widthPercent) / 2f
         OneHandedMode.RIGHT -> 1f - oneHandedWidthFraction(widthPercent) / 2f
     }

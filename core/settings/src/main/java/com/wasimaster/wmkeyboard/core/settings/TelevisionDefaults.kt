@@ -86,9 +86,10 @@ const val TvKeyHeightDp = 40
 const val TvNumberRowHeightDp = 36
 
 /**
- * How much of a television's width the board fills by default. 60% of a 960 dp
- * screen is 576 dp — a key every 57 dp, which is a phone's key size at a
+ * How much of a television's width the board fills by default. 50% of a 960 dp
+ * screen is 480 dp — a key every 48 dp, which is a phone's key size at a
  * television's viewing distance, and a board that clears the 5% overscan margin
- * on every side.
+ * on every side. Gboard's TV card is narrower still (about 40–45%); half the
+ * screen keeps room for the toolbar's row of tools, which Gboard does not have.
  */
-const val TvKeyboardWidthPercent = 60
+const val TvKeyboardWidthPercent = 50

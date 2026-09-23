@@ -37,6 +37,7 @@ import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
 import com.wasimaster.wmkeyboard.core.prediction.WordFacts
 import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
+import com.wasimaster.wmkeyboard.core.settings.KeyboardAlignment
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.RankControl
 import com.wasimaster.wmkeyboard.core.settings.ScreenVariant
@@ -2873,6 +2874,23 @@ data class KeyboardUiState(
      * connection cannot answer either. Avro in a terminal stays as it was.
      */
     val nullField: Boolean = false,
+    /**
+     * The keyboard is running on a television. A device fact rather than a
+     * setting, so it lives here and not in [KeyboardSettings]: the docked
+     * board is drawn as a card floating over the app, the way Gboard draws
+     * it on a TV, instead of a strip across the whole screen.
+     */
+    val television: Boolean = false,
+    /**
+     * Where the focused field asked the board to sit, from a
+     * `horizontalAlignment=left|center|right` in its
+     * [android.view.inputmethod.EditorInfo.privateImeOptions] — the hint
+     * Android TV documents for Gboard, so a sign-up form down the right of
+     * the screen keeps the board under it. Null when the field says nothing,
+     * and always null off a television. Beats
+     * [KeyboardSettings.keyboardAlignment] for this field only.
+     */
+    val fieldAlignment: KeyboardAlignment? = null,
     /**
      * The field asked the keyboard to hide the *suggestion strip*
      * (TYPE_TEXT_FLAG_NO_SUGGESTIONS, or an email/URI/filter/password
