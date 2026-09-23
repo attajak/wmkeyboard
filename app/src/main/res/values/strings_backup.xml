@@ -371,7 +371,11 @@
     <string name="backup_auto_webdav_user_label">User name</string>
     <string name="backup_auto_webdav_password_label">Password</string>
     <string name="backup_auto_webdav_password_hint">If your server can make app passwords, use one here instead of your account password.</string>
-    <string name="backup_auto_webdav_needs_https">This address is not https. The app sends your user name and password with every upload, and on a plain http address anyone on the network can read them, so the app does not use it.</string>
+    <string name="backup_auto_webdav_needs_https">This address is not https. The app sends your user name and password with every upload, and on a plain http address anyone on the network can read them, so the app does not use it. Addresses on your Tailscale network are the exception.</string>
+    <string name="backup_auto_webdav_user_hint">Leave empty for a server that does not ask you to sign in</string>
+    <string name="backup_webdav_taildrive_share_label">Share</string>
+    <string name="backup_webdav_taildrive_share_hint">As Tailscale shows it: your tailnet, the computer, and the share name, for example example.ts.net/laptop/wmkeyboard</string>
+    <string name="backup_webdav_tailnet_note">This address is on your Tailscale network. It is plain http, but Tailscale encrypts everything between your devices. Tailscale must be connected on this phone.</string>
 
     <string name="backup_auto_drive_title">Google Drive</string>
     <string name="backup_auto_drive_checking">Checking…</string>
@@ -516,7 +520,14 @@
     <string name="backup_sync_secrets_title">Sync API keys and passwords</string>
     <string name="backup_sync_secrets_subtitle">A passphrase protects them</string>
     <string name="backup_sync_contents_title">What syncs</string>
-    <string name="backup_sync_local_note">Some settings stay on each device, because they only fit that device: the keyboard size and position, one-handed mode, the hardware keyboard, paired computers and the app lock.</string>
+    <string name="backup_sync_local_note">Some settings stay on each device, because they only fit that device: the keyboard size and position, one-handed mode, the hardware keyboard, paired computers and the app lock. To keep more on this device, use Keep on this device below.</string>
+    <string name="backup_sync_keep_local_title">Keep on this device</string>
+    <string name="backup_sync_keep_local_info">Settings you tick here stay as they are on this device. Changes you make to them here are not sent, and changes from your other devices are not taken. Untick one later and this device takes what your other devices have.</string>
+    <string name="backup_sync_keep_toolbar_title">Toolbar and toolbox</string>
+    <string name="backup_sync_keep_toolbar_subtitle">Which tools, in what order, and how they look</string>
+    <string name="backup_sync_keep_layouts_title">Languages and layouts</string>
+    <string name="backup_sync_keep_layouts_subtitle">The layouts you switch between, extra languages, and the layout for each app</string>
+    <string name="backup_sync_keep_needs_settings">Needs Settings ticked in What syncs</string>
     <string name="backup_sync_first_note">Each device keeps one sync file at a location. Every device reads the files of the others, and the newest change to each setting wins. The first time a device syncs, the settings of your other devices win, and anything that only this device has goes to the others.</string>
     <string name="backup_sync_error_passphrase">Another device uses a different passphrase. Use the same passphrase on every device.</string>
     <string name="backup_sync_done_nothing">Synced. Nothing was new.</string>

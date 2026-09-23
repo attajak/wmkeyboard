@@ -72,9 +72,35 @@ object SyncKeys {
      */
     private val VARIANT_NUMBER_ROW = ScreenVariant.entries.mapTo(HashSet()) { "number_row_${it.suffix}" }
 
+    /**
+     * Settings that sync by default but that a person may want different on
+     * each device, kept here when they tick the group. A phone and a tablet
+     * rarely want the same toolbar, and a work phone may not want the
+     * languages of a personal one.
+     */
+    enum class LocalGroup(val id: String, private val names: Set<String>, private val prefixes: List<String>) {
+        /** Which tools, in what order, and how the toolbar and toolbox look. */
+        TOOLBAR("toolbar", emptySet(), listOf("toolbar_", "toolbox_", "tool_")),
+
+        /** The layouts switched between, the extra languages, and the per-app choices. */
+        LAYOUTS(
+            "layouts",
+            setOf("enabled_layout_ids", "secondary_languages", "per_app_layout_map", "per_app_language_enabled"),
+            emptyList(),
+        ),
+        ;
+
+        fun holds(key: String): Boolean = key in names || prefixes.any { key.startsWith(it) }
+
+        companion object {
+            fun of(ids: Set<String>): Set<LocalGroup> = entries.filterTo(LinkedHashSet()) { it.id in ids }
+        }
+    }
+
     /** Whether the setting named [key] travels between devices. */
-    fun syncable(key: String, includeSecrets: Boolean): Boolean {
+    fun syncable(key: String, includeSecrets: Boolean, keepLocal: Set<LocalGroup> = emptySet()): Boolean {
         if (key in SettingsBackup.TRANSIENT_KEYS) return false
+        if (keepLocal.any { it.holds(key) }) return false
         if (key in VARIANT_NUMBER_ROW) return false
         if (key in SettingsBackup.THEME_KEYS) return false
         if (!includeSecrets && key in SettingsBackup.SECRET_KEYS) return false

@@ -107,6 +107,9 @@ import com.wasimaster.wmkeyboard.core.settings.BackupLocation
 import androidx.compose.material3.Checkbox
 import com.wasimaster.wmkeyboard.core.settings.exportSectionSet
 import com.wasimaster.wmkeyboard.core.settings.sync.SyncRunner
+import com.wasimaster.wmkeyboard.core.settings.keepLocalGroups
+import com.wasimaster.wmkeyboard.core.settings.sync.SyncScheduler
+import com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys
 import com.wasimaster.wmkeyboard.core.settings.targets
 
 // ---- backup ----
@@ -1270,6 +1273,40 @@ internal fun BackupSyncSettings(repository: SettingsRepository, settings: Keyboa
             scope.launch {
                 val current = repository.settings.first().autoBackup.sync.sectionSet
                 repository.setSyncSections(if (on) current + section else current - section)
+            }
+        }
+    }
+
+    val syncsSettings = ConfigBackup.Section.SETTINGS in sync.sectionSet
+    SettingsGroup(
+        stringResource(R.string.backup_sync_keep_local_title),
+        info = stringResource(R.string.backup_sync_keep_local_info),
+    ) {
+        for (group in SyncKeys.LocalGroup.entries) {
+            item {
+                ToggleSetting(
+                    when (group) {
+                        SyncKeys.LocalGroup.TOOLBAR -> R.string.backup_sync_keep_toolbar_title
+                        SyncKeys.LocalGroup.LAYOUTS -> R.string.backup_sync_keep_layouts_title
+                    },
+                    stringResource(
+                        when {
+                            !syncsSettings -> R.string.backup_sync_keep_needs_settings
+                            group == SyncKeys.LocalGroup.TOOLBAR -> R.string.backup_sync_keep_toolbar_subtitle
+                            else -> R.string.backup_sync_keep_layouts_subtitle
+                        },
+                    ),
+                    group in sync.keepLocalGroups,
+                    enabled = syncsSettings,
+                    default = false,
+                ) { on ->
+                    scope.launch {
+                        repository.setSyncKeepLocal(group, on)
+                        // Let go of: take what the other devices have now,
+                        // not whenever the next change happens to be made.
+                        if (!on) SyncScheduler.requestSoon(context, repository.settings.first().autoBackup, delayMs = 0L)
+                    }
+                }
             }
         }
     }

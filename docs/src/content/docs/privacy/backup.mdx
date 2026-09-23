@@ -257,6 +257,14 @@ and a deletion spreads like any other change.
 - **First sync:** a device that joins takes the settings your other devices
   already agreed on, rather than pushing its own over them. Anything only it
   has goes to the others.
+- **Keep on this device:** tick **Toolbar and toolbox** or **Languages and
+  layouts** to keep that part different on this device. It isn't sent, and
+  your other devices' changes to it aren't taken.
+- **Without a cloud account:** any location your devices can all reach works.
+  On a Tailscale network, share a folder from a computer with Taildrive and add
+  it on each device as a WebDAV location with the **Tailscale Taildrive**
+  service. The files stay on your own computer, and Tailscale encrypts them on
+  the way.
 
 Some settings stay on each device, because they only fit that device: the
 keyboard size and position on each screen, one-handed mode, the floating

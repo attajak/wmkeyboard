@@ -144,6 +144,7 @@ import androidx.compose.material.icons.outlined.KeyboardAlt
 import androidx.compose.material.icons.outlined.KeyboardCapslock
 import androidx.compose.material.icons.outlined.KeyboardCommandKey
 import androidx.compose.material.icons.outlined.KeyboardTab
+import androidx.compose.material.icons.outlined.Handyman
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LibraryAdd
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -444,6 +445,8 @@ internal object SettingsRowIcons {
         put(R.string.backup_sync_targets_title) { Icons.Outlined.CloudQueue }
         put(R.string.backup_auto_targets_title) { Icons.Outlined.CloudQueue }
         put(R.string.backup_sync_secrets_title) { Icons.Outlined.Key }
+        put(R.string.backup_sync_keep_toolbar_title) { Icons.Outlined.Handyman }
+        put(R.string.backup_sync_keep_layouts_title) { Icons.Outlined.Language }
         put(R.string.backup_files_contents_title) { Icons.Outlined.Checklist }
         put(R.string.backup_auto_folder_title) { Icons.Outlined.Folder }
         put(R.string.backup_auto_webdav_url_label) { Icons.Outlined.Link }

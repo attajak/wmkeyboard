@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.settings.sync
 
 import android.content.Context
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import com.wasimaster.wmkeyboard.core.settings.keepLocalGroups
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -62,10 +63,13 @@ object SyncWatcher {
             // there before the first unlock. The settings flow re-emits when the
             // repository moves to the real store, which is when this starts.
             repository.settings
-                .map { it.autoBackup.sync.includeSecrets to DirectBoot.isUserUnlocked(app) }
+                .map {
+                    val sync = it.autoBackup.sync
+                    Triple(sync.includeSecrets, sync.keepLocalGroups, DirectBoot.isUserUnlocked(app))
+                }
                 .distinctUntilChanged()
-                .flatMapLatest { (secrets, unlocked) ->
-                    if (unlocked) repository.syncFingerprint(secrets).drop(1) else emptyFlow()
+                .flatMapLatest { (secrets, keepLocal, unlocked) ->
+                    if (unlocked) repository.syncFingerprint(secrets, keepLocal).drop(1) else emptyFlow()
                 }
                 .catch { BackupLog.w("sync fingerprint", it) }
                 .collect { SyncScheduler.requestSoon(app, repository.settings.first().autoBackup) }

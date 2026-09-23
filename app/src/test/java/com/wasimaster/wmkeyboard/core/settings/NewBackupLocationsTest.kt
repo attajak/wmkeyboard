@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.settings
 
+import com.wasimaster.wmkeyboard.core.settings.sink.WebDavSink
 import com.wasimaster.wmkeyboard.core.settings.sink.GitSink
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
 import com.wasimaster.wmkeyboard.core.settings.sink.sftp.SftpAlgorithms
@@ -81,6 +82,26 @@ class NewBackupLocationsTest {
         assertEquals("https://p.example/seafdav/Lib/", WebDavPreset.SEAFILE.url("p.example", "u", "Lib"))
         assertTrue(WebDavPreset.KDRIVE.needsServer)
         assertFalse(WebDavPreset.YANDEX.needsServer)
+        assertEquals(
+            "http://100.100.100.100:8080/example.ts.net/laptop/my%20share/WM%20Keyboard/",
+            WebDavPreset.TAILDRIVE.url("/example.ts.net/laptop/my share/", "", "WM Keyboard"),
+        )
+        assertFalse(WebDavPreset.TAILDRIVE.signsIn)
+        assertTrue(WebDavPreset.NEXTCLOUD.signsIn)
+    }
+
+    @Test
+    fun `plain http is allowed only on a tailscale network`() {
+        assertTrue(WebDavSink.isTailnet("http://100.100.100.100:8080/example.ts.net/laptop/share/"))
+        assertTrue(WebDavSink.isTailnet("http://100.101.2.3:5005/dav/"))
+        assertTrue(WebDavSink.isTailnet("http://laptop.example.ts.net/dav/"))
+        assertTrue(WebDavSink.isTailnet("http://[fd7a:115c:a1e0::1]:8080/"))
+        assertFalse(WebDavSink.isTailnet("http://192.168.1.10/dav/"))
+        assertFalse(WebDavSink.isTailnet("http://100.128.0.1/"))
+        assertFalse(WebDavSink.isTailnet("http://nas.local/"))
+        assertFalse(WebDavSink.isTailnet("https://100.100.100.100/"))
+        // A webdav location needs no user name: Taildrive asks for none.
+        assertTrue(BackupLocation(id = "a", type = BackupDestination.WEBDAV, webDavUrl = "http://100.100.100.100:8080/x/").configured)
     }
 
     @Test

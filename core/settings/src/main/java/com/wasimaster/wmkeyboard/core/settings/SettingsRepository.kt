@@ -3509,6 +3509,13 @@ data class SyncSettings(
      * call: their keys, their storage.
      */
     val includeSecrets: Boolean = false,
+    /**
+     * Groups of settings this device keeps to itself, by
+     * [com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.LocalGroup.id].
+     * None by default: everything in Settings syncs until the user says a
+     * part of it should differ here.
+     */
+    val keepLocal: Set<String> = emptySet(),
     val lastRunAtMs: Long = 0L,
     /** A `SinkError` name, a sync-specific reason, or empty. */
     val lastError: String = "",
@@ -3526,6 +3533,10 @@ data class SyncSettings(
         )
     }
 }
+
+/** [SyncSettings.keepLocal] as the groups themselves. */
+val SyncSettings.keepLocalGroups: Set<com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.LocalGroup>
+    get() = com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.LocalGroup.of(keepLocal)
 
 /** [SyncSettings.sections] as the sections themselves. */
 val SyncSettings.sectionSet: Set<ConfigBackup.Section>
@@ -7380,6 +7391,7 @@ class SettingsRepository(private val context: Context) {
         private val SYNC_LOCATION_IDS = stringSetPreferencesKey(SettingsBackup.SYNC_LOCATION_IDS)
         private val SYNC_SECTIONS = stringSetPreferencesKey(SettingsBackup.SYNC_SECTIONS)
         private val SYNC_INCLUDE_SECRETS = booleanPreferencesKey(SettingsBackup.SYNC_INCLUDE_SECRETS)
+        private val SYNC_KEEP_LOCAL = stringSetPreferencesKey(SettingsBackup.SYNC_KEEP_LOCAL)
         private val SYNC_LAST_RUN_AT = longPreferencesKey(SettingsBackup.SYNC_LAST_RUN_AT)
         private val SYNC_LAST_ERROR = stringPreferencesKey(SettingsBackup.SYNC_LAST_ERROR)
         private val LONG_PRESS_DELAY = intPreferencesKey("long_press_delay")
@@ -8569,6 +8581,7 @@ class SettingsRepository(private val context: Context) {
                     locationIds = defaults.autoBackup.sync.locationIds,
                     sections = p[SYNC_SECTIONS] ?: defaults.autoBackup.sync.sections,
                     includeSecrets = p[SYNC_INCLUDE_SECRETS] ?: defaults.autoBackup.sync.includeSecrets,
+                    keepLocal = p[SYNC_KEEP_LOCAL] ?: defaults.autoBackup.sync.keepLocal,
                     lastRunAtMs = p[SYNC_LAST_RUN_AT] ?: defaults.autoBackup.sync.lastRunAtMs,
                     lastError = p[SYNC_LAST_ERROR] ?: defaults.autoBackup.sync.lastError,
                 ),
@@ -14167,6 +14180,13 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSyncIncludeSecrets(value: Boolean) = editPrefs { it[SYNC_INCLUDE_SECRETS] = value }
 
+    /** Keeps one group of settings on this device, or lets it sync again. */
+    suspend fun setSyncKeepLocal(group: com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.LocalGroup, on: Boolean) =
+        editPrefs { prefs ->
+            val current = prefs[SYNC_KEEP_LOCAL].orEmpty()
+            prefs[SYNC_KEEP_LOCAL] = if (on) current + group.id else current - group.id
+        }
+
     /**
      * Writes settings another device changed, and removes ones it reset.
      *
@@ -14189,10 +14209,15 @@ class SettingsRepository(private val context: Context) {
      * worth pushing. Not a hash of the whole store: the keyboard writes its
      * own counters and state all day, and those must not wake a sync.
      */
-    fun syncFingerprint(includeSecrets: Boolean): Flow<Int> =
+    fun syncFingerprint(
+        includeSecrets: Boolean,
+        keepLocal: Set<com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.LocalGroup>,
+    ): Flow<Int> =
         context.dataStore.data.map { prefs ->
             prefs.asMap().entries
-                .filter { com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.syncable(it.key.name, includeSecrets) }
+                .filter {
+                    com.wasimaster.wmkeyboard.core.settings.sync.SyncKeys.syncable(it.key.name, includeSecrets, keepLocal)
+                }
                 .sumOf { (it.key.name to it.value.toString()).hashCode() }
         }.distinctUntilChanged()
 

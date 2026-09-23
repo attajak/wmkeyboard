@@ -76,7 +76,9 @@ data class BackupLocation(
     val configured: Boolean
         get() = when (type) {
             BackupDestination.FOLDER -> folderUri.isNotEmpty()
-            BackupDestination.WEBDAV -> webDavUrl.isNotEmpty() && webDavUser.isNotEmpty()
+            // No user name is a server that asks for none: Taildrive, or an
+            // open share on the home network. One that does ask says so.
+            BackupDestination.WEBDAV -> webDavUrl.isNotEmpty()
             BackupDestination.DRIVE -> true
             BackupDestination.S3 ->
                 s3.bucket.isNotEmpty() && s3.accessKeyId.isNotEmpty() && s3.secretAccessKey.isNotEmpty()

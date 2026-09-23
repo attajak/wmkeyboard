@@ -198,6 +198,39 @@ class SyncMergeTest {
     }
 
     @Test
+    fun `a setting let go of from this device takes what the others have`() {
+        // The toolbar was kept on this phone, so the last pass neither sent
+        // nor remembered it. Untick it: the others' toolbar wins, although
+        // this phone's copy has no stamp to lose with.
+        val remote = mapOf(s to mapOf("toolbar_tools" to Stamped(v("theirs"), 1_000, "bbbbbbbb")))
+        val r = SyncMerge.merge(
+            local = mapOf(s to mapOf("toolbar_tools" to v("mine"), "sound" to v("soft"))),
+            remembered = remembered("sound" to "soft"),
+            remotes = listOf(remote),
+            me = "aaaaaaaa",
+            nowMs = 5_000,
+            firstSync = false,
+            rejoining = { _, key -> key == "toolbar_tools" },
+        )
+        assertEquals(v("theirs"), r.changes[s]!!["toolbar_tools"])
+    }
+
+    @Test
+    fun `a setting let go of that nobody else has is sent from here`() {
+        val r = SyncMerge.merge(
+            local = mapOf(s to mapOf("toolbar_tools" to v("mine"))),
+            remembered = remembered(),
+            remotes = listOf(mapOf(s to mapOf("sound" to Stamped(v("soft"), 1_000, "bbbbbbbb")))),
+            me = "aaaaaaaa",
+            nowMs = 5_000,
+            firstSync = false,
+            rejoining = { _, key -> key == "toolbar_tools" },
+        )
+        assertEquals(5_000, r.merged[s]!!["toolbar_tools"]!!.t)
+        assertNull(r.changes[s]?.get("toolbar_tools"))
+    }
+
+    @Test
     fun `a joining phone loses even a tie to the phone it joins`() {
         // Phone A was first: nothing else there, so it stamped for real.
         val a = SyncMerge.merge(

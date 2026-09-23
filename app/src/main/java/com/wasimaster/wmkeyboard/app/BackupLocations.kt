@@ -72,6 +72,7 @@ import com.wasimaster.wmkeyboard.core.settings.ImapSecurity
 import com.wasimaster.wmkeyboard.core.settings.S3Account
 import com.wasimaster.wmkeyboard.core.settings.S3Preset
 import com.wasimaster.wmkeyboard.core.settings.WebDavPreset
+import com.wasimaster.wmkeyboard.core.settings.WebDavServerField
 import com.wasimaster.wmkeyboard.core.settings.LocationStatus
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -84,6 +85,7 @@ import com.wasimaster.wmkeyboard.core.settings.sink.NextcloudLogin
 import com.wasimaster.wmkeyboard.core.settings.sink.S3Sink
 import com.wasimaster.wmkeyboard.core.settings.sink.SftpSink
 import com.wasimaster.wmkeyboard.core.settings.sink.SinkError
+import com.wasimaster.wmkeyboard.core.settings.sink.WebDavSink
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -744,27 +746,37 @@ private fun WebDavPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit
     } else if (preset.needsServer) {
         StoredTextField(
             label = stringResource(
-                if (preset.serverIsId) R.string.backup_webdav_server_id_label else R.string.backup_webdav_server_label,
+                when (preset.serverField) {
+                    WebDavServerField.HOST -> R.string.backup_webdav_server_label
+                    WebDavServerField.ACCOUNT_ID -> R.string.backup_webdav_server_id_label
+                    WebDavServerField.TAILDRIVE_SHARE -> R.string.backup_webdav_taildrive_share_label
+                },
             ),
             value = draft.webDavServer,
             supporting = stringResource(
-                if (preset.serverIsId) R.string.backup_webdav_server_id_hint else R.string.backup_webdav_server_hint,
+                when (preset.serverField) {
+                    WebDavServerField.HOST -> R.string.backup_webdav_server_hint
+                    WebDavServerField.ACCOUNT_ID -> R.string.backup_webdav_server_id_hint
+                    WebDavServerField.TAILDRIVE_SHARE -> R.string.backup_webdav_taildrive_share_hint
+                },
             ),
             keyboardType = KeyboardType.Uri,
         ) { onChange(withParts(draft.copy(webDavServer = it))) }
     }
     if (preset == WebDavPreset.NEXTCLOUD) NextcloudSignIn(draft) { onChange(withParts(it)) }
-    StoredTextField(
-        label = stringResource(R.string.backup_auto_webdav_user_label),
-        value = draft.webDavUser,
-        supporting = "",
-    ) { onChange(withParts(draft.copy(webDavUser = it))) }
-    StoredTextField(
-        label = stringResource(R.string.backup_auto_webdav_password_label),
-        value = draft.webDavPassword,
-        supporting = stringResource(R.string.backup_auto_webdav_password_hint),
-        password = true,
-    ) { onChange(draft.copy(webDavPassword = it)) }
+    if (preset.signsIn) {
+        StoredTextField(
+            label = stringResource(R.string.backup_auto_webdav_user_label),
+            value = draft.webDavUser,
+            supporting = stringResource(R.string.backup_auto_webdav_user_hint),
+        ) { onChange(withParts(draft.copy(webDavUser = it))) }
+        StoredTextField(
+            label = stringResource(R.string.backup_auto_webdav_password_label),
+            value = draft.webDavPassword,
+            supporting = stringResource(R.string.backup_auto_webdav_password_hint),
+            password = true,
+        ) { onChange(draft.copy(webDavPassword = it)) }
+    }
     if (preset != WebDavPreset.CUSTOM) {
         StoredTextField(
             label = stringResource(R.string.backup_location_folder_label),
@@ -780,8 +792,13 @@ private fun WebDavPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit
             )
         }
     }
-    if (draft.webDavUrl.isNotEmpty() && !draft.webDavUrl.trim().startsWith("https://", ignoreCase = true)) {
-        StateBanner(stringResource(R.string.backup_auto_webdav_needs_https), tone = BannerTone.WARNING)
+    val https = draft.webDavUrl.trim().startsWith("https://", ignoreCase = true)
+    if (draft.webDavUrl.isNotEmpty() && !https) {
+        if (WebDavSink.isTailnet(draft.webDavUrl)) {
+            StateBanner(stringResource(R.string.backup_webdav_tailnet_note), tone = BannerTone.INFO)
+        } else {
+            StateBanner(stringResource(R.string.backup_auto_webdav_needs_https), tone = BannerTone.WARNING)
+        }
     }
 }
 

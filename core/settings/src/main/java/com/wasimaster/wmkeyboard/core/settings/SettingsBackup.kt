@@ -86,6 +86,7 @@ object SettingsBackup {
     const val SYNC_LOCATION_IDS = "sync_location_ids"
     const val SYNC_SECTIONS = "sync_sections"
     const val SYNC_INCLUDE_SECRETS = "sync_include_secrets"
+    const val SYNC_KEEP_LOCAL = "sync_keep_local"
     const val SYNC_LAST_RUN_AT = "sync_last_run_at"
     const val SYNC_LAST_ERROR = "sync_last_error"
 
@@ -185,6 +186,7 @@ object SettingsBackup {
         SYNC_LOCATION_IDS,
         SYNC_SECTIONS,
         SYNC_INCLUDE_SECRETS,
+        SYNC_KEEP_LOCAL,
         SYNC_LAST_RUN_AT,
         SYNC_LAST_ERROR,
     )

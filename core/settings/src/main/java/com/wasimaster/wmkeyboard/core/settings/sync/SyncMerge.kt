@@ -76,6 +76,11 @@ object SyncMerge {
      *   A section with nothing remembered is treated the same way, however
      *   old the phone's sync is: it was just ticked, and what the other
      *   devices changed while it was off is newer than anything here.
+     * @param rejoining whether an entry this phone left out of its last pass
+     *   is back in this one: a setting the user stopped keeping on this
+     *   device, or a key once keys sync. It joins the way a section does,
+     *   taking what the other devices have rather than pushing this phone's
+     *   copy over theirs.
      */
     fun merge(
         local: Map<String, Map<String, JsonElement>>,
@@ -84,6 +89,7 @@ object SyncMerge {
         me: String,
         nowMs: Long,
         firstSync: Boolean,
+        rejoining: (section: String, key: String) -> Boolean = { _, _ -> false },
     ): Result {
         val seen = maxOf(
             remotes.maxOfOrNull { table -> table.values.maxOfOrNull { s -> s.values.maxOfOrNull { it.t } ?: 0L } ?: 0L } ?: 0L,
@@ -110,6 +116,8 @@ object SyncMerge {
                 val h = hash(value)
                 mine[key] = when {
                     prior == null && joining -> Stamped(value, 0L, JOINER)
+                    prior == null && rejoining(section, key) &&
+                        remotes.any { it[section]?.containsKey(key) == true } -> Stamped(value, 0L, JOINER)
                     prior == null -> Stamped(value, stamp, me)
                     prior.hash != h -> Stamped(value, stamp, me)
                     else -> Stamped(value, prior.t, prior.by)

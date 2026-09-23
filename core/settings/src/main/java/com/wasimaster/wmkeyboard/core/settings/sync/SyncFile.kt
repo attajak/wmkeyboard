@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.longOrNull
@@ -124,5 +125,38 @@ object SyncStateCodec {
                 }
             }
         }.getOrNull()
+    }
+}
+
+/**
+ * Which settings this phone held back from its last pass: keys or not, and
+ * the groups it kept on the device. Beside [SyncStateCodec] in
+ * `noBackupFilesDir`, so the next pass can tell a setting that has just come
+ * back into sync (see `SyncMerge.merge`'s `rejoining`) from one changed here.
+ */
+data class SyncFilter(val includeSecrets: Boolean, val keepLocal: Set<SyncKeys.LocalGroup>) {
+
+    fun syncable(key: String): Boolean = SyncKeys.syncable(key, includeSecrets, keepLocal)
+
+    companion object {
+        private val json = Json { ignoreUnknownKeys = true }
+
+        fun encode(filter: SyncFilter): String = buildJsonObject {
+            put("secrets", JsonPrimitive(filter.includeSecrets))
+            put("keepLocal", kotlinx.serialization.json.JsonArray(filter.keepLocal.map { JsonPrimitive(it.id) }))
+        }.toString()
+
+        fun decode(text: String?): SyncFilter? {
+            if (text.isNullOrBlank()) return null
+            return runCatching {
+                val root = json.parseToJsonElement(text).jsonObject
+                SyncFilter(
+                    includeSecrets = root["secrets"]?.jsonPrimitive?.contentOrNull == "true",
+                    keepLocal = SyncKeys.LocalGroup.of(
+                        root["keepLocal"]?.jsonArray?.mapNotNullTo(HashSet()) { it.jsonPrimitive.contentOrNull }.orEmpty(),
+                    ),
+                )
+            }.getOrNull()
+        }
     }
 }

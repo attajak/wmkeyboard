@@ -12,6 +12,7 @@ import com.wasimaster.wmkeyboard.core.settings.BackupInstall
 import com.wasimaster.wmkeyboard.core.settings.BackupLocation
 import com.wasimaster.wmkeyboard.core.settings.ConfigBackup
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import com.wasimaster.wmkeyboard.core.settings.keepLocalGroups
 import com.wasimaster.wmkeyboard.core.settings.sectionSet
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupLog
 import com.wasimaster.wmkeyboard.core.settings.sink.BackupSink
@@ -44,6 +45,7 @@ import kotlinx.serialization.json.JsonObject
 object SyncRunner {
 
     private const val STATE_FILE = "sync_state.json"
+    private const val FILTER_FILE = "sync_filter.json"
 
     /** A sync-only reason, beside the `SinkError` names, for a file sealed under another passphrase. */
     const val ERROR_PASSPHRASE = "SYNC_PASSPHRASE"
@@ -92,11 +94,14 @@ object SyncRunner {
         if (!DirectBoot.isUserUnlocked(context)) return Outcome.Locked
 
         val encrypt = auto.encrypt && auto.passphrase.isNotEmpty()
-        val includeSecrets = sync.includeSecrets
+        val filter = SyncFilter(sync.includeSecrets, sync.keepLocalGroups)
         val me = BackupInstall.id(context)
         val stateFile = File(context.noBackupFilesDir, STATE_FILE)
         val remembered = SyncStateCodec.decode(runCatching { stateFile.readText() }.getOrNull())
         val firstSync = remembered == null
+        val filterFile = File(context.noBackupFilesDir, FILTER_FILE)
+        // Before this file existed there was no choice to have changed.
+        val lastFilter = SyncFilter.decode(runCatching { filterFile.readText() }.getOrNull()) ?: filter
 
         // Every other device's newest file, from every target. The same device
         // can turn up at two locations; its later file wins.
@@ -137,19 +142,19 @@ object SyncRunner {
         // Read here, after the downloads rather than before them: whatever
         // changed on this phone while those ran is in it, and the gap before
         // [apply] writes is as short as it can be.
-        val local = localEntries(repository, sections, includeSecrets)
+        val local = localEntries(repository, sections, filter)
 
         // Only what this phone would sync itself, from either side. A setting
-        // that is per-device here, or a key while keys are off, is neither
-        // taken from another phone nor, once it drops out of the local view,
-        // sent back to them as a deletion.
+        // that is per-device here, one the user keeps on this device, or a key
+        // while keys are off, is neither taken from another phone nor, once it
+        // drops out of the local view, sent back to them as a deletion.
         fun settingsOnly(table: Map<String, Map<String, Stamped>>) = table.mapValues { (section, entries) ->
             if (section != ConfigBackup.Section.SETTINGS.id) entries
-            else entries.filterKeys { SyncKeys.syncable(it, includeSecrets) }
+            else entries.filterKeys(filter::syncable)
         }
         val rememberedHere = remembered.orEmpty().mapValues { (section, entries) ->
             if (section != ConfigBackup.Section.SETTINGS.id) entries
-            else entries.filterKeys { SyncKeys.syncable(it, includeSecrets) }
+            else entries.filterKeys(filter::syncable)
         }
         val result = SyncMerge.merge(
             local = local,
@@ -158,13 +163,16 @@ object SyncRunner {
             me = me,
             nowMs = nowMs,
             firstSync = firstSync,
+            rejoining = { section, key ->
+                section == ConfigBackup.Section.SETTINGS.id && !lastFilter.syncable(key) && filter.syncable(key)
+            },
         )
         val applied = apply(repository, result, local)
 
         // What is remembered is what this phone holds after applying, so the
         // next pass does not mistake a store's own formatting of a value it was
         // just given for a change made here.
-        val after = if (applied > 0) localEntries(repository, sections, includeSecrets) else local
+        val after = if (applied > 0) localEntries(repository, sections, filter) else local
         val nextState = result.remembered.mapValues { (section, entries) ->
             val now = after[section].orEmpty()
             entries.mapValues { (key, r) ->
@@ -186,6 +194,7 @@ object SyncRunner {
                 }
         }
         runCatching { stateFile.writeText(SyncStateCodec.encode(nextState)) }
+        runCatching { filterFile.writeText(SyncFilter.encode(filter)) }
 
         recordLocations(repository, targets, failed, nowMs)
         val wrote = readable.any { (location, _) -> location.id !in failed }
@@ -198,16 +207,16 @@ object SyncRunner {
     private suspend fun localEntries(
         repository: SettingsRepository,
         sections: Set<ConfigBackup.Section>,
-        includeSecrets: Boolean,
+        filter: SyncFilter,
     ): Map<String, Map<String, JsonElement>> {
-        val bundle = repository.exportConfig(sections, includeSecrets, appVersion = 0, appVersionName = "")
+        val bundle = repository.exportConfig(sections, filter.includeSecrets, appVersion = 0, appVersionName = "")
         val parsed = ConfigBackup.decode(bundle)?.sections.orEmpty()
         return sections.associate { section ->
             val element = parsed[section]
             val entries = when {
                 element == null -> emptyMap()
                 section == ConfigBackup.Section.SETTINGS ->
-                    (element as? JsonObject).orEmpty().filterKeys { SyncKeys.syncable(it, includeSecrets) }
+                    (element as? JsonObject).orEmpty().filterKeys(filter::syncable)
                 else -> SyncEntries.explode(element)
             }
             section.id to entries
@@ -352,5 +361,6 @@ object SyncRunner {
     /** Forgets what this phone agreed on, so the next pass is a first one again. */
     suspend fun reset(context: Context) = withContext(Dispatchers.IO) {
         File(context.noBackupFilesDir, STATE_FILE).delete()
+        File(context.noBackupFilesDir, FILTER_FILE).delete()
     }
 }

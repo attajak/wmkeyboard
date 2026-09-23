@@ -204,11 +204,8 @@ enum class WebDavPreset(
     val id: String,
     val label: String,
     val template: String,
-    /**
-     * Whether the `{server}` in [template] is an account id rather than a
-     * host name, which changes what the field is called.
-     */
-    val serverIsId: Boolean = false,
+    /** What the `{server}` in [template] is, which changes what the field is called. */
+    val serverField: WebDavServerField = WebDavServerField.HOST,
 ) {
     CUSTOM("", "", ""),
 
@@ -225,10 +222,28 @@ enum class WebDavPreset(
     PCLOUD_US("pcloud-us", "pCloud (US)", "https://webdav.pcloud.com/{folder}"),
     PCLOUD_EU("pcloud-eu", "pCloud (EU)", "https://ewebdav.pcloud.com/{folder}"),
     YANDEX("yandex", "Yandex Disk", "https://webdav.yandex.com/{folder}"),
-    KDRIVE("kdrive", "kDrive", "https://{server}.connect.kdrive.infomaniak.com/{folder}", serverIsId = true),
+    KDRIVE(
+        "kdrive", "kDrive", "https://{server}.connect.kdrive.infomaniak.com/{folder}",
+        serverField = WebDavServerField.ACCOUNT_ID,
+    ),
     STORAGE_BOX("storagebox", "Hetzner Storage Box", "https://{user}.your-storagebox.de/{folder}"),
     FOURSHARED("4shared", "4shared", "https://webdav.4shared.com/{folder}"),
+
+    /**
+     * A folder shared with Tailscale's Taildrive, from a computer on the
+     * user's tailnet. The Tailscale app serves every share at this one local
+     * address, with no sign-in: being on the tailnet is the permission. Plain
+     * `http` to an address that never leaves the phone, and from there inside
+     * Tailscale's encrypted tunnel; see [com.wasimaster.wmkeyboard.core.settings.sink.WebDavSink.isTailnet].
+     */
+    TAILDRIVE(
+        "taildrive", "Tailscale Taildrive", "http://100.100.100.100:8080/{server}/{folder}",
+        serverField = WebDavServerField.TAILDRIVE_SHARE,
+    ),
     ;
+
+    /** Whether the service signs in with a user name and password at all. */
+    val signsIn: Boolean get() = serverField != WebDavServerField.TAILDRIVE_SHARE
 
     /** Whether [template] has a `{server}` the user must fill in. */
     val needsServer: Boolean get() = template.contains("{server}")
@@ -239,8 +254,11 @@ enum class WebDavPreset(
      * becomes `My%20backups` and a nested folder keeps its slashes.
      */
     fun url(server: String, user: String, folder: String): String {
-        val host = server.trim().removePrefix("https://").removePrefix("http://").trimEnd('/')
-        val path = folder.trim().trim('/').split('/').filter { it.isNotEmpty() }.joinToString("/", transform = ::encodeSegment)
+        val host = server.trim().removePrefix("https://").removePrefix("http://").trim('/').let {
+            // A Taildrive share is a path of its own: tailnet/machine/share.
+            if (serverField == WebDavServerField.TAILDRIVE_SHARE) encodePath(it) else it
+        }
+        val path = encodePath(folder)
         return template
             .replace("{server}", host)
             .replace("{user}", encodeSegment(user.trim()))
@@ -255,7 +273,22 @@ enum class WebDavPreset(
 
         private fun encodeSegment(segment: String): String =
             java.net.URLEncoder.encode(segment, "UTF-8").replace("+", "%20")
+
+        private fun encodePath(path: String): String =
+            path.trim().trim('/').split('/').filter { it.isNotEmpty() }.joinToString("/", transform = ::encodeSegment)
     }
+}
+
+/** What a [WebDavPreset]'s `{server}` holds. */
+enum class WebDavServerField {
+    /** A host name, `cloud.example.com`. */
+    HOST,
+
+    /** An account number that is part of the host name. */
+    ACCOUNT_ID,
+
+    /** A Taildrive share as Tailscale names it: `tailnet/machine/share`. */
+    TAILDRIVE_SHARE,
 }
 
 /**

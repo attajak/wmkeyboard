@@ -89,6 +89,16 @@ class BackupLocationTest {
             assertTrue(key, SyncKeys.syncable(key, includeSecrets = false))
         }
         assertFalse(SyncKeys.syncable("ai_openai_key", includeSecrets = false))
+        // Kept on this device when the user ticks the group, and only then.
+        val toolbar = setOf(SyncKeys.LocalGroup.TOOLBAR)
+        for (key in listOf("toolbar_tools", "toolbox_order", "tool_color_overrides")) {
+            assertTrue(key, SyncKeys.syncable(key, includeSecrets = false))
+            assertFalse(key, SyncKeys.syncable(key, includeSecrets = false, keepLocal = toolbar))
+        }
+        assertTrue(SyncKeys.syncable("enabled_layout_ids", includeSecrets = false, keepLocal = toolbar))
+        assertFalse(
+            SyncKeys.syncable("enabled_layout_ids", includeSecrets = false, keepLocal = setOf(SyncKeys.LocalGroup.LAYOUTS)),
+        )
         assertTrue(SyncKeys.syncable("ai_openai_key", includeSecrets = true))
     }
 }
