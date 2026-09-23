@@ -1386,6 +1386,7 @@ fun KeyboardScreen(
             LocalPossessiveFlick provides onPossessiveFlick,
             LocalOctopusWords provides rememberUpdatedState(state.octopus),
             LocalOctopusOccupancy provides remember { OctopusOccupancy() },
+            LocalTransliterationPreview provides rememberTransliterationPreview(bodyState),
             LocalSelectionHold provides toolHold.onSelectionHold,
             LocalCanDelete provides canDelete,
             LocalCanDeleteField provides canDeleteField,
@@ -12531,11 +12532,14 @@ internal data class KeyVisual(
      */
     val shapeKind: KeyShapeKind? = null,
     /**
-     * What this key is about to write in the target script, on a layout that
-     * transliterates ([transliterationHint]). Null on every other board, and
-     * on every key whose answer is nothing worth drawing.
+     * The roman this key feeds a transliterating layout's buffer, shift
+     * included ([transliterationRoman]), for the corner to ask the composer
+     * what it will write. Null on every other board and every key that is not
+     * a letter. The reading itself is not here: it follows the buffer, which
+     * changes on every keystroke, and anything on [KeyVisual] that did would
+     * rebuild the whole grid per letter. [KeyCornerHint] reads it instead.
      */
-    val transliteration: String? = null,
+    val transliterationRoman: String? = null,
     /**
      * Shift is capitalising what this key's alternates type ([shiftCasesText]),
      * so its popup and corner hint draw the capitals (issue #211). False on a
@@ -12702,7 +12706,7 @@ internal fun keyVisual(
             ?.coerceIn(KEY_OVERRIDE_LABEL_SCALE_RANGE),
         bold = override?.bold,
         shapeKind = overrideShape,
-        transliteration = transliterationHint(key, state),
+        transliterationRoman = transliterationRoman(key, state),
         alternatesShifted = key.longPress.isNotEmpty() && state.shiftCasesText(),
         iconSlot = when {
             action == KeyAction.Shift -> when (state.shiftState) {
@@ -12821,12 +12825,10 @@ private fun rememberKeyGrid(
         state.activeFancyStyleId,
         // A text-editing Select key on the grid lights with selection mode.
         state.selectingText,
-        // The one key here that a keystroke moves, and the exception the note
-        // above is drawn against: on a transliterating layout the corner hints
-        // ARE the reading of the buffer, so they have to be rebuilt with it.
-        // The service leaves this empty unless those hints are switched on
-        // ([transliterationHintsShown]), so no other board pays for it.
-        state.composingRoman,
+        // Whether the corners read the transliteration at all. The reading
+        // itself follows the buffer and is not a key here: [KeyCornerHint]
+        // reads it through [LocalTransliterationPreview], so a letter typed
+        // on a phonetic board recomposes the corners, not the grid.
         state.composer.isTransliterating,
     ) {
         // This layer's label size, or the layout's where the layer sets none —
@@ -19511,52 +19513,81 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             } else {
                 Modifier.drawWithContent { if (!octopusHere.value) drawContent() }
             }
-            // What the transliterator is about to write with this key. It takes
-            // the corner over the long-press alternate, and answers to its own
-            // switch rather than `longPressHints`: the two annotate different
-            // things — the alternate is a second glyph the key also has, this
-            // is what the key does right now — and on a phonetic board this is
-            // the only thing that says what a roman key means. `hideHint` still
-            // silences it, since that is an author asking for a clean corner
-            // rather than an opinion about which hint belongs in it.
-            val translit = if (key.hideHint) null else visual.transliteration
-            when {
-                // Drawn a step larger than the hint lane: these are Bengali
-                // conjuncts, not a single Latin letter, and ক্ক at [HintLabelSp]
-                // is a smudge. The user's hint scale still applies.
-                translit != null -> Text(
-                    text = translit,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
-                    fontSize = (TranslitHintSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
-                    color = hintColor,
-                    maxLines = 1,
-                    softWrap = false,
-                    style = keyHintTextStyle(),
-                )
-                showHints && hintIcon != null -> Icon(
-                    hintIcon,
-                    contentDescription = null,
-                    tint = hintColor,
-                    modifier = hintMask
-                        .align(Alignment.TopEnd)
-                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding)
-                        .size((HintIconDp * fontScale * settings.layoutBehavior.hintFontScale).dp),
-                )
-                showHints && key.opensAlternatesPopup() && hint != null -> Text(
-                    text = hint,
-                    modifier = hintMask
-                        .align(Alignment.TopEnd)
-                        .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
-                    fontSize = (HintLabelSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
-                    color = hintColor,
-                    maxLines = 1,
-                    softWrap = false,
-                    style = keyHintTextStyle(),
-                )
-            }
+            KeyCornerHint(
+                transliterationRoman = if (key.hideHint) null else visual.transliterationRoman,
+                hintIcon = hintIcon.takeIf { showHints },
+                hint = hint.takeIf { showHints && key.opensAlternatesPopup() },
+                hintMask = hintMask,
+                hintColor = hintColor,
+                fontScale = fontScale,
+                settings = settings,
+            )
         }
+    }
+}
+
+/**
+ * A key's corner: what the transliterator is about to write with it, or else
+ * the icon an author named, or else the first long-press alternate.
+ *
+ * Its own composable so the transliteration reading, which changes on every
+ * keystroke of a phonetic board, is read in a scope of its own: a letter
+ * typed recomposes this corner and leaves the key around it alone.
+ */
+@Composable
+private fun BoxScope.KeyCornerHint(
+    transliterationRoman: String?,
+    hintIcon: ImageVector?,
+    hint: String?,
+    hintMask: Modifier,
+    hintColor: Color,
+    fontScale: Float,
+    settings: KeyboardSettings,
+) {
+    // What the transliterator is about to write with this key. It takes
+    // the corner over the long-press alternate, and answers to its own
+    // switch rather than `longPressHints`: the two annotate different
+    // things — the alternate is a second glyph the key also has, this
+    // is what the key does right now — and on a phonetic board this is
+    // the only thing that says what a roman key means. `hideHint` still
+    // silences it, since that is an author asking for a clean corner
+    // rather than an opinion about which hint belongs in it.
+    val translit = transliterationRoman?.let { LocalTransliterationPreview.current?.of(it) }
+    when {
+        // Drawn a step larger than the hint lane: these are Bengali
+        // conjuncts, not a single Latin letter, and ক্ক at [HintLabelSp]
+        // is a smudge. The user's hint scale still applies.
+        translit != null -> Text(
+            text = translit,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
+            fontSize = (TranslitHintSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
+            color = hintColor,
+            maxLines = 1,
+            softWrap = false,
+            style = keyHintTextStyle(),
+        )
+        hintIcon != null -> Icon(
+            hintIcon,
+            contentDescription = null,
+            tint = hintColor,
+            modifier = hintMask
+                .align(Alignment.TopEnd)
+                .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding)
+                .size((HintIconDp * fontScale * settings.layoutBehavior.hintFontScale).dp),
+        )
+        hint != null -> Text(
+            text = hint,
+            modifier = hintMask
+                .align(Alignment.TopEnd)
+                .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
+            fontSize = (HintLabelSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
+            color = hintColor,
+            maxLines = 1,
+            softWrap = false,
+            style = keyHintTextStyle(),
+        )
     }
 }
 
@@ -19658,7 +19689,7 @@ private fun spacebarText(state: KeyboardUiState): String {
  * the transliterator), a key that adds no glyph of its own (Avro's inherent
  * "o" after a consonant), or one whose answer is the roman letter back again.
  */
-private fun transliterationHint(key: Key, state: KeyboardUiState): String? {
+private fun transliterationRoman(key: Key, state: KeyboardUiState): String? {
     if (key.action != KeyAction.Text || !state.transliterationHintsShown()) return null
     // What the keypress would actually feed the buffer, shift included. Taken
     // the same way [WMKeyboardService.keyOutput] takes it rather than off the
@@ -19667,15 +19698,49 @@ private fun transliterationHint(key: Key, state: KeyboardUiState): String? {
     // letter every time shift is down.
     val base = key.output ?: key.label
     val shiftLabel = key.shiftLabel
-    val roman = when {
+    return when {
         state.shiftState != ShiftState.OFF && shiftLabel != null -> shiftLabel
         state.shiftState != ShiftState.OFF -> base.uppercase()
         else -> base
     }
+}
+
+/**
+ * The composer and the live roman buffer, for the corners of a transliterating
+ * board to read what each key is about to write ([KeyCornerHint]).
+ *
+ * The buffer is a [State] read only by the corners, so a keystroke recomposes
+ * those small scopes and nothing else. Handed to the grid through
+ * [KeyVisual] it had to be a key of `rememberKeyGrid`, and every letter typed
+ * rebuilt all ~40 key visuals and recomposed every key body with them.
+ */
+@Stable
+internal class TransliterationPreview(
+    private val composer: com.wasimaster.wmkeyboard.core.input.composer.Composer,
+    private val wholeCluster: Boolean,
+    private val buffer: State<String>,
+) {
+    /** What [roman] would write now, or null when that is nothing worth drawing. */
+    fun of(roman: String): String? =
+        composer.keyPreview(buffer.value, roman, wholeCluster)
+            ?.takeIf { it.isNotEmpty() && it != roman }
+}
+
+/** Null on every board whose corners do not read a transliteration. */
+internal val LocalTransliterationPreview =
+    staticCompositionLocalOf<TransliterationPreview?> { null }
+
+@Composable
+private fun rememberTransliterationPreview(state: KeyboardUiState): TransliterationPreview? {
+    // Always taken, so the slot does not come and go with the setting.
+    val buffer = rememberUpdatedState(state.composingRoman)
+    if (!state.transliterationHintsShown()) return null
+    val composer = state.composer
     val wholeCluster =
         state.settings.layoutBehavior.transliterationHints == TransliterationHintMode.CLUSTER
-    return state.composer.keyPreview(state.composingRoman, roman, wholeCluster)
-        ?.takeIf { it.isNotEmpty() && it != roman }
+    return remember(composer, wholeCluster, buffer) {
+        TransliterationPreview(composer, wholeCluster, buffer)
+    }
 }
 
 private fun displayLabel(key: Key, state: KeyboardUiState): String {

@@ -5976,11 +5976,12 @@ data class LayoutBehaviorSettings(
      * script it is about to type rather than its long-press alternate: ক on
      * the `k`, কা on the `a` once a consonant is composing, ক্ক on the `k`
      * after one. The hints follow the composing buffer and the shift state, so
-     * the roman grid reads as the Bengali it produces. On by default — it is
-     * the only thing on a phonetic board that says what a key does — and
+     * the roman grid reads as the Bengali it produces. Off by default: the
+     * hints change on every keystroke, so they cost every key a redraw per
+     * letter typed, and a phonetic typist mostly knows the scheme already.
      * [TransliterationHintMode] picks how much of the cluster it shows.
      */
-    val transliterationHints: TransliterationHintMode = TransliterationHintMode.CLUSTER,
+    val transliterationHints: TransliterationHintMode = TransliterationHintMode.OFF,
     /**
      * When on, holding shift on the letters layer swaps the extra number row's
      * digits for the symbol layer's bracket/math fill row (`=\<>[]{}|~`), so
