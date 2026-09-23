@@ -604,9 +604,9 @@ enum class QrEccLevel { L, M, Q, H }
 /**
  * Where the translate tool gets its translations.
  *
- * Stored by name. [ONLINE] is first and the default because it is what the
- * tool has always done and it needs nothing downloaded; the other two only
- * mean anything in a build that carries ML Kit.
+ * Stored by name. [ONLINE] is first, what the tool has always done, and the
+ * default everywhere but Play (see [TranslateSettings.engine]); the other two
+ * only mean anything in a build that carries ML Kit.
  */
 enum class TranslateEngine(@StringRes val labelRes: Int) {
     /** The online service: Google's endpoint, a Cloud key, or a LibreTranslate server. */
@@ -627,7 +627,18 @@ enum class TranslateEngine(@StringRes val labelRes: Int) {
  * slot on [KeyboardSettings] however many settings end up inside.
  */
 data class TranslateSettings(
-    val engine: TranslateEngine = TranslateEngine.ONLINE,
+    /**
+     * [TranslateEngine.ON_DEVICE] on Play, [TranslateEngine.ONLINE] elsewhere.
+     * The Play build ships no Cloud Translation key, so its online engine is
+     * Google's keyless public endpoint, which is not an API Google offers to
+     * apps; and a shared key would be billed per character with no cap once
+     * it is out of the APK. On the device, the first translation offers the
+     * module and the model instead of fetching anything unasked. The other
+     * builds keep Online: lite has no ML Kit, and a GitHub or F-Droid user
+     * has always had it.
+     */
+    val engine: TranslateEngine =
+        if (BuildConfig.ENABLE_PLAY_STORE) TranslateEngine.ON_DEVICE else TranslateEngine.ONLINE,
     /**
      * The panel's language menus list the languages whose model is on the
      * device first, while the engine is On device or Automatic. On Online
