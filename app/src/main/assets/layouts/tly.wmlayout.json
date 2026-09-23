@@ -3,7 +3,7 @@
   "version": 1,
   "layout": {
     "id": "asset_tly",
-    "name": "tolışi zıvon (Talysh)",
+    "name": "tolyši zyvon (Talysh)",
     "langId": "tly",
     "version": 2,
     "layers": {
@@ -19,7 +19,8 @@
             {
               "label": "e",
               "longPress": [
-                "ə"
+                "ə",
+                "ē"
               ]
             },
             {
@@ -38,16 +39,10 @@
               ]
             },
             {
-              "label": "i",
-              "longPress": [
-                "ı"
-              ]
+              "label": "i"
             },
             {
-              "label": "o",
-              "longPress": [
-                "ö"
-              ]
+              "label": "o"
             },
             {
               "label": "p"
@@ -60,7 +55,7 @@
             {
               "label": "s",
               "longPress": [
-                "ş"
+                "š"
               ]
             },
             {
@@ -72,7 +67,7 @@
             {
               "label": "g",
               "longPress": [
-                "ğ"
+                "ǧ"
               ]
             },
             {
@@ -97,7 +92,10 @@
               "width": 1.5
             },
             {
-              "label": "z"
+              "label": "z",
+              "longPress": [
+                "ž"
+              ]
             },
             {
               "label": "x"
@@ -105,7 +103,7 @@
             {
               "label": "c",
               "longPress": [
-                "ç"
+                "č"
               ]
             },
             {

@@ -1484,6 +1484,13 @@
   "keyman": false
  },
  {
+  "id": "kok_rom",
+  "name": "Romi Konkani · Konkani (Romi)",
+  "english": "Konkani (Romi)",
+  "script": "Latin",
+  "keyman": false
+ },
+ {
   "id": "aa",
   "name": "Qafar af · Afar",
   "english": "Afar",
@@ -2101,7 +2108,7 @@
  },
  {
   "id": "tly",
-  "name": "tolışi zıvon · Talysh",
+  "name": "tolyši zyvon · Talysh",
   "english": "Talysh",
   "script": "Latin",
   "keyman": false
@@ -2363,6 +2370,13 @@
   "name": "ⵜⴰⵛⵍⵃⵉⵢⵜ · Tachelhit",
   "english": "Tachelhit",
   "script": "Tifinagh",
+  "keyman": false
+ },
+ {
+  "id": "shi_latn",
+  "name": "Taclḥit · Tachelhit (Latin)",
+  "english": "Tachelhit (Latin)",
+  "script": "Latin",
   "keyman": false
  },
  {

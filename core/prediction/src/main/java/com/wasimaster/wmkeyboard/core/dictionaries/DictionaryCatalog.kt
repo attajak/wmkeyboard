@@ -48,9 +48,10 @@ data class DictionaryEntry(
     @StringRes val variantRes: Int? = null,
     /**
      * Which file under `data/$repoCode/` this entry downloads: `"full"` (the
-     * ordinary native-script list) or `"rom"` (a romanized/Latin-script
+     * ordinary native-script list), `"rom"` (a romanized/Latin-script
      * transliteration list — its own selectable language, e.g. "Bengali
-     * (Romanized)", not a variant of the native-script entry).
+     * (Romanized)", not a variant of the native-script entry) or `"latn"`
+     * (a language's other script, written as such: Tachelhit's Latin list).
      */
     val suffix: String = "full",
     /**
@@ -206,8 +207,9 @@ object DictionaryCatalog {
         entry("km", "km", "km", 9_427, 155_670L),
         entry("kn", "kn", "kn", 549_589, 2_884_310L),
         entry("ko", "ko", "ko", 675_331, 2_838_560L),
-        entry("kok", "kok", "kok", 58_449, 220_459L),
-        entry("ku", "ku", "ku", 75_880, 340_422L),
+        // Devanagari, from gom.wikipedia; data/kok holds the Romi list.
+        entry("kok", "kok", "gom", 165_192, 774_191L),
+        entry("ku", "ku", "ku", 145_280, 577_616L),
         entry("kv", "kv", "kv", 49_462, 228_954L),
         entry("kw", "kw", "kw", 49_355, 194_052L),
         entry("ky", "ky", "ky", 336_397, 1_691_959L),
@@ -336,6 +338,7 @@ object DictionaryCatalog {
         entry("ta_rom", "ta_rom", "ta", 3_134_887, 10_185_068L, suffix = "rom"),
         entry("te_rom", "te_rom", "te", 2_270_502, 7_234_058L, suffix = "rom"),
         entry("ur_rom", "ur_rom", "ur", 110_489, 507_828L, suffix = "rom"),
+        entry("kok_rom", "kok_rom", "kok", 58_449, 220_459L, suffix = "rom"),
         // --- Language expansion: 140 new languages. ---
         entry("ace", "ace", "ace", 27984, 109003L),
         entry("ami", "ami", "ami", 58883, 219840L),
@@ -421,7 +424,7 @@ object DictionaryCatalog {
         entry("szy", "szy", "szy", 92948, 332214L),
         entry("tay", "tay", "tay", 26311, 95342L),
         entry("tdd", "tdd", "tdd", 4795, 21062L),
-        entry("tly", "tly", "tly", 2294, 12199L),
+        entry("tly", "tly", "tly", 13902, 56250L),
         entry("trv", "trv", "trv", 53084, 193302L),
         entry("tum", "tum", "tum", 77785, 313644L),
         entry("vep", "vep", "vep", 113585, 469155L),
@@ -455,7 +458,8 @@ object DictionaryCatalog {
         entry("shn", "shn", "shn", 239802, 1856358L),
         entry("hyw", "hyw", "hyw", 275125, 1221053L),
         entry("pnt", "pnt", "pnt", 8208, 39993L),
-        entry("shi", "shi", "shi", 51501, 190037L),
+        entry("shi", "shi", "shi", 23090, 103083L),
+        entry("shi_latn", "shi_latn", "shi", 23094, 87492L, suffix = "latn"),
         entry("tig", "tig", "tig", 68240, 278849L),
         entry("tcy", "tcy", "tcy", 33567, 160325L),
         entry("xmf", "xmf", "xmf", 175039, 795383L),

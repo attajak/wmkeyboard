@@ -2,99 +2,96 @@
   "format": "wmkeyboard-layout",
   "version": 1,
   "layout": {
-    "id": "asset_shi",
-    "name": "ⵜⴰⵛⵍⵃⵉⵢⵜ (Tachelhit)",
-    "langId": "shi",
+    "id": "asset_shi_latn",
+    "name": "Taclḥit (Tachelhit Latin)",
+    "langId": "shi_latn",
     "version": 2,
     "layers": {
       "letters": {
         "rows": [
           [
             {
-              "label": "ⵇ"
+              "label": "q"
             },
             {
-              "label": "ⵡ",
-              "shiftLabel": "ⵯ"
-            },
-            {
-              "label": "ⴻ"
-            },
-            {
-              "label": "ⵔ",
-              "shiftLabel": "ⵕ",
+              "label": "w",
               "longPress": [
-                "ⵕ"
+                "ʷ"
               ]
             },
             {
-              "label": "ⵜ",
-              "shiftLabel": "ⵟ",
+              "label": "e",
               "longPress": [
-                "ⵟ"
+                "ɛ"
               ]
             },
             {
-              "label": "ⵢ"
+              "label": "r",
+              "longPress": [
+                "ṛ"
+              ]
             },
             {
-              "label": "ⵓ"
+              "label": "t",
+              "longPress": [
+                "ṭ"
+              ]
             },
             {
-              "label": "ⵉ"
+              "label": "y"
             },
             {
-              "label": "ⵄ"
+              "label": "u"
             },
             {
-              "label": "ⵃ"
+              "label": "i"
+            },
+            {
+              "label": "o"
+            },
+            {
+              "label": "p"
             }
           ],
           [
             {
-              "label": "ⴰ"
+              "label": "a"
             },
             {
-              "label": "ⵙ",
-              "shiftLabel": "ⵚ",
+              "label": "s",
               "longPress": [
-                "ⵚ"
+                "ṣ"
               ]
             },
             {
-              "label": "ⴷ",
-              "shiftLabel": "ⴹ",
+              "label": "d",
               "longPress": [
-                "ⴹ"
+                "ḍ"
               ]
             },
             {
-              "label": "ⴼ"
+              "label": "f"
             },
             {
-              "label": "ⴳ",
+              "label": "g",
               "longPress": [
-                "ⴳⵯ"
+                "ɣ"
               ]
             },
             {
-              "label": "ⵀ",
+              "label": "h",
               "longPress": [
-                "ⵁ"
+                "ḥ"
               ]
             },
             {
-              "label": "ⵊ"
+              "label": "j"
             },
             {
-              "label": "ⴽ",
-              "longPress": [
-                "ⴽⵯ",
-                "ⴾ"
-              ]
+              "label": "k"
             },
             {
-              "label": "ⵍ"
+              "label": "l"
             }
           ],
           [
@@ -106,39 +103,28 @@
               "width": 1.5
             },
             {
-              "label": "ⵣ",
-              "shiftLabel": "ⵥ",
+              "label": "z",
               "longPress": [
-                "ⵥ"
+                "ẓ"
               ]
             },
             {
-              "label": "ⵅ"
+              "label": "x"
             },
             {
-              "label": "ⵛ",
-              "longPress": [
-                "ⵞ"
-              ]
+              "label": "c"
             },
             {
-              "label": "ⵖ",
-              "longPress": [
-                "ⴴ"
-              ]
+              "label": "v"
             },
             {
-              "label": "ⴱ",
-              "longPress": [
-                "ⴲ",
-                "ⵒ"
-              ]
+              "label": "b"
             },
             {
-              "label": "ⵏ"
+              "label": "n"
             },
             {
-              "label": "ⵎ"
+              "label": "m"
             },
             {
               "label": "⌫",

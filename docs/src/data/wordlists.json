@@ -733,8 +733,8 @@
   "lang": "kok",
   "name": "कोंकणी · Konkani",
   "english": "Konkani",
-  "words": 58449,
-  "gzBytes": 220459,
+  "words": 165192,
+  "gzBytes": 774191,
   "source": "Frequency"
  },
  {
@@ -742,8 +742,8 @@
   "lang": "ku",
   "name": "Kurdî · Kurdish",
   "english": "Kurdish",
-  "words": 75880,
-  "gzBytes": 340422,
+  "words": 145280,
+  "gzBytes": 577616,
   "source": "Frequency"
  },
  {
@@ -1809,6 +1809,15 @@
   "source": "Frequency"
  },
  {
+  "id": "kok_rom",
+  "lang": "kok_rom",
+  "name": "Romi Konkani · Konkani (Romi)",
+  "english": "Konkani (Romi)",
+  "words": 58449,
+  "gzBytes": 220459,
+  "source": "Frequency"
+ },
+ {
   "id": "ace",
   "lang": "ace",
   "name": "Bahsa Acèh · Acehnese",
@@ -2567,10 +2576,10 @@
  {
   "id": "tly",
   "lang": "tly",
-  "name": "tolışi zıvon · Talysh",
+  "name": "tolyši zyvon · Talysh",
   "english": "Talysh",
-  "words": 2294,
-  "gzBytes": 12199,
+  "words": 13902,
+  "gzBytes": 56250,
   "source": "Frequency"
  },
  {
@@ -2875,8 +2884,17 @@
   "lang": "shi",
   "name": "ⵜⴰⵛⵍⵃⵉⵢⵜ · Tachelhit",
   "english": "Tachelhit",
-  "words": 51501,
-  "gzBytes": 190037,
+  "words": 23090,
+  "gzBytes": 103083,
+  "source": "Frequency"
+ },
+ {
+  "id": "shi_latn",
+  "lang": "shi_latn",
+  "name": "Taclḥit · Tachelhit (Latin)",
+  "english": "Tachelhit (Latin)",
+  "words": 23094,
+  "gzBytes": 87492,
   "source": "Frequency"
  },
  {
