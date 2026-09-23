@@ -1756,26 +1756,38 @@ private fun DockedKeyboardFrame(
     // overlay matches, takes it in; the position is read on the outer one,
     // which is always here, rather than on an overlay that is only in the
     // tree while a key is down.
-    Box(
-        modifier = Modifier
+    //
+    // Both modifiers are remembered, and that is load-bearing. This frame
+    // recomposes on every keystroke (it takes the state), and a `layout { }`
+    // or `onGloballyPositioned { }` built in the composition is a new lambda
+    // each time, which Compose reads as a changed modifier: the node is
+    // measured again, and since the keyboard is sized by its content all the
+    // way up, that reached the window as a full layout pass — two or three
+    // of them per key on a phone, measured, with the keys, strip and toolbar
+    // all measured again each time. Remembered, a keystroke measures only
+    // what it actually changed.
+    val outerFrameModifier = remember {
+        Modifier
             .fillMaxWidth()
             .onGloballyPositioned {
                 frameOrigin = it.positionInRoot()
                 frameSize = it.size
-            },
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .keyPreviewHeadroom(previewHeadroomPx, previewBand)
-                .then(
-                    if (resize == null) {
-                        Modifier.rowRevealHeadroom(revealHeadroom)
-                    } else {
-                        Modifier.resizeHeadroom(resize)
-                    },
-                ),
-        ) {
+            }
+    }
+    val innerFrameModifier = remember(previewHeadroomPx, previewBand, resize, revealHeadroom) {
+        Modifier
+            .fillMaxWidth()
+            .keyPreviewHeadroom(previewHeadroomPx, previewBand)
+            .then(
+                if (resize == null) {
+                    Modifier.rowRevealHeadroom(revealHeadroom)
+                } else {
+                    Modifier.resizeHeadroom(resize)
+                },
+            )
+    }
+    Box(modifier = outerFrameModifier) {
+        Box(modifier = innerFrameModifier) {
             if (resize != null) ResizeHeadroomScrim()
             // Rounded corners cut out of the whole board, the app showing
             // through them. Not on a television, whose card rounds itself, and
@@ -13119,9 +13131,11 @@ internal fun KeyPreviewOverlay(
     val onKeyLabelLanePx = with(density) { onKeyLabelLanePx(popup) }
     val headroomPx = if (virtualHeadroom) keyPreviewHeadroomPx(settings) else 0
     val bubbles = state.shown.toList()
-    // Nothing in the tree while nothing is previewing: a press adds the node
-    // in the same composition that lights the key, and idle costs nothing.
-    if (bubbles.isEmpty()) return
+    // In the tree even while nothing is previewing, with no children. Taking
+    // the node out on release and putting it back on the next press changed
+    // the frame's own child list twice a keystroke, and the frame is sized by
+    // its content, so each change was a layout pass over the whole window. An
+    // empty Layout costs a node and nothing else.
     Layout(
         // Transient, and already spoken by the key: a screen reader has no
         // use for a bubble that is gone before the description finishes.

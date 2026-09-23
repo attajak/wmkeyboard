@@ -343,6 +343,7 @@ import com.wasimaster.wmkeyboard.core.tools.matches
 import com.wasimaster.wmkeyboard.core.tools.parseLeader
 import com.wasimaster.wmkeyboard.core.tools.pickerLetter
 import com.wasimaster.wmkeyboard.core.tools.toolbarHintButtons
+import com.wasimaster.wmkeyboard.ime.ui.StableMeasureFrame
 import com.wasimaster.wmkeyboard.ime.ui.SymbolRowAction
 import com.wasimaster.wmkeyboard.ime.ui.activeSymbolSet
 import com.wasimaster.wmkeyboard.ime.ui.keyboardHintPlan
@@ -4101,7 +4102,20 @@ open class WMKeyboardService : InputMethodService() {
                 ServiceKeyboardContent()
             }
         }
-        return view
+        // Measured through a frame that hands it one height per traversal;
+        // see [StableMeasureFrame] for why a keystroke used to lay out the
+        // whole window.
+        // The keyboard keeps the params the input frame gives an input view:
+        // full width, its own height.
+        return StableMeasureFrame(this).apply {
+            addView(
+                view,
+                android.widget.FrameLayout.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                ),
+            )
+        }
     }
 
     /**
