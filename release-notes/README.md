@@ -5,6 +5,11 @@ top of the GitHub release for that version: the "What's new" block, which
 `.github/scripts/release-notes.sh` drops in verbatim under a `<details open>`
 and follows with the download grid.
 
+Every issue linked here gets a comment once the release is published, saying
+it shipped and linking any settings the change added
+(`.github/workflows/release-comments.yml`). Link the issues a release
+actually closes or moves forward, not ones it only mentions in passing.
+
 Write it in `###` sections: the script supplies the `<h2>` above it, so a file
 that starts with its own `##` ends up with two headings.
 

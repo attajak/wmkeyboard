@@ -1,0 +1,122 @@
+name: Release comments
+
+# Tells every issue a release links that it has shipped: which version, a
+# mention of whoever opened it, links that open any settings the change added,
+# and how long F-Droid and Google Play take to catch up. The work is in
+# .github/scripts/release_comments.py, which explains how the commits and the
+# settings are found.
+#
+# Three ways in:
+#
+#   * release.yml calls this after its `publish` job. That is the usual path,
+#     and it has to be a call: the release is published with the workflow's own
+#     token, and GitHub starts no workflow for an event that token caused, so
+#     the `release` trigger below never sees those.
+#   * `release: published`, for a release published by hand.
+#   * By hand from the Actions tab, for an older release or a rehearsal. Dry run
+#     is on by default; it writes every comment to the run summary instead.
+#
+# A second run for the same tag posts nothing twice: each comment carries a
+# marker for its tag, and the script skips (or updates) an issue that has one.
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag, e.g. v0.5.12'
+        type: string
+        required: true
+      dry_run:
+        description: 'Only show the comments, in the run summary'
+        type: boolean
+        default: true
+      only:
+        description: 'Limit to these issue numbers (comma-separated). Empty for all'
+        type: string
+        default: ''
+      stores:
+        description: 'Stores that lag the GitHub release (comma-separated). Empty for none'
+        type: string
+        default: 'F-Droid,Google Play'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  comment:
+    name: Comment on the issues
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # One run per tag at a time, so a hand publish racing the release job
+    # cannot read "no comment yet" twice. Never cancelled halfway through
+    # posting.
+    concurrency:
+      group: release-comments-${{ inputs.tag || github.event.release.tag_name }}
+      cancel-in-progress: false
+    # A pre-release tells nobody; the script refuses one too.
+    if: github.event_name != 'release' || !github.event.release.prerelease
+    steps:
+      # The default branch, not the tag: the script and the freshest settings
+      # index live there. Full history and tags, because the commits behind
+      # each issue are read out of the tag's range.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+
+      # Everything a person typed reaches the script through the environment,
+      # never through a workflow expression inside the script text.
+      - name: Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && 'true' || 'false' }}
+          ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.only || '' }}
+          # Prefixed with `=` so an input deliberately left empty ("no
+          # stores") is not mistaken for no input and replaced by the default.
+          STORES: ${{ github.event_name == 'workflow_dispatch' && format('={0}', inputs.stores) || '' }}
+        run: |
+          args=(--repo "$REPO" --tag "$TAG" --only "$ONLY")
+          if [ -n "$STORES" ]; then
+            args+=(--stores "${STORES#=}")
+          fi
+          if [ "$DRY_RUN" = 'true' ]; then
+            args+=(--dry-run --out comments)
+          fi
+          set +e
+          python3 .github/scripts/release_comments.py "${args[@]}"
+          status=$?
+          set -e
+          if [ "$DRY_RUN" = 'true' ] && [ -d comments ]; then
+            {
+              echo
+              echo '### The comments'
+              for f in comments/*.md; do
+                echo
+                echo "<details><summary>#$(basename "$f" .md)</summary>"
+                echo
+                cat "$f"
+                echo
+                echo '</details>'
+              done
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # 3 is "this release is not one to announce" (a draft, a
+          # pre-release, no APKs): worth a notice, not a red run.
+          if [ "$status" -eq 3 ]; then
+            echo "::notice::Nothing to announce for $TAG"
+            exit 0
+          fi
+          exit "$status"

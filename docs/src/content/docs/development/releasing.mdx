@@ -261,6 +261,51 @@ inside a fence long enough that no backtick run in it can escape.
 
 </Steps>
 
+### Telling the issues
+
+Once the release is published, the `issue-comments` job calls
+[`release-comments.yml`](https://github.com/wasi-master/wmkeyboard/blob/main/.github/workflows/release-comments.yml),
+which comments on every issue the release notes link. The comment names the
+version, mentions whoever opened the issue, lists the commits behind it, and
+says that F-Droid and Google Play take 2 to 3 days to catch up with the GitHub
+release. So the issue links you write in `release-notes/<versionName>.md` are
+also the list of people who hear about it.
+
+When the change added settings, the comment links each one through
+`https://wmkeyboard.pages.dev/open/`, with `since=` set to the release, and
+notes that the links open only once that version is installed. Nothing
+records which settings belong to which issue, so the script works it out:
+
+1. **The commits.** Every commit between the previous tag and this one whose
+   message names the issue (`Closes #285`, `Refs #285`), the commits GitHub
+   tied to it on the issue's timeline (a reference, the closing commit, a
+   merged pull request that mentions it), and any commit a maintainer's
+   comment names by hash. A commit outside the release's range never counts.
+2. **The settings.** A `<string name>` those commits added under
+   `src/main/res/values/` that the previous tag did not have, and that
+   `docs/src/data/settings-links.json` lists as a screen or a row. A row's
+   link name is the resource name of its title, so this is an exact match. A
+   new screen stands for the rows on it, so a new tool is one link, not twenty.
+
+It runs from the release workflow rather than on `release: published`
+because the release is published with the workflow's own token, and GitHub
+starts no workflow for an event that token caused. The `release` trigger is
+still there for a release you publish by hand. Every comment carries a hidden
+marker for its tag, so a second run for the same release posts nothing twice:
+it skips an issue it already told, or updates the comment if the text has
+changed.
+
+Rehearse against any release that is already out, from the Actions tab
+(**Release comments**, dry run on by default, comments land in the run
+summary) or locally:
+
+```sh
+python3 .github/scripts/release_comments.py --tag v0.5.11 --dry-run
+python3 .github/scripts/release_comments.py --tag v0.5.11 --dry-run --only 285,302
+```
+
+A draft, a pre-release, or a release with no APKs attached is left alone.
+
 ### What the release body looks like
 
 `.github/scripts/release-notes.sh` builds it in the `publish` job, after the

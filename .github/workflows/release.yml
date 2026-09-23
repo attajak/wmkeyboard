@@ -523,6 +523,22 @@ jobs:
           done
           gh release edit "$TAG" --repo "$REPO" --draft=false --latest
 
+  # Comments on every issue the release notes link, now that there is a
+  # release to point at. A call rather than a `release: published` trigger in
+  # that workflow, because the release above is published with this run's
+  # token, and GitHub starts no workflow for an event that token caused.
+  issue-comments:
+    name: Tell the linked issues
+    needs: [verify, publish]
+    if: github.ref_type == 'tag' && !inputs.dry_run
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    uses: ./.github/workflows/release-comments.yml
+    with:
+      tag: ${{ github.ref_name }}
+
   # Points the bug report form at the version just published, so reporters
   # are asked to confirm they are on it. Runs after publish, so a failed or
   # dry run never advertises a version nobody can download. Commits to main,
