@@ -1,0 +1,166 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_pwn_t9",
+    "name": "T9 (Paiwan)",
+    "langId": "pwn",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "b",
+                "c"
+              ],
+              "letters": "abc"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "e",
+                "f"
+              ],
+              "letters": "def"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i"
+              ],
+              "letters": "ghi"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l"
+              ],
+              "letters": "jkl"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o"
+              ],
+              "letters": "mno"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s"
+              ],
+              "letters": "pqrs"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "v"
+              ],
+              "letters": "tuv"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z"
+              ],
+              "letters": "wxyz"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

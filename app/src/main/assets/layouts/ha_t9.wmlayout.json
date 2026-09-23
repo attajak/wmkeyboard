@@ -1,0 +1,170 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_ha_t9",
+    "name": "T9 (Hausa)",
+    "langId": "ha",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "b",
+                "c",
+                "ɓ"
+              ],
+              "letters": "abcɓ"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "e",
+                "f",
+                "ɗ"
+              ],
+              "letters": "defɗ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i"
+              ],
+              "letters": "ghi"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l",
+                "ƙ"
+              ],
+              "letters": "jklƙ"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o"
+              ],
+              "letters": "mno"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s"
+              ],
+              "letters": "pqrs"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "v"
+              ],
+              "letters": "tuv"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z",
+                "ƴ"
+              ],
+              "letters": "wxyzƴ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

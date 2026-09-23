@@ -1,0 +1,177 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_xmf_t9",
+    "name": "T9 (მარგალური ნინა)",
+    "langId": "xmf",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "აბგდ",
+              "output": "ა",
+              "longPress": [
+                "2",
+                "ა",
+                "ბ",
+                "გ",
+                "დ"
+              ],
+              "letters": "აბგდ"
+            },
+            {
+              "label": "ევზთჷ",
+              "output": "ე",
+              "longPress": [
+                "3",
+                "ე",
+                "ვ",
+                "ზ",
+                "თ",
+                "ჷ"
+              ],
+              "letters": "ევზთჷ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "იკლმ",
+              "output": "ი",
+              "longPress": [
+                "4",
+                "ი",
+                "კ",
+                "ლ",
+                "მ"
+              ],
+              "letters": "იკლმ"
+            },
+            {
+              "label": "ნოპჟ",
+              "output": "ნ",
+              "longPress": [
+                "5",
+                "ნ",
+                "ო",
+                "პ",
+                "ჟ"
+              ],
+              "letters": "ნოპჟ"
+            },
+            {
+              "label": "რსტუ",
+              "output": "რ",
+              "longPress": [
+                "6",
+                "რ",
+                "ს",
+                "ტ",
+                "უ"
+              ],
+              "letters": "რსტუ"
+            },
+            {
+              "label": ",",
+              "longPress": [
+                "!",
+                "?"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ფქღყ",
+              "output": "ფ",
+              "longPress": [
+                "7",
+                "ფ",
+                "ქ",
+                "ღ",
+                "ყ"
+              ],
+              "letters": "ფქღყ"
+            },
+            {
+              "label": "შჩცძ",
+              "output": "შ",
+              "longPress": [
+                "8",
+                "შ",
+                "ჩ",
+                "ც",
+                "ძ"
+              ],
+              "letters": "შჩცძ"
+            },
+            {
+              "label": "წჭხჯჰჸ",
+              "output": "წ",
+              "longPress": [
+                "9",
+                "წ",
+                "ჭ",
+                "ხ",
+                "ჯ",
+                "ჰ",
+                "ჸ"
+              ],
+              "letters": "წჭხჯჰჸ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

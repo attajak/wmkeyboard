@@ -1,0 +1,182 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_kaa_t9",
+    "name": "T9 (Қарақалпақ тили)",
+    "langId": "kaa",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "АБВГӘҒ",
+              "output": "а",
+              "longPress": [
+                "2",
+                "а",
+                "б",
+                "в",
+                "г",
+                "ә",
+                "ғ"
+              ],
+              "letters": "абвгәғ"
+            },
+            {
+              "label": "ДЕЖЗ",
+              "output": "д",
+              "longPress": [
+                "3",
+                "д",
+                "е",
+                "ё",
+                "ж",
+                "з"
+              ],
+              "letters": "деёжз"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ИКЛҚ",
+              "output": "и",
+              "longPress": [
+                "4",
+                "и",
+                "й",
+                "к",
+                "л",
+                "қ"
+              ],
+              "letters": "ийклқ"
+            },
+            {
+              "label": "МНОПҢӨ",
+              "output": "м",
+              "longPress": [
+                "5",
+                "м",
+                "н",
+                "о",
+                "п",
+                "ң",
+                "ө"
+              ],
+              "letters": "мнопңө"
+            },
+            {
+              "label": "РСТУҮҰ",
+              "output": "р",
+              "longPress": [
+                "6",
+                "р",
+                "с",
+                "т",
+                "у",
+                "ү",
+                "ұ",
+                "ў"
+              ],
+              "letters": "рстуүұў"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ФХЦЧҺ",
+              "output": "ф",
+              "longPress": [
+                "7",
+                "ф",
+                "х",
+                "ц",
+                "ч",
+                "һ"
+              ],
+              "letters": "фхцчһ"
+            },
+            {
+              "label": "ШЩЪЫ",
+              "output": "ш",
+              "longPress": [
+                "8",
+                "ш",
+                "щ",
+                "ъ",
+                "ы"
+              ],
+              "letters": "шщъы"
+            },
+            {
+              "label": "ЬЭЮЯ",
+              "output": "ь",
+              "longPress": [
+                "9",
+                "ь",
+                "э",
+                "ю",
+                "я"
+              ],
+              "letters": "ьэюя"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

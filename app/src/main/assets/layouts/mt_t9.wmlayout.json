@@ -1,0 +1,185 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_mt_t9",
+    "name": "T9 (Malti)",
+    "langId": "mt",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "b",
+                "c",
+                "ċ",
+                "â",
+                "á",
+                "à"
+              ],
+              "letters": "abcċâáà"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "e",
+                "f",
+                "ê",
+                "é",
+                "è"
+              ],
+              "letters": "defêéè"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i",
+                "ġ",
+                "ħ",
+                "î",
+                "í",
+                "ì"
+              ],
+              "letters": "ghiġħîíì"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l"
+              ],
+              "letters": "jkl"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o",
+                "ô",
+                "ó",
+                "ò"
+              ],
+              "letters": "mnoôóò"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s"
+              ],
+              "letters": "pqrs"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "v",
+                "û",
+                "ú",
+                "ù"
+              ],
+              "letters": "tuvûúù"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z",
+                "ż"
+              ],
+              "letters": "wxyzż"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

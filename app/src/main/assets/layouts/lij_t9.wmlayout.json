@@ -1,0 +1,184 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_lij_t9",
+    "name": "T9 (Ligure)",
+    "langId": "lij",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "b",
+                "c",
+                "à",
+                "ć",
+                "ç",
+                "â",
+                "ä",
+                "æ"
+              ],
+              "letters": "abcàćçâäæ"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "e",
+                "f",
+                "é",
+                "è",
+                "ë",
+                "ê"
+              ],
+              "letters": "deféèëê"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i",
+                "ì"
+              ],
+              "letters": "ghiì"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l"
+              ],
+              "letters": "jkl"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o",
+                "ò",
+                "ó",
+                "ô",
+                "ö"
+              ],
+              "letters": "mnoòóôö"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s"
+              ],
+              "letters": "pqrs"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "v",
+                "ù",
+                "û",
+                "ü"
+              ],
+              "letters": "tuvùûü"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z"
+              ],
+              "letters": "wxyz"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

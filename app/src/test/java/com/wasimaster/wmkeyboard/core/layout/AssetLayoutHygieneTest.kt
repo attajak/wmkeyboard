@@ -152,6 +152,9 @@ class AssetLayoutHygieneTest {
             .values
             .filter { group ->
                 group.size > 1 &&
+                    // A T9 keypad is the script's keypad standard, shared by
+                    // design the way InScript is (#332).
+                    group.any { (name, _) -> !name.endsWith("_t9") } &&
                     group.any { (_, l) -> l.id !in latinByDesign && l.script().id != ScriptId.LATIN } &&
                     // Membership, not an exact group match: fixing one language's
                     // letters moves it in or out of a shared-grid cluster, and a

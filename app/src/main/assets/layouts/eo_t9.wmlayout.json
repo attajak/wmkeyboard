@@ -1,0 +1,172 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_eo_t9",
+    "name": "T9 (Esperanto)",
+    "langId": "eo",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ABC",
+              "output": "a",
+              "longPress": [
+                "2",
+                "a",
+                "b",
+                "c",
+                "ĉ"
+              ],
+              "letters": "abcĉ"
+            },
+            {
+              "label": "DEF",
+              "output": "d",
+              "longPress": [
+                "3",
+                "d",
+                "e",
+                "f"
+              ],
+              "letters": "def"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "GHI",
+              "output": "g",
+              "longPress": [
+                "4",
+                "g",
+                "h",
+                "i",
+                "ĝ",
+                "ĥ"
+              ],
+              "letters": "ghiĝĥ"
+            },
+            {
+              "label": "JKL",
+              "output": "j",
+              "longPress": [
+                "5",
+                "j",
+                "k",
+                "l",
+                "ĵ"
+              ],
+              "letters": "jklĵ"
+            },
+            {
+              "label": "MNO",
+              "output": "m",
+              "longPress": [
+                "6",
+                "m",
+                "n",
+                "o"
+              ],
+              "letters": "mno"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "PQRS",
+              "output": "p",
+              "longPress": [
+                "7",
+                "p",
+                "q",
+                "r",
+                "s",
+                "ŝ"
+              ],
+              "letters": "pqrsŝ"
+            },
+            {
+              "label": "TUV",
+              "output": "t",
+              "longPress": [
+                "8",
+                "t",
+                "u",
+                "v",
+                "ŭ"
+              ],
+              "letters": "tuvŭ"
+            },
+            {
+              "label": "WXYZ",
+              "output": "w",
+              "longPress": [
+                "9",
+                "w",
+                "x",
+                "y",
+                "z"
+              ],
+              "letters": "wxyz"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

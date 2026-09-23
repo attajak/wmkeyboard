@@ -1,0 +1,178 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_ar_t9",
+    "name": "T9 (العربية)",
+    "langId": "ar",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".،؟",
+              "output": ".",
+              "longPress": [
+                "1",
+                "،",
+                "؟",
+                "!",
+                "'",
+                "-",
+                ":",
+                "؛"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ب ت ة ث",
+              "output": "ب",
+              "longPress": [
+                "2",
+                "ب",
+                "ت",
+                "ة",
+                "ث"
+              ],
+              "letters": "بتةث"
+            },
+            {
+              "label": "ا ى ء",
+              "output": "ا",
+              "longPress": [
+                "3",
+                "ا",
+                "أ",
+                "إ",
+                "آ",
+                "ى",
+                "ؤ",
+                "ئ",
+                "ء"
+              ],
+              "letters": "اأإآىؤئء"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "س ش ص ض",
+              "output": "س",
+              "longPress": [
+                "4",
+                "س",
+                "ش",
+                "ص",
+                "ض"
+              ],
+              "letters": "سشصض"
+            },
+            {
+              "label": "د ذ ر ز",
+              "output": "د",
+              "longPress": [
+                "5",
+                "د",
+                "ذ",
+                "ر",
+                "ز"
+              ],
+              "letters": "دذرز"
+            },
+            {
+              "label": "ج ح خ",
+              "output": "ج",
+              "longPress": [
+                "6",
+                "ج",
+                "ح",
+                "خ"
+              ],
+              "letters": "جحخ"
+            },
+            {
+              "label": "،",
+              "longPress": [
+                "!",
+                "؟"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ن ه و ي",
+              "output": "ن",
+              "longPress": [
+                "7",
+                "ن",
+                "ه",
+                "و",
+                "ي"
+              ],
+              "letters": "نهوي"
+            },
+            {
+              "label": "ف ق ك ل م",
+              "output": "ف",
+              "longPress": [
+                "8",
+                "ف",
+                "ق",
+                "ك",
+                "ل",
+                "م"
+              ],
+              "letters": "فقكلم"
+            },
+            {
+              "label": "ط ظ ع غ",
+              "output": "ط",
+              "longPress": [
+                "9",
+                "ط",
+                "ظ",
+                "ع",
+                "غ"
+              ],
+              "letters": "طظعغ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

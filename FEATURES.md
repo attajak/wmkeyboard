@@ -726,10 +726,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Per-script pinned fonts `uncommon` — 25 scripts map to a specific Google font; Music to Noto Music, Braille to Noto Sans Symbols 2
     - Per-script font pickers — Curated alternative families per script, shown only while a language on that script is enabled
     - Per-glyph fallback — A glyph the pinned face lacks falls back to the system font rather than blanking
-- **Keyboard layouts** — 1,280 shipped layouts: 21 compiled built-ins + 1,259 JSON assets (862 of them converted Keyman keyboards)
+- **Keyboard layouts** — 1,551 shipped layouts: 21 compiled built-ins + 1,530 JSON assets (862 of them converted Keyman keyboards)
   - Shipped catalogue — 20 Kotlin LayoutSpecs (boot-critical) plus 354 .wmlayout.json assets parsed off the main thread
     - Latin ergonomic alternates — QWERTY, AZERTY, Dvorak, Colemak, Workman, Halmak built in; BÉPO, Swiss German, LatAm Spanish, Turkish-Q as assets
-    - Ambiguous boards — T9 and Compact QWERTY built in; keys twice to four times the usual size, decoded rather than multi-tapped (#103)
+    - Ambiguous boards — T9 and Compact QWERTY built in; keys twice to four times the usual size, decoded rather than multi-tapped (#103); T9 keypads for 271 more languages as assets (#332)
     - Indic InScript family — InScript for Marathi, Nepali, Sanskrit, Telugu, Kannada, Malayalam, Gujarati, Punjabi, Odia, Konkani, Maithili, Bodo, Dogri, Bhojpuri; plus Tamil99 and Sinhala Wijesekara
     - Minority Cyrillic alphabets — Tatar, Bashkir, Chuvash, Chechen, Ossetian, Yakut, Udmurt, Komi, Kalmyk, Tuvan, Buryat, Erzya, Mari, Adyghe, Kabardian, Abkhaz, Avar, Lezgian and more
     - A failed asset costs one language, not the build — Each file is decoded in runCatching; a malformed one is skipped
@@ -747,10 +747,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Tablet auto-expansion `RARE` — Render-time transform widens an eligible grid by one column each side and mints Tab, backslash, caps lock, a mirrored shift and arrows
     - Row count never changes — The IME window is sized from layer row counts, so the transform only moves and widens keys
     - Backspace can never go missing — Delete only relocates to the number row when that row is actually drawn
-    - All-or-nothing eligibility — Declines 15 shipped layouts - the T9 keypad, kana flick pads, braille, morse, the Chinese shape/phonetic pads, and grids with no shift key
+    - All-or-nothing eligibility — Declines 284 shipped layouts - the 272 T9 keypads, kana flick pads, braille, morse, the Chinese shape/phonetic pads, and grids with no shift key
     - Per-layout opt-out — tabletExpand flag, default true, for grids already laid out wide by hand
   - More than one letter per key `RARE` — Key.letters lets a grid put a set of letters on one key and leave the language model to say which was meant (#103); AOSP-derived keyboards cannot, because their decoders are one keystroke to one letter
     - Two shipped boards — T9 on the ITU E.161 keypad (8 letter keys, digit hints, 4 columns) and Compact QWERTY (QWERTY's own rows folded two to a key, 5 columns)
+    - T9 in 272 languages (#332) — Every keypad follows ETSI ES 202 130's table for its language, or the table the standard names for it (Catalan → Spanish, Faroese → Danish, Rusyn → Ukrainian); languages the standard does not cover start from the table their phones used (German, Russian, Persian, Urdu, or plain E.161) with their own letters on the key ETSI's language-independent table gives them. Armenian keeps 9 for punctuation as the standard does; caseless scripts trade the shift key for a comma. Skipped: orthographies that need a standalone combining mark (Vietnamese, Yoruba, Indic and Southeast Asian scripts)
     - The buffer stays one character per keystroke — A tap commits the key's anchor letter, so backspace, the caret, word boundaries and every consumer of the composing buffer are untouched
     - Key sets ride beside the buffer — A per-keystroke frame, the twin of the tap-position frame, snapshotted with the word and size-checked against it
     - Free unedited matches — Every letter of the pressed key matches at zero cost and zero edits, so readings are not corrections and survive the "a known word suppresses corrections" gate

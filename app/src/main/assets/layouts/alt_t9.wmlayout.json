@@ -1,0 +1,177 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_alt_t9",
+    "name": "T9 (Алтай тили)",
+    "langId": "alt",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "АБВГ",
+              "output": "а",
+              "longPress": [
+                "2",
+                "а",
+                "б",
+                "в",
+                "г"
+              ],
+              "letters": "абвг"
+            },
+            {
+              "label": "ДЕЖЗ",
+              "output": "д",
+              "longPress": [
+                "3",
+                "д",
+                "е",
+                "ё",
+                "ж",
+                "з"
+              ],
+              "letters": "деёжз"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ИКЛЈ",
+              "output": "и",
+              "longPress": [
+                "4",
+                "и",
+                "й",
+                "к",
+                "л",
+                "ј"
+              ],
+              "letters": "ийклј"
+            },
+            {
+              "label": "МНОПҤ",
+              "output": "м",
+              "longPress": [
+                "5",
+                "м",
+                "н",
+                "о",
+                "п",
+                "ҥ",
+                "ӧ"
+              ],
+              "letters": "мнопҥӧ"
+            },
+            {
+              "label": "РСТУ",
+              "output": "р",
+              "longPress": [
+                "6",
+                "р",
+                "с",
+                "т",
+                "у",
+                "ӱ"
+              ],
+              "letters": "рстуӱ"
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ФХЦЧ",
+              "output": "ф",
+              "longPress": [
+                "7",
+                "ф",
+                "х",
+                "ц",
+                "ч"
+              ],
+              "letters": "фхцч"
+            },
+            {
+              "label": "ШЩЪЫ",
+              "output": "ш",
+              "longPress": [
+                "8",
+                "ш",
+                "щ",
+                "ъ",
+                "ы"
+              ],
+              "letters": "шщъы"
+            },
+            {
+              "label": "ЬЭЮЯ",
+              "output": "ь",
+              "longPress": [
+                "9",
+                "ь",
+                "э",
+                "ю",
+                "я"
+              ],
+              "letters": "ьэюя"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}
