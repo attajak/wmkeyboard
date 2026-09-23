@@ -4458,10 +4458,18 @@ open class WMKeyboardService : InputMethodService() {
      * Never use the fullscreen (extract) editor while floating or collapsed to
      * the bar — nor over a window with no editor that a pinned keyboard is
      * kept up on, where an extract view would have nothing to extract.
+     *
+     * Nor on a tablet or an unfolded foldable. The platform's default turns it
+     * on for any landscape screen, so an app whose field doesn't opt out
+     * (Signal does not) got a blank editor over most of a Pixel Fold. LatinIME
+     * and Gboard keep it to phones; so do we. Reads the configuration live
+     * rather than [deviceForm]: `super.onConfigurationChanged` re-evaluates
+     * this before that flow has caught up with an unfold.
      */
     override fun onEvaluateFullscreenMode(): Boolean =
         if (_uiState.value.settings.floatingKeyboard || voiceBarShowing() ||
-            (pinnedNow() && isNullField())
+            (pinnedNow() && isNullField()) ||
+            DeviceForm.of(resources.configuration.smallestScreenWidthDp).isTablet
         ) {
             false
         } else {
