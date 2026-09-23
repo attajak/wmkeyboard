@@ -6,7 +6,7 @@
 
 **An Android keyboard that keeps its brain on the device.**
 
-843 languages, Avro-style Bangla phonetic typing, a toolbox that goes well past emoji,
+845 languages, Avro-style Bangla phonetic typing, a toolbox that goes well past emoji,
 and a prediction stack that never phones home.
 
 <a href="https://github.com/wasi-master/wmkeyboard/releases/latest" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/v/release/wasi-master/wmkeyboard?style=flat-square&label=Download&color=3DDC84&logo=android&logoColor=white" alt="Download"></a>
@@ -53,7 +53,7 @@ It is written in Kotlin with Jetpack Compose, keyboard surface included. The cod
 
 | | |
 |---|---|
-| **Languages** | 843 languages and 1,589 layouts from a data-driven registry: native scripts, InScript variants, romanized entries, CJK, even constructed ones. A fresh install picks up whatever your phone is already set to. |
+| **Languages** | 845 languages and 1,597 layouts from a data-driven registry: native scripts, InScript variants, romanized entries, CJK, even constructed ones. A fresh install picks up whatever your phone is already set to. |
 | **Bangla, done right** | Avro-compatible phonetic typing for the Bengali script, with a lenient index, so `asi`, `achi` and `achhi` all land on আছি. Probhat layout too, with aspirates on shift, plus conjunct-aware backspace. |
 | **Prediction** | Trie-lattice beam decoder shared by tapping and glide, n-gram context ranking, likelihood-gated autocorrect, and on-device learning of your words, bigrams and trigrams. |
 | **Emoji and friends** | Emoji 17.0 catalog with semantic search in 125 languages, per-person skin tones, kaomoji, GIFs, stickers, and long-press to send Google's animated emoji. |

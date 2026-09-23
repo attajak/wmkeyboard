@@ -2,99 +2,80 @@
   "format": "wmkeyboard-layout",
   "version": 1,
   "layout": {
-    "id": "asset_shi",
-    "name": "ⵜⴰⵛⵍⵃⵉⵢⵜ (Tachelhit)",
-    "langId": "shi",
+    "id": "asset_kok_rom",
+    "name": "Romi Konkani",
+    "langId": "kok_rom",
     "version": 2,
     "layers": {
       "letters": {
         "rows": [
           [
             {
-              "label": "ⵇ"
+              "label": "q"
             },
             {
-              "label": "ⵡ",
-              "shiftLabel": "ⵯ"
+              "label": "w"
             },
             {
-              "label": "ⴻ"
-            },
-            {
-              "label": "ⵔ",
-              "shiftLabel": "ⵕ",
+              "label": "e",
               "longPress": [
-                "ⵕ"
+                "ê",
+                "é"
               ]
             },
             {
-              "label": "ⵜ",
-              "shiftLabel": "ⵟ",
+              "label": "r"
+            },
+            {
+              "label": "t"
+            },
+            {
+              "label": "y"
+            },
+            {
+              "label": "u"
+            },
+            {
+              "label": "i"
+            },
+            {
+              "label": "o",
               "longPress": [
-                "ⵟ"
+                "õ",
+                "ô"
               ]
             },
             {
-              "label": "ⵢ"
-            },
-            {
-              "label": "ⵓ"
-            },
-            {
-              "label": "ⵉ"
-            },
-            {
-              "label": "ⵄ"
-            },
-            {
-              "label": "ⵃ"
+              "label": "p"
             }
           ],
           [
             {
-              "label": "ⴰ"
+              "label": "a"
             },
             {
-              "label": "ⵙ",
-              "shiftLabel": "ⵚ",
-              "longPress": [
-                "ⵚ"
-              ]
+              "label": "s"
             },
             {
-              "label": "ⴷ",
-              "shiftLabel": "ⴹ",
-              "longPress": [
-                "ⴹ"
-              ]
+              "label": "d"
             },
             {
-              "label": "ⴼ"
+              "label": "f"
             },
             {
-              "label": "ⴳ",
-              "longPress": [
-                "ⴳⵯ"
-              ]
+              "label": "g"
             },
             {
-              "label": "ⵀ",
-              "longPress": [
-                "ⵁ"
-              ]
+              "label": "h"
             },
             {
-              "label": "ⵊ"
+              "label": "j"
             },
             {
-              "label": "ⴽ",
-              "longPress": [
-                "ⴽⵯ",
-                "ⴾ"
-              ]
+              "label": "k"
             },
             {
-              "label": "ⵍ"
+              "label": "l"
             }
           ],
           [
@@ -106,39 +87,28 @@
               "width": 1.5
             },
             {
-              "label": "ⵣ",
-              "shiftLabel": "ⵥ",
+              "label": "z"
+            },
+            {
+              "label": "x"
+            },
+            {
+              "label": "c"
+            },
+            {
+              "label": "v"
+            },
+            {
+              "label": "b"
+            },
+            {
+              "label": "n",
               "longPress": [
-                "ⵥ"
+                "ñ"
               ]
             },
             {
-              "label": "ⵅ"
-            },
-            {
-              "label": "ⵛ",
-              "longPress": [
-                "ⵞ"
-              ]
-            },
-            {
-              "label": "ⵖ",
-              "longPress": [
-                "ⴴ"
-              ]
-            },
-            {
-              "label": "ⴱ",
-              "longPress": [
-                "ⴲ",
-                "ⵒ"
-              ]
-            },
-            {
-              "label": "ⵏ"
-            },
-            {
-              "label": "ⵎ"
+              "label": "m"
             },
             {
               "label": "⌫",

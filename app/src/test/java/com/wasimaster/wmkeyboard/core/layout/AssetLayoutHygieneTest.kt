@@ -143,6 +143,9 @@ class AssetLayoutHygieneTest {
         // left to tell apart without inventing a difference.
         setOf("koi", "kv_cyrillic"),
         setOf("mdf", "myv_cyrillic"),
+        // Tachelhit and Standard Moroccan Tamazight are both written in IRCAM
+        // Tifinagh, the same letters on the same keys.
+        setOf("shi", "zgh_tifinagh"),
     )
 
     @Test

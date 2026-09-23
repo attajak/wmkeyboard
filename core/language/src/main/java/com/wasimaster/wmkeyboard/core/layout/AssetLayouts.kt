@@ -230,6 +230,7 @@ object AssetLayouts {
     const val TA_ROM_ID = "asset_ta_rom"
     const val TE_ROM_ID = "asset_te_rom"
     const val UR_ROM_ID = "asset_ur_rom"
+    const val KOK_ROM_ID = "asset_kok_rom"
 
     // --- Composer-driven input methods (Vietnamese Telex/VNI, Japanese romaji,
     // Chinese pinyin): plain QWERTY grids whose "composer" field does the work. ---
@@ -396,6 +397,7 @@ object AssetLayouts {
     const val HYW_ID = "asset_hyw"
     const val PNT_ID = "asset_pnt"
     const val SHI_ID = "asset_shi"
+    const val SHI_LATN_ID = "asset_shi_latn"
     const val TIG_ID = "asset_tig"
     const val TCY_ID = "asset_tcy"
     const val XMF_ID = "asset_xmf"
@@ -733,6 +735,7 @@ object AssetLayouts {
     const val TUM_T9_ID = "asset_tum_t9"
     const val TY_T9_ID = "asset_ty_t9"
     const val UR_ROM_T9_ID = "asset_ur_rom_t9"
+    const val KOK_ROM_T9_ID = "asset_kok_rom_t9"
     const val UZ_T9_ID = "asset_uz_t9"
     const val VE_T9_ID = "asset_ve_t9"
     const val VO_T9_ID = "asset_vo_t9"
@@ -784,6 +787,15 @@ object AssetLayouts {
     const val TLH_T9_ID = "asset_tlh_t9"
     const val YI_T9_ID = "asset_yi_t9"
     const val PNT_T9_ID = "asset_pnt_t9"
+
+    // Languages whose word list was in another script until it was rebuilt:
+    // Kurmanji (Turkish table), Konkani (Indian-market plan), Tachelhit in
+    // Tifinagh and in Latin, Talysh (Azerbaijani table).
+    const val KU_T9_ID = "asset_ku_t9"
+    const val KOK_T9_ID = "asset_kok_t9"
+    const val SHI_T9_ID = "asset_shi_t9"
+    const val SHI_LATN_T9_ID = "asset_shi_latn_t9"
+    const val TLY_T9_ID = "asset_tly_t9"
 
     @Volatile private var cached: List<LayoutSpec> = emptyList()
     @Volatile private var index: Map<String, LayoutSpec> = emptyMap()

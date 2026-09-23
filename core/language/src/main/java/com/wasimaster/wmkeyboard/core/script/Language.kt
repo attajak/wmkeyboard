@@ -820,7 +820,7 @@ object LanguageRegistry {
             englishName = "Kurdish",
             script = ScriptId.LATIN,
             localeTag = "ku-TR",
-            layoutIds = listOf(AssetLayouts.KU_KURMANJI_ID),
+            layoutIds = listOf(AssetLayouts.KU_KURMANJI_ID, AssetLayouts.KU_T9_ID),
         ),
         LanguageDef(
             id = "id",
@@ -1249,7 +1249,7 @@ object LanguageRegistry {
             englishName = "Konkani",
             script = ScriptId.DEVANAGARI,
             localeTag = "kok-IN",
-            layoutIds = listOf(AssetLayouts.KOK_INSCRIPT_ID),
+            layoutIds = listOf(AssetLayouts.KOK_INSCRIPT_ID, AssetLayouts.KOK_T9_ID),
             numeralSystem = NumeralSystem.DEVANAGARI,
         ),
         LanguageDef(
@@ -1913,6 +1913,16 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "ur-Latn",
             layoutIds = listOf(AssetLayouts.UR_ROM_ID, AssetLayouts.UR_ROM_T9_ID),
+        ),
+        // Romi is Konkani's Latin orthography, written in Goa since the 16th
+        // century, so its list is written text rather than a transliteration.
+        LanguageDef(
+            id = "kok_rom",
+            displayName = "Romi Konkani · Konkani (Romi)",
+            englishName = "Konkani (Romi)",
+            script = ScriptId.LATIN,
+            localeTag = "kok-Latn",
+            layoutIds = listOf(AssetLayouts.KOK_ROM_ID, AssetLayouts.KOK_ROM_T9_ID),
         ),
         // --- Language expansion: 140 new languages (Latin/Cyrillic/Devanagari/
         // Arabic/reused-script/conlang families + Ol Chiki + Meetei Mayek). ---
@@ -2626,11 +2636,11 @@ object LanguageRegistry {
         ),
         LanguageDef(
             id = "tly",
-            displayName = "tolışi zıvon · Talysh",
+            displayName = "tolyši zyvon · Talysh",
             englishName = "Talysh",
             script = ScriptId.LATIN,
             localeTag = "tly",
-            layoutIds = listOf(AssetLayouts.TLY_ID),
+            layoutIds = listOf(AssetLayouts.TLY_ID, AssetLayouts.TLY_T9_ID),
         ),
         LanguageDef(
             id = "trv",
@@ -2943,7 +2953,18 @@ object LanguageRegistry {
             englishName = "Tachelhit",
             script = ScriptId.TIFINAGH,
             localeTag = "shi",
-            layoutIds = listOf(AssetLayouts.SHI_ID),
+            layoutIds = listOf(AssetLayouts.SHI_ID, AssetLayouts.SHI_T9_ID),
+        ),
+        // Tachelhit's other everyday script: shi.wikipedia is written in IRCAM
+        // Latin, so it is a language of its own rather than a layout of the
+        // Tifinagh one, whose suggestions could never match it.
+        LanguageDef(
+            id = "shi_latn",
+            displayName = "Taclḥit · Tachelhit (Latin)",
+            englishName = "Tachelhit (Latin)",
+            script = ScriptId.LATIN,
+            localeTag = "shi-Latn",
+            layoutIds = listOf(AssetLayouts.SHI_LATN_ID, AssetLayouts.SHI_LATN_T9_ID),
         ),
         LanguageDef(
             id = "tig",

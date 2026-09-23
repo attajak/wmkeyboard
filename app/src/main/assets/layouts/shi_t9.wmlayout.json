@@ -1,0 +1,174 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_shi_t9",
+    "name": "T9 (ⵜⴰⵛⵍⵃⵉⵜ)",
+    "langId": "shi",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ⴰⴱⴳⴷ",
+              "output": "ⴰ",
+              "longPress": [
+                "2",
+                "ⴰ",
+                "ⴱ",
+                "ⴳ",
+                "ⴷ"
+              ],
+              "letters": "ⴰⴱⴳⴷ"
+            },
+            {
+              "label": "ⴹⴻⴼⴽ",
+              "output": "ⴹ",
+              "longPress": [
+                "3",
+                "ⴹ",
+                "ⴻ",
+                "ⴼ",
+                "ⴽ"
+              ],
+              "letters": "ⴹⴻⴼⴽ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ⵀⵃⵄⵅ",
+              "output": "ⵀ",
+              "longPress": [
+                "4",
+                "ⵀ",
+                "ⵃ",
+                "ⵄ",
+                "ⵅ"
+              ],
+              "letters": "ⵀⵃⵄⵅ"
+            },
+            {
+              "label": "ⵇⵉⵊⵍ",
+              "output": "ⵇ",
+              "longPress": [
+                "5",
+                "ⵇ",
+                "ⵉ",
+                "ⵊ",
+                "ⵍ"
+              ],
+              "letters": "ⵇⵉⵊⵍ"
+            },
+            {
+              "label": "ⵎⵏⵓⵔ",
+              "output": "ⵎ",
+              "longPress": [
+                "6",
+                "ⵎ",
+                "ⵏ",
+                "ⵓ",
+                "ⵔ"
+              ],
+              "letters": "ⵎⵏⵓⵔ"
+            },
+            {
+              "label": ",",
+              "longPress": [
+                "!",
+                "?"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ⵕⵖⵙⵚ",
+              "output": "ⵕ",
+              "longPress": [
+                "7",
+                "ⵕ",
+                "ⵖ",
+                "ⵙ",
+                "ⵚ"
+              ],
+              "letters": "ⵕⵖⵙⵚ"
+            },
+            {
+              "label": "ⵛⵜⵟⵡ",
+              "output": "ⵛ",
+              "longPress": [
+                "8",
+                "ⵛ",
+                "ⵜ",
+                "ⵟ",
+                "ⵡ"
+              ],
+              "letters": "ⵛⵜⵟⵡ"
+            },
+            {
+              "label": "ⵢⵣⵥ",
+              "output": "ⵢ",
+              "longPress": [
+                "9",
+                "ⵢ",
+                "ⵣ",
+                "ⵥ",
+                "ⵯ"
+              ],
+              "letters": "ⵢⵣⵥⵯ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}
