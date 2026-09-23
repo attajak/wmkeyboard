@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.BuiltInPanelLayouts
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
@@ -104,9 +105,12 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
  * it unless told otherwise, but a theme given to the letters layer alone is
  * that layer's and stops at its edge (issue #196). That is the rule the
  * editor's panel tab previews with, and the keyboard has to agree with it.
+ *
+ * [layout] is the typing grid when the caller already has it built; without
+ * it the grid is built here.
  */
-internal fun screenThemeId(state: KeyboardUiState): String? {
-    val panelKind = state.panel.layoutKind ?: return currentLayout(state).themeId
+internal fun screenThemeId(state: KeyboardUiState, layout: KeyboardLayout? = null): String? {
+    val panelKind = state.panel.layoutKind ?: return (layout ?: currentLayout(state)).themeId
     return state.panelLayout(panelKind).grid.themeId ?: state.layouts.themeId
 }
 

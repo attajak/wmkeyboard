@@ -5756,6 +5756,10 @@ open class WMKeyboardService : InputMethodService() {
         KeyboardPassthrough.publishRegion(null)
         stopReadAloud()
         vocabProgress.save()
+        // Nothing is showing a vocabulary card once the window is gone; the
+        // nudges only need the triggers, which stay. The next card reads the
+        // packs again.
+        vocabIndex?.releaseRecords()
         // The word card is about a word on a strip that is going away — and
         // its spelling editor owns the keys, so it goes with it (#138).
         if (_uiState.value.wordCard != null || _uiState.value.wordSpell != null) {
@@ -6107,6 +6111,8 @@ open class WMKeyboardService : InputMethodService() {
             WhisperEngine.release()
             // Reloads on the next translation; the panel's state is untouched.
             if (translateEngineLoaded) OnDeviceTranslator.release()
+            // Vocabulary cards: read back from the pack files on demand.
+            if (_uiState.value.panel != PanelMode.VOCABULARY) vocabIndex?.releaseRecords()
         }
     }
 
@@ -14296,15 +14302,23 @@ open class WMKeyboardService : InputMethodService() {
                 clearSmartChip()
                 return@launch
             }
-            val before = withContext(Dispatchers.Default) {
-                ic.getTextBeforeCursor(SmartSuggest.LOOKBEHIND, 0)?.toString().orEmpty()
+            // The context is read here, on the main thread, where the state
+            // it copies from is written; the detection itself — dates, sums,
+            // units, currencies, keywords, vocabulary — is a scan over the
+            // text that has no business on the thread drawing the keys, so it
+            // runs beside the read that fetched the text.
+            val ctx = smartContext(_uiState.value)
+            val muted = smartMutedAfter
+            val detected = withContext(Dispatchers.Default) {
+                val before = ic.getTextBeforeCursor(SmartSuggest.LOOKBEHIND, 0)?.toString().orEmpty()
+                before to if (before == muted) null else SmartSuggest.detect(before, ctx)
             }
-            if (before == smartMutedAfter) {
+            if (detected.first == smartMutedAfter) {
                 clearSmartChip()
                 return@launch
             }
             smartMutedAfter = null
-            var hit = SmartSuggest.detect(before, smartContext(_uiState.value))
+            var hit = detected.second
             // A retired hint stays down; answers (calc, dates, weather) are
             // immune — they carry information, not advice.
             if (hit != null &&
@@ -14375,7 +14389,9 @@ open class WMKeyboardService : InputMethodService() {
             vocabScope = state.settings.vocabulary.nudgeScope,
             vocabMinGap = state.settings.vocabulary.nudgeLevel.minGap,
             vocabLearnt = vocabProgress::isLearnt,
-            vocabRetired = vocabRetired,
+            // A copy: detection runs off the main thread, and the retired
+            // set is added to on it.
+            vocabRetired = vocabRetired.toSet(),
             // Never in a field that asks for a number: an amount box, a card
             // form or a PIN wants the digits it asked for, and separators
             // would break the value the app parses back out.
@@ -18238,6 +18254,10 @@ open class WMKeyboardService : InputMethodService() {
                 if (prefill != null) onToolPrefillConsumed()
                 serviceScope.launch {
                     reloadVocabIndex()
+                    // The cards are dropped while the keyboard is hidden;
+                    // read them back off the main thread before the panel
+                    // asks for one on it.
+                    vocabIndex?.let { index -> withContext(Dispatchers.IO) { index.packs } }
                     openVocabulary(prefill?.word)
                 }
             }
@@ -23334,9 +23354,14 @@ open class WMKeyboardService : InputMethodService() {
         val codes = VocabLanguages.wantedCodes(settings.vocabulary.translationLangList, settings.enabledLanguages.map { it.id })
         val next = withContext(Dispatchers.IO) {
             vocabProgress.reloadIfChanged()
-            VocabIndexCache.get(filesDir, codes)
+            // Without the cards: the keyboard reads them only when its panel
+            // opens, and this runs on every field focus.
+            VocabIndexCache.get(filesDir, codes, cards = false)
         }
         val available = !next.isEmpty
+        // A fresh index arrives with its cards; the keyboard only wants them
+        // while the vocabulary panel is up.
+        if (_uiState.value.panel != PanelMode.VOCABULARY) next.releaseRecords()
         if (next !== current) {
             vocabIndex = next
             _uiState.update { it.copy(vocab = it.vocab.copy(available = available)) }
@@ -23350,7 +23375,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun openVocabulary(prefillWord: String?) {
         val index = vocabIndex
         val word = prefillWord
-            ?: currentWordForLookup()?.lowercase(Locale.ROOT)?.takeIf { index?.lookupAnyForm(it) != null }
+            ?: currentWordForLookup()?.lowercase(Locale.ROOT)?.takeIf { index?.containsAnyForm(it) == true }
         when {
             word != null -> showVocabCard(word, push = false)
             _uiState.value.vocab.card is VocabCardUi.Ready -> Unit
@@ -23470,7 +23495,7 @@ open class WMKeyboardService : InputMethodService() {
             VocabRelatedTap.INSERT -> onVocabInsert(word)
             VocabRelatedTap.DICTIONARY_LOOKUP -> onVocabFullDictionary(word)
             VocabRelatedTap.OPEN_CARD_ELSE_INSERT ->
-                if (vocabIndex?.lookupAnyForm(word) != null) onVocabOpen(word) else onVocabInsert(word)
+                if (vocabIndex?.containsAnyForm(word) == true) onVocabOpen(word) else onVocabInsert(word)
         }
     }
 

@@ -24,12 +24,12 @@ import kotlinx.coroutines.withContext
  * ([translationCodes]), since the index is rebuilt when they change.
  */
 class VocabIndex private constructor(
-    val packs: List<VocabPack>,
     /** [VocabPacks.stateToken] of the files this was built from. */
     val token: Int,
     /** The sidecar codes whose glosses were indexed as triggers. */
     val translationCodes: List<String>,
-    private val words: HashMap<String, VocabWord>,
+    /** Every lemma, lowercase: what "is this a vocabulary word" asks. */
+    private val lemmaSet: Set<String>,
     private val triggers: HashMap<String, List<TriggerHit>>,
     private val packOfWord: HashMap<String, VocabPackMeta>,
     /** Inflected form → lemma, so a typed "abhorred" still finds its card. */
@@ -38,7 +38,56 @@ class VocabIndex private constructor(
     val sources: Map<String, VocabSource>,
     /** The longest multi-word trigger, in words; 1 unless a gloss had spaces. */
     val maxTriggerWords: Int,
+    /**
+     * Reads the packs again, for an index whose cards were released
+     * ([releaseRecords]). Null for an index built from packs in memory, which
+     * keeps its cards: there is nothing to read them back from.
+     */
+    private val reload: (() -> List<VocabPack>)?,
+    initial: Records?,
 ) {
+
+    // ## What stays in memory
+    //
+    // The typing path — the nudges, the word-of-the-day draw, "is this a
+    // vocabulary word" — needs the triggers, the inflected forms and the
+    // lemmas, and nothing else. The cards (senses, examples, etymology,
+    // translations, audio) are most of the weight: a few kilobytes a word,
+    // 20 MB for four packs measured on a phone, held for as long as the
+    // keyboard ran. So they are [Records], built with the index, dropped by
+    // [releaseRecords] once nothing is showing them, and read back from the
+    // pack files the next time a card, the browse list or a review asks.
+
+    /** The merged cards, and the enabled packs they came from. */
+    private class Records(val packs: List<VocabPack>, val words: Map<String, VocabWord>)
+
+    @Volatile
+    private var records: Records? = initial
+
+    private fun records(): Records {
+        records?.let { return it }
+        synchronized(this) {
+            records?.let { return it }
+            val packs = reload?.invoke().orEmpty()
+            return mergeRecords(packs).also { records = it }
+        }
+    }
+
+    /**
+     * Drops the cards, keeping what the typing path reads. The next [lookup],
+     * [byPack], [allWords] or [packs] reads them back from disk, so call this
+     * where nothing is showing them. A no-op for an index built from packs in
+     * memory.
+     */
+    fun releaseRecords() {
+        if (reload != null) records = null
+    }
+
+    /** Whether the cards are in memory right now. */
+    val recordsLoaded: Boolean get() = records != null
+
+    /** The enabled packs, cards and all. Reads them back if released. */
+    val packs: List<VocabPack> get() = records().packs
 
     /**
      * One word to offer for a typed token. [replacement] is the word bent to
@@ -50,16 +99,27 @@ class VocabIndex private constructor(
         val gap: Double,
     )
 
-    val size: Int get() = words.size
-    val isEmpty: Boolean get() = words.isEmpty()
+    val size: Int get() = lemmaSet.size
+    val isEmpty: Boolean get() = lemmaSet.isEmpty()
+
+    /** Whether [token] is a lemma or one of a lemma's inflected forms. No cards read. */
+    fun containsAnyForm(token: String): Boolean {
+        val key = token.lowercase(Locale.ROOT)
+        return key in lemmaSet || key in forms
+    }
 
     /** The record for [lemma] (any case), or null. */
-    fun lookup(lemma: String): VocabWord? = words[lemma.lowercase(Locale.ROOT)]
+    fun lookup(lemma: String): VocabWord? {
+        val key = lemma.lowercase(Locale.ROOT)
+        if (key !in lemmaSet) return null
+        return records().words[key]
+    }
 
     /** The record for [token] as a lemma or as one of a record's inflected forms. */
     fun lookupAnyForm(token: String): VocabWord? {
         val key = token.lowercase(Locale.ROOT)
-        return words[key] ?: forms[key]?.let { words[it] }
+        val lemma = if (key in lemmaSet) key else forms[key] ?: return null
+        return records().words[lemma]
     }
 
     /**
@@ -72,15 +132,17 @@ class VocabIndex private constructor(
         return hits.filter { it.gap >= minGap }
     }
 
-    fun byPack(packId: String): List<VocabWord> =
-        packs.firstOrNull { it.id == packId }?.words?.mapNotNull { words[it.word] }.orEmpty()
+    fun byPack(packId: String): List<VocabWord> {
+        val records = records()
+        return records.packs.firstOrNull { it.id == packId }?.words?.mapNotNull { records.words[it.word] }.orEmpty()
+    }
 
     fun packOf(lemma: String): VocabPackMeta? = packOfWord[lemma.lowercase(Locale.ROOT)]
 
     /** Every lemma, sorted, for the word-of-the-day draw and the browse tab. */
-    val lemmas: List<String> by lazy { words.keys.sorted() }
+    val lemmas: List<String> by lazy { lemmaSet.sorted() }
 
-    val allWords: Collection<VocabWord> get() = words.values
+    val allWords: Collection<VocabWord> get() = records().words.values
 
     companion object {
         /** More than this on one token is noise, whatever the packs say. */
@@ -93,7 +155,10 @@ class VocabIndex private constructor(
          */
         const val TRANSLATION_GAP = 9.0
 
-        val EMPTY: VocabIndex = VocabIndex(emptyList(), 0, emptyList(), HashMap(), HashMap(), HashMap(), HashMap(), emptyMap(), 1)
+        val EMPTY: VocabIndex = VocabIndex(
+            0, emptyList(), emptySet(), HashMap(), HashMap(), HashMap(), emptyMap(), 1,
+            reload = null, initial = Records(emptyList(), emptyMap()),
+        )
 
         /**
          * The key a typed token or a gloss is looked up under. Latin text loses
@@ -116,26 +181,26 @@ class VocabIndex private constructor(
         private val LATIN_EXTENDED = 0x1E00..0x1EFF
         private val WHITESPACE = Regex("\\s+")
 
-        /** Pure and synchronous, so it is testable with packs built in memory. */
-        fun build(packs: List<VocabPack>, token: Int = 0, translationCodes: Collection<String> = emptyList()): VocabIndex {
-            val enabled = packs.filter { it.enabled }
-            // Hosted packs first: a hand-typed list should annotate a hosted
-            // record, not replace it wholesale.
-            val ordered = enabled.filter { !it.meta.userCreated } + enabled.filter { it.meta.userCreated }
-            val words = HashMap<String, VocabWord>()
+        /**
+         * Pure and synchronous, so it is testable with packs built in memory.
+         *
+         * [reload] reads the packs back from disk; with one, the index may
+         * drop its cards ([releaseRecords]) and read them again on demand.
+         * Without one it keeps the cards it was built with.
+         */
+        fun build(
+            packs: List<VocabPack>,
+            token: Int = 0,
+            translationCodes: Collection<String> = emptyList(),
+            reload: (() -> List<VocabPack>)? = null,
+        ): VocabIndex {
+            val records = mergeRecords(packs)
+            val words = records.words
             val packOfWord = HashMap<String, VocabPackMeta>()
             val sources = LinkedHashMap<String, VocabSource>()
-            for (pack in ordered) {
+            for (pack in enabledInOrder(packs)) {
                 for (source in pack.meta.sources) sources.putIfAbsent(source.id, source)
-                for (record in pack.words) {
-                    val existing = words[record.word]
-                    if (existing == null) {
-                        words[record.word] = record
-                        packOfWord[record.word] = pack.meta
-                    } else {
-                        words[record.word] = merge(existing, record, pack.meta.userCreated)
-                    }
-                }
+                for (record in pack.words) packOfWord.putIfAbsent(record.word, pack.meta)
             }
             val forms = HashMap<String, String>()
             for (record in words.values) {
@@ -183,7 +248,35 @@ class VocabIndex private constructor(
                     .sortedWith(compareByDescending<TriggerHit> { it.gap }.thenBy { it.lemma })
                     .take(MAX_HITS_PER_TRIGGER)
             }
-            return VocabIndex(enabled, token, codes, words, capped, packOfWord, forms, sources, maxWords.coerceAtMost(MAX_TRIGGER_WORDS))
+            return VocabIndex(
+                token, codes, HashSet(words.keys), capped, packOfWord, forms, sources,
+                maxWords.coerceAtMost(MAX_TRIGGER_WORDS),
+                reload = reload,
+                initial = records,
+            )
+        }
+
+        /** Enabled packs, hosted first: a hand-typed list annotates a hosted record rather than replacing it. */
+        private fun enabledInOrder(packs: List<VocabPack>): List<VocabPack> {
+            val enabled = packs.filter { it.enabled }
+            return enabled.filter { !it.meta.userCreated } + enabled.filter { it.meta.userCreated }
+        }
+
+        /**
+         * The merged cards: the first pack to define a lemma — hosted packs
+         * first — wins the record, later ones fill in and add their sources.
+         * [Records.packs] keeps the enabled packs in their own order, which
+         * is the order the lists show them in.
+         */
+        private fun mergeRecords(packs: List<VocabPack>): Records {
+            val words = HashMap<String, VocabWord>()
+            for (pack in enabledInOrder(packs)) {
+                for (record in pack.words) {
+                    val existing = words[record.word]
+                    words[record.word] = if (existing == null) record else merge(existing, record, pack.meta.userCreated)
+                }
+            }
+            return Records(packs.filter { it.enabled }, words)
         }
 
         /** A gloss longer than this is a sentence, not a word; the detector never looks that far back. */
@@ -191,7 +284,8 @@ class VocabIndex private constructor(
 
         suspend fun load(filesDir: File, langId: String, translationCodes: List<String> = emptyList()): VocabIndex =
             withContext(Dispatchers.IO) {
-                build(VocabPacks.load(filesDir, langId), VocabPacks.stateToken(filesDir), translationCodes)
+                val read = { VocabPacks.load(filesDir, langId) }
+                build(read(), VocabPacks.stateToken(filesDir), translationCodes, reload = read)
             }
 
         /** [current] when nothing on disk changed since it was built, else a fresh index. */

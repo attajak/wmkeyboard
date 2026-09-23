@@ -54,7 +54,7 @@ The keyboard and the settings app run in one process, so the number Android show
 
 - **The layouts you have switched on.** Over 1,500 layouts ship with the app, but only the ones you use, and the ones a settings screen is showing, are ever loaded.
 - **Your word lists, mostly not.** Dictionaries are read straight from storage and cost next to nothing. The exception is a phonetic language like Bangla: the part that turns "valo" into ভালো keeps an index over the whole downloaded list, so the tier you pick matters. The largest Bangla tier (over 450,000 words) needs about 25 MB for it, and Small only a few. See [Changing the size of a list you already have](/languages/dictionaries/#changing-the-size-of-a-list-you-already-have).
-- **Vocabulary packs**, if you've downloaded any. Every card is kept ready so the nudges can show while you type, which is a few megabytes per pack. Removing packs you've finished with gives it back.
+- **Vocabulary packs**, a little, if you've downloaded any. The nudges only need a small index of which words to watch for. The cards themselves (definitions, examples, translations) are read from the pack when you open one and let go once the keyboard is closed.
 - **On-device models**: the AI tool, Whisper and on-device translation. They load when you use them and are let go as soon as Android asks for memory back.
 
 [Power saving mode](/typing/power-saving/) turns off more of it in one switch. If the number still looks far too high for what you use, [file a bug](#filing-a-useful-bug-report) with a diagnostics report attached.

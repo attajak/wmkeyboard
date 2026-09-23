@@ -20,18 +20,39 @@ object VocabIndexCache {
     private var current: VocabIndex? = null
     private val lock = Mutex()
 
-    /** Whatever was built last, possibly stale; for painting a first frame while [get] checks the disk. */
-    fun peek(): VocabIndex? = current
+    /**
+     * Whatever was built last, possibly stale; for painting a first frame while
+     * [get] checks the disk. Null when its cards were released: a screen that
+     * looked a word up in it would read the packs on the main thread.
+     */
+    fun peek(): VocabIndex? = current?.takeIf { it.recordsLoaded }
 
-    /** The index for the packs on disk, built or reused off the main thread. */
-    suspend fun get(filesDir: File, translationCodes: List<String> = emptyList()): VocabIndex = withContext(Dispatchers.IO) {
+    /**
+     * The index for the packs on disk, built or reused off the main thread.
+     *
+     * With [cards], the cards are in memory when this returns — read back here,
+     * on the IO thread, if a holder had released them — so a screen can look
+     * words up from its composition. The keyboard asks without: it only needs
+     * the triggers until its own panel opens.
+     */
+    suspend fun get(
+        filesDir: File,
+        translationCodes: List<String> = emptyList(),
+        cards: Boolean = true,
+    ): VocabIndex = withContext(Dispatchers.IO) {
+        getIndex(filesDir, translationCodes).also { if (cards) it.packs }
+    }
+
+    private suspend fun getIndex(filesDir: File, translationCodes: List<String>): VocabIndex {
         val token = VocabPacks.stateToken(filesDir)
-        current?.takeIf { it.token == token && it.translationCodes == translationCodes }?.let { return@withContext it }
-        lock.withLock {
+        current?.takeIf { it.token == token && it.translationCodes == translationCodes }?.let { return it }
+        return lock.withLock {
             // Another caller may have built it while this one waited.
             current?.takeIf { it.token == token && it.translationCodes == translationCodes }?.let { return@withLock it }
-            val packs = VocabPacks.languages(filesDir).flatMap { VocabPacks.load(filesDir, it) }
-            VocabIndex.build(packs, token, translationCodes).also { current = it }
+            val read = { VocabPacks.languages(filesDir).flatMap { VocabPacks.load(filesDir, it) } }
+            // Built with a way back to the files, so a holder can let the
+            // cards go while nothing is showing them (see [VocabIndex.releaseRecords]).
+            VocabIndex.build(read(), token, translationCodes, reload = read).also { current = it }
         }
     }
 
