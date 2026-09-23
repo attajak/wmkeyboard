@@ -58,6 +58,8 @@ A few more long-press behaviors live under the same **Press and hold shortcuts**
 
 Auto-capitalization arms Shift for you at the start of a sentence, but only when three things line up: **Automatic capital letters** is on (the default), the field is a plain text field rather than a structured keypad, and the active language's script has letter case at all. Bangla, for instance, doesn't, so auto-capitalize never fires while you type it. It re-checks after every sentence-ending mark (`.`, `!`, `?`, `।`) and whenever you move the cursor or switch fields. Caps Lock is off limits to it, so an all-caps line you locked in stays locked in.
 
+Switching language re-checks it too whenever either side has no letter case. On Arabic, Bangla and the like, Shift opens a second set of letters rather than capitals, so a Shift armed or locked on English is dropped when you switch to one of them, and the keyboard opens on its plain letters. Switching back to English at the start of a sentence arms Shift again. Between two languages that both have case, English and Russian say, Shift stays as it was.
+
 <SettingsPath path="Typing / Automatic corrections" />
 
 That toggle lives on the Typing screen rather than here. See [Autocorrect](/smart/autocorrect/) for the rest of the automatic-corrections group it sits in.

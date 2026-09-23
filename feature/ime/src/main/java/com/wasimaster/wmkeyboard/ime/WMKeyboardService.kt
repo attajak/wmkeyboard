@@ -530,6 +530,7 @@ import com.wasimaster.wmkeyboard.core.script.FancyStyles
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.NumeralCommitScope
+import com.wasimaster.wmkeyboard.core.script.ScriptDef
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.SpacedPunctuation
 import com.wasimaster.wmkeyboard.core.script.VERBATIM_DIGITS
@@ -3343,6 +3344,7 @@ open class WMKeyboardService : InputMethodService() {
                 // language switch must not leave the old keyboard's rules
                 // running against the new grid.
                 syncKeymanSession(activeSpec)
+                val shift = shiftAcrossScriptChange(activeSpec.script())
                 _uiState.update {
                     it.copy(
                         settings = modeSettings,
@@ -3364,6 +3366,8 @@ open class WMKeyboardService : InputMethodService() {
                         language = activeSpec.language(),
                         script = activeSpec.script(),
                         composer = composerFor(activeSpec.script(), activeSpec.composerType()),
+                        shiftState = shift ?: it.shiftState,
+                        shiftPressedByUser = if (shift != null) false else it.shiftPressedByUser,
                         layoutId = activeSpec.id,
                         layoutName = activeSpec.name,
                         layouts = resolveLayoutSet(
@@ -5107,7 +5111,9 @@ open class WMKeyboardService : InputMethodService() {
                     .orEmpty(),
                 secureField = secure,
                 deviceLocked = deviceLocked,
-                shiftState = autoCapitalizeShift(),
+                // Against the layout this field opens on: the state still holds
+                // the last field's script until this update lands.
+                shiftState = autoCapitalizeShift(fieldSpec.script()),
                 shiftPressedByUser = false,
                 clipboardItems = if (clipboardAccessible) clipboardStore.items() else emptyList(),
                 clipboardSuggestion = if (clipboardAccessible) it.clipboardSuggestion else null,
@@ -10537,11 +10543,14 @@ open class WMKeyboardService : InputMethodService() {
         // running against the new grid.
         syncKeymanSession(spec)
         syncEngineBlacklist(spec.language().id)
+        val shift = shiftAcrossScriptChange(spec.script())
         _uiState.update {
             it.copy(
                 language = spec.language(),
                 script = spec.script(),
                 composer = composerFor(spec.script(), spec.composerType()),
+                shiftState = shift ?: it.shiftState,
+                shiftPressedByUser = if (shift != null) false else it.shiftPressedByUser,
                 layoutId = spec.id,
                 layoutName = spec.name,
                 layouts = resolveLayoutSet(
@@ -30234,13 +30243,18 @@ open class WMKeyboardService : InputMethodService() {
      * EditorInfo.initialCapsMode is the fallback for the window between
      * onStartInput and a live connection: the framework computed it for
      * exactly this purpose.
+     *
+     * [script] is the script the answer is for. It defaults to the one on
+     * screen; a caller about to swap the layout passes the incoming one, since
+     * the state still holds the outgoing script until its update lands.
      */
-    private fun autoCapitalizeShift(): ShiftState {
+    private fun autoCapitalizeShift(script: ScriptDef = _uiState.value.script): ShiftState {
         val state = _uiState.value
         if (!state.settings.autoText.capitalize) return ShiftState.OFF
-        // Sentence capitalization applies to every Latin-script language;
-        // Bengali has no letter case.
-        if (!state.script.hasLetterCase) return ShiftState.OFF
+        // Sentence capitalization applies to every cased script; Arabic,
+        // Bengali and the rest have no letter case, and their shift layer is a
+        // second set of letters rather than capitals.
+        if (!script.hasLetterCase) return ShiftState.OFF
         val info = currentInputEditorInfo ?: return ShiftState.OFF
         if (info.inputType and InputType.TYPE_MASK_CLASS != InputType.TYPE_CLASS_TEXT) {
             return ShiftState.OFF
@@ -30254,6 +30268,26 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private fun shouldAutoCapitalize(): Boolean = autoCapitalizeShift() != ShiftState.OFF
+
+    /**
+     * The shift a switch from the script on screen to [script] should land on,
+     * or null to leave it as it is.
+     *
+     * Between two cased scripts a shift means the same thing on both sides, so
+     * it carries over. Where either side is caseless it does not: a shift the
+     * sentence start armed on English is, on Arabic, the layer of extra letters,
+     * and the next keystroke would type one of those instead of the letter the
+     * user was looking at. Nothing else re-judges it until the cursor moves, so
+     * without this the Arabic grid opened shifted after every switch at a
+     * sentence start. Going the other way, Arabic to English at a sentence
+     * start now gets its capital.
+     */
+    private fun shiftAcrossScriptChange(script: ScriptDef): ShiftState? {
+        val from = _uiState.value.script
+        if (from.id == script.id) return null
+        if (from.hasLetterCase && script.hasLetterCase) return null
+        return autoCapitalizeShift(script)
+    }
 
     private fun maybeAutoCapitalize() {
         val target = autoCapitalizeShift()
