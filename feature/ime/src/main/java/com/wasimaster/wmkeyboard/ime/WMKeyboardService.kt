@@ -414,6 +414,8 @@ import com.wasimaster.wmkeyboard.core.vocab.VocabAudioSource
 import com.wasimaster.wmkeyboard.core.vocab.VocabAutofill
 import com.wasimaster.wmkeyboard.core.vocab.VocabCooldown
 import com.wasimaster.wmkeyboard.core.vocab.VocabIndex
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymLookup
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSource
 import com.wasimaster.wmkeyboard.core.vocab.VocabIndexCache
 import com.wasimaster.wmkeyboard.core.vocab.VocabLanguages
 import com.wasimaster.wmkeyboard.core.vocab.VocabPackFile
@@ -5698,6 +5700,8 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.wordCard != null || _uiState.value.wordSpell != null) {
             _uiState.update { it.copy(wordCard = null, wordSpell = null) }
         }
+        // So are the synonyms: a pick would land in whatever field comes next.
+        if (_uiState.value.synonyms != null) closeSynonyms()
         // The chat composer gives the keys back with the window: a keyboard
         // that came up in the next field already swallowing keystrokes would
         // be a trap. The draft stays. The on-device session is left alone — the
@@ -27717,6 +27721,7 @@ open class WMKeyboardService : InputMethodService() {
             facts = ::wordMenuFacts,
             onMenu = ::onWordMenuAction,
             onCard = ::onWordCardAction,
+            onSynonyms = ::onSynonymAction,
         )
     }
 
@@ -27770,6 +27775,7 @@ open class WMKeyboardService : InputMethodService() {
             searchableStroke = caretStrokeWord(),
             deletable = isForgettable(trimmed),
             blacklisted = _uiState.value.let { it.settings.suggestionSources.blacklisted(trimmed, it.language.id) },
+            synonyms = synonymsOffered(trimmed),
         )
     }
 
@@ -27781,6 +27787,7 @@ open class WMKeyboardService : InputMethodService() {
             is WordMenuAction.Delete -> deleteWord(action.word)
             is WordMenuAction.Open -> openWordCard(action.word)
             is WordMenuAction.SearchAllWords -> searchAllWordsForCaretWord(action.word)
+            is WordMenuAction.Synonyms -> openSynonyms(action.word)
         }
     }
 
@@ -27947,6 +27954,125 @@ open class WMKeyboardService : InputMethodService() {
                     it.copy(wordCard = current.copy(facts = facts, packLabels = labels))
                 }
             }
+        }
+    }
+
+    // ---- synonyms (#321) ----
+
+    /** The look-up behind the open sheet; a new one, or closing the sheet, cancels it. */
+    private var synonymsJob: Job? = null
+
+    /**
+     * Recent answers, keyed by the source order and the word, so opening the
+     * sheet for the same word again asks nobody. A failure is not kept: the
+     * next try may well get through.
+     */
+    private val synonymsCache = object : LinkedHashMap<String, SynonymLookup.Result>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, SynonymLookup.Result>?): Boolean =
+            size > SYNONYMS_CACHE_SIZE
+    }
+
+    /**
+     * Whether the held-word menu may offer Synonyms for [word]: a word in
+     * Latin letters, written where English feeds the strip. Every source is
+     * English, so a Bangla or Greek word would only ever be "not found".
+     */
+    private fun synonymsOffered(word: String): Boolean {
+        if (word.length < 2 || word.none { it.isLetter() }) return false
+        if (!word.all { (it.isLetter() && it.code <= LATIN_EXTENDED_END) || it == '\'' || it == '’' || it == '-' }) {
+            return false
+        }
+        val state = _uiState.value
+        val languages = listOf(state.language.id) + state.settings.secondaryLanguages[state.language.id].orEmpty()
+        return languages.any { it == "en" || it.startsWith("en-") || it.startsWith("en_") }
+    }
+
+    private fun openSynonyms(word: String) {
+        val trimmed = word.trim()
+        if (trimmed.isEmpty()) return
+        vibrate()
+        // The capitals a pick wears come from the word it will replace, which
+        // is what the strip's own pick reads too: the word being typed, the
+        // word the caret is in, or the word a swipe just wrote. A prediction
+        // replaces nothing and is left to the shift, like any pick.
+        val gestureWord = lastGestureWord?.takeIf { composing.isEmpty() && stripReplacesGestureWord }
+        val model = composing.toString().ifEmpty { caretWord?.word ?: gestureWord.orEmpty() }
+        _uiState.update { it.copy(wordCard = null, synonyms = SynonymsSheet(trimmed, caseModel = model)) }
+        lookUpSynonyms(trimmed)
+    }
+
+    fun onSynonymAction(action: SynonymAction) {
+        val sheet = _uiState.value.synonyms ?: return
+        when (action) {
+            is SynonymAction.Pick -> {
+                closeSynonyms()
+                // Exactly a pick off the strip: it replaces the word being
+                // typed, the word the caret is in or a swipe's word, and is
+                // learned the same way.
+                onSuggestionTapped(caseLike(action.word, sheet.caseModel))
+            }
+            SynonymAction.Retry -> {
+                _uiState.update { it.copy(synonyms = sheet.copy(status = SynonymsStatus.Loading)) }
+                lookUpSynonyms(sheet.word)
+            }
+            SynonymAction.Dismiss -> closeSynonyms()
+        }
+    }
+
+    private fun closeSynonyms() {
+        synonymsJob?.cancel()
+        synonymsJob = null
+        _uiState.update { it.copy(synonyms = null) }
+    }
+
+    /**
+     * Asks the user's sources in their order (see [SynonymLookup]). Online
+     * sources are asked whatever data saver says, like a vocabulary look-up:
+     * the user asked for this word, now, and it is a few kilobytes.
+     */
+    private fun lookUpSynonyms(word: String) {
+        synonymsJob?.cancel()
+        val settings = _uiState.value.settings
+        val sources = settings.suggestionStrip.synonymSources.filter { it.enabled }.map { it.source }
+        if (sources.isEmpty()) {
+            publishSynonyms(word, SynonymsStatus.NoSources)
+            return
+        }
+        val key = sources.joinToString(",") { it.id } + "|" + word.lowercase(Locale.ROOT)
+        synonymsCache[key]?.let { cached ->
+            publishSynonyms(word, synonymsStatusOf(cached))
+            return
+        }
+        val codes = VocabLanguages.wantedCodes(
+            settings.vocabulary.translationLangList,
+            settings.enabledLanguages.map { it.id },
+        )
+        synonymsJob = serviceScope.launch {
+            // The packs' index is the vocabulary tool's when it has one
+            // loaded; otherwise the same shared copy, read with the same codes
+            // so the cache is not thrashed.
+            val index = vocabIndex ?: if (SynonymSource.VOCAB_PACKS in sources && userUnlocked) {
+                withContext(Dispatchers.IO) { VocabIndexCache.get(filesDir, codes) }.takeUnless { it.isEmpty }
+            } else {
+                null
+            }
+            val result = SynonymLookup.resolve(word, sources, fetch = SynonymLookup.fetcher { index })
+            if (result !is SynonymLookup.Result.Failed) synonymsCache[key] = result
+            publishSynonyms(word, synonymsStatusOf(result))
+        }
+    }
+
+    private fun synonymsStatusOf(result: SynonymLookup.Result): SynonymsStatus = when (result) {
+        is SynonymLookup.Result.Found -> SynonymsStatus.Found(result.set.groups, result.set.source)
+        SynonymLookup.Result.NotFound -> SynonymsStatus.NotFound
+        SynonymLookup.Result.Failed -> SynonymsStatus.Failed
+    }
+
+    /** Fills in the sheet, when it is still up and still about [word]. */
+    private fun publishSynonyms(word: String, status: SynonymsStatus) {
+        _uiState.update { state ->
+            val sheet = state.synonyms
+            if (sheet?.word != word) state else state.copy(synonyms = sheet.copy(status = status))
         }
     }
 
@@ -31697,6 +31823,12 @@ private const val MAX_EVENT_TITLE = 100
 private const val FIND_MAX_QUERY = 500
 private const val FIND_BUDGET_MS = 50L
 private const val FIND_DEBOUNCE_MS = 200L
+
+/** How many words' synonyms are kept for the sheet to reopen with (#321). */
+private const val SYNONYMS_CACHE_SIZE = 32
+
+/** The last code point of Latin Extended-B: a word past it is in a script the synonym sources do not cover. */
+private const val LATIN_EXTENDED_END = 0x24F
 
 /** WhatsApp, and the business build that registers its own package. */
 private val WHATSAPP_PACKAGES = listOf("com.whatsapp", "com.whatsapp.w4b")

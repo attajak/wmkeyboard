@@ -284,6 +284,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Keep these capitals — The dictionary screen's pin switch, on the card, for a word the keyboard has learned (#138)
   - Two rank mechanisms, both shown by default and chosen in settings — Learned weight (the lexicon count, decade stepper) or a per-word −10..+10 offset applied in the engine to every source, glide and next-word included; never to autocorrect
   - Which menu items show is a chip setting — Edit cannot be hidden, since the card carries the rest
+  - Synonyms (#321) — "Synonyms for "word"" on English Latin-letter words opens a sheet of synonyms grouped by part of speech and meaning; a tap goes through the strip's own pick path (replaces the typed word, the caret word or a swipe's word, wears its capitals, is learned like a pick); stored menu sets from before it read it as on (`~synonyms` marker)
+    - Ordered, switchable sources, first with synonyms wins, a source that is down or empty falls through — Vocabulary packs (offline), Datamuse `ml=` filtered to `syn` tags, Wiktionary via kaikki, Free Dictionary API, Datamuse similar words (flagged as such); `SynonymLookup` in `:core:tools` `core.thesaurus`, 32-word answer cache, bypasses data saver, own `NetSource.SYNONYMS`, Datamuse overridable on F-Droid
   - Pinned capitals — A word added or respelled by hand keeps its case against the vote; "Keep these capitals" switch on the dictionary screen; a tapped chip no longer teaches an auto-capital (#100)
   - Offensive-word filter — 60-word bundled English list, on by default
     - Never suggested, never an autocorrect target — So a neutral typo is never corrected into a slur

@@ -202,6 +202,7 @@
   {"title":"Numbers from the letter keys","name":"typing_number_prediction_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Words on the keys","name":"typing_group_octopus_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Word menu","name":"typing_word_menu_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
+  {"title":"Synonym sources","name":"typing_synonym_sources_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Adjust rank changes","name":"typing_rank_control_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Delete edits imported lists","name":"typing_delete_edits_lists_title","route":"typing/suggestions","screens":["Typing","Suggestions"],"screen":false},
   {"title":"Autopilot","name":"typing_smart_hit_detection_title","route":"typing/autopilot","screens":["Typing","Autopilot"],"screen":false},

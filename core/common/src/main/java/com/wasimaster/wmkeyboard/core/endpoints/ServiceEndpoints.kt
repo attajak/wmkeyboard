@@ -51,6 +51,9 @@ enum class ServiceEndpoint(
     PEXELS("pexels", "https://api.pexels.com", ServiceGroup.PHOTOS),
     WIKIPEDIA("wikipedia", "https://{lang}.wikipedia.org", ServiceGroup.WIKIPEDIA),
     DICTIONARY_API("dictionary_api", "https://api.dictionaryapi.dev", ServiceGroup.DICTIONARY),
+
+    /** Synonyms for a held word (#321). */
+    DATAMUSE("datamuse", "https://api.datamuse.com", ServiceGroup.DICTIONARY),
     KAIKKI("kaikki", "https://kaikki.org", ServiceGroup.VOCABULARY),
     WIKTIONARY("wiktionary", "https://en.wiktionary.org", ServiceGroup.VOCABULARY),
     OPEN_METEO("open_meteo", "https://api.open-meteo.com", ServiceGroup.WEATHER),

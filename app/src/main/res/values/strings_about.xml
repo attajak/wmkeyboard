@@ -187,6 +187,7 @@
     <string name="about_service_currency_used">The currency conversion rates</string>
     <string name="about_service_crypto_used">The cryptocurrency prices</string>
     <string name="about_service_dictionary_used">The word definitions</string>
+    <string name="about_service_synonyms_used">Synonyms for a word you hold on the suggestion strip</string>
     <string name="about_service_models_used">The downloads for the models that run on your device</string>
     <!-- Used by every bring-your-own-key AI provider row. -->
     <string name="about_service_byok_used">The optional AI tool, with your own key</string>

@@ -144,6 +144,29 @@
     <!-- Menu item that opens the word card, where the word is spelled,
          weighted, ranked, deleted or banned. -->
     <string name="ime_word_menu_edit">Edit…</string>
+    <!-- Menu item that looks up synonyms for the held word, to put one in its
+         place (#321). %1$s is the word the user held. -->
+    <string name="ime_word_menu_synonyms">Synonyms for \"<xliff:g id="word" example="happy">%1$s</xliff:g>\"</string>
+
+    <!-- The synonyms sheet: a panel over the keyboard that lists synonyms for
+         a held word. Tapping one puts it in place of the word. -->
+    <!-- The sheet's heading. %1$s is the held word. -->
+    <string name="ime_synonyms_title">Synonyms for \"<xliff:g id="word" example="happy">%1$s</xliff:g>\"</string>
+    <string name="ime_synonyms_close_desc">Close synonyms</string>
+    <string name="ime_synonyms_loading">Looking up synonyms…</string>
+    <!-- %1$s is the held word. -->
+    <string name="ime_synonyms_not_found">No synonyms found for \"<xliff:g id="word" example="happy">%1$s</xliff:g>\".</string>
+    <string name="ime_synonyms_failed">Could not reach a synonym source. Check the connection and try again.</string>
+    <string name="ime_synonyms_no_sources">All synonym sources are off. Turn one on in Typing, Suggestions, Synonym sources.</string>
+    <string name="ime_synonyms_retry">Try again</string>
+    <!-- Under the list: where the synonyms came from. %1$s is the source's
+         name, such as "Datamuse thesaurus". -->
+    <string name="ime_synonyms_from">From <xliff:g id="source" example="Datamuse thesaurus">%1$s</xliff:g></string>
+    <!-- Over the list when it holds related words rather than synonyms,
+         because no source listed synonyms for the word. -->
+    <string name="ime_synonyms_similar_note">No synonyms are listed for this word. These words have a similar meaning.</string>
+    <!-- Spoken label of a synonym. %1$s is the synonym. -->
+    <string name="ime_synonyms_pick_desc">Use \"<xliff:g id="word" example="glad">%1$s</xliff:g>\"</string>
 
     <!-- The word card: a panel over the keyboard about one suggested word. -->
     <!-- Heading over the list of places the word was found. -->

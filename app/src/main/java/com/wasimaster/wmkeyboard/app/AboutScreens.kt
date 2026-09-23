@@ -517,6 +517,11 @@ private val serviceAttributions: List<Attribution> = listOf(
         "https://dictionaryapi.dev/",
     ),
     Attribution(
+        "Datamuse", R.string.about_service_synonyms_used, "",
+        "Provider terms", null,
+        "https://www.datamuse.com/api/",
+    ),
+    Attribution(
         "Hugging Face", R.string.about_service_models_used, "",
         "Per-model licence, accepted on the model's page", null,
         "https://huggingface.co/terms-of-service",

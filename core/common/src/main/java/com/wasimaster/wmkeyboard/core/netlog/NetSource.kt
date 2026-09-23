@@ -38,6 +38,9 @@ enum class NetSource(
     WIKIPEDIA("wikipedia", ToolbarTool.WIKIPEDIA),
     DICTIONARY("dictionary", ToolbarTool.DICTIONARY),
     VOCABULARY("vocabulary", ToolbarTool.VOCABULARY),
+
+    /** Synonyms for a word held on the suggestion strip (#321). Its settings sit on the Suggestions page. */
+    SYNONYMS("synonyms"),
     WEATHER("weather", ToolbarTool.WEATHER),
     CURRENCY("currency", ToolbarTool.CURRENCY),
     /** Searching photos is asked for; refilling the rotation pool passes `background` itself. */

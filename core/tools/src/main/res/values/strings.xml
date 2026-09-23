@@ -229,4 +229,20 @@
          rather than as the search being broken. -->
     <string name="core_tools_gif_source_commons">Commons</string>
     <string name="core_tools_photo_source_commons">Wikimedia Commons</string>
+
+    <!-- ================================================================== -->
+    <!-- Synonyms (#321): the places a held word's synonyms come from, as   -->
+    <!-- the settings list and the synonyms sheet name them.                -->
+    <!-- ================================================================== -->
+
+    <string name="core_tools_synonym_source_vocab_packs">Vocabulary packs</string>
+    <string name="core_tools_synonym_source_vocab_packs_desc">On this phone. Only the words in the packs you downloaded.</string>
+    <string name="core_tools_synonym_source_datamuse">Datamuse thesaurus</string>
+    <string name="core_tools_synonym_source_datamuse_desc">Online. Many words, ranked by how well they fit.</string>
+    <string name="core_tools_synonym_source_wiktionary">Wiktionary</string>
+    <string name="core_tools_synonym_source_wiktionary_desc">Online, through kaikki.org. Grouped by meaning.</string>
+    <string name="core_tools_synonym_source_dictionary_api">Free Dictionary API</string>
+    <string name="core_tools_synonym_source_dictionary_api_desc">Online. The source the Dictionary tool uses.</string>
+    <string name="core_tools_synonym_source_similar_words">Similar words</string>
+    <string name="core_tools_synonym_source_similar_words_desc">Online, from Datamuse. Words with a related meaning, for a word with no synonyms.</string>
 </resources>

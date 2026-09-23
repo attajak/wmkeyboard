@@ -105,7 +105,8 @@ Full writeup: [Autocorrect](/smart/autocorrect/) covers the confidence math, wha
 | Personal dictionary | Nav row | n/a | always (opens the [Personal dictionary](/smart/personal-dictionary/) screen) |
 | Custom dictionaries | Nav row | n/a | always (opens the Custom dictionaries screen) |
 | Suggestion blacklist | Nav row | n/a | always (opens the [Suggestion blacklist](/smart/blacklist/) screen) |
-| Word menu | Chips | Never suggest, Add, Delete | always |
+| Word menu | Chips | Never suggest, Add, Delete, Synonyms | always |
+| Synonym sources | Drag list with switches | Vocabulary packs, Datamuse thesaurus, Wiktionary, Free Dictionary API, Similar words, all on | always |
 | Adjust rank changes | Choice | Both | always |
 | Delete edits imported lists | Toggle | On | always |
 
@@ -119,7 +120,7 @@ Full writeup: [Autocorrect](/smart/autocorrect/) covers the confidence math, wha
 
 All three are covered in full on [Personal dictionary](/smart/personal-dictionary/#words-wait-their-turn).
 
-**Word menu** picks which of the three optional items the press-and-hold menu on a suggested word offers; **Edit** is always on it. **Adjust rank changes** decides which rank controls the word card shows: the learned weight (the personal dictionary's own count), a separate rank adjustment that can move any word up or down, or both. Both settings are covered on [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip).
+**Word menu** picks which of the four optional items the press-and-hold menu on a suggested word offers; **Edit** is always on it. **Synonym sources** sets where the menu's **Synonyms** looks, in order: each source is asked only when the ones above it had no synonyms for the word or could not be reached. Drag to reorder, and switch a source off to never ask it. **Adjust rank changes** decides which rank controls the word card shows: the learned weight (the personal dictionary's own count), a separate rank adjustment that can move any word up or down, or both. All three settings are covered on [Personal dictionary](/smart/personal-dictionary/#from-the-suggestion-strip).
 
 **Delete edits imported lists** governs what happens when you delete one of your own imported words from the strip. On, the word is removed from that list's file for good. Off, the list stays untouched and the word is blacklisted instead, the same as a word from a downloaded list, which can't be edited.
 

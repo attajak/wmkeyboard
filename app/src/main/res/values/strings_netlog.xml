@@ -148,6 +148,7 @@
     <string name="netlog_source_wikipedia">Wikipedia</string>
     <string name="netlog_source_dictionary">Dictionary</string>
     <string name="netlog_source_vocabulary">Vocabulary</string>
+    <string name="netlog_source_synonyms">Synonyms</string>
     <string name="netlog_source_weather">Weather</string>
     <string name="netlog_source_currency">Currency rates</string>
     <string name="netlog_source_photos">Photo backgrounds</string>
@@ -184,6 +185,7 @@
     <string name="netlog_sent_wikipedia">Your search words or the title of the article.</string>
     <string name="netlog_sent_dictionary">One word: your selection, or the word at the cursor.</string>
     <string name="netlog_sent_vocabulary">The word on the card, or the name of a word pack.</string>
+    <string name="netlog_sent_synonyms">One word: the word you held on the suggestion strip.</string>
     <string name="netlog_sent_weather">The saved location, or the place name you searched.</string>
     <string name="netlog_sent_currency">Nothing about you. The keyboard downloads the whole rate table and converts on your device.</string>
     <string name="netlog_sent_photos">Your search words and filters, or the name of the photo to download.</string>

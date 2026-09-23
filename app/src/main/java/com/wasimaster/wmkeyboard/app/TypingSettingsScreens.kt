@@ -14,17 +14,21 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Switch
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextOverflow
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSource
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSourceChoice
 import com.wasimaster.wmkeyboard.core.tools.CheatSheetLetter
 import com.wasimaster.wmkeyboard.core.tools.DefaultLeader
 import com.wasimaster.wmkeyboard.core.tools.DefaultToolLetters
@@ -902,6 +906,7 @@ internal fun TypingSuggestionsSettings(
             val neverSuggest = stringResource(R.string.typing_word_menu_item_never_suggest)
             val add = stringResource(R.string.typing_word_menu_item_add)
             val delete = stringResource(R.string.typing_word_menu_item_delete)
+            val synonyms = stringResource(R.string.typing_word_menu_item_synonyms)
             MultiChoiceSetting(
                 R.string.typing_word_menu_title,
                 subtitle = stringResource(R.string.typing_word_menu_subtitle),
@@ -911,11 +916,54 @@ internal fun TypingSuggestionsSettings(
                         WordMenuItem.NEVER_SUGGEST -> neverSuggest
                         WordMenuItem.ADD -> add
                         WordMenuItem.DELETE -> delete
+                        WordMenuItem.SYNONYMS -> synonyms
                     }
                 },
                 selected = settings.suggestionStrip.wordMenuItems,
                 default = SettingsDefaults.suggestionStrip.wordMenuItems,
             ) { scope.launch { repository.setWordMenuItems(it) } }
+        }
+        item {
+            // Where Synonyms looks (#321), in the order it asks: a source is
+            // only asked when those above it had nothing or were unreachable.
+            val sources = settings.suggestionStrip.synonymSources
+            val save: (List<SynonymSourceChoice>) -> Unit = { scope.launch { repository.setSynonymSources(it) } }
+            ControlSetting(
+                R.string.typing_synonym_sources_title,
+                subtitle = stringResource(R.string.typing_synonym_sources_subtitle),
+                info = stringResource(R.string.typing_synonym_sources_info),
+            ) {
+                val names = SynonymSource.entries.associateWith { stringResource(it.labelRes) }
+                ReorderableColumn(
+                    items = sources,
+                    label = { names[it.source].orEmpty() },
+                    onReorder = save,
+                    modifier = Modifier.padding(top = 8.dp),
+                    rowHeight = SynonymSourceRowHeight,
+                ) { choice ->
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            names[choice.source].orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            stringResource(choice.source.descriptionRes),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    Switch(
+                        checked = choice.enabled,
+                        onCheckedChange = { on ->
+                            save(sources.map { if (it.source == choice.source) it.copy(enabled = on) else it })
+                        },
+                    )
+                }
+            }
         }
         item {
             val weight = stringResource(R.string.typing_rank_control_weight_label)
@@ -2976,3 +3024,6 @@ private fun SettingsGroupScope.glideIntentRows(
         ) { scope.launch { repository.setGestureWiggleExtent(it) } }
     }
 }
+
+/** Two lines per source: its name and what it knows. */
+private val SynonymSourceRowHeight = 64.dp

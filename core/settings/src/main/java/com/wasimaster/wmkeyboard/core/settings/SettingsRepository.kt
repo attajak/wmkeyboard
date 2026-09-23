@@ -140,6 +140,8 @@ import java.io.File
 import kotlin.random.Random
 import com.wasimaster.wmkeyboard.settings.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSourceChoice
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSources
 import com.wasimaster.wmkeyboard.core.vocab.VocabAccent
 import com.wasimaster.wmkeyboard.core.vocab.VocabAudioSource
 import com.wasimaster.wmkeyboard.core.vocab.VocabChipTap
@@ -6102,9 +6104,11 @@ enum class LanguageDetectionStrength { GENTLE, BALANCED, AGGRESSIVE }
  * The optional items of the menu that opens when a word on the suggestion
  * strip is pressed and held (#99). "Edit" is not here because it is always
  * offered: it opens the word card, which carries every one of these actions
- * too, so hiding all three still leaves everything reachable.
+ * too, so hiding all of them still leaves everything reachable. [SYNONYMS]
+ * is the one the card does not carry (#321): it replaces the word in the
+ * text rather than editing it in the dictionary.
  */
-enum class WordMenuItem { NEVER_SUGGEST, ADD, DELETE }
+enum class WordMenuItem { NEVER_SUGGEST, ADD, DELETE, SYNONYMS }
 
 /**
  * What the word card's rank control changes (#99).
@@ -6538,6 +6542,13 @@ data class SuggestionStripSettings(
      * only to stay under its JVM field ceiling.
      */
     val wordMenuItems: Set<WordMenuItem> = WordMenuItem.entries.toSet(),
+    /**
+     * Where the held-word menu's Synonyms looks (#321), in the order it asks:
+     * each source is asked only when the ones before it had no synonyms for
+     * the word or could not be reached. A source switched off stays in the
+     * list, in its place, so switching it back on does not lose the order.
+     */
+    val synonymSources: List<SynonymSourceChoice> = SynonymSources.DEFAULT,
     /** What the word card's rank controls edit; see [RankControl]. */
     val rankControl: RankControl = RankControl.BOTH,
     /**
@@ -7018,6 +7029,15 @@ class SettingsRepository(private val context: Context) {
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
         private val WORD_PAIRS_OFF_LANGS = stringSetPreferencesKey("word_pairs_off_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
+
+        /**
+         * Written into [WORD_MENU_ITEMS] beside the item names from the build
+         * that added Synonyms (#321) on. A stored set without it was chosen
+         * before Synonyms existed, so Synonyms is read as on rather than as
+         * switched off by someone who never saw it.
+         */
+        private const val WORD_MENU_SYNONYMS_MARK = "~synonyms"
+        private val SYNONYM_SOURCES = stringPreferencesKey("synonym_sources")
         private val WORD_RANK_CONTROL = stringPreferencesKey("word_rank_control")
         private val DELETE_EDITS_IMPORTED_LISTS = booleanPreferencesKey("delete_edits_imported_lists")
         private val LEARN_FROM_TEXT_SORT = stringPreferencesKey("learn_from_text_sort")
@@ -8645,8 +8665,13 @@ class SettingsRepository(private val context: Context) {
                 // An item name this build does not know is dropped, not kept
                 // as a stale string.
                 wordMenuItems = p[WORD_MENU_ITEMS]
-                    ?.mapNotNullTo(mutableSetOf()) { runCatching { WordMenuItem.valueOf(it) }.getOrNull() }
+                    ?.let { stored ->
+                        val items = stored.mapNotNullTo(mutableSetOf()) { runCatching { WordMenuItem.valueOf(it) }.getOrNull() }
+                        if (WORD_MENU_SYNONYMS_MARK in stored) items else items + WordMenuItem.SYNONYMS
+                    }
                     ?: defaults.suggestionStrip.wordMenuItems,
+                synonymSources = p[SYNONYM_SOURCES]?.let(SynonymSources::decode)
+                    ?: defaults.suggestionStrip.synonymSources,
                 rankControl = p[WORD_RANK_CONTROL]
                     ?.let { runCatching { RankControl.valueOf(it) }.getOrNull() }
                     ?: defaults.suggestionStrip.rankControl,
@@ -12968,7 +12993,11 @@ class SettingsRepository(private val context: Context) {
 
     /** Replaces the whole set of optional held-word menu items (#99). */
     suspend fun setWordMenuItems(value: Set<WordMenuItem>) =
-        editPrefs { it[WORD_MENU_ITEMS] = value.mapTo(mutableSetOf()) { item -> item.name } }
+        editPrefs { it[WORD_MENU_ITEMS] = value.mapTo(mutableSetOf(WORD_MENU_SYNONYMS_MARK)) { item -> item.name } }
+
+    /** Replaces the synonym sources, order and switches together (#321). */
+    suspend fun setSynonymSources(value: List<SynonymSourceChoice>) =
+        editPrefs { it[SYNONYM_SOURCES] = SynonymSources.encode(value) }
 
     suspend fun setRankControl(value: RankControl) =
         editPrefs { it[WORD_RANK_CONTROL] = value.name }

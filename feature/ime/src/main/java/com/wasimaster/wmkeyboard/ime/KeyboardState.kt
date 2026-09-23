@@ -29,6 +29,8 @@ import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptDef
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymGroup
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSource
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.settings.DataSaverStatus
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
@@ -1899,6 +1901,9 @@ sealed interface WordMenuAction {
      * to check the caret has not moved on under the menu.
      */
     data class SearchAllWords(val word: String) : WordMenuAction
+
+    /** Look up synonyms for [word] and offer them in its place (#321). */
+    data class Synonyms(val word: String) : WordMenuAction
 }
 
 /** What the word card can ask of the service, once open (#99). */
@@ -1978,6 +1983,11 @@ data class WordMenuFacts(
      * word being typed rather than the chip.
      */
     val searchableStroke: String? = null,
+    /**
+     * Whether Synonyms may be offered for the held word (#321): a word in
+     * letters, typed where the sources can answer (they are English).
+     */
+    val synonyms: Boolean = false,
 )
 
 /**
@@ -2009,6 +2019,52 @@ data class WordCard(
      */
     val casePinned: Boolean = false,
 )
+
+/**
+ * The synonyms the held-word menu asked for (#321), shown over the keyboard
+ * until one is picked or the sheet is closed. [status] fills in as the
+ * sources answer, one after another.
+ */
+data class SynonymsSheet(
+    /** The held word, as the chip showed it. */
+    val word: String,
+    /**
+     * The text whose capitals a pick wears: the word it replaces, so "Happy"
+     * at the start of a sentence gives "Glad". Empty when the pick replaces
+     * nothing (a next-word prediction was held), and the shift decides, as
+     * for any pick off the strip.
+     */
+    val caseModel: String = "",
+    val status: SynonymsStatus = SynonymsStatus.Loading,
+)
+
+/** How far the look-up behind a [SynonymsSheet] has got. */
+sealed interface SynonymsStatus {
+    data object Loading : SynonymsStatus
+
+    /** [source] had synonyms; the ones before it in the user's order did not. */
+    data class Found(val groups: List<SynonymGroup>, val source: SynonymSource) : SynonymsStatus
+
+    /** Every source asked answered, and none listed synonyms for the word. */
+    data object NotFound : SynonymsStatus
+
+    /** No source could be reached. */
+    data object Failed : SynonymsStatus
+
+    /** Every source is switched off in settings. */
+    data object NoSources : SynonymsStatus
+}
+
+/** What the synonyms sheet can ask of the service (#321). */
+sealed interface SynonymAction {
+    /** Put [word] in place of the held one, as picking it off the strip would. */
+    data class Pick(val word: String) : SynonymAction
+
+    /** Ask the sources again, after none could be reached. */
+    data object Retry : SynonymAction
+
+    data object Dismiss : SynonymAction
+}
 
 /**
  * A clip being edited in the clipboard panel's editor dialog.
@@ -2744,6 +2800,8 @@ data class KeyboardUiState(
     val wordCard: WordCard? = null,
     /** The card's spelling editor while it is up; see [WordSpell] (#138). */
     val wordSpell: WordSpell? = null,
+    /** The synonyms a held word's menu asked for, or null while none are up (#321). */
+    val synonyms: SynonymsSheet? = null,
     /**
      * The one-tap actions offered for the current selection, or null when
      * there is no selection to act on (or the feature is off).

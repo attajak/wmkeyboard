@@ -57,9 +57,13 @@ object KaikkiClient : VocabAutofill.Source {
     }
 
     /** Blocking; call on an IO dispatcher. Null when kaikki has no page for the word; throws when it could not be asked. */
-    override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? {
+    override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? =
+        lookup(lemma, translationCodes, NetSource.VOCABULARY)
+
+    /** [lookup], logged under [netSource]: the synonym look-up asks the same page (#321). */
+    fun lookup(lemma: String, translationCodes: List<String>, netSource: NetSource): VocabWord? {
         val connection = URL(url(lemma)).openConnection() as HttpURLConnection
-        val netCall = NetLog.call(NetSource.VOCABULARY, "GET", url(lemma), route = "/dictionary")
+        val netCall = NetLog.call(netSource, "GET", url(lemma), route = "/dictionary")
         try {
             connection.connectTimeout = 8_000
             connection.readTimeout = 12_000

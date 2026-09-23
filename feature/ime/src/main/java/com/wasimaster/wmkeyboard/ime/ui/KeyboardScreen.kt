@@ -3966,6 +3966,11 @@ private fun TopBar(
                 state.wordCard?.takeIf { state.wordSpell == null }?.let { card ->
                     WordCardPopup(card = card, onAction = suggestionHold.onCard)
                 }
+                // The synonyms a held word asked for (#321), a window over the
+                // keyboard like the card.
+                state.synonyms?.let { sheet ->
+                    SynonymsPopup(sheet = sheet, onAction = suggestionHold.onSynonyms)
+                }
             }
             // Emoji candidates ride along after the words: typing "birthday"
             // puts 🎂 🎉 🥳 🎁 one tap away. Held set, so they fade out with
@@ -4451,8 +4456,18 @@ private fun RowScope.LatinSuggestionChips(
                         icon = Icons.Outlined.Search,
                     ) { act(WordMenuAction.SearchAllWords(searchable)) }
                 }
-                // Always offered: the card carries every action above too, so
-                // a menu trimmed to this one item still reaches all of them —
+                // About the held word itself, unlike the two above: its
+                // synonyms, any of which goes in place of the word the chip
+                // stands for, as picking it off the strip would (#321).
+                if (heldFacts.synonyms && WordMenuItem.SYNONYMS in menuItems) {
+                    WordMenuRow(
+                        label = stringResource(R.string.ime_word_menu_synonyms, held),
+                        icon = Icons.Outlined.SwapHoriz,
+                    ) { act(WordMenuAction.Synonyms(held)) }
+                }
+                // Always offered: the card carries every action above but
+                // Synonyms too, so a menu trimmed to this one item still
+                // reaches all of those —
                 // and since #138 it edits the word itself as well, which is
                 // why it is "Edit" rather than "Adjust rank".
                 WordMenuRow(

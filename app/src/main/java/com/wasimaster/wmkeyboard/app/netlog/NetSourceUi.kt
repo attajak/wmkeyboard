@@ -15,6 +15,7 @@ import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Icon
@@ -112,6 +113,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.WIKIPEDIA -> R.string.netlog_source_wikipedia to R.string.netlog_sent_wikipedia
     NetSource.DICTIONARY -> R.string.netlog_source_dictionary to R.string.netlog_sent_dictionary
     NetSource.VOCABULARY -> R.string.netlog_source_vocabulary to R.string.netlog_sent_vocabulary
+    NetSource.SYNONYMS -> R.string.netlog_source_synonyms to R.string.netlog_sent_synonyms
     NetSource.WEATHER -> R.string.netlog_source_weather to R.string.netlog_sent_weather
     NetSource.CURRENCY -> R.string.netlog_source_currency to R.string.netlog_sent_currency
     NetSource.PHOTOS -> R.string.netlog_source_photos to R.string.netlog_sent_photos
@@ -139,6 +141,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
 /** Where a source that is not a tool keeps its settings. */
 private fun ownerRoute(source: NetSource): String? = when (source) {
     NetSource.PHOTOS -> "photos"
+    NetSource.SYNONYMS -> "typing/suggestions"
     NetSource.MEDIA_IMAGES -> "emoji"
     NetSource.DOWNLOAD_WORDLIST, NetSource.DOWNLOAD_NGRAM, NetSource.DOWNLOAD_CJK -> "languages"
     NetSource.DOWNLOAD_EMOJI -> "emojikeywords"
@@ -162,6 +165,7 @@ private fun fallbackIcon(source: NetSource): ImageVector = when (source) {
     NetSource.LINK_IMPORT, NetSource.LINK_PREVIEW -> Icons.Outlined.Link
     NetSource.KEYMAN -> Icons.Outlined.Keyboard
     NetSource.BACKUP -> Icons.Outlined.Save
+    NetSource.SYNONYMS -> Icons.Outlined.SwapHoriz
     NetSource.UPDATES -> Icons.Outlined.SystemUpdate
     NetSource.OTHER -> Icons.Outlined.Public
     else -> Icons.Outlined.CloudDownload
@@ -173,7 +177,7 @@ private fun fallbackIcon(source: NetSource): ImageVector = when (source) {
  */
 private val DataSaverSources = NetSource.entries.toSet() - setOf(
     NetSource.TRANSLATE, NetSource.DEEPL_WRITE, NetSource.BACKUP, NetSource.UPDATES, NetSource.KDE_CONNECT,
-    NetSource.LINK_IMPORT, NetSource.OTHER,
+    NetSource.LINK_IMPORT, NetSource.SYNONYMS, NetSource.OTHER,
 )
 
 private val NeutralAccent = Color(0xFF90A4AE)

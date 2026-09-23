@@ -789,6 +789,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_blacklist_title) { Icons.Outlined.VisibilityOff }
         put(R.string.backup_blacklist_scope_title) { Icons.Outlined.Translate }
         put(R.string.typing_word_menu_title) { Icons.Outlined.Tune }
+        put(R.string.typing_synonym_sources_title) { Icons.Outlined.SwapHoriz }
         put(R.string.typing_rank_control_title) { Icons.Outlined.SwapVert }
         put(R.string.typing_delete_edits_lists_title) { Icons.Outlined.Description }
         put(R.string.typing_smart_chips_title) { Icons.Outlined.AutoAwesome }

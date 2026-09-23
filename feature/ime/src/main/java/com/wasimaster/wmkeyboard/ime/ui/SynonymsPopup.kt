@@ -1,0 +1,231 @@
+package com.wasimaster.wmkeyboard.ime.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymGroup
+import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSource
+import com.wasimaster.wmkeyboard.core.ui.ScrollRail
+import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
+import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.SynonymAction
+import com.wasimaster.wmkeyboard.ime.SynonymsSheet
+import com.wasimaster.wmkeyboard.ime.SynonymsStatus
+import com.wasimaster.wmkeyboard.ime.caseLike
+
+/**
+ * The synonyms for a held word (#321): what the held-word menu's Synonyms
+ * opens. One chip per synonym, grouped by part of speech and, when the
+ * source says, by meaning; tapping a chip puts that word where the held one
+ * was, the same way picking it off the strip would, and closes the sheet.
+ *
+ * A [Popup] over the keyboard with a scrim, like [WordCardPopup] and for the
+ * same reasons: the IME cannot raise a Compose Dialog, and the scrim keeps the
+ * keys under it from typing while the sheet is up. Unlike the card it is only
+ * as tall as its list, capped so a long list scrolls behind a rail.
+ *
+ * The chips wear the capitals of the word they replace ([SynonymsSheet.caseModel]),
+ * so the sheet shows exactly what a tap will type.
+ */
+@Composable
+internal fun SynonymsPopup(sheet: SynonymsSheet, onAction: (SynonymAction) -> Unit) {
+    val kb = LocalKbTheme.current
+    val dismiss = { onAction(SynonymAction.Dismiss) }
+
+    Popup(onDismissRequest = dismiss) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .pointerInput(Unit) { detectTapGestures { dismiss() } },
+            contentAlignment = Alignment.Center,
+        ) {
+            Surface(
+                shape = kb.menuShape(),
+                color = kb.popup,
+                border = kb.popupSurfaceBorder(),
+                shadowElevation = elevationFor(kb.menuShapeKind, 8.dp),
+                modifier = Modifier
+                    .padding(12.dp)
+                    // As tall as its list, and no taller than the keyboard:
+                    // the box it is centred in is the keyboard window.
+                    .fillMaxWidth(0.94f)
+                    // Taps inside the sheet must not reach the scrim.
+                    .pointerInput(Unit) { detectTapGestures { } },
+            ) {
+                Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.ime_synonyms_title, sheet.word),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = kb.popupText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.weight(1f),
+                        )
+                        IconButton(onClick = dismiss, modifier = Modifier.size(32.dp)) {
+                            Icon(
+                                Icons.Outlined.Close,
+                                contentDescription = stringResource(R.string.ime_synonyms_close_desc),
+                                tint = kb.popupText,
+                                modifier = Modifier.size(18.dp),
+                            )
+                        }
+                    }
+                    when (val status = sheet.status) {
+                        SynonymsStatus.Loading -> Loading(kb.popupText)
+                        is SynonymsStatus.Found -> Found(sheet, status, kb, onAction)
+                        SynonymsStatus.NotFound ->
+                            Message(stringResource(R.string.ime_synonyms_not_found, sheet.word), kb.popupText)
+                        SynonymsStatus.Failed -> {
+                            Message(stringResource(R.string.ime_synonyms_failed), kb.popupText)
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                TextButton(onClick = { onAction(SynonymAction.Retry) }) {
+                                    Icon(Icons.Outlined.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(Modifier.width(6.dp))
+                                    Text(stringResource(R.string.ime_synonyms_retry))
+                                }
+                            }
+                        }
+                        SynonymsStatus.NoSources ->
+                            Message(stringResource(R.string.ime_synonyms_no_sources), kb.popupText)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun Loading(color: Color) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp),
+    ) {
+        CircularProgressIndicator(color = color, strokeWidth = 2.dp, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(stringResource(R.string.ime_synonyms_loading), style = MaterialTheme.typography.bodyMedium, color = color)
+    }
+}
+
+@Composable
+private fun Message(text: String, color: Color) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = color,
+        modifier = Modifier.padding(vertical = 12.dp),
+    )
+}
+
+@Composable
+private fun ColumnScope.Found(
+    sheet: SynonymsSheet,
+    status: SynonymsStatus.Found,
+    kb: KbTheme,
+    onAction: (SynonymAction) -> Unit,
+) {
+    val color = kb.popupText
+    if (status.source == SynonymSource.SIMILAR_WORDS) {
+        Text(
+            text = stringResource(R.string.ime_synonyms_similar_note),
+            fontSize = 12.sp,
+            color = color.copy(alpha = 0.7f),
+            modifier = Modifier.padding(bottom = 4.dp),
+        )
+    }
+    val rail = rememberScrollRailState(rememberScrollState())
+    ScrollRail(
+        state = rail,
+        modifier = Modifier.fillMaxWidth().weight(1f, fill = false),
+        fadeColor = kb.popup,
+        colors = kbRailColors(kb),
+    ) {
+        for (group in status.groups) Group(group, sheet.caseModel, kb, onAction)
+    }
+    Text(
+        text = stringResource(R.string.ime_synonyms_from, stringResource(status.source.labelRes)),
+        fontSize = 12.sp,
+        color = color.copy(alpha = 0.6f),
+        modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
+    )
+}
+
+/** A part of speech, the meaning when the source gave one, and its synonyms as chips. */
+@Composable
+private fun Group(group: SynonymGroup, caseModel: String, kb: KbTheme, onAction: (SynonymAction) -> Unit) {
+    val color = kb.popupText
+    val heading = listOfNotNull(group.pos.takeIf { it.isNotEmpty() }, group.sense).joinToString(" · ")
+    if (heading.isNotEmpty()) {
+        Text(
+            text = heading,
+            style = MaterialTheme.typography.labelMedium,
+            color = color.copy(alpha = 0.7f),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+        )
+    }
+    FlowRow(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        for (word in group.words) {
+            val shown = caseLike(word, caseModel)
+            val label = stringResource(R.string.ime_synonyms_pick_desc, shown)
+            Text(
+                text = shown,
+                style = MaterialTheme.typography.bodyLarge,
+                color = color,
+                modifier = Modifier
+                    .clip(ChipShape)
+                    .background(color.copy(alpha = 0.10f))
+                    .clickable { onAction(SynonymAction.Pick(word)) }
+                    .semantics { contentDescription = label }
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+            )
+        }
+    }
+}
+
+private val ChipShape = RoundedCornerShape(16.dp)

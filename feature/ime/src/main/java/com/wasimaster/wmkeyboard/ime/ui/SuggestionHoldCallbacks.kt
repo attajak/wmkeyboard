@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import androidx.compose.runtime.Immutable
+import com.wasimaster.wmkeyboard.ime.SynonymAction
 import com.wasimaster.wmkeyboard.ime.WordCardAction
 import com.wasimaster.wmkeyboard.ime.WordMenuAction
 import com.wasimaster.wmkeyboard.ime.WordMenuFacts
@@ -28,4 +29,6 @@ class SuggestionHoldCallbacks(
     val onMenu: (WordMenuAction) -> Unit = {},
     /** Something on the open word card was pressed. */
     val onCard: (WordCardAction) -> Unit = {},
+    /** Something on the open synonyms sheet was pressed (#321). */
+    val onSynonyms: (SynonymAction) -> Unit = {},
 )
