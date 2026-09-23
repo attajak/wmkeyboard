@@ -7,6 +7,7 @@ import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.app.updates.UpdateChannel
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.settings.AutomationPermission
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
@@ -1643,7 +1644,9 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         automation(R.string.automation_words_title, R.string.automation_words_subtitle),
         automation(R.string.automation_backup_title, R.string.automation_backup_subtitle),
         automation(R.string.automation_layout_events_title, R.string.automation_layout_events_subtitle),
-        automation(R.string.automation_type_text_title, R.string.automation_type_text_subtitle),
+        // Not offered on Play, so not indexed there either.
+        automation(R.string.automation_type_text_title, R.string.automation_type_text_subtitle)
+            .takeIf { AutomationPermission.TYPE_TEXT.offered },
         // The fingerprint lock's own three settings. The per-target checkboxes
         // below them are deliberately absent: each is named after a screen or
         // a row that already has its own entry here, and a second result for

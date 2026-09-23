@@ -29,7 +29,7 @@ internal fun AutomationSettingsScreen(repository: SettingsRepository) {
             tone = BannerTone.WARNING,
         ) { scope.launch { repository.setAutomationEnabled(true) } }
     }
-    val (basic, trust) = AutomationPermission.entries.partition { it.defaultAllowed }
+    val (basic, trust) = AutomationPermission.offeredEntries.partition { it.defaultAllowed }
     for ((title, info, permissions) in listOf(
         Triple(R.string.automation_group_basic_title, R.string.automation_group_basic_info, basic),
         Triple(R.string.automation_group_trust_title, R.string.automation_group_trust_info, trust),
@@ -92,7 +92,7 @@ internal fun OtherAppsGroup(repository: SettingsRepository, onNavigate: (String)
                 NavRow(
                     R.string.automation_actions_title,
                     stringResource(R.string.automation_actions_subtitle),
-                    value = stringResource(R.string.automation_actions_count, automation.allowed.size),
+                    value = stringResource(R.string.automation_actions_count, automation.allowed.count { it.offered }),
                     route = AUTOMATION_ROUTE,
                 ) { onNavigate(AUTOMATION_ROUTE) }
             }

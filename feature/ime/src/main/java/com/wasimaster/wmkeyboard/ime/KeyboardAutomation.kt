@@ -445,6 +445,7 @@ class KeyboardAutomationReceiver : BroadcastReceiver() {
             ?: KeyboardAutomation.incognitoPermission(
                 KeyboardAutomation.parseSwitch(extra(intent, KeyboardAutomation.EXTRA_ENABLED)) ?: !settings.incognito,
             )
+        if (!needs.offered) return fail("\"${needs.key}\" is not part of this edition of WM Keyboard")
         if (!automation.allows(needs)) {
             return fail("not allowed: turn on \"${needs.key}\" under Settings › Privacy › Allowed actions")
         }

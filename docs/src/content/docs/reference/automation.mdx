@@ -41,7 +41,7 @@ switch for each kind of command, in two groups:
 | Add and block words | Needs more trust | Off | `ADD_WORD`, `BLOCK_WORD` |
 | Back up now | Needs more trust | Off | `BACKUP_NOW` |
 | Announce layout changes | Needs more trust | Off | The `LAYOUT_CHANGED` event the keyboard sends |
-| Type text | Needs more trust | Off | `TYPE_TEXT` |
+| Type text (not in the Google Play edition) | Needs more trust | Off | `TYPE_TEXT` |
 
 The **Keyboard controls** each do what a control on the keyboard does, and you
 can undo them. The **Needs more trust** rows change what the keyboard knows,
@@ -154,7 +154,10 @@ they change the setting, and WM Keyboard opens with it next time.
   the one on [Deep links](/reference/deep-links/) for `tool/{toolName}`, in any
   case.
 - **`TYPE_TEXT`** types into the field that has the keyboard, never into a
-  password field, and at most 10,000 characters at once. A snippet is found by
+  password field, and at most 10,000 characters at once. The Google Play
+  edition leaves it out: the row is not on Allowed actions, and the command is
+  refused with a reason even if a backup from another edition had it on. The
+  GitHub and F-Droid editions keep it. A snippet is found by
   its trigger first and its label second, and expands exactly as a tap on it
   in the Snippets panel does.
 

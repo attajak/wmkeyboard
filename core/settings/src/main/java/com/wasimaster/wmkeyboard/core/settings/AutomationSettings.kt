@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.settings
 
+import com.wasimaster.wmkeyboard.config.BuildConfig
+
 /**
  * One thing another app may ask the keyboard to do through its automation
  * intents (adb, Tasker, MacroDroid, Automate). Each is one row on the
@@ -57,7 +59,20 @@ enum class AutomationPermission(val key: String, val defaultAllowed: Boolean) {
     TYPE_TEXT("type_text", false),
     ;
 
+    /**
+     * Whether this build offers the permission at all. The Google Play build
+     * leaves [TYPE_TEXT] out: the receiver is exported with no permission, so
+     * once it is allowed any installed app can type into whatever field has
+     * the keyboard, and on Play that is an input-injection surface in an app
+     * reviewed as a keyboard. Refused even when a backup from another build
+     * restores it as allowed.
+     */
+    val offered: Boolean get() = !(this == TYPE_TEXT && BuildConfig.ENABLE_PLAY_STORE)
+
     companion object {
+        /** The permissions this build offers, in screen order. */
+        val offeredEntries: List<AutomationPermission> get() = entries.filter { it.offered }
+
         /** The stored name's permission, or null for one this version does not know. */
         fun byKey(key: String): AutomationPermission? = entries.firstOrNull { it.key == key }
     }
@@ -78,7 +93,7 @@ data class AutomationSettings(
     val allowed: Set<AutomationPermission> = DEFAULT_ALLOWED,
 ) {
     /** Whether an intent needing [permission] goes through. */
-    fun allows(permission: AutomationPermission): Boolean = enabled && permission in allowed
+    fun allows(permission: AutomationPermission): Boolean = enabled && permission.offered && permission in allowed
 
     companion object {
         val DEFAULT_ALLOWED: Set<AutomationPermission> =

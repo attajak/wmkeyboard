@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.ime
 
+import com.wasimaster.wmkeyboard.config.BuildConfig
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.settings.AutomationPermission
 import com.wasimaster.wmkeyboard.core.settings.AutomationSettings
@@ -161,6 +162,18 @@ class KeyboardAutomationTest {
             AutomationPermission.TYPE_TEXT,
         )
         assertEquals(AutomationPermission.entries.toSet() - trusted, AutomationSettings.DEFAULT_ALLOWED)
+    }
+
+    @Test
+    fun `the Play build leaves typing out, even when a restore allowed it`() {
+        val everything = AutomationSettings(enabled = true, allowed = AutomationPermission.entries.toSet())
+        assertEquals(!BuildConfig.ENABLE_PLAY_STORE, AutomationPermission.TYPE_TEXT.offered)
+        assertEquals(AutomationPermission.TYPE_TEXT.offered, everything.allows(AutomationPermission.TYPE_TEXT))
+        assertEquals(
+            AutomationPermission.entries.filter { it.offered },
+            AutomationPermission.entries.filter(everything::allows),
+        )
+        assertTrue(AutomationPermission.entries.all { it.offered || it == AutomationPermission.TYPE_TEXT })
     }
 
     @Test
