@@ -198,6 +198,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.withFrameMillis
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17377,6 +17378,14 @@ internal fun KeyButton(
     // anywhere in this body puts composition and layout back on the press path.
     val pressed = remember { mutableStateOf(false) }
     var showAlternates by remember { mutableStateOf(false) }
+    // The popup built ahead of the long press, hidden, while the finger is still
+    // down: creating its window is the slow part of opening it (a first
+    // relayout, ~15 ms on a mid-range phone, then a first draw), and paying that
+    // after the long press fired put the popup a few frames behind the buzz that
+    // says it is open. Armed [AlternatesPrewarmLeadMs] before the long press and
+    // dropped on the lift, so a tap never gets this far.
+    var alternatesPrepared by remember { mutableStateOf(false) }
+    val alternatesPrewarm = remember { arrayOfNulls<Job>(1) }
     // The hold that opened the popup, while one is open: it carries the geometry
     // both windows need to agree on and the entry the finger is choosing. One
     // per key, and null throughout when the behaviour is switched off, which is
@@ -17638,6 +17647,16 @@ internal fun KeyButton(
                         // be dropped silently.
                         if (down) gate.press(debounceMs.value)
                         pressed.value = down
+                        alternatesPrewarm[0]?.cancel()
+                        val prewarmAt = settings.longPressDelayMs - AlternatesPrewarmLeadMs
+                        if (down && prewarmAt >= AlternatesPrewarmFloorMs && key.opensAlternatesPopup()) {
+                            alternatesPrewarm[0] = scope.launch {
+                                delay(prewarmAt.toLong())
+                                alternatesPrepared = true
+                            }
+                        } else if (!down) {
+                            alternatesPrepared = false
+                        }
                         announce(down)
                         // The burst spends nothing when off, and rides the same
                         // debounce as the sound: a dropped contact throws no
@@ -17803,7 +17822,7 @@ internal fun KeyButton(
         KeyLabel(visual, settings, pressed)
         val popupPosition = rememberAboveAnchorPopup()
 
-        if (showAlternates && key.opensAlternatesPopup()) {
+        if ((showAlternates || alternatesPrepared) && key.opensAlternatesPopup()) {
             // The popup can go away with the finger still down: a second finger
             // switching layer under it, or the board recomposed away. Nothing
             // then delivers the lift, and the board-wide gate would stay raised
@@ -17813,11 +17832,17 @@ internal fun KeyButton(
             // the gate on opening too, and its ways out (an entry tapped, a
             // tap outside) never reach the hold, so this is the one place
             // that lowers it for them (#89).
-            DisposableEffect(alternatesHold) {
-                onDispose { alternatesHold.cancel() }
+            // Only once it is shown: a prepared popup dropped on a tap never
+            // raised the gate, and lowering it then would lower it under a
+            // popup another key has open.
+            if (showAlternates) {
+                DisposableEffect(alternatesHold) {
+                    onDispose { alternatesHold.cancel() }
+                }
             }
             AlternatesPopup(
                 key = key,
+                visible = showAlternates,
                 popupPosition = popupPosition,
                 popup = settings.popup,
                 hold = alternatesHold.takeIf { holdToSelect },
@@ -18045,7 +18070,9 @@ internal class AlternatesHold(
 
     /** The popup has just opened under this finger: pre-select the first entry. */
     fun open() {
-        rects = emptyList()
+        // Not the rects: a popup prepared ahead of the long press has already
+        // been laid out and reported them, and nothing would report them again.
+        // The popup clears them itself when it goes.
         selected.intValue = 0
         anchor = null
         steering = false
@@ -18170,6 +18197,12 @@ private val LayerDragStillDp = 12.dp
 @Composable
 private fun AlternatesPopup(
     key: Key,
+    /**
+     * False while the popup is prepared ahead of the long press: composed,
+     * laid out and drawn in a window of its own, but transparent and letting
+     * every touch through to the keyboard beneath.
+     */
+    visible: Boolean = true,
     popupPosition: PopupPositionProvider,
     popup: KeyPopupSettings,
     onDismiss: () -> Unit,
@@ -18233,19 +18266,39 @@ private fun AlternatesPopup(
     // Opens out of the key it was held on and settles, rather than appearing at
     // full size in one step. Nothing waits for it: the first frame is fully
     // opaque, and every entry is already laid out where it will be.
+    // Started when the popup is shown rather than when it is composed: a
+    // prepared popup would otherwise have grown out of sight.
     val grow = remember { Animatable(if (kb.reduceMotion) 1f else AlternatesGrowFrom) }
-    LaunchedEffect(grow) {
-        grow.animateTo(1f, tween(AlternatesGrowMs, easing = FastOutSlowInEasing))
+    LaunchedEffect(grow, visible) {
+        if (visible) grow.animateTo(1f, tween(AlternatesGrowMs, easing = FastOutSlowInEasing))
+    }
+    DisposableEffect(hold) {
+        onDispose { hold?.rects = emptyList() }
+    }
+    val shown by rememberUpdatedState(visible)
+    // Hidden, the window takes no touches at all: a second finger landing where
+    // the popup will be belongs to the keyboard until it is shown. Changing that
+    // is a window relayout (~8 ms on a mid-range phone), so it waits one frame
+    // behind showing: the frame that reveals the popup only repaints it, and
+    // nothing can reach for a popup in the frame before it is on screen.
+    var touchable by remember { mutableStateOf(visible) }
+    LaunchedEffect(visible) {
+        if (visible) withFrameNanos {}
+        touchable = visible
     }
     Popup(
         popupPositionProvider = provider,
         onDismissRequest = onDismiss,
+        properties = if (touchable) AlternatesShownProperties else AlternatesHiddenProperties,
     ) {
         Surface(
-            // A scale at draw time, never a graphicsLayer: the hold-drag reads the
-            // grid's window position and its entries' laid-out rects, and a layer
-            // transform would shift both for as long as the popup was growing.
-            modifier = Modifier.growFrom(pivot = { growPivot.value }) { grow.value },
+            // A scale at draw time, never a transform in the layer: the
+            // hold-drag reads the grid's window position and its entries'
+            // laid-out rects, and a layer transform would shift both for as
+            // long as the popup was growing. The layer's alpha moves nothing.
+            modifier = Modifier
+                .graphicsLayer { alpha = if (shown) 1f else 0f }
+                .growFrom(pivot = { growPivot.value }) { grow.value },
             shape = kb.popupShape(),
             color = kb.popup,
             border = kb.popupSurfaceBorder(),
@@ -18313,6 +18366,37 @@ private const val AlternatesGrowFrom = 0.6f
 
 /** How long the alternates popup takes to grow out of its key. */
 private const val AlternatesGrowMs = 140
+
+/**
+ * How long before the long press fires its popup starts being built, hidden.
+ * Enough for the window's first relayout and draw on a slow phone; short
+ * enough that an ordinary tap has lifted long before.
+ */
+private const val AlternatesPrewarmLeadMs = 100
+
+/**
+ * The earliest into a press the prewarm may start. Below it (a long-press
+ * delay set very short) ordinary taps would be building and throwing away
+ * popups, so the popup is built when the long press fires, as before.
+ */
+private const val AlternatesPrewarmFloorMs = 120
+
+/** The alternates popup's window as Compose's defaults make it. */
+private val AlternatesShownProperties = PopupProperties()
+
+/**
+ * The same window while prepared: not touchable (touches fall through to the
+ * keyboard) and not watching outside touches, which would dismiss it.
+ */
+private val AlternatesHiddenProperties = PopupProperties(
+    flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+    inheritSecurePolicy = true,
+    dismissOnBackPress = true,
+    dismissOnClickOutside = true,
+    excludeFromSystemGesture = true,
+    usePlatformDefaultWidth = false,
+)
 
 /**
  * Draws the content scaled by [scale] about [pivot], the point it grows out of
