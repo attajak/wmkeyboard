@@ -254,5 +254,9 @@
          feature is on but drawing over the strip, where this row is unused. -->
     <string name="rows_bar_macros_title">Selection actions</string>
     <string name="rows_bar_macros_strip_subtitle">On the suggestion strip</string>
+    <string name="rows_bar_stickers_title">Sticker suggestions</string>
+    <!-- Status under the sticker row in the row order list. The row is only there while something typed matches a sticker. -->
+    <string name="rows_bar_stickers_subtitle">Shows when what you type matches one of your stickers</string>
+    <string name="rows_bar_stickers_button_subtitle">Opens from the sticker chip on the suggestion strip</string>
 
 </resources>

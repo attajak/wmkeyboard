@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import com.wasimaster.wmkeyboard.core.settings.BarRow
 import com.wasimaster.wmkeyboard.core.settings.DefaultBarOrder
+import com.wasimaster.wmkeyboard.core.settings.GifSettings
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.ToolbarBehavior
 import com.wasimaster.wmkeyboard.core.settings.ToolbarPlacement
@@ -51,6 +52,18 @@ class BarRowListTest {
         assertEquals(stored.toSet(), merged.toSet())
         assertEquals(BarRow.SYMBOL, merged.first())
         assertEquals(merged.indexOf(BarRow.EMOJI) + 1, merged.indexOf(BarRow.TOOLS))
+    }
+
+    @Test
+    fun `sticker row is listed only while stickers are offered as you type`() {
+        val on = KeyboardSettings()
+        assertEquals(BarRow.STICKERS, barRowsListed(DefaultBarOrder, on).first())
+        val off = KeyboardSettings(gif = GifSettings(stickerSuggest = false))
+        val listed = barRowsListed(DefaultBarOrder, off)
+        assertEquals(false, BarRow.STICKERS in listed)
+        // Moved while hidden, it keeps the place it was stored at.
+        val stored = DefaultBarOrder - BarRow.STICKERS + BarRow.STICKERS
+        assertEquals(stored.last(), barOrderMerged(barRowsListed(stored, off), stored).last())
     }
 
     @Test

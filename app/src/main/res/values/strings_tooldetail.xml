@@ -377,7 +377,7 @@
     <string name="tooldetail_sticker_suggest_style_strip">On the strip</string>
     <string name="tooldetail_sticker_suggest_style_chip">One chip</string>
     <!-- One line under each option in the "Where they show" picker. -->
-    <string name="tooldetail_sticker_suggest_style_tray_desc">A row of large stickers above the suggestion strip. The word suggestions stay where they are</string>
+    <string name="tooldetail_sticker_suggest_style_tray_desc">A row of large stickers at the top of the keyboard. The word suggestions stay where they are. Move the row in Rows and bars</string>
     <string name="tooldetail_sticker_suggest_style_strip_desc">Three small stickers on the suggestion strip, next to the words. A button shows the rest</string>
     <string name="tooldetail_sticker_suggest_style_chip_desc">A small chip on the strip that says how many stickers there are. Tap it to see them</string>
     <string name="tooldetail_sticker_suggest_trigger_title">After you send one</string>

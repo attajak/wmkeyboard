@@ -97,7 +97,8 @@ internal fun stickerStripShows(state: KeyboardUiState): Boolean {
 }
 
 /**
- * The tray, as a row of the bar stack directly above the strip. It grows in
+ * The tray, as its own row of the bar stack ([com.wasimaster.wmkeyboard.core.settings.BarRow.STICKERS]):
+ * on top by default, wherever Rows & bars puts it otherwise. It grows in
  * and out the way the selection macro row does, inside a docked frame that
  * holds still (see [RevealingBarRow]), so a match arriving resizes the window
  * once rather than on every frame of the move.

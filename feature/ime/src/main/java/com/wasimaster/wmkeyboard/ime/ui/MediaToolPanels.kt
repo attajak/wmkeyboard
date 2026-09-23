@@ -1109,8 +1109,13 @@ private fun MediaActionSheet(
                 .padding(vertical = 6.dp),
         ) {
             // The item's name first — long-press is also the only way to
-            // find out what a result is called.
-            if (item.title.isNotBlank()) {
+            // find out what a result is called. One of the user's own
+            // stickers says everything it is found by instead: its title,
+            // its pack, and the keywords and emoji that offer it while typing.
+            val own = if (item.source == GifSource.LOCAL) ownSticker(item, packs) else null
+            if (own != null) {
+                OwnStickerInfo(own.first, own.second)
+            } else if (item.title.isNotBlank()) {
                 Text(
                     item.title,
                     color = kb.secondaryText,
@@ -1147,6 +1152,66 @@ private fun MediaActionSheet(
             }
         }
     }
+}
+
+/** The pack and sticker behind a `local_…` grid item, from the packs the panel already holds. */
+private fun ownSticker(
+    item: GifItem,
+    packs: List<com.wasimaster.wmkeyboard.core.stickers.StickerPack>,
+): Pair<com.wasimaster.wmkeyboard.core.stickers.StickerPack, com.wasimaster.wmkeyboard.core.stickers.CustomSticker>? =
+    packs.firstNotNullOfOrNull { pack ->
+        val prefix = com.wasimaster.wmkeyboard.core.stickers.StickerPackStore.ITEM_PREFIX + pack.id + "_"
+        if (!item.id.startsWith(prefix)) return@firstNotNullOfOrNull null
+        pack.stickers.firstOrNull { it.id == item.id.removePrefix(prefix) }?.let { pack to it }
+    }
+
+/**
+ * The head of the long-press sheet for one of the user's own stickers: the
+ * title (or that it has none), the pack, then the word keywords and the emoji
+ * on lines of their own, since those are two different ways of calling it up.
+ */
+@Composable
+private fun OwnStickerInfo(
+    pack: com.wasimaster.wmkeyboard.core.stickers.StickerPack,
+    sticker: com.wasimaster.wmkeyboard.core.stickers.CustomSticker,
+) {
+    val kb = LocalKbTheme.current
+    val (emoji, words) = sticker.keywords.partition {
+        com.wasimaster.wmkeyboard.core.stickers.StickerKeywords.isEmoji(it)
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(3.dp),
+    ) {
+        Text(
+            sticker.name.ifBlank { stringResource(R.string.ime_sticker_info_untitled) },
+            color = kb.popupText,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        OwnStickerInfoLine(stringResource(R.string.ime_sticker_info_pack, pack.name))
+        if (words.isNotEmpty()) {
+            OwnStickerInfoLine(stringResource(R.string.ime_sticker_info_keywords, words.joinToString(", ")))
+        }
+        if (emoji.isNotEmpty()) {
+            OwnStickerInfoLine(stringResource(R.string.ime_sticker_info_emoji, emoji.joinToString(" ")))
+        }
+    }
+}
+
+@Composable
+private fun OwnStickerInfoLine(text: String) {
+    Text(
+        text,
+        color = LocalKbTheme.current.secondaryText,
+        fontSize = 12.sp,
+        maxLines = 3,
+        overflow = TextOverflow.Ellipsis,
+    )
 }
 
 /**

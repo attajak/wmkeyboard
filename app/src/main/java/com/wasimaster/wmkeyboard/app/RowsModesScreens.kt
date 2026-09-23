@@ -88,6 +88,7 @@ import com.wasimaster.wmkeyboard.core.settings.EmojiBarMode
 import com.wasimaster.wmkeyboard.ime.ui.ModeIcons
 import com.wasimaster.wmkeyboard.core.settings.BarRow
 import com.wasimaster.wmkeyboard.core.settings.SelectionMacroPlacement
+import com.wasimaster.wmkeyboard.core.settings.StickerSuggestStyle
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.layoutAfterFancy
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
@@ -118,6 +119,7 @@ import androidx.compose.material.icons.outlined.AltRoute
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.FindReplace
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Keyboard
 import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
 import com.wasimaster.wmkeyboard.core.ui.rememberScrollRailState
@@ -152,6 +154,7 @@ private fun barRowTitle(row: BarRow, settings: KeyboardSettings): Int = when (ro
     BarRow.TOOLS -> R.string.rows_bar_tools_title
     BarRow.DICTIONARY -> R.string.rows_dictionary_bar_title
     BarRow.MACROS -> R.string.rows_bar_macros_title
+    BarRow.STICKERS -> R.string.rows_bar_stickers_title
     BarRow.KEYBOARD -> R.string.rows_bar_keyboard_title
 }
 
@@ -190,6 +193,13 @@ private fun barRowStatus(row: BarRow, settings: KeyboardSettings): Int? = when (
             R.string.rows_bar_macros_strip_subtitle
         else -> null
     }
+    // Only listed while the feature is on ([barRowsListed]). The two strip
+    // styles open it from their chip, like the on-demand tools row.
+    BarRow.STICKERS -> if (settings.gif.stickerSuggestStyle == StickerSuggestStyle.TRAY) {
+        R.string.rows_bar_stickers_subtitle
+    } else {
+        R.string.rows_bar_stickers_button_subtitle
+    }
     BarRow.KEYBOARD -> null
 }
 
@@ -207,22 +217,26 @@ private fun barRowShown(row: BarRow, settings: KeyboardSettings): Boolean = when
     BarRow.DICTIONARY -> settings.rows.dictionaryBarEnabled
     BarRow.MACROS -> settings.selectionMacros.enabled &&
         settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW
+    BarRow.STICKERS -> settings.gif.stickerSuggest
     BarRow.KEYBOARD -> true
 }
 
 /**
  * The rows the order list offers, out of the stored order.
  *
- * Everything but the tools row, always; the tools row only while the tools
- * have a row of their own. On the strip they are part of the strip entry
- * above, and a second entry for a row that cannot be drawn is a slot the user
- * can drag around to no effect.
+ * Everything but the tools row and the sticker tray, always; the tools row
+ * only while the tools have a row of their own, and the sticker tray only
+ * while stickers are offered as you type (#329). On the strip the tools are
+ * part of the strip entry above, and a second entry for a row that cannot be
+ * drawn is a slot the user can drag around to no effect.
  */
 internal fun barRowsListed(order: List<BarRow>, settings: KeyboardSettings): List<BarRow> =
-    if (settings.toolbarBehavior.placement.isOwnRow) {
-        order
-    } else {
-        order.filter { it != BarRow.TOOLS }
+    order.filter { row ->
+        when (row) {
+            BarRow.TOOLS -> settings.toolbarBehavior.placement.isOwnRow
+            BarRow.STICKERS -> settings.gif.stickerSuggest
+            else -> true
+        }
     }
 
 /**
@@ -318,6 +332,17 @@ private fun BarRowPreview(row: BarRow, shown: Boolean) {
                 Icons.Outlined.ContentCopy, Icons.Outlined.ContentCut, Icons.Outlined.ContentPaste,
             )) {
                 Icon(icon, contentDescription = null, modifier = Modifier.size(12.dp), tint = scheme.onSurfaceVariant)
+            }
+            // A few sticker-sized squares and the tray's close mark.
+            BarRow.STICKERS -> {
+                repeat(4) { PreviewPill(16.dp, scheme.tertiaryContainer) }
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    Icons.Outlined.Close,
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = scheme.onSurfaceVariant,
+                )
             }
             BarRow.KEYBOARD -> PreviewKeys(scheme.outline)
         }

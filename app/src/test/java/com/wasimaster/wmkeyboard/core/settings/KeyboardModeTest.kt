@@ -394,7 +394,7 @@ class KeyboardModeTest {
     fun `sanitizeBarOrder repairs missing and duplicate rows`() {
         assertEquals(
             listOf(
-                BarRow.EMOJI, BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.SYMBOL,
+                BarRow.STICKERS, BarRow.EMOJI, BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.SYMBOL,
                 BarRow.DICTIONARY, BarRow.FANCY, BarRow.KEYBOARD,
             ),
             sanitizeBarOrder(listOf(BarRow.EMOJI, BarRow.EMOJI, BarRow.TOPBAR)),
@@ -404,9 +404,10 @@ class KeyboardModeTest {
         // fancy row is appended, nearest the keys, and the tools and macros
         // rows land just over the strip — where tools always drew — rather
         // than at the bottom. The keys come last, so nothing moves below them.
+        // The sticker tray, newer than all of them, goes on top.
         assertEquals(
             listOf(
-                BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.EMOJI, BarRow.SYMBOL,
+                BarRow.STICKERS, BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.EMOJI, BarRow.SYMBOL,
                 BarRow.DICTIONARY, BarRow.FANCY, BarRow.KEYBOARD,
             ),
             sanitizeBarOrder(listOf(BarRow.TOPBAR, BarRow.EMOJI, BarRow.SYMBOL)),

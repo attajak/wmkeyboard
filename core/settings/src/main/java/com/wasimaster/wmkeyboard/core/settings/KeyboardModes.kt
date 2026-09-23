@@ -20,11 +20,15 @@ import kotlinx.serialization.json.Json
  * neither a setting alone nor the layout: it appears only while there is a
  * selection to act on, and only under the own-row placement.
  *
+ * [STICKERS] (your own stickers offered while typing, #329) follows state the
+ * same way: it opens when the text before the cursor asks for a sticker, and
+ * has a slot only while that feature is switched on.
+ *
  * Stored by name. The reader drops a name it does not know and
  * [sanitizeBarOrder] fills the gap, so a build that predates a constant
  * still decodes an order written by a newer one.
  */
-enum class BarRow { TOPBAR, EMOJI, SYMBOL, FANCY, TOOLS, DICTIONARY, MACROS, KEYBOARD }
+enum class BarRow { TOPBAR, EMOJI, SYMBOL, FANCY, TOOLS, DICTIONARY, MACROS, STICKERS, KEYBOARD }
 
 /**
  * The shipped stacking: emoji on top because it is reached for most, the
@@ -35,12 +39,18 @@ enum class BarRow { TOPBAR, EMOJI, SYMBOL, FANCY, TOOLS, DICTIONARY, MACROS, KEY
  * that comes and goes with a selection, so it belongs where it pushes the
  * fewest fixed rows around when it arrives.
  *
+ * The sticker tray goes above everything: it is an offer that comes and goes
+ * with what is typed, and on top it pushes no fixed row around under the
+ * finger that is about to tap it. An order stored before it existed gets it
+ * on top too, since [sanitizeBarOrder] slots a missing row above the first
+ * row that follows it in this list.
+ *
  * The keys come last, so every row sits above them — which is also where
  * [sanitizeBarOrder] puts the keys for an order stored before they were an
  * entry, keeping that user's keyboard exactly as it was.
  */
 val DefaultBarOrder: List<BarRow> = listOf(
-    BarRow.EMOJI, BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.SYMBOL,
+    BarRow.STICKERS, BarRow.EMOJI, BarRow.TOOLS, BarRow.MACROS, BarRow.TOPBAR, BarRow.SYMBOL,
     BarRow.DICTIONARY, BarRow.FANCY, BarRow.KEYBOARD,
 )
 

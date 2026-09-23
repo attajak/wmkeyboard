@@ -15,4 +15,14 @@
         <item quantity="one">%1$d sticker</item>
         <item quantity="other">%1$d stickers</item>
     </plurals>
+
+    <!-- Long-press sheet over one of the user's own stickers: what the sticker is called and what finds it. -->
+    <!-- Shown in place of the title when the sticker has none. -->
+    <string name="ime_sticker_info_untitled">No title</string>
+    <!-- %1$s is the name of the sticker pack. -->
+    <string name="ime_sticker_info_pack">Pack: <xliff:g id="pack">%1$s</xliff:g></string>
+    <!-- %1$s is a comma-separated list of words, for example "cat, good night". -->
+    <string name="ime_sticker_info_keywords">Keywords: <xliff:g id="keywords">%1$s</xliff:g></string>
+    <!-- %1$s is a list of emoji, for example "😂 🐱". -->
+    <string name="ime_sticker_info_emoji">Emoji: <xliff:g id="emoji">%1$s</xliff:g></string>
 </resources>
