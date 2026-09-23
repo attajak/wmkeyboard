@@ -3235,7 +3235,11 @@ private fun TopBar(
     // With the size on the row, that walk went past it to the window's root:
     // a full measure of the whole keyboard at every word boundary (traced on
     // a CPH2481). A box that is exactly this size stops it at the row.
-    Box(Modifier.fillMaxWidth().height(topBarHeight(state.settings))) {
+    //
+    // Its own layer for the draw the same way: the strip repaints on every
+    // keystroke, and without a layer that repaint re-recorded the window's
+    // root, and with it every key that has no layer of its own.
+    Box(Modifier.fillMaxWidth().height(topBarHeight(state.settings)).graphicsLayer()) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -17771,6 +17775,13 @@ internal fun KeyButton(
                     Modifier
                 }
             )
+            // A layer of the key's own, so the draw a press invalidates is this
+            // key's and nothing else's. Without one (every theme with no key
+            // shadow) the nearest layer was the window's root: each press and
+            // each release re-recorded every key's face, label and hint, plus
+            // the toolbar and the strip — 2-5 ms of display-list recording per
+            // frame on a CPH2481, the largest piece of a typing frame.
+            .graphicsLayer()
             // The face and its sheen are painted here rather than by
             // Modifier.background, because both depend on the press: read inside
             // the draw lambda, a press invalidates only the draw, so pressing a
