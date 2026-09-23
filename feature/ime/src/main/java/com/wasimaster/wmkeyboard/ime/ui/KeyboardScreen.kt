@@ -3228,10 +3228,17 @@ private fun TopBar(
         LayoutDirection.Ltr
     }
     CompositionLocalProvider(LocalLayoutDirection provides stripDirection) {
+    // The bar's size is fixed by this box rather than by the row itself. The
+    // row's children change as you type — the strip and the toolbar trade
+    // places, the chevron comes and goes — and Compose walks a change to a
+    // node's children up to the first parent whose size cannot depend on it.
+    // With the size on the row, that walk went past it to the window's root:
+    // a full measure of the whole keyboard at every word boundary (traced on
+    // a CPH2481). A box that is exactly this size stops it at the row.
+    Box(Modifier.fillMaxWidth().height(topBarHeight(state.settings))) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(topBarHeight(state.settings))
+            .fillMaxSize()
             // A deliberate downward flick anywhere on the strip dismisses the
             // keyboard. A tool's own reorder is a hold-then-drag, so it fires
             // its long-press first and never reaches this detector; a quick
@@ -4177,6 +4184,7 @@ private fun TopBar(
                 }
             }
         }
+    }
     }
     }
 }
@@ -13143,54 +13151,65 @@ internal fun KeyPreviewOverlay(
     // the frame's own child list twice a keystroke, and the frame is sized by
     // its content, so each change was a layout pass over the whole window. An
     // empty Layout costs a node and nothing else.
-    Layout(
-        // Transient, and already spoken by the key: a screen reader has no
-        // use for a bubble that is gone before the description finishes.
-        modifier = modifier.clearAndSetSemantics { },
-        // Keyed by the pressing key, so a bubble expiring under a finger that
-        // is still down removes that bubble rather than shuffling the rest up
-        // into its slot.
-        content = {
-            for (preview in bubbles) {
-                key(preview.token) {
-                    val heightPx = if (onKeyStyle) {
-                        onKeyBubbleHeightPx(bubbleHeightPx, preview.size.height, onKeyLabelLanePx)
-                    } else {
-                        bubbleHeightPx
+    //
+    // And inside a box of its own, which [modifier] (`matchParentSize`, at
+    // both call sites) measures at one fixed size. Every press and release
+    // still changes this Layout — its children, and its measure block, which
+    // closes over the bubbles — and Compose walks such a change up to the
+    // first parent whose size cannot depend on it. Straight under the frame
+    // that was the window's root: a full measure of the whole keyboard,
+    // every key's text included, twice a keystroke (traced on a CPH2481 with
+    // a requestLayout probe). Under a fixed-size box the walk stops here.
+    Box(modifier) {
+        Layout(
+            // Transient, and already spoken by the key: a screen reader has no
+            // use for a bubble that is gone before the description finishes.
+            modifier = Modifier.fillMaxSize().clearAndSetSemantics { },
+            // Keyed by the pressing key, so a bubble expiring under a finger that
+            // is still down removes that bubble rather than shuffling the rest up
+            // into its slot.
+            content = {
+                for (preview in bubbles) {
+                    key(preview.token) {
+                        val heightPx = if (onKeyStyle) {
+                            onKeyBubbleHeightPx(bubbleHeightPx, preview.size.height, onKeyLabelLanePx)
+                        } else {
+                            bubbleHeightPx
+                        }
+                        KeyPreviewBubble(preview, popup, onKeyStyle, heightPx)
                     }
-                    KeyPreviewBubble(preview, popup, onKeyStyle, heightPx)
                 }
-            }
-        },
-    ) { measurables, constraints ->
-        val laidOut = constraints.constrain(size)
-        // The space the providers clamp into: the overlay, plus the band a
-        // host without one is pretending to have above it.
-        val room = IntSize(laidOut.width, laidOut.height + headroomPx)
-        val placeables = measurables.map { it.measure(Constraints()) }
-        layout(laidOut.width, laidOut.height) {
-            placeables.forEachIndexed { index, placeable ->
-                val preview = bubbles[index]
-                // The key in the overlay's space, pushed down by the band.
-                val keyBounds = IntRect(
-                    IntOffset(
-                        (preview.position.x - origin.x).roundToInt(),
-                        (preview.position.y - origin.y).roundToInt() + headroomPx,
-                    ),
-                    preview.size,
-                )
-                val provider = if (onKeyStyle) {
-                    OnKeyPopupPositionProvider
-                } else {
-                    AboveAnchorPopupPositionProvider(gapPx, offsetXPx)
+            },
+        ) { measurables, constraints ->
+            val laidOut = constraints.constrain(size)
+            // The space the providers clamp into: the overlay, plus the band a
+            // host without one is pretending to have above it.
+            val room = IntSize(laidOut.width, laidOut.height + headroomPx)
+            val placeables = measurables.map { it.measure(Constraints()) }
+            layout(laidOut.width, laidOut.height) {
+                placeables.forEachIndexed { index, placeable ->
+                    val preview = bubbles[index]
+                    // The key in the overlay's space, pushed down by the band.
+                    val keyBounds = IntRect(
+                        IntOffset(
+                            (preview.position.x - origin.x).roundToInt(),
+                            (preview.position.y - origin.y).roundToInt() + headroomPx,
+                        ),
+                        preview.size,
+                    )
+                    val provider = if (onKeyStyle) {
+                        OnKeyPopupPositionProvider
+                    } else {
+                        AboveAnchorPopupPositionProvider(gapPx, offsetXPx)
+                    }
+                    val at = provider.calculatePosition(
+                        keyBounds,
+                        room,
+                        layoutDirection,
+                        IntSize(placeable.width, placeable.height),
+                    )
+                    placeable.place(at.x, at.y - headroomPx)
                 }
-                val at = provider.calculatePosition(
-                    keyBounds,
-                    room,
-                    layoutDirection,
-                    IntSize(placeable.width, placeable.height),
-                )
-                placeable.place(at.x, at.y - headroomPx)
             }
         }
     }
