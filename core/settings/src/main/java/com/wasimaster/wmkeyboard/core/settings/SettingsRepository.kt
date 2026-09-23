@@ -7918,10 +7918,21 @@ class SettingsRepository(private val context: Context) {
      * is writable. Locked, edits land in the device-protected mirror: the
      * keyboard's own toggles keep working on the lock screen, and the first
      * emission after unlock overwrites them.
+     *
+     * The edit runs on [Dispatchers.IO], not on the caller's dispatcher.
+     * DataStore takes its write lock first and then runs [transform] in the
+     * caller's context, so an edit launched from the keyboard's main-thread
+     * scope held the lock until the main looper got round to the transform.
+     * A looper that never does — a Robolectric test that ends without idling
+     * it — left the process-wide store locked, and every later write in that
+     * JVM waited forever. Off the main thread is also where the JSON these
+     * transforms decode and re-encode belongs.
      */
     private suspend fun editPrefs(transform: suspend (MutablePreferences) -> Unit) {
-        if (unlocked.value) context.dataStore.edit { transform(it) }
-        else locked.edit { transform(it) }
+        withContext(Dispatchers.IO) {
+            if (unlocked.value) context.dataStore.edit { transform(it) }
+            else locked.edit { transform(it) }
+        }
     }
 
     /**
