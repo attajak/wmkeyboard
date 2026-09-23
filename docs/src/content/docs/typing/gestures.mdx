@@ -36,6 +36,10 @@ Set a slot to **Cursor** and the drag moves the text cursor instead of typing. T
 
 **2-D cursor touchpad** (off by default) turns the same drag into a touchpad. A vertical component now steps the cursor up and down through the text too, on the same Cursor speed distance. Both axes send real arrow-key events rather than computing a raw text offset, so vertical movement follows whatever line-wrapping the app is doing instead of guessing at it. The toggle only appears once one of the two swipe slots above is set to Cursor, and Cursor speed appears beside it.
 
+<SettingsPath path="Typing / Gestures / Cursor magnifier" />
+
+**Cursor magnifier** (on by default) shows the line of text around the cursor, enlarged, in a bubble over the text while the drag moves the cursor. It comes up once the drag has resolved to Cursor and goes when you lift your finger. The bubble is the keyboard's own drawing of the text the app hands it, not a zoomed picture of the screen, so it uses the keyboard's colours and font. It sits above the cursor, or below it when the cursor is too close to the top of the screen, for apps that tell the keyboard where their cursor is, which most do. For an app that doesn't, it sits just above the keyboard instead. It never takes a touch and it goes the moment you lift your finger. It appears beside Cursor speed, and the [trackpad](/tools/trackpad/) has a separate switch for the same bubble.
+
 The same drag **selects** text instead of moving through it while selection mode is on, on either axis. Turn the mode on from the toolbar's [Selection mode](/tools/text-editing/#selection-mode) tool, or hold that tool down and scrub the spacebar with your other thumb. A Shift you pressed yourself does it too, lock included, exactly as [Shift+Arrow](/tools/text-editing/#hold-shift-to-select) would: lock Shift, then scrub. A Shift the keyboard armed by itself at a sentence start doesn't count, so an ordinary drag never selects behind your back.
 
 ## Swiping down to hide the keyboard
@@ -230,6 +234,7 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | Press and hold, then swipe | Cursor |
 | 2-D cursor touchpad | Off |
 | Cursor speed | 16&nbsp;dp (8–32&nbsp;dp) |
+| Cursor magnifier | On |
 | Swipe down to hide the keyboard | Off |
 | Swipe down to type the hint | Off |
 | Swipe to add 's | Off |
@@ -247,7 +252,7 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | Volume keys move the cursor | Off |
 | Release the keys while audio plays | On |
 
-Open the **Typing** tile in settings, or search "Gestures", "Delete keys" or "Volume keys". The last two rows live under Typing / Key press rather than Delete keys, and Word delete interval only appears while Holding delete clears words is on. Cursor speed only appears while a swipe slot is set to Cursor. Swipe deletes, Show what you will delete and the two step distances only appear while Swipe to delete is on, and the two distances are one setting each: Words mode shows Word delete distance, Characters mode shows Character delete distance. The Gestures group's language-switching settings (Arrows on the spacebar, The spacebar shows, Spacebar text) are covered on [Switching languages](/languages/switching/#swiping-the-spacebar) instead of here. For the field-by-field breakdown see [Typing settings](/reference/settings/typing/).
+Open the **Typing** tile in settings, or search "Gestures", "Delete keys" or "Volume keys". The last two rows live under Typing / Key press rather than Delete keys, and Word delete interval only appears while Holding delete clears words is on. Cursor speed and Cursor magnifier only appear while a swipe slot is set to Cursor. Swipe deletes, Show what you will delete and the two step distances only appear while Swipe to delete is on, and the two distances are one setting each: Words mode shows Word delete distance, Characters mode shows Character delete distance. The Gestures group's language-switching settings (Arrows on the spacebar, The spacebar shows, Spacebar text) are covered on [Switching languages](/languages/switching/#swiping-the-spacebar) instead of here. For the field-by-field breakdown see [Typing settings](/reference/settings/typing/).
 
 ## Details & edge cases
 

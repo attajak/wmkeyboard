@@ -1972,6 +1972,15 @@ internal fun TypingGesturesSettings(
                     default = SettingsDefaults.textEditing.spaceCursorStepDp.toFloat(),
                 ) { scope.launch { repository.setSpaceCursorStepDp(it.toInt()) } }
             }
+            item {
+                ToggleSetting(
+                    R.string.typing_space_cursor_magnifier_title,
+                    stringResource(R.string.typing_space_cursor_magnifier_subtitle),
+                    settings.textEditing.spaceCursorMagnifier,
+                    info = stringResource(R.string.typing_space_cursor_magnifier_info),
+                    default = SettingsDefaults.textEditing.spaceCursorMagnifier,
+                ) { scope.launch { repository.setSpaceCursorMagnifier(it) } }
+            }
         }
         item {
             ToggleSetting(

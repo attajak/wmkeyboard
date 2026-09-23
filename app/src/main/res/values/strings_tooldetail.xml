@@ -184,6 +184,9 @@
     <string name="tooldetail_trackpad_haptics_subtitle">A short tick for every character or line the cursor moves</string>
     <string name="tooldetail_trackpad_trail_title">Show the trail</string>
     <string name="tooldetail_trackpad_trail_subtitle">Draw your finger\'s path and a crosshair on the trackpad while you drag</string>
+    <string name="tooldetail_trackpad_magnifier_title">Magnifier</string>
+    <string name="tooldetail_trackpad_magnifier_subtitle">Show the text at the cursor, larger, above the cursor while you drag</string>
+    <string name="tooldetail_trackpad_magnifier_info">The magnifier shows the line of text around the cursor. It goes above the cursor when the app tells the keyboard where the cursor is. If the app does not, it goes above the keyboard.</string>
     <string name="tooldetail_trackpad_info">One finger moves the cursor. Hold, then drag to select. Two fingers move a word at a time, and a two-finger tap types a space.</string>
 
     <!-- Numpad tool. -->

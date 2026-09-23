@@ -36,6 +36,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.net.Uri
+import android.view.inputmethod.CursorAnchorInfo
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InlineSuggestionsRequest
@@ -599,6 +600,9 @@ import com.wasimaster.wmkeyboard.voice.R as VoiceR
 open class WMKeyboardService : InputMethodService() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    /** The bubble over the caret while a drag moves it (discussion #303). */
+    private val caretMagnifier = CaretMagnifierController(serviceScope)
 
     /**
      * The one thread a [SuggestionEngine] pass may run on (issue #313).
@@ -5208,6 +5212,7 @@ open class WMKeyboardService : InputMethodService() {
         expectedSelStart = newSelStart
         expectedSelEnd = newSelEnd
         trackCaretAtFieldStart(newSelStart, newSelEnd)
+        caretMagnifier.onSelection(newSelStart, newSelEnd)
         // Marks the engine's context stale unless this is the echo of its own
         // edit. No text is read here: this runs on every keystroke, and a read
         // would undo what the expected-selection cache exists to save.
@@ -5658,6 +5663,8 @@ open class WMKeyboardService : InputMethodService() {
     override fun onFinishInputView(finishingInput: Boolean) {
         super.onFinishInputView(finishingInput)
         keyboardVisible = false
+        // The drag that put it up cannot finish with the keyboard gone.
+        caretMagnifier.stop()
         // The ring belongs to the board that is going away: a new session gets
         // a fresh one, seeded where [KeyGridFocus.show] puts it rather than on
         // whatever key the last field was left pointing at.
@@ -25406,6 +25413,10 @@ open class WMKeyboardService : InputMethodService() {
                 onUndo = ::onFindReplaceUndo,
             ),
             clipboard = clipboardPanelActions(),
+            caretMagnifier = com.wasimaster.wmkeyboard.ime.ui.CaretMagnifierSeam(
+                onDrag = ::onCaretDrag,
+                state = caretMagnifier.state,
+            ),
             learnFromText = com.wasimaster.wmkeyboard.ime.ui.LearnFromTextCallbacks(
                 onToggle = ::onLearnToggle,
                 onToggleAll = ::onLearnToggleAll,
@@ -25650,6 +25661,32 @@ open class WMKeyboardService : InputMethodService() {
                 onPanelChange(PanelMode.TRACKPAD, haptic = false)
             }
         }
+    }
+
+    /**
+     * A trackpad or spacebar drag started (true) or stopped (false) moving the
+     * caret: the magnifier over it (discussion #303), when that surface has it
+     * switched on. Not for a keyboard-owned field, whose caret is on the
+     * keyboard already.
+     */
+    fun onCaretDrag(source: CaretDragSource, down: Boolean) {
+        if (!down) {
+            caretMagnifier.end(source)
+            return
+        }
+        val state = _uiState.value
+        val enabled = when (source) {
+            CaretDragSource.TRACKPAD -> state.settings.trackpad.magnifier
+            CaretDragSource.SPACEBAR -> state.settings.textEditing.spaceCursorMagnifier
+        }
+        if (!enabled || state.captureTarget() != null) return
+        val ic = currentInputConnection ?: return
+        caretMagnifier.begin(source, ic, expectedSelStart, expectedSelEnd)
+    }
+
+    override fun onUpdateCursorAnchorInfo(cursorAnchorInfo: CursorAnchorInfo) {
+        super.onUpdateCursorAnchorInfo(cursorAnchorInfo)
+        caretMagnifier.onCursorAnchor(cursorAnchorInfo)
     }
 
     /** Arms the toolbar's selection mode, whatever the panel's own toggle says. */

@@ -54,12 +54,14 @@ internal class PanelLayoutCallbacks(
  * arrives at the service's `onTextEdit` with the selection mode it already
  * honours; the two-finger tap is a real space key for the same reason. The
  * hold rides the Selection mode tool's hold callback: on at the long press,
- * off at the release, the selection left standing.
+ * off at the release, the selection left standing. [onCaretDrag] brackets a
+ * drag for the caret magnifier (discussion #303), the same way.
  */
 @Immutable
 internal class TrackpadFieldCallbacks(
     private val onKey: (Key) -> Unit,
     val onSelectionHold: (Boolean) -> Unit,
+    val onCaretDrag: (Boolean) -> Unit = {},
 ) {
     fun onEdit(op: TextEditAction) = onKey(Key("", action = KeyAction.Edit(op)))
     fun onSpace() = onKey(Key(" ", action = KeyAction.Space))

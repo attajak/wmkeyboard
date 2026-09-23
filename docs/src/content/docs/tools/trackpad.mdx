@@ -44,6 +44,8 @@ Every move is a real arrow key sent to the field, the same event a hardware keyb
 
 The tool's button is lit on the toolbar while the panel is open, however it was opened. On the surface, a trail follows your finger and a crosshair marks where it is now; both go the moment you lift. The trail can be turned off under [Options](#options). A faint hint in the middle of the surface fades while you are touching it.
 
+While you drag, a **magnifier** shows the line of text around the cursor, enlarged, in a bubble over the text, with the cursor in its middle. It comes up when a drag starts or a hold arms selection, and it follows the cursor from line to line. Any selection shows highlighted in it, and the cursor in it is the end of the selection that is moving. A plain tap never shows it. The bubble is the keyboard's own drawing of the text the app hands it, not a zoomed picture of the screen, so it uses the keyboard's colours and font. It sits above the cursor, or below it when the cursor is too close to the top of the screen, for apps that tell the keyboard where their cursor is, which most do. For an app that doesn't, it sits just above the keyboard instead. It never takes a touch and it goes the moment you lift your finger.
+
 ## The panel is a layout
 
 The trackpad is a [panel layout](/languages/custom-layouts/#panel-layouts) like the emoji, clipboard and text-editing panels. Out of the box it is the pointing surface over an <KeyCap>abc</KeyCap>, <KeyCap>space</KeyCap> and <KeyCap>⌫</KeyCap> row. Open the layout editor from the tool's page (or from **Panel layouts** in the layouts gallery) to change the row, add keys beside the surface, give the surface more or less height, or put a text-editing key on it. The surface itself is the one component the layout cannot lose: a layout without it gets one added back.
@@ -63,6 +65,8 @@ The trackpad is a [panel layout](/languages/custom-layouts/#panel-layouts) like 
 **Vibrate on each move**: on by default. A short tick for every character or line the cursor moves.
 
 **Show the trail**: on by default. Draws your finger's path and a crosshair while you drag.
+
+**Magnifier**: on by default. Shows the text at the cursor, enlarged, while you drag (see [Visual feedback](#visual-feedback)). The [spacebar cursor swipe](/typing/gestures/#moving-the-cursor-with-a-spacebar-swipe) has a separate switch for the same bubble.
 
 **Panel layout** opens the layout editor described above.
 

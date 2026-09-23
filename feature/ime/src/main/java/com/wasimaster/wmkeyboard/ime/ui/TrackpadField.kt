@@ -112,6 +112,14 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                     // Whether selection mode is on because of *this* hold, so
                     // the release turns off exactly what the press turned on.
                     var selecting = false
+                    // Whether this press put the magnifier up, for the same reason.
+                    // A drag or a hold does; a tap never gets that far.
+                    var dragging = false
+                    fun startDrag() {
+                        if (dragging) return
+                        dragging = true
+                        callbacks.onCaretDrag(true)
+                    }
                     touching.value = true
                     if (settings.trail) trail.push(downPos.x, downPos.y)
                     val timer = scope.launch {
@@ -121,6 +129,7 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                             selecting = true
                             tick()
                             callbacks.onSelectionHold(true)
+                            startDrag()
                         }
                     }
                     try {
@@ -161,6 +170,7 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                                 // not a hold; after it, the hold stands and the
                                 // drag selects.
                                 if (!longPressed) timer.cancel()
+                                startDrag()
                             }
                             if (settings.trail) trail.push(cx, cy)
                             if (maxFingers >= 2) {
@@ -178,6 +188,7 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                         // ends with it. The selection itself stays: it lives in
                         // the editor and nothing here collapses it.
                         if (selecting) callbacks.onSelectionHold(false)
+                        if (dragging) callbacks.onCaretDrag(false)
                         when (classifyRelease(moved, longPressed, maxFingers)) {
                             TrackpadRelease.NONE -> taps.reset()
                             TrackpadRelease.TWO_FINGER_TAP -> {

@@ -4450,6 +4450,12 @@ data class TextEditingSettings(
      */
     val spaceCursorStepDp: Int = 16,
     /**
+     * A magnifier over the caret while a spacebar cursor swipe moves it
+     * (discussion #303): the line around the caret, enlarged, in a bubble over
+     * the text. The trackpad has its own switch, [TrackpadSettings.magnifier].
+     */
+    val spaceCursorMagnifier: Boolean = true,
+    /**
      * How far a backspace swipe drags before the first word goes.
      *
      * Later words come cheaper on a fixed curve derived from this one, so a
@@ -4568,6 +4574,12 @@ data class TrackpadSettings(
     val haptics: Boolean = true,
     /** Draw the finger's trail and a crosshair on the surface while dragging. */
     val trail: Boolean = true,
+    /**
+     * A magnifier over the caret while a drag moves it (discussion #303): the
+     * line around the caret, enlarged, in a bubble over the text, so the finger
+     * on the pad can see where the caret is without looking for it.
+     */
+    val magnifier: Boolean = true,
 )
 
 /**
@@ -7523,6 +7535,7 @@ class SettingsRepository(private val context: Context) {
         private val TRACKPAD_MULTI_TAP = booleanPreferencesKey("trackpad_multi_tap")
         private val TRACKPAD_HAPTICS = booleanPreferencesKey("trackpad_haptics")
         private val TRACKPAD_TRAIL = booleanPreferencesKey("trackpad_trail")
+        private val TRACKPAD_MAGNIFIER = booleanPreferencesKey("trackpad_magnifier")
         private val VOCAB_NUDGES = booleanPreferencesKey("vocab_nudges")
         private val VOCAB_NUDGE_SELF = booleanPreferencesKey("vocab_nudge_self")
         private val VOCAB_NUDGE_SCOPE = stringPreferencesKey("vocab_nudge_scope")
@@ -7544,6 +7557,7 @@ class SettingsRepository(private val context: Context) {
         private val VOCAB_TRANSLATION_LANGS = stringPreferencesKey("vocab_translation_langs")
         private val DOUBLE_SPACE_WINDOW_MS = intPreferencesKey("double_space_window_ms")
         private val SPACE_CURSOR_STEP_DP = intPreferencesKey("space_cursor_step_dp")
+        private val SPACE_CURSOR_MAGNIFIER = booleanPreferencesKey("space_cursor_magnifier")
         private val BACKSPACE_WORD_STEP_DP = intPreferencesKey("backspace_word_step_dp")
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
         private val BACKSPACE_SWIPE_PREVIEW = booleanPreferencesKey("backspace_swipe_preview")
@@ -9031,6 +9045,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.textEditing.doubleSpaceWindowMs,
                 spaceCursorStepDp = p[SPACE_CURSOR_STEP_DP]
                     ?: defaults.textEditing.spaceCursorStepDp,
+                spaceCursorMagnifier = p[SPACE_CURSOR_MAGNIFIER]
+                    ?: defaults.textEditing.spaceCursorMagnifier,
                 backspaceWordStepDp = p[BACKSPACE_WORD_STEP_DP]
                     ?: defaults.textEditing.backspaceWordStepDp,
                 backspaceSwipeUnit = p[BACKSPACE_SWIPE_UNIT]
@@ -9052,6 +9068,7 @@ class SettingsRepository(private val context: Context) {
                 multiTap = p[TRACKPAD_MULTI_TAP] ?: defaults.trackpad.multiTap,
                 haptics = p[TRACKPAD_HAPTICS] ?: defaults.trackpad.haptics,
                 trail = p[TRACKPAD_TRAIL] ?: defaults.trackpad.trail,
+                magnifier = p[TRACKPAD_MAGNIFIER] ?: defaults.trackpad.magnifier,
             ),
             vocabulary = VocabularySettings(
                 nudges = p[VOCAB_NUDGES] ?: defaults.vocabulary.nudges,
@@ -10004,6 +10021,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setSpaceCursorStepDp(value: Int) =
         editPrefs { it[SPACE_CURSOR_STEP_DP] = value.coerceIn(8, 32) }
 
+    suspend fun setSpaceCursorMagnifier(value: Boolean) =
+        editPrefs { it[SPACE_CURSOR_MAGNIFIER] = value }
+
     suspend fun setBackspaceWordStepDp(value: Int) =
         editPrefs { it[BACKSPACE_WORD_STEP_DP] = value.coerceIn(32, 120) }
 
@@ -10039,6 +10059,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setTrackpadTrail(value: Boolean) =
         editPrefs { it[TRACKPAD_TRAIL] = value }
+
+    suspend fun setTrackpadMagnifier(value: Boolean) =
+        editPrefs { it[TRACKPAD_MAGNIFIER] = value }
 
     suspend fun setVocabNudges(value: Boolean) = editPrefs { it[VOCAB_NUDGES] = value }
 

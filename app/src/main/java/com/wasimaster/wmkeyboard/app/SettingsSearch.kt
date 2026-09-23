@@ -500,6 +500,7 @@ private fun SearchStrings.typingGesturesRows(): List<SettingsSearchEntry> {
         row(R.string.typing_space_short_swipe_title, R.string.typing_space_short_swipe_subtitle),
         row(R.string.typing_space_long_swipe_title, R.string.typing_space_long_swipe_subtitle),
         row(R.string.typing_space_cursor_step_title, R.string.typing_space_cursor_step_subtitle),
+        row(R.string.typing_space_cursor_magnifier_title, R.string.typing_space_cursor_magnifier_subtitle),
         row(R.string.typing_space_cursor_2d_title, R.string.typing_space_cursor_2d_subtitle),
         row(R.string.typing_space_swipe_down_hide_title, R.string.typing_space_swipe_down_hide_subtitle),
         row(R.string.typing_hint_flick_title, R.string.typing_hint_flick_subtitle),
@@ -1119,6 +1120,7 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.TRACKPAD, R.string.tooldetail_trackpad_taps_title, R.string.tooldetail_trackpad_taps_subtitle),
     toolEntry(ToolbarTool.TRACKPAD, R.string.tooldetail_trackpad_haptics_title, R.string.tooldetail_trackpad_haptics_subtitle),
     toolEntry(ToolbarTool.TRACKPAD, R.string.tooldetail_trackpad_trail_title, R.string.tooldetail_trackpad_trail_subtitle),
+    toolEntry(ToolbarTool.TRACKPAD, R.string.tooldetail_trackpad_magnifier_title, R.string.tooldetail_trackpad_magnifier_subtitle),
     // One switch drawn on all eight caret tools' pages, indexed once. Eight
     // results with the same title would read as a broken search, and the switch
     // is the same one wherever it is flipped — so the first of them answers for

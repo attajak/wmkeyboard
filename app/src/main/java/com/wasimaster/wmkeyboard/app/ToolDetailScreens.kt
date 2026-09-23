@@ -1011,6 +1011,15 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.trackpad.trail,
                     ) { scope.launch { repository.setTrackpadTrail(it) } }
                 }
+                item {
+                    ToggleSetting(
+                        R.string.tooldetail_trackpad_magnifier_title,
+                        stringResource(R.string.tooldetail_trackpad_magnifier_subtitle),
+                        settings.trackpad.magnifier,
+                        info = stringResource(R.string.tooldetail_trackpad_magnifier_info),
+                        default = SettingsDefaults.trackpad.magnifier,
+                    ) { scope.launch { repository.setTrackpadMagnifier(it) } }
+                }
                 // The surface and the keys beside it are a panel layout (issue
                 // #63), edited where the text-editing pad is.
                 item {

@@ -306,6 +306,7 @@ import coil3.compose.AsyncImage
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.OctopusBoard
+import com.wasimaster.wmkeyboard.ime.CaretDragSource
 import com.wasimaster.wmkeyboard.ime.top
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
@@ -1373,6 +1374,7 @@ fun KeyboardScreen(
             LocalCanForwardDelete provides canForwardDelete,
             LocalDeleteSwipe provides deleteSwipe,
             LocalCursorMoveVertical provides onCursorMoveVertical,
+            LocalCaretDrag provides toolHold.caretMagnifier.onDrag,
             LocalHideKeyboard provides onHideKeyboard,
             LocalLanguageSwitchEcho provides languageSwitchEcho,
             LocalTouchExploration provides rememberTouchExploration(),
@@ -1522,6 +1524,7 @@ fun KeyboardScreen(
                 onPluginCopy = onPluginCopy,
                 launcher = launcher,
             )
+            CaretMagnifierHost(toolHold.caretMagnifier.state)
         }
     }
 
@@ -9966,6 +9969,7 @@ private fun KeyboardBody(
                 trackpad = TrackpadFieldCallbacks(
                     onKey = onKey,
                     onSelectionHold = toolHold.onSelectionHold,
+                    onCaretDrag = { toolHold.caretMagnifier.onDrag(CaretDragSource.TRACKPAD, it) },
                 ),
             )
         }
@@ -17094,6 +17098,7 @@ internal fun KeyButton(
     val canForwardDelete = LocalCanForwardDelete.current
     val deleteSwipe = LocalDeleteSwipe.current
     val onCursorMoveVertical = LocalCursorMoveVertical.current
+    val caretDrag = LocalCaretDrag.current
     val onHideKeyboard = LocalHideKeyboard.current
 
     // What this key would put in the shared bubble, were it pressed right now.
@@ -17351,6 +17356,7 @@ internal fun KeyButton(
                     onSelectionHold = onSelectionHold,
                     onCursorMove = onCursorMove,
                     onCursorMoveVertical = onCursorMoveVertical,
+                    onCaretDrag = { caretDrag(CaretDragSource.SPACEBAR, it) },
                     onHideKeyboard = onHideKeyboard,
                     spaceCursor2d = settings.layoutBehavior.spaceCursor2d,
                     spaceSwipeDownHide = settings.layoutBehavior.spaceSwipeDownHide,
@@ -19525,6 +19531,11 @@ private fun Modifier.pointerInputKey(
     onSelectionHold: (Boolean) -> Unit,
     onCursorMove: (Int) -> Unit,
     onCursorMoveVertical: (Int) -> Unit,
+    /**
+     * A spacebar drag started (true) or stopped (false) moving the caret, for
+     * the magnifier over it. Paired: the release ends what the drag began.
+     */
+    onCaretDrag: (Boolean) -> Unit = {},
     onHideKeyboard: () -> Unit,
     spaceCursor2d: Boolean,
     spaceSwipeDownHide: Boolean,
@@ -19779,6 +19790,7 @@ private fun Modifier.pointerInputKey(
                             // slot is free (see holdOpensSwitcher) — it can no
                             // longer eat a cursor or numpad hold.
                             action = if (holdPreviewShown) SpaceSwipeAction.LANGUAGE else candidate
+                            if (action == SpaceSwipeAction.CURSOR) onCaretDrag(true)
                             lastX = change.position.x
                             lastY = change.position.y
                             accumulated = 0f
@@ -19906,6 +19918,7 @@ private fun Modifier.pointerInputKey(
                     }
                 }
                 holdJob?.cancel()
+                if (action == SpaceSwipeAction.CURSOR) onCaretDrag(false)
                 setPressed(false)
                 onKeyRelease()
                 setLanguagePreview(null)
@@ -21553,6 +21566,8 @@ data class ToolHoldCallbacks(
     val learnFromText: LearnFromTextCallbacks = LearnFromTextCallbacks(),
     /** The clipboard panel's editor and view switch; here for the same reason as [dictionaryBar]. */
     val clipboard: ClipboardPanelActions = ClipboardPanelActions(),
+    /** The caret magnifier (discussion #303); here for the same reason as [dictionaryBar]. */
+    val caretMagnifier: CaretMagnifierSeam = CaretMagnifierSeam(),
 )
 
 // ---- snippets panel ----

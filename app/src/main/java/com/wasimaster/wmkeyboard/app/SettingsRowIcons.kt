@@ -261,6 +261,7 @@ import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material.icons.outlined.Weekend
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.outlined.Wifi
+import androidx.compose.material.icons.outlined.ZoomIn
 import androidx.compose.material.icons.outlined.ZoomOutMap
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wasimaster.wmkeyboard.R
@@ -886,6 +887,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_space_hold_picker_long_ring_title) { Icons.Outlined.ViewAgenda }
         put(R.string.typing_space_cursor_2d_title) { Icons.Outlined.Mouse }
         put(R.string.typing_space_cursor_step_title) { Icons.Outlined.Speed }
+        put(R.string.typing_space_cursor_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.typing_space_swipe_down_hide_title) { Icons.Outlined.SwipeDown }
         put(R.string.typing_hint_flick_title) { Icons.Outlined.SwipeDownAlt }
         put(R.string.typing_space_hold_keys_label) { Icons.Outlined.TouchApp }
@@ -1018,6 +1020,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_trackpad_taps_title) { Icons.Outlined.SelectAll }
         put(R.string.tooldetail_trackpad_haptics_title) { Icons.Outlined.Vibration }
         put(R.string.tooldetail_trackpad_trail_title) { Icons.Outlined.Gesture }
+        put(R.string.tooldetail_trackpad_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.tooldetail_numpad_calc_title) { Icons.Outlined.Calculate }
         put(R.string.tooldetail_incognito_learning_title) { Icons.Outlined.School }
         put(R.string.tooldetail_incognito_clipboard_title) { Icons.Outlined.ContentPaste }
