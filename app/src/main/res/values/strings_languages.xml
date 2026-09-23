@@ -137,6 +137,24 @@
     <string name="languages_translit_hints_off_desc">The keys show only their roman letter</string>
     <string name="languages_translit_hints_added_desc">The corner shows only the part that the key writes</string>
     <string name="languages_translit_hints_cluster_desc">The corner repeats the consonant before it, so the hint is a shape from a real word</string>
+    <!-- Phonetic layouts: the key map on the language's page, which roman keys type which letter. -->
+    <string name="languages_keymap_title">Key map</string>
+    <string name="languages_keymap_summary">Vowels, consonants, signs and the full guide</string>
+    <string name="languages_keymap_vowels">Vowels</string>
+    <string name="languages_keymap_vowels_note">The first letter is the vowel on its own. The second is the sign it becomes after a consonant.</string>
+    <string name="languages_keymap_consonants">Consonants</string>
+    <string name="languages_keymap_consonants_note">Two consonants in a row join into one letter. Type a vowel between them to keep them apart.</string>
+    <string name="languages_keymap_consonants_note_guessed">Whether two consonants join is a guess from how the word is said. The suggestion strip offers the other reading.</string>
+    <string name="languages_keymap_signs">Joins and signs</string>
+    <string name="languages_keymap_after_consonant">After a consonant</string>
+    <string name="languages_keymap_elsewhere">Anywhere else</string>
+    <string name="languages_keymap_before_consonant">Before a consonant</string>
+    <string name="languages_keymap_before_vowel">Before a vowel</string>
+    <string name="languages_keymap_after_t">After t</string>
+    <string name="languages_keymap_between_consonants">Between two consonants, keeps them apart</string>
+    <string name="languages_phonetic_guide_title">Full guide</string>
+    <string name="languages_phonetic_guide_subtitle">Every rule with examples, on the WM Keyboard website</string>
+    <string name="languages_phonetic_guide_action">Open guide</string>
 
     <string name="languages_numerals_title">Numerals</string>
     <!-- Fancy Text: the styled-letters pseudo-language. -->

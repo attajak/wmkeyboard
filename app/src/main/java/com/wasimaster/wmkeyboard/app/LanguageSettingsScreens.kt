@@ -37,6 +37,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -876,6 +877,7 @@ internal fun LanguageDetailScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val filesDir = context.filesDir
     val notifyDownload = rememberDownloadNotifier()
     val lang = LanguageRegistry.byId(langId)
@@ -1025,6 +1027,9 @@ internal fun LanguageDetailScreen(
                 ) { scope.launch { repository.setTransliterationHints(it) } }
             }
         }
+        // The whole key map, for the letters no hint can teach: a hint shows
+        // what the next key writes, never which key writes ঁ.
+        PhoneticKeyMapGroup(langId) { uriHandler.openUri(it) }
     }
 
     // Numerals are per language: Arabic can type ٠-٩ while English beside it

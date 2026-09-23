@@ -53,6 +53,62 @@ A few more of the rules worth knowing:
 
 Both of Avro's spellings for the marks work, and so do the ones Ridmik uses: ঁ is `^` or `qq`/`cb`, ঃ is `:` or `HH`, ৎ is `t` plus a backquote or `TH`, and the hasant is `,,` or `hs`. The `hs` form only fires after a consonant, where a hasant can actually go, so it never eats the h and s of a name like `ahsan`.
 
+### Avro key map
+
+Every key the engine reads, in one place. The same tables are in the app, under **Key map** on Bangla's own screen (see [Options](#options)).
+
+**Vowels.** The first form is the letter on its own (at the start of a word, or after another vowel). The second is the sign it becomes after a consonant.
+
+| Key | Letter | After a consonant |
+|---|---|---|
+| `o` | অ | nothing: the inherent vowel |
+| `a`, `A` | আ | া |
+| `i` | ই | ি |
+| `I` | ঈ | ী |
+| `u`, `oo` | উ | ু |
+| `U` | ঊ | ূ |
+| `rri` | ঋ | ৃ |
+| `e`, `E` | এ | ে |
+| `OI` | ঐ | ৈ |
+| `O` | ও | ো |
+| `OU` | ঔ | ৌ |
+
+An `a` straight after another written vowel glides with য়, so `kiamot` is কিয়ামত. A capital `A` is always a plain আ.
+
+**Consonants.** Two consonants in a row join into a conjunct with no extra key. Type `o` between them to keep them apart.
+
+| | | | | |
+|---|---|---|---|---|
+| `k` ক | `kh` খ | `g` গ | `gh` ঘ | `Ng` ঙ |
+| `c` চ | `ch` ছ | `j` জ | `jh` ঝ | `NG` ঞ |
+| `T` ট | `Th` ঠ | `D` ড | `Dh` ঢ | `N` ণ |
+| `t` ত | `th` থ | `d` দ | `dh` ধ | `n` ন |
+| `p` প | `ph`, `f` ফ | `b` ব | `bh`, `v` ভ | `m` ম |
+| `z` য | `r` র | `l` ল | `sh`, `S` শ | `Sh` ষ |
+| `s` স | `h` হ | `R` ড় | `Rh` ঢ় | `Y` য় |
+| `J` জ় | `x` ক্স | `kkh` ক্ষ | `gg` জ্ঞ | `nj` ঞ্জ |
+
+**Joins and signs.**
+
+| Key | Gives | Example |
+|---|---|---|
+| `y` after a consonant | ্য (য-ফলা) | `shyam` শ্যাম |
+| `y` anywhere else | য় | `meye` মেয়ে |
+| `Z` | ্য, wherever it is | |
+| `w` after a consonant | ্ব (ব-ফলা) | `swasthyo` স্বাস্থ্য |
+| `w` anywhere else | ও | `wasi` ওয়াসি |
+| `rr` before a consonant | র্ (reph) | `dhorrmo` ধর্ম |
+| `ng` | ং, or ঙ before a vowel | `bangla` বাংলা, `bangali` বাঙালি |
+| `^`, `qq`, `cb` | ঁ (চন্দ্রবিন্দু) | `ca^d` চাঁদ |
+| `:`, `HH` | ঃ (বিসর্গ) | `du:kho` দুঃখ |
+| `,,`, `hs` | ্ (hasant) | |
+| `TH`, or `t` then a backquote | ৎ | `hoThaTH` হঠাৎ |
+| a backquote between consonants | keeps them apart | `` k`s `` কস, where `ks` is ক্স |
+| `.` / `..` | । / `.` | |
+| `$`, `0` to `9` | ৳, ০ to ৯ | |
+
+A capital that isn't in these tables reads as its lowercase letter, so `B` is ব.
+
 ### Spellings the rules can't reach
 
 Some words just aren't spelled the way they sound, so a list of them is checked before the phonetic engine runs. A match there always wins over whatever the transliterator would have produced. Two kinds of word need this:
@@ -126,6 +182,7 @@ Open Bangla's own screen from **Languages** in the app, or search for it from **
 
 - **Layouts**: one card each for Avro, Probhat, Jatiya, Baishakhi, Bornona, and InScript, each a small preview of that keyboard. Tap a card to turn it on or off; all six are independent. At least one layout has to stay enabled somewhere across your whole keyboard, so you can't switch off the last one from here.
 - **Key hints**: <SettingsPath path="Languages & layouts / Bangla / Key hints / Show the letter each key types" />, a three-way choice (Off, Added, or Whole letter), with Whole letter as the default. It puts the Bengali letter a key is about to write in its corner. Unlike the settings around it, this one is shared. It's one setting for every language with a transliterating layout enabled, not just Bangla, and it shows only while such a layout, Avro, is active.
+- **Key map**: a folded group just below the hints while Avro is on. Open it for the vowels, consonants, joins and signs, the same tables as the [Avro key map](#avro-key-map) above, so they work offline. **Full guide** at the bottom, <SettingsPath path="Languages & layouts / Bangla / Key map / Full guide" />, opens this page in your browser.
 - **Numerals**: two buttons, **০-৯** and **0-9**, and Bengali digits win by default. Switch to `0-9` if you'd rather see Latin digits on the number row while typing Bangla. Where the digits you pick actually get typed is a separate, global setting under Layout & size → Numerals. It defaults to native digits in text fields only, and plain ASCII in number, phone, date and time fields.
 - **Also suggest from**: pick other enabled languages to draw secondary suggestions from alongside Bangla. With English picked, Avro's strip also carries the word as you typed it in Latin letters, and an **English words** group appears right below: **Type English words as English** makes the space bar write `hello` as hello, and **Switch on the suggestion strip** shows or hides the small button that turns that on and off while you type. See [English on Avro and Hindi phonetic](/smart/mixed-language/#english-on-avro-and-hindi-phonetic).
 - **Dictionary**: Bangla ships with a bundled dictionary, and a downloadable wordlist of about 451,000 words gives better suggestions. You can import your own list too. See [Downloadable dictionaries](/languages/dictionaries/) for how sizes compare across languages.

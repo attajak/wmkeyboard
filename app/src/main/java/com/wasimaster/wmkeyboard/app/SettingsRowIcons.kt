@@ -1239,6 +1239,7 @@ internal object SettingsRowIcons {
         put(R.string.keypress_popup_group_title) { Icons.Outlined.Preview }
         put(R.string.keypress_shortcuts_group_title) { Icons.Outlined.Shortcut }
         put(R.string.languages_translit_hints_row_title) { Icons.Outlined.Translate }
+        put(R.string.languages_phonetic_guide_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.langemoji_emoji_panel_title) { Icons.Outlined.GridView }
         put(R.string.languages_cjk_double_pinyin_title) { Icons.Outlined.Keyboard }
         put(R.string.languages_cjk_region_title) { Icons.Outlined.Public }

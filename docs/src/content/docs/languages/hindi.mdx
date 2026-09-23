@@ -33,7 +33,41 @@ Every key is where it is on the English layout. What you type shows up as Devana
 | `roTi`, `paRhna` | रोटी, पढ़ना | capitals spell the retroflex letters exactly |
 | `Bahut` | बहुत | a capital that spells nothing reads as its lowercase self |
 
-The full letter table: `k kh g gh`, `ch chh j jh`, `T Th D Dh N`, `t th d dh n`, `p ph f b bh m`, `y r l v w`, `sh Sh s h`, `z` for ज़, `q`, `R` for ड़, `Rh` for ढ़, `x` for क्स, `ksh` for क्ष, `gy` for ज्ञ. Vowels are `a aa i ee u oo e ai o au`, and `A I U` are the long ones if you'd rather use shift than double the letter. `M` is ं, `H` is ः, `RRi` is ऋ.
+### Hindi phonetic key map
+
+Every key the rules read. The same tables are in the app, under **Key map** on Hindi's own screen (see [Options](#options)).
+
+**Vowels.** The first form is the letter on its own, the second the sign it becomes after a consonant. Shift gives the long vowels too, if you'd rather do that than double the letter.
+
+| Key | Letter | After a consonant |
+|---|---|---|
+| `a` | अ | nothing: the inherent vowel |
+| `aa`, `A` | आ | ा |
+| `i` | इ | ि |
+| `ee`, `ii`, `I` | ई | ी |
+| `u` | उ | ु |
+| `oo`, `uu`, `U` | ऊ | ू |
+| `e` | ए | े |
+| `ai` | ऐ | ै |
+| `o` | ओ | ो |
+| `au`, `ou` | औ | ौ |
+| `RRi` | ऋ | ृ |
+
+**Consonants.**
+
+| | | | | |
+|---|---|---|---|---|
+| `k` क | `kh` ख | `g` ग | `gh` घ | |
+| `ch`, `c` च | `chh` छ | `j` ज | `jh` झ | |
+| `T` ट | `Th` ठ | `D` ड | `Dh` ढ | `N` ण |
+| `t` त | `th` थ | `d` द | `dh` ध | `n` न |
+| `p` प | `ph`, `f` फ | `b` ब | `bh` भ | `m` म |
+| `y` य | `r` र | `l` ल | `v`, `w` व | |
+| `sh` श | `Sh` ष | `s` स | `h` ह | |
+| `z` ज़ | `q` क | `R` ड़ | `Rh` ढ़ | |
+| `ksh` क्ष | `gy`, `jn` ज्ञ | `x` क्स | | |
+
+**Signs.** `M` is ं (anusvara) and `H` is ः (visarga). You rarely need `M`: a nasal before the stop it belongs to is written as ं on its own, as `hindi` shows. A capital that isn't in these tables reads as its lowercase letter.
 
 ### Why Hindi is harder than it looks
 
@@ -73,6 +107,7 @@ Backspace inside a word you're still typing removes one Latin letter per press, 
 
 - **Layouts**: InScript, Hindi phonetic, and Remington (GAIL), one card each, turned on and off independently.
 - **Key hints**: <SettingsPath path="Languages & layouts / Hindi / Key hints / Show the letter each key types" />. Off, Added, or Whole letter. It puts the Devanagari a key is about to write in its corner. It's the same shared setting Bangla's Avro uses, and it shows only while a transliterating layout is active.
+- **Key map**: a folded group just below the hints while Hindi phonetic is on, with the same tables as the [key map](#hindi-phonetic-key-map) above. **Full guide** at the bottom, <SettingsPath path="Languages & layouts / Hindi / Key map / Full guide" />, opens this page in your browser.
 - **Spellings**: <SettingsPath path="Languages & layouts / Hindi / Spellings / Use known spellings" />, on by default. Switch it off for the letter-for-letter reading. Without a downloaded word list this leaves the rules on their own, so expect more wrong guesses.
 - **Also suggest from**: with English picked, the phonetic layout's strip also carries the word as you typed it in Latin letters, and an **English words** group appears right below: **Type English words as English** makes the space bar write `hello` as hello, and **Switch on the suggestion strip** shows or hides the small button that turns that on and off while you type. See [English on Avro and Hindi phonetic](/smart/mixed-language/#english-on-avro-and-hindi-phonetic).
 - **Numerals**: `०-९` or `0-9`.
