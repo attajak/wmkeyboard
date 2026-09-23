@@ -78,6 +78,7 @@ import com.wasimaster.wmkeyboard.core.settings.GlideLoopMinArcRange
 import com.wasimaster.wmkeyboard.core.settings.GlideLoopExtentRange
 import com.wasimaster.wmkeyboard.core.settings.GlideLoopRadiusRange
 import com.wasimaster.wmkeyboard.core.settings.GlideWiggleExtentRange
+import com.wasimaster.wmkeyboard.core.settings.GlideShapesPerWordRange
 import com.wasimaster.wmkeyboard.core.settings.GlideWiggleWeightRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerDwellMsRange
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerSensitivity
@@ -1784,6 +1785,21 @@ internal fun TypingGesturesSettings(
         if (settings.gestureTyping && settings.letterSwipeAction == LetterSwipeAction.TYPE_WORDS) {
             glideRadiusRows(settings, repository, scope)
             glideIntentRows(settings, repository, scope)
+            // How many ways of drawing one word the swipe style keeps apart
+            // (#326). Here rather than beside the switch because it is a number
+            // to measure with, not a choice most people need to make.
+            item(visible = settings.gesture.learnSwipeStyle) {
+                val numberFormat = stringResource(R.string.values_number)
+                SliderSetting(
+                    R.string.typing_glide_shapes_per_word_title,
+                    subtitle = stringResource(R.string.typing_glide_shapes_per_word_subtitle),
+                    value = settings.gesture.shapesPerWord.toFloat(),
+                    range = GlideShapesPerWordRange.first.toFloat()..GlideShapesPerWordRange.last.toFloat(),
+                    display = { numberFormat.format(it.roundToInt()) },
+                    info = stringResource(R.string.typing_glide_shapes_per_word_info),
+                    default = SettingsDefaults.gesture.shapesPerWord.toFloat(),
+                ) { scope.launch { repository.setGestureShapesPerWord(it.roundToInt()) } }
+            }
         }
     }
     SettingsGroup(stringResource(R.string.typing_group_glide_trail_title)) {

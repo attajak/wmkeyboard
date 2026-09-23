@@ -3403,6 +3403,7 @@ open class WMKeyboardService : InputMethodService() {
                 suggestionEngine?.adaptiveConfidence = settings.correction.adaptive
                 correctionStats.memory = settings.correction.undoMemory
                 glideOutcomes.applied = settings.gesture.learnSwipeStyle
+                glideShapes.setShapesPerWord(settings.gesture.shapesPerWord)
                 suggestionEngine?.reranker = resolveReranker(settings)
                 // The engine sees one flat set: the global list plus the list of
                 // the language being typed (#136). Re-pointed on every language
@@ -3642,7 +3643,9 @@ open class WMKeyboardService : InputMethodService() {
         glideRetryOffer = null
         undoneGlide = null
         suggestionEngine?.glideOutcomes = glideOutcomes
-        glideShapes = GlideShapeStore(store(GLIDE_SHAPES_FILE))
+        glideShapes = GlideShapeStore(store(GLIDE_SHAPES_FILE)).also {
+            it.setShapesPerWord(_uiState.value.settings.gesture.shapesPerWord)
+        }
         glideSandbox = GlideSandboxLadder(store(GLIDE_SANDBOX_FILE))
         sandboxOfferPolicy = null
         correctionStats = CorrectionStats(store("learning/correction_stats.json"))

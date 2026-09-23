@@ -266,6 +266,7 @@
   {"title":"Wiggle to double a letter","name":"typing_glide_wiggle_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Wiggle strength","name":"typing_glide_wiggle_strength_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Biggest wiggle that counts","name":"typing_glide_wiggle_extent_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
+  {"title":"Shapes kept per word","name":"typing_glide_shapes_per_word_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Trail width","name":"typing_trail_width_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Trail length","name":"typing_trail_length_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},
   {"title":"Trail opacity","name":"typing_trail_opacity_title","route":"typing/gestures","screens":["Typing","Gestures"],"screen":false},

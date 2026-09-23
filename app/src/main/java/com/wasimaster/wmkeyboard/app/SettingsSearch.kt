@@ -471,6 +471,7 @@ private fun SearchStrings.typingGesturesRows(): List<SettingsSearchEntry> {
             R.string.typing_glide_wiggle_strength_subtitle,
         ),
         row(R.string.typing_glide_wiggle_extent_title, R.string.typing_glide_wiggle_extent_subtitle),
+        row(R.string.typing_glide_shapes_per_word_title, R.string.typing_glide_shapes_per_word_subtitle),
         row(R.string.typing_trail_width_title, R.string.typing_trail_width_subtitle),
         row(R.string.typing_trail_length_title, R.string.typing_trail_length_subtitle),
         row(R.string.typing_trail_opacity_title),

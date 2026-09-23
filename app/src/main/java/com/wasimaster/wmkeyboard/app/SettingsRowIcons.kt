@@ -863,6 +863,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_glide_wiggle_title) { Icons.Outlined.Waves }
         put(R.string.typing_glide_wiggle_strength_title) { Icons.Outlined.LineWeight }
         put(R.string.typing_glide_wiggle_extent_title) { Icons.Outlined.Straighten }
+        put(R.string.typing_glide_shapes_per_word_title) { Icons.Outlined.Layers }
         put(R.string.typing_swipe_start_distance_title) { Icons.Outlined.Straighten }
         put(R.string.typing_trail_width_title) { Icons.Outlined.LineWeight }
         put(R.string.typing_trail_length_title) { Icons.Outlined.Timeline }

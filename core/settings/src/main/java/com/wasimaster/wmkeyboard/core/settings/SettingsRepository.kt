@@ -40,6 +40,7 @@ import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinScheme
 import com.wasimaster.wmkeyboard.core.input.composer.HanVariant
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinFuzzy
 import com.wasimaster.wmkeyboard.core.gesture.GlideBeam
+import com.wasimaster.wmkeyboard.core.gesture.GlideShapeStore
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.SuggestionEngine
@@ -5114,6 +5115,12 @@ val GlideWiggleExtentRange = 0.2f..0.9f
  */
 val GlideWiggleWeightRange = 0.1f..1f
 
+/**
+ * Bounds for [GestureSettings.shapesPerWord]. The top is the shape store's own
+ * ceiling, so a value the slider reaches is always one the store keeps.
+ */
+val GlideShapesPerWordRange = 1..GlideShapeStore.MAX_SHAPES_PER_WORD
+
 /** Glide-typing behaviour and swipe-trail appearance. See [KeyboardSettings.gesture]. */
 data class GestureSettings(
     /**
@@ -5473,6 +5480,15 @@ data class GestureSettings(
      * is learned and reads the keys as drawn.
      */
     val learnSwipeStyle: Boolean = true,
+    /**
+     * How many ways of drawing one word [learnSwipeStyle] keeps apart
+     * (#326). Three is what the store always kept; the ceiling is high on
+     * purpose, so a user can let it grow and see in a backup how many a hand
+     * really uses before the default is revisited. Lowering it hides the
+     * least-used extras from the decoder at once and drops them only when the
+     * word next learns a new way. Range [GlideShapesPerWordRange].
+     */
+    val shapesPerWord: Int = GlideShapeStore.DEFAULT_SHAPES_PER_WORD,
     /**
      * Offer the full search as a chip on the suggestion strip whenever the
      * caret lands inside a word a swipe wrote and whose path is still kept
@@ -6924,6 +6940,7 @@ class SettingsRepository(private val context: Context) {
         private val GESTURE_COMMIT_COLOR_SCOPE =
             stringPreferencesKey("gesture_commit_color_scope")
         private val GESTURE_LEARN_SWIPE_STYLE = booleanPreferencesKey("gesture_learn_swipe_style")
+        private val GESTURE_SHAPES_PER_WORD = intPreferencesKey("gesture_shapes_per_word")
         private val GESTURE_SEARCH_ALL_CHIP = booleanPreferencesKey("gesture_search_all_chip")
         private val GESTURE_SWIPE_STYLE_VERSION = intPreferencesKey("gesture_swipe_style_version")
         // Legacy boolean, read only to migrate into SPACE_LONG_SWIPE.
@@ -8134,6 +8151,8 @@ class SettingsRepository(private val context: Context) {
                 wiggleExtent = p[GESTURE_WIGGLE_EXTENT] ?: defaults.gesture.wiggleExtent,
                 wiggleWeight = p[GESTURE_WIGGLE_WEIGHT] ?: defaults.gesture.wiggleWeight,
                 learnSwipeStyle = p[GESTURE_LEARN_SWIPE_STYLE] ?: defaults.gesture.learnSwipeStyle,
+                shapesPerWord = (p[GESTURE_SHAPES_PER_WORD] ?: defaults.gesture.shapesPerWord)
+                    .coerceIn(GlideShapesPerWordRange),
                 searchAllChip = p[GESTURE_SEARCH_ALL_CHIP] ?: defaults.gesture.searchAllChip,
                 swipeStyleVersion = p[GESTURE_SWIPE_STYLE_VERSION] ?: defaults.gesture.swipeStyleVersion,
             ),
@@ -11699,7 +11718,8 @@ class SettingsRepository(private val context: Context) {
      * Embedded verbatim the way every other file-backed section is, so this
      * repository never has to model a shape store's internals. Bounded without
      * a cap of its own: the shapes file is the big one, and it holds at most
-     * `GlideShapeStore.MAX_WORDS` words of a few hundred bytes each.
+     * `GlideShapeStore.MAX_WORDS` words of a few hundred bytes each at the
+     * default three shapes a word, about 2 KB at the most a user can ask for.
      */
     private fun swipeSection(): JsonElement? {
         val parts = SWIPE_SECTION_KEYS.mapNotNull { (key, path) ->
@@ -12891,6 +12911,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGestureLearnSwipeStyle(value: Boolean) =
         editPrefs { it[GESTURE_LEARN_SWIPE_STYLE] = value }
+
+    /** @see GestureSettings.shapesPerWord */
+    suspend fun setGestureShapesPerWord(value: Int) =
+        editPrefs { it[GESTURE_SHAPES_PER_WORD] = value.coerceIn(GlideShapesPerWordRange) }
 
     suspend fun setGestureSearchAllChip(value: Boolean) =
         editPrefs { it[GESTURE_SEARCH_ALL_CHIP] = value }

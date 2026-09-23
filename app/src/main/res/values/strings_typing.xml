@@ -9,7 +9,7 @@
     <string name="typing_group_gestures_title">Gestures</string>
     <string name="typing_group_glide_title">Glide typing</string>
     <string name="typing_group_glide_tuning_title">Advanced tuning</string>
-    <string name="typing_group_glide_tuning_summary">Error radius, pause, loop and wiggle</string>
+    <string name="typing_group_glide_tuning_summary">Error radius, pause, loop, wiggle and shapes per word</string>
     <string name="typing_group_glide_tuning_info">These values are how the keyboard reads a glide: how near the keys your finger has to go for a word to be offered at all, and what tells it that you wrote a letter twice. They ship at the values the keyboard was measured with. Move one, glide a few sentences, and press the reset on the row if it was worse. Nothing here can break the keyboard.</string>
     <string name="typing_group_glide_trail_title">Glide trail and preview</string>
     <string name="typing_group_spacebar_title">Spacebar gestures</string>
@@ -562,6 +562,9 @@
 
     <string name="typing_glide_wiggle_extent_title">Biggest wiggle that counts</string>
     <string name="typing_glide_wiggle_extent_subtitle">How far the finger can go in a rub</string>
+    <string name="typing_glide_shapes_per_word_title">Shapes kept per word</string>
+    <string name="typing_glide_shapes_per_word_subtitle">How many ways of swiping one word are remembered</string>
+    <string name="typing_glide_shapes_per_word_info">Learn my swipe style keeps your own shapes for each word you swipe, and a swipe is read against the nearest of them. Swipe a word the same way and the shape settles in; swipe it a clearly different way and that is kept as another shape, up to this many, the least used making room. Raise it if you swipe some words several different ways and the keyboard keeps forgetting one of them. The shapes travel in a backup under Swipe style, so you can see how many your words really use. Lowering it takes the extras out of use at once, and they are only deleted when that word next learns a new shape. Used only while Learn my swipe style is on.</string>
     <string name="typing_glide_wiggle_extent_info">Measured in key widths. Keep this under the width of one key, or a word that goes from one key to the key next door and back reads as one letter written twice. Used only while the switch above is on.</string>
 
     <string name="typing_swipe_start_distance_title">Swipe start distance</string>

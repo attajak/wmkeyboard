@@ -53,7 +53,7 @@ class GlideShapeStoreTest {
         // And a fourth distinct shape replaces the least accepted.
         store.learn(GlideShapeSample(layout, near(base, 80)), "hello")
         store.learn(GlideShapeSample(layout, near(base, -60)), "hello")
-        assertEquals(GlideShapeStore.MAX_SHAPES_PER_WORD, store.countFor("hello"))
+        assertEquals(GlideShapeStore.DEFAULT_SHAPES_PER_WORD, store.countFor("hello"))
     }
 
     @Test
@@ -141,7 +141,7 @@ class GlideShapeStoreTest {
         for (step in 1..10) store.learn(GlideShapeSample(layout, flat(step * 8)), "can")
 
         val source = store.forLayout(layout) ?: error("no source")
-        assertEquals(GlideShapeStore.MAX_SHAPES_PER_WORD, store.countFor("can"))
+        assertEquals(GlideShapeStore.DEFAULT_SHAPES_PER_WORD, store.countFor("can"))
         assertTrue(
             "the way the hand stopped drawing must have given up its slot",
             source.minDistance("can", settled) > 0f,
@@ -172,6 +172,37 @@ class GlideShapeStoreTest {
             1e-6f,
         )
         assertTrue("and must actually have moved toward it", settledThenDrifted(true) < flatDistance(3))
+    }
+
+    @Test
+    fun `the number of ways kept per word is the user's, and lowering it loses nothing until a new way arrives`() {
+        val store = GlideShapeStore(null)
+        store.setShapesPerWord(5)
+        // One way drawn four times, then four more far enough apart to be kept apart.
+        repeat(4) { store.learn(GlideShapeSample(layout, flat(0)), "can") }
+        for (away in listOf(40, 80, -40, -80)) store.learn(GlideShapeSample(layout, flat(away)), "can")
+        assertEquals(5, store.countFor("can"))
+
+        // Lowered, the decoder reads only the most accepted...
+        store.setShapesPerWord(2)
+        assertEquals(2, store.countFor("can"))
+        assertEquals(0f, store.forLayout(layout)!!.minDistance("can", flat(0)), 1e-6f)
+        // ...and raised again before anything new is learned, the rest come back (#326).
+        store.setShapesPerWord(5)
+        assertEquals(5, store.countFor("can"))
+
+        // A new way of drawing it under the lower limit is what finally drops them.
+        store.setShapesPerWord(2)
+        store.learn(GlideShapeSample(layout, flat(120)), "can")
+        store.setShapesPerWord(5)
+        assertEquals(2, store.countFor("can"))
+        val source = store.forLayout(layout)!!
+        assertEquals(0f, source.minDistance("can", flat(0)), 1e-6f)
+        assertEquals(0f, source.minDistance("can", flat(120)), 1e-6f)
+
+        // Clamped to what the store can keep.
+        store.setShapesPerWord(0)
+        assertEquals(1, store.countFor("can"))
     }
 
     /** How far [away] quantised units on every coordinate is, in the store's units. */

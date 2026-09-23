@@ -57,9 +57,10 @@ class GlideShapeSample(val layoutKey: Long, val shape: ByteArray)
  * **Accept and reject counts per shape.** A settle finds the nearest stored
  * shape of the word: within [MERGE_RADIUS] it blends in and counts an
  * acceptance, further off it is a new way of drawing the word and is added,
- * up to [MAX_SHAPES_PER_WORD], the least-accepted making room. A glide the
- * user undoes or replaces marks the shape that matched it rejected, and a
- * shape rejected more often than accepted goes.
+ * up to the user's limit ([setShapesPerWord], three unless they moved it),
+ * the least-accepted making room. A glide the user undoes or replaces marks
+ * the shape that matched it rejected, and a shape rejected more often than
+ * accepted goes.
  *
  * Bounded at [MAX_WORDS] words across every layout, the longest untouched
  * evicted. Persisted as JSON in the learning directory beside the lexicon;
@@ -125,12 +126,33 @@ class GlideShapeStore(private val storageFile: File?) {
     @Volatile
     private var published: Map<Long, LayoutShapes> = emptyMap()
 
+    /** How many ways of drawing one word are kept apart. See [setShapesPerWord]. */
+    private var shapeLimit = DEFAULT_SHAPES_PER_WORD
+
     init {
         load()
     }
 
     /** The shapes stored for one layout, for the decoder; null when it has none. */
     fun forLayout(layoutKey: Long): GlideShapeSource? = published[layoutKey]
+
+    /**
+     * How many ways of drawing one word to keep apart (#326), clamped to
+     * 1..[MAX_SHAPES_PER_WORD].
+     *
+     * Lowering it takes the least-accepted extras away from the decoder at
+     * once, but drops them from the store only when that word next learns a
+     * new way of being drawn. Until then raising it again brings them back,
+     * so a slider dragged down and up again, or a settings emit that arrives
+     * with the default before the user's value, loses nothing.
+     */
+    @Synchronized
+    fun setShapesPerWord(limit: Int) {
+        val clamped = limit.coerceIn(1, MAX_SHAPES_PER_WORD)
+        if (clamped == shapeLimit) return
+        shapeLimit = clamped
+        publish()
+    }
 
     /**
      * A settled glide of [word] drawn as [sample]: blends into the nearest
@@ -143,14 +165,14 @@ class GlideShapeStore(private val storageFile: File?) {
         if (key.isEmpty() || sample.shape.size != POINTS) return
         tick++
         val words = layouts.getOrPut(sample.layoutKey) { HashMap() }
-        val entry = words.getOrPut(key) { Entry(tick, ArrayList(MAX_SHAPES_PER_WORD)) }
+        val entry = words.getOrPut(key) { Entry(tick, ArrayList(shapeLimit)) }
         entry.tick = tick
         val nearest = nearest(entry, sample.shape)
         if (nearest != null && distance(nearest.points, sample.shape, MERGE_RADIUS) <= MERGE_RADIUS) {
             blend(nearest, sample.shape)
             nearest.accepted++
         } else {
-            if (entry.shapes.size >= MAX_SHAPES_PER_WORD) {
+            if (entry.shapes.size >= shapeLimit) {
                 // A new way of drawing a word always arrives at one acceptance,
                 // so a plain count leaves an established shape unbeatable: it
                 // evicts each newcomer in turn, and a hand that has changed can
@@ -159,7 +181,11 @@ class GlideShapeStore(private val storageFile: File?) {
                 // its lead by being accepted again; one the user has stopped
                 // drawing halves away and gives up the slot in a few sightings.
                 for (shape in entry.shapes) shape.accepted = (shape.accepted + 1) / 2
-                entry.shapes.remove(entry.shapes.minByOrNull { it.accepted - it.rejected })
+                // More than one goes when the limit was lowered since this word
+                // last learned something new.
+                while (entry.shapes.size >= shapeLimit) {
+                    entry.shapes.remove(entry.shapes.minByOrNull { it.accepted - it.rejected })
+                }
             }
             entry.shapes.add(Shape(sample.shape.copyOf(), 1, 0))
         }
@@ -205,12 +231,12 @@ class GlideShapeStore(private val storageFile: File?) {
         return any
     }
 
-    /** How many shapes [word] has stored, across every layout. */
+    /** How many shapes [word] has that the decoder reads, across every layout. */
     @Synchronized
     fun countFor(word: String): Int {
         val key = WordKey.of(word)
         var count = 0
-        for (words in layouts.values) count += words[key]?.shapes?.size ?: 0
+        for (words in layouts.values) count += minOf(words[key]?.shapes?.size ?: 0, shapeLimit)
         return count
     }
 
@@ -332,8 +358,9 @@ class GlideShapeStore(private val storageFile: File?) {
                 val shapeList = ArrayList<ByteArray>()
                 val byWord = HashMap<String, IntArray>(words.size * 2)
                 for ((word, entry) in words) {
-                    val indices = IntArray(entry.shapes.size)
-                    for ((i, shape) in entry.shapes.withIndex()) {
+                    val kept = readable(entry.shapes)
+                    val indices = IntArray(kept.size)
+                    for ((i, shape) in kept.withIndex()) {
                         indices[i] = shapeList.size
                         wordList.add(word)
                         shapeList.add(shape.points.copyOf())
@@ -344,6 +371,14 @@ class GlideShapeStore(private val storageFile: File?) {
             }
         }
     }
+
+    /** The [shapeLimit] most-accepted of [shapes], or all of them when they fit. */
+    private fun readable(shapes: List<Shape>): List<Shape> =
+        if (shapes.size <= shapeLimit) {
+            shapes
+        } else {
+            shapes.sortedByDescending { it.accepted - it.rejected }.take(shapeLimit)
+        }
 
     private fun load() {
         val file = storageFile ?: return
@@ -358,7 +393,7 @@ class GlideShapeStore(private val storageFile: File?) {
                 for ((word, stored) in words) {
                     val key = WordKey.of(word)
                     if (key.isEmpty()) continue
-                    val shapes = ArrayList<Shape>(MAX_SHAPES_PER_WORD)
+                    val shapes = ArrayList<Shape>(minOf(stored.s.size, MAX_SHAPES_PER_WORD))
                     for (s in stored.s) {
                         val points = s.p.fromHex() ?: continue
                         if (points.size != POINTS || s.a <= 0) continue
@@ -387,8 +422,15 @@ class GlideShapeStore(private val storageFile: File?) {
         /** Words kept across every layout; the longest untouched goes first. */
         const val MAX_WORDS = 1000
 
-        /** Ways of drawing one word that are kept apart. */
-        const val MAX_SHAPES_PER_WORD = 3
+        /** Ways of drawing one word that are kept apart, unless the user sets another number. */
+        const val DEFAULT_SHAPES_PER_WORD = 3
+
+        /**
+         * Most ways of drawing one word the user can ask to keep (#326). Set
+         * high on purpose, so a backup can show how many a hand really uses.
+         * A full store at this is 1000 words of about 2 KB each.
+         */
+        const val MAX_SHAPES_PER_WORD = 20
 
         /**
          * Deepest the running mean behind a stored shape ever gets: past this
