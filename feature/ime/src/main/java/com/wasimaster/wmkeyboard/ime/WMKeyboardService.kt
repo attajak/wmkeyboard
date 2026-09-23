@@ -854,6 +854,8 @@ open class WMKeyboardService : InputMethodService() {
     private var clipboardSuggestionJob: Job? = null
     /** Expiry timer for the one-time-code chip (see [maybeShowOtpSuggestion]). */
     private var otpSuggestionJob: Job? = null
+    /** How long the clipboard panel's Undo bar stays up (see [onClipboardDelete]). */
+    private var clipUndoJob: Job? = null
 
     /**
      * The character-by-character run that types a code (see
@@ -28503,10 +28505,73 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
     }
 
+    /**
+     * Deletes a clip from the panel, by its bin or a swipe. With
+     * `undoDelete` on (the default) the clip is only detached, and an Undo
+     * bar offers it back for a few seconds (#327): a swipe is easy to make by
+     * accident while scrolling, and it has no confirmation.
+     *
+     * The history on disk drops the clip at once either way. Only an image's
+     * file waits for the bar to go, so a crash in between loses the clip, as
+     * a delete should, and the next start sweeps the file up as an orphan.
+     */
     fun onClipboardDelete(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
-        clipboardStore.remove(item.id)
+        if (!_uiState.value.settings.clipboard.undoDelete) {
+            clipboardStore.remove(item.id)
+            clipboardStore.save()
+            _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
+            return
+        }
+        val removed = clipboardStore.detach(item.id) ?: return
         clipboardStore.save()
-        _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
+        _uiState.update { state ->
+            state.copy(
+                clipboardItems = clipboardStore.items(),
+                clipboardUndo = ClipUndo(state.clipboardUndo?.items.orEmpty() + removed),
+            )
+        }
+        // Each delete restarts the clock: the bar is about the latest one.
+        clipUndoJob?.cancel()
+        clipUndoJob = serviceScope.launch {
+            delay(clipUndoTimeoutMillis())
+            clipUndoJob = null
+            endClipUndo()
+        }
+    }
+
+    /** The Undo bar's button: every clip it holds goes back where it was. */
+    fun onClipboardUndoDelete() {
+        val undo = _uiState.value.clipboardUndo ?: return
+        clipUndoJob?.cancel()
+        clipUndoJob = null
+        vibrate()
+        undo.items.forEach { clipboardStore.reattach(it) }
+        clipboardStore.save()
+        _uiState.update { it.copy(clipboardItems = clipboardStore.items(), clipboardUndo = null) }
+    }
+
+    /** The Undo bar's time is up: its clips are gone for good, image files included. */
+    private fun endClipUndo() {
+        val undo = _uiState.value.clipboardUndo ?: return
+        undo.items.forEach(clipboardStore::discard)
+        _uiState.update { it.copy(clipboardUndo = null) }
+    }
+
+    /**
+     * Five seconds, or longer when the user has asked Android for more time
+     * to act on controls that go away by themselves (Accessibility → Time to
+     * take action), which is the setting a snackbar is meant to honour.
+     */
+    private fun clipUndoTimeoutMillis(): Long {
+        val base = CLIP_UNDO_TIMEOUT_MS
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return base.toLong()
+        val a11y = getSystemService(android.view.accessibility.AccessibilityManager::class.java)
+            ?: return base.toLong()
+        return a11y.getRecommendedTimeoutMillis(
+            base,
+            android.view.accessibility.AccessibilityManager.FLAG_CONTENT_TEXT or
+                android.view.accessibility.AccessibilityManager.FLAG_CONTENT_CONTROLS,
+        ).toLong()
     }
 
     /**
@@ -28519,6 +28584,7 @@ open class WMKeyboardService : InputMethodService() {
         onEditSave = ::onClipEditSave,
         onEditCancel = ::onClipEditCancel,
         onViewToggle = ::onClipboardViewToggle,
+        onUndoDelete = ::onClipboardUndoDelete,
     )
 
     /** The panel's grid / list switch: the same setting the settings screen writes. */
@@ -30942,6 +31008,9 @@ open class WMKeyboardService : InputMethodService() {
         /** Only the shipped default now; the live value is a setting. */
         @Suppress("unused")
         private const val CLIPBOARD_SUGGESTION_TIMEOUT_MS = 5L * 60 * 1000
+
+        /** The clipboard panel's Undo bar, before accessibility asks for longer. */
+        private const val CLIP_UNDO_TIMEOUT_MS = 5_000
         /**
          * Gap between the characters of a code typed into the field (see
          * [commitCodeToField]). Long enough for a form to move the focus to its

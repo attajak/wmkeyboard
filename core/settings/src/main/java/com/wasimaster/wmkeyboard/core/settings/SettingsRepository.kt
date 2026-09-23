@@ -4874,6 +4874,13 @@ data class ClipboardSettings(
      * Off by default.
      */
     val showNumbers: Boolean = false,
+    /**
+     * Offer an Undo bar for a few seconds after a clip is deleted from the
+     * panel (#327). A swipe deletes with no confirmation, and one made while
+     * scrolling is easy to make by accident. On by default: it only shows up
+     * when something was just deleted.
+     */
+    val undoDelete: Boolean = true,
 )
 
 /**
@@ -7165,6 +7172,7 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_FULL_BLEED = booleanPreferencesKey("clipboard_full_bleed")
         private val CLIPBOARD_VIEW = stringPreferencesKey("clipboard_view")
         private val CLIPBOARD_SHOW_NUMBERS = booleanPreferencesKey("clipboard_show_numbers")
+        private val CLIPBOARD_UNDO_DELETE = booleanPreferencesKey("clipboard_undo_delete")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
         // field" to "code box", but a user who turned it on meant the same
@@ -8320,6 +8328,7 @@ class SettingsRepository(private val context: Context) {
                     ?.let { runCatching { ClipboardView.valueOf(it) }.getOrNull() }
                     ?: defaults.clipboard.view,
                 showNumbers = p[CLIPBOARD_SHOW_NUMBERS] ?: defaults.clipboard.showNumbers,
+                undoDelete = p[CLIPBOARD_UNDO_DELETE] ?: defaults.clipboard.undoDelete,
             ),
             otp = OtpSettings(
                 enabled = p[OTP_CHIP_ENABLED] ?: defaults.otp.enabled,
@@ -13709,6 +13718,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardShowNumbers(value: Boolean) =
         editPrefs { it[CLIPBOARD_SHOW_NUMBERS] = value }
+
+    suspend fun setClipboardUndoDelete(value: Boolean) =
+        editPrefs { it[CLIPBOARD_UNDO_DELETE] = value }
 
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }

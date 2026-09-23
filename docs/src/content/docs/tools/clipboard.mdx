@@ -43,7 +43,7 @@ An edited clip keeps its place in the history, its number, its pin and its age, 
 
 Images, files, folders and videos have no text to edit, so their popup has no **Edit**. Neither does a [hidden password or code](#passwords-are-handled-deliberately): the panel never shows its text, and an editor would. Editing only changes the history. What's on the system clipboard stays as it was.
 
-Every card carries two small circles along its bottom edge: a pin and a delete. Tap the pin to keep a clip out of reach of the expiry and the entry cap. Tap the bin to drop it. Swiping a card left or right until it slides off deletes it too, and a swipe has no confirmation and no undo, so a stray one is permanent.
+Every card carries two small circles along its bottom edge: a pin and a delete. Tap the pin to keep a clip out of reach of the expiry and the entry cap. Tap the bin to drop it. Swiping a card left or right until it slides off deletes it too. Neither asks first, so a bar pops up at the bottom of the panel for five seconds saying **Clip deleted**, with an **Undo** button that puts the clip back in the spot it had, pin and all. Delete a few more while the bar is up and it counts them ("3 clips deleted"), and one Undo brings back the lot. If you've asked Android for more time under Accessibility, **Time to take action**, the bar stays up that long instead. Once it's gone the delete is for good. Don't want the bar? Turn off **Undo a deleted clip** under [Options](#options).
 
 To see a clip's info popup instead, press and hold its card. The popup gives the time it was copied, its type and size, and (if [source tracking](#options) is on) the app it came from. An image clip gets one extra line there: **Send as sticker**, which runs the picture through the sticker processor before it goes.
 
@@ -134,6 +134,7 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Full-screen clipboard panel**: on by default, so this is what the panel does unless you say otherwise. The history takes the whole keyboard, and a slim back header stands in for the toolbar, the emoji row and the symbol row. Picking the right clip gets easier the more of them are on screen, which is why that trade is the default. Start a search and the panel drops back to its compact size so the keys fit underneath. Turn it off to keep the toolbar visible while the panel is open.
 - **History layout**: **Grid** (default) or **List**, the same choice as the [switch in the panel](#grid-or-list).
 - **Number the clips**: puts a [number](#numbered-clips) beside every clip; off by default.
+- **Undo a deleted clip**: shows the Undo bar for a few seconds after you delete a clip with the bin or a swipe; on by default. Off, a delete is immediate and final.
 - **Pinned entries last**: moves pinned clips to the end of the panel instead of the top; off by default.
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.
 - **Detect codes, numbers and links**: enables the [entity chips](#pulling-codes-and-links-out-of-a-clip); on by default. Detection runs entirely on the device.

@@ -1,9 +1,14 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -49,6 +54,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -58,9 +64,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -80,6 +90,7 @@ import com.wasimaster.wmkeyboard.core.clipboard.matchesQuery
 import com.wasimaster.wmkeyboard.core.layout.PanelFieldKind
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
 import com.wasimaster.wmkeyboard.ime.ClipEdit
+import com.wasimaster.wmkeyboard.ime.ClipUndo
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
@@ -106,6 +117,8 @@ data class ClipboardPanelActions(
     val onEditCancel: () -> Unit = {},
     /** Flip the history between the two-column grid and the one-per-row list. */
     val onViewToggle: () -> Unit = {},
+    /** The Undo bar's button: put back the clips just deleted (#327). */
+    val onUndoDelete: () -> Unit = {},
 )
 
 /** Everything the clipboard components call back into the service with. */
@@ -247,6 +260,87 @@ private fun ClipboardEntitiesField(
 }
 
 /**
+ * The history, with the Undo bar over its bottom edge after a delete. The bar
+ * sits on the history rather than in a cell of its own so it is there however
+ * the panel layout is arranged, and in the search panel too, and it outlives
+ * the last clip: deleting that one is when the empty placeholder shows.
+ */
+@Composable
+private fun ClipboardListField(
+    state: KeyboardUiState,
+    session: ClipboardPanelSession,
+    callbacks: ClipboardFieldCallbacks,
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        ClipboardHistory(state, session, callbacks)
+        ClipUndoBar(
+            undo = state.clipboardUndo,
+            reduceMotion = state.settings.reduceMotion,
+            onUndo = callbacks.actions.onUndoDelete,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 10.dp, vertical = 8.dp),
+        )
+    }
+}
+
+/**
+ * "Clip deleted · Undo", in the keyboard's popup style. A snackbar in all but
+ * name: Compose's own needs a Scaffold, and a keyboard panel has none.
+ *
+ * It keeps the count it last showed while it slides away, so the text does
+ * not blank out under the exit animation once the service clears the state.
+ */
+@Composable
+private fun ClipUndoBar(
+    undo: ClipUndo?,
+    reduceMotion: Boolean,
+    onUndo: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var lastCount by remember { mutableIntStateOf(1) }
+    if (undo != null) lastCount = undo.items.size
+    AnimatedVisibility(
+        visible = undo != null,
+        modifier = modifier,
+        enter = if (reduceMotion) fadeIn(tween(0)) else slideInVertically(tween(180)) { it } + fadeIn(tween(180)),
+        exit = if (reduceMotion) fadeOut(tween(0)) else slideOutVertically(tween(160)) { it } + fadeOut(tween(160)),
+    ) {
+        val kb = LocalKbTheme.current
+        Surface(
+            shape = kb.menuShape(),
+            color = kb.popup,
+            border = kb.popupSurfaceBorder(),
+            shadowElevation = elevationFor(kb.menuShapeKind, 6.dp),
+            modifier = Modifier
+                .widthIn(max = 420.dp)
+                .semantics { liveRegion = LiveRegionMode.Polite },
+        ) {
+            Row(
+                modifier = Modifier.padding(start = 14.dp, end = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    pluralStringResource(R.plurals.ime_clip_deleted, lastCount, lastCount),
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = kb.popupText,
+                    modifier = Modifier.weight(1f, fill = false),
+                )
+                Spacer(Modifier.width(12.dp))
+                TextButton(onClick = onUndo) {
+                    Text(
+                        stringResource(R.string.ime_clip_undo_delete),
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/**
  * The history — two columns of cards packed independently, or one clip per
  * row — with the empty and no-match placeholders where the clips would be.
  *
@@ -255,7 +349,7 @@ private fun ClipboardEntitiesField(
  * animations, and the focus ring moves the way the clips are drawn.
  */
 @Composable
-private fun ClipboardListField(
+private fun ClipboardHistory(
     state: KeyboardUiState,
     session: ClipboardPanelSession,
     callbacks: ClipboardFieldCallbacks,
@@ -295,7 +389,14 @@ private fun ClipboardListField(
         state = gridState,
         columns = StaggeredGridCells.Fixed(columns),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(6.dp),
+        // Room under the last clips for the Undo bar while it is up, so the
+        // bottom row can still be scrolled clear of it.
+        contentPadding = PaddingValues(
+            start = 6.dp,
+            top = 6.dp,
+            end = 6.dp,
+            bottom = if (state.clipboardUndo != null) UndoBarClearance else 6.dp,
+        ),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalItemSpacing = 6.dp,
     ) {
@@ -588,6 +689,9 @@ private fun ClipRow(item: ClipItem, number: Int?, focused: Boolean, callbacks: C
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { ClipActions(item, callbacks) }
     }
 }
+
+/** The history's bottom padding while the Undo bar covers its last few dp. */
+private val UndoBarClearance = 64.dp
 
 /** How big a picture is drawn in a list row. */
 private val ListThumbnailWidth = 96.dp

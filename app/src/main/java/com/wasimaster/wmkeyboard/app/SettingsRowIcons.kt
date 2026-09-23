@@ -934,6 +934,7 @@ internal object SettingsRowIcons {
         put(R.string.clipboard_full_bleed_title) { Icons.Outlined.Fullscreen }
         put(R.string.clipboard_view_title) { Icons.Outlined.GridView }
         put(R.string.clipboard_numbers_title) { Icons.Outlined.FormatListNumbered }
+        put(R.string.clipboard_undo_delete_title) { Icons.AutoMirrored.Outlined.Undo }
         put(R.string.clipboard_pinned_last_title) { Icons.Outlined.PushPin }
         put(R.string.clipboard_search_title) { Icons.Outlined.Search }
         put(R.string.clipboard_password_paste_title) { Icons.Outlined.Password }

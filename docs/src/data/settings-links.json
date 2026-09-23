@@ -513,6 +513,7 @@
   {"title":"Full-screen clipboard panel","name":"clipboard_full_bleed_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"History layout","name":"clipboard_view_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Number the clips","name":"clipboard_numbers_title","route":"clipboard","screens":["Clipboard"],"screen":false},
+  {"title":"Undo a deleted clip","name":"clipboard_undo_delete_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Pinned entries last","name":"clipboard_pinned_last_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Search bar","name":"clipboard_search_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Detect codes, numbers and links","name":"clipboard_entities_title","route":"clipboard","screens":["Clipboard"],"screen":false},

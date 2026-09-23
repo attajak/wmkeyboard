@@ -2026,6 +2026,15 @@ data class ClipEdit(
 }
 
 /**
+ * The clipboard panel's Undo bar after a delete (#327): the clips it would put
+ * back, oldest delete first. Deleting another clip while the bar is up joins
+ * it, so one Undo reverses a quick run of swipes rather than only the last.
+ * The clips are held detached in the store until the bar goes (see
+ * `ClipboardStore.detach`).
+ */
+data class ClipUndo(val items: List<ClipItem>)
+
+/**
  * The word card's spelling editor (#138): the word being respelled, and what
  * the keys have made of it so far.
  *
@@ -2606,6 +2615,8 @@ data class KeyboardUiState(
     val clipboardSearchActive: Boolean = false,
     /** The clip open in the clipboard panel's editor; see [clipEditActive]. */
     val clipEdit: ClipEdit? = null,
+    /** The clipboard panel's Undo bar, while a delete can still be taken back. */
+    val clipboardUndo: ClipUndo? = null,
     /**
      * Most recently copied text, offered as a paste chip on the suggestion strip
      * (Gboard style). Null when nothing recent, the chip expired, was dismissed,

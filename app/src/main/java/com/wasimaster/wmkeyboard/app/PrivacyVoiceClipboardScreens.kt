@@ -754,6 +754,15 @@ internal fun ClipboardSettings(
         }
         item {
             ToggleSetting(
+                R.string.clipboard_undo_delete_title,
+                stringResource(R.string.clipboard_undo_delete_subtitle),
+                settings.clipboard.undoDelete,
+                info = stringResource(R.string.clipboard_undo_delete_info),
+                default = SettingsDefaults.clipboard.undoDelete,
+            ) { scope.launch { repository.setClipboardUndoDelete(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.clipboard_search_title,
                 stringResource(R.string.clipboard_search_subtitle),
                 settings.clipboard.search,

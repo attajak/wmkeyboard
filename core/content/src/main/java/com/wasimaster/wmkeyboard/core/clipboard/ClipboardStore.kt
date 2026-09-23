@@ -184,6 +184,13 @@ class ClipboardStore(
     private data class Snapshot(val items: List<ClipItem> = emptyList())
 
     private val items = ArrayList<ClipItem>()
+    /**
+     * Clips taken out by [detach] whose Undo is still on offer. They are gone
+     * from [items], so nothing lists, caps or expires them, but an image clip
+     * keeps its file until [discard]: deleting it at once would leave Undo
+     * nothing to put back.
+     */
+    private val detached = ArrayList<ClipItem>()
     private val json = Json { ignoreUnknownKeys = true }
     private var nextId = 1L
 
@@ -225,12 +232,16 @@ class ClipboardStore(
                         }
                     }
                 )
-                nextId = (items.maxOfOrNull { it.id } ?: 0L) + 1
             }
         }
+        // A clip waiting on its Undo still owns its id, or a new clip could
+        // take it and Undo would put back two clips with one id.
+        nextId = ((items + detached).maxOfOrNull { it.id } ?: 0L) + 1
         // Image files whose item is gone (crash between file copy and save).
+        // A detached clip's file is not an orphan yet: Undo may still want it.
+        // One left behind by a process death is swept on the next start.
         imagesDir?.listFiles()?.let { files ->
-            val referenced = items.mapNotNull { it.imagePath }.toSet()
+            val referenced = (items + detached).mapNotNull { it.imagePath }.toSet()
             files.filter { it.absolutePath !in referenced }.forEach { it.delete() }
         }
     }
@@ -488,6 +499,58 @@ class ClipboardStore(
     @Synchronized
     fun remove(id: Long) {
         removeWhere { it.id == id }
+    }
+
+    /**
+     * Takes a clip out of the history the way [remove] does, but keeps an
+     * image clip's file, so [reattach] can put the clip back whole. Every
+     * detached clip ends in exactly one of [reattach] or [discard].
+     *
+     * Returns the clip as it was, or null when there is no such clip.
+     */
+    @Synchronized
+    fun detach(id: Long): ClipItem? {
+        val item = items.firstOrNull { it.id == id } ?: return null
+        items.remove(item)
+        detached.add(item)
+        return item
+    }
+
+    /**
+     * Undoes a [detach]: the clip goes back with its id, pin and timestamp,
+     * so it lands in the slot it left rather than at the top.
+     *
+     * Not when the same text or file was copied again in the meantime: that
+     * copy already stands where the clip would, and copying the same thing
+     * twice never makes two entries. Expiry and the entry cap still apply, so
+     * a clip that ran out while it was away does not come back.
+     *
+     * Returns the clip as stored, or null when it was not put back.
+     */
+    @Synchronized
+    fun reattach(item: ClipItem, now: Long = System.currentTimeMillis()): ClipItem? {
+        val held = detached.firstOrNull { it.id == item.id } ?: return null
+        detached.remove(held)
+        val copiedAgain = items.any {
+            (held.kind.isTextual && it.kind.isTextual && it.text == held.text) ||
+                (held.uriString != null && it.uriString == held.uriString)
+        }
+        if (copiedAgain || (held.kind == ClipKind.IMAGE && held.imagePath?.let { File(it).exists() } != true)) {
+            held.imagePath?.let { File(it).delete() }
+            return null
+        }
+        val restored = if (items.any { it.id == held.id }) held.copy(id = nextId++) else held
+        items.add(restored)
+        prune(now)
+        return restored.takeIf { items.contains(it) }
+    }
+
+    /** Ends a [detach] for good: an image clip's file is deleted now. */
+    @Synchronized
+    fun discard(item: ClipItem) {
+        val held = detached.firstOrNull { it.id == item.id } ?: return
+        detached.remove(held)
+        held.imagePath?.let { File(it).delete() }
     }
 
     @Synchronized

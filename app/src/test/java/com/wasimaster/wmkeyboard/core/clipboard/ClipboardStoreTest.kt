@@ -259,6 +259,71 @@ class ClipboardStoreTest {
         assertFalse(orphan.exists())
     }
 
+    @Test fun reattachPutsAClipBackInItsOwnSlot() {
+        val store = ClipboardStore(null, expiryMillis = 0)
+        store.add("a", now = 1000)
+        val b = store.add("b", now = 2000)!!
+        store.setPinned(b.id, true)
+        store.add("c", now = 3000)
+        val removed = store.detach(b.id)!!
+        assertEquals(listOf("c", "a"), store.items(now = 4000).map { it.text })
+        val back = store.reattach(removed, now = 4000)!!
+        assertEquals(b.id, back.id)
+        assertTrue(back.pinned)
+        assertEquals(listOf("b", "c", "a"), store.items(now = 4000).map { it.text })
+        // Undo is spent: a second one finds nothing to put back.
+        assertNull(store.reattach(removed, now = 4000))
+    }
+
+    @Test fun detachedImageKeepsItsFileUntilDiscarded() {
+        val dir = Files.createTempDirectory("clips").toFile()
+        val store = ClipboardStore(null, expiryMillis = 0, imagesDir = dir)
+        val file = tempImage(dir, "a.png")
+        val item = store.addImage(file, "image/png", now = 1000)!!
+        val removed = store.detach(item.id)!!
+        assertTrue(store.items(now = 2000).isEmpty())
+        assertTrue(file.exists())
+        store.discard(removed)
+        assertFalse(file.exists())
+        assertNull(store.reattach(removed, now = 2000))
+    }
+
+    @Test fun detachedImageSurvivesAReloadAndComesBack() {
+        val dir = Files.createTempDirectory("clips").toFile()
+        val storageFile = Files.createTempFile("history", ".json").toFile()
+        val store = ClipboardStore(storageFile, expiryMillis = 0, imagesDir = dir)
+        val file = tempImage(dir, "a.png")
+        val item = store.addImage(file, "image/png", now = 1000)!!
+        store.save()
+        val removed = store.detach(item.id)!!
+        store.save()
+        // The panel reloads on open; its orphan sweep must not take the file.
+        store.reload()
+        assertTrue(file.exists())
+        // Nor may a clip copied meanwhile take the detached clip's id.
+        val fresh = store.add("fresh", now = 1500)!!
+        assertTrue(fresh.id != removed.id)
+        assertNotNull(store.reattach(removed, now = 2000))
+        assertEquals(listOf(ClipKind.TEXT, ClipKind.IMAGE), store.items(now = 2000).map { it.kind })
+    }
+
+    @Test fun reattachSkipsAClipCopiedAgainMeanwhile() {
+        val store = ClipboardStore(null, expiryMillis = 0)
+        val a = store.add("a", now = 1000)!!
+        val removed = store.detach(a.id)!!
+        store.add("a", now = 2000)
+        assertNull(store.reattach(removed, now = 3000))
+        assertEquals(listOf("a"), store.items(now = 3000).map { it.text })
+    }
+
+    @Test fun reattachHonoursExpiry() {
+        val store = ClipboardStore(null, expiryMillis = 100)
+        val a = store.add("a", now = 0)!!
+        val removed = store.detach(a.id)!!
+        assertNull(store.reattach(removed, now = 500))
+        assertTrue(store.items(now = 500).isEmpty())
+    }
+
     @Test fun maxItemsCapsUnpinnedHistory() {
         val store = ClipboardStore(null, expiryMillis = 0, maxItems = 3)
         repeat(6) { store.add("clip $it", now = 1000L + it) }

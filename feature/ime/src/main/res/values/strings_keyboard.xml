@@ -587,6 +587,12 @@
     <string name="ime_clip_edit_save">Save</string>
     <string name="ime_clip_edit_placeholder">Type the clip’s text</string>
     <string name="ime_clip_edit_rich_note">Saving a change drops the formatting</string>
+    <!-- The bar at the bottom of the clipboard panel after a delete. %1$d is how many clips it would bring back. -->
+    <plurals name="ime_clip_deleted">
+        <item quantity="one">Clip deleted</item>
+        <item quantity="other">%1$d clips deleted</item>
+    </plurals>
+    <string name="ime_clip_undo_delete">Undo</string>
     <string name="ime_clipboard_view_list_desc">Show clips as a list</string>
     <string name="ime_clipboard_view_grid_desc">Show clips as a grid</string>
     <!-- Spoken before a clip's content when clip numbers are on. %1$d is the clip's number in the history. -->
