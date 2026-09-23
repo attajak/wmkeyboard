@@ -343,6 +343,11 @@
     <string name="languages_cjk_loose_marks_subtitle">かつこう also finds 学校 (がっこう)</string>
     <!-- The kana are examples and stay as they are. -->
     <string name="languages_cjk_loose_marks_info">On the Flick and Kana JIS layouts, a small kana, a ゛ or a ゜ is an extra key. With this on, a plain kana also matches those forms: か finds が, つ finds っ and づ, は finds ば and ぱ, や finds ゃ. When two words are almost equally common, the one that you typed exactly comes first. A kana that you typed with a mark is not changed, and Romaji typing is not changed.</string>
+    <string name="languages_cjk_full_width_space_title">Full-width space</string>
+    <!-- 　 is the full-width space itself, drawn between the brackets, and stays
+         as it is. -->
+    <string name="languages_cjk_full_width_space_subtitle">The space bar types a full-width space [　]</string>
+    <string name="languages_cjk_full_width_space_info">Japanese and Chinese text is spaced with the ideographic space (U+3000), which is as wide as one character. With this on, the space bar types it instead of the narrow space used between words in other languages. A space pressed while you are still typing a reading picks a candidate as before, and only a press with nothing waiting to convert types a space.</string>
     <string name="languages_cjk_fuzzy_title">Fuzzy Pinyin</string>
     <!-- Only "Match confusable sounds" needs translation. The rest is Pinyin
          spelling and stays as it is. -->

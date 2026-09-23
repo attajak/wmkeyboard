@@ -107,6 +107,9 @@ object LayoutJsonDocs {
         "Key.repeatOnHold" to
             "Holding the key does its action over and over, the way holding delete does. It spends the press and hold, so " +
             "the key's alternates stop opening.",
+        "Key.kanaVariantWhileComposing" to
+            "While the kana you are typing has a small, ゛ or ゜ form, the key shows 小゛゜ and a tap changes that kana. " +
+            "The rest of the time the key does its own action.",
 
         "KeyAlternate.action" to "What choosing this entry does.",
         "KeyAlternate.label" to "What the popup draws for this entry. Blank draws the action's own glyph or icon.",

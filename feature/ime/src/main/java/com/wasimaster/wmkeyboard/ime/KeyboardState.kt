@@ -19,6 +19,7 @@ import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.Layouts
 import com.wasimaster.wmkeyboard.core.layout.hasAmbiguousKeys
+import com.wasimaster.wmkeyboard.core.layout.hasKanaVariantKeys
 import com.wasimaster.wmkeyboard.core.layout.isAmbiguous
 import com.wasimaster.wmkeyboard.core.layout.letterSet
 import com.wasimaster.wmkeyboard.core.media.MediaSnapshot
@@ -376,6 +377,20 @@ data class LayoutSet(
         keymanCaps?.rows?.size ?: 0,
         named.values.maxOfOrNull { it.rows.size } ?: 0,
     ).coerceAtLeast(1)
+
+    /**
+     * Whether a key on one of the layers the ?123 and Fn keys cycle through can
+     * stand in for the 小゛゜ key (see [Key.kanaVariantWhileComposing]). The
+     * service publishes [KeyboardUiState.kanaVariantReady] only when this holds,
+     * because that flag is a key of the grid's `remember`: every other board
+     * would otherwise rebuild its keys on the kana-by-kana flips it makes.
+     *
+     * Not a constructor property, so it stays out of equals/hashCode/copy.
+     */
+    val hasKanaVariantKeys: Boolean = letters.hasKanaVariantKeys() ||
+        symbols.hasKanaVariantKeys() ||
+        symbolsShifted.hasKanaVariantKeys() ||
+        fn?.hasKanaVariantKeys() == true
 
     /**
      * Every character the letter layer can produce: base labels, their shifted
@@ -2581,6 +2596,15 @@ data class KeyboardUiState(
      * board pays for a feature it does not draw.
      */
     val composingRoman: String = "",
+    /**
+     * The reading being typed ends in a kana that has a small, dakuten or
+     * handakuten form, so a [Key.kanaVariantWhileComposing] key is showing as
+     * the 小゛゜ key (issue #340).
+     *
+     * Only ever true on a board that has such a key ([LayoutSet.hasKanaVariantKeys]):
+     * it is a key of the grid's `remember`, and it moves kana by kana.
+     */
+    val kanaVariantReady: Boolean = false,
     /**
      * Probability weight (0..1) of each letter being typed next, given the
      * current composing word. Drives smart key-hit detection, which nudges

@@ -1478,6 +1478,19 @@ private fun CjkDictPackManager(
             ) { on -> scope.launch { repository.setKanaLooseMarks(on) } }
         }
 
+        // Issue #341: Japanese and Chinese are spaced with the ideographic
+        // space, twice the width of an ASCII one. Per language, since the two
+        // conventions differ, and off until asked for.
+        item {
+            ToggleSetting(
+                R.string.languages_cjk_full_width_space_title,
+                stringResource(R.string.languages_cjk_full_width_space_subtitle),
+                langId in settings.cjk.fullWidthSpaceLanguages,
+                info = stringResource(R.string.languages_cjk_full_width_space_info),
+                default = langId in SettingsDefaults.cjk.fullWidthSpaceLanguages,
+            ) { on -> scope.launch { repository.setFullWidthSpace(langId, on) } }
+        }
+
     }
     // Chinese-only: fuzzy pinyin + Double Pinyin scheme, in a card of their own.
     if (langId == "zh") {

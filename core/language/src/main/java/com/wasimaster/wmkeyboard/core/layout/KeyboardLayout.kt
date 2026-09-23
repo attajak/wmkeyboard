@@ -230,7 +230,50 @@ data class Key(
      * for one.
      */
     val repeatOnHold: Boolean = false,
+    /**
+     * While the reading being typed ends in a kana that has a small, dakuten
+     * or handakuten form, this key stands in for the 小゛゜ key: it draws
+     * `小゛゜` and a tap runs [KeyAction.KanaVariant] (issue #340). The rest of
+     * the time it is the key it was authored as — a 🌐, an emoji key, anything.
+     *
+     * The way the phone kana pads save a key: the 小゛゜ key is only ever useful
+     * right after a kana, which is exactly when nothing else on that key is
+     * wanted. A flag on the key rather than an action of its own, so the key's
+     * own action and everything else about it stay authored and editable, and
+     * any key of the pad can be given the second job, not only the globe.
+     *
+     * Additive and defaulted, so no format-version bump.
+     */
+    val kanaVariantWhileComposing: Boolean = false,
 )
+
+/** What a [Key.kanaVariantWhileComposing] key draws while it is the 小゛゜ key. */
+const val KanaVariantKeyLabel = "小゛゜"
+
+/**
+ * This key as the 小゛゜ key, for as long as [Key.kanaVariantWhileComposing]
+ * has it stand in for one. Everything about where and how big it is survives;
+ * everything about what it did is replaced, down to its hold, so a press and
+ * hold does not open the popup of the key it is covering for.
+ */
+fun Key.asKanaVariantKey(): Key = copy(
+    label = KanaVariantKeyLabel,
+    output = null,
+    shiftLabel = null,
+    action = KeyAction.KanaVariant,
+    longPress = emptyList(),
+    actionAlternates = emptyList(),
+    clipboardAction = null,
+    icon = null,
+    iconHint = null,
+    flick = emptyMap(),
+    letters = null,
+    repeatOnHold = false,
+)
+
+/** Whether any key of this grid can stand in for the 小゛゜ key. */
+fun KeyboardLayout.hasKanaVariantKeys(): Boolean =
+    rows.any { row -> row.any { it.kanaVariantWhileComposing } }
 
 /**
  * The letters this key can stand for, as the decoder and the glide grid read

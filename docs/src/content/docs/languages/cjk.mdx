@@ -80,6 +80,8 @@ Japanese ships three layouts, all feeding the same composer:
   <Shot id="languages/cjk-japanese-flick" alt="Japanese Flick: kana glyphs sit on the keys themselves, with directional flicks for the rest of the row." />
 </PhoneFrame>
 
+The Flick pad is an ordinary layout, so you can change it in the [layout editor](/languages/custom-layouts/). Each key's sheet has a field for every flick direction, and the editor's preview draws a key's flicks around its edges, so you can see and move every kana on the pad. Any key of a Japanese layout can also be told to **become 小゛゜ after a kana**: while the last kana you typed has a small, ゛ or ゜ form, that key shows 小゛゜ and changes it, and once the word is done it goes back to its own job. Give that job to the globe or emoji key and the separate <KeyCap>小゛゜</KeyCap> key can go, which is how phone kana pads save the space.
+
 All three read the same kana or romaji into `JapaneseComposer`, which converts kana readings to kanji/word candidates using a Mozc-derived dictionary. If nothing in the dictionary matches (or before you've downloaded the pack at all), the reading still commits as plain hiragana, katakana, or half-width katakana, so every Japanese layout works as a bare kana keyboard with zero setup.
 
 ### Kana without marks
@@ -89,6 +91,10 @@ On Flick and Kana JIS, every small kana, ゛ and ゜ is an extra key. **Match ka
 It only ever adds marks. A が or a っ you typed was asked for by name and is never read back as か or つ. Each guessed mark costs the candidate a little, so between two words of about the same frequency the one spelled exactly as you typed it comes first, while a clearly more common marked word leads: かつこう opens with 学校 ahead of the given name 葛洪, and かき still opens with 書き, 描き and 下記 before 鍵 arrives. Nothing the exact spelling offered is removed, so expect a longer list rather than a different one. What's left in the field while you compose is the kana you typed; the marks arrive with the candidate you pick. Picks are learned against the dictionary's reading, so 学校 moves up whether you next type it with its marks or without.
 
 Romaji is never widened. `ga` costs exactly what `ka` does on a QWERTY layout, so `kaki` means かき and nothing else, which keeps the strip as tight as it was.
+
+## Full-width space
+
+Japanese and Chinese text is spaced with the ideographic space (U+3000, 「　」), which is as wide as a character, rather than the narrow space between words in other languages. Turn on **Full-width space** in the language's options and the space bar types it. It is set per language, off by default, so you can have it for Japanese and not for Chinese. A space pressed while a reading is still waiting to convert picks a candidate as it always has; only a press with nothing composing types a space.
 
 ## The candidate bar
 
@@ -129,6 +135,7 @@ Opening a Chinese, Cantonese, or Japanese entry from the Languages screen shows 
 | Regional wording (Standard / Taiwan / Hong Kong) | Standard | Same, only shown once Traditional is on |
 | Lazy pronunciation (懶音) | On | Cantonese only |
 | Match kana without marks | On | Japanese only, and only kana typed on Flick or Kana JIS |
+| Full-width space | Off | Chinese, Cantonese, and Japanese, each on its own |
 | Fuzzy Pinyin | Off | Chinese only |
 | The eleven fuzzy pairs, one row each | All on | Chinese only, shown while Fuzzy Pinyin is on |
 | Double Pinyin scheme | Off (full Pinyin) | Chinese only |

@@ -32,6 +32,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import com.wasimaster.wmkeyboard.core.layout.KeyRole
+import com.wasimaster.wmkeyboard.core.layout.FlickDirection
+import com.wasimaster.wmkeyboard.core.layout.KanaVariantKeyLabel
 import com.wasimaster.wmkeyboard.core.layout.LayerFile
 import com.wasimaster.wmkeyboard.core.layout.LayerSpec
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
@@ -2419,6 +2421,7 @@ internal fun KeyLayoutEditorScreen(
             },
             onDismiss = { sheetOpen = false },
             secondaryLayouts = secondaryLayouts(settings.customLayouts),
+            kanaPad = !secondary && layout.language().id == "ja",
         )
     }
 }
@@ -3353,8 +3356,46 @@ internal fun EditorKeyCell(
                 )
             }
         }
+        // Issue #339: what each flick types, at the edge it is flicked
+        // towards. The keyboard only shows the cross under a finger, which
+        // the editor has none of, so a kana pad here was a grid of あ, か, さ
+        // with no way to see the forty other kana it types.
+        for ((direction, text) in key.flick) {
+            Text(
+                text = text,
+                color = foreground.copy(alpha = 0.6f),
+                fontSize = (EditorFlickSp * fontScale).sp,
+                maxLines = 1,
+                modifier = Modifier
+                    .align(flickAlignment(direction))
+                    .padding(horizontal = 3.dp, vertical = 1.dp),
+            )
+        }
+        // Issue #340: a key that becomes 小゛゜ after a kana says so.
+        if (key.kanaVariantWhileComposing) {
+            Text(
+                text = KanaVariantKeyLabel,
+                color = foreground.copy(alpha = 0.6f),
+                fontSize = (EditorFlickSp * fontScale).sp,
+                maxLines = 1,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(horizontal = 3.dp, vertical = 1.dp),
+            )
+        }
     }
 }
+
+/** Where a flick's glyph sits on a preview cell: the edge it is flicked towards. */
+private fun flickAlignment(direction: FlickDirection): Alignment = when (direction) {
+    FlickDirection.LEFT -> Alignment.CenterStart
+    FlickDirection.UP -> Alignment.TopCenter
+    FlickDirection.RIGHT -> Alignment.CenterEnd
+    FlickDirection.DOWN -> Alignment.BottomCenter
+}
+
+/** The preview's size for a flick glyph: small enough to leave the key's own label alone. */
+private const val EditorFlickSp = 9f
 
 /**
  * ".com" and "https://" are legal labels and would blow a cell open at full
@@ -3484,6 +3525,15 @@ internal val KeyActionCatalog: List<KeyActionOption> = listOf(
         R.string.layout_editor_action_group_typing,
         R.string.layout_editor_action_newline_detail,
         { KeyAction.Newline }, { it == KeyAction.Newline },
+    ),
+    // The Japanese flick pad's 小゛゜ key. It shipped on that pad with no entry
+    // here, so the editor called it "Unknown action" and no other grid could
+    // be given one.
+    KeyActionOption(
+        R.string.layout_editor_action_kana_variant_title,
+        R.string.layout_editor_action_group_typing,
+        R.string.layout_editor_action_kana_variant_detail,
+        { KeyAction.KanaVariant }, { it == KeyAction.KanaVariant },
     ),
     KeyActionOption(
         R.string.layout_editor_action_symbols_title,
@@ -3684,6 +3734,12 @@ internal fun KeyEditSheet(
     fieldKinds: List<PanelFieldKind>? = null,
     /** The secondary layouts an "Open a layout" key may name; see [KeyAction.Layout]. */
     secondaryLayouts: List<LayoutSpec> = emptyList(),
+    /**
+     * The layout types Japanese, so its keys are offered
+     * [Key.kanaVariantWhileComposing]. Everywhere else the switch would name a
+     * key no reading ever reaches.
+     */
+    kanaPad: Boolean = false,
 ) {
     var pickingAction by remember { mutableStateOf(false) }
     // Which tool this key opens, when the picker put a tool action on it.
@@ -3757,6 +3813,8 @@ internal fun KeyEditSheet(
                 supporting = stringResource(R.string.layout_editor_key_shift_label_hint),
                 resetKey = ref,
             ) { text -> onChange { it.copy(shiftLabel = text.ifBlank { null }) } }
+
+            if (!isField && key.action == KeyAction.Text) FlickFields(key, ref, onChange)
 
             val option = catalog.firstOrNull { it.matches(key.action) }
             val actionDetail = option?.let { stringResource(it.detailRes) }
@@ -3861,6 +3919,22 @@ internal fun KeyEditSheet(
             }
             if (key.action == KeyAction.Text) {
                 IconPickRow(R.string.layout_editor_icon_hint_field_label, key.iconHint) { pickingIcon = true }
+            }
+
+            // Issue #340: on a Japanese pad, any key but the 小゛゜ key itself
+            // can stand in for it while there is a kana to change. Kept for a
+            // key already carrying the flag, so a layout that changed language
+            // can still turn it off.
+            if (!isField &&
+                key.action != KeyAction.KanaVariant &&
+                (kanaPad || key.kanaVariantWhileComposing)
+            ) {
+                ToggleSetting(
+                    R.string.layout_editor_kana_variant_title,
+                    stringResource(R.string.layout_editor_kana_variant_subtitle),
+                    key.kanaVariantWhileComposing,
+                    info = stringResource(R.string.layout_editor_kana_variant_info),
+                ) { on -> onChange { it.copy(kanaVariantWhileComposing = on) } }
             }
 
             // Issue #231: a key whose action is worth doing twice can be told
@@ -4123,6 +4197,67 @@ private fun outputFieldSupport(key: Key): String = when {
     key.label.isNotBlank() ->
         stringResource(R.string.layout_editor_key_output_hint_typed, key.label)
     else -> stringResource(R.string.layout_editor_key_output_hint_none)
+}
+
+/**
+ * The four flick directions of a kana-pad key (issue #339): what a short flick
+ * left, up, right or down types instead of the tap.
+ *
+ * These were reachable only from the raw JSON, on the grounds that a flick map
+ * is rare and whoever wants one already knows the word (see [LettersField]).
+ * Rare, yes; but the person who wants one is somebody adjusting the Japanese
+ * pad they type on every day, and the JSON was the one part of that job the
+ * editor sent them away for. So the fields are here, behind a button on a key
+ * that has none, and open straight away on a key that has some.
+ *
+ * Blank removes the direction rather than storing an empty string: an empty
+ * arm is what the keyboard already treats as no flick, and keeping the map to
+ * the directions that type something keeps the file what an author would write.
+ */
+@Composable
+private fun FlickFields(key: Key, ref: KeyRef, onChange: ((Key) -> Key) -> Unit) {
+    var open by remember(ref) { mutableStateOf(key.flick.isNotEmpty()) }
+    if (!open) {
+        WmRow(
+            title = stringResource(R.string.layout_editor_flick_add_action),
+            subtitle = stringResource(R.string.layout_editor_flick_add_subtitle),
+            leading = { Icon(Icons.Outlined.Add, contentDescription = null) },
+            onClick = { open = true },
+        )
+        return
+    }
+    CaptionText(stringResource(R.string.layout_editor_flick_caption))
+    for (direction in FlickDirection.entries) {
+        val value = key.flick[direction].orEmpty()
+        SheetField(
+            label = stringResource(flickLabelRes(direction)),
+            value = value,
+            supporting = if (value.isEmpty()) {
+                stringResource(R.string.layout_editor_flick_field_hint)
+            } else {
+                stringResource(R.string.layout_editor_flick_set_hint, value)
+            },
+            resetKey = ref to direction,
+        ) { text ->
+            onChange { it.copy(flick = it.flick.withArm(direction, text)) }
+        }
+    }
+}
+
+/** [this] with [direction] typing [text], or without it for a blank one, in the file's order. */
+internal fun Map<FlickDirection, String>.withArm(direction: FlickDirection, text: String): Map<FlickDirection, String> {
+    val next = this + (direction to text)
+    return FlickDirection.entries
+        .mapNotNull { dir -> next[dir]?.takeIf { it.isNotEmpty() }?.let { dir to it } }
+        .toMap()
+}
+
+@StringRes
+private fun flickLabelRes(direction: FlickDirection): Int = when (direction) {
+    FlickDirection.LEFT -> R.string.layout_editor_flick_left_label
+    FlickDirection.UP -> R.string.layout_editor_flick_up_label
+    FlickDirection.RIGHT -> R.string.layout_editor_flick_right_label
+    FlickDirection.DOWN -> R.string.layout_editor_flick_down_label
 }
 
 /**

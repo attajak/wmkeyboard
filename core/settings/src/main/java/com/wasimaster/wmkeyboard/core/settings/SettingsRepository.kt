@@ -4159,6 +4159,18 @@ data class CjkSettings(
      * typing never sees it.
      */
     val kanaLooseMarks: Boolean = true,
+    /**
+     * The languages whose space bar types the ideographic space U+3000 (the
+     * full-width 　) instead of an ASCII one, by language id (#341). Only a
+     * press with nothing composing reaches it: a space mid-reading converts,
+     * as it always has.
+     *
+     * Per language rather than one switch, because Japanese and Chinese
+     * conventions differ (Japanese IMEs type a full-width space by default,
+     * Chinese ones a half-width one) and a person typing both may want each
+     * its own way. Empty by default, so nobody's space changes under them.
+     */
+    val fullWidthSpaceLanguages: Set<String> = emptySet(),
     /** Which region's vocabulary Traditional output should prefer. */
     val hanRegion: HanVariant.HanRegion = HanVariant.HanRegion.GENERIC,
 )
@@ -7284,6 +7296,7 @@ class SettingsRepository(private val context: Context) {
         private val CJK_TRADITIONAL_OUTPUT = booleanPreferencesKey("cjk_traditional_output")
         private val JYUTPING_LAZY = booleanPreferencesKey("jyutping_lazy")
         private val KANA_LOOSE_MARKS = booleanPreferencesKey("kana_loose_marks")
+        private val FULL_WIDTH_SPACE_LANGUAGES = stringSetPreferencesKey("full_width_space_languages")
         private val CJK_HAN_REGION = stringPreferencesKey("cjk_han_region")
         private val ONE_HANDED_MODE = stringPreferencesKey("one_handed_mode")
         // One-handed width leaves room for the rail on the inner edge, so it is
@@ -8475,6 +8488,7 @@ class SettingsRepository(private val context: Context) {
                 traditionalOutput = p[CJK_TRADITIONAL_OUTPUT] ?: defaults.cjk.traditionalOutput,
                 jyutpingLazy = p[JYUTPING_LAZY] ?: defaults.cjk.jyutpingLazy,
                 kanaLooseMarks = p[KANA_LOOSE_MARKS] ?: defaults.cjk.kanaLooseMarks,
+                fullWidthSpaceLanguages = p[FULL_WIDTH_SPACE_LANGUAGES] ?: defaults.cjk.fullWidthSpaceLanguages,
                 hanRegion = p[CJK_HAN_REGION]
                     ?.let { runCatching { HanVariant.HanRegion.valueOf(it) }.getOrNull() }
                     ?: defaults.cjk.hanRegion,
@@ -13799,6 +13813,11 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setKanaLooseMarks(value: Boolean) =
         editPrefs { it[KANA_LOOSE_MARKS] = value }
+
+    suspend fun setFullWidthSpace(languageId: String, value: Boolean) = editPrefs { p ->
+        val current = p[FULL_WIDTH_SPACE_LANGUAGES] ?: emptySet()
+        p[FULL_WIDTH_SPACE_LANGUAGES] = if (value) current + languageId else current - languageId
+    }
 
     suspend fun setCjkHanRegion(value: HanVariant.HanRegion) =
         editPrefs { it[CJK_HAN_REGION] = value.name }

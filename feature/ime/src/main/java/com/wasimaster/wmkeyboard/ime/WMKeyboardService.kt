@@ -1062,6 +1062,7 @@ open class WMKeyboardService : InputMethodService() {
             // re-armed) word starts with no rhythm history.
             keystrokeTiming.reset()
             publishComposingRoman()
+            publishKanaVariantReady()
         }
     private var previousWord: String? = null
 
@@ -9768,7 +9769,7 @@ open class WMKeyboardService : InputMethodService() {
         if (hasSelection(ic)) {
             dropComposingForSelectionEdit(ic)
             invalidateExpectedSelection()
-            ic.commitText(" ", 1)
+            ic.commitText(spaceText(state), 1)
             recordStat { onSeparator(now, SystemClock.uptimeMillis()) }
             lastSpaceTime = 0
             maybeAutoCapitalize()
@@ -9896,8 +9897,9 @@ open class WMKeyboardService : InputMethodService() {
         }
         // A word being followed in the field ends at this space when the caret
         // is at its end, and gains the space when it is inside it.
-        mirrorTypedIntoRevision(ic, " ")
-        ic.commitText(" ", 1)
+        val space = spaceText(state)
+        mirrorTypedIntoRevision(ic, space)
+        ic.commitText(space, 1)
         // The one plain-space landing: the confirm-a-space-already-there and
         // double-space returns above add no character worth counting.
         recordStat { onSeparator(now, SystemClock.uptimeMillis()) }
@@ -9908,6 +9910,20 @@ open class WMKeyboardService : InputMethodService() {
         // appear once the word is committed.
         refreshSuggestions()
     }
+
+    /**
+     * What the space bar types in [state]'s language: the ideographic space
+     * U+3000 where the user asked for full-width spaces (#341), otherwise an
+     * ASCII one.
+     *
+     * Only the two landings that put a space into the text ask this. The
+     * confirm-a-space-already-there paths and the double-space rules keep
+     * testing for the ASCII space, and that is what they should do: both are
+     * habits of Latin typing, and a full-width space after a word is not a
+     * space an auto-space rule typed.
+     */
+    private fun spaceText(state: KeyboardUiState): String =
+        if (state.language.id in state.settings.cjk.fullWidthSpaceLanguages) IDEOGRAPHIC_SPACE else " "
 
     /**
      * [hardwareShift] is the physical keyboard's own shift, read from the key
@@ -10760,6 +10776,26 @@ open class WMKeyboardService : InputMethodService() {
         ic.setComposingText(preview, 1)
         _uiState.update { it.copy(composingPreview = preview) }
         publishComposingRoman()
+        publishKanaVariantReady()
+    }
+
+    /**
+     * Mirrors whether the reading's last kana has a 小゛゜ form into
+     * [KeyboardUiState.kanaVariantReady], which turns a
+     * [com.wasimaster.wmkeyboard.core.layout.Key.kanaVariantWhileComposing] key
+     * into the 小゛゜ key (issue #340). Asked at the same two places the roman
+     * mirror is, for the same reason: they are every way the buffer changes.
+     *
+     * False on any board without such a key, because the flag is a key of the
+     * grid's `remember` — see [LayoutSet.hasKanaVariantKeys].
+     */
+    private fun publishKanaVariantReady() {
+        val state = _uiState.value
+        val last = composing.lastOrNull()
+        val ready = last != null && state.layouts.hasKanaVariantKeys && Kana.cycleVariant(last) != last
+        if (state.kanaVariantReady != ready) {
+            _uiState.update { it.copy(kanaVariantReady = ready) }
+        }
     }
 
     /**
@@ -31798,6 +31834,9 @@ fun compositionCannotPrecedeCaret(
  */
 /** What the strip asks for, and [SuggestionEngine.suggest]'s own default. */
 private const val SUGGEST_LIMIT = 5
+
+/** U+3000, the full-width space Japanese and Chinese text is spaced with. */
+private const val IDEOGRAPHIC_SPACE = "\u3000"
 
 /**
  * How many ranked words to fetch per key the octopus may fill. Above one

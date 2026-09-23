@@ -483,6 +483,7 @@ import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
 import com.wasimaster.wmkeyboard.core.layout.AlternateEntry
 import com.wasimaster.wmkeyboard.core.layout.alternateEntries
 import com.wasimaster.wmkeyboard.core.layout.flickKey
+import com.wasimaster.wmkeyboard.core.layout.asKanaVariantKey
 import com.wasimaster.wmkeyboard.core.layout.clipboardAlternate
 import com.wasimaster.wmkeyboard.core.layout.FlickDirection
 import com.wasimaster.wmkeyboard.core.layout.Key
@@ -15864,6 +15865,9 @@ internal fun rememberCurrentLayout(state: KeyboardUiState): KeyboardLayout = rem
     // one the key stays out, so shift does not rebuild the grid.
     state.shiftState.takeIf { state.layouts.keymanShift != null || state.layouts.keymanCaps != null },
     numericPadActive(state),
+    // Issue #340: only ever true on a board with a key that becomes 小゛゜, so
+    // no other board rebuilds on it.
+    state.kanaVariantReady,
 ) {
     currentLayout(state)
 }
@@ -16051,10 +16055,14 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // folds in the live shift: reading that here would rebuild the whole grid on
     // every shift press, and the entry belongs in the popup either way.
     val newlineAlternate = state.enterAction != EnterAction.DEFAULT
+    // Issue #340: the keys that stand in for 小゛゜ while the reading ends in a
+    // kana that has one of those forms.
+    val kanaVariantKeys = state.kanaVariantReady
     if (!commaAsEmoji && !globeAsEmoji && !swapCommaGlobe && !stripDigits &&
         clipboardKeys.isEmpty() && fieldKey == null && domainAlternates.isEmpty() &&
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
-        !newlineAlternate && spaceHoldKeys.isEmpty() && punctuationAlternates.isEmpty()
+        !newlineAlternate && spaceHoldKeys.isEmpty() && punctuationAlternates.isEmpty() &&
+        !kanaVariantKeys
     ) {
         return base
     }
@@ -16189,6 +16197,12 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                     actionAlternates = mapped.actionAlternates +
                         KeyAlternate(action = KeyAction.Newline, icon = "enter"),
                 )
+            }
+            // Last, so it covers whatever the passes above made of the key: a
+            // 🌐 the emoji preference already turned into the emoji key is still
+            // the 小゛゜ key while there is a kana to change.
+            if (kanaVariantKeys && rowKey.kanaVariantWhileComposing) {
+                mapped = mapped.asKanaVariantKey()
             }
             mapped
         }

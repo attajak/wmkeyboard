@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.app.dropGapAt
 import com.wasimaster.wmkeyboard.app.dropLanding
 import com.wasimaster.wmkeyboard.app.moveKeyIn
 import com.wasimaster.wmkeyboard.app.rowMoveTarget
+import com.wasimaster.wmkeyboard.app.withArm
 import com.wasimaster.wmkeyboard.language.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -316,6 +317,37 @@ class LayoutEditOpsTest {
         for (action in drawnAsIcons) {
             assertEquals("$action", "", action.fallbackLabel())
         }
+    }
+
+    @Test
+    fun `a flick field writes its arm and a blank one removes it`() {
+        // Issue #339: the key sheet's flick fields. The map stays in the file's
+        // own left-up-right-down order whatever order the fields were filled in,
+        // and an emptied field leaves no empty arm behind.
+        val arms = emptyMap<FlickDirection, String>()
+            .withArm(FlickDirection.DOWN, "お")
+            .withArm(FlickDirection.LEFT, "い")
+        assertEquals(listOf(FlickDirection.LEFT, FlickDirection.DOWN), arms.keys.toList())
+        assertEquals(mapOf(FlickDirection.DOWN to "お"), arms.withArm(FlickDirection.LEFT, ""))
+    }
+
+    @Test
+    fun `the action picker offers the kana-mark key`() {
+        // The flick pad's 小゛゜ key shipped with no entry here, so its sheet
+        // read "Unknown action".
+        assertTrue(KeyActionCatalog.any { it.matches(KeyAction.KanaVariant) })
+    }
+
+    @Test
+    fun `a key that becomes the kana-mark key survives the JSON round trip`() {
+        val key = Key("🌐", action = KeyAction.LanguageSwitch, kanaVariantWhileComposing = true)
+        val spec = mine().withLayerRows(listOf(listOf(key)))
+        val back = LayoutCodec.decode(LayoutCodec.encodeForEditing(spec))!!
+        assertTrue(back.compile(layer).rows[0][0].kanaVariantWhileComposing)
+        assertFalse(
+            "an unflagged key does not write the field",
+            LayoutCodec.encodeForEditing(BuiltInLayouts.QWERTY).contains("kanaVariantWhileComposing"),
+        )
     }
 
     @Test

@@ -877,6 +877,7 @@ private fun SearchStrings.languageRows(): List<SettingsSearchEntry> {
         row(R.string.languages_cjk_traditional_title, R.string.languages_cjk_traditional_subtitle),
         row(R.string.languages_cjk_lazy_title, R.string.languages_cjk_lazy_subtitle),
         row(R.string.languages_cjk_loose_marks_title, R.string.languages_cjk_loose_marks_subtitle),
+        row(R.string.languages_cjk_full_width_space_title, R.string.languages_cjk_full_width_space_subtitle),
         row(R.string.languages_cjk_fuzzy_title, R.string.languages_cjk_fuzzy_subtitle),
     )
 }

@@ -277,6 +277,19 @@
     <string name="layout_editor_icon_missing_hint">There is no icon with the name \"<xliff:g id="icon_name" example="mik">%1$s</xliff:g>\". The app draws the label instead</string>
 
     <!-- Switch on a key's sheet. On: holding the key fires it again and again, the way holding delete does. -->
+    <string name="layout_editor_flick_add_action">Add flick directions</string>
+    <string name="layout_editor_flick_add_subtitle">For a 12-key kana pad: a short flick left, up, right or down types something else</string>
+    <string name="layout_editor_flick_caption">A flick in one direction types what you put in that field. A tap still types the output. Leave a field blank for no flick that way.</string>
+    <string name="layout_editor_flick_left_label">Flick left</string>
+    <string name="layout_editor_flick_up_label">Flick up</string>
+    <string name="layout_editor_flick_right_label">Flick right</string>
+    <string name="layout_editor_flick_down_label">Flick down</string>
+    <string name="layout_editor_flick_field_hint">Blank: no flick in this direction</string>
+    <string name="layout_editor_flick_set_hint">A flick this way types %1$s</string>
+    <!-- 小゛゜ is the name of the key on Japanese keyboards and stays as it is. -->
+    <string name="layout_editor_kana_variant_title">Becomes 小゛゜ after a kana</string>
+    <string name="layout_editor_kana_variant_subtitle">While the kana you are typing has a small, ゛ or ゜ form, this key changes it</string>
+    <string name="layout_editor_kana_variant_info">The key shows 小゛゜ as soon as the last kana you typed can take a mark, and a tap changes that kana: か to が, は to ば and ぱ, つ to っ. When the word is done, or the last kana has no other form, the key goes back to its own action. Use it to put the 小゛゜ key on the globe or emoji key, and remove the separate 小゛゜ key to make room.</string>
     <string name="layout_editor_repeat_hold_title">Repeat while held</string>
     <string name="layout_editor_repeat_hold_subtitle">Holding the key keeps doing what it does, the way delete does</string>
     <string name="layout_editor_repeat_hold_info">Hold the key and, after the same wait delete takes, it does its action over and over until you lift your finger. Arrow keys are what this is for: one press moves the cursor one place, and a hold walks it along. The two speeds are yours to set under Key press: Time before a key repeats, and Repeating key interval.</string>
@@ -394,6 +407,10 @@
     <string name="layout_editor_action_enter_detail">Does the app\'s own action: send, search or done</string>
     <string name="layout_editor_action_newline_title">New line</string>
     <string name="layout_editor_action_newline_detail">Always types a line break, even where enter would send</string>
+    <!-- 小゛゜ is the name of the key on Japanese keyboards and stays as it is. -->
+    <string name="layout_editor_action_kana_variant_title">Kana marks (小゛゜)</string>
+    <!-- The kana are examples and stay as they are. -->
+    <string name="layout_editor_action_kana_variant_detail">Changes the last kana you typed to its small, ゛ or ゜ form: か to が, は to ば to ぱ, つ to っ</string>
 
     <string name="layout_editor_action_symbols_title">Symbols page</string>
     <!-- ?123 and =\\&lt; are printed on the two symbol keys. Do not translate them. -->
