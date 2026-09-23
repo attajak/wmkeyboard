@@ -31,9 +31,12 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "á",
+                "à",
+                "́"
               ],
-              "letters": "abc"
+              "letters": "abcáà́"
             },
             {
               "label": "DEF",
@@ -44,9 +47,13 @@
                 "e",
                 "f",
                 "ɖ",
-                "ɛ"
+                "ɛ",
+                "ẹ",
+                "é",
+                "è",
+                "̀"
               ],
-              "letters": "defɖɛ"
+              "letters": "defɖɛẹéè̀"
             },
             {
               "label": "⌫",
@@ -63,9 +70,11 @@
                 "4",
                 "g",
                 "h",
-                "i"
+                "i",
+                "í",
+                "ì"
               ],
-              "letters": "ghi"
+              "letters": "ghiíì"
             },
             {
               "label": "JKL",
@@ -86,9 +95,12 @@
                 "m",
                 "n",
                 "o",
-                "ɔ"
+                "ɔ",
+                "ọ",
+                "ó",
+                "ò"
               ],
-              "letters": "mnoɔ"
+              "letters": "mnoɔọóò"
             },
             {
               "label": "⇧",
@@ -106,9 +118,10 @@
                 "p",
                 "q",
                 "r",
-                "s"
+                "s",
+                "ṣ"
               ],
-              "letters": "pqrs"
+              "letters": "pqrsṣ"
             },
             {
               "label": "TUV",
@@ -117,9 +130,11 @@
                 "8",
                 "t",
                 "u",
-                "v"
+                "v",
+                "ú",
+                "ù"
               ],
-              "letters": "tuv"
+              "letters": "tuvúù"
             },
             {
               "label": "WXYZ",

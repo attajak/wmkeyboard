@@ -255,6 +255,18 @@ fun Key.letterSet(): String {
 fun Key.isAmbiguous(): Boolean = letterSet().length > 1
 
 /**
+ * What a key's letter set may hold: a letter, or a combining mark that is part
+ * of a written word (a matra, a virama, a nukta, a tone mark).
+ */
+fun Char.spellsAWord(): Boolean = isLetter() || category in SPELLING_MARKS
+
+private val SPELLING_MARKS = setOf(
+    CharCategory.NON_SPACING_MARK,
+    CharCategory.COMBINING_SPACING_MARK,
+    CharCategory.ENCLOSING_MARK,
+)
+
+/**
  * This key rebuilt around the letter set [raw] spells, with the anchor invariant
  * applied rather than assumed.
  *
@@ -273,13 +285,19 @@ fun Key.isAmbiguous(): Boolean = letterSet().length > 1
  * which is not always 1:1 (Turkish `İ` lowercases to two characters) and would
  * quietly make the set longer than the label it came from.
  *
+ * A combining mark counts as a letter here (issue #332). An Indic keypad's 1
+ * carries the virama and the anusvara, and its 2 and 3 carry the vowel signs,
+ * because that is where the phones of the Indian market put them: each is a
+ * keystroke of its own that the word is spelled with, exactly like a letter,
+ * and dropping them left those scripts with no way to spell a word at all.
+ *
  * An empty result clears the field, which is what an ordinary key is.
  */
 fun Key.withLetters(raw: String): Key {
     val set = StringBuilder()
     for (ch in raw) {
         val letter = ch.lowercaseChar()
-        if (letter.isLetter() && letter !in set) set.append(letter)
+        if (letter.spellsAWord() && letter !in set) set.append(letter)
     }
     return if (set.isEmpty()) {
         copy(letters = null)

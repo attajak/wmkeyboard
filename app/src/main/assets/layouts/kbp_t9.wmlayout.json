@@ -64,9 +64,10 @@
                 "g",
                 "h",
                 "i",
-                "ɣ"
+                "ɣ",
+                "ɩ"
               ],
-              "letters": "ghiɣ"
+              "letters": "ghiɣɩ"
             },
             {
               "label": "JKL",
@@ -88,9 +89,10 @@
                 "n",
                 "o",
                 "ŋ",
-                "ɔ"
+                "ɔ",
+                "ñ"
               ],
-              "letters": "mnoŋɔ"
+              "letters": "mnoŋɔñ"
             },
             {
               "label": "⇧",
@@ -120,9 +122,10 @@
                 "t",
                 "u",
                 "v",
-                "ʋ"
+                "ʋ",
+                "ʊ"
               ],
-              "letters": "tuvʋ"
+              "letters": "tuvʋʊ"
             },
             {
               "label": "WXYZ",
@@ -132,9 +135,10 @@
                 "w",
                 "x",
                 "y",
-                "z"
+                "z",
+                "̄"
               ],
-              "letters": "wxyz"
+              "letters": "wxyz̄"
             },
             {
               "label": "⏎",

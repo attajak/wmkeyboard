@@ -8673,7 +8673,15 @@ open class WMKeyboardService : InputMethodService() {
             // unit, which would shed a base and leave its hasant dangling. Gated
             // on the same per-language setting for the same reason: whichever way
             // the user set backspace, it must not change under a resumed word.
-            val length = if (state.language.id in state.settings.conjunctBackspaceLanguages) {
+            //
+            // Never on a keypad (#332). There the buffer holds each key's anchor,
+            // not the word the field shows, so a "cluster" read off it is a run
+            // of unrelated keypresses; one backspace takes back one press, and
+            // the reading is decoded afresh from the presses that are left.
+            val length = if (
+                !state.layouts.ambiguousKeys &&
+                state.language.id in state.settings.conjunctBackspaceLanguages
+            ) {
                 state.composer.deleteLength(composing).coerceIn(1, composing.length)
             } else {
                 1

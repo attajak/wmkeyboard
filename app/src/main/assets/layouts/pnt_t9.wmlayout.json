@@ -2,9 +2,9 @@
   "format": "wmkeyboard-layout",
   "version": 1,
   "layout": {
-    "id": "asset_shi_t9",
-    "name": "T9 (ⵜⴰⵛⵍⵃⵉⵢⵜ)",
-    "langId": "shi",
+    "id": "asset_pnt_t9",
+    "name": "T9 (Ποντιακά)",
+    "langId": "pnt",
     "layers": {
       "letters": {
         "rows": [
@@ -25,28 +25,29 @@
               "role": "Period"
             },
             {
-              "label": "ⴰⴱⴳⴷ",
-              "output": "ⴰ",
+              "label": "ΑΒΓ",
+              "output": "α",
               "longPress": [
                 "2",
-                "ⴰ",
-                "ⴱ",
-                "ⴳ",
-                "ⴷ"
+                "α",
+                "β",
+                "γ",
+                "ά",
+                "́"
               ],
-              "letters": "ⴰⴱⴳⴷ"
+              "letters": "αβγά́"
             },
             {
-              "label": "ⴹⴻⴼⴽ",
-              "output": "ⴹ",
+              "label": "ΔΕΖ",
+              "output": "δ",
               "longPress": [
                 "3",
-                "ⴹ",
-                "ⴻ",
-                "ⴼ",
-                "ⴽ"
+                "δ",
+                "ε",
+                "ζ",
+                "έ"
               ],
-              "letters": "ⴹⴻⴼⴽ"
+              "letters": "δεζέ"
             },
             {
               "label": "⌫",
@@ -57,86 +58,89 @@
           ],
           [
             {
-              "label": "ⵀⵃⵄⵅ",
-              "output": "ⵀ",
+              "label": "ΗΘΙ",
+              "output": "η",
               "longPress": [
                 "4",
-                "ⵀ",
-                "ⵃ",
-                "ⵄ",
-                "ⵅ"
+                "η",
+                "θ",
+                "ι",
+                "ή",
+                "ί",
+                "ϊ",
+                "ΐ"
               ],
-              "letters": "ⵀⵃⵄⵅ"
+              "letters": "ηθιήίϊΐ"
             },
             {
-              "label": "ⵇⵉⵊⵍ",
-              "output": "ⵇ",
+              "label": "ΚΛΜ",
+              "output": "κ",
               "longPress": [
                 "5",
-                "ⵇ",
-                "ⵉ",
-                "ⵊ",
-                "ⵍ"
+                "κ",
+                "λ",
+                "μ"
               ],
-              "letters": "ⵇⵉⵊⵍ"
+              "letters": "κλμ"
             },
             {
-              "label": "ⵎⵏⵓⵔ",
-              "output": "ⵎ",
+              "label": "ΝΞΟ",
+              "output": "ν",
               "longPress": [
                 "6",
-                "ⵎ",
-                "ⵏ",
-                "ⵓ",
-                "ⵔ"
+                "ν",
+                "ξ",
+                "ο",
+                "ό"
               ],
-              "letters": "ⵎⵏⵓⵔ"
+              "letters": "νξοό"
             },
             {
-              "label": ",",
-              "longPress": [
-                "!",
-                "?"
-              ],
-              "role": "Comma"
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
             }
           ],
           [
             {
-              "label": "ⵕⵖⵙⵚ",
-              "output": "ⵕ",
+              "label": "ΠΡΣ",
+              "output": "π",
               "longPress": [
                 "7",
-                "ⵕ",
-                "ⵖ",
-                "ⵙ",
-                "ⵚ"
+                "π",
+                "ρ",
+                "σ",
+                "ς",
+                "̌"
               ],
-              "letters": "ⵕⵖⵙⵚ"
+              "letters": "πρσς̌"
             },
             {
-              "label": "ⵛⵜⵟⵡ",
-              "output": "ⵛ",
+              "label": "ΤΥΦ",
+              "output": "τ",
               "longPress": [
                 "8",
-                "ⵛ",
-                "ⵜ",
-                "ⵟ",
-                "ⵡ"
+                "τ",
+                "υ",
+                "φ",
+                "ύ",
+                "ϋ",
+                "ΰ"
               ],
-              "letters": "ⵛⵜⵟⵡ"
+              "letters": "τυφύϋΰ"
             },
             {
-              "label": "ⵢⵣⵥ",
-              "output": "ⵢ",
+              "label": "ΧΨΩ",
+              "output": "χ",
               "longPress": [
                 "9",
-                "ⵢ",
-                "ⵣ",
-                "ⵥ",
-                "ⵯ"
+                "χ",
+                "ψ",
+                "ω",
+                "ώ"
               ],
-              "letters": "ⵢⵣⵥⵯ"
+              "letters": "χψωώ"
             },
             {
               "label": "⏎",

@@ -1,0 +1,183 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_yi_t9",
+    "name": "T9 (ייִדיש)",
+    "langId": "yi",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "דהוװױ",
+              "output": "ד",
+              "longPress": [
+                "2",
+                "ד",
+                "ה",
+                "ו",
+                "וּ",
+                "װ",
+                "ױ"
+              ],
+              "letters": "דהווּװױ"
+            },
+            {
+              "label": "אבג",
+              "output": "א",
+              "longPress": [
+                "3",
+                "א",
+                "ב",
+                "ג",
+                "אַ",
+                "אָ",
+                "בֿ"
+              ],
+              "letters": "אבגאַאָבֿ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "מנ",
+              "output": "מ",
+              "longPress": [
+                "4",
+                "מ",
+                "ם",
+                "נ",
+                "ן"
+              ],
+              "letters": "מםנן"
+            },
+            {
+              "label": "יכלײ",
+              "output": "י",
+              "longPress": [
+                "5",
+                "י",
+                "כ",
+                "ך",
+                "ל",
+                "יִ",
+                "ײַ",
+                "כּ",
+                "ײ"
+              ],
+              "letters": "יכךליִײַכּײ"
+            },
+            {
+              "label": "זחט",
+              "output": "ז",
+              "longPress": [
+                "6",
+                "ז",
+                "ח",
+                "ט"
+              ],
+              "letters": "זחט"
+            },
+            {
+              "label": ",",
+              "longPress": [
+                "!",
+                "?"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "רשת",
+              "output": "ר",
+              "longPress": [
+                "7",
+                "ר",
+                "ש",
+                "ת",
+                "שׂ",
+                "תּ"
+              ],
+              "letters": "רשתשׂתּ"
+            },
+            {
+              "label": "צק",
+              "output": "צ",
+              "longPress": [
+                "8",
+                "צ",
+                "ץ",
+                "ק"
+              ],
+              "letters": "צץק"
+            },
+            {
+              "label": "סעפ",
+              "output": "ס",
+              "longPress": [
+                "9",
+                "ס",
+                "ע",
+                "פ",
+                "ף",
+                "פּ",
+                "פֿ"
+              ],
+              "letters": "סעפףפּפֿ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

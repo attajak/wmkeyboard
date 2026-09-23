@@ -31,9 +31,10 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "à"
               ],
-              "letters": "abc"
+              "letters": "abcà"
             },
             {
               "label": "DEF",
@@ -42,9 +43,11 @@
                 "3",
                 "d",
                 "e",
-                "f"
+                "f",
+                "é",
+                "è"
               ],
-              "letters": "def"
+              "letters": "deféè"
             },
             {
               "label": "⌫",

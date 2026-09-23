@@ -49,9 +49,10 @@
                 "f",
                 "đ",
                 "é",
-                "ē"
+                "ē",
+                "è"
               ],
-              "letters": "defđéē"
+              "letters": "defđéēè"
             },
             {
               "label": "⌫",
@@ -68,9 +69,10 @@
                 "4",
                 "g",
                 "h",
-                "i"
+                "i",
+                "ì"
               ],
-              "letters": "ghi"
+              "letters": "ghiì"
             },
             {
               "label": "JKL",

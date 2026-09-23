@@ -1,0 +1,182 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_syl_t9",
+    "name": "T9 (সিলেটি)",
+    "langId": "syl",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": "ꠂ ꠆ ꠋ ꠬",
+              "output": "ꠂ",
+              "longPress": [
+                "1",
+                "ꠂ",
+                "꠆",
+                "ꠋ",
+                "꠬"
+              ],
+              "letters": "ꠂ꠆ꠋ꠬"
+            },
+            {
+              "label": "ꠀꠁꠃ",
+              "output": "ꠣ",
+              "longPress": [
+                "2",
+                "ꠣ",
+                "ꠤ",
+                "ꠥ",
+                "ꠀ",
+                "ꠁ",
+                "ꠃ"
+              ],
+              "letters": "ꠣꠤꠥꠀꠁꠃ"
+            },
+            {
+              "label": "ꠄꠅ",
+              "output": "ꠦ",
+              "longPress": [
+                "3",
+                "ꠦ",
+                "ꠧ",
+                "ꠄ",
+                "ꠅ"
+              ],
+              "letters": "ꠦꠧꠄꠅ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ꠇꠈꠉꠊ",
+              "output": "ꠇ",
+              "longPress": [
+                "4",
+                "ꠇ",
+                "ꠈ",
+                "ꠉ",
+                "ꠊ"
+              ],
+              "letters": "ꠇꠈꠉꠊ"
+            },
+            {
+              "label": "ꠌꠍꠎꠏ",
+              "output": "ꠌ",
+              "longPress": [
+                "5",
+                "ꠌ",
+                "ꠍ",
+                "ꠎ",
+                "ꠏ"
+              ],
+              "letters": "ꠌꠍꠎꠏ"
+            },
+            {
+              "label": "ꠐꠑꠒꠓ",
+              "output": "ꠐ",
+              "longPress": [
+                "6",
+                "ꠐ",
+                "ꠑ",
+                "ꠒ",
+                "ꠓ",
+                "ꠠ"
+              ],
+              "letters": "ꠐꠑꠒꠓꠠ"
+            },
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            }
+          ],
+          [
+            {
+              "label": "ꠔꠕꠖꠗ",
+              "output": "ꠔ",
+              "longPress": [
+                "7",
+                "ꠔ",
+                "ꠕ",
+                "ꠖ",
+                "ꠗ",
+                "ꠘ"
+              ],
+              "letters": "ꠔꠕꠖꠗꠘ"
+            },
+            {
+              "label": "ꠙꠚꠛꠜ",
+              "output": "ꠙ",
+              "longPress": [
+                "8",
+                "ꠙ",
+                "ꠚ",
+                "ꠛ",
+                "ꠜ",
+                "ꠝ"
+              ],
+              "letters": "ꠙꠚꠛꠜꠝ"
+            },
+            {
+              "label": "ꠞꠟꠡꠢ",
+              "output": "ꠞ",
+              "longPress": [
+                "9",
+                "ꠞ",
+                "ꠟ",
+                "ꠡ",
+                "ꠢ"
+              ],
+              "letters": "ꠞꠟꠡꠢ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

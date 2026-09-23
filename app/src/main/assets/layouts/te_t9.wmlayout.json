@@ -1,0 +1,207 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_te_t9",
+    "name": "T9 (తెలుగు)",
+    "langId": "te",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": "ఁ ం ః ్",
+              "output": "ఁ",
+              "longPress": [
+                "1",
+                "ఁ",
+                "ం",
+                "ః",
+                "్"
+              ],
+              "letters": "ఁంః్"
+            },
+            {
+              "label": "అఆఇఈ",
+              "output": "ా",
+              "longPress": [
+                "2",
+                "ా",
+                "ి",
+                "ీ",
+                "ు",
+                "ూ",
+                "ృ",
+                "ౄ",
+                "అ",
+                "ఆ",
+                "ఇ",
+                "ఈ",
+                "ఉ",
+                "ఊ",
+                "ఋ",
+                "ౠ"
+              ],
+              "letters": "ాిీుూృౄఅఆఇఈఉఊఋౠ"
+            },
+            {
+              "label": "ఎఏఐఒ",
+              "output": "ె",
+              "longPress": [
+                "3",
+                "ె",
+                "ే",
+                "ై",
+                "ొ",
+                "ో",
+                "ౌ",
+                "ఎ",
+                "ఏ",
+                "ఐ",
+                "ఒ",
+                "ఓ",
+                "ఔ"
+              ],
+              "letters": "ెేైొోౌఎఏఐఒఓఔ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "కఖగఘ",
+              "output": "క",
+              "longPress": [
+                "4",
+                "క",
+                "ఖ",
+                "గ",
+                "ఘ",
+                "ఙ"
+              ],
+              "letters": "కఖగఘఙ"
+            },
+            {
+              "label": "చఛజఝ",
+              "output": "చ",
+              "longPress": [
+                "5",
+                "చ",
+                "ఛ",
+                "జ",
+                "ఝ",
+                "ఞ"
+              ],
+              "letters": "చఛజఝఞ"
+            },
+            {
+              "label": "టఠడఢ",
+              "output": "ట",
+              "longPress": [
+                "6",
+                "ట",
+                "ఠ",
+                "డ",
+                "ఢ",
+                "ణ"
+              ],
+              "letters": "టఠడఢణ"
+            },
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            }
+          ],
+          [
+            {
+              "label": "తథదధ",
+              "output": "త",
+              "longPress": [
+                "7",
+                "త",
+                "థ",
+                "ద",
+                "ధ",
+                "న"
+              ],
+              "letters": "తథదధన"
+            },
+            {
+              "label": "పఫబభ",
+              "output": "ప",
+              "longPress": [
+                "8",
+                "ప",
+                "ఫ",
+                "బ",
+                "భ",
+                "మ"
+              ],
+              "letters": "పఫబభమ"
+            },
+            {
+              "label": "యరఱల",
+              "output": "య",
+              "longPress": [
+                "9",
+                "య",
+                "ర",
+                "ఱ",
+                "ల",
+                "ళ",
+                "వ",
+                "శ",
+                "ష",
+                "స",
+                "హ"
+              ],
+              "letters": "యరఱలళవశషసహ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}

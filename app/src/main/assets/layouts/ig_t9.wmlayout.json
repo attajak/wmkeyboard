@@ -31,9 +31,11 @@
                 "2",
                 "a",
                 "b",
-                "c"
+                "c",
+                "á",
+                "à"
               ],
-              "letters": "abc"
+              "letters": "abcáà"
             },
             {
               "label": "DEF",
@@ -42,9 +44,11 @@
                 "3",
                 "d",
                 "e",
-                "f"
+                "f",
+                "é",
+                "è"
               ],
-              "letters": "def"
+              "letters": "deféè"
             },
             {
               "label": "⌫",
@@ -62,9 +66,11 @@
                 "g",
                 "h",
                 "i",
-                "ị"
+                "ị",
+                "í",
+                "ì"
               ],
-              "letters": "ghiị"
+              "letters": "ghiịíì"
             },
             {
               "label": "JKL",
@@ -86,9 +92,11 @@
                 "n",
                 "o",
                 "ṅ",
-                "ọ"
+                "ọ",
+                "ó",
+                "ò"
               ],
-              "letters": "mnoṅọ"
+              "letters": "mnoṅọóò"
             },
             {
               "label": "⇧",
@@ -118,9 +126,11 @@
                 "t",
                 "u",
                 "v",
-                "ụ"
+                "ụ",
+                "ú",
+                "ù"
               ],
-              "letters": "tuvụ"
+              "letters": "tuvụúù"
             },
             {
               "label": "WXYZ",

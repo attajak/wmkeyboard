@@ -5,6 +5,7 @@ import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.isAmbiguous
 import com.wasimaster.wmkeyboard.core.layout.letterSet
 import java.io.File
+import java.text.Normalizer
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -277,5 +278,49 @@ class AmbiguousKeyDecodeTest {
                 assertEquals("$stem: $word", word, decode(entries, word, pad = pad).first())
             }
         }
+    }
+
+    /**
+     * Scripts written with combining marks (#332): the vowel sign, the virama
+     * and the tone mark are keystrokes of their own, on the keys the phones put
+     * them on, and decode like any other letter of the set.
+     */
+    @Test
+    fun aKeypadSpellsWordsWithCombiningMarks() {
+        val cases = listOf(
+            "hi" to listOf("नमस्ते" to 500, "भारत" to 400),
+            "bn" to listOf("আমি" to 500, "বাংলা" to 400),
+            "ta" to listOf("வணக்கம்" to 500),
+            "th" to listOf("สวัสดี" to 500),
+            "vi" to listOf("việt" to 500, "người" to 400),
+            "yo" to listOf(Normalizer.normalize("ẹ\u0301kọ\u0301", Normalizer.Form.NFC) to 500),
+        )
+        for ((stem, entries) in cases) {
+            val pad = shippedKeypad(stem)
+            for ((word, _) in entries) {
+                assertEquals("$stem: $word", word, decode(entries, word, pad = pad).first())
+            }
+        }
+    }
+
+    /**
+     * A nukta letter on a key (ज़, U+095B) is spelled base + nukta in the word
+     * lists, because Unicode will not compose it back; one keystroke still
+     * reads the whole letter.
+     */
+    @Test
+    fun aNuktaLetterOnAKeyMatchesItsDecomposedSpelling() {
+        val typedWith = "\u095bिंदगी"
+        val listed = Normalizer.normalize(typedWith, Normalizer.Form.NFC)
+        assertEquals("the list spells it decomposed", typedWith.length + 1, listed.length)
+        val got = decode(listOf(listed to 500), typedWith, pad = shippedKeypad("hi"))
+        assertEquals(listed, got.first())
+    }
+
+    @Test
+    fun keySetsKnowWhichMembersSpellAsSeveralCharacters() {
+        val keys = requireNotNull(KeySets.of(listOf("चछजझञ\u095b", "abc")))
+        assertEquals(listOf("ज\u093c"), keys.spellingsAt(0)?.toList())
+        assertNull(keys.spellingsAt(1))
     }
 }

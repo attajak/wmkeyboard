@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import java.text.Normalizer
+
 /**
  * Which letters each keystroke of a word could have meant, for a keyboard that
  * puts more than one letter on a key — T9's `2 = abc`, a compact grid's
@@ -30,6 +32,28 @@ class KeySets private constructor(private val sets: Array<String>) {
      * key, a long-press pick, a position past the end of the frame.
      */
     fun at(pos: Int): String? = sets.getOrNull(pos)?.takeIf { it.length > 1 }
+
+    /**
+     * The members of keystroke [pos]'s set that a word list spells as more
+     * than one character, each in that spelling, or null when there are none.
+     *
+     * A key carries the letters its phone printed, and some of those are
+     * characters normalisation will not keep whole: क़, ড় and য় are on
+     * Unicode's composition-exclusion list, so the NFC word lists spell them
+     * base + nukta, and Yiddish's אַ is a presentation form the lists spell
+     * alef + patah (#332). One keystroke still means the whole letter; the
+     * decoder walks its spelling edge by edge. Computed once per frame, since
+     * a frame is rebuilt per keystroke and read at every node of the walk.
+     */
+    fun spellingsAt(pos: Int): Array<String>? = spellings.getOrNull(pos)
+
+    private val spellings: Array<Array<String>?> = Array(sets.size) { i ->
+        sets[i].takeIf { it.length > 1 }
+            ?.map { Normalizer.normalize(it.toString(), Normalizer.Form.NFC) }
+            ?.filter { it.length > 1 }
+            ?.takeIf { it.isNotEmpty() }
+            ?.toTypedArray()
+    }
 
     /** Whether keystroke [pos] could have meant [label]. */
     fun accepts(pos: Int, label: Char): Boolean = at(pos)?.contains(label) == true

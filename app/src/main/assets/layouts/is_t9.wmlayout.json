@@ -49,9 +49,10 @@
                 "f",
                 "ð",
                 "é",
-                "ë"
+                "ë",
+                "đ"
               ],
-              "letters": "defðéë"
+              "letters": "defðéëđ"
             },
             {
               "label": "⌫",
@@ -80,9 +81,10 @@
                 "5",
                 "j",
                 "k",
-                "l"
+                "l",
+                "ķ"
               ],
-              "letters": "jkl"
+              "letters": "jklķ"
             },
             {
               "label": "MNO",
@@ -127,9 +129,10 @@
                 "u",
                 "v",
                 "ú",
-                "ü"
+                "ü",
+                "ū"
               ],
-              "letters": "tuvúü"
+              "letters": "tuvúüū"
             },
             {
               "label": "WXYZ",

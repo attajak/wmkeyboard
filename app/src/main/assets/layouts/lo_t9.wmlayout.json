@@ -1,0 +1,197 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_lo_t9",
+    "name": "T9 (ລາວ)",
+    "langId": "lo",
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": ".,?",
+              "output": ".",
+              "longPress": [
+                "1",
+                ",",
+                "?",
+                "!",
+                "'",
+                "-",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "ກຂຄງ",
+              "output": "ກ",
+              "longPress": [
+                "2",
+                "ກ",
+                "ຂ",
+                "ຄ",
+                "ງ"
+              ],
+              "letters": "ກຂຄງ"
+            },
+            {
+              "label": "ຈສຊຍ",
+              "output": "ຈ",
+              "longPress": [
+                "3",
+                "ຈ",
+                "ສ",
+                "ຊ",
+                "ຍ"
+              ],
+              "letters": "ຈສຊຍ"
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "ດຕຖທ",
+              "output": "ດ",
+              "longPress": [
+                "4",
+                "ດ",
+                "ຕ",
+                "ຖ",
+                "ທ",
+                "ນ"
+              ],
+              "letters": "ດຕຖທນ"
+            },
+            {
+              "label": "ບປຜຝ",
+              "output": "ບ",
+              "longPress": [
+                "5",
+                "ບ",
+                "ປ",
+                "ຜ",
+                "ຝ"
+              ],
+              "letters": "ບປຜຝ"
+            },
+            {
+              "label": "ພຟມຢ",
+              "output": "ພ",
+              "longPress": [
+                "6",
+                "ພ",
+                "ຟ",
+                "ມ",
+                "ຢ"
+              ],
+              "letters": "ພຟມຢ"
+            },
+            {
+              "label": ",",
+              "longPress": [
+                "!",
+                "?"
+              ],
+              "role": "Comma"
+            }
+          ],
+          [
+            {
+              "label": "ຣລວຫ",
+              "output": "ຣ",
+              "longPress": [
+                "7",
+                "ຣ",
+                "ລ",
+                "ວ",
+                "ຫ",
+                "ອ",
+                "ຮ",
+                "ໜ",
+                "ໝ"
+              ],
+              "letters": "ຣລວຫອຮໜໝ"
+            },
+            {
+              "label": "ິ ີ ຶ ື",
+              "output": "ິ",
+              "longPress": [
+                "8",
+                "ິ",
+                "ີ",
+                "ຶ",
+                "ື",
+                "ຸ",
+                "ູ",
+                "ັ",
+                "ົ",
+                "່",
+                "້",
+                "໊",
+                "໋",
+                "໌",
+                "ໍ",
+                "ຼ"
+              ],
+              "letters": "ິີຶືຸູັົ່້໊໋໌ໍຼ"
+            },
+            {
+              "label": "ະາເແ",
+              "output": "ະ",
+              "longPress": [
+                "9",
+                "ະ",
+                "າ",
+                "ຳ",
+                "ເ",
+                "ແ",
+                "ໂ",
+                "ໃ",
+                "ໄ",
+                "ຽ",
+                "ໆ",
+                "ຯ"
+              ],
+              "letters": "ະາຳເແໂໃໄຽໆຯ"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            }
+          ]
+        ]
+      }
+    },
+    "tabletExpand": false
+  }
+}
