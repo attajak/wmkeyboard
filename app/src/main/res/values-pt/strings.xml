@@ -6044,9 +6044,6 @@
     <string name="typing_glide_commit_scope_info">A barra de sugestões é onde a cor do corretor automático já reside, por isso ela sempre mostra a cor. A pílula de palavra fica acima da ponta do seu dedo e é o que a maioria das pessoas observa enquanto deslizam, por isso ela também carrega a cor por padrão. As palavras desenhadas nas teclas também podem carregá-la, o que faz com que todo o teclado responda rapidamente, mas é muita cor de uma só vez.</string>
     <string name="typing_glide_commit_scope_subtitle">A barra de sugestões, a palavra acima do seu dedo ou as palavras nas teclas</string>
     <string name="typing_glide_commit_scope_title">Onde a cor aparece</string>
-    <string name="typing_glide_dwell_info">Um gesto desenha \"bom\" e \"god\" da mesma maneira, porque o \'o\' é uma tecla e seu dedo a cruza uma vez. Fique na tecla por um momento para indicar que a letra está lá duas vezes. O valor é um múltiplo da sua própria velocidade nesse mesmo gesto, não um número de segundos, então funciona tanto em um gesto rápido quanto em um lento. Um valor baixo aceita uma parada curta, mas um gesto cuidadoso que desacelera em todos os lugares acaba escrevendo letras duas vezes por conta própria. Um valor alto exige uma parada clara.</string>
-    <string name="typing_glide_dwell_subtitle">Quanto tempo permanecer em uma tecla para escrever a letra duas vezes</string>
-    <string name="typing_glide_dwell_title">Pausar para duplicar uma letra</string>
     <string name="typing_glide_end_radius_info">Medido em larguras de tecla. O teclado oferece uma palavra apenas quando você levanta o dedo tão perto da última letra dessa palavra. O fim de um deslize é onde um movimento para, por isso geralmente é menos preciso do que o início. Este é um valor separado por esse motivo. Aumente-o se seus deslizes passarem da última letra.</string>
     <string name="typing_glide_end_radius_subtitle">Quão longe o final de um deslize pode estar da última letra</string>
     <string name="typing_glide_end_radius_title">Raio de erro final</string>
@@ -6059,8 +6056,6 @@
     <string name="typing_glide_loop_extent_info">Medido em larguras de tecla. Uma marca deve ser pequena o suficiente para caber em uma tecla. Uma palavra como \"assassino\" contorna um anel de teclas adjacentes e desenha um círculo largo que não significa nada do tipo, então mantenha isso abaixo da largura de uma tecla. Um valor baixo conta apenas um círculo apertado e mantém as letras ao redor dele fora dele.</string>
     <string name="typing_glide_loop_extent_subtitle">Círculos mais largos são um caminho através das teclas, não uma marca em uma só</string>
     <string name="typing_glide_loop_extent_title">Maior laço que conta</string>
-    <string name="typing_glide_loop_info">Esta é a marca que o Swype ensinou. Deslize até a letra, contorne-a uma vez e continue. O círculo não custa nada à palavra, porque o teclado remove o loop da distância que seu dedo percorreu. Desative isso se seus deslizes se curvarem no caminho e você obtiver letras escritas duas vezes que não solicitou.</string>
-    <string name="typing_glide_loop_radius_info">Medido em larguras de tecla. O teclado fornece um círculo para a tecla mais próxima do seu centro. Um círculo desenhado através de uma tecla fica cerca de um terço de uma tecla para um lado, então um valor muito baixo não encontra nenhuma letra para ele e a marca não faz nada. Um valor alto pode dar a marca para a tecla vizinha.</string>
     <string name="typing_glide_loop_radius_subtitle">Quão perto da letra o centro de um círculo deve estar</string>
     <string name="typing_glide_loop_radius_title">Centralização do loop</string>
     <string name="typing_glide_loop_subtitle">Desenhe um pequeno círculo em uma tecla para escrever a letra duas vezes</string>
@@ -6128,15 +6123,9 @@
     <string name="typing_glide_vocabulary_info">Um deslize indica ao teclado quais teclas seu dedo passou perto e em que ordem. Muitas palavras se encaixam nisso vagamente, então o teclado usa a frequência das palavras para selecionar uma delas. Um dicionário grande contém muitas palavras raras, e uma palavra rara cujo formato se encaixa um pouco melhor pode ganhar da palavra que você pretendia. Esta configuração limita um deslize às palavras mais comuns no dicionário. Ela altera apenas a digitação por deslize. Sugestões, preenchimento de palavras e correção automática ainda usam todas as palavras, porque as letras que você digita dizem muito mais do que um deslize. As palavras que você ensina ao teclado nunca são limitadas. O dicionário que vem com o teclado é menor do que qualquer limite aqui, então esta configuração não faz nada até que você baixe ou importe uma lista de palavras grande.</string>
     <string name="typing_glide_vocabulary_subtitle">Limitar um deslize às palavras mais comuns no seu dicionário</string>
     <string name="typing_glide_vocabulary_title">Palavras que um deslize pode produzir</string>
-    <string name="typing_glide_wiggle_extent_info">Medido em larguras de tecla. Mantenha isso abaixo da largura de uma tecla, ou uma palavra que vai de uma tecla para a vizinha e volta é lida como uma letra escrita duas vezes. Usado apenas enquanto o interruptor acima estiver ligado.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Até onde o dedo pode ir em um movimento</string>
     <string name="typing_glide_wiggle_extent_title">Maior oscilação que conta</string>
-    <string name="typing_glide_wiggle_info">A outra marca que as pessoas usam para uma letra escrita duas vezes: em vez de um círculo, elas esfregam sobre a tecla. Isso está desativado, porque uma curva lenta desenhada com um dedo instável parece muito semelhante, e o teclado então escreve letras duas vezes que você escreveu uma vez. Ative se esta for a marca que você faz.</string>
-    <string name="typing_glide_wiggle_strength_info">Um valor de 100 por cento torna a marca tão boa quanto um círculo. Um valor menor a deixa como uma dica, que uma palavra muito mais comum ainda pode superar. Usado apenas enquanto o interruptor acima estiver ligado.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Quanto um movimento de esfregar conta como evidência de duas letras</string>
     <string name="typing_glide_wiggle_strength_title">Força da oscilação</string>
-    <string name="typing_glide_wiggle_subtitle">Esfregue para frente e para trás em uma tecla para escrever a letra duas vezes</string>
-    <string name="typing_glide_wiggle_title">Agitar para duplicar uma letra</string>
     <string name="typing_group_autopilot_subtitle">Ampliar a área de toque das letras que você digitará em seguida</string>
     <string name="typing_group_autopilot_title">Piloto automático</string>
     <string name="typing_group_backspace_title">Backspace</string>

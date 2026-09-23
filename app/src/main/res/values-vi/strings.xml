@@ -6041,9 +6041,6 @@
     <string name="typing_glide_commit_scope_info">Thanh gợi ý là nơi màu tự động sửa lỗi đã tồn tại, vì vậy nó luôn hiển thị màu đó. Viên từ nằm phía trên đầu ngón tay của bạn và là thứ mà hầu hết mọi người nhìn vào khi họ lướt, vì vậy theo mặc định, nó cũng mang màu sắc đó. Các từ được vẽ trên các phím cũng có thể mang màu sắc đó, giúp toàn bộ bàn phím phản hồi trong nháy mắt nhưng lại có quá nhiều màu cùng một lúc.</string>
     <string name="typing_glide_commit_scope_subtitle">Thanh gợi ý, từ phía trên ngón tay của bạn, hoặc các từ trên phím</string>
     <string name="typing_glide_commit_scope_title">Nơi hiển thị màu sắc</string>
-    <string name="typing_glide_dwell_info">Vuốt vẽ \"good\" và \"god\" theo cùng một cách, vì chữ o là một phím và ngón tay của bạn đi qua nó một lần. Giữ trên phím một lúc để cho biết chữ cái đó xuất hiện hai lần. Giá trị này là bội số của tốc độ của chính bạn trong cùng một lần vuốt, không phải là số giây, vì vậy nó hoạt động hiệu quả trong cả vuốt nhanh và chậm. Giá trị thấp chấp nhận dừng ngắn, nhưng vuốt cẩn thận làm chậm lại ở mọi nơi sẽ tự viết chữ cái hai lần. Giá trị cao yêu cầu dừng rõ ràng.</string>
-    <string name="typing_glide_dwell_subtitle">Thời gian dừng trên một phím để viết chữ cái đó hai lần</string>
-    <string name="typing_glide_dwell_title">Tạm dừng để nhân đôi chữ cái</string>
     <string name="typing_glide_end_radius_info">Được đo bằng độ rộng phím. Bàn phím chỉ gợi ý một từ khi bạn nhấc ngón tay ở khoảng cách này so với chữ cái cuối cùng của từ đó. Điểm kết thúc của một thao tác lướt là nơi chuyển động dừng lại, vì vậy nó thường kém chính xác hơn điểm bắt đầu. Đây là lý do tại sao có một giá trị riêng cho điểm này. Hãy tăng giá trị nếu các thao tác lướt của bạn vượt quá chữ cái cuối cùng.</string>
     <string name="typing_glide_end_radius_subtitle">Khoảng cách tối đa từ điểm kết thúc của thao tác vuốt đến chữ cái cuối cùng</string>
     <string name="typing_glide_end_radius_title">Bán kính lỗi kết thúc</string>
@@ -6056,8 +6053,6 @@
     <string name="typing_glide_loop_extent_info">Được đo bằng chiều rộng phím. Một dấu hiệu phải đủ nhỏ để nằm trên một phím. Một từ như \"murderer\" đi vòng quanh các phím cạnh nhau và vẽ một vòng tròn rộng không có ý nghĩa gì cả, vì vậy hãy giữ giá trị này dưới chiều rộng của một phím. Giá trị thấp chỉ tính một vòng tròn hẹp và giữ các chữ cái xung quanh nó không bị bao gồm.</string>
     <string name="typing_glide_loop_extent_subtitle">Các vòng tròn rộng hơn là một đường dẫn qua các phím, không phải là một dấu hiệu trên một phím</string>
     <string name="typing_glide_loop_extent_title">Vòng lặp lớn nhất được tính</string>
-    <string name="typing_glide_loop_info">Đây là dấu hiệu mà Swype đã dạy. Lướt đến chữ cái, đi vòng quanh nó một lần và tiếp tục. Vòng tròn không làm ảnh hưởng đến từ ngữ vì bàn phím loại bỏ vòng lặp khỏi khoảng cách ngón tay bạn đã di chuyển. Hãy tắt tính năng này nếu các đường lướt của bạn bị cong trên đường đi và bạn nhận được các chữ cái được viết hai lần mà bạn không yêu cầu.</string>
-    <string name="typing_glide_loop_radius_info">Được đo bằng chiều rộng phím. Bàn phím tạo ra một vòng tròn đến phím gần giữa nhất. Một vòng tròn vẽ qua một phím nằm cách một bên khoảng một phần ba phím, vì vậy giá trị rất thấp sẽ không tìm thấy chữ cái nào cho nó và dấu đó không có tác dụng. Giá trị cao có thể gán dấu đó cho phím bên cạnh.</string>
     <string name="typing_glide_loop_radius_subtitle">Khoảng cách gần chữ cái mà tâm vòng tròn phải đạt tới</string>
     <string name="typing_glide_loop_radius_title">Căn giữa vòng lặp</string>
     <string name="typing_glide_loop_subtitle">Vẽ một vòng tròn nhỏ trên một phím để viết chữ cái hai lần</string>
@@ -6125,15 +6120,9 @@
     <string name="typing_glide_vocabulary_info">Lướt phím cho bàn phím biết ngón tay bạn đã đi gần những phím nào và theo thứ tự nào. Nhiều từ khớp với điều đó một cách lỏng lẻo, vì vậy bàn phím sử dụng tần suất từ để chọn một trong số đó. Một từ điển lớn chứa nhiều từ hiếm, và một từ hiếm có hình dạng khớp tốt hơn một chút có thể thắng từ bạn định nhập. Cài đặt này giới hạn việc lướt phím chỉ với các từ phổ biến nhất trong từ điển. Nó chỉ thay đổi cách gõ lướt. Các gợi ý, hoàn thành từ và tự động sửa lỗi vẫn sử dụng mọi từ, vì các chữ cái bạn gõ nói lên nhiều điều hơn là một cú vuốt. Các từ bạn dạy cho bàn phím không bao giờ bị giới hạn. Từ điển đi kèm với bàn phím nhỏ hơn mọi giới hạn ở đây, vì vậy cài đặt này không có tác dụng cho đến khi bạn tải xuống hoặc nhập một danh sách từ lớn.</string>
     <string name="typing_glide_vocabulary_subtitle">Giới hạn thao tác lướt trong các từ phổ biến nhất trong từ điển của bạn</string>
     <string name="typing_glide_vocabulary_title">Các từ mà thao tác lướt có thể tạo ra</string>
-    <string name="typing_glide_wiggle_extent_info">Được đo bằng độ rộng phím. Hãy giữ giá trị này dưới độ rộng của một phím, nếu không một từ đi từ một phím sang phím bên cạnh rồi quay lại sẽ bị đọc thành một chữ cái được viết hai lần. Chỉ được sử dụng khi công tắc phía trên đang bật.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Khoảng cách ngón tay có thể di chuyển khi vuốt</string>
     <string name="typing_glide_wiggle_extent_title">Độ rung lớn nhất được tính</string>
-    <string name="typing_glide_wiggle_info">Dấu hiệu khác mà mọi người sử dụng cho một chữ cái được viết hai lần: thay vì một vòng tròn, họ di chuyển qua lại trên phím. Tính năng này bị tắt vì một vòng quay chậm được vẽ bằng ngón tay không ổn định trông khá giống nhau, và bàn phím sau đó sẽ viết các chữ cái hai lần mà bạn chỉ viết một lần. Hãy bật tính năng này nếu đây là dấu hiệu bạn tạo ra.</string>
-    <string name="typing_glide_wiggle_strength_info">Giá trị 100 phần trăm làm cho dấu vết tốt như một vòng tròn. Giá trị thấp hơn để lại nó như một gợi ý, mà một từ phổ biến hơn nhiều vẫn có thể thắng được. Chỉ được sử dụng khi công tắc phía trên đang bật.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Mức độ di chuyển trên phím được tính là bằng chứng của hai chữ cái</string>
     <string name="typing_glide_wiggle_strength_title">Độ mạnh của rung</string>
-    <string name="typing_glide_wiggle_subtitle">Di chuyển qua lại trên một phím để viết chữ cái đó hai lần</string>
-    <string name="typing_glide_wiggle_title">Lắc để nhân đôi chữ cái</string>
     <string name="typing_group_autopilot_subtitle">Mở rộng vùng chạm của các chữ cái bạn gõ tiếp theo</string>
     <string name="typing_group_autopilot_title">Tự động lái</string>
     <string name="typing_group_backspace_title">Phím xóa lùi</string>

@@ -6037,9 +6037,6 @@
     <string name="typing_glide_commit_scope_info">Öneri şeridi, otomatik düzeltme renginin zaten bulunduğu yerdir, bu yüzden rengi her zaman gösterir. Kelime balonu parmak ucunuzun üzerinde hareket eder ve çoğu insanın kaydırma yaparken izlediği şey budur, bu yüzden varsayılan olarak rengi de taşır. Tuşların üzerine çizilen kelimeler de bunu taşıyabilir, bu da tüm klavyenin bir bakışta yanıt vermesini sağlar ancak aynı anda çok fazla renk oluşturur.</string>
     <string name="typing_glide_commit_scope_subtitle">Öneri şeridi, parmağınızın üzerindeki kelime veya tuşların üzerindeki kelimeler</string>
     <string name="typing_glide_commit_scope_title">Rengin göründüğü yer</string>
-    <string name="typing_glide_dwell_info">Bir kaydırma hareketi \"good\" ve \"god\" kelimelerini aynı şekilde çizer, çünkü \'o\' harfi tek bir tuştur ve parmağınız üzerinden bir kez geçer. Harfin iki kez olduğunu belirtmek için tuş üzerinde bir an bekleyin. Değer, saniye sayısı değil, aynı kaydırma hareketindeki kendi hızınızın bir katıdır, bu nedenle hem hızlı hem de yavaş kaydırmalarda çalışır. Düşük bir değer kısa bir duraklamayı kabul eder, ancak her yerde yavaşlayan dikkatli bir kaydırma, harfleri kendi kendine iki kez yazar. Yüksek bir değer net bir duraklama gerektirir.</string>
-    <string name="typing_glide_dwell_subtitle">Harfi iki kez yazmak için bir tuş üzerinde ne kadar süre kalınacağı</string>
-    <string name="typing_glide_dwell_title">Bir harfi iki kez yazmak için duraklayın</string>
     <string name="typing_glide_end_radius_info">Tuş genişliği cinsinden ölçülür. Klavye, bir kelimeyi ancak parmağınızı o kelimenin son harfine bu kadar yakın bir noktada kaldırdığınızda önerir. Kaydırmanın sonu, hareketin durduğu yerdir, bu nedenle genellikle başlangıcından daha az doğrudur. Bu nedenle ayrı bir değerdir. Kaydırmalarınız son harfin ötesine geçiyorsa bu değeri artırın.</string>
     <string name="typing_glide_end_radius_subtitle">Bir kaydırmanın sonunun son harften ne kadar uzakta olabileceği</string>
     <string name="typing_glide_end_radius_title">Bitiş hata yarıçapı</string>
@@ -6052,8 +6049,6 @@
     <string name="typing_glide_loop_extent_info">Tuş genişliği cinsinden ölçülür. Bir işaret, tek bir tuşa sığacak kadar küçük olmalıdır. \"Murderer\" gibi bir kelime, yan yana duran tuşlar etrafında döner ve hiçbir anlam ifade etmeyen geniş bir daire çizer, bu yüzden bunu bir tuş genişliğinin altında tutun. Düşük bir değer sadece dar bir daireyi sayar ve etrafındaki harfleri bunun dışında tutar.</string>
     <string name="typing_glide_loop_extent_subtitle">Daha geniş daireler, bir tuş üzerindeki işaret değil, tuşlar boyunca bir yoldur</string>
     <string name="typing_glide_loop_extent_title">Sayılacak en büyük döngü</string>
-    <string name="typing_glide_loop_info">Bu, Swype\'ın öğrettiği işarettir. Harfe kaydırın, üzerinde bir kez dönün ve devam edin. Klavye, parmağınızın katettiği mesafeden döngüyü çıkardığı için dairenin kelimeye bir maliyeti yoktur. Kaydırmalarınız sırasında kıvrılmalar oluyorsa ve istemediğiniz halde harfler iki kez yazılıyorsa bunu kapatın.</string>
-    <string name="typing_glide_loop_radius_info">Tuş genişliği cinsinden ölçülür. Klavye, orta noktasına en yakın tuşa bir daire atar. Bir tuşun içinden çizilen daire, tuşun bir tarafına yaklaşık üçte bir oranında oturur, bu nedenle çok düşük bir değer o tuş için hiçbir harf bulamaz ve işaret hiçbir şey yapmaz. Yüksek bir değer, işareti yan taraftaki tuşa verebilir.</string>
     <string name="typing_glide_loop_radius_subtitle">Bir dairenin merkezinin harfe ne kadar yakın olması gerektiği</string>
     <string name="typing_glide_loop_radius_title">Döngü merkezleme</string>
     <string name="typing_glide_loop_subtitle">Harfi iki kez yazmak için bir tuş üzerinde küçük bir daire çizin</string>
@@ -6121,15 +6116,9 @@
     <string name="typing_glide_vocabulary_info">Kaydırma, klavyeye parmağınızın hangi tuşlara yakın geçtiğini ve hangi sırayla geçtiğini söyler. Birçok kelime buna kısmen uyar, bu yüzden klavye birini seçmek için kelime sıklığını kullanır. Büyük bir sözlük birçok nadir kelimeyi barındırır ve şekli biraz daha iyi uyan nadir bir kelime, kastettiğiniz kelimeye karşı kazanabilir. Bu ayar, kaydırmayı sözlükteki en yaygın kelimelerle sınırlar. Sadece kaydırarak yazmayı değiştirir. Öneriler, kelime tamamlama ve otomatik düzeltme her kelimeyi kullanmaya devam eder, çünkü yazdığınız harfler kaydırmadan çok daha fazlasını ifade eder. Klavyeye öğrettiğiniz kelimeler asla sınırlandırılmaz. Klavyeyle gelen sözlük buradaki her sınırdan daha küçüktür, bu yüzden büyük bir kelime listesi indirip içe aktarana kadar bu ayar hiçbir şey yapmaz.</string>
     <string name="typing_glide_vocabulary_subtitle">Kaydırmayı sözlüğünüzdeki en yaygın kelimelerle sınırlandırın</string>
     <string name="typing_glide_vocabulary_title">Kaydırmanın üretebileceği kelimeler</string>
-    <string name="typing_glide_wiggle_extent_info">Tuş genişliği cinsinden ölçülür. Bunu bir tuşun genişliğinin altında tutun, aksi takdirde bir tuştan yanındaki tuşa gidip geri dönen bir kelime, iki kez yazılmış bir harf olarak okunur. Yalnızca yukarıdaki anahtar açıkken kullanılır.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kaydırma sırasında parmağın ne kadar uzağa gidebileceği</string>
     <string name="typing_glide_wiggle_extent_title">Sayılacak en büyük sallanma</string>
-    <string name="typing_glide_wiggle_info">İnsanların iki kez yazılan bir harf için kullandığı diğer işaret: daire yerine tuşun üzerinde ovalama yaparlar. Bu kapalıdır, çünkü titrek bir parmakla çizilen yavaş bir dönüş neredeyse aynı görünür ve klavye o zaman bir kez yazdığınız harfleri iki kez yazar. Eğer yaptığınız işaret buysa açın.</string>
-    <string name="typing_glide_wiggle_strength_info">Yüzde 100\'lük bir değer, işareti bir daire kadar iyi yapar. Daha düşük bir değer, onu çok daha yaygın bir kelimenin hala yenebileceği bir ipucu olarak bırakır. Yalnızca yukarıdaki anahtar açıkken kullanılır.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Bir sürtünmenin iki harfin kanıtı olarak ne kadar sayılacağı</string>
     <string name="typing_glide_wiggle_strength_title">Sallanma gücü</string>
-    <string name="typing_glide_wiggle_subtitle">Harfi iki kez yazmak için bir tuş üzerinde ileri geri ovalayın</string>
-    <string name="typing_glide_wiggle_title">Bir harfi iki kez yazmak için sallayın</string>
     <string name="typing_group_autopilot_subtitle">Bir sonraki yazacağınız harflerin dokunma alanını genişletin</string>
     <string name="typing_group_autopilot_title">Otopilot</string>
     <string name="typing_group_backspace_title">Geri silme</string>

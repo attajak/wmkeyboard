@@ -6053,9 +6053,6 @@
     <string name="typing_glide_commit_scope_info">Vrstica s predlogi je prostor, kjer že živi barva samodejnega popravljanja, zato vedno prikazuje barvo. Besedna oblaček se premika nad vašo konico prsta in je tisto, kar večina ljudi opazuje med drsenjem, zato privzeto nosi tudi barvo. Besede, narisane na tipkah, jo lahko prav tako nosijo, zaradi česar se celotna tipkovnica odzove na prvi pogled, vendar je to naenkrat veliko barve.</string>
     <string name="typing_glide_commit_scope_subtitle">Vrstica s predlogi, beseda nad vašim prstom ali besede na tipkah</string>
     <string name="typing_glide_commit_scope_title">Kje se prikaže barva</string>
-    <string name="typing_glide_dwell_info">Drsenje nariše \"good\" in \"god\" na enak način, ker je o ena tipka in vaš prst jo prečka enkrat. Ostanite na tipki trenutek, da poveste, da je črka tam dvakrat. Vrednost je večkratnik vaše lastne hitrosti pri istem drsenju, ne število sekund, zato deluje pri hitrem in počasnem drsenju enako. Nizka vrednost sprejme kratek postanek, vendar previdno drsenje, ki se povsod upočasni, nato samo po sebi zapiše črke dvakrat. Visoka vrednost zahteva jasen postanek.</string>
-    <string name="typing_glide_dwell_subtitle">Kako dolgo ostati na tipki za dvakratni zapis črke</string>
-    <string name="typing_glide_dwell_title">Premor za podvojitev črke</string>
     <string name="typing_glide_end_radius_info">Merjeno v širinah tipk. Tipkovnica ponudi besedo le, če ste prst dvignili tako blizu zadnje črke te besede. Konec drsenja je tam, kjer se gibanje ustavi, zato je običajno manj natančen kot začetek. Iz tega razloga je to ločena vrednost. Premaknite jo navzgor, če vaši drsaji zdrsnejo mimo zadnje črke.</string>
     <string name="typing_glide_end_radius_subtitle">Kako daleč je lahko konec drsenja od zadnje črke</string>
     <string name="typing_glide_end_radius_title">Polmer končne napake</string>
@@ -6068,8 +6065,6 @@
     <string name="typing_glide_loop_extent_info">Merjeno v širinah tipk. Oznaka mora biti dovolj majhna, da se prilega eni tipki. Beseda, kot je \"murderer\", gre okoli obroča sosednjih tipk in nariše širok krog, ki ne pomeni ničesar, zato naj bo to manj od širine ene tipke. Nizka vrednost šteje le tesen krog in iz njega izključi črke okoli njega.</string>
     <string name="typing_glide_loop_extent_subtitle">Širši krogi so pot skozi tipke, ne oznaka na eni</string>
     <string name="typing_glide_loop_extent_title">Največja zanka, ki se šteje</string>
-    <string name="typing_glide_loop_info">To je oznaka, ki jo je učil Swype. Podrsajte do črke, enkrat jo obkrožite in nadaljujte. Krog ne vpliva na besedo, saj tipkovnica odšteje zanko od razdalje, ki jo je prepotoval vaš prst. To izklopite, če se vaši drsni gibi med potjo zvijajo in dobite dvakrat zapisane črke, ki jih niste želeli.</string>
-    <string name="typing_glide_loop_radius_info">Merjeno v širinah tipk. Tipkovnica dodeli krog tipki, ki je najbližje njeni sredini. Krog, narisan skozi tipko, leži približno tretjino tipke na eni strani, zato zelo nizka vrednost ne najde nobene črke zanjo in oznaka ne naredi ničesar. Visoka vrednost lahko dodeli oznako sosednji tipki.</string>
     <string name="typing_glide_loop_radius_subtitle">Kako blizu črke mora biti središče kroga</string>
     <string name="typing_glide_loop_radius_title">Centriranje zanke</string>
     <string name="typing_glide_loop_subtitle">Narišite majhen krog na tipki, da črko zapišete dvakrat</string>
@@ -6138,15 +6133,9 @@
     <string name="typing_glide_vocabulary_info">Drsenje pove tipkovnici, katere tipke so bile blizu vašega prsta in v kakšnem vrstnem redu. Mnoge besede se temu ohlapno prilegajo, zato tipkovnica uporablja pogostost besed za izbiro ene izmed njih. Velik slovar vsebuje veliko redkih besed in redka beseda, katere oblika se malo bolje prilega, lahko zmaga nad besedo, ki ste jo imeli v mislih. Ta nastavitev omeji drsenje na najpogostejše besede v slovarju. Spremeni samo drsno tipkanje. Predlogi, dokončanje besed in samodejni popravek še vedno uporabljajo vsako besedo, ker črke, ki jih vtipkate, povedo veliko več kot poteza. Besede, ki jih naučite tipkovnico, niso nikoli omejene. Slovar, ki je priložen tipkovnici, je manjši od vsake omejitve tukaj, zato ta nastavitev ne naredi ničesar, dokler ne prenesete ali uvozite velikega seznama besed.</string>
     <string name="typing_glide_vocabulary_subtitle">Omejite drsenje na najpogostejše besede v vašem slovarju</string>
     <string name="typing_glide_vocabulary_title">Besede, ki jih lahko ustvari drsenje</string>
-    <string name="typing_glide_wiggle_extent_info">Merjeno v širinah tipk. Naj bo to manj od širine ene tipke, sicer se beseda, ki gre od ene tipke do sosednje in nazaj, prebere kot ena črka, zapisana dvakrat. Uporablja se le, ko je zgornje stikalo vklopljeno.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kako daleč lahko seže prst pri drgnjenju</string>
     <string name="typing_glide_wiggle_extent_title">Največje miganje, ki šteje</string>
-    <string name="typing_glide_wiggle_info">Druga oznaka, ki jo ljudje uporabljajo za črko, napisano dvakrat: namesto kroga podrgnejo po tipki. To je izklopljeno, ker počasno obračanje, narisano z negotovim prstom, izgleda precej enako, tipkovnica pa nato dvakrat zapiše črke, ki ste jih napisali enkrat. Vklopite to, če je to oznaka, ki jo delate.</string>
-    <string name="typing_glide_wiggle_strength_info">Vrednost 100 odstotkov naredi oznako tako dobro kot krog. Nižja vrednost jo pusti kot namig, ki ga lahko še vedno premaga veliko pogostejša beseda. Uporablja se le, ko je zgornje stikalo vklopljeno.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Kako močno drgnjenje šteje kot dokaz za dve črki</string>
     <string name="typing_glide_wiggle_strength_title">Moč miganja</string>
-    <string name="typing_glide_wiggle_subtitle">Pomikajte se naprej in nazaj po tipki, da črko zapišete dvakrat</string>
-    <string name="typing_glide_wiggle_title">Migajte za podvojitev črke</string>
     <string name="typing_group_autopilot_subtitle">Razširite območje dotika črk, ki jih boste vnesli naslednje</string>
     <string name="typing_group_autopilot_title">Avtopilot</string>
     <string name="typing_group_backspace_title">Tipke za brisanje</string>

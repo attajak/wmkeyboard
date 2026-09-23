@@ -6052,9 +6052,6 @@
     <string name="typing_glide_commit_scope_info">Tillögustikan er þar sem sjálfvirk leiðréttingarliturinn býr nú þegar, svo hún sýnir alltaf litinn. Orðapillan fer fyrir ofan fingurgóminn og er það sem flestir horfa á á meðan þeir renna, svo hún ber líka litinn sjálfgefið. Orðin sem dregin eru á lyklana geta líka borið hann, sem gerir það að verkum að allt borðið svarar í fljótu bragði en það er mikill litur í einu.</string>
     <string name="typing_glide_commit_scope_subtitle">Tillögustikan, orðið fyrir ofan fingurinn þinn, eða orðin á lyklunum</string>
     <string name="typing_glide_commit_scope_title">Hvar liturinn birtist</string>
-    <string name="typing_glide_dwell_info">Renniskrif teiknar \"good\" og \"god\" á sama hátt, vegna þess að o er einn takki og fingurinn fer yfir hann einu sinni. Vertu á takkanum í smástund til að gefa til kynna að stafurinn sé þar tvisvar. Gildið er margfeldi af þínum eigin hraða í sama renniskrifi, ekki fjöldi sekúndna, svo það virkar jafnt í hröðu og hægu renniskrifi. Lágt gildi samþykkir stutta stopp, en varkárt renniskrif sem hægir á sér alls staðar skrifar þá stafi tvisvar af sjálfu sér. Hátt gildi krefst skýrs stopps.</string>
-    <string name="typing_glide_dwell_subtitle">Hversu lengi á að vera á takka til að skrifa stafinn tvisvar</string>
-    <string name="typing_glide_dwell_title">Hlé til að tvöfalda staf</string>
     <string name="typing_glide_end_radius_info">Mælt í breidd lykla. Lyklaborðið býður aðeins upp á orð þegar þú hefur lyft fingrinum svona nálægt síðasta staf orðsins. Endi á stroki er þar sem hreyfing stöðvast, svo hann er venjulega ónákvæmari en upphafið. Þetta er sérstakt gildi af þeirri ástæðu. Færðu það upp ef strokin þín renna framhjá síðasta stafnum.</string>
     <string name="typing_glide_end_radius_subtitle">Hversu langt endinn á stroki getur verið frá síðasta staf</string>
     <string name="typing_glide_end_radius_title">Radíus fyrir villu við lok</string>
@@ -6067,8 +6064,6 @@
     <string name="typing_glide_loop_extent_info">Mælt í breidd lykla. Merki verður að vera nógu lítið til að sitja á einum lykli. Orð eins og \"murderer\" fer í kringum hring af lyklum við hliðina á hverjum öðrum og teiknar breiðan hring sem þýðir ekkert slíkt, svo hafðu þetta undir breidd eins lykils. Lágt gildi telur aðeins þéttan hring og heldur stöfunum í kringum hann fyrir utan.</string>
     <string name="typing_glide_loop_extent_subtitle">Breiðari hringir eru leið í gegnum lykla, ekki merki á einum</string>
     <string name="typing_glide_loop_extent_title">Stærsta lykkja sem telur</string>
-    <string name="typing_glide_loop_info">Þetta er merkið sem Swype kenndi. Strjúktu að stafnum, farðu einu sinni í hring um hann og haltu áfram. Hringurinn kostar orðið ekkert, vegna þess að lyklaborðið tekur lykkjuna út úr vegalengdinni sem fingurinn ferðaðist. Slökktu á þessu ef strokurnar þínar krullast á leiðinni og þú færð stafi skrifaða tvisvar sem þú baðst ekki um.</string>
-    <string name="typing_glide_loop_radius_info">Mælt í breidd lykla. Lyklaborðið gefur lyklinum sem er næstur miðjunni hring. Hringur sem dreginn er í gegnum lykil situr um það bil þriðjung úr lykli til hliðar, svo mjög lágt gildi finnur engan staf fyrir hann og merkið gerir ekkert. Hátt gildi getur gefið næsta lykli merkið.</string>
     <string name="typing_glide_loop_radius_subtitle">Hversu nálægt stafnum miðja hringsins verður að vera</string>
     <string name="typing_glide_loop_radius_title">Miðja lykkju</string>
     <string name="typing_glide_loop_subtitle">Teiknaðu lítinn hring á takka til að skrifa stafinn tvisvar</string>
@@ -6138,15 +6133,9 @@
     <string name="typing_glide_vocabulary_info">Rennsli segir lyklaborðinu hvaða takka fingurinn fór nálægt, og í hvaða röð. Mörg orð passa lauslega við það, svo lyklaborðið notar tíðni orða til að velja eitt þeirra. Stór orðabók geymir mörg sjaldgæf orð, og sjaldgæft orð sem passar aðeins betur í lögun getur unnið yfir orðið sem þú meintir. Þessi stilling takmarkar rennsli við algengustu orðin í orðabókinni. Hún breytir aðeins rennslisskrifun. Tillögur, orðauppfylling og sjálfvirk leiðrétting nota enn öll orð, vegna þess að stafirnir sem þú skrifar segja miklu meira en stroka gerir. Orð sem þú kennir lyklaborðinu eru aldrei takmörkuð. Orðabókin sem fylgir lyklaborðinu er minni en öll mörk hér, svo þessi stilling gerir ekkert fyrr en þú hleður niður eða flytur inn stóran orðalista.</string>
     <string name="typing_glide_vocabulary_subtitle">Takmarkaðu strokur við algengustu orðin í orðabókinni þinni</string>
     <string name="typing_glide_vocabulary_title">Orð sem rennsli getur framleitt</string>
-    <string name="typing_glide_wiggle_extent_info">Mælt í breidd lykla. Hafðu þetta undir breidd eins lykils, annars gæti orð sem fer frá einum lykli yfir í þann næsta og til baka talist sem einn stafur skrifaður tvisvar. Aðeins notað á meðan rofinn hér að ofan er virkur.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Hversu langt fingurinn getur farið í stroku</string>
     <string name="typing_glide_wiggle_extent_title">Mesta hreyfing sem telur</string>
-    <string name="typing_glide_wiggle_info">Hitt merkið sem fólk notar fyrir staf skrifaðan tvisvar: í stað hrings, skrúbba þeir yfir lykilinn. Þetta er óvirkt, vegna þess að hæg beygja dregin með óstöðugum fingri lítur mjög svipað út, og lyklaborðið skrifar þá stafi tvisvar sem þú skrifaðir einu sinni. Kveiktu á þessu ef þetta er merkið sem þú gerir.</string>
-    <string name="typing_glide_wiggle_strength_info">Gildi upp á 100 prósent gerir merkið jafn gott og hring. Lægra gildi skilur það eftir sem vísbendingu, sem mun algengara orð getur samt unnið gegn. Aðeins notað á meðan rofinn hér að ofan er virkur.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Hversu mikið nudd telst sem vísbending um tvo stafi</string>
     <string name="typing_glide_wiggle_strength_title">Styrkur hreyfingar</string>
-    <string name="typing_glide_wiggle_subtitle">Strjúktu fram og til baka á lykli til að skrifa stafinn tvisvar</string>
-    <string name="typing_glide_wiggle_title">Hreyfing til að tvöfalda staf</string>
     <string name="typing_group_autopilot_subtitle">Stækka snertisvæði stafanna sem þú skrifar næst</string>
     <string name="typing_group_autopilot_title">Sjálfstýring</string>
     <string name="typing_group_backspace_title">Eyða lyklum</string>

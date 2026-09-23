@@ -6041,9 +6041,6 @@
     <string name="typing_glide_commit_scope_info">サジェストバーには自動修正の色がすでに表示されているため、常にその色が表示されます。ワードピルは指先の上に表示され、スワイプ入力中に多くの人が注目する場所であるため、デフォルトでその色も反映されます。キー上に描画された単語にも色を付けることができ、キーボード全体で一目で確認できるようになりますが、一度に多くの色が表示されることになります。</string>
     <string name="typing_glide_commit_scope_subtitle">サジェストストリップ、指の上の単語、またはキー上の単語</string>
     <string name="typing_glide_commit_scope_title">色が表示される場所</string>
-    <string name="typing_glide_dwell_info">グライド入力では、「o」が1つのキーであり、指がその上を一度通過するため、「good」と「god」は同じように描画されます。文字を2回入力したい場合は、そのキーの上で少し指を止めてください。この値は秒数ではなく、そのグライド内での自身の速度に対する倍率であるため、速いグライドでも遅いグライドでも同様に機能します。値を小さくすると短い停止でも受け付けますが、慎重なグライドで全体的に速度を落とすと、自動的に文字が2回入力されます。値を大きくすると、明確な停止が必要になります。</string>
-    <string name="typing_glide_dwell_subtitle">文字を2回入力するためにキーの上で指を止める時間</string>
-    <string name="typing_glide_dwell_title">一時停止して文字を重ねる</string>
     <string name="typing_glide_end_radius_info">キーの幅で測定されます。キーボードは、指をその単語の最後の文字の近くまで離したときにのみ、単語を提示します。グライドの終了は動きが止まる場所であるため、通常は開始よりも精度が低くなります。そのため、個別の値になっています。グライドが最後の文字を通り過ぎてしまう場合は、この値を上げてください。</string>
     <string name="typing_glide_end_radius_subtitle">スライドの終点が最後の文字からどれだけ離れていてもよいか</string>
     <string name="typing_glide_end_radius_title">終了時の許容範囲</string>
@@ -6056,8 +6053,6 @@
     <string name="typing_glide_loop_extent_info">キーの幅を単位として測定します。マークは1つのキーに収まるほど小さくなければなりません。「murderer」のような単語は隣接するキーの周囲を回るため、大きな円を描いてしまいますが、これはループを意味しません。そのため、この値はキー1つ分の幅以下に保ってください。値を小さくすると、小さな円のみがループとしてカウントされ、周囲の文字が巻き込まれるのを防ぎます。</string>
     <string name="typing_glide_loop_extent_subtitle">円が大きい場合はキーをなぞるパスとして認識され、単一キーへのマークとはみなされません</string>
     <string name="typing_glide_loop_extent_title">カウント対象となる最大のループ</string>
-    <string name="typing_glide_loop_info">これはSwypeが導入したマークです。文字までグライドし、その上で1回円を描いてから続けます。キーボードは指が移動した距離からループ分を差し引くため、円を描いても単語の入力には影響しません。グライド中に意図せず円を描いてしまい、意図しない文字が2回入力される場合は、この機能をオフにしてください。</string>
-    <string name="typing_glide_loop_radius_info">キー幅で測定されます。キーボードは中央に最も近いキーに円を割り当てます。キーを通過する円はキーの片側に約3分の1ほど位置するため、値が非常に小さいと文字が認識されず、マークは何もしません。値が大きいと、隣のキーにマークが割り当てられる可能性があります。</string>
     <string name="typing_glide_loop_radius_subtitle">円の中心が文字からどれだけ近くにある必要があるか</string>
     <string name="typing_glide_loop_radius_title">ループの中心合わせ</string>
     <string name="typing_glide_loop_subtitle">キーの上で小さな円を描くと、その文字が2回入力されます</string>
@@ -6125,15 +6120,9 @@
     <string name="typing_glide_vocabulary_info">グライド入力は、指がどのキーの近くを通ったか、どのような順序で通ったかをキーボードに伝えます。多くの単語がその軌跡に当てはまるため、キーボードは単語の頻度を使用してその中から1つを選択します。大規模な辞書には多くの珍しい単語が含まれており、形状が少しだけ一致する珍しい単語が、意図した単語よりも優先されることがあります。この設定は、グライド入力を辞書内の最も一般的な単語に制限します。これはグライド入力のみを変更します。入力した文字はスワイプよりもはるかに多くの情報を伝えるため、候補、単語補完、自動修正は引き続きすべての単語を使用します。キーボードに学習させた単語が制限されることはありません。キーボードに付属の辞書はここにあるどの制限よりも小さいため、大規模な単語リストをダウンロードまたはインポートするまで、この設定は機能しません。</string>
     <string name="typing_glide_vocabulary_subtitle">グライド入力を辞書内の最も一般的な単語に限定します</string>
     <string name="typing_glide_vocabulary_title">グライド入力で生成可能な単語</string>
-    <string name="typing_glide_wiggle_extent_info">キーの幅で測定します。キー1つ分の幅未満に保ってください。そうしないと、あるキーから隣のキーへ移動して戻る単語が、同じ文字を2回入力したと判定されます。上記のスイッチがオンの時のみ使用されます。</string>
     <string name="typing_glide_wiggle_extent_subtitle">なぞる際に指がどれだけ動かせるか</string>
     <string name="typing_glide_wiggle_extent_title">カウントされる最大の揺れ</string>
-    <string name="typing_glide_wiggle_info">同じ文字を2回入力する際、円を描く代わりにキーの上をこする動作をする人がいます。しかし、指が震えてゆっくりと方向転換しただけでも同じように見えてしまい、1回しか入力していないのに文字が2回入力されてしまうことがあります。この動作をよく行う場合はオンにしてください。</string>
-    <string name="typing_glide_wiggle_strength_info">値を100パーセントにすると、マークは円と同等になります。値を低くするとヒントとして残り、より一般的な単語が優先される可能性があります。上記のスイッチがオンの時のみ使用されます。</string>
-    <string name="typing_glide_wiggle_strength_subtitle">文字の揺れを2文字の証拠とみなす度合い</string>
     <string name="typing_glide_wiggle_strength_title">揺れの強さ</string>
-    <string name="typing_glide_wiggle_subtitle">キーの上を往復して文字を2回入力する</string>
-    <string name="typing_glide_wiggle_title">揺らして文字を重ねる</string>
     <string name="typing_group_autopilot_subtitle">次に打つ文字のタッチ領域を広げます</string>
     <string name="typing_group_autopilot_title">オートパイロット</string>
     <string name="typing_group_backspace_title">バックスペース</string>

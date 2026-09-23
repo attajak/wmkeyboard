@@ -194,8 +194,11 @@ class KeyOffsets(private val storageFile: File?) {
      * [keys] moved to where this hand lands on them, in the same pixel space,
      * for a keyboard whose keys are [keyWidth] wide. The list itself when
      * there is nothing learned yet. Characters sharing a key keep sharing it:
-     * the shift is a function of the drawn position alone.
+     * the shift is a function of the drawn position alone. Held under the
+     * lock for the whole grid, so a glide learned mid-call cannot leave half
+     * the keys on the old offsets and half on the new.
      */
+    @Synchronized
     fun shifted(keys: List<KeyCenter>, keyWidth: Float): List<KeyCenter> {
         if (isEmpty() || keyWidth <= 0f) return keys
         val out = FloatArray(2)

@@ -6050,9 +6050,6 @@
     <string name="typing_glide_commit_scope_info">Ieteikumu josla ir vieta, kur jau atrodas automātiskās labošanas krāsa, tāpēc tā vienmēr parāda krāsu. Vārda burbulis atrodas virs jūsu pirksta gala, un tas ir tas, ko vairums cilvēku vēro slīdēšanas laikā, tāpēc pēc noklusējuma tas arī nes krāsu. Uz taustiņiem uzzīmētie vārdi arī var nest krāsu, kas liek visam dēlim reaģēt uzreiz, taču tas ir daudz krāsu vienlaikus.</string>
     <string name="typing_glide_commit_scope_subtitle">Ieteikumu josla, vārds virs pirksta vai vārdi uz taustiņiem</string>
     <string name="typing_glide_commit_scope_title">Kur parādās krāsa</string>
-    <string name="typing_glide_dwell_info">Slīdošā ievade zīmē \"good\" un \"god\" vienādi, jo \"o\" ir viens taustiņš un jūsu pirksts to šķērso vienu reizi. Palieciet uz taustiņa brīdi, lai norādītu, ka burts ir divreiz. Vērtība ir jūsu paša ātruma reizinātājs tajā pašā slīdējumā, nevis sekunžu skaits, tāpēc tas darbojas gan ātrā, gan lēnā slīdējumā. Zema vērtība pieņem īsu apstāšanos, bet rūpīga slīdēšana, kas visur palēninās, pati uzraksta burtus divreiz. Augsta vērtība prasa skaidru apstāšanos.</string>
-    <string name="typing_glide_dwell_subtitle">Cik ilgi jāuzkavējas uz taustiņa, lai uzrakstītu burtu divreiz</string>
-    <string name="typing_glide_dwell_title">Pauze, lai dubultotu burtu</string>
     <string name="typing_glide_end_radius_info">Mēra taustiņu platumos. Tastatūra piedāvā vārdu tikai tad, ja esat pacēlis pirkstu tik tuvu vārda pēdējam burtam. Slīdēšanas beigas ir vieta, kur kustība apstājas, tāpēc parasti tā ir mazāk precīza nekā sākums. Šī iemesla dēļ tā ir atsevišķa vērtība. Pārvietojiet to uz augšu, ja jūsu slīdēšana sniedzas pāri pēdējam burtam.</string>
     <string name="typing_glide_end_radius_subtitle">Cik tālu slīdēšanas beigas var atrasties no pēdējā burta</string>
     <string name="typing_glide_end_radius_title">Beigu kļūdas rādiuss</string>
@@ -6065,8 +6062,6 @@
     <string name="typing_glide_loop_extent_info">Mēra taustiņu platumos. Atzīmei jābūt pietiekami mazai, lai tā ietilptu uz viena taustiņa. Tāds vārds kā \"murderer\" apvijas ap blakus esošo taustiņu loku un uzzīmē platu apli, kas neko nenozīmē, tāpēc saglabājiet to mazāku par viena taustiņa platumu. Zema vērtība skaita tikai ciešu apli un neiekļauj tajā apkārtējos burtus.</string>
     <string name="typing_glide_loop_extent_subtitle">Plašāki apļi ir ceļš cauri taustiņiem, nevis atzīme uz viena</string>
     <string name="typing_glide_loop_extent_title">Lielākā cilpa, kas tiek skaitīta</string>
-    <string name="typing_glide_loop_info">Šī ir atzīme, ko iemācīja Swype. Slidiniet līdz burtam, apvelciet ap to vienu apli un turpiniet. Aplis vārdam neko nemaksā, jo tastatūra atņem cilpu no attāluma, ko veicis jūsu pirksts. Izslēdziet šo funkciju, ja jūsu slidināšanas ceļš vijas un jūs saņemat divreiz uzrakstītus burtus, kurus nebijāt vēlējušies.</string>
-    <string name="typing_glide_loop_radius_info">Mēra taustiņu platumos. Tastatūra piešķir apli taustiņam, kas atrodas vistuvāk tā vidum. Caur taustiņu novilkts aplis atrodas apmēram trešdaļu taustiņa uz vienu pusi, tāpēc ļoti zema vērtība neatrod nevienu burtu, un atzīme neko nedara. Augsta vērtība var piešķirt atzīmi blakus esošajam taustiņam.</string>
     <string name="typing_glide_loop_radius_subtitle">Cik tuvu burtam jābūt apļa centram</string>
     <string name="typing_glide_loop_radius_title">Cilpas centrēšana</string>
     <string name="typing_glide_loop_subtitle">Uzzīmējiet mazu apli uz taustiņa, lai uzrakstītu burtu divreiz</string>
@@ -6136,15 +6131,9 @@
     <string name="typing_glide_vocabulary_info">Slīdēšana norāda tastatūrai, kuriem taustiņiem pirksts atradās tuvumā un kādā secībā. Daudzi vārdi atbilst šai formai, tāpēc tastatūra izmanto vārdu biežumu, lai izvēlētos vienu no tiem. Liela vārdnīca satur daudz retu vārdu, un rets vārds, kura forma atbilst nedaudz labāk, var uzvarēt pār vārdu, kuru domājāt. Šis iestatījums ierobežo slīdēšanu līdz visbiežāk lietotajiem vārdiem vārdnīcā. Tas maina tikai slīdrakstīšanu. Ieteikumi, vārdu pabeigšana un automātiskā labošana joprojām izmanto visus vārdus, jo jūsu ievadītie burti pasaka daudz vairāk nekā pārvilkšana. Vārdi, kurus mācāt tastatūrai, nekad netiek ierobežoti. Tastatūras komplektācijā iekļautā vārdnīca ir mazāka par jebkuru šeit norādīto ierobežojumu, tāpēc šis iestatījums neko nedara, līdz lejupielādējat vai importējat lielu vārdu sarakstu.</string>
     <string name="typing_glide_vocabulary_subtitle">Ierobežot slīdēšanu līdz visbiežāk lietotajiem vārdiem jūsu vārdnīcā</string>
     <string name="typing_glide_vocabulary_title">Vārdi, ko var radīt slīdēšana</string>
-    <string name="typing_glide_wiggle_extent_info">Mēra taustiņu platumos. Saglabājiet to mazāku par viena taustiņa platumu, pretējā gadījumā vārds, kas pāriet no viena taustiņa uz blakus esošo un atpakaļ, tiks nolasīts kā viens burts, kas uzrakstīts divreiz. Izmanto tikai tad, kad augstāk esošais slēdzis ir ieslēgts.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Cik tālu pirksts var virzīties slīdot</string>
     <string name="typing_glide_wiggle_extent_title">Lielākā kustība, kas tiek skaitīta</string>
-    <string name="typing_glide_wiggle_info">Otra atzīme, ko cilvēki izmanto divreiz rakstītam burtam: apļa vietā viņi skrubē pāri taustiņam. Tas ir izslēgts, jo lēns pagrieziens, kas uzzīmēts ar nestabilu pirkstu, izskatās līdzīgi, un tastatūra tad raksta burtus divreiz, kurus jūs uzrakstījāt vienu reizi. Ieslēdziet to, ja šī ir atzīme, ko veidojat.</string>
-    <string name="typing_glide_wiggle_strength_info">100 procentu vērtība padara atzīmi tikpat labu kā apli. Zemāka vērtība atstāj to kā mājienu, kuru daudz izplatītāks vārds joprojām var pārspēt. Izmanto tikai tad, kad augšējais slēdzis ir ieslēgts.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Cik lielā mērā slīdēšana tiek uzskatīta par divu burtu ievadi</string>
     <string name="typing_glide_wiggle_strength_title">Kustības stiprums</string>
-    <string name="typing_glide_wiggle_subtitle">Paberzējiet uz priekšu un atpakaļ uz taustiņa, lai uzrakstītu burtu divreiz</string>
-    <string name="typing_glide_wiggle_title">Kustība burta dubultošanai</string>
     <string name="typing_group_autopilot_subtitle">Paplašināt to burtu skārienzonu, kurus rakstīsiet nākamajā reizē</string>
     <string name="typing_group_autopilot_title">Autopilots</string>
     <string name="typing_group_backspace_title">Dzēšanas taustiņi</string>

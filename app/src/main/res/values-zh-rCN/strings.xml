@@ -6039,9 +6039,6 @@
     <string name="typing_glide_commit_scope_info">建议栏是自动更正颜色所在的位置，因此它始终显示该颜色。单词气泡悬浮在指尖上方，是大多数人在滑动时注视的地方，因此默认情况下它也带有颜色。按键上绘制的单词也可以带有颜色，这使得整个键盘一目了然，但同时显示的颜色过多。</string>
     <string name="typing_glide_commit_scope_subtitle">建议栏、手指上方的词或按键上的词</string>
     <string name="typing_glide_commit_scope_title">颜色显示位置</string>
-    <string name="typing_glide_dwell_info">滑动输入在绘制“good”和“god”时路径相同，因为“o”是一个按键，且您的手指经过它一次。在按键上停留片刻即可表示该字母出现两次。该值是您当前滑动速度的倍数，而非秒数，因此它在快速滑动和慢速滑动中均有效。较低的值接受较短的停顿，但仔细的滑动如果到处减速，会自动将字母写两次。较高的值则要求明确的停顿。</string>
-    <string name="typing_glide_dwell_subtitle">在按键上停留多久以输入重复字母</string>
-    <string name="typing_glide_dwell_title">暂停以输入双写字母</string>
     <string name="typing_glide_end_radius_info">以按键宽度为单位。只有当您在距离该单词最后一个字母如此近的地方抬起手指时，键盘才会提供该单词。滑动结束是动作停止的地方，因此它通常不如开始时准确。出于这个原因，这是一个单独的值。如果您的滑动滑过了最后一个字母，请调高此值。</string>
     <string name="typing_glide_end_radius_subtitle">滑动输入的终点距离最后一个字母的最远距离</string>
     <string name="typing_glide_end_radius_title">结束误差半径</string>
@@ -6054,8 +6051,6 @@
     <string name="typing_glide_loop_extent_info">以按键宽度为单位。标记必须足够小，才能位于单个按键上。像“murderer”这样的单词会绕过相邻按键的环，并画出一个毫无意义的大圆圈，因此请将其保持在单个按键的宽度以下。较低的值仅计算紧密的圆圈，并将周围的字母排除在外。</string>
     <string name="typing_glide_loop_extent_subtitle">较大的圆圈被视为穿过按键的路径，而非在单个按键上的标记</string>
     <string name="typing_glide_loop_extent_title">有效的最大循环范围</string>
-    <string name="typing_glide_loop_info">这是 Swype 教授的标记方法。滑动到字母上，绕该字母画一个圈，然后继续。这个圆圈不会影响单词输入，因为键盘会从手指移动的距离中扣除循环路径。如果您的滑动轨迹弯曲导致意外输入了重复字母，请关闭此功能。</string>
-    <string name="typing_glide_loop_radius_info">以按键宽度为单位测量。键盘将圆圈分配给中心点最近的按键。穿过按键绘制的圆圈大约位于按键一侧的三分之一处，因此数值过低将无法识别到按键，标记也不会生效。数值过高可能会将标记分配给相邻的按键。</string>
     <string name="typing_glide_loop_radius_subtitle">圆心距离字母的允许范围</string>
     <string name="typing_glide_loop_radius_title">循环中心化</string>
     <string name="typing_glide_loop_subtitle">在按键上画一个小圆圈以输入两次该字母</string>
@@ -6124,15 +6119,9 @@
     <string name="typing_glide_vocabulary_info">滑动输入会告诉键盘您的手指经过了哪些键以及顺序。许多单词都符合这种模糊的路径，因此键盘会使用词频来选择其中一个。大型词典包含许多生僻词，而一个形状匹配度稍好的生僻词可能会胜过您原本想输入的词。此设置将滑动输入限制为词典中最常用的单词。它仅更改滑动输入。建议、单词补全和自动更正仍会使用所有单词，因为您输入的字母比滑动输入包含的信息更多。您教给键盘的单词永远不会受到限制。键盘自带的词典比此处的任何限制都要小，因此在您下载或导入大型词汇表之前，此设置不会产生任何影响。</string>
     <string name="typing_glide_vocabulary_subtitle">将滑动输入限制为您词典中最常用的词汇</string>
     <string name="typing_glide_vocabulary_title">滑动输入可生成的词汇</string>
-    <string name="typing_glide_wiggle_extent_info">以按键宽度为单位。请将其保持在单个按键的宽度以下，否则从一个按键移动到相邻按键再返回的路径会被识别为同一个字母被输入了两次。仅在上述开关开启时有效。</string>
     <string name="typing_glide_wiggle_extent_subtitle">滑动时手指可移动的范围</string>
     <string name="typing_glide_wiggle_extent_title">计入的最大抖动幅度</string>
-    <string name="typing_glide_wiggle_info">人们用于输入两次字母的另一种标记：不是画圆，而是在按键上摩擦。此功能目前处于关闭状态，因为手指不稳时画出的缓慢转弯看起来很相似，这会导致键盘将您输入一次的字母写成两次。如果您习惯使用这种标记，请将其开启。</string>
-    <string name="typing_glide_wiggle_strength_info">设置为 100% 时，该标记的效果等同于一个圆圈。较低的值会使其仅作为提示，如果存在更常用的单词，则该提示可能会被覆盖。仅在上述开关开启时有效。</string>
-    <string name="typing_glide_wiggle_strength_subtitle">滑动动作被视为两个字母的判定强度</string>
     <string name="typing_glide_wiggle_strength_title">抖动强度</string>
-    <string name="typing_glide_wiggle_subtitle">在按键上左右来回摩擦以输入两次该字母</string>
-    <string name="typing_glide_wiggle_title">摆动以双写字母</string>
     <string name="typing_group_autopilot_subtitle">扩大您接下来要输入的字母的触摸区域</string>
     <string name="typing_group_autopilot_title">自动驾驶</string>
     <string name="typing_group_backspace_title">退格键</string>

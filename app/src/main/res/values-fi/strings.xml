@@ -6042,9 +6042,6 @@
     <string name="typing_glide_commit_scope_info">Ehdotuspalkki on paikka, jossa automaattisen korjauksen väri jo sijaitsee, joten se näyttää värin aina. Sanapilleri liikkuu sormenpääsi yläpuolella ja on se, mitä useimmat ihmiset seuraavat liukuessaan, joten se kantaa väriä myös oletusarvoisesti. Näppäimille piirretyt sanat voivat myös kantaa sitä, mikä saa koko näppäimistön vastaamaan yhdellä silmäyksellä, mutta se on paljon väriä kerralla.</string>
     <string name="typing_glide_commit_scope_subtitle">Ehdotuspalkki, sormesi yläpuolella oleva sana tai näppäimissä olevat sanat</string>
     <string name="typing_glide_commit_scope_title">Missä väri näkyy</string>
-    <string name="typing_glide_dwell_info">Pyyhkäisy piirtää sanat \"good\" ja \"god\" samalla tavalla, koska o on yksi näppäin ja sormesi ylittää sen kerran. Pysy näppäimellä hetki ilmaistaksesi, että kirjain on siinä kahdesti. Arvo on kerrannainen omasta nopeudestasi samassa pyyhkäisyssä, ei sekuntien määrä, joten se toimii sekä nopeassa että hitaassa pyyhkäisyssä. Pieni arvo hyväksyy lyhyen pysähdyksen, mutta huolellinen pyyhkäisy, joka hidastuu kaikkialla, kirjoittaa kirjaimet kahdesti itsestään. Suuri arvo vaatii selkeän pysähdyksen.</string>
-    <string name="typing_glide_dwell_subtitle">Kuinka kauan näppäimellä on pysyttävä, jotta kirjain kirjoitetaan kahdesti</string>
-    <string name="typing_glide_dwell_title">Pysähdy kaksoiskirjainta varten</string>
     <string name="typing_glide_end_radius_info">Mitataan näppäimen leveyksinä. Näppäimistö ehdottaa sanaa vain, kun nostit sormesi näin lähelle kyseisen sanan viimeistä kirjainta. Liu\'un loppu on kohta, jossa liike pysähtyy, joten se on yleensä vähemmän tarkka kuin alku. Tästä syystä tämä on erillinen arvo. Siirrä sitä ylöspäin, jos liu\'ut liukuvat viimeisen kirjaimen ohi.</string>
     <string name="typing_glide_end_radius_subtitle">Kuinka kaukana liukukirjoituksen loppu voi olla viimeisestä kirjaimesta</string>
     <string name="typing_glide_end_radius_title">Lopun virhesäde</string>
@@ -6057,8 +6054,6 @@
     <string name="typing_glide_loop_extent_info">Mitataan näppäimen leveyksinä. Merkin on oltava tarpeeksi pieni mahtuakseen yhdelle näppäimelle. Sana kuten \"murderer\" kiertää vierekkäisten näppäinten kehää ja piirtää laajan ympyrän, joka ei tarkoita mitään sellaista, joten pidä tämä alle yhden näppäimen leveyden. Pieni arvo laskee vain tiukan ympyrän ja pitää sitä ympäröivät kirjaimet sen ulkopuolella.</string>
     <string name="typing_glide_loop_extent_subtitle">Laajemmat ympyrät ovat polku näppäinten yli, eivät merkintä yhden päällä</string>
     <string name="typing_glide_loop_extent_title">Suurin huomioitava silmukka</string>
-    <string name="typing_glide_loop_info">Tämä on Swypen opettama merkki. Liu\'uta kirjaimeen, kierrä sen ympäri kerran ja jatka matkaa. Ympyrä ei vaikuta sanaan, koska näppäimistö poistaa silmukan sormesi kulkemasta matkasta. Kytke tämä pois päältä, jos liu\'utukset kiertyvät matkalla ja saat kirjaimia kahdesti, joita et pyytänyt.</string>
-    <string name="typing_glide_loop_radius_info">Mitataan näppäimen leveyksinä. Näppäimistö antaa ympyrän keskikohtaansa lähimpänä olevalle näppäimelle. Näppäimen läpi piirretty ympyrä sijaitsee noin kolmasosan näppäimen leveydestä sivussa, joten hyvin pieni arvo ei löydä sille kirjainta eikä merkintä tee mitään. Suuri arvo voi antaa merkinnän naapurinäppäimelle.</string>
     <string name="typing_glide_loop_radius_subtitle">Kuinka lähellä kirjainta ympyrän keskipisteen on oltava</string>
     <string name="typing_glide_loop_radius_title">Silmukan keskittäminen</string>
     <string name="typing_glide_loop_subtitle">Piirrä pieni ympyrä näppäimen päälle kirjoittaaksesi kirjaimen kahdesti</string>
@@ -6126,15 +6121,9 @@
     <string name="typing_glide_vocabulary_info">Liukukirjoitus kertoo näppäimistölle, mitä näppäimiä sormesi lähellä liikkui ja missä järjestyksessä. Monet sanat sopivat tähän väljästi, joten näppäimistö käyttää sanan yleisyyttä valitakseen yhden niistä. Suuri sanakirja sisältää monia harvinaisia sanoja, ja harvinainen sana, jonka muoto sopii hieman paremmin, voi voittaa tarkoittamasi sanan. Tämä asetus rajoittaa liukukirjoituksen sanakirjan yleisimpiin sanoihin. Se muuttaa vain liukukirjoitusta. Ehdotukset, sanan täydennys ja automaattinen korjaus käyttävät edelleen jokaista sanaa, koska kirjoittamasi kirjaimet kertovat paljon enemmän kuin pyyhkäisy. Sanat, jotka opetat näppäimistölle, eivät ole koskaan rajoitettuja. Näppäimistön mukana tuleva sanakirja on pienempi kuin mikään tässä oleva raja, joten tämä asetus ei tee mitään, ennen kuin lataat tai tuot suuren sanaluettelon.</string>
     <string name="typing_glide_vocabulary_subtitle">Rajoita liuku sanakirjasi yleisimpiin sanoihin</string>
     <string name="typing_glide_vocabulary_title">Sanat, joita pyyhkäisy voi tuottaa</string>
-    <string name="typing_glide_wiggle_extent_info">Mitataan näppäimen leveyksinä. Pidä tämä alle yhden näppäimen leveyden, muuten sana, joka menee näppäimeltä viereiselle ja takaisin, luetaan yhtenä kirjaimena kahdesti. Käytetään vain, kun yllä oleva kytkin on päällä.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kuinka kauas sormi voi mennä hankauksessa</string>
     <string name="typing_glide_wiggle_extent_title">Suurin hinkkaus, joka lasketaan</string>
-    <string name="typing_glide_wiggle_info">Toinen merkki, jota ihmiset käyttävät kahdesti kirjoitetulle kirjaimelle: ympyrän sijaan he hankaavat näppäintä edestakaisin. Tämä on pois päältä, koska epävakaalla sormella piirretty hidas käännös näyttää samalta, jolloin näppäimistö kirjoittaa kirjaimen kahdesti, vaikka kirjoitit sen vain kerran. Kytke tämä päälle, jos käytät tätä merkintätapaa.</string>
-    <string name="typing_glide_wiggle_strength_info">100 prosentin arvo tekee merkistä yhtä hyvän kuin ympyrä. Pienempi arvo jättää sen vihjeeksi, jonka paljon yleisempi sana voi silti voittaa. Käytössä vain, kun yllä oleva kytkin on päällä.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Kuinka paljon hankausta pidetään todisteena kahdesta kirjaimesta</string>
     <string name="typing_glide_wiggle_strength_title">Heilahtelun voimakkuus</string>
-    <string name="typing_glide_wiggle_subtitle">Hinkkaa edestakaisin näppäimellä kirjoittaaksesi kirjaimen kahdesti</string>
-    <string name="typing_glide_wiggle_title">Hinkkaa tuplataksesi kirjaimen</string>
     <string name="typing_group_autopilot_subtitle">Laajenna seuraavaksi kirjoittamiesi kirjainten kosketusaluetta</string>
     <string name="typing_group_autopilot_title">Autopilotti</string>
     <string name="typing_group_backspace_title">Poistonäppäimet</string>

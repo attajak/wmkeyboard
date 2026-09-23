@@ -6050,9 +6050,6 @@
     <string name="typing_glide_commit_scope_info">Forslagsfeltet er der autokorrekturfargen allerede befinner seg, så den viser alltid fargen. Ordboblen ligger over fingertuppen din og er det de fleste ser på mens de glir, så den bærer også fargen som standard. Ordene som er tegnet på tastene kan også bære den, noe som gjør at hele tastaturet svarer ved et blikk, men det blir mye farge på en gang.</string>
     <string name="typing_glide_commit_scope_subtitle">Forslagslinjen, ordet over fingeren din, eller ordene på tastene</string>
     <string name="typing_glide_commit_scope_title">Hvor fargen vises</string>
-    <string name="typing_glide_dwell_info">En glide-bevegelse tegner \"good\" og \"god\" på samme måte, fordi o-en er én tast og fingeren din krysser den én gang. Bli på tasten et øyeblikk for å si at bokstaven er der to ganger. Verdien er et multiplum av din egen hastighet i den samme glide-bevegelsen, ikke et antall sekunder, så den fungerer likt i en rask og en langsom glide-bevegelse. En lav verdi godtar et kort stopp, men en forsiktig glide-bevegelse som bremser ned overalt, skriver da bokstaver to ganger av seg selv. En høy verdi krever et tydelig stopp.</string>
-    <string name="typing_glide_dwell_subtitle">Hvor lenge du må holde på en tast for å skrive bokstaven to ganger</string>
-    <string name="typing_glide_dwell_title">Pause for å doble en bokstav</string>
     <string name="typing_glide_end_radius_info">Målt i tastebredder. Tastaturet foreslår et ord bare når du har løftet fingeren så nærme den siste bokstaven i ordet. Slutten av en sveipebevegelse er der bevegelsen stopper, så den er vanligvis mindre nøyaktig enn starten. Dette er en separat verdi av den grunn. Flytt den opp hvis sveipene dine glir forbi den siste bokstaven.</string>
     <string name="typing_glide_end_radius_subtitle">Hvor langt unna den siste bokstaven slutten av et sveip kan være</string>
     <string name="typing_glide_end_radius_title">Sluttfeilradius</string>
@@ -6065,8 +6062,6 @@
     <string name="typing_glide_loop_extent_info">Målt i tastbredder. Et merke må være lite nok til å sitte på én tast. Et ord som \"murderer\" går rundt en ring av taster ved siden av hverandre og tegner en bred sirkel som ikke betyr noe slikt, så hold dette under bredden av én tast. En lav verdi teller bare en stram sirkel og holder bokstavene rundt den utenfor.</string>
     <string name="typing_glide_loop_extent_subtitle">Bredere sirkler er en bane gjennom taster, ikke et merke på én</string>
     <string name="typing_glide_loop_extent_title">Største løkke som teller</string>
-    <string name="typing_glide_loop_info">Dette er merket Swype lærte bort. Sveip til bokstaven, gå en runde rundt den, og fortsett. Sirkelen koster ikke ordet noe, fordi tastaturet fjerner løkken fra avstanden fingeren din har tilbakelagt. Slå dette av hvis sveipene dine krøller seg underveis og du får bokstaver skrevet to ganger som du ikke ba om.</string>
-    <string name="typing_glide_loop_radius_info">Målt i tastbredder. Tastaturet gir en sirkel til tasten nærmest midten. En sirkel tegnet gjennom en tast sitter omtrent en tredjedel av en tast til den ene siden, så en veldig lav verdi finner ingen bokstav for den, og merket gjør ingenting. En høy verdi kan gi merket til nabotasten.</string>
     <string name="typing_glide_loop_radius_subtitle">Hvor nær bokstaven midten av en sirkel må være</string>
     <string name="typing_glide_loop_radius_title">Sentrering av løkke</string>
     <string name="typing_glide_loop_subtitle">Tegn en liten sirkel på en tast for å skrive bokstaven to ganger</string>
@@ -6134,15 +6129,9 @@
     <string name="typing_glide_vocabulary_info">En glide forteller tastaturet hvilke taster fingeren din var nær, og i hvilken rekkefølge. Mange ord passer løst til det, så tastaturet bruker ordfrekvens for å velge ett av dem. En stor ordbok inneholder mange sjeldne ord, og et sjeldent ord hvis form passer litt bedre kan vinne over ordet du mente. Denne innstillingen begrenser en glide til de vanligste ordene i ordboken. Den endrer kun glide-skriving. Forslag, ordfullføring og autokorrektur bruker fortsatt alle ord, fordi bokstavene du skriver sier mye mer enn et sveip gjør. Ord du lærer tastaturet blir aldri begrenset. Ordboken som følger med tastaturet er mindre enn enhver grense her, så denne innstillingen gjør ingenting før du laster ned eller importerer en stor ordliste.</string>
     <string name="typing_glide_vocabulary_subtitle">Begrens sveiping til de vanligste ordene i ordboken din</string>
     <string name="typing_glide_vocabulary_title">Ord som kan skrives med sveiping</string>
-    <string name="typing_glide_wiggle_extent_info">Målt i tastbredder. Hold dette under bredden av én tast, ellers vil et ord som går fra én tast til nabotasten og tilbake bli lest som én bokstav skrevet to ganger. Brukes bare mens bryteren ovenfor er på.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Hvor langt fingeren kan bevege seg i en gni-bevegelse</string>
     <string name="typing_glide_wiggle_extent_title">Største vrikk som teller</string>
-    <string name="typing_glide_wiggle_info">Det andre tegnet folk bruker for en bokstav skrevet to ganger: i stedet for en sirkel, skrubber de over tasten. Dette er av, fordi en langsom sving tegnet med en ustø finger ser ganske lik ut, og tastaturet skriver da bokstaver to ganger som du skrev én gang. Slå den på hvis dette er tegnet du bruker.</string>
-    <string name="typing_glide_wiggle_strength_info">En verdi på 100 prosent gjør merket like bra som en sirkel. En lavere verdi etterlater det som et hint, som et mye mer vanlig ord fortsatt kan vinne over. Brukes bare mens bryteren ovenfor er på.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Hvor mye en gniing teller som bevis for to bokstaver</string>
     <string name="typing_glide_wiggle_strength_title">Vrikkestyrke</string>
-    <string name="typing_glide_wiggle_subtitle">Gni frem og tilbake på en tast for å skrive bokstaven to ganger</string>
-    <string name="typing_glide_wiggle_title">Vrikk for å doble en bokstav</string>
     <string name="typing_group_autopilot_subtitle">Utvid berøringsområdet for bokstavene du skriver neste gang</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Slett taster</string>

@@ -6049,9 +6049,6 @@
     <string name="typing_glide_commit_scope_info">Forslagslinjen er der, hvor autokorrekturfarven allerede findes, så den viser altid farven. Ordboblen svæver over din fingerspids og er det, de fleste kigger på, mens de glider, så den bærer også farven som standard. Ordene tegnet på tasterne kan også bære den, hvilket får hele tastaturet til at reagere med et blik, men det er meget farve på én gang.</string>
     <string name="typing_glide_commit_scope_subtitle">Forslagslinjen, ordet over din finger eller ordene på tasterne</string>
     <string name="typing_glide_commit_scope_title">Hvor farven vises</string>
-    <string name="typing_glide_dwell_info">En glide-bevægelse tegner \"god\" og \"god\" på samme måde, fordi o\'et er én tast, og din finger krydser den én gang. Bliv på tasten et øjeblik for at angive, at bogstavet er der to gange. Værdien er et multiplum af din egen hastighed i den samme glide-bevægelse, ikke et antal sekunder, så den fungerer både ved en hurtig og en langsom glide-bevægelse. En lav værdi accepterer et kort stop, men en forsigtig glide-bevægelse, der sænker farten overalt, skriver så bogstaver to gange af sig selv. En høj værdi kræver et tydeligt stop.</string>
-    <string name="typing_glide_dwell_subtitle">Hvor længe du skal blive på en tast for at skrive bogstavet to gange</string>
-    <string name="typing_glide_dwell_title">Hold pause for at fordoble et bogstav</string>
     <string name="typing_glide_end_radius_info">Målt i tastbredder. Tastaturet foreslår kun et ord, når du har løftet fingeren så tæt på det sidste bogstav i ordet. Slutningen af en glidebevægelse er der, hvor en bevægelse stopper, så den er normalt mindre præcis end starten. Dette er en separat værdi af den grund. Flyt den op, hvis dine glidebevægelser glider forbi det sidste bogstav.</string>
     <string name="typing_glide_end_radius_subtitle">Hvor langt slutningen af et glide-strøg kan være fra det sidste bogstav</string>
     <string name="typing_glide_end_radius_title">Slutradius for fejl</string>
@@ -6064,8 +6061,6 @@
     <string name="typing_glide_loop_extent_info">Målt i tastbredder. Et mærke skal være lille nok til at sidde på én tast. Et ord som \"murderer\" går rundt om en ring af taster ved siden af hinanden og tegner en bred cirkel, der ikke betyder noget i den retning, så hold dette under bredden af én tast. En lav værdi tæller kun en stram cirkel og holder bogstaverne omkring den ude af den.</string>
     <string name="typing_glide_loop_extent_subtitle">Bredere cirkler er en sti gennem taster, ikke et mærke på én</string>
     <string name="typing_glide_loop_extent_title">Største løkke der tæller</string>
-    <string name="typing_glide_loop_info">Dette er det mærke, Swype lærte fra sig. Glid til bogstavet, kør rundt om det én gang, og fortsæt. Cirklen koster ikke ordet noget, fordi tastaturet fjerner løkken fra den distance, din finger har tilbagelagt. Slå dette fra, hvis dine glid krøller undervejs, og du får skrevet bogstaver to gange, som du ikke bad om.</string>
-    <string name="typing_glide_loop_radius_info">Målt i tastbredder. Tastaturet giver en cirkel til den tast, der er tættest på midten. En cirkel tegnet gennem en tast sidder cirka en tredjedel af en tast til den ene side, så en meget lav værdi finder ikke noget bogstav til den, og markeringen gør intet. En høj værdi kan give markeringen til nabotasten.</string>
     <string name="typing_glide_loop_radius_subtitle">Hvor tæt på bogstavet midten af en cirkel skal være</string>
     <string name="typing_glide_loop_radius_title">Centrering af løkke</string>
     <string name="typing_glide_loop_subtitle">Tegn en lille cirkel på en tast for at skrive bogstavet to gange</string>
@@ -6134,15 +6129,9 @@
     <string name="typing_glide_vocabulary_info">Et glide fortæller tastaturet, hvilke taster din finger var i nærheden af, og i hvilken rækkefølge. Mange ord passer løst på det, så tastaturet bruger ordfrekvens til at vælge et af dem. En stor ordbog indeholder mange sjældne ord, og et sjældent ord, hvis form passer lidt bedre, kan vinde over det ord, du mente. Denne indstilling begrænser et glide til de mest almindelige ord i ordbogen. Det ændrer kun glide-skrivning. Forslag, ordfærdiggørelse og autokorrektur bruger stadig alle ord, fordi de bogstaver, du skriver, siger meget mere end et swipe gør. Ord, du lærer tastaturet, begrænses aldrig. Ordbogen, der følger med tastaturet, er mindre end enhver grænse her, så denne indstilling gør intet, før du downloader eller importerer en stor ordliste.</string>
     <string name="typing_glide_vocabulary_subtitle">Begræns et glide-input til de mest almindelige ord i din ordbog</string>
     <string name="typing_glide_vocabulary_title">Ord som et glide-input kan producere</string>
-    <string name="typing_glide_wiggle_extent_info">Målt i tastbredder. Hold dette under bredden af én tast, ellers læses et ord, der går fra én tast til nabotasten og tilbage, som ét bogstav skrevet to gange. Bruges kun mens kontakten ovenfor er tændt.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Hvor langt fingeren kan gå i en gnidning</string>
     <string name="typing_glide_wiggle_extent_title">Største vrikken der tæller</string>
-    <string name="typing_glide_wiggle_info">Det andet tegn, folk bruger for et bogstav skrevet to gange: i stedet for en cirkel, gnider de hen over tasten. Dette er slået fra, fordi et langsomt sving tegnet med en usikker finger ligner meget, og tastaturet skriver derefter bogstaver to gange, som du kun skrev én gang. Slå det til, hvis det er det tegn, du laver.</string>
-    <string name="typing_glide_wiggle_strength_info">En værdi på 100 procent gør markeringen lige så god som en cirkel. En lavere værdi efterlader det som et hint, som et meget mere almindeligt ord stadig kan vinde over. Bruges kun mens kontakten ovenfor er tændt.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Hvor meget en gnidning tæller som bevis for to bogstaver</string>
     <string name="typing_glide_wiggle_strength_title">Wiggle-styrke</string>
-    <string name="typing_glide_wiggle_subtitle">Gnid frem og tilbage på en tast for at skrive bogstavet to gange</string>
-    <string name="typing_glide_wiggle_title">Vrik for at fordoble et bogstav</string>
     <string name="typing_group_autopilot_subtitle">Udvid berøringsområdet for de bogstaver, du skriver næste gang</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Slet taster</string>

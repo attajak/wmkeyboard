@@ -340,11 +340,12 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Arc-length resampling — Stroke resampled to equally-spaced samples so travel between letters is measured in steps, not pixels
     - Two-term placement cost — Distance-to-key plus disagreement between finger travel and key distance — stops 'hello' decoding as 'ho'
     - Shape channel rescore — Top candidates re-scored on stroke shape with size and position normalised out; weight 45.0
-    - Dwell-aware double letters — 'good' vs 'god': doubling charged only when the finger did not pause on the key
+    - Loop-only double letters — 'good' vs 'god': an unlooped doubling pays a charge; a pause or a wiggle says a letter is in the word, never that it is there twice (#337)
     - Loop-aware double letters — A small circle drawn on a key is Swype's mark for the letter twice: found on a fine resample by path-to-extent ratio and enclosed-area roundness, its arc collapsed out of the travel term, the doubling's charge waived, and every word that leaves it undoubled charged for it
-    - Unclaimed pauses charged — A finished word pays, once per pause, for each pause none of its letters sits on
+    - Unclaimed pauses charged — A finished word pays, once per pause, for each pause none of its letters sits on; only the key the pause happened on claims it, never its neighbour, which is what separates 'write' from 'wrote' on one row. A wiggle, when on, files the same event
+    - Exclusive loops — A loop credits only the key nearest its centre, and the samples inside it belong to that key alone, so the keys its edge passes over cannot enter the word
     - Admissible bound pruning — logWeight + ln(1+maxSubtree) - shapeWeight*minCol; anchor radius 1.6 and near radius 1.5 key widths
-    - 17 injectable tuning weights — sigma, maxPointCost, gapWeight, gapWindow, shapeWeight, repeatCost, dwellPenalty, unclaimedDwell, loopExtent, loopMinArc, wiggleExtent, wiggleWeight, unclaimedLoop, shapeChannel, anchorRadius, nearRadius, vocabularyRank — swept by a test harness
+    - 17 injectable tuning weights — sigma, maxPointCost, gapWeight, gapWindow, shapeWeight, repeatCost, unloopedRepeat, unclaimedDwell, loopExtent, loopMinArc, wiggleExtent, wiggleWeight, unclaimedLoop, shapeChannel, anchorRadius, nearRadius, vocabularyRank — swept by a test harness
   - Per-language glide readiness gate `RARE` — Glide enables itself only where it can decode honestly; measured, not flagged
     - Coverage measurement — Top 1500 words per word source; grid must be able to spell 90% of them
     - Converting-layout block — Off on Avro, Hangul, Vietnamese and every CJK conversion layout — a stroke there spells a reading, not a word
