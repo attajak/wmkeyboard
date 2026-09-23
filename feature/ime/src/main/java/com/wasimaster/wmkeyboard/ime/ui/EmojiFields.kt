@@ -1,5 +1,9 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -172,10 +176,25 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
     val tabs = session.tabs
     val scope = rememberCoroutineScope()
     val reduceMotion = state.settings.reduceMotion
+    val pagerState = session.pagerState
+    // A tapped tab moves the page in one step and slides only the bar.
+    // Scrolling the pager there instead dragged every category in between
+    // through composition: the pager snaps to three pages short of a far tab
+    // and animates the rest, and each page it crosses is a whole emoji grid
+    // being laid out and shaped mid-slide, which is what made the bar stutter
+    // (and jump, at the snap). Now only the tab landed on is composed.
+    val tabSlide = remember { TabSlide() }
     val goToTab: (Int) -> Unit = { index ->
         scope.launch {
-            if (reduceMotion) session.pagerState.scrollToPage(index)
-            else session.pagerState.animateScrollToPage(index)
+            // From wherever the bar is drawn now, a slide still running included.
+            val from = tabSlide.active?.value
+                ?: (pagerState.currentPage + pagerState.currentPageOffsetFraction)
+            val slide = tabSlide.start(from)
+            launch { pagerState.scrollToPage(index) }
+            if (!reduceMotion) {
+                slide.animateTo(index.toFloat(), tween(EmojiTabSlideMs, easing = FastOutSlowInEasing))
+            }
+            tabSlide.finish(slide)
         }
     }
     PanelFocusTarget(
@@ -189,16 +208,15 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
     val focusedTab = state.focusedIndex(FocusRegion.CHIPS)
     val selectedTab = session.selectedTab
     val mostUsed = session.historyMode == EmojiTabMode.MOST_USED
-    val pagerState = session.pagerState
     Row(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 2.dp)
-            // One bar that travels with the pager, in place of one per tab.
-            // Pages and tabs are the same list (a tab's tap scrolls to its own
-            // index), so the pager's position is the bar's position.
+            // One bar for the row, in place of one per tab. Pages and tabs are
+            // the same list, so outside a tap's own slide the pager's position
+            // is the bar's position, and a swipe drags it under the finger.
             .emojiTabIndicator(tabs.size, MaterialTheme.colorScheme.onSurface) {
-                pagerState.currentPage + pagerState.currentPageOffsetFraction
+                tabSlide.active?.value ?: (pagerState.currentPage + pagerState.currentPageOffsetFraction)
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -221,6 +239,28 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
                 bar = false,
             )
         }
+    }
+}
+
+/** How long the tab bar takes to slide to a tapped tab. */
+private const val EmojiTabSlideMs = 220
+
+/**
+ * A tapped tab's own bar slide, which the bar draws instead of the pager's
+ * position while it runs. Snapshot state, read only in the draw phase, so the
+ * hand-over either way repaints the row and never recomposes it.
+ */
+@Stable
+private class TabSlide {
+    var active by mutableStateOf<Animatable<Float, AnimationVector1D>?>(null)
+        private set
+
+    /** A new slide starting at [from]; it replaces any still running as the one drawn. */
+    fun start(from: Float): Animatable<Float, AnimationVector1D> = Animatable(from).also { active = it }
+
+    /** Hands the bar back to the pager, unless a later tap has taken it over since. */
+    fun finish(slide: Animatable<Float, AnimationVector1D>) {
+        if (active === slide) active = null
     }
 }
 
@@ -333,8 +373,8 @@ internal fun EmojiGridField(
     val pagerState = session.pagerState
     val history = session.history
     // A pager, not a swapped-in single grid: horizontal swipes cross
-    // categories and every tab switch slides across. Each page keeps its own
-    // scroll offset via the stable key below.
+    // categories. A tapped tab lands in one step instead (see EmojiTabsField).
+    // Each page keeps its own scroll offset via the stable key below.
     HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxSize(),

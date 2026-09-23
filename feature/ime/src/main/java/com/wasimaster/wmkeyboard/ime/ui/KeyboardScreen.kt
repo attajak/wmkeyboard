@@ -26,9 +26,6 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.animation.EnterTransition
@@ -10561,15 +10558,13 @@ private fun KeyboardBody(
                 PanelMode.NONE -> if (
                     !(state.hardwareKeyboardPresent && state.settings.toolbarBehavior.onlyWithHardwareKeyboard)
                 ) {
-                    LayerLabelFade(state.layoutMode, state.settings.reduceMotion) {
-                        KeyRows(
-                            state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
-                            onGestureWords = onGestureWords,
-                            onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
-                            onKeyTouch = onKeyTouch,
-                            onTouchKeys = onTouchKeys,
-                        )
-                    }
+                    KeyRows(
+                        state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
+                        onGestureWords = onGestureWords,
+                        onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                        onKeyTouch = onKeyTouch,
+                        onTouchKeys = onTouchKeys,
+                    )
                 }
             }
         }
@@ -10604,15 +10599,13 @@ private fun KeyboardBody(
                 } else if (captureStripShown(state)) {
                     CaptureStrip(state, capture.onSuggestion)
                 }
-                LayerLabelFade(state.layoutMode, state.settings.reduceMotion) {
-                    KeyRows(
-                        state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
-                        onGestureWords = onGestureWords,
-                        onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
-                        onKeyTouch = onKeyTouch,
-                        onTouchKeys = onTouchKeys,
-                    )
-                }
+                KeyRows(
+                    state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
+                    onGestureWords = onGestureWords,
+                    onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                    onKeyTouch = onKeyTouch,
+                    onTouchKeys = onTouchKeys,
+                )
             }
             // The rows the user put under the keys. Every row's own gate
             // (full-bleed, lock screen, its setting) applies here exactly as
@@ -17776,6 +17769,11 @@ private fun AlternatesPopup(
     // as that budget, over a key right of centre (the spacebar), sat flush
     // against the right edge with twice the margin on the left (#298).
     val marginPx = with(LocalDensity.current) { PopupSideMarginDp.dp.roundToPx() }
+    // The centre of the key the popup belongs to, in the popup's own space: the
+    // point it grows out of. The provider is the one place that knows both the
+    // key's bounds and where it put the popup, in the same coordinates, so it
+    // records the point as it places the window, before the first frame draws.
+    val growPivot = remember { mutableStateOf<Offset?>(null) }
     val provider = remember(popupPosition, hold, marginPx) {
         object : PopupPositionProvider {
             override fun calculatePosition(
@@ -17787,13 +17785,15 @@ private fun AlternatesPopup(
                 val at = popupPosition
                     .calculatePosition(anchorBounds, windowSize, layoutDirection, popupContentSize)
                 val x = alternatesPopupX(at.x, windowSize.width - popupContentSize.width, marginPx)
+                val key = anchorBounds.center
+                growPivot.value = Offset((key.x - x).toFloat(), (key.y - at.y).toFloat())
                 return IntOffset(x, at.y).also { hold?.popupOffset = it }
             }
         }
     }
-    // Opens already on screen at nearly full size and settles out of the key,
-    // rather than appearing at full size in one step. Nothing waits for it: the
-    // first frame is fully opaque and every entry is already where it will be.
+    // Opens out of the key it was held on and settles, rather than appearing at
+    // full size in one step. Nothing waits for it: the first frame is fully
+    // opaque, and every entry is already laid out where it will be.
     val grow = remember { Animatable(if (kb.reduceMotion) 1f else AlternatesGrowFrom) }
     LaunchedEffect(grow) {
         grow.animateTo(1f, tween(AlternatesGrowMs, easing = FastOutSlowInEasing))
@@ -17806,7 +17806,7 @@ private fun AlternatesPopup(
             // A scale at draw time, never a graphicsLayer: the hold-drag reads the
             // grid's window position and its entries' laid-out rects, and a layer
             // transform would shift both for as long as the popup was growing.
-            modifier = Modifier.growFromBottom { grow.value },
+            modifier = Modifier.growFrom(pivot = { growPivot.value }) { grow.value },
             shape = kb.popupShape(),
             color = kb.popup,
             border = kb.popupSurfaceBorder(),
@@ -17870,22 +17870,24 @@ private fun AlternatesPopup(
 }
 
 /** The size the alternates popup opens at, as a share of its own. */
-private const val AlternatesGrowFrom = 0.9f
+private const val AlternatesGrowFrom = 0.6f
 
-/** How long the alternates popup takes to settle to its full size. */
-private const val AlternatesGrowMs = 110
+/** How long the alternates popup takes to grow out of its key. */
+private const val AlternatesGrowMs = 140
 
 /**
- * Draws the content scaled by [scale] about its bottom centre, the edge that
- * faces the key it came from. Paint only: layout and every coordinate read from
- * it stay at full size, which a popup that is being steered by a finger needs.
+ * Draws the content scaled by [scale] about [pivot], the point it grows out of
+ * (the popup's own key, which may lie outside its bounds; the bottom centre
+ * until that is known). Paint only: layout and every coordinate read from it
+ * stay at full size, which a popup that is being steered by a finger needs.
  */
-private fun Modifier.growFromBottom(scale: () -> Float): Modifier = drawWithContent {
+private fun Modifier.growFrom(pivot: () -> Offset?, scale: () -> Float): Modifier = drawWithContent {
     val s = scale()
     if (s >= 1f) {
         drawContent()
     } else {
-        scale(s, s, pivot = Offset(size.width / 2f, size.height)) {
+        val at = pivot() ?: Offset(size.width / 2f, size.height)
+        scale(s, s, pivot = at) {
             this@drawWithContent.drawContent()
         }
     }
@@ -18273,72 +18275,11 @@ private const val MaxPopupHeightFraction = 0.6f
 @Composable
 private fun KeyLabel(visual: KeyVisual, settings: KeyboardSettings, pressed: State<Boolean>) {
     val recolours = visual.pressedContentColor != visual.contentColor
-    val fade = LocalLayerLabelFade.current
-    if (fade == null) {
-        KeyContent(
-            visual,
-            settings,
-            if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
-        )
-        return
-    }
-    // Only the label fades, never the face: a key that dimmed as a whole would
-    // read as disabled, and the hit targets are already the new layer's. A
-    // wrapper that sizes to its content and centres it lays each child out
-    // exactly where the key's own centring Box would; the alpha is read in the
-    // draw phase, and ModulateAlpha keeps it off an offscreen buffer that could
-    // clip a glyph drawn past its bounds.
-    Box(
-        modifier = Modifier.graphicsLayer {
-            alpha = fade.value
-            compositingStrategy = CompositingStrategy.ModulateAlpha
-        },
-        contentAlignment = Alignment.Center,
-    ) {
-        KeyContent(
-            visual,
-            settings,
-            if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
-        )
-    }
-}
-
-/**
- * The key labels' opacity while the board changes layer (letters, symbols,
- * the second symbol page), so the new labels come up rather than cutting in.
- * Null outside [LayerLabelFade], which is every grid that never changes layer
- * under the finger (panel grids, previews): their labels skip the wrapper.
- */
-internal val LocalLayerLabelFade = compositionLocalOf<State<Float>?> { null }
-
-/** The opacity a new layer's labels start from. */
-private const val LayerLabelFadeFrom = 0.35f
-
-/** How long a new layer's labels take to reach full strength. */
-private const val LayerLabelFadeMs = 110
-
-/**
- * Provides [LocalLayerLabelFade] to [content], starting a fade each time [mode]
- * changes. The fade's start value is decided in the composition that switched
- * layer, so the frame that first shows the new labels already draws them faded,
- * rather than drawing them at full strength and dimming them a frame later.
- * The first layer a board opens on does not fade, and neither does any layer
- * under Reduce motion.
- */
-@Composable
-private fun LayerLabelFade(mode: LayoutMode, reduceMotion: Boolean, content: @Composable () -> Unit) {
-    // A plain holder, not snapshot state: it is written from inside the
-    // remember below, and nothing draws from it.
-    val shown = remember { arrayOfNulls<LayoutMode>(1) }
-    val fade = remember(mode) {
-        val switched = shown[0] != null && shown[0] != mode
-        shown[0] = mode
-        Animatable(if (switched && !reduceMotion) LayerLabelFadeFrom else 1f)
-    }
-    LaunchedEffect(fade) {
-        fade.animateTo(1f, tween(LayerLabelFadeMs, easing = LinearOutSlowInEasing))
-    }
-    CompositionLocalProvider(LocalLayerLabelFade provides fade.asState(), content = content)
+    KeyContent(
+        visual,
+        settings,
+        if (recolours && pressed.value) visual.pressedContentColor else visual.contentColor,
+    )
 }
 
 /**
@@ -18722,46 +18663,6 @@ private fun ActionKeyIcon(
     }
 }
 
-/**
- * [ActionKeyIcon] for the shift and caps-lock keys, which change look with the
- * shift state: the glyph cross-fades (outline, filled, locked) and the tint eases
- * between the key's colour and the lit one, instead of both snapping.
- *
- * Only these two keys pay for it, and only on the frames a shift state changes;
- * every other key keeps the plain icon. The outgoing glyph drops its name while
- * it fades, so a screen reader never finds two shift keys in one place.
- */
-@Composable
-private fun ShiftStateIcon(
-    named: ImageVector?,
-    slot: String,
-    contentDescription: String?,
-    tint: Color,
-    reduceMotion: Boolean,
-) {
-    val shownTint by animateColorAsState(
-        tint,
-        animationSpec = if (reduceMotion) snap() else tween(ShiftMotionMs),
-        label = "shiftTint",
-    )
-    // A named icon is one glyph for every state, so there is nothing to fade.
-    if (named != null || reduceMotion) {
-        ActionKeyIcon(named, slot, contentDescription, shownTint)
-        return
-    }
-    Crossfade(targetState = slot, animationSpec = tween(ShiftMotionMs), label = "shiftGlyph") { shown ->
-        ActionKeyIcon(
-            null,
-            shown,
-            contentDescription = if (shown == slot) contentDescription else null,
-            tint = shownTint,
-        )
-    }
-}
-
-/** How long the shift key takes to change its glyph and its tint. */
-private const val ShiftMotionMs = 120
-
 @Composable
 private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentColor: Color) {
     val key = visual.key
@@ -18775,19 +18676,17 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
     when (key.action) {
         // The shift slot and its spoken name both track the live shift state, and
         // [spokenLabel] already words it the way this key wants read out.
-        KeyAction.Shift -> ShiftStateIcon(
+        KeyAction.Shift -> ActionKeyIcon(
             namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
-            reduceMotion = settings.reduceMotion,
         )
-        KeyAction.CapsLock -> ShiftStateIcon(
+        KeyAction.CapsLock -> ActionKeyIcon(
             namedIcon,
             visual.iconSlot ?: IconSlots.KEY_SHIFT_LOCK,
             contentDescription = visual.spoken.resolved(),
             tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
-            reduceMotion = settings.reduceMotion,
         )
         KeyAction.Delete -> ActionKeyIcon(
             namedIcon,
