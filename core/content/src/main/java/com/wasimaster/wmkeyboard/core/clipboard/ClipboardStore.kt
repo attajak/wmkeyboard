@@ -178,6 +178,13 @@ class ClipboardStore(
      * code is useful for a minute and a liability for a day.
      */
     var sensitiveExpiryMillis: Long = DEFAULT_SENSITIVE_EXPIRY_MILLIS,
+    /**
+     * The most characters of text one clip keeps (0 = no limit). A longer copy
+     * is stored cut to this length, and its rich-text markup, which no longer
+     * matches the cut text, is dropped. What is on the system clipboard itself
+     * is never touched.
+     */
+    var maxTextChars: Int = 0,
 ) {
 
     @Serializable
@@ -348,8 +355,12 @@ class ClipboardStore(
         now: Long,
         sensitive: Boolean = false,
     ): ClipItem? {
-        val trimmed = text.trim()
-        if (trimmed.isEmpty()) return null
+        val whole = text.trim()
+        if (whole.isEmpty()) return null
+        // A cut can land after a space; the clip should not end in one.
+        val trimmed = capClipText(whole, maxTextChars).trimEnd()
+        // Markup for the whole text would paste back what the cut dropped.
+        val html = html.takeIf { trimmed.length == whole.length }
         val isLink = html == null && ClipLinks.asUrl(trimmed) != null
         // Re-copying an existing item moves it to the top instead of duplicating.
         val existing = items.firstOrNull { it.kind.isTextual && it.text == trimmed }
@@ -477,7 +488,7 @@ class ClipboardStore(
         if (index < 0) return null
         val item = items[index]
         if (!item.kind.isTextual) return null
-        val trimmed = text.trim()
+        val trimmed = capClipText(text.trim(), maxTextChars).trimEnd()
         if (trimmed.isEmpty()) return null
         // Saved without a change: nothing to lose, so rich text keeps its markup.
         if (trimmed == item.text) return item
@@ -571,14 +582,11 @@ class ClipboardStore(
     }
 
     private fun prune(now: Long) {
-        if (expiryMillis > 0) {
-            removeWhere { !it.pinned && now - it.timestamp > expiryMillis }
-        }
         // Sensitive clips are swept on their own shorter timer, which is not
         // capped by the history one: a five-minute leash has to hold even when
-        // history is set to keep everything forever.
-        if (sensitiveExpiryMillis > 0) {
-            removeWhere { it.sensitive && !it.pinned && now - it.timestamp > sensitiveExpiryMillis }
+        // history is set to keep everything forever. [expiresAt] has both.
+        removeWhere { item ->
+            item.expiresAt(expiryMillis, sensitiveExpiryMillis)?.let { now > it } == true
         }
         val cap = maxItems.coerceAtLeast(1)
         while (items.count { !it.pinned } > cap) {
@@ -592,4 +600,58 @@ class ClipboardStore(
         items.removeAll(predicate)
         removed.forEach { item -> item.imagePath?.let { File(it).delete() } }
     }
+}
+
+/**
+ * When [this] clip expires, in epoch millis, or null when it never does: a
+ * pinned clip, or history set to keep everything with no shorter leash for a
+ * sensitive one. [expiryMillis] and [sensitiveExpiryMillis] are the store's
+ * own; 0 turns either off. The one rule the store prunes by and the panel's
+ * "expires in" label reads, so the two cannot disagree.
+ */
+fun ClipItem.expiresAt(expiryMillis: Long, sensitiveExpiryMillis: Long): Long? {
+    if (pinned) return null
+    val history = if (expiryMillis > 0) timestamp + expiryMillis else null
+    val leash = if (sensitive && sensitiveExpiryMillis > 0) timestamp + sensitiveExpiryMillis else null
+    return listOfNotNull(history, leash).minOrNull()
+}
+
+/**
+ * [text] cut to [max] characters, one fewer rather than splitting a surrogate
+ * pair; unchanged when it fits or [max] is 0 or less (no limit).
+ */
+fun capClipText(text: String, max: Int): String {
+    if (max <= 0 || text.length <= max) return text
+    var end = max
+    if (Character.isHighSurrogate(text[end - 1])) end--
+    return text.substring(0, end)
+}
+
+/**
+ * The most characters of a clip the panel hands to text layout. Laying out a
+ * paragraph measures all of it, however few lines are drawn, so a clip of a
+ * whole book would otherwise cost a book's worth of shaping on every panel
+ * open. Far more than any preview line count can show.
+ */
+const val CLIP_PREVIEW_CHAR_CAP = 4_000
+
+/**
+ * The part of [text] a preview of [lines] lines can show: up to the line break
+ * after the one past the last shown line, and never past [cap]. One extra line
+ * is kept so the text still overflows, and the preview still ends in an
+ * ellipsis when there is more.
+ */
+fun clipPreviewText(text: String, lines: Int, cap: Int = CLIP_PREVIEW_CHAR_CAP): String {
+    val shown = lines.coerceAtLeast(1)
+    val limit = minOf(text.length, cap)
+    var breaks = 0
+    var end = limit
+    for (i in 0 until limit) {
+        if (text[i] == '\n' && ++breaks > shown) {
+            end = i
+            break
+        }
+    }
+    if (end >= text.length) return text
+    return capClipText(text, end.coerceAtLeast(1))
 }

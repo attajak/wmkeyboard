@@ -56,6 +56,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -86,9 +87,15 @@ import com.wasimaster.wmkeyboard.core.clipboard.ClipItem
 import com.wasimaster.wmkeyboard.core.clipboard.ClipKind
 import com.wasimaster.wmkeyboard.core.clipboard.PhoneFormats
 import com.wasimaster.wmkeyboard.core.clipboard.clipEditable
+import com.wasimaster.wmkeyboard.core.clipboard.clipPreviewText
+import com.wasimaster.wmkeyboard.core.clipboard.expiresAt
 import com.wasimaster.wmkeyboard.core.clipboard.matchesQuery
 import com.wasimaster.wmkeyboard.core.layout.PanelFieldKind
+import com.wasimaster.wmkeyboard.core.settings.ClipGridColumnsRange
+import com.wasimaster.wmkeyboard.core.settings.ClipTimeLabel
+import com.wasimaster.wmkeyboard.core.settings.ClipboardSettings
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
+import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.ime.ClipEdit
 import com.wasimaster.wmkeyboard.ime.ClipUndo
 import com.wasimaster.wmkeyboard.ime.FocusRegion
@@ -355,7 +362,21 @@ private fun ClipboardHistory(
     callbacks: ClipboardFieldCallbacks,
 ) {
     val shownItems = session.shownItems
-    val columns = if (session.list) 1 else 2
+    val clipboard = state.settings.clipboard
+    val columns = if (session.list) 1 else clipboard.gridColumns.coerceIn(ClipGridColumnsRange)
+    // 0 is the view's own: six lines on a card, three in a row, where a list
+    // is for scanning many clips.
+    val lines = clipboard.previewLines.takeIf { it > 0 } ?: if (session.list) 3 else 6
+    // The clock the time labels read. Ticks only while they are shown, and
+    // only twice a minute: they count in minutes.
+    val timeLabel = clipboard.timeLabel
+    val now by produceState(System.currentTimeMillis(), timeLabel) {
+        if (timeLabel == ClipTimeLabel.OFF) return@produceState
+        while (true) {
+            delay(ClipTimeTickMs)
+            value = System.currentTimeMillis()
+        }
+    }
     PanelFocusTarget(
         panel = PanelMode.CLIPBOARD,
         count = shownItems.size,
@@ -420,10 +441,11 @@ private fun ClipboardHistory(
                 },
             ) {
                 val number = session.numbers[item.id]
+                val time = clipTimeText(item, timeLabel, clipboard, now)
                 if (session.list) {
-                    ClipRow(item, number, focused = index == focused, callbacks)
+                    ClipRow(item, number, lines, time, focused = index == focused, callbacks)
                 } else {
-                    ClipCard(item, number, focused = index == focused, callbacks)
+                    ClipCard(item, number, lines, time, focused = index == focused, callbacks)
                 }
             }
         }
@@ -541,8 +563,10 @@ private fun ClipBody(item: ClipItem, maxLines: Int) {
         item.kind == ClipKind.VIDEO -> ClipVideoBody(item)
         item.kind == ClipKind.FILE || item.kind == ClipKind.FOLDER -> ClipFileBody(item)
         item.kind == ClipKind.LINK -> ClipLinkBody(item)
+        // Cut before layout: a paragraph is measured whole however few lines
+        // are drawn, and one clip can be a whole document.
         else -> Text(
-            text = item.text,
+            text = remember(item.text, maxLines) { clipPreviewText(item.text, maxLines) },
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             fontSize = 13.sp,
@@ -600,7 +624,14 @@ private fun ClipNumberBadge(number: Int, modifier: Modifier = Modifier) {
  * take, so turning numbering on never makes a card taller.
  */
 @Composable
-private fun ClipCard(item: ClipItem, number: Int?, focused: Boolean, callbacks: ClipboardFieldCallbacks) {
+private fun ClipCard(
+    item: ClipItem,
+    number: Int?,
+    lines: Int,
+    time: String?,
+    focused: Boolean,
+    callbacks: ClipboardFieldCallbacks,
+) {
     var showInfo by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -609,7 +640,7 @@ private fun ClipCard(item: ClipItem, number: Int?, focused: Boolean, callbacks: 
             .padding(if (item.kind == ClipKind.IMAGE || item.kind == ClipKind.VIDEO) 5.dp else 10.dp),
     ) {
         if (showInfo) ClipHoldPopup(item, callbacks) { showInfo = false }
-        ClipBody(item, maxLines = 6)
+        ClipBody(item, maxLines = lines)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -628,6 +659,7 @@ private fun ClipCard(item: ClipItem, number: Int?, focused: Boolean, callbacks: 
                     modifier = Modifier.weight(1f, fill = false),
                 )
             }
+            if (time != null) ClipTimeText(time, Modifier.weight(1f, fill = false))
             Spacer(Modifier.weight(1f))
             ClipActions(item, callbacks)
         }
@@ -641,7 +673,14 @@ private fun ClipCard(item: ClipItem, number: Int?, focused: Boolean, callbacks: 
  * picture is a thumbnail at the start of the row rather than the whole row.
  */
 @Composable
-private fun ClipRow(item: ClipItem, number: Int?, focused: Boolean, callbacks: ClipboardFieldCallbacks) {
+private fun ClipRow(
+    item: ClipItem,
+    number: Int?,
+    lines: Int,
+    time: String?,
+    focused: Boolean,
+    callbacks: ClipboardFieldCallbacks,
+) {
     var showInfo by remember { mutableStateOf(false) }
     val visual = item.kind == ClipKind.IMAGE || item.kind == ClipKind.VIDEO
     Row(
@@ -662,19 +701,21 @@ private fun ClipRow(item: ClipItem, number: Int?, focused: Boolean, callbacks: C
                     .width(ListThumbnailWidth)
                     .heightIn(max = ListThumbnailMaxHeight)
                     .clip(RoundedCornerShape(8.dp)),
-            ) { ClipBody(item, maxLines = 3) }
-            Text(
-                stringResource(
-                    if (item.kind == ClipKind.IMAGE) R.string.ime_clip_type_image else R.string.ime_clip_type_video,
-                ),
-                fontSize = 11.sp,
-                maxLines = 1,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
-            )
+            ) { ClipBody(item, maxLines = lines) }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    stringResource(
+                        if (item.kind == ClipKind.IMAGE) R.string.ime_clip_type_image else R.string.ime_clip_type_video,
+                    ),
+                    fontSize = 11.sp,
+                    maxLines = 1,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (time != null) ClipTimeText(time, Modifier.padding(top = 2.dp))
+            }
         } else {
             Column(modifier = Modifier.weight(1f)) {
-                ClipBody(item, maxLines = 3)
+                ClipBody(item, maxLines = lines)
                 if (item.kind == ClipKind.HTML) {
                     Text(
                         stringResource(R.string.ime_clip_type_rich_text),
@@ -684,11 +725,69 @@ private fun ClipRow(item: ClipItem, number: Int?, focused: Boolean, callbacks: C
                         modifier = Modifier.padding(top = 2.dp),
                     )
                 }
+                if (time != null) ClipTimeText(time, Modifier.padding(top = 2.dp))
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { ClipActions(item, callbacks) }
     }
 }
+
+/** A clip's time label, in the rich-text tag's small muted type. */
+@Composable
+private fun ClipTimeText(time: String, modifier: Modifier = Modifier) {
+    Text(
+        time,
+        fontSize = 10.sp,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier,
+    )
+}
+
+/**
+ * The time [item] shows under [label] at [now], or null for none: how long ago
+ * it was copied, or how long it has left by the same rule the store prunes by
+ * ([expiresAt]). A pinned clip, or one history keeps forever, has no time left
+ * to show.
+ */
+@Composable
+private fun clipTimeText(item: ClipItem, label: ClipTimeLabel, clipboard: ClipboardSettings, now: Long): String? =
+    when (label) {
+        ClipTimeLabel.OFF -> null
+        ClipTimeLabel.COPIED -> android.text.format.DateUtils.getRelativeTimeSpanString(
+            item.timestamp,
+            now,
+            android.text.format.DateUtils.MINUTE_IN_MILLIS,
+            android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE,
+        ).toString()
+        ClipTimeLabel.EXPIRES -> {
+            val sensitiveLeash = if (clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
+                clipboard.sensitiveExpiryMinutes * MinuteMs
+            } else {
+                0L
+            }
+            item.expiresAt(clipboard.expiryHours * 60 * MinuteMs, sensitiveLeash)?.let { at ->
+                val minutes = ((at - now).coerceAtLeast(0L) + MinuteMs - 1) / MinuteMs
+                when {
+                    minutes < 60 -> minutes.coerceAtLeast(1L).toInt().let {
+                        pluralStringResource(R.plurals.ime_clip_left_minutes, it, it)
+                    }
+                    minutes < 48 * 60 -> (minutes / 60).toInt().let {
+                        pluralStringResource(R.plurals.ime_clip_left_hours, it, it)
+                    }
+                    else -> (minutes / (24 * 60)).toInt().let {
+                        pluralStringResource(R.plurals.ime_clip_left_days, it, it)
+                    }
+                }
+            }
+        }
+    }
+
+private const val MinuteMs = 60_000L
+
+/** How often the time labels are brought up to date while the panel is open. */
+private const val ClipTimeTickMs = 30_000L
 
 /** The history's bottom padding while the Undo bar covers its last few dp. */
 private val UndoBarClearance = 64.dp

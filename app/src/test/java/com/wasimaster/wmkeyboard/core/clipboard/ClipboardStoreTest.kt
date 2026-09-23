@@ -379,4 +379,62 @@ class ClipboardStoreTest {
         assertTrue(clip.kind.isUriBacked)
         assertFalse(clip.kind.isTextual)
     }
+
+    @Test fun noTextLimitByDefault() {
+        val store = ClipboardStore(null)
+        val long = "x".repeat(200_000)
+        assertEquals(long, store.add(long, now = 1)!!.text)
+    }
+
+    @Test fun textLimitCutsALongCopy() {
+        val store = ClipboardStore(null, maxTextChars = 10)
+        assertEquals("0123456789", store.add("0123456789abcdef", now = 1)!!.text)
+    }
+
+    @Test fun textLimitDropsMarkupThatNoLongerMatches() {
+        val store = ClipboardStore(null, maxTextChars = 5)
+        val cut = store.addHtml("bold words", "<b>bold</b> words", now = 1)!!
+        assertEquals("bold", cut.text)
+        assertEquals(ClipKind.TEXT, cut.kind)
+        assertNull(cut.htmlText)
+        val whole = store.addHtml("hi", "<b>hi</b>", now = 2)!!
+        assertEquals(ClipKind.HTML, whole.kind)
+    }
+
+    @Test fun textLimitNeverSplitsASurrogatePair() {
+        assertEquals("ab", capClipText("ab😀", 3))
+        assertEquals("ab😀", capClipText("ab😀", 4))
+        assertEquals("ab😀", capClipText("ab😀", 0))
+    }
+
+    @Test fun editsAreCutToo() {
+        val store = ClipboardStore(null, maxTextChars = 3)
+        val clip = store.add("abc", now = 1)!!
+        assertEquals("xyz", store.editText(clip.id, "xyzzy")!!.text)
+    }
+
+    @Test fun previewKeepsOneLineMoreThanShown() {
+        assertEquals("a\nb\nc", clipPreviewText("a\nb\nc\nd\ne", lines = 2))
+        assertEquals("a\nb", clipPreviewText("a\nb", lines = 2))
+        assertEquals("one", clipPreviewText("one", lines = 1))
+    }
+
+    @Test fun previewIsCappedOnOneEndlessLine() {
+        val text = "y".repeat(CLIP_PREVIEW_CHAR_CAP * 3)
+        assertEquals(CLIP_PREVIEW_CHAR_CAP, clipPreviewText(text, lines = 20).length)
+    }
+
+    @Test fun previewOfALeadingBreakIsNotTheWholeText() {
+        val text = "\n\n\n" + "z".repeat(10)
+        assertEquals("\n", clipPreviewText(text, lines = 1))
+    }
+
+    @Test fun expiresAtTakesTheSoonerOfTheTwoTimers() {
+        val clip = ClipItem(id = 1, text = "t", timestamp = 1_000)
+        assertEquals(1_000L + 500, clip.expiresAt(expiryMillis = 500, sensitiveExpiryMillis = 100))
+        assertEquals(1_000L + 100, clip.copy(sensitive = true).expiresAt(500, 100))
+        assertEquals(1_000L + 100, clip.copy(sensitive = true).expiresAt(0, 100))
+        assertNull(clip.expiresAt(0, 100))
+        assertNull(clip.copy(pinned = true, sensitive = true).expiresAt(500, 100))
+    }
 }

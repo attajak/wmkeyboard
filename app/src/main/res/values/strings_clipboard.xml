@@ -35,8 +35,24 @@
     <string name="clipboard_full_bleed_subtitle">Hide the toolbar behind a back button so the history gets the whole keyboard</string>
     <string name="clipboard_full_bleed_info">The clipboard panel takes the whole keyboard. The toolbar, the emoji row and the symbol row step aside, and a slim back header takes their place. The history then shows more clips at once. While you search the history, the panel returns to its compact form so the keys fit below it. This setting is on by default.</string>
     <string name="clipboard_view_title">History layout</string>
-    <string name="clipboard_view_subtitle">Cards in two columns, or one clip per row</string>
-    <string name="clipboard_view_info">The grid packs two columns of cards, which suits pictures. The list gives each clip a whole row, which suits long text. The switch beside the panel\'s search bar changes the same setting. The grid is the default.</string>
+    <string name="clipboard_view_subtitle">Cards in columns, or one clip per row</string>
+    <string name="clipboard_view_info">The grid packs cards in columns, which suits pictures. Set how many under Grid columns. The list gives each clip a whole row, which suits long text. The switch beside the panel\'s search bar changes the same setting. The grid is the default.</string>
+    <string name="clipboard_columns_title">Grid columns</string>
+    <string name="clipboard_columns_subtitle">How many columns of cards the grid has</string>
+    <string name="clipboard_columns_info">More columns show more clips at once, which suits short text. Fewer give each card more room, which suits long text and pictures. The list layout always shows one clip per row. The default is 2.</string>
+    <string name="clipboard_lines_title">Lines per clip</string>
+    <string name="clipboard_lines_subtitle">How much of each clip\'s text the panel shows</string>
+    <string name="clipboard_lines_info">Auto shows six lines on a grid card and three in a list row. Set a number to show that many lines in both layouts. Text that is longer ends with …. Tap the clip to paste all of it, or press and hold it to read the details.</string>
+    <!-- Slider readout for the lines per clip when it follows the layout. -->
+    <string name="clipboard_lines_auto">Auto</string>
+    <string name="clipboard_time_title">Time on each clip</string>
+    <string name="clipboard_time_subtitle">Show when a clip was copied, or how long it has left</string>
+    <string name="clipboard_time_info">Time copied shows how long ago you copied each clip. Time left shows how long each clip stays before the clipboard expiry deletes it. A pinned clip, or a clip in a history that never expires, shows no time left. This setting is off by default.</string>
+    <string name="clipboard_max_chars_title">Longest clip kept</string>
+    <string name="clipboard_max_chars_subtitle">Cut very long copied text to this many characters</string>
+    <string name="clipboard_max_chars_info">With no limit, the default, the history keeps all of the text you copy. Set a limit and a longer copy is kept cut to that many characters, so a copied book does not fill the history and your backups. Rich text that gets cut is kept as plain text. The system clipboard itself keeps all of the text, so a normal paste in an app is not changed. Gboard cuts at 20,000 characters.</string>
+    <!-- Slider readout when a clip's text has no length limit. -->
+    <string name="clipboard_max_chars_none">No limit</string>
     <string name="clipboard_numbers_title">Number the clips</string>
     <string name="clipboard_numbers_subtitle">Show a number beside each clip, so you tap the one you mean</string>
     <string name="clipboard_numbers_info">Each clip keeps its own number while you search. The results show the numbers the clips had, and the count does not start again from 1. The numbers follow the order of the panel, from the top. This setting is off by default.</string>

@@ -27,6 +27,8 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.core.settings.BottomRowHeightRange
 import com.wasimaster.wmkeyboard.core.settings.GlobeTypingGuardMsRange
+import com.wasimaster.wmkeyboard.core.settings.BoardCorner
+import com.wasimaster.wmkeyboard.core.settings.BoardCornerRadiusRange
 import com.wasimaster.wmkeyboard.core.settings.SidePadScaleRange
 import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
@@ -1091,6 +1093,42 @@ internal fun LayoutSizeSettings(
                 info = stringResource(R.string.layout_bottom_padding_info),
                 default = SettingsDefaults.bottomPaddingDp.toFloat(),
             ) { scope.launch { repository.setBottomPaddingDp(it.toInt()) } }
+        }
+        item {
+            val square = stringResource(R.string.layout_board_corner_square)
+            SliderSetting(
+                R.string.layout_board_corner_top_title,
+                subtitle = stringResource(R.string.layout_board_corner_top_subtitle),
+                value = settings.layoutBehavior.boardCornerTopDp.toFloat(),
+                range = BoardCornerRadiusRange.first.toFloat()..BoardCornerRadiusRange.last.toFloat(),
+                display = { if (it.roundToInt() == 0) square else dpFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.layout_board_corner_info),
+                default = SettingsDefaults.layoutBehavior.boardCornerTopDp.toFloat(),
+            ) { scope.launch { repository.setBoardCornerTopDp(it.roundToInt()) } }
+        }
+        item {
+            val square = stringResource(R.string.layout_board_corner_square)
+            SliderSetting(
+                R.string.layout_board_corner_bottom_title,
+                subtitle = stringResource(R.string.layout_board_corner_bottom_subtitle),
+                value = settings.layoutBehavior.boardCornerBottomDp.toFloat(),
+                range = BoardCornerRadiusRange.first.toFloat()..BoardCornerRadiusRange.last.toFloat(),
+                display = { if (it.roundToInt() == 0) square else dpFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.layout_board_corner_info),
+                default = SettingsDefaults.layoutBehavior.boardCornerBottomDp.toFloat(),
+            ) { scope.launch { repository.setBoardCornerBottomDp(it.roundToInt()) } }
+        }
+        // Which corners only matters once one of the two is round.
+        if (settings.layoutBehavior.boardCornerTopDp > 0 || settings.layoutBehavior.boardCornerBottomDp > 0) {
+            item {
+                MultiChoiceSetting(
+                    R.string.layout_board_corners_title,
+                    subtitle = stringResource(R.string.layout_board_corners_subtitle),
+                    options = BoardCorner.entries.map { it to stringResource(it.labelRes) },
+                    selected = settings.layoutBehavior.boardCorners,
+                    default = SettingsDefaults.layoutBehavior.boardCorners,
+                ) { scope.launch { repository.setBoardCorners(it) } }
+            }
         }
         item {
             SliderSetting(

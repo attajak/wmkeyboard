@@ -151,6 +151,13 @@
     <string name="core_settings_copied_code_chip_off_label">Never</string>
     <string name="core_settings_clipboard_view_grid_label">Grid</string>
     <string name="core_settings_clipboard_view_list_label">List</string>
+    <string name="core_settings_clip_time_off_label">None</string>
+    <string name="core_settings_board_corner_top_left_label">Top left</string>
+    <string name="core_settings_board_corner_top_right_label">Top right</string>
+    <string name="core_settings_board_corner_bottom_left_label">Bottom left</string>
+    <string name="core_settings_board_corner_bottom_right_label">Bottom right</string>
+    <string name="core_settings_clip_time_copied_label">Time copied</string>
+    <string name="core_settings_clip_time_expires_label">Time left</string>
     <string name="core_settings_copied_code_chip_code_fields_label">Code boxes only</string>
     <string name="core_settings_copied_code_chip_any_field_label">Any field</string>
 

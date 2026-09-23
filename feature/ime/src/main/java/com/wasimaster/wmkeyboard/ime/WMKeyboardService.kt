@@ -3120,14 +3120,7 @@ open class WMKeyboardService : InputMethodService() {
                     coinPickKey = nextCoinKey
                     remergeCurrencyRates()
                 }
-                clipboardStore.expiryMillis = settings.clipboard.expiryHours * 60L * 60 * 1000
-                clipboardStore.maxItems = settings.clipboard.maxItems
-                clipboardStore.sensitiveExpiryMillis =
-                    if (settings.clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
-                        settings.clipboard.sensitiveExpiryMinutes * 60L * 1000
-                    } else {
-                        0L
-                    }
+                configureClipboardStore(settings)
                 // "Keep it like any other clip" means the mark is ignored, so
                 // clips marked while hiding was on unmask rather than staying
                 // dots forever with no short timer left to sweep them.
@@ -3684,6 +3677,10 @@ open class WMKeyboardService : InputMethodService() {
             store("clipboard/history.json"),
             imagesDir = store("clipboard/images"),
         )
+        // The swapped-in store starts on the defaults; carry the user's limits
+        // across, or a bigger history and a longer expiry than asked for hold
+        // until the next settings emit.
+        configureClipboardStore(_uiState.value.settings)
         snippetsFile = store("snippets/snippets.json")
         snippetStore = SnippetStore(snippetsFile)
         snippetsStamp = snippetsFile?.lastModified() ?: 0L
@@ -5609,6 +5606,19 @@ open class WMKeyboardService : InputMethodService() {
      * a hardware key, all of which arrive here as a selection update.
      */
     private var lastSelectionUpdateAt = 0L
+
+    /** Hands the clipboard settings the store enforces to [clipboardStore]. */
+    private fun configureClipboardStore(settings: KeyboardSettings) {
+        clipboardStore.expiryMillis = settings.clipboard.expiryHours * 60L * 60 * 1000
+        clipboardStore.maxItems = settings.clipboard.maxItems
+        clipboardStore.maxTextChars = settings.clipboard.maxTextChars
+        clipboardStore.sensitiveExpiryMillis =
+            if (settings.clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
+                settings.clipboard.sensitiveExpiryMinutes * 60L * 1000
+            } else {
+                0L
+            }
+    }
 
     /** When a key last typed into the field, for the 🌐 guard: see [globeTapGuarded]. */
     private var lastTypedKeyAt = 0L

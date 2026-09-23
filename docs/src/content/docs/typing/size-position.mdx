@@ -44,6 +44,8 @@ Each padding is claimed at its own edge before **Keyboard position** gets a say,
 
 **Bottom padding** raises the whole keyboard away from the bottom edge and the gesture navigation bar, from 0dp to 160dp. The default depends on your Android version: **32dp** on Android 15 and up, where the IME window can draw behind the gesture bar, and **8dp** on older versions. Raise it if the bottom row feels cramped against the screen edge, or if you keep triggering system navigation by mistake. The slider runs so high because the inline **Resize** tool moves the same value, and that can push the keyboard a long way up the screen.
 
+**Round top corners** and **Round bottom corners** cut rounded corners out of the docked keyboard, from square (the default) up to 40dp, and the app shows through the cut. The top and bottom are set apart, and **Which corners**, shown once either one is round, picks which of the four corners they apply to. All four by default, so rounding only the top two means leaving the bottom at Square. Round bottom corners suit gesture navigation and a phone whose screen corners are round too. With the older three-button navigation bar, the bar sits below the keyboard and the bottom corners open onto the app above it. The floating keyboard and the television card have round corners of their own and ignore these.
+
 ## Sizing each screen shape
 
 <SettingsPath path="Layout & size / Size and position / Per screen" />
@@ -194,6 +196,9 @@ Pin the **Keep on screen** tool to your toolbar to toggle this directly. That to
 | Right padding | 0% |
 | Key spacing | 100% |
 | Bottom padding | 32 dp (Android 15+) / 8 dp (older) |
+| Round top corners | Square (0 dp) |
+| Round bottom corners | Square (0 dp) |
+| Which corners | All four |
 | Keyboard width | 100% |
 | Keyboard position | Centre |
 | Keyboard scale (per screen shape) | 100% |

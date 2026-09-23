@@ -634,6 +634,19 @@
     <string name="ime_clip_video_desc">Copied video</string>
     <string name="ime_clip_hidden_desc">Hidden</string>
     <!-- How long a copied text is. %1$d is the number of characters. -->
+    <!-- Time left before a clip in the clipboard panel expires. "min" and "h" are short unit names. -->
+    <plurals name="ime_clip_left_minutes">
+        <item quantity="one">%d min left</item>
+        <item quantity="other">%d min left</item>
+    </plurals>
+    <plurals name="ime_clip_left_hours">
+        <item quantity="one">%d h left</item>
+        <item quantity="other">%d h left</item>
+    </plurals>
+    <plurals name="ime_clip_left_days">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
     <plurals name="ime_clip_character_count">
         <item quantity="one">%1$d character</item>
         <item quantity="other">%1$d characters</item>

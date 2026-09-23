@@ -95,6 +95,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -311,6 +312,7 @@ import com.wasimaster.wmkeyboard.ime.top
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
 import com.wasimaster.wmkeyboard.ime.hintFlick
+import com.wasimaster.wmkeyboard.core.clipboard.clipPreviewText
 import com.wasimaster.wmkeyboard.ime.KeyFlickDirection
 import com.wasimaster.wmkeyboard.ime.keyFlick
 import com.wasimaster.wmkeyboard.ime.globeDragAction
@@ -397,6 +399,9 @@ import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.MeteredFeature
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
+import com.wasimaster.wmkeyboard.core.settings.BoardCorner
+import com.wasimaster.wmkeyboard.core.settings.BoardCornerRadiusRange
+import com.wasimaster.wmkeyboard.core.settings.LayoutBehaviorSettings
 import com.wasimaster.wmkeyboard.core.settings.OneHandedSide
 import com.wasimaster.wmkeyboard.core.settings.LetterSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
@@ -1769,10 +1774,20 @@ private fun DockedKeyboardFrame(
                 ),
         ) {
             if (resize != null) ResizeHeadroomScrim()
+            // Rounded corners cut out of the whole board, the app showing
+            // through them. Not on a television, whose card rounds itself, and
+            // not while resizing, whose outline chrome runs to the corners.
+            val behavior = state.settings.layoutBehavior
+            val boardShape = remember(behavior.boardCornerTopDp, behavior.boardCornerBottomDp, behavior.boardCorners) {
+                boardCornerShape(behavior)
+            }.takeUnless {
+                resize != null || (state.television && state.settings.oneHandedMode == OneHandedMode.OFF)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
+                    .then(if (boardShape == null) Modifier else Modifier.clip(boardShape))
                     .then(
                         if (resize == null) Modifier else Modifier.onSizeChanged {
                             resize.latchReserved(it.height, headroomPx, maxReservedPx)
@@ -2109,6 +2124,29 @@ private fun TelevisionCard(modifier: Modifier, content: @Composable () -> Unit) 
         BoardBackground(LocalKbTheme.current)
         content()
     }
+}
+
+/**
+ * The docked board's outline from its corner settings, or null while every
+ * corner is square, so the default board takes no clip at all. Left and right
+ * are the screen's, whatever the language's direction, since the corners are
+ * where the screen's are.
+ */
+internal fun boardCornerShape(behavior: LayoutBehaviorSettings): Shape? {
+    val top = behavior.boardCornerTopDp.coerceIn(BoardCornerRadiusRange)
+    val bottom = behavior.boardCornerBottomDp.coerceIn(BoardCornerRadiusRange)
+    fun radius(corner: BoardCorner, dp: Int): Int = if (corner in behavior.boardCorners) dp else 0
+    val topLeft = radius(BoardCorner.TOP_LEFT, top)
+    val topRight = radius(BoardCorner.TOP_RIGHT, top)
+    val bottomLeft = radius(BoardCorner.BOTTOM_LEFT, bottom)
+    val bottomRight = radius(BoardCorner.BOTTOM_RIGHT, bottom)
+    if (topLeft == 0 && topRight == 0 && bottomLeft == 0 && bottomRight == 0) return null
+    return AbsoluteRoundedCornerShape(
+        topLeft = topLeft.dp,
+        topRight = topRight.dp,
+        bottomRight = bottomRight.dp,
+        bottomLeft = bottomLeft.dp,
+    )
 }
 
 /** Corner radius of [TelevisionCard]'s two top corners. */
@@ -4922,7 +4960,8 @@ private fun ClipboardSuggestionChip(
                         R.string.ime_clip_chip_image
                     },
                 )
-                clip.text.isNotBlank() -> clip.text
+                // One line is all the chip shows; the rest is not laid out.
+                clip.text.isNotBlank() -> clipPreviewText(clip.text, lines = 1)
                 else -> stringResource(R.string.ime_clip_chip_item)
             }
             Text(

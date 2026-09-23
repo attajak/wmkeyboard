@@ -585,6 +585,9 @@ internal object SettingsRowIcons {
         put(R.string.layout_key_spacing_title) { Icons.Outlined.SpaceBar }
         put(R.string.layout_keyboard_scale_title) { Icons.Outlined.ZoomOutMap }
         put(R.string.layout_bottom_padding_title) { Icons.Outlined.Padding }
+        put(R.string.layout_board_corner_top_title) { Icons.Outlined.RoundedCorner }
+        put(R.string.layout_board_corner_bottom_title) { Icons.Outlined.RoundedCorner }
+        put(R.string.layout_board_corners_title) { Icons.Outlined.CropFree }
         put(R.string.layout_keyboard_width_title) { Icons.Outlined.Straighten }
         put(R.string.layout_keyboard_position_title) { Icons.Outlined.OpenWith }
         put(R.string.layout_font_size_title) { Icons.Outlined.FormatSize }
@@ -949,6 +952,10 @@ internal object SettingsRowIcons {
         put(R.string.panel_layout_row_title) { Icons.Outlined.ViewAgenda }
         put(R.string.clipboard_full_bleed_title) { Icons.Outlined.Fullscreen }
         put(R.string.clipboard_view_title) { Icons.Outlined.GridView }
+        put(R.string.clipboard_columns_title) { Icons.Outlined.ViewWeek }
+        put(R.string.clipboard_lines_title) { Icons.Outlined.TextFields }
+        put(R.string.clipboard_time_title) { Icons.Outlined.Schedule }
+        put(R.string.clipboard_max_chars_title) { Icons.Outlined.Straighten }
         put(R.string.clipboard_numbers_title) { Icons.Outlined.FormatListNumbered }
         put(R.string.clipboard_undo_delete_title) { Icons.AutoMirrored.Outlined.Undo }
         put(R.string.clipboard_pinned_last_title) { Icons.Outlined.PushPin }

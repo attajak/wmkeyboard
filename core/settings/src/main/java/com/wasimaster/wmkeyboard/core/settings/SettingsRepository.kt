@@ -4662,6 +4662,28 @@ data class PerAppLanguageSettings(
 /** Bounds for the Morse commit pause, in ms; the settings slider shares them. */
 val MorseCommitMsRange = 300..2000
 
+/** One corner of the docked keyboard, on screen (left is left, in any language). */
+enum class BoardCorner {
+    TOP_LEFT,
+    TOP_RIGHT,
+    BOTTOM_LEFT,
+    BOTTOM_RIGHT,
+    ;
+
+    /** Caption for this choice; resolve it where it is drawn. */
+    @get:StringRes
+    val labelRes: Int
+        get() = when (this) {
+            TOP_LEFT -> R.string.core_settings_board_corner_top_left_label
+            TOP_RIGHT -> R.string.core_settings_board_corner_top_right_label
+            BOTTOM_LEFT -> R.string.core_settings_board_corner_bottom_left_label
+            BOTTOM_RIGHT -> R.string.core_settings_board_corner_bottom_right_label
+        }
+}
+
+/** Bounds for the docked keyboard's corner radii, in dp; 0 is square. */
+val BoardCornerRadiusRange = 0..40
+
 /** Bounds for [LayoutBehaviorSettings.globeTypingGuardMs]; 0 is off. The slider shares them. */
 val GlobeTypingGuardMsRange = 0..1000
 
@@ -4933,6 +4955,41 @@ enum class ClipboardView {
         }
 }
 
+/** The time a clip in the panel shows under its text, if any. */
+enum class ClipTimeLabel {
+    /** No time on the clips. */
+    OFF,
+
+    /** How long ago it was copied: "5 min ago". */
+    COPIED,
+
+    /** How long until it expires: "2 h left". Nothing on a clip that never does. */
+    EXPIRES,
+    ;
+
+    /** Caption for this choice; resolve it where it is drawn. */
+    @get:StringRes
+    val labelRes: Int
+        get() = when (this) {
+            OFF -> R.string.core_settings_clip_time_off_label
+            COPIED -> R.string.core_settings_clip_time_copied_label
+            EXPIRES -> R.string.core_settings_clip_time_expires_label
+        }
+}
+
+/** Lines of text a clip may show in the panel; 0 is the view's own (see [ClipboardSettings.previewLines]). */
+val ClipPreviewLinesRange = 0..20
+
+/** Columns the grid view may have. */
+val ClipGridColumnsRange = 1..4
+
+/**
+ * The stops of the per-clip text limit, in characters; 0 is no limit. A
+ * slider over these rather than over every number, since nobody means 13,417.
+ * 20,000 is Gboard's own limit.
+ */
+val ClipMaxTextCharsSteps = listOf(0, 1_000, 2_000, 5_000, 10_000, 20_000, 50_000, 100_000)
+
 /**
  * Clipboard-tool settings — history capture, the panel, and the paste chip on
  * the suggestion strip — grouped into their own object (see [CameraSettings]
@@ -5062,6 +5119,27 @@ data class ClipboardSettings(
      * when something was just deleted.
      */
     val undoDelete: Boolean = true,
+    /**
+     * Lines of text each clip shows in the panel. 0, the default, is the
+     * view's own: six on a grid card, three in a list row. See
+     * [ClipPreviewLinesRange].
+     */
+    val previewLines: Int = 0,
+    /**
+     * Columns of cards in the grid view, 1 to 4 ([ClipGridColumnsRange]). Two
+     * by default, as before; a wide screen or short clips suit more. The list
+     * view is always one clip per row.
+     */
+    val gridColumns: Int = 2,
+    /** The time each clip shows: none, when it was copied, or when it expires. */
+    val timeLabel: ClipTimeLabel = ClipTimeLabel.OFF,
+    /**
+     * The most characters of text one clip keeps, 0 for no limit (the
+     * default). A longer copy is stored cut to this length. Gboard cuts at
+     * 20,000; here nothing is cut unless the user asks, since a clip cut short
+     * pastes something other than what was copied. See [ClipMaxTextCharsSteps].
+     */
+    val maxTextChars: Int = 0,
 )
 
 /**
@@ -5809,6 +5887,18 @@ data class LayoutBehaviorSettings(
      * key changes until someone asks for it.
      */
     val globeTypingGuardMs: Int = 0,
+    /**
+     * How round the docked keyboard's top corners are, in dp (0 = square, the
+     * default). The corners are cut out of the whole board, so the app shows
+     * through them, the way Gboard-patches' rounded panel does. The floating
+     * panel and the television card have rounded corners of their own and are
+     * left alone. See [BoardCornerRadiusRange].
+     */
+    val boardCornerTopDp: Int = 0,
+    /** The same for the two bottom corners, which suit gesture navigation. */
+    val boardCornerBottomDp: Int = 0,
+    /** Which of the four corners [boardCornerTopDp] and [boardCornerBottomDp] round. All four by default. */
+    val boardCorners: Set<BoardCorner> = BoardCorner.entries.toSet(),
     /**
      * Turn the spacebar cursor slide into a 2-D touchpad: a vertical drag moves
      * the caret up and down as well as left and right. Only applies while a
@@ -7190,6 +7280,9 @@ class SettingsRepository(private val context: Context) {
         private val CAPITAL_FLICK = booleanPreferencesKey("capital_flick")
         private val GLOBE_TYPING_GUARD_MS = intPreferencesKey("globe_typing_guard_ms")
         private val GLOBE_DRAG_SHORTCUTS = booleanPreferencesKey("globe_drag_shortcuts")
+        private val BOARD_CORNER_TOP = intPreferencesKey("board_corner_top")
+        private val BOARD_CORNER_BOTTOM = intPreferencesKey("board_corner_bottom")
+        private val BOARD_CORNERS = stringSetPreferencesKey("board_corners")
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
         private val HINT_OFFSET = intPreferencesKey("hint_offset_dp")
@@ -7405,6 +7498,10 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_VIEW = stringPreferencesKey("clipboard_view")
         private val CLIPBOARD_SHOW_NUMBERS = booleanPreferencesKey("clipboard_show_numbers")
         private val CLIPBOARD_UNDO_DELETE = booleanPreferencesKey("clipboard_undo_delete")
+        private val CLIPBOARD_PREVIEW_LINES = intPreferencesKey("clipboard_preview_lines")
+        private val CLIPBOARD_GRID_COLUMNS = intPreferencesKey("clipboard_grid_columns")
+        private val CLIPBOARD_TIME_LABEL = stringPreferencesKey("clipboard_time_label")
+        private val CLIPBOARD_MAX_TEXT_CHARS = intPreferencesKey("clipboard_max_text_chars")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
         // field" to "code box", but a user who turned it on meant the same
@@ -8585,6 +8682,15 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.clipboard.view,
                 showNumbers = p[CLIPBOARD_SHOW_NUMBERS] ?: defaults.clipboard.showNumbers,
                 undoDelete = p[CLIPBOARD_UNDO_DELETE] ?: defaults.clipboard.undoDelete,
+                previewLines = p[CLIPBOARD_PREVIEW_LINES]?.coerceIn(ClipPreviewLinesRange)
+                    ?: defaults.clipboard.previewLines,
+                gridColumns = p[CLIPBOARD_GRID_COLUMNS]?.coerceIn(ClipGridColumnsRange)
+                    ?: defaults.clipboard.gridColumns,
+                timeLabel = p[CLIPBOARD_TIME_LABEL]
+                    ?.let { runCatching { ClipTimeLabel.valueOf(it) }.getOrNull() }
+                    ?: defaults.clipboard.timeLabel,
+                maxTextChars = p[CLIPBOARD_MAX_TEXT_CHARS]?.coerceAtLeast(0)
+                    ?: defaults.clipboard.maxTextChars,
             ),
             otp = OtpSettings(
                 enabled = p[OTP_CHIP_ENABLED] ?: defaults.otp.enabled,
@@ -8817,6 +8923,14 @@ class SettingsRepository(private val context: Context) {
                 capitalFlick = p[CAPITAL_FLICK] ?: defaults.layoutBehavior.capitalFlick,
                 globeTypingGuardMs = p[GLOBE_TYPING_GUARD_MS]?.coerceIn(GlobeTypingGuardMsRange)
                     ?: defaults.layoutBehavior.globeTypingGuardMs,
+                boardCornerTopDp = p[BOARD_CORNER_TOP]?.coerceIn(BoardCornerRadiusRange)
+                    ?: defaults.layoutBehavior.boardCornerTopDp,
+                boardCornerBottomDp = p[BOARD_CORNER_BOTTOM]?.coerceIn(BoardCornerRadiusRange)
+                    ?: defaults.layoutBehavior.boardCornerBottomDp,
+                // Names this build does not know are dropped, not fatal.
+                boardCorners = p[BOARD_CORNERS]
+                    ?.mapNotNullTo(mutableSetOf()) { name -> BoardCorner.entries.firstOrNull { it.name == name } }
+                    ?: defaults.layoutBehavior.boardCorners,
                 spaceCursor2d = p[SPACE_CURSOR_2D] ?: defaults.layoutBehavior.spaceCursor2d,
                 spaceHoldKeys = p[SPACE_HOLD_KEYS]
                     ?.split('\n')?.filter { it.isNotEmpty() }
@@ -13436,6 +13550,15 @@ class SettingsRepository(private val context: Context) {
     suspend fun setGlobeDragShortcuts(value: Boolean) =
         editPrefs { it[GLOBE_DRAG_SHORTCUTS] = value }
 
+    suspend fun setBoardCornerTopDp(value: Int) =
+        editPrefs { it[BOARD_CORNER_TOP] = value.coerceIn(BoardCornerRadiusRange) }
+
+    suspend fun setBoardCornerBottomDp(value: Int) =
+        editPrefs { it[BOARD_CORNER_BOTTOM] = value.coerceIn(BoardCornerRadiusRange) }
+
+    suspend fun setBoardCorners(value: Set<BoardCorner>) =
+        editPrefs { prefs -> prefs[BOARD_CORNERS] = value.mapTo(mutableSetOf()) { it.name } }
+
     suspend fun setSpaceCursor2d(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_2D] = value }
 
@@ -14040,6 +14163,18 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardUndoDelete(value: Boolean) =
         editPrefs { it[CLIPBOARD_UNDO_DELETE] = value }
+
+    suspend fun setClipboardPreviewLines(value: Int) =
+        editPrefs { it[CLIPBOARD_PREVIEW_LINES] = value.coerceIn(ClipPreviewLinesRange) }
+
+    suspend fun setClipboardGridColumns(value: Int) =
+        editPrefs { it[CLIPBOARD_GRID_COLUMNS] = value.coerceIn(ClipGridColumnsRange) }
+
+    suspend fun setClipboardTimeLabel(value: ClipTimeLabel) =
+        editPrefs { it[CLIPBOARD_TIME_LABEL] = value.name }
+
+    suspend fun setClipboardMaxTextChars(value: Int) =
+        editPrefs { it[CLIPBOARD_MAX_TEXT_CHARS] = value.coerceAtLeast(0) }
 
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }

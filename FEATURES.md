@@ -647,6 +647,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Rail controls — Flip side and exit buttons; the flip also rewrites that orientation's remembered side
     - Height compression — Key and number-row heights scale down together to bring the top rows into thumb reach
   - Split keyboard — Configurable gap percent between halves
+  - Rounded board corners `uncommon` — layoutBehavior.boardCornerTopDp / boardCornerBottomDp (0–40 dp, default 0) and boardCorners (any of the four, default all): the docked frame's board box is clipped to an AbsoluteRoundedCornerShape so the app shows through; no clip at all while square, none on the television card, the floating panel or in resize mode
     - Midpoint cut — Rows split by accumulated width, ties go right; a straddling spacebar is divided in half with the left half's label blanked
     - Empty-row safety — A custom layout with a deleted row splits without throwing
   - Floating keyboard — Draggable panel with a resize grip
@@ -2001,9 +2002,12 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Unpinned entry cap — 5–500, default 100; oldest unpinned drops as new ones arrive
     - Pinning exempts a clip from expiry, the cap and the sensitive timer
     - Pinned-first or pinned-last ordering — Toggle; newest-first within each group either way
+    - Per-clip text limit — clipboard.maxTextChars, default 0 (no limit), stops 1k–100k: capClipText at add and edit, surrogate-safe; markup dropped when the cut makes it lie; the system clipboard is untouched
     - Re-copying an existing clip moves it to the top instead of duplicating — Matches on text for textual clips, on URI for file clips
   - Panel `uncommon`
-    - Staggered two-column grid — Columns pack independently so a tall image leaves no hole beside it
+    - Staggered grid, 1–4 columns (clipboard.gridColumns, default 2) — Columns pack independently so a tall image leaves no hole beside it
+    - Lines per clip — clipboard.previewLines, 0 = auto (6 on a card, 3 in a row), up to 20; every preview (cards, rows, the strip chip) cut by clipPreviewText before layout: one line past the last shown, 4,000 chars at most, so a document-sized clip lays out like a short one
+    - Time on each clip — clipboard.timeLabel NONE / COPIED (relative, abbreviated) / EXPIRES (countdown from ClipItem.expiresAt, the same rule prune uses), refreshed every 30 s only while shown
     - Swipe a card off to delete — Card follows the finger and fades; release past 40% of its width deletes
     - Press-and-hold info popup — Relative + exact copy time, source app, type, and size/duration/char count
     - Per-card pin and delete buttons

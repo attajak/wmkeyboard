@@ -32,6 +32,10 @@ import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.settings.HoldToTalkRange
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
+import com.wasimaster.wmkeyboard.core.settings.ClipGridColumnsRange
+import com.wasimaster.wmkeyboard.core.settings.ClipMaxTextCharsSteps
+import com.wasimaster.wmkeyboard.core.settings.ClipPreviewLinesRange
+import com.wasimaster.wmkeyboard.core.settings.ClipTimeLabel
 import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -561,6 +565,27 @@ internal fun ClipboardSettings(
             ) { scope.launch { repository.setClipboardExpiryHours(it.toInt()) } }
         }
         item {
+            // A slider over a handful of stops rather than every number: the
+            // choice is "about how much", and a round figure is one the user
+            // can set again.
+            val none = stringResource(R.string.clipboard_max_chars_none)
+            val steps = ClipMaxTextCharsSteps
+            val stored = settings.clipboard.maxTextChars
+            val index = steps.indices.minByOrNull { kotlin.math.abs(steps[it] - stored) } ?: 0
+            SliderSetting(
+                R.string.clipboard_max_chars_title,
+                subtitle = stringResource(R.string.clipboard_max_chars_subtitle),
+                value = index.toFloat(),
+                range = 0f..steps.lastIndex.toFloat(),
+                display = {
+                    val chars = steps[it.roundToInt().coerceIn(steps.indices)]
+                    if (chars == 0) none else numberFormat.format(chars)
+                },
+                info = stringResource(R.string.clipboard_max_chars_info),
+                default = steps.indexOf(SettingsDefaults.clipboard.maxTextChars).coerceAtLeast(0).toFloat(),
+            ) { scope.launch { repository.setClipboardMaxTextChars(steps[it.roundToInt().coerceIn(steps.indices)]) } }
+        }
+        item {
             ToggleSetting(
                 R.string.clipboard_pinned_last_title,
                 stringResource(R.string.clipboard_pinned_last_subtitle),
@@ -742,6 +767,40 @@ internal fun ClipboardSettings(
                 selected = settings.clipboard.view,
                 default = SettingsDefaults.clipboard.view,
             ) { scope.launch { repository.setClipboardView(it) } }
+        }
+        item {
+            SliderSetting(
+                R.string.clipboard_columns_title,
+                subtitle = stringResource(R.string.clipboard_columns_subtitle),
+                value = settings.clipboard.gridColumns.toFloat(),
+                range = ClipGridColumnsRange.first.toFloat()..ClipGridColumnsRange.last.toFloat(),
+                display = { numberFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.clipboard_columns_info),
+                enabled = settings.clipboard.view == ClipboardView.GRID,
+                default = SettingsDefaults.clipboard.gridColumns.toFloat(),
+            ) { scope.launch { repository.setClipboardGridColumns(it.roundToInt()) } }
+        }
+        item {
+            val auto = stringResource(R.string.clipboard_lines_auto)
+            SliderSetting(
+                R.string.clipboard_lines_title,
+                subtitle = stringResource(R.string.clipboard_lines_subtitle),
+                value = settings.clipboard.previewLines.toFloat(),
+                range = ClipPreviewLinesRange.first.toFloat()..ClipPreviewLinesRange.last.toFloat(),
+                display = { if (it.roundToInt() == 0) auto else numberFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.clipboard_lines_info),
+                default = SettingsDefaults.clipboard.previewLines.toFloat(),
+            ) { scope.launch { repository.setClipboardPreviewLines(it.roundToInt()) } }
+        }
+        item {
+            ChoiceSetting(
+                title = R.string.clipboard_time_title,
+                subtitle = stringResource(R.string.clipboard_time_subtitle),
+                info = stringResource(R.string.clipboard_time_info),
+                options = ClipTimeLabel.entries.map { it to stringResource(it.labelRes) },
+                selected = settings.clipboard.timeLabel,
+                default = SettingsDefaults.clipboard.timeLabel,
+            ) { scope.launch { repository.setClipboardTimeLabel(it) } }
         }
         item {
             ToggleSetting(

@@ -20,7 +20,7 @@ The clipboard tool keeps a running history of what you copy: text, images, files
 
 Tap **Clipboard** on the toolbar. If you unpinned it, open the toolbox and tap it there. See [the toolbar](/tools/overview/) for how pinning works. On a hardware keyboard, use the [leader key](/reference/shortcuts/): double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>C</KeyCap>.
 
-Cards lay out in a staggered two-column grid rather than a fixed one, so a short text clip doesn't get stretched to match a tall image beside it. Pinned clips sort first by default ([flip that](#options) to put them last instead). Tap any card to insert it. Copying the same content again moves the existing card back to the top rather than adding a duplicate.
+Cards lay out in a staggered grid, two columns by default, rather than a fixed one, so a short text clip doesn't get stretched to match a tall image beside it. Pinned clips sort first by default ([flip that](#options) to put them last instead). Tap any card to insert it. Copying the same content again moves the existing card back to the top rather than adding a duplicate.
 
 ### Grid or list
 
@@ -29,6 +29,12 @@ The square button beside the search box switches the history between the grid an
 ### Numbered clips
 
 Turn on **Number the clips** and every clip gets a small number: at the start of its row in the list, and next to the pin in the grid, so a card never gets taller for it. The number belongs to the clip, not to the spot it's drawn in. Search the history and the results keep the numbers they had, so the third clip is still number 3 when it's the only match. Numbers follow the panel's order from the top, pinned clips included.
+
+### Columns, lines and times
+
+Three settings change how much each clip shows. **Grid columns** sets how many columns the grid has, one to four (two by default): more suits a history of short text, fewer gives long text and pictures room. The list is always one clip per row. **Lines per clip** sets how many lines of text a clip shows, up to 20, in both views. Its default, **Auto**, is six lines on a card and three in a row. Longer text ends in an ellipsis. **Time on each clip** puts a small time next to the number: **Time copied** reads "5 min. ago", and **Time left** counts down to when the [expiry](#expiry-and-the-entry-cap) deletes the clip. A pinned clip, or any clip while expiry is off, has no time left to show. The times update while the panel is open.
+
+However many lines you ask for, a clip's preview is cut before it's laid out: at the line after the last one shown, and never past 4,000 characters. A clip that holds a whole document costs no more to draw than a short one.
 
 ### Editing a clip
 
@@ -74,6 +80,8 @@ Tapping an image, file, or video card negotiates a MIME type with the focused fi
 ### Expiry and the entry cap
 
 Unpinned clips fall off two ways. <SettingsPath path="Clipboard" /> sets an expiry in hours, where 0 turns expiry off. It also caps how many unpinned entries history keeps at once, and once that cap is hit the oldest unpinned clip drops with each new copy. Pinning a clip exempts it from both. A pinned clip never expires and never counts against the cap.
+
+A third limit is on the length of each clip, and it starts off. **Longest clip kept** keeps all of what you copy by default. Set it (1,000 to 100,000 characters; Gboard cuts at 20,000) and a longer copy is stored cut to that length, so a copied book doesn't fill the history and every backup of it. Rich text that gets cut is stored as plain text, since its formatting no longer matches. Only the history is cut: the system clipboard still holds the whole copy, so an app's own paste is unchanged.
 
 ## Finding a clip again
 
@@ -130,9 +138,13 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Pop-up when you copy**: off by default. It lives in this group but it isn't a history setting at all, see [below](#details--edge-cases).
 - **Clipboard expiry**: hours before an unpinned clip is removed, 0–168, default 24 hours (0 means never).
 - **Maximum entries**: how many unpinned clips history keeps, 5–500, default 100.
+- **Longest clip kept**: **No limit** (default), or 1,000 to 100,000 characters in steps; a [longer copy is stored cut](#expiry-and-the-entry-cap).
 - **Panel layout**: opens the panel's [layout](/languages/custom-layouts/#panel-layouts) in the layout editor. The search box, the grid or list switch, the strip of copied fragments and the history are cells you can move and resize, and any key can join them: an abc, space and backspace row along the bottom, say, which is what the old "Bottom control row" switch used to add. A layout made with that switch on carries over.
 - **Full-screen clipboard panel**: on by default, so this is what the panel does unless you say otherwise. The history takes the whole keyboard, and a slim back header stands in for the toolbar, the emoji row and the symbol row. Picking the right clip gets easier the more of them are on screen, which is why that trade is the default. Start a search and the panel drops back to its compact size so the keys fit underneath. Turn it off to keep the toolbar visible while the panel is open.
 - **History layout**: **Grid** (default) or **List**, the same choice as the [switch in the panel](#grid-or-list).
+- **Grid columns**: 1–4, default 2. Greyed out while the history is a list.
+- **Lines per clip**: **Auto** (default: six on a card, three in a row) or 1–20.
+- **Time on each clip**: **None** (default), **Time copied** or **Time left**. See [Columns, lines and times](#columns-lines-and-times).
 - **Number the clips**: puts a [number](#numbered-clips) beside every clip; off by default.
 - **Undo a deleted clip**: shows the Undo bar for a few seconds after you delete a clip with the bin or a swipe; on by default. Off, a delete is immediate and final.
 - **Pinned entries last**: moves pinned clips to the end of the panel instead of the top; off by default.
