@@ -13679,30 +13679,30 @@ class SettingsRepository(private val context: Context) {
     }
 
     suspend fun setPinyinFuzzy(value: Boolean) =
-        context.dataStore.edit { it[PINYIN_FUZZY] = value }
+        editPrefs { it[PINYIN_FUZZY] = value }
 
-    suspend fun setPinyinFuzzyPair(id: String, on: Boolean) = context.dataStore.edit { p ->
+    suspend fun setPinyinFuzzyPair(id: String, on: Boolean) = editPrefs { p ->
         val current = p[PINYIN_FUZZY_PAIRS] ?: PinyinFuzzy.ALL_PAIRS
         p[PINYIN_FUZZY_PAIRS] = if (on) current + id else current - id
     }
 
     suspend fun resetPinyinFuzzyPairs() =
-        context.dataStore.edit { it.remove(PINYIN_FUZZY_PAIRS) }
+        editPrefs { it.remove(PINYIN_FUZZY_PAIRS) }
 
     suspend fun setPinyinDoublePinyin(value: DoublePinyinScheme) =
-        context.dataStore.edit { it[PINYIN_DOUBLE_PINYIN] = value.name }
+        editPrefs { it[PINYIN_DOUBLE_PINYIN] = value.name }
 
     suspend fun setCjkTraditionalOutput(value: Boolean) =
-        context.dataStore.edit { it[CJK_TRADITIONAL_OUTPUT] = value }
+        editPrefs { it[CJK_TRADITIONAL_OUTPUT] = value }
 
     suspend fun setJyutpingLazy(value: Boolean) =
-        context.dataStore.edit { it[JYUTPING_LAZY] = value }
+        editPrefs { it[JYUTPING_LAZY] = value }
 
     suspend fun setKanaLooseMarks(value: Boolean) =
-        context.dataStore.edit { it[KANA_LOOSE_MARKS] = value }
+        editPrefs { it[KANA_LOOSE_MARKS] = value }
 
     suspend fun setCjkHanRegion(value: HanVariant.HanRegion) =
-        context.dataStore.edit { it[CJK_HAN_REGION] = value.name }
+        editPrefs { it[CJK_HAN_REGION] = value.name }
 
     suspend fun setOneHandedMode(value: OneHandedMode) =
         editPrefs { it[ONE_HANDED_MODE] = value.name }
