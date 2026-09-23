@@ -25,6 +25,9 @@ enum class NetSource(
     val background: Boolean = false,
 ) {
     TRANSLATE("translate", ToolbarTool.TRANSLATE),
+
+    /** DeepL Write, from the grammar panel or the selection bar. Its settings sit on the Translate page. */
+    DEEPL_WRITE("deepl_write", ToolbarTool.TRANSLATE),
     GIF("gif", ToolbarTool.GIF),
     STICKER("sticker", ToolbarTool.STICKER),
     WEB_SEARCH("web_search", ToolbarTool.WEB_SEARCH),

@@ -60,6 +60,20 @@
     <string name="core_settings_translate_engine_auto_label">Automatic</string>
 
     <!-- ================================================================== -->
+    <!-- DeepL Write: how the rewritten text should read.                   -->
+    <!-- ================================================================== -->
+
+    <string name="core_settings_deepl_style_default_label">As it is</string>
+    <string name="core_settings_deepl_style_simple_label">Simple</string>
+    <string name="core_settings_deepl_style_business_label">Business</string>
+    <string name="core_settings_deepl_style_academic_label">Academic</string>
+    <string name="core_settings_deepl_style_casual_label">Casual</string>
+    <string name="core_settings_deepl_style_friendly_label">Friendly</string>
+    <string name="core_settings_deepl_style_confident_label">Confident</string>
+    <string name="core_settings_deepl_style_diplomatic_label">Diplomatic</string>
+    <string name="core_settings_deepl_style_enthusiastic_label">Enthusiastic</string>
+
+    <!-- ================================================================== -->
     <!-- Grammar tool: which English the offline checker reads against.     -->
     <!-- ================================================================== -->
 

@@ -189,6 +189,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.tooldetail_translate_models_group, R.string.search_kw_translate_models)
     put(R.string.tooldetail_translate_downloaded_first_title, R.string.search_kw_translate_downloaded_first)
     put(R.string.tooldetail_translate_only_downloaded_title, R.string.search_kw_translate_only_downloaded)
+    put(R.string.tooldetail_deepl_key_label, R.string.search_kw_deepl)
     put(R.string.voice_engine_title, R.string.search_kw_voice_engine)
 }
 

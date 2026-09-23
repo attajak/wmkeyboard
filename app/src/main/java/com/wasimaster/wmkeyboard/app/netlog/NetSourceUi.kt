@@ -101,6 +101,7 @@ internal fun NetSourceTile(look: NetSourceLook, modifier: Modifier = Modifier, s
 
 private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.TRANSLATE -> R.string.netlog_source_translate to R.string.netlog_sent_translate
+    NetSource.DEEPL_WRITE -> R.string.netlog_source_deepl_write to R.string.netlog_sent_deepl_write
     NetSource.GIF -> R.string.netlog_source_gif to R.string.netlog_sent_gif
     NetSource.STICKER -> R.string.netlog_source_sticker to R.string.netlog_sent_sticker
     NetSource.WEB_SEARCH -> R.string.netlog_source_web_search to R.string.netlog_sent_web_search
@@ -171,7 +172,7 @@ private fun fallbackIcon(source: NetSource): ImageVector = when (source) {
  * row for: every one except these, which it deliberately leaves alone.
  */
 private val DataSaverSources = NetSource.entries.toSet() - setOf(
-    NetSource.TRANSLATE, NetSource.BACKUP, NetSource.UPDATES, NetSource.KDE_CONNECT,
+    NetSource.TRANSLATE, NetSource.DEEPL_WRITE, NetSource.BACKUP, NetSource.UPDATES, NetSource.KDE_CONNECT,
     NetSource.LINK_IMPORT, NetSource.OTHER,
 )
 

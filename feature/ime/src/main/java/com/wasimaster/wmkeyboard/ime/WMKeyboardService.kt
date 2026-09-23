@@ -367,6 +367,7 @@ import com.wasimaster.wmkeyboard.core.tools.GifSource
 import com.wasimaster.wmkeyboard.core.tools.LinkPreviewClient
 import com.wasimaster.wmkeyboard.core.tools.GifSources
 import com.wasimaster.wmkeyboard.core.tools.CommonsClient
+import com.wasimaster.wmkeyboard.core.tools.DeepLClient
 import com.wasimaster.wmkeyboard.core.tools.LibreTranslateClient
 import com.wasimaster.wmkeyboard.core.tools.GiphyClient
 import com.wasimaster.wmkeyboard.core.tools.SearxClient
@@ -439,6 +440,7 @@ import com.wasimaster.wmkeyboard.core.translate.OfflineTranslateResult
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
 import com.wasimaster.wmkeyboard.core.translate.TranslateModuleState
 import com.wasimaster.wmkeyboard.core.translate.downloadNotified
+import com.wasimaster.wmkeyboard.core.settings.DeepLSettings
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.tools.TypedWord
 import com.wasimaster.wmkeyboard.core.tools.TypingAchievements
@@ -4259,14 +4261,7 @@ open class WMKeyboardService : InputMethodService() {
                 onImageResult = ::onImageResultSelect,
                 onImageResultLink = ::onImageResultLink,
                 translateCallbacks = translateCallbacks,
-                onGrammarFix = ::onGrammarFix,
-                onGrammarFixAll = ::onGrammarFixAll,
-                onGrammarDismiss = ::onGrammarDismiss,
-                onGrammarDialect = ::onGrammarDialectChange,
-                onGrammarKindShown = ::onGrammarKindShown,
-                onGrammarCategoryShown = ::onGrammarCategoryShown,
-                onGrammarShowAllKinds = ::onGrammarShowAllKinds,
-                onGrammarFocus = ::onGrammarFocus,
+                grammarCallbacks = grammarCallbacks,
                 onWikiOpen = ::onWikiOpen,
                 onWikiBack = ::onWikiBack,
                 onWikiLoadLinks = ::onWikiLoadLinks,
@@ -18159,6 +18154,7 @@ open class WMKeyboardService : InputMethodService() {
         translateJob?.cancel()
         if (_uiState.value.panel == PanelMode.TRANSLATE) watchTranslateModels() else releaseTranslateEngine()
         grammarJob?.cancel()
+        rephraseJob?.cancel()
         learnJob?.cancel()
         mediaFetchJob?.cancel()
         mediaLiveSearchJob?.cancel()
@@ -24608,12 +24604,38 @@ open class WMKeyboardService : InputMethodService() {
         }
     }
 
+    /**
+     * Language pairs DeepL turned down this session, as "source>target", so a
+     * language it does not have costs one refused request rather than one per
+     * keystroke. Forgotten with the process, since DeepL keeps adding languages.
+     */
+    private val deeplRefusedPairs = HashSet<String>()
+
     private suspend fun translateOnline(
         settings: KeyboardSettings,
         source: String,
         target: String,
         sourceLang: String,
     ): Result<Translation> = withContext(Dispatchers.IO) {
+        // DeepL first while the user has set it up (#331). A 400 is DeepL not
+        // having the language, so that pair goes to the usual service instead;
+        // any other failure is the answer, since it is the service they chose.
+        val deepl = settings.translate.deepl
+        val pair = sourceLang.ifBlank { TranslateClient.AUTO } + ">" + target
+        if (deepl.translateActive && pair !in deeplRefusedPairs) {
+            val viaDeepL = runCancellable {
+                DeepLClient.translate(
+                    text = source,
+                    target = target,
+                    apiKey = deepl.apiKey,
+                    endpoint = deepl.endpoint,
+                    source = sourceLang.ifBlank { TranslateClient.AUTO },
+                )
+            }
+            val failure = viaDeepL.exceptionOrNull()
+            if (failure !is ToolHttpException || failure.status != HTTP_BAD_REQUEST) return@withContext viaDeepL
+            deeplRefusedPairs += pair
+        }
         runCancellable {
             // Configured instance wins. Without one the F-Droid build
             // still translates through the keyless public endpoint,
@@ -24663,6 +24685,7 @@ open class WMKeyboardService : InputMethodService() {
                         sourceText = source,
                         translated = t.text,
                         detectedSource = t.detectedSource,
+                        viaDeepL = t.viaDeepL,
                     )
                 },
                 onFailure = { e ->
@@ -25063,6 +25086,103 @@ open class WMKeyboardService : InputMethodService() {
                 )
             }
         }
+    }
+
+    /**
+     * The grammar panel's service callbacks as one [KeyboardScreen] parameter,
+     * built outside `ServiceKeyboardContent` for the reason
+     * [translateCallbacks] is: that call sits against the 64K method ceiling.
+     */
+    private val grammarCallbacks by lazy {
+        com.wasimaster.wmkeyboard.ime.ui.GrammarCallbacks(
+            onFix = ::onGrammarFix,
+            onFixAll = ::onGrammarFixAll,
+            onDismiss = ::onGrammarDismiss,
+            onDialect = ::onGrammarDialectChange,
+            onFocus = ::onGrammarFocus,
+            onKindShown = ::onGrammarKindShown,
+            onCategoryShown = ::onGrammarCategoryShown,
+            onShowAllKinds = ::onGrammarShowAllKinds,
+            onRephrase = ::onGrammarRephrase,
+            onRephraseApply = ::onGrammarRephraseApply,
+            onRephraseDismiss = ::onGrammarRephraseDismiss,
+        )
+    }
+
+    private var rephraseJob: Job? = null
+
+    /** DeepL Write, blocking on [Dispatchers.IO]; the style is the user's (#331). */
+    private suspend fun deeplRephrase(text: String, deepl: DeepLSettings): Result<DeepLClient.Rephrase> =
+        withContext(Dispatchers.IO) {
+            runCancellable {
+                DeepLClient.rephrase(
+                    text = text,
+                    apiKey = deepl.apiKey,
+                    endpoint = deepl.endpoint,
+                    writingStyle = deepl.writeStyle.writingStyle,
+                    tone = deepl.writeStyle.tone,
+                )
+            }
+        }
+
+    /**
+     * The DeepL Write chip in the grammar panel: ask DeepL to rewrite the
+     * field (the first [DeepLClient.MAX_CHARS] of it) and show the result as a
+     * card above the issues. Nothing changes in the field until Replace.
+     */
+    fun onGrammarRephrase() {
+        val state = _uiState.value
+        val deepl = state.settings.translate.deepl
+        if (!deepl.writeActive || state.grammar.rephrase?.working == true) return
+        vibrate()
+        val text = state.grammar.sourceText.ifBlank { extractFieldText() }.take(DeepLClient.MAX_CHARS)
+        if (text.isBlank()) return
+        val pending = DeepLWriteUi(source = text)
+        _uiState.update { it.copy(grammar = it.grammar.copy(rephrase = pending)) }
+        rephraseJob?.cancel()
+        rephraseJob = serviceScope.launch {
+            val result = deeplRephrase(text, deepl)
+            _uiState.update { s ->
+                // A lint of changed text has dropped the request; its answer
+                // would describe text that is no longer there.
+                if (s.panel != PanelMode.GRAMMAR || s.grammar.rephrase?.let { it.working && it.source == text } != true) {
+                    return@update s
+                }
+                val done = result.fold(
+                    onSuccess = { pending.copy(result = it.text, working = false) },
+                    onFailure = { e ->
+                        pending.copy(working = false, error = requestErrorText(e, R.string.ime_grammar_deepl_error))
+                    },
+                )
+                s.copy(grammar = s.grammar.copy(rephrase = done))
+            }
+        }
+    }
+
+    /** Replace on the DeepL Write card: the text sent becomes DeepL's text. */
+    fun onGrammarRephraseApply() {
+        val grammar = _uiState.value.grammar
+        val rephrase = grammar.rephrase ?: return
+        if (rephrase.working || rephrase.result.isEmpty()) return
+        vibrate()
+        val field = grammar.sourceText.ifBlank { rephrase.source }
+        // Only the part that was sent is swapped: the field can run past what
+        // one request carries, and the rest of it stays exactly as it is.
+        if (!field.startsWith(rephrase.source)) return
+        val rewritten = rephrase.result + field.substring(rephrase.source.length)
+        if (!replaceFieldSpans(listOf(GrammarEdit(0, rephrase.source.length, rephrase.result)))) {
+            // Offsets unknown: a whole-field rewrite is only safe when the
+            // extraction saw the whole field.
+            if (!fieldTextComplete) return toast(R.string.ime_grammar_deepl_replace_failed_toast)
+            replaceFieldText(rewritten)
+        }
+        relintAfterFix(rewritten)
+    }
+
+    /** The X on the DeepL Write card. */
+    fun onGrammarRephraseDismiss() {
+        rephraseJob?.cancel()
+        _uiState.update { it.copy(grammar = it.grammar.copy(rephrase = null)) }
     }
 
     /** Tapped one fix chip: apply it and re-lint the result. */
@@ -25759,6 +25879,10 @@ open class WMKeyboardService : InputMethodService() {
             grammarAvailable = BuildConfig.ENABLE_GRAMMAR && ToolbarTool.GRAMMAR in settings.enabledTools &&
                 (grammarAvailable || grammarProbePending()),
             aiAvailable = aiReady,
+            // DeepL Write only when the user set it up, and only for what one
+            // request carries: a longer selection would come back cut short.
+            deeplWriteAvailable = settings.translate.deepl.writeActive &&
+                text.trim().length <= DeepLClient.MAX_CHARS,
             bengaliLoaded = suggestionEngine != null && bengaliAssetEntries.isNotEmpty(),
             hindiLoaded = suggestionEngine?.extraPhonetic?.containsKey(PhoneticSchemes.HINDI.languageId) == true,
             chatSyntax = ChatSyntax.forPackage(currentPackage),
@@ -25885,6 +26009,7 @@ open class WMKeyboardService : InputMethodService() {
             SelectionMacro.CHAT_STRIKE -> chatToggle(text, ChatStyle.STRIKE)
             SelectionMacro.CHAT_MONO -> chatToggle(text, ChatStyle.MONO)
             SelectionMacro.GRAMMAR_FIX -> fixGrammarInSelection(offer)
+            SelectionMacro.DEEPL_WRITE -> rephraseSelection(offer)
             SelectionMacro.AI -> onPanelChange(PanelMode.AI)
             SelectionMacro.READ_ALOUD -> toggleReadAloud(offer)
             SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
@@ -26330,6 +26455,39 @@ open class WMKeyboardService : InputMethodService() {
             setMacroBusy(null)
             val fixed = GrammarChecker.applyAll(offer.text, lints)
             if (fixed == offer.text) toast(R.string.ime_selection_macro_grammar_clean_toast) else rewriteSelection(fixed)
+        }
+    }
+
+    /** DeepL Write over the selection alone, committed in place (#331). */
+    private fun rephraseSelection(offer: SelectionMacroOffer) {
+        val deepl = _uiState.value.settings.translate.deepl
+        if (!deepl.writeActive || offer.busy != null) return
+        val text = offer.text.trim()
+        if (text.isEmpty()) return
+        val seq = ++macroSeq
+        setMacroBusy(SelectionMacro.DEEPL_WRITE)
+        macroJob?.cancel()
+        macroJob = serviceScope.launch {
+            val result = deeplRephrase(text, deepl)
+            if (!offerStillLive(offer, seq)) return@launch
+            setMacroBusy(null)
+            result.fold(
+                onSuccess = { r ->
+                    val better = r.text.trim()
+                    if (better.isEmpty() || better == text) {
+                        toast(R.string.ime_selection_macro_deepl_clean_toast)
+                    } else {
+                        rewriteSelection(better)
+                    }
+                },
+                onFailure = { e ->
+                    Toast.makeText(
+                        this@WMKeyboardService,
+                        requestErrorText(e, R.string.ime_grammar_deepl_error),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                },
+            )
         }
     }
 
@@ -30826,6 +30984,9 @@ open class WMKeyboardService : InputMethodService() {
     companion object {
         /** Minimum spacing between haptic clicks so rapid presses stay distinct. */
         private const val MIN_HAPTIC_GAP_MS = 45L
+
+        /** What DeepL answers for a language it does not have; see [translateOnline]. */
+        private const val HTTP_BAD_REQUEST = 400
 
         /**
          * The glide sandbox row, by its title's resource name. A string, not

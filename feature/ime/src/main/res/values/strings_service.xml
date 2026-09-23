@@ -25,6 +25,16 @@
     <!-- Content description of the button that hides one issue card. -->
     <string name="ime_grammar_dismiss_desc">Hide this issue</string>
     <!-- Shown when the native grammar library is not part of this build. The file name must stay as it is. -->
+    <!-- DeepL Write in the grammar panel (issue #331). Only shown after the user adds a DeepL key and turns Write on. -->
+    <string name="ime_grammar_deepl_action_desc">Improve the text with DeepL Write</string>
+    <string name="ime_grammar_deepl_title">DeepL Write</string>
+    <string name="ime_grammar_deepl_replace_action">Replace</string>
+    <string name="ime_grammar_deepl_dismiss_desc">Close the DeepL Write result</string>
+    <string name="ime_grammar_deepl_unchanged">DeepL Write has nothing to change</string>
+    <string name="ime_grammar_deepl_error">DeepL Write did not answer</string>
+    <string name="ime_grammar_deepl_replace_failed_toast">The text in this field cannot be replaced</string>
+    <!-- Small label beside a translation that DeepL made. DeepL is a brand name. -->
+    <string name="ime_translate_deepl_label">DeepL</string>
     <string name="ime_grammar_unavailable_info">This build of the app does not include the grammar engine. The file <xliff:g id="library_file" example="libharper_jni.so">libharper_jni.so</xliff:g> is missing.</string>
 
     <!-- AI panel: one tap actions that run on the text in the field. -->

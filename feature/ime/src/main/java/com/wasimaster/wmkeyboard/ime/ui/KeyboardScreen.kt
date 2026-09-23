@@ -350,8 +350,6 @@ import com.wasimaster.wmkeyboard.core.theme.brush
 import com.wasimaster.wmkeyboard.core.theme.keyShapeKindOrNull
 import com.wasimaster.wmkeyboard.core.ui.ToolPaint
 import com.wasimaster.wmkeyboard.core.ui.toolAccentPaint
-import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
-import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
 import com.wasimaster.wmkeyboard.core.gesture.KeyCenter
 import com.wasimaster.wmkeyboard.core.handwriting.HwPoint
 import com.wasimaster.wmkeyboard.core.handwriting.HwStroke
@@ -378,9 +376,6 @@ import com.wasimaster.wmkeyboard.core.settings.EmojiFontChoice
 import com.wasimaster.wmkeyboard.core.settings.EmojiInsertMode
 import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.sourceChar
-import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
-import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
-import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.settings.KeyboardMode
 import com.wasimaster.wmkeyboard.core.settings.LanguagePickerStyle
 import com.wasimaster.wmkeyboard.core.settings.EmojiBarMode
@@ -1152,14 +1147,7 @@ fun KeyboardScreen(
     onImageResult: (ImageResult) -> Unit = {},
     onImageResultLink: (ImageResult) -> Unit = {},
     translateCallbacks: TranslateCallbacks = TranslateCallbacks(),
-    onGrammarFix: (GrammarLint, GrammarFix) -> Unit = { _, _ -> },
-    onGrammarFixAll: () -> Unit = {},
-    onGrammarDismiss: (GrammarLint) -> Unit = {},
-    onGrammarDialect: (GrammarDialect) -> Unit = {},
-    onGrammarFocus: (GrammarLint) -> Unit = {},
-    onGrammarKindShown: (GrammarLintKind, Boolean) -> Unit = { _, _ -> },
-    onGrammarCategoryShown: (GrammarCategory, Boolean) -> Unit = { _, _ -> },
-    onGrammarShowAllKinds: () -> Unit = {},
+    grammarCallbacks: GrammarCallbacks = GrammarCallbacks(),
     onWikiOpen: (String) -> Unit = {},
     onWikiBack: () -> Unit = {},
     onWikiLoadLinks: () -> Unit = {},
@@ -1503,14 +1491,7 @@ fun KeyboardScreen(
                 onImageResult = onImageResult,
                 onImageResultLink = onImageResultLink,
                 translateCallbacks = translateCallbacks,
-                onGrammarFix = onGrammarFix,
-                onGrammarFixAll = onGrammarFixAll,
-                onGrammarDismiss = onGrammarDismiss,
-                onGrammarDialect = onGrammarDialect,
-                onGrammarFocus = onGrammarFocus,
-                onGrammarKindShown = onGrammarKindShown,
-                onGrammarCategoryShown = onGrammarCategoryShown,
-                onGrammarShowAllKinds = onGrammarShowAllKinds,
+                grammarCallbacks = grammarCallbacks,
                 onWikiOpen = onWikiOpen,
                 onWikiBack = onWikiBack,
                 onWikiLoadLinks = onWikiLoadLinks,
@@ -9528,14 +9509,7 @@ private fun KeyboardBody(
     onImageResult: (ImageResult) -> Unit,
     onImageResultLink: (ImageResult) -> Unit,
     translateCallbacks: TranslateCallbacks,
-    onGrammarFix: (GrammarLint, GrammarFix) -> Unit,
-    onGrammarFixAll: () -> Unit,
-    onGrammarDismiss: (GrammarLint) -> Unit,
-    onGrammarDialect: (GrammarDialect) -> Unit,
-    onGrammarFocus: (GrammarLint) -> Unit,
-    onGrammarKindShown: (GrammarLintKind, Boolean) -> Unit,
-    onGrammarCategoryShown: (GrammarCategory, Boolean) -> Unit,
-    onGrammarShowAllKinds: () -> Unit,
+    grammarCallbacks: GrammarCallbacks,
     onWikiOpen: (String) -> Unit,
     onWikiBack: () -> Unit,
     onWikiLoadLinks: () -> Unit,
@@ -10219,17 +10193,7 @@ private fun KeyboardBody(
                     TranslatePanel(state = state, callbacks = translateCallbacks)
                 }
                 PanelMode.GRAMMAR -> if (BuildConfig.ENABLE_GRAMMAR) {
-                    GrammarPanel(
-                        state = state,
-                        onFix = onGrammarFix,
-                        onFixAll = onGrammarFixAll,
-                        onDismiss = onGrammarDismiss,
-                        onDialect = onGrammarDialect,
-                        onFocus = onGrammarFocus,
-                        onKindShown = onGrammarKindShown,
-                        onCategoryShown = onGrammarCategoryShown,
-                        onShowAllKinds = onGrammarShowAllKinds,
-                    )
+                    GrammarPanel(state = state, callbacks = grammarCallbacks)
                 } else {
                     onPanelChange(PanelMode.SNIPPETS)
                 }

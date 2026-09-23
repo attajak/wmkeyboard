@@ -640,7 +640,64 @@ data class TranslateSettings(
      * there, online if not on the device. Issue #324.
      */
     val onlyDownloaded: Boolean = true,
+    /** DeepL, the user's own opt-in service (see [DeepLSettings]). Issue #331. */
+    val deepl: DeepLSettings = DeepLSettings(),
 )
+
+/**
+ * How DeepL Write should rewrite the text. DeepL's `prefer_` values: a
+ * language whose Write model has no styles yet takes the text as plain
+ * [DEFAULT] instead of refusing it. At most one of [writingStyle] and [tone]
+ * is set, since DeepL takes only one per request.
+ *
+ * Stored by name, so rename nothing.
+ */
+enum class DeepLWriteStyle(
+    @StringRes val labelRes: Int,
+    val writingStyle: String? = null,
+    val tone: String? = null,
+) {
+    DEFAULT(R.string.core_settings_deepl_style_default_label),
+    SIMPLE(R.string.core_settings_deepl_style_simple_label, writingStyle = "prefer_simple"),
+    BUSINESS(R.string.core_settings_deepl_style_business_label, writingStyle = "prefer_business"),
+    ACADEMIC(R.string.core_settings_deepl_style_academic_label, writingStyle = "prefer_academic"),
+    CASUAL(R.string.core_settings_deepl_style_casual_label, writingStyle = "prefer_casual"),
+    FRIENDLY(R.string.core_settings_deepl_style_friendly_label, tone = "prefer_friendly"),
+    CONFIDENT(R.string.core_settings_deepl_style_confident_label, tone = "prefer_confident"),
+    DIPLOMATIC(R.string.core_settings_deepl_style_diplomatic_label, tone = "prefer_diplomatic"),
+    ENTHUSIASTIC(R.string.core_settings_deepl_style_enthusiastic_label, tone = "prefer_enthusiastic"),
+}
+
+/**
+ * DeepL, with a key the user brings (issue #331). Nothing here does anything
+ * until [apiKey] or [endpoint] is filled in: the keyboard ships no DeepL key,
+ * and with both blank the translate panel, the grammar panel and the
+ * selection bar look and behave exactly as they would without this.
+ */
+data class DeepLSettings(
+    /** DeepL API key. A Free key ends in `:fx` and is sent to DeepL's Free host. */
+    val apiKey: String = "",
+    /**
+     * A server to send DeepL requests to instead of DeepL's own, for a proxy
+     * the user runs. Blank means DeepL's host for the kind of key.
+     */
+    val endpoint: String = "",
+    /** The translate tool asks DeepL first while a key is set. */
+    val translate: Boolean = true,
+    /**
+     * DeepL Write shows in the grammar panel and the selection bar. Off until
+     * asked for: Write needs an API Pro key, and a Free key is the common one.
+     */
+    val write: Boolean = false,
+    val writeStyle: DeepLWriteStyle = DeepLWriteStyle.DEFAULT,
+) {
+    /** A key or a server to reach: the one thing that turns DeepL on at all. */
+    val configured: Boolean get() = apiKey.isNotBlank() || endpoint.isNotBlank()
+
+    val translateActive: Boolean get() = configured && translate
+
+    val writeActive: Boolean get() = configured && write
+}
 
 /**
  * English dialect the offline grammar tool lints against. Ordinals are the
@@ -7537,6 +7594,11 @@ class SettingsRepository(private val context: Context) {
         private val TRANSLATE_ENGINE = stringPreferencesKey("translate_engine")
         private val TRANSLATE_DOWNLOADED_FIRST = booleanPreferencesKey("translate_downloaded_first")
         private val TRANSLATE_ONLY_DOWNLOADED = booleanPreferencesKey("translate_only_downloaded")
+        private val DEEPL_API_KEY = stringPreferencesKey("deepl_api_key")
+        private val DEEPL_ENDPOINT = stringPreferencesKey("deepl_endpoint")
+        private val DEEPL_TRANSLATE = booleanPreferencesKey("deepl_translate")
+        private val DEEPL_WRITE = booleanPreferencesKey("deepl_write")
+        private val DEEPL_WRITE_STYLE = stringPreferencesKey("deepl_write_style")
         private val GRAMMAR_DIALECT = stringPreferencesKey("grammar_dialect")
         private val GRAMMAR_HIDDEN_KINDS = stringSetPreferencesKey("grammar_hidden_kinds")
         private val SPELL_CHECKER_NO_SUGGESTIONS =
@@ -9047,6 +9109,15 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.translate.engine,
                 downloadedFirst = p[TRANSLATE_DOWNLOADED_FIRST] ?: defaults.translate.downloadedFirst,
                 onlyDownloaded = p[TRANSLATE_ONLY_DOWNLOADED] ?: defaults.translate.onlyDownloaded,
+                deepl = DeepLSettings(
+                    apiKey = p[DEEPL_API_KEY] ?: defaults.translate.deepl.apiKey,
+                    endpoint = p[DEEPL_ENDPOINT] ?: defaults.translate.deepl.endpoint,
+                    translate = p[DEEPL_TRANSLATE] ?: defaults.translate.deepl.translate,
+                    write = p[DEEPL_WRITE] ?: defaults.translate.deepl.write,
+                    writeStyle = p[DEEPL_WRITE_STYLE]
+                        ?.let { name -> DeepLWriteStyle.entries.firstOrNull { it.name == name } }
+                        ?: defaults.translate.deepl.writeStyle,
+                ),
             ),
             grammarDialect = p[GRAMMAR_DIALECT]
                 ?.let { runCatching { GrammarDialect.valueOf(it) }.getOrNull() }
@@ -14222,6 +14293,21 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setTranslateOnlyDownloaded(value: Boolean) =
         editPrefs { it[TRANSLATE_ONLY_DOWNLOADED] = value }
+
+    suspend fun setDeepLApiKey(value: String) =
+        editPrefs { it[DEEPL_API_KEY] = value.trim() }
+
+    suspend fun setDeepLEndpoint(value: String) =
+        editPrefs { it[DEEPL_ENDPOINT] = value.trim() }
+
+    suspend fun setDeepLTranslate(value: Boolean) =
+        editPrefs { it[DEEPL_TRANSLATE] = value }
+
+    suspend fun setDeepLWrite(value: Boolean) =
+        editPrefs { it[DEEPL_WRITE] = value }
+
+    suspend fun setDeepLWriteStyle(value: DeepLWriteStyle) =
+        editPrefs { it[DEEPL_WRITE_STYLE] = value.name }
 
     suspend fun setGrammarDialect(value: GrammarDialect) =
         editPrefs { it[GRAMMAR_DIALECT] = value.name }

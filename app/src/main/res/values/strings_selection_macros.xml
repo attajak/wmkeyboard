@@ -62,6 +62,7 @@
     <string name="selection_macros_desc_search">Look the selection up with the web search tool</string>
     <string name="selection_macros_desc_translate">Send the selection to the translate tool</string>
     <string name="selection_macros_desc_grammar">Correct the selection with the grammar checker</string>
+    <string name="selection_macros_desc_deepl_write">Improve the selection with DeepL Write. Shows only after you add a DeepL key and turn on DeepL Write in the Translate tool settings.</string>
     <string name="selection_macros_desc_ai">Open the AI tool on the selection</string>
     <string name="selection_macros_desc_to_bangla">Banglish to Bangla, when Bengali is one of your languages</string>
     <string name="selection_macros_desc_to_banglish">Bangla back to Banglish</string>

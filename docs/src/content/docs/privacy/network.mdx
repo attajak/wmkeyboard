@@ -38,6 +38,7 @@ it.
 | Tool | Endpoint | Sends | Fires when |
 |---|---|---|---|
 | Translate | `translate.googleapis.com` (no key) or `translation.googleapis.com` (with a key) | the text you typed into the panel, up to 2,500 characters, plus the target language | as you type, about 400ms after you stop, only while the panel is open |
+| Translate and DeepL Write, with your DeepL key | `api-free.deepl.com` (Free keys), `api.deepl.com` (other keys), or the DeepL server you entered | Translate: the same as above. DeepL Write: the text in the field or the selection, up to 2,500 characters. Both send your key in a header | only after you add a DeepL key under Tools / Translate. Translate as you type in its panel; DeepL Write only when you tap it |
 | Translate, on-device models | `dl.google.com` (through Android's download manager), full edition only | nothing you typed: the request names the language model | when you press Download for a language, in the panel or under Tools / Translate |
 | GIF search | `api.klipy.com`, `api.giphy.com` | your search text, or nothing for the trending feed | immediately when you open the panel (trending), then live as you type |
 | Sticker search | same clients as GIF search | same | same |
@@ -200,7 +201,7 @@ without you, and only to the destination you chose yourself.
 <SettingsPath path="Tools / Translate" />
 
 Each tool that needs a key has its own field, all blank by default:
-Translate's Cloud Translation key, GIF search's Klipy and GIPHY keys, Web
+Translate's Cloud Translation and DeepL keys, GIF search's Klipy and GIPHY keys, Web
 and Image search's Brave key, photo backgrounds' Unsplash and Pexels keys,
 and the AI tool's per-provider keys
 (Anthropic, OpenAI, Gemini, Grok, DeepSeek, and whatever key the

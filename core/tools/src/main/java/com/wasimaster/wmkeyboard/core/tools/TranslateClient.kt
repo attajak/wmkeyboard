@@ -13,6 +13,8 @@ data class Translation(
     val text: String,
     /** ISO 639-1 code of the detected source language, or "" when unknown. */
     val detectedSource: String,
+    /** DeepL answered, rather than the tool's usual service. */
+    val viaDeepL: Boolean = false,
 )
 
 /**

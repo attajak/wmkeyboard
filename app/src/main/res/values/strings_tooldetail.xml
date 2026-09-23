@@ -347,7 +347,22 @@
     <string name="tooldetail_translate_key_group">API key</string>
     <string name="tooldetail_translate_key_label">Cloud Translation API key (optional)</string>
     <string name="tooldetail_translate_key_hint">Without a key, translation uses the free public endpoint of Google</string>
-    <string name="tooldetail_translate_info">The keyboard sends the text that you translate to Google either way, and only while the translate panel is open. The free endpoint is unofficial and rate limited. A Cloud Translation key makes it official and reliable.</string>
+    <string name="tooldetail_translate_info">The keyboard sends the text that you translate to Google either way, and only while the translate panel is open. The free endpoint is unofficial and rate limited. A Cloud Translation key makes it official and reliable. If you set up DeepL below, DeepL gets the text instead, and Google gets only the languages that DeepL does not have.</string>
+
+    <!-- DeepL (issue #331): the user's own key, for Translate and for DeepL Write. DeepL, DeepL Write, API Free and API Pro are names. -->
+    <string name="tooldetail_deepl_group">DeepL</string>
+    <string name="tooldetail_deepl_info">DeepL is optional. Nothing changes until you add a DeepL API key or a server address. Get a key in your DeepL account. The Free plan includes 500,000 characters each month. The keyboard sends text to DeepL only when you translate or when you tap DeepL Write.</string>
+    <string name="tooldetail_deepl_key_label">DeepL API key</string>
+    <string name="tooldetail_deepl_key_hint">Free keys end in :fx. The keyboard picks the correct DeepL server for your key.</string>
+    <string name="tooldetail_deepl_endpoint_label">DeepL server (optional)</string>
+    <string name="tooldetail_deepl_endpoint_hint">For a proxy that you run. Keep empty to use the DeepL servers.</string>
+    <string name="tooldetail_deepl_translate_title">Translate with DeepL</string>
+    <string name="tooldetail_deepl_translate_subtitle">The online engine uses DeepL. Languages that DeepL does not have use the usual service.</string>
+    <string name="tooldetail_deepl_write_title">DeepL Write</string>
+    <string name="tooldetail_deepl_write_subtitle">Adds a DeepL Write button to the grammar panel and a DeepL Write action to the selection actions</string>
+    <string name="tooldetail_deepl_write_info">DeepL Write corrects and rewrites text in the same language. It works with a DeepL API Pro key only. A Free key gets an error.</string>
+    <string name="tooldetail_deepl_style_title">Writing style</string>
+    <string name="tooldetail_deepl_style_subtitle">How DeepL Write rewrites your text. Languages without styles ignore it.</string>
 
     <!-- GIF and sticker tools. -->
     <string name="tooldetail_sticker_packs_group">Your stickers</string>

@@ -91,6 +91,14 @@ Re-checks are debounced. After you stop typing, the panel waits before re-lintin
 The very first check after opening the panel can take a beat longer, since building Harper's linter costs roughly 100&nbsp;ms the first time. That cost is already paid by the time you open the panel if [Harper is also set as your system spell checker](/smart/spell-checker/). Its own service warms the linter up on its own. Opening the Grammar tool alone doesn't pre-warm it.
 :::
 
+## DeepL Write
+
+With a DeepL API Pro key set up under [Tools / Translate](/tools/translate/#deepl) and **DeepL Write** turned on there, the panel gets one more button beside the filter. Tap it and DeepL rewrites the text in the field: grammar, wording, and the style you picked. Unlike Harper, DeepL Write reads German, French, Spanish, Italian, Portuguese, Japanese, Korean and Chinese as well as English.
+
+The answer takes the place of the issue list until you tap **Replace** or close it with its X. **Replace** swaps the text for DeepL's version. On a field longer than 2,500 characters, only the first 2,500 go to DeepL and only those are replaced. If you edit the text before the answer arrives, the answer is dropped, because it no longer matches what is in the field.
+
+This is the one part of Grammar check that goes online. The text in the field and your DeepL key go to DeepL, and only when you tap the button. Without a DeepL key, or with DeepL Write off, the button is not there and the panel works as described above. The same rewrite is available on selected text as the **DeepL Write** [selection action](/smart/selection-actions/).
+
 ## Options
 
 <SettingsPath path="Tools / Grammar check" />
@@ -114,7 +122,7 @@ A **System-wide** group sits below these two, with a **Use Harper everywhere** b
 
 ## Details & edge cases
 
-- **English only.** Harper doesn't check any other language, and the dialect setting is global. It applies no matter which typing language or layout is currently active. Grammar check has nothing to do while you're typing in a non-English language.
+- **English only.** Apart from the optional [DeepL Write](#deepl-write) button, Harper doesn't check any other language, and the dialect setting is global. It applies no matter which typing language or layout is currently active. Grammar check has nothing to do while you're typing in a non-English language.
 - **Full edition only.** Grammar check doesn't exist at all in the lite build. It's absent from both the toolbar customization list and the toolbox, rather than sitting there disabled or grayed out, because lite ships without Harper's native library. If you're on lite and don't see it, that's expected.
 - **A missing engine fails safely.** If `libharper_jni.so` somehow didn't load, the panel opens normally and says the grammar engine isn't in this build, rather than crashing or hanging on "checking."
 - **A fix only touches the words it flagged.** Applying a chip (or "Fix all") replaces the flagged spans and nothing else, so the rest of what you wrote isn't re-typed into the field. That's what keeps formatting alive in apps that have any: bold, colour, a checklist item in Google Keep. The one exception is an editor that won't tell the keyboard where its text starts. There's no way to address a span in one of those, so the fix falls back to rewriting the whole field, which flattens any styling it was carrying.

@@ -1210,6 +1210,8 @@ data class TranslateUi(
     val sourceGuessed: Boolean = false,
     /** [translated] came from the on-device engine, not from a server. */
     val onDevice: Boolean = false,
+    /** [translated] came from DeepL, the user's own opt-in service (#331). */
+    val viaDeepL: Boolean = false,
     /**
      * Model codes the on-device engine needs before it can translate the
      * current query. Non-empty is what puts the download offer on screen.
@@ -1256,6 +1258,21 @@ data class GrammarUi(
     val checkedOnce: Boolean = false,
     /** Native Harper library present in this build. */
     val available: Boolean = true,
+    /**
+     * DeepL Write's rewrite of the field, while one was asked for (#331).
+     * Every fresh lint builds a new [GrammarUi] without it, which is what
+     * drops a rewrite of text the user has since changed.
+     */
+    val rephrase: DeepLWriteUi? = null,
+)
+
+/** One DeepL Write request from the grammar panel, and what came of it. */
+data class DeepLWriteUi(
+    /** The text sent: the start of the field, [com.wasimaster.wmkeyboard.core.tools.DeepLClient.MAX_CHARS] at most. */
+    val source: String,
+    val result: String = "",
+    val working: Boolean = true,
+    val error: String? = null,
 )
 
 /** Wikipedia panel state, owned by the service (it does the fetching). */

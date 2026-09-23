@@ -686,6 +686,7 @@
     <string name="ime_selection_macro_busy_desc">Working</string>
     <string name="ime_selection_macro_nothing_to_undo_toast">Nothing left to undo</string>
     <string name="ime_selection_macro_grammar_clean_toast">Nothing to fix</string>
+    <string name="ime_selection_macro_deepl_clean_toast">DeepL Write has nothing to change</string>
     <string name="ime_selection_macro_grammar_unavailable_toast">The grammar checker is not available</string>
     <string name="ime_selection_macro_find_none_toast">No other match</string>
     <string name="ime_selection_macro_bengali_unavailable_toast">Bengali is not loaded</string>

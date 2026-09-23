@@ -63,6 +63,8 @@ data class MacroGates(
     val clipboardHasText: Boolean = false,
     val undoAvailable: Boolean = false,
     val grammarAvailable: Boolean = false,
+    /** DeepL Write is set up and switched on, and the selection fits one request. */
+    val deeplWriteAvailable: Boolean = false,
     val aiAvailable: Boolean = false,
     /** The Bengali dictionary and spelling map are loaded. */
     val bengaliLoaded: Boolean = false,

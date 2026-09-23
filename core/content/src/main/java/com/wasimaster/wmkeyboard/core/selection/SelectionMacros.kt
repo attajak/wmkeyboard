@@ -62,6 +62,11 @@ enum class SelectionMacro {
     TRANSLATE,
     /** Correct the selection with the grammar checker, in place. */
     GRAMMAR_FIX,
+    /**
+     * Rewrite the selection with DeepL Write, in place. Only offered once the
+     * user has set DeepL up with a key and switched Write on (#331).
+     */
+    DEEPL_WRITE,
     /** Open the AI tool on the selection. Direct buttons for single actions ride beside it. */
     AI,
     TO_BANGLA,
@@ -148,6 +153,7 @@ enum class SelectionMacro {
             SEARCH -> R.string.core_content_selection_macro_search
             TRANSLATE -> R.string.core_content_selection_macro_translate
             GRAMMAR_FIX -> R.string.core_content_selection_macro_grammar
+            DEEPL_WRITE -> R.string.core_content_selection_macro_deepl_write
             AI -> R.string.core_content_selection_macro_ai
             TO_BANGLA -> R.string.core_content_selection_macro_to_bangla
             TO_BANGLISH -> R.string.core_content_selection_macro_to_banglish
@@ -194,7 +200,7 @@ enum class SelectionMacro {
             CASE_LOWER, CASE_TITLE, CASE_UPPER, CASE_SENTENCE,
             CASE_CAMEL, CASE_SNAKE, CASE_KEBAB, CASE_CONSTANT -> MacroCategory.FORMAT
             DIGITS_LATIN, COLOUR, JSON_FORMAT, BASE64_DECODE, URL_DECODE, STRIP_TRACKERS -> MacroCategory.CONVERT
-            TRANSLATE, GRAMMAR_FIX, AI, TO_BANGLA, TO_BANGLISH, TO_HINDI, TO_HINGLISH -> MacroCategory.LANGUAGE
+            TRANSLATE, GRAMMAR_FIX, DEEPL_WRITE, AI, TO_BANGLA, TO_BANGLISH, TO_HINDI, TO_HINGLISH -> MacroCategory.LANGUAGE
             SEARCH, READ_ALOUD, TIME_ZONES -> MacroCategory.LOOKUP
             SHARE, CALL, SMS, WHATSAPP, EMAIL, OPEN, QR, ADD_CONTACT, MAP, CALENDAR -> MacroCategory.OPEN_IN
         }
@@ -349,7 +355,8 @@ object SelectionMacros {
         SelectionMacro.COPY, SelectionMacro.CUT, SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE,
         SelectionMacro.FORMAT, SelectionMacro.FIND, SelectionMacro.REPLACE,
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
-        SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.GRAMMAR_FIX, SelectionMacro.DEEPL_WRITE, SelectionMacro.AI,
+        SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
         SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
         SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR, SelectionMacro.FANCY,
         SelectionMacro.CHAT_BOLD, SelectionMacro.CHAT_ITALIC, SelectionMacro.CHAT_STRIKE, SelectionMacro.CHAT_MONO,
@@ -360,7 +367,8 @@ object SelectionMacros {
 
     /**
      * The shipped set. Search and Translate are off because both are a round
-     * trip to a network service; the programmer's cases, chat markup, speech,
+     * trip to a network service; DeepL Write is one too, but it is on because
+     * its gate already waits for the user to set DeepL up and switch Write on; the programmer's cases, chat markup, speech,
      * maps, calendars and the decoders are off because each is a taste rather
      * than a need, and the row is long enough already.
      */
@@ -369,7 +377,8 @@ object SelectionMacros {
         SelectionMacro.PASTE, SelectionMacro.DELETE, SelectionMacro.SHARE, SelectionMacro.FORMAT,
         SelectionMacro.FIND, SelectionMacro.REPLACE,
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE, SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET,
-        SelectionMacro.GRAMMAR_FIX, SelectionMacro.AI, SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
+        SelectionMacro.GRAMMAR_FIX, SelectionMacro.DEEPL_WRITE, SelectionMacro.AI,
+        SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
         SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
         SelectionMacro.DIGITS_LATIN, SelectionMacro.COLOUR,
         SelectionMacro.CALL, SelectionMacro.SMS, SelectionMacro.WHATSAPP, SelectionMacro.EMAIL,
@@ -481,6 +490,7 @@ object SelectionMacros {
         SelectionMacro.LINES_SORT, SelectionMacro.LINES_DEDUPE,
         SelectionMacro.LINES_NUMBER, SelectionMacro.LINES_BULLET -> gates.content.multiLine
         SelectionMacro.GRAMMAR_FIX -> gates.grammarAvailable
+        SelectionMacro.DEEPL_WRITE -> gates.deeplWriteAvailable
         SelectionMacro.AI -> gates.aiAvailable
         SelectionMacro.TO_BANGLA -> gates.bengaliLoaded && gates.content.hasLatin && !gates.content.hasBengali
         SelectionMacro.TO_BANGLISH -> gates.content.hasBengali

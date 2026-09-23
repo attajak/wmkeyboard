@@ -126,6 +126,7 @@ object SettingsBackup {
         AUTO_BACKUP_DROPBOX_TOKEN,
         AUTO_BACKUP_ONEDRIVE_TOKEN,
         "translate_api_key",
+        "deepl_api_key",
         "klipy_api_key",
         "brave_api_key",
         "giphy_api_key",

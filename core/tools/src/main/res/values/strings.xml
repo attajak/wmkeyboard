@@ -203,6 +203,10 @@
     <!-- %1$d is the HTTP status code. -->
     <string name="core_tools_error_http_failed">The request failed (HTTP <xliff:g id="status" example="500">%1$d</xliff:g>)</string>
     <string name="core_tools_error_file_too_large">The file is larger than the maximum size</string>
+    <string name="core_tools_error_deepl_quota">Your DeepL character allowance for this month is used up</string>
+    <string name="core_tools_error_deepl_write_key">DeepL did not accept the key for DeepL Write. Write needs a DeepL API Pro key.</string>
+    <string name="core_tools_error_deepl_write_language">DeepL Write cannot improve text in this language</string>
+    <string name="core_tools_error_deepl_empty">DeepL sent back no text</string>
 
     <!-- ================================================================== -->
     <!-- Calendar tool: events read from the device calendar.               -->

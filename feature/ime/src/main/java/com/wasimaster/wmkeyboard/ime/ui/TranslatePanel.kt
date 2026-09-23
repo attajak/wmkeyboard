@@ -249,6 +249,18 @@ internal fun TranslatePanel(
                 }
             }
             Spacer(Modifier.weight(1f))
+            // Says which service answered only when it is the one the user
+            // brought (#331): DeepL falls back to the usual service for a
+            // language it does not have, and that switch should not be silent.
+            if (translate.viaDeepL && translate.translated.isNotEmpty()) {
+                Text(
+                    stringResource(R.string.ime_translate_deepl_label),
+                    color = kb.secondaryText,
+                    fontSize = 11.sp,
+                    maxLines = 1,
+                    modifier = Modifier.padding(end = 6.dp),
+                )
+            }
             if (translate.translating) {
                 CircularProgressIndicator(
                     modifier = Modifier

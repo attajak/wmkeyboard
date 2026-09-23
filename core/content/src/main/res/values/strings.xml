@@ -303,6 +303,7 @@
     <string name="core_content_selection_macro_lines_number">Number</string>
     <string name="core_content_selection_macro_lines_bullet">Bullets</string>
     <string name="core_content_selection_macro_grammar">Grammar</string>
+    <string name="core_content_selection_macro_deepl_write">DeepL Write</string>
     <string name="core_content_selection_macro_ai" translatable="false">AI</string>
     <string name="core_content_selection_macro_to_bangla">Bangla</string>
     <string name="core_content_selection_macro_to_banglish">Banglish</string>

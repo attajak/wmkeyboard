@@ -58,6 +58,7 @@ Two things sit outside the order. **Undo** is always first while there is someth
 | Replace | Anything | On |
 | Sort, Unique, Number, Bullets | Two or more lines | On |
 | Grammar | Text, with the [Grammar](/smart/grammar/) tool on | On |
+| DeepL Write | Text up to 2,500 characters, once [DeepL Write](/tools/translate/#deepl) is set up | On |
 | AI, and the AI buttons | Text, with the [AI](/tools/ai/) tool on and set up | On |
 | Bangla | Latin text, with Bengali among your languages | On |
 | Banglish | Bengali text | On |
@@ -164,6 +165,7 @@ Mono on several lines uses the app's fenced block where it has one. These four a
 - **Hindi** does the same for Hinglish: the known-spellings list first (`theek` to ठीक, `nhi` to नहीं), then the downloaded Hindi word list through the same phonetic match the strip uses, then the rules. It needs the Hindi phonetic layout switched on, because that is what loads all three. On Latin text with both Bangla and Hindi available you get both chips, and you pick the language you wrote.
 - **Hinglish** writes Devanagari back in Latin letters the way it is said, not the way it is spelled: करना is `karna` and नमस्ते is `namaste`, because spoken Hindi drops the inherent vowel in the first and keeps it in the second. Long vowels are doubled inside a word and single at its end (`naam`, `theek`, `mera`, `ladki`).
 - **Grammar** runs the [Grammar](/smart/grammar/) checker over the selection alone and commits every suggestion at once, offline. It shows a spinner while it works and says so when there is nothing to fix.
+- **DeepL Write** sends the selection to DeepL Write and puts DeepL's rewrite in its place, in the [writing style](/tools/translate/#options) you picked. It shows only after you add a DeepL API Pro key and turn on **DeepL Write** under Tools / Translate, and it works in the Lite edition too. Undo brings the original back.
 - **AI** opens the [AI](/tools/ai/) tool on the selection. Under **AI buttons** you can give any AI action a chip of its own (Formal, Shorter, Friendly and Summarize are made for it): one tap runs it on the selection and the result lands in the AI panel, ready to apply. Applying replaces the selection, not the field around it.
 - **Translate** sends the selection to the [translate](/tools/translate/) tool.
 
@@ -206,7 +208,7 @@ None of these send anything anywhere themselves: each hands the text to an app y
 
 - **The bar never appears over a password field.** Putting a password in front of a Share chooser is exactly the mistake this feature should not make.
 - **An action is only offered when it can work.** WhatsApp is hidden when WhatsApp is not installed. Search, Translate, QR, Grammar and AI are hidden when their tools are switched off, which includes the tools that [power saving](/typing/power-saving/) and the lock screen have already taken away, and AI is hidden until a provider is set up. Hiding a tool from the toolbox is not switching it off: turn off **Show in toolbox** on the tool's own page to keep, say, the AI chip here while the AI tool stays out of the toolbox grid.
-- **Nothing is stored and nothing is sent by the keyboard.** Every action either edits the field you are already in, or hands the text to an app you picked. Grammar and the Bengali conversions run on the device.
+- **Nothing is stored and nothing is sent by the keyboard.** Every action either edits the field you are already in, or hands the text to an app you picked. Grammar and the Bengali conversions run on the device. The one exception is DeepL Write, which you set up yourself: it sends the selection to DeepL.
 - **Before your first unlock**, only the actions that touch the current field survive: the edits, the rewrites and Find. Paste needs a clipboard that is still locked, Speak needs a speech engine, and everything under Open in would have to start another app.
 - **A very long selection gets no bar.** Past about 4,000 characters you have selected a document rather than a fragment, and the toolbar's own [Copy tool](/tools/text-editing/) is the better answer.
 - **The bar follows the selection, not the caret.** Extending a selection with [selection mode](/tools/text-editing/#selection-mode) or a [trackpad](/tools/trackpad/) drag re-reads it as you go, so the actions change under your finger as the selection grows into a whole phone number.

@@ -137,6 +137,7 @@
 
     <!-- Feature names, one per part of the keyboard that makes requests. -->
     <string name="netlog_source_translate">Translate</string>
+    <string name="netlog_source_deepl_write">DeepL Write</string>
     <string name="netlog_source_gif">GIFs</string>
     <string name="netlog_source_sticker">Stickers</string>
     <string name="netlog_source_web_search">Web search</string>
@@ -172,6 +173,7 @@
 
     <!-- What one feature sends with a request. Shown in the request sheet. -->
     <string name="netlog_sent_translate">The text in the translate panel and the two languages.</string>
+    <string name="netlog_sent_deepl_write">The text you asked DeepL Write to improve, and your DeepL key.</string>
     <string name="netlog_sent_gif">Your search words and the content filter, or nothing for the trending list.</string>
     <string name="netlog_sent_sticker">Your search words and the content filter, or nothing for the trending list.</string>
     <string name="netlog_sent_web_search">The search you submitted.</string>

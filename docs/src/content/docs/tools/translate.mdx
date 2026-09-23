@@ -59,6 +59,15 @@ Hardware-keyboard focus-ring navigation reaches the whole panel: <KeyCap>Tab</Ke
 
 **What to expect.** On-device translation is good for messages and short text and noticeably less exact than the online service on long, technical or idiomatic text. Line breaks and blank lines survive: each line is translated on its own. The translators are unloaded when you close the panel, since a loaded language pair holds tens of megabytes of memory.
 
+## DeepL
+
+DeepL is an optional online service that you bring yourself, with your own DeepL API key. Nothing about it shows or runs until you add a key (or a server address) under [Options](#options). The keyboard has no DeepL key of its own.
+
+- **Translate with DeepL.** With a key set, the online engine asks DeepL instead of Google or LibreTranslate. A small **DeepL** label beside the engine chip says when DeepL made the translation on screen. For a language pair that DeepL does not have, the keyboard uses the usual service for that pair and the label goes away. On **Automatic**, DeepL only takes the part that would otherwise go online.
+- **DeepL Write.** Off until you turn it on. Write corrects and rewrites text in its own language: grammar, wording, style and tone. It adds a button to the [Grammar check](/smart/grammar/#deepl-write) panel and a **DeepL Write** action to [selection actions](/smart/selection-actions/). DeepL sells Write with API Pro plans only, so a Free key gets an error from it (Free keys still translate).
+- **Which server.** DeepL API Free keys end in `:fx` and go to `api-free.deepl.com`; every other key goes to `api.deepl.com`. The keyboard picks the server from the key. **DeepL server** replaces both, for a proxy that you run and that answers DeepL's `/v2/translate` requests.
+- **Limits.** The Free plan includes 500,000 characters each month. When the month's characters are used up, the panel says so.
+
 ## Options
 
 <SettingsPath path="Tools / Translate" />
@@ -72,19 +81,25 @@ Hardware-keyboard focus-ring navigation reaches the whole panel: <KeyCap>Tab</Ke
 - **Only downloaded languages**: <Flavor edition="full" /> on by default. On **On device**, the panel's language menus show the downloaded languages, the languages you type in and the current selection, with **All languages** at the end for the rest. Off lists every language.
 - **Languages on the device**: <Flavor edition="full" /> the on-device models. The list starts with English (built in), the language you translate into, the languages you type in, and anything already downloaded or on its way. **More languages** below it folds out the rest. Each row downloads, cancels or deletes one model and shows its progress. A download started here shows as running in the panel, and the other way round.
 - **LibreTranslate server**: F-Droid build only, blank by default. Paste the address of a LibreTranslate server, your own or one you trust. Translation goes there instead of Google, even if a Cloud Translation key is also set. An optional key field sits below it, for instances that ask for one. See [Servers](/reference/settings/servers/) for the same field shared across tools.
+- **DeepL API key**: blank by default, and the switch that turns DeepL on. See [DeepL](#deepl). The key rows below it show only once a key or a server is set.
+- **DeepL server (optional)**: blank by default, which means DeepL's own server for your kind of key. Paste an address to send DeepL requests to a proxy instead.
+- **Translate with DeepL**: on by default. Off keeps the key for DeepL Write only, and translation goes to the usual service.
+- **DeepL Write**: off by default. On adds DeepL Write to the Grammar check panel and to selection actions. Needs a DeepL API Pro key.
+- **Writing style**: shown while DeepL Write is on. **As it is** (default), **Simple**, **Business**, **Academic**, **Casual**, **Friendly**, **Confident**, **Diplomatic** or **Enthusiastic**. A language that DeepL has no styles for gets a plain rewrite.
 - **Cloud Translation API key (optional)**: blank by default. Paste a Google Cloud Translation API key here to use the official API instead of the free endpoint (see below). The field saves as you type, with no separate save button. Under it you'll read "The app uses your key" once you've typed one, "This field is blank. The app uses the key that is built into the app." if this build ships one, or "Without a key, translation uses the free public endpoint of Google" otherwise.
 
 This screen also shows the caption WM Keyboard displays right on the settings page:
 
-> The keyboard sends the text that you translate to Google either way, and only while the translate panel is open. The free endpoint is unofficial and rate limited. A Cloud Translation key makes it official and reliable.
+> The keyboard sends the text that you translate to Google either way, and only while the translate panel is open. The free endpoint is unofficial and rate limited. A Cloud Translation key makes it official and reliable. If you set up DeepL below, DeepL gets the text instead, and Google gets only the languages that DeepL does not have.
 
-If you back up your settings with **Include API keys** turned on, a Translate key you've pasted in travels with the backup along with your GIF, search, and AI keys.
+If you back up your settings with **Include API keys** turned on, a Translate key or DeepL key you've pasted in travels with the backup along with your GIF, search, and AI keys. Without that switch, neither leaves the phone in a backup.
 
 ## Details & edge cases
 
 - **On the device, nothing is sent.** With the engine on **On device**, the text you type is translated by ML Kit on the phone and goes nowhere. The only network use is the model downloads, which come from Google's servers (`dl.google.com`) through Android's download manager, plus ML Kit's own [diagnostics](/privacy/network/). On **Automatic**, text goes online only when the device cannot translate it.
 - **Google, or LibreTranslate on the F-Droid build.** On the online engine, with no key, WM Keyboard calls Google's free public translation endpoint. It's the same unofficial one browser translate extensions use: fine for personal typing volumes, with no uptime guarantee and its own rate limits. With a key, it calls the official Cloud Translation v2 API instead, billed to your Google Cloud project and reliable. The F-Droid build adds a third path: paste a LibreTranslate server's address under Options. Every translation then goes there instead of either Google option, even with a Cloud Translation key also set. Whichever is active, only the text you type into the panel is sent. Nothing else in the field is.
-- **Sent, precisely:** the text currently in the panel's search box (truncated to 2,500 characters), the target language code, the source language code if you picked one, and your key where one applies. The free Google endpoint receives the text as part of the request URL. The official Google API and a configured LibreTranslate server both send it in a POST body, LibreTranslate's carrying its optional key alongside.
+- **DeepL, when you set it up.** With a DeepL key, translations go to DeepL first (see [DeepL](#deepl)). A pair that DeepL turns down goes to Google or LibreTranslate as above, and DeepL is not asked about that pair again until the keyboard restarts. Any other DeepL error (a wrong key, a used-up month) shows in the panel and is not sent anywhere else.
+- **Sent, precisely:** the text currently in the panel's search box (truncated to 2,500 characters), the target language code, the source language code if you picked one, and your key where one applies. DeepL receives the text in a POST body and the key in a request header. The free Google endpoint receives the text as part of the request URL. The official Google API and a configured LibreTranslate server both send it in a POST body, LibreTranslate's carrying its optional key alongside.
 - **When it's sent:** automatically ~400ms after you stop typing, immediately on return or retry, and immediately again if you change the target language, all only while the panel is open. Closing the panel cancels any translation in flight.
 - **Power Saving mode's "Background network" toggle doesn't touch this.** That toggle only stops fetches that happen without you asking: link previews, QR auto-scan, dictionary look-ups. Tools you open yourself, translate included, keep working even with it on.
 - **Not available before your phone is unlocked once after a restart.** Translate isn't on the short list of tools that work on a locked device, and the on-device models live in storage that is locked until then. It won't appear if you're typing on the lock screen before that first unlock.

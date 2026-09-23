@@ -108,6 +108,7 @@ import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
+import com.wasimaster.wmkeyboard.core.settings.DeepLWriteStyle
 import com.wasimaster.wmkeyboard.core.tools.WeatherClient
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
@@ -1658,6 +1659,7 @@ internal fun ToolDetailSettings(
                     ) { repository.setTranslateApiKey(it) }
                 }
             }
+            DeepLSettingsGroup(repository, settings)
         }
         ToolbarTool.GIF, ToolbarTool.STICKER -> {
             if (BuildConfig.ENABLE_FDROID && tool == ToolbarTool.GIF) {
@@ -3014,6 +3016,65 @@ private fun ToolKeywordSetting(
         StateBanner(stringResource(R.string.toolai_keyword_off_info))
     }
 }
+/**
+ * DeepL, the user's own opt-in service (#331): a key or a server, and then
+ * what to use it for. Until one of the two fields is filled in the switches
+ * stay out of sight, because they would switch nothing.
+ */
+@Composable
+private fun DeepLSettingsGroup(repository: SettingsRepository, settings: KeyboardSettings) {
+    val scope = rememberCoroutineScope()
+    val deepl = settings.translate.deepl
+    val defaults = SettingsDefaults.translate.deepl
+    SettingsGroup(
+        stringResource(R.string.tooldetail_deepl_group),
+        info = stringResource(R.string.tooldetail_deepl_info),
+    ) {
+        item {
+            ApiKeyField(
+                label = stringResource(R.string.tooldetail_deepl_key_label),
+                value = deepl.apiKey,
+                builtInAvailable = false,
+                emptyHint = stringResource(R.string.tooldetail_deepl_key_hint),
+            ) { repository.setDeepLApiKey(it) }
+        }
+        item {
+            TextFieldSetting(
+                label = stringResource(R.string.tooldetail_deepl_endpoint_label),
+                value = deepl.endpoint,
+                hint = stringResource(R.string.tooldetail_deepl_endpoint_hint),
+                default = defaults.endpoint,
+            ) { repository.setDeepLEndpoint(it) }
+        }
+        item(visible = deepl.configured) {
+            ToggleSetting(
+                R.string.tooldetail_deepl_translate_title,
+                stringResource(R.string.tooldetail_deepl_translate_subtitle),
+                deepl.translate,
+                default = defaults.translate,
+            ) { scope.launch { repository.setDeepLTranslate(it) } }
+        }
+        item(visible = deepl.configured) {
+            ToggleSetting(
+                R.string.tooldetail_deepl_write_title,
+                stringResource(R.string.tooldetail_deepl_write_subtitle),
+                deepl.write,
+                info = stringResource(R.string.tooldetail_deepl_write_info),
+                default = defaults.write,
+            ) { scope.launch { repository.setDeepLWrite(it) } }
+        }
+        item(visible = deepl.writeActive) {
+            ChoiceSetting(
+                R.string.tooldetail_deepl_style_title,
+                subtitle = stringResource(R.string.tooldetail_deepl_style_subtitle),
+                options = DeepLWriteStyle.entries.map { it to stringResource(it.labelRes) },
+                selected = deepl.writeStyle,
+                default = defaults.writeStyle,
+            ) { scope.launch { repository.setDeepLWriteStyle(it) } }
+        }
+    }
+}
+
 /** A plain saved-as-you-type text setting (same mechanics as ApiKeyField). */
 @Composable
 internal fun TextFieldSetting(

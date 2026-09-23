@@ -245,6 +245,7 @@ internal fun macroDescription(macro: SelectionMacro): Int = when (macro) {
     SelectionMacro.SEARCH -> R.string.selection_macros_desc_search
     SelectionMacro.TRANSLATE -> R.string.selection_macros_desc_translate
     SelectionMacro.GRAMMAR_FIX -> R.string.selection_macros_desc_grammar
+    SelectionMacro.DEEPL_WRITE -> R.string.selection_macros_desc_deepl_write
     SelectionMacro.AI -> R.string.selection_macros_desc_ai
     SelectionMacro.TO_BANGLA -> R.string.selection_macros_desc_to_bangla
     SelectionMacro.TO_BANGLISH -> R.string.selection_macros_desc_to_banglish

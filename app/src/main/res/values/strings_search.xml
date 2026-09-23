@@ -181,6 +181,7 @@
     <string name="search_kw_typing_wrap_selection">surround parentheses quotes auto braces</string>
     <string name="search_kw_update_row_check">upgrade latest release</string>
     <string name="search_kw_voice_engine">offline whisper device model server transcription selfhosted hosted speaches remote</string>
+    <string name="search_kw_deepl">write rephrase rewrite improve polish style tone translation</string>
     <string name="search_kw_sticker_suggest">suggestions suggest tray prediction autocomplete</string>
     <string name="search_kw_translate_engine">offline private internet airplane local device ml kit google model download cloud</string>
     <string name="search_kw_translate_models">offline translation model download delete storage ml kit google</string>

@@ -34,6 +34,7 @@ import androidx.compose.material.icons.outlined.ContentCut
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.DataObject
 import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.FindInPage
@@ -542,6 +543,7 @@ private fun macroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
     SelectionMacro.SEARCH -> Icons.Outlined.Search
     SelectionMacro.TRANSLATE -> Icons.Outlined.Translate
     SelectionMacro.GRAMMAR_FIX -> Icons.Outlined.Spellcheck
+    SelectionMacro.DEEPL_WRITE -> Icons.Outlined.EditNote
     SelectionMacro.AI -> Icons.Outlined.AutoFixHigh
     SelectionMacro.TO_BANGLA, SelectionMacro.TO_BANGLISH,
     SelectionMacro.TO_HINDI, SelectionMacro.TO_HINGLISH,
