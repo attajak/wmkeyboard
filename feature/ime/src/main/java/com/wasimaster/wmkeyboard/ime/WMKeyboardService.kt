@@ -50,10 +50,12 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import android.content.ClipDescription
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -4072,6 +4074,14 @@ open class WMKeyboardService : InputMethodService() {
             // Provided out here rather than inside ServiceKeyboardContent: that
             // one method is already up against the JVM's 64K ceiling.
             CompositionLocalProvider(
+                // The board is physical geometry: layouts list their keys left
+                // to right as they appear on screen, and one-handed LEFT means
+                // the left edge. Inherited from an Arabic or Hebrew system
+                // locale, RTL mirrored every row — backspace at the left, the
+                // Arabic layout reading backwards (issue #336). The surfaces
+                // that should follow a right-to-left *script* (the candidate
+                // strip, the toolbar when asked) provide it themselves.
+                LocalLayoutDirection provides LayoutDirection.Ltr,
                 LocalSystemNavBarPainter provides systemNavBarPainter,
                 LocalInlineChipPaletteReporter provides inlineChipPaletteReporter,
             ) {

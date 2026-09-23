@@ -8511,8 +8511,9 @@ private fun ToolboxPanel(
         drag.toolboxHidden = toolbox.hiddenTools
         drag.toolboxColumns = columns
         // The grid takes the ambient direction (it has no script of its own to
-        // follow), so under an RTL locale it fills from the right and the cell
-        // maths has to mirror with it — the grid half of issue #79.
+        // follow). The service pins the board to LTR (#336), but whatever the
+        // ambient is, the cell maths has to mirror with it — the grid half of
+        // issue #79.
         drag.boxRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         // Drop preview: the dragged tool LEAVES the list and a ghost marks the
         // slot it would land in. That is one hole, not two, and — the reason
