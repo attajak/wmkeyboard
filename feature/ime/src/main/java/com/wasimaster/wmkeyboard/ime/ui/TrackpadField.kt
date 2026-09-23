@@ -132,11 +132,18 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                             startDrag()
                         }
                     }
+                    // Whether the last finger came up. A gesture cut short (the
+                    // loop restarted under it) is not a release: it must not
+                    // type the two-finger tap's space or count as a tap.
+                    var lifted = false
                     try {
                         while (true) {
                             val event = awaitPointerEvent()
                             val pressed = event.changes.filter { it.pressed }
-                            if (pressed.isEmpty()) break
+                            if (pressed.isEmpty()) {
+                                lifted = true
+                                break
+                            }
                             for (change in event.changes) change.consume()
                             val fingers = pressed.size
                             if (fingers > maxFingers) maxFingers = fingers
@@ -189,7 +196,12 @@ internal fun TrackpadField(settings: TrackpadSettings, callbacks: TrackpadFieldC
                         // the editor and nothing here collapses it.
                         if (selecting) callbacks.onSelectionHold(false)
                         if (dragging) callbacks.onCaretDrag(false)
-                        when (classifyRelease(moved, longPressed, maxFingers)) {
+                        val release = if (lifted) {
+                            classifyRelease(moved, longPressed, maxFingers)
+                        } else {
+                            TrackpadRelease.NONE
+                        }
+                        when (release) {
                             TrackpadRelease.NONE -> taps.reset()
                             TrackpadRelease.TWO_FINGER_TAP -> {
                                 taps.reset()

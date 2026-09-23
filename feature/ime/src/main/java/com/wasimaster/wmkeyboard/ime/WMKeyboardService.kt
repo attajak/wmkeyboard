@@ -4733,6 +4733,16 @@ open class WMKeyboardService : InputMethodService() {
         expectedSelStart = attribute?.initialSelStart ?: -1
         expectedSelEnd = attribute?.initialSelEnd ?: -1
         trackCaretAtFieldStart(expectedSelStart, expectedSelEnd)
+        // A drag still holding the magnifier up follows the field onto its new
+        // connection; the one it was reading from is gone.
+        if (caretMagnifier.active) {
+            caretMagnifier.rebind(
+                currentInputConnection,
+                expectedSelStart,
+                expectedSelEnd,
+                hidesTypedText(attribute?.inputType ?: 0),
+            )
+        }
         // Whatever word was being followed, its field is gone or its text has
         // changed under it; nothing about it can be trusted from here.
         revision = null
@@ -25761,7 +25771,8 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (!enabled || state.captureTarget() != null) return
         val ic = currentInputConnection ?: return
-        caretMagnifier.begin(source, ic, expectedSelStart, expectedSelEnd)
+        val mask = hidesTypedText(currentInputEditorInfo?.inputType ?: 0)
+        caretMagnifier.begin(source, ic, expectedSelStart, expectedSelEnd, mask)
     }
 
     override fun onUpdateCursorAnchorInfo(cursorAnchorInfo: CursorAnchorInfo) {

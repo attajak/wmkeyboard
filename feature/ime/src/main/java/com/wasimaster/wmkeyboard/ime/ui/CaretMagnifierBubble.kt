@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -43,6 +44,7 @@ import com.wasimaster.wmkeyboard.ime.CaretAnchor
 import com.wasimaster.wmkeyboard.ime.CaretDragSource
 import com.wasimaster.wmkeyboard.ime.CaretMagnifierState
 import com.wasimaster.wmkeyboard.ime.MagnifierLine
+import com.wasimaster.wmkeyboard.ime.SelectionBeyond
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.roundToInt
@@ -94,14 +96,15 @@ internal fun CaretMagnifierHost(state: StateFlow<CaretMagnifierState?>) {
     val view = LocalView.current
     val density = LocalDensity.current
     // Where this window starts on screen. The editor reports its caret in
-    // screen pixels, and a popup is placed in its parent window's.
-    val origin = IntArray(2).also { view.rootView.getLocationOnScreen(it) }
-    val provider = remember(magnifier.anchor, origin[0], origin[1]) {
-        MagnifierPositionProvider(
-            anchor = magnifier.anchor,
-            windowOrigin = IntOffset(origin[0], origin[1]),
-            gapPx = with(density) { MagnifierGap.roundToPx() },
-        )
+    // screen pixels, and a popup is placed in its parent window's. Read once
+    // per appearance: the keyboard's window does not move under a drag, and
+    // this recomposes on every step of one.
+    val origin = remember(view) {
+        IntArray(2).also { view.rootView.getLocationOnScreen(it) }.let { IntOffset(it[0], it[1]) }
+    }
+    val gapPx = with(density) { MagnifierGap.roundToPx() }
+    val provider = remember(magnifier.anchor, origin, gapPx) {
+        MagnifierPositionProvider(anchor = magnifier.anchor, windowOrigin = origin, gapPx = gapPx)
     }
     Popup(popupPositionProvider = provider, properties = MagnifierPopupProperties) {
         MagnifierBubble(magnifier.line)
@@ -142,7 +145,9 @@ private class MagnifierPositionProvider(
         } else {
             (anchor.bottom - windowOrigin.y).roundToInt() + gapPx
         }
-        return IntOffset(x, y)
+        // Never over the keys: a caret the app left behind the keyboard would
+        // otherwise put the bubble on top of the finger that is dragging it.
+        return IntOffset(x, minOf(y, anchorBounds.top - height - gapPx))
     }
 }
 
@@ -158,6 +163,7 @@ private fun MagnifierBubble(line: MagnifierLine) {
     val style = LocalTextStyle.current.merge(TextStyle(color = kb.popupText, fontSize = MagnifierFontSize))
     val shape = RoundedCornerShape(50)
     val textColor = kb.popupText
+    val selectionColor = textColor.copy(alpha = 0.3f)
     Box(
         modifier = Modifier
             .shadow(6.dp, shape, clip = false)
@@ -183,6 +189,13 @@ private fun MagnifierBubble(line: MagnifierLine) {
                 } else {
                     null
                 }
+                // A selection too long to read runs from the caret off one
+                // edge; the bubble shows it as a tint over that half.
+                val beyond = when (line.selectedBeyond) {
+                    SelectionBeyond.NONE -> null
+                    SelectionBeyond.BEFORE -> 0f to size.width / 2
+                    SelectionBeyond.AFTER -> size.width / 2 to size.width
+                }
                 val caretWidth = 2.dp.toPx()
                 val caretTop = shiftY + 2.dp.toPx()
                 val caretBottom = shiftY + layout.size.height - 2.dp.toPx()
@@ -193,8 +206,15 @@ private fun MagnifierBubble(line: MagnifierLine) {
                     1f to Color.Transparent,
                 )
                 onDrawBehind {
+                    beyond?.let { (from, to) ->
+                        drawRect(
+                            selectionColor,
+                            topLeft = Offset(from, shiftY),
+                            size = Size(to - from, layout.size.height.toFloat()),
+                        )
+                    }
                     translate(shiftX, shiftY) {
-                        selection?.let { drawPath(it, textColor.copy(alpha = 0.3f)) }
+                        selection?.let { drawPath(it, selectionColor) }
                         drawText(layout)
                     }
                     drawLine(

@@ -19687,371 +19687,385 @@ private fun Modifier.pointerInputKey(
             // Extra travel demanded before the language list wraps around at
             // either end — the boundary acts like a detent, not a wall.
             val langWrapPx = langStepPx * 2.5f
-            awaitEachGesture {
-                val down = awaitFirstDown()
-                setPressed(true)
-                // Space press feedback: sound stays, buzz is gated on its toggle.
-                if (vibrateOnSpace) onKeyPress() else onKeySound()
-                // Resolved on the first movement past the slop; null until
-                // then (and forever for a plain tap).
-                var action: SpaceSwipeAction? = null
-                var accumulated = 0f
-                var lastX = down.position.x
-                // Vertical accumulator for the 2-D cursor pad, and a latch set
-                // once a swipe-down has dismissed the keyboard (so release does
-                // not also type a space).
-                var accumulatedY = 0f
-                var lastY = down.position.y
-                var hidden = false
-                var langIndex = enabledLayoutIds.indexOf(currentLayoutId).coerceAtLeast(0)
-                // With exactly two languages a swipe direction means "the
-                // other language", so a single run of travel toggles at most
-                // once: runDir is the direction of the current run and
-                // runSwitched whether it already toggled. Continued travel in
-                // the same direction must never cycle back to the language the
-                // user deliberately swiped away from; only reversing direction
-                // switches back.
-                val twoModes = enabledLayoutIds.size == 2
-                var runDir = 0
-                var runSwitched = false
-                // When the swipe last stepped the language ring. A step in the
-                // same direction waits LanguageStepDwellMs after it, so a flick
-                // moves one language however far it travels and only a swipe
-                // that keeps going walks on (see [stepLanguageRing]).
-                var lastStepAt = 0L
-                // With language switching on the short-swipe slot, holding
-                // the spacebar just past a normal tap shows the language
-                // picker without needing any initial swipe. The action is
-                // not locked in — a drag afterwards still resolves short vs
-                // long normally, so a hold + swipe cursor action survives —
-                // but a release with the picker up must not type a space.
-                var holdPreviewShown = false
-                // With more than two languages the swipe ring is long, so a
-                // hold opens the full tappable picker instead of the inline
-                // preview. Once open, a drag walks it entry by entry — up and
-                // down through the list, sideways along the carousel — and
-                // release commits the highlighted layout; a hold that never
-                // moves leaves the popup up for tapping, and release types
-                // nothing either way.
-                var pickerOpened = false
-                var pickerIndex = langIndex
-                var pickerMoved = false
-                var pickerPrimed = false
-                // Issue #57: alternates authored onto the spacebar own the hold,
-                // and the language picker gives way to them. A hold cannot mean
-                // two things, and the keys are there because someone typed them
-                // in; the picker is still on the 🌐 key and on the swipe.
-                val holdOpensAlternates = key.opensAlternatesPopup()
-                var alternatesOpened = false
-                // Arm the hold-to-switch gesture only when the hold is free to
-                // mean it — see [spaceHoldOpensPicker]. The picker only opens on
-                // a still-hold (action == null); a drag sets action first and
-                // still runs the swipe/cursor gesture.
-                val holdOpensSwitcher = spaceHoldOpensPicker(
-                    enabledLayoutIds.size, holdOpensAlternates, spaceLongSwipe,
-                )
-                // The popup waits out the full long-press delay, like every other
-                // key's does; the picker keeps its own shorter cap.
-                val holdDelayMs = if (holdOpensAlternates) {
-                    longPressDelayMs
-                } else {
-                    minOf(longPressDelayMs, SpaceHoldPickerMs)
-                }
-                val holdJob = if (holdOpensAlternates || holdOpensSwitcher) {
-                    scope.launch {
-                        delay(holdDelayMs.toLong())
-                        if (action == null) {
-                            if (holdOpensAlternates) {
-                                alternatesOpened = true
+            // Set while a cursor drag holds the caret magnifier up, so a
+            // restart of this loop mid-drag (one of the keys above changed)
+            // still takes the bubble down instead of stranding it.
+            var caretDragOpen = false
+            try {
+                awaitEachGesture {
+                    val down = awaitFirstDown()
+                    setPressed(true)
+                    // Space press feedback: sound stays, buzz is gated on its toggle.
+                    if (vibrateOnSpace) onKeyPress() else onKeySound()
+                    // Resolved on the first movement past the slop; null until
+                    // then (and forever for a plain tap).
+                    var action: SpaceSwipeAction? = null
+                    var accumulated = 0f
+                    var lastX = down.position.x
+                    // Vertical accumulator for the 2-D cursor pad, and a latch set
+                    // once a swipe-down has dismissed the keyboard (so release does
+                    // not also type a space).
+                    var accumulatedY = 0f
+                    var lastY = down.position.y
+                    var hidden = false
+                    var langIndex = enabledLayoutIds.indexOf(currentLayoutId).coerceAtLeast(0)
+                    // With exactly two languages a swipe direction means "the
+                    // other language", so a single run of travel toggles at most
+                    // once: runDir is the direction of the current run and
+                    // runSwitched whether it already toggled. Continued travel in
+                    // the same direction must never cycle back to the language the
+                    // user deliberately swiped away from; only reversing direction
+                    // switches back.
+                    val twoModes = enabledLayoutIds.size == 2
+                    var runDir = 0
+                    var runSwitched = false
+                    // When the swipe last stepped the language ring. A step in the
+                    // same direction waits LanguageStepDwellMs after it, so a flick
+                    // moves one language however far it travels and only a swipe
+                    // that keeps going walks on (see [stepLanguageRing]).
+                    var lastStepAt = 0L
+                    // With language switching on the short-swipe slot, holding
+                    // the spacebar just past a normal tap shows the language
+                    // picker without needing any initial swipe. The action is
+                    // not locked in — a drag afterwards still resolves short vs
+                    // long normally, so a hold + swipe cursor action survives —
+                    // but a release with the picker up must not type a space.
+                    var holdPreviewShown = false
+                    // With more than two languages the swipe ring is long, so a
+                    // hold opens the full tappable picker instead of the inline
+                    // preview. Once open, a drag walks it entry by entry — up and
+                    // down through the list, sideways along the carousel — and
+                    // release commits the highlighted layout; a hold that never
+                    // moves leaves the popup up for tapping, and release types
+                    // nothing either way.
+                    var pickerOpened = false
+                    var pickerIndex = langIndex
+                    var pickerMoved = false
+                    var pickerPrimed = false
+                    // Issue #57: alternates authored onto the spacebar own the hold,
+                    // and the language picker gives way to them. A hold cannot mean
+                    // two things, and the keys are there because someone typed them
+                    // in; the picker is still on the 🌐 key and on the swipe.
+                    val holdOpensAlternates = key.opensAlternatesPopup()
+                    var alternatesOpened = false
+                    // Arm the hold-to-switch gesture only when the hold is free to
+                    // mean it — see [spaceHoldOpensPicker]. The picker only opens on
+                    // a still-hold (action == null); a drag sets action first and
+                    // still runs the swipe/cursor gesture.
+                    val holdOpensSwitcher = spaceHoldOpensPicker(
+                        enabledLayoutIds.size, holdOpensAlternates, spaceLongSwipe,
+                    )
+                    // The popup waits out the full long-press delay, like every other
+                    // key's does; the picker keeps its own shorter cap.
+                    val holdDelayMs = if (holdOpensAlternates) {
+                        longPressDelayMs
+                    } else {
+                        minOf(longPressDelayMs, SpaceHoldPickerMs)
+                    }
+                    val holdJob = if (holdOpensAlternates || holdOpensSwitcher) {
+                        scope.launch {
+                            delay(holdDelayMs.toLong())
+                            if (action == null) {
+                                if (holdOpensAlternates) {
+                                    alternatesOpened = true
+                                    if (hapticOnLongPress) onKeyPress()
+                                    openAlternates()
+                                    return@launch
+                                }
+                                // List for a long ring (> 4, unless the user keeps
+                                // the preview for every length) or when the swipe
+                                // can't cycle languages; otherwise the inline preview.
+                                val useList = (pickerForLongRing && enabledLayoutIds.size > 4) ||
+                                    spaceShortSwipe != SpaceSwipeAction.LANGUAGE
+                                if (useList) {
+                                    pickerOpened = true
+                                    pickerIndex = langIndex
+                                    openLanguagePicker()
+                                } else {
+                                    holdPreviewShown = true
+                                    setLanguagePreview(enabledLayoutIds[langIndex])
+                                }
                                 if (hapticOnLongPress) onKeyPress()
-                                openAlternates()
-                                return@launch
                             }
-                            // List for a long ring (> 4, unless the user keeps
-                            // the preview for every length) or when the swipe
-                            // can't cycle languages; otherwise the inline preview.
-                            val useList = (pickerForLongRing && enabledLayoutIds.size > 4) ||
-                                spaceShortSwipe != SpaceSwipeAction.LANGUAGE
-                            if (useList) {
-                                pickerOpened = true
-                                pickerIndex = langIndex
-                                openLanguagePicker()
-                            } else {
-                                holdPreviewShown = true
-                                setLanguagePreview(enabledLayoutIds[langIndex])
-                            }
-                            if (hapticOnLongPress) onKeyPress()
                         }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
-                while (true) {
-                    val event = awaitPointerEvent()
-                    val change = event.changes.firstOrNull { it.id == down.id } ?: break
-                    if (!change.pressed) break
-                    // The alternates popup owns the gesture from here (issue
-                    // #57): the finger is choosing inside it, and none of the
-                    // swipes may also run under it. Swallowed so the release
-                    // types no space either.
-                    if (alternatesOpened) {
-                        alternates?.moveTo(change.position, reachPx, steerPx)
-                        change.consume()
-                        continue
-                    }
-                    // Picker is up: the finger now navigates it. The first
-                    // event only re-bases the origin — the finger may have
-                    // drifted (below slop) before the hold fired, and that
-                    // drift must not count as a step.
-                    if (pickerOpened) {
-                        if (!pickerPrimed) {
-                            pickerPrimed = true
-                            lastX = change.position.x
-                            lastY = change.position.y
-                            accumulated = 0f
-                            accumulatedY = 0f
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                        if (!change.pressed) break
+                        // The alternates popup owns the gesture from here (issue
+                        // #57): the finger is choosing inside it, and none of the
+                        // swipes may also run under it. Swallowed so the release
+                        // types no space either.
+                        if (alternatesOpened) {
+                            alternates?.moveTo(change.position, reachPx, steerPx)
                             change.consume()
                             continue
                         }
-                        // The carousel keeps the swipe's own axis (issue
-                        // #150): sideways travel walks it one chip per
-                        // language step. The list walks by its row height.
-                        val walk = if (pickerIsCarousel) {
-                            accumulated += change.position.x - lastX
-                            lastX = change.position.x
-                            walkPicker(pickerIndex, accumulated, langStepPx, enabledLayoutIds.size - 1)
-                                .also { accumulated = it.remainder }
-                        } else {
-                            accumulatedY += change.position.y - lastY
-                            lastY = change.position.y
-                            walkPicker(pickerIndex, accumulatedY, pickerRowPx, enabledLayoutIds.size - 1)
-                                .also { accumulatedY = it.remainder }
-                        }
-                        if (walk.index != pickerIndex) {
-                            pickerIndex = walk.index
-                            pickerMoved = true
-                            setPickerDragIndex(pickerIndex)
-                            onKeyPress()
-                        }
-                        change.consume()
-                        continue
-                    }
-                    // The action this gesture would resolve to right now (short
-                    // vs long by hold time). Used to decide whether the 2-D pad
-                    // owns the vertical axis for this drag.
-                    val candidate = if (change.uptimeMillis - down.uptimeMillis < longPressDelayMs) {
-                        spaceShortSwipe
-                    } else {
-                        spaceLongSwipe
-                    }
-                    val cursorOwnsVertical = spaceCursor2d &&
-                        (action == SpaceSwipeAction.CURSOR ||
-                            (action == null && candidate == SpaceSwipeAction.CURSOR))
-                    // Swipe straight down to dismiss the keyboard — unless the
-                    // 2-D pad is claiming vertical for cursor movement.
-                    if (spaceSwipeDownHide && !cursorOwnsVertical) {
-                        val totalDy = change.position.y - down.position.y
-                        val totalDx = change.position.x - down.position.x
-                        if (totalDy > hideThresholdPx && totalDy > abs(totalDx)) {
-                            change.consume()
-                            hidden = true
-                            onHideKeyboard()
-                            break
-                        }
-                    }
-                    if (action == null) {
-                        val totalDx = change.position.x - down.position.x
-                        val totalDy = change.position.y - down.position.y
-                        // The pad may also resolve on a vertical drag, so a
-                        // straight up/down slide starts moving the cursor; the
-                        // language and horizontal-cursor paths still need
-                        // horizontal slop, which keeps their flick direction sane.
-                        val vertForCursor = spaceCursor2d &&
-                            candidate == SpaceSwipeAction.CURSOR && abs(totalDy) > slopPx
-                        if (abs(totalDx) > slopPx || vertForCursor) {
-                            // Short vs long is decided by hold time, not travel
-                            // distance — a fast flick covers more ground than a
-                            // careful drag, so distance can't tell them apart.
-                            // With the hold preview up the drag always
-                            // navigates the language ring: the user is looking
-                            // at a language chooser, so resolving the drag to
-                            // the long-swipe action read as "swiping does
-                            // nothing". Safe to override the candidate here
-                            // because the preview only comes up when the long
-                            // slot is free (see holdOpensSwitcher) — it can no
-                            // longer eat a cursor or numpad hold.
-                            action = if (holdPreviewShown) SpaceSwipeAction.LANGUAGE else candidate
-                            if (action == SpaceSwipeAction.CURSOR) onCaretDrag(true)
-                            lastX = change.position.x
-                            lastY = change.position.y
-                            accumulated = 0f
-                            accumulatedY = 0f
-                            if (action == SpaceSwipeAction.NUMPAD) {
-                                // Discrete action (A39): open the numeric panel once
-                                // and go inert. The synthetic Numpad key routes
-                                // through the same onKey dispatch the ?123 long-press
-                                // uses. `hidden` latches so release types no space.
-                                onKey(Key(label = " ", action = KeyAction.Numpad))
-                                hidden = true
-                                change.consume()
-                                break
-                            }
-                            if (action == SpaceSwipeAction.LANGUAGE) {
-                                // The movement that crossed the slop already
-                                // counts: a quick flick switches one language.
-                                // At a list end the flick parks on the boundary
-                                // — wrapping needs a continued drag past the
-                                // langWrapPx detent below. With two languages
-                                // either direction simply toggles to the other.
-                                val dir = if (totalDx > 0) 1 else -1
-                                val flicked = if (twoModes) {
-                                    1 - langIndex
-                                } else {
-                                    (langIndex + dir).coerceIn(0, enabledLayoutIds.size - 1)
-                                }
-                                if (flicked != langIndex) {
-                                    langIndex = flicked
-                                    onKeyPress()
-                                }
-                                runDir = dir
-                                runSwitched = true
-                                lastStepAt = change.uptimeMillis
-                                setLanguagePreview(enabledLayoutIds[langIndex])
-                            }
-                            change.consume()
-                        }
-                        continue
-                    }
-                    // 2-D touchpad: while sliding the cursor, a vertical drag
-                    // steps the caret up and down as well. Runs alongside the
-                    // horizontal step below, so a diagonal drag moves both axes.
-                    if (spaceCursor2d && action == SpaceSwipeAction.CURSOR) {
-                        accumulatedY += change.position.y - lastY
-                        lastY = change.position.y
-                        var movedV = false
-                        while (accumulatedY > cursorStepPx) {
-                            onCursorMoveVertical(1); accumulatedY -= cursorStepPx; movedV = true
-                        }
-                        while (accumulatedY < -cursorStepPx) {
-                            onCursorMoveVertical(-1); accumulatedY += cursorStepPx; movedV = true
-                        }
-                        if (movedV) change.consume()
-                    }
-                    accumulated += change.position.x - lastX
-                    lastX = change.position.x
-                    when (action) {
-                        SpaceSwipeAction.CURSOR -> {
-                            var moved = false
-                            while (accumulated > cursorStepPx) {
-                                onCursorMove(1); accumulated -= cursorStepPx; moved = true
-                            }
-                            while (accumulated < -cursorStepPx) {
-                                onCursorMove(-1); accumulated += cursorStepPx; moved = true
-                            }
-                            if (moved) change.consume()
-                        }
-                        SpaceSwipeAction.LANGUAGE -> {
-                            if (twoModes) {
-                                // One toggle per run of travel: piling on more
-                                // distance in the same direction never wraps
-                                // back to the starting language — the user
-                                // swiped away from it on purpose. Reversing
-                                // direction starts a new run and toggles back.
-                                val dir = when {
-                                    accumulated > langStepPx -> 1
-                                    accumulated < -langStepPx -> -1
-                                    else -> 0
-                                }
-                                if (dir != 0) {
-                                    if (dir != runDir) {
-                                        runDir = dir
-                                        runSwitched = false
-                                    }
-                                    if (!runSwitched) {
-                                        langIndex = 1 - langIndex
-                                        runSwitched = true
-                                        setLanguagePreview(enabledLayoutIds[langIndex])
-                                        onKeyPress()
-                                    }
-                                    // Drain the overshoot so a reversal only
-                                    // needs one step of travel to respond.
-                                    accumulated = 0f
-                                }
+                        // Picker is up: the finger now navigates it. The first
+                        // event only re-bases the origin — the finger may have
+                        // drifted (below slop) before the hold fired, and that
+                        // drift must not count as a step.
+                        if (pickerOpened) {
+                            if (!pickerPrimed) {
+                                pickerPrimed = true
+                                lastX = change.position.x
+                                lastY = change.position.y
+                                accumulated = 0f
+                                accumulatedY = 0f
                                 change.consume()
                                 continue
                             }
-                            // One step per event at most, and a same-way
-                            // step only once the last one has settled: a flick
-                            // lands on the next language, never two over, and
-                            // the list ends wrap only on a deliberate pull.
-                            val step = stepLanguageRing(
-                                index = langIndex,
-                                travel = accumulated,
-                                stepPx = langStepPx,
-                                wrapPx = langWrapPx,
-                                last = enabledLayoutIds.size - 1,
-                                lastDir = runDir,
-                                settled = change.uptimeMillis - lastStepAt >= LanguageStepDwellMs,
-                            )
-                            accumulated = step.remainder
-                            if (step.dir != 0) {
-                                langIndex = step.index
-                                runDir = step.dir
-                                lastStepAt = change.uptimeMillis
-                                setLanguagePreview(enabledLayoutIds[langIndex])
+                            // The carousel keeps the swipe's own axis (issue
+                            // #150): sideways travel walks it one chip per
+                            // language step. The list walks by its row height.
+                            val walk = if (pickerIsCarousel) {
+                                accumulated += change.position.x - lastX
+                                lastX = change.position.x
+                                walkPicker(pickerIndex, accumulated, langStepPx, enabledLayoutIds.size - 1)
+                                    .also { accumulated = it.remainder }
+                            } else {
+                                accumulatedY += change.position.y - lastY
+                                lastY = change.position.y
+                                walkPicker(pickerIndex, accumulatedY, pickerRowPx, enabledLayoutIds.size - 1)
+                                    .also { accumulatedY = it.remainder }
+                            }
+                            if (walk.index != pickerIndex) {
+                                pickerIndex = walk.index
+                                pickerMoved = true
+                                setPickerDragIndex(pickerIndex)
                                 onKeyPress()
                             }
                             change.consume()
+                            continue
                         }
-                        // NONE: the swipe is deliberately inert — swallow it
-                        // so release does not type a space.
-                        else -> change.consume()
+                        // The action this gesture would resolve to right now (short
+                        // vs long by hold time). Used to decide whether the 2-D pad
+                        // owns the vertical axis for this drag.
+                        val candidate = if (change.uptimeMillis - down.uptimeMillis < longPressDelayMs) {
+                            spaceShortSwipe
+                        } else {
+                            spaceLongSwipe
+                        }
+                        val cursorOwnsVertical = spaceCursor2d &&
+                            (action == SpaceSwipeAction.CURSOR ||
+                                (action == null && candidate == SpaceSwipeAction.CURSOR))
+                        // Swipe straight down to dismiss the keyboard — unless the
+                        // 2-D pad is claiming vertical for cursor movement.
+                        if (spaceSwipeDownHide && !cursorOwnsVertical) {
+                            val totalDy = change.position.y - down.position.y
+                            val totalDx = change.position.x - down.position.x
+                            if (totalDy > hideThresholdPx && totalDy > abs(totalDx)) {
+                                change.consume()
+                                hidden = true
+                                onHideKeyboard()
+                                break
+                            }
+                        }
+                        if (action == null) {
+                            val totalDx = change.position.x - down.position.x
+                            val totalDy = change.position.y - down.position.y
+                            // The pad may also resolve on a vertical drag, so a
+                            // straight up/down slide starts moving the cursor; the
+                            // language and horizontal-cursor paths still need
+                            // horizontal slop, which keeps their flick direction sane.
+                            val vertForCursor = spaceCursor2d &&
+                                candidate == SpaceSwipeAction.CURSOR && abs(totalDy) > slopPx
+                            if (abs(totalDx) > slopPx || vertForCursor) {
+                                // Short vs long is decided by hold time, not travel
+                                // distance — a fast flick covers more ground than a
+                                // careful drag, so distance can't tell them apart.
+                                // With the hold preview up the drag always
+                                // navigates the language ring: the user is looking
+                                // at a language chooser, so resolving the drag to
+                                // the long-swipe action read as "swiping does
+                                // nothing". Safe to override the candidate here
+                                // because the preview only comes up when the long
+                                // slot is free (see holdOpensSwitcher) — it can no
+                                // longer eat a cursor or numpad hold.
+                                action = if (holdPreviewShown) SpaceSwipeAction.LANGUAGE else candidate
+                                if (action == SpaceSwipeAction.CURSOR) {
+                                    onCaretDrag(true)
+                                    caretDragOpen = true
+                                }
+                                lastX = change.position.x
+                                lastY = change.position.y
+                                accumulated = 0f
+                                accumulatedY = 0f
+                                if (action == SpaceSwipeAction.NUMPAD) {
+                                    // Discrete action (A39): open the numeric panel once
+                                    // and go inert. The synthetic Numpad key routes
+                                    // through the same onKey dispatch the ?123 long-press
+                                    // uses. `hidden` latches so release types no space.
+                                    onKey(Key(label = " ", action = KeyAction.Numpad))
+                                    hidden = true
+                                    change.consume()
+                                    break
+                                }
+                                if (action == SpaceSwipeAction.LANGUAGE) {
+                                    // The movement that crossed the slop already
+                                    // counts: a quick flick switches one language.
+                                    // At a list end the flick parks on the boundary
+                                    // — wrapping needs a continued drag past the
+                                    // langWrapPx detent below. With two languages
+                                    // either direction simply toggles to the other.
+                                    val dir = if (totalDx > 0) 1 else -1
+                                    val flicked = if (twoModes) {
+                                        1 - langIndex
+                                    } else {
+                                        (langIndex + dir).coerceIn(0, enabledLayoutIds.size - 1)
+                                    }
+                                    if (flicked != langIndex) {
+                                        langIndex = flicked
+                                        onKeyPress()
+                                    }
+                                    runDir = dir
+                                    runSwitched = true
+                                    lastStepAt = change.uptimeMillis
+                                    setLanguagePreview(enabledLayoutIds[langIndex])
+                                }
+                                change.consume()
+                            }
+                            continue
+                        }
+                        // 2-D touchpad: while sliding the cursor, a vertical drag
+                        // steps the caret up and down as well. Runs alongside the
+                        // horizontal step below, so a diagonal drag moves both axes.
+                        if (spaceCursor2d && action == SpaceSwipeAction.CURSOR) {
+                            accumulatedY += change.position.y - lastY
+                            lastY = change.position.y
+                            var movedV = false
+                            while (accumulatedY > cursorStepPx) {
+                                onCursorMoveVertical(1); accumulatedY -= cursorStepPx; movedV = true
+                            }
+                            while (accumulatedY < -cursorStepPx) {
+                                onCursorMoveVertical(-1); accumulatedY += cursorStepPx; movedV = true
+                            }
+                            if (movedV) change.consume()
+                        }
+                        accumulated += change.position.x - lastX
+                        lastX = change.position.x
+                        when (action) {
+                            SpaceSwipeAction.CURSOR -> {
+                                var moved = false
+                                while (accumulated > cursorStepPx) {
+                                    onCursorMove(1); accumulated -= cursorStepPx; moved = true
+                                }
+                                while (accumulated < -cursorStepPx) {
+                                    onCursorMove(-1); accumulated += cursorStepPx; moved = true
+                                }
+                                if (moved) change.consume()
+                            }
+                            SpaceSwipeAction.LANGUAGE -> {
+                                if (twoModes) {
+                                    // One toggle per run of travel: piling on more
+                                    // distance in the same direction never wraps
+                                    // back to the starting language — the user
+                                    // swiped away from it on purpose. Reversing
+                                    // direction starts a new run and toggles back.
+                                    val dir = when {
+                                        accumulated > langStepPx -> 1
+                                        accumulated < -langStepPx -> -1
+                                        else -> 0
+                                    }
+                                    if (dir != 0) {
+                                        if (dir != runDir) {
+                                            runDir = dir
+                                            runSwitched = false
+                                        }
+                                        if (!runSwitched) {
+                                            langIndex = 1 - langIndex
+                                            runSwitched = true
+                                            setLanguagePreview(enabledLayoutIds[langIndex])
+                                            onKeyPress()
+                                        }
+                                        // Drain the overshoot so a reversal only
+                                        // needs one step of travel to respond.
+                                        accumulated = 0f
+                                    }
+                                    change.consume()
+                                    continue
+                                }
+                                // One step per event at most, and a same-way
+                                // step only once the last one has settled: a flick
+                                // lands on the next language, never two over, and
+                                // the list ends wrap only on a deliberate pull.
+                                val step = stepLanguageRing(
+                                    index = langIndex,
+                                    travel = accumulated,
+                                    stepPx = langStepPx,
+                                    wrapPx = langWrapPx,
+                                    last = enabledLayoutIds.size - 1,
+                                    lastDir = runDir,
+                                    settled = change.uptimeMillis - lastStepAt >= LanguageStepDwellMs,
+                                )
+                                accumulated = step.remainder
+                                if (step.dir != 0) {
+                                    langIndex = step.index
+                                    runDir = step.dir
+                                    lastStepAt = change.uptimeMillis
+                                    setLanguagePreview(enabledLayoutIds[langIndex])
+                                    onKeyPress()
+                                }
+                                change.consume()
+                            }
+                            // NONE: the swipe is deliberately inert — swallow it
+                            // so release does not type a space.
+                            else -> change.consume()
+                        }
                     }
-                }
-                holdJob?.cancel()
-                if (action == SpaceSwipeAction.CURSOR) onCaretDrag(false)
-                setPressed(false)
-                onKeyRelease()
-                setLanguagePreview(null)
-                when {
-                    // A swipe-down already dismissed the keyboard: the finger
-                    // lifting must not also type a space.
-                    hidden -> {}
-                    // The hold opened the alternates popup: the lift commits
-                    // whatever it has highlighted, and types no space. With
-                    // hold-to-select off there is nothing to commit and the
-                    // popup waits for the next tap, as it always did.
-                    alternatesOpened -> {
-                        alternates?.commit()
-                        if (hapticOnLongPressRelease) onKeyPress()
+                    holdJob?.cancel()
+                    if (caretDragOpen) {
+                        onCaretDrag(false)
+                        caretDragOpen = false
                     }
-                    // The picker is up. A hold-drag that walked it commits
-                    // the highlighted entry; a hold that never moved leaves
-                    // the popup up for tapping. Neither types a space.
-                    action == null && pickerOpened -> {
-                        if (pickerMoved) {
-                            val selected = enabledLayoutIds[pickerIndex]
-                            closeLanguagePicker()
+                    setPressed(false)
+                    onKeyRelease()
+                    setLanguagePreview(null)
+                    when {
+                        // A swipe-down already dismissed the keyboard: the finger
+                        // lifting must not also type a space.
+                        hidden -> {}
+                        // The hold opened the alternates popup: the lift commits
+                        // whatever it has highlighted, and types no space. With
+                        // hold-to-select off there is nothing to commit and the
+                        // popup waits for the next tap, as it always did.
+                        alternatesOpened -> {
+                            alternates?.commit()
+                            if (hapticOnLongPressRelease) onKeyPress()
+                        }
+                        // The picker is up. A hold-drag that walked it commits
+                        // the highlighted entry; a hold that never moved leaves
+                        // the popup up for tapping. Neither types a space.
+                        action == null && pickerOpened -> {
+                            if (pickerMoved) {
+                                val selected = enabledLayoutIds[pickerIndex]
+                                closeLanguagePicker()
+                                if (selected != currentLayoutId) onLayoutSelect(selected)
+                            }
+                        }
+                        // Releasing with the hold preview up commits whatever it
+                        // showed (usually the current language — a no-op) and
+                        // must not type a space.
+                        action == null && holdPreviewShown -> {
+                            val selected = enabledLayoutIds[langIndex]
                             if (selected != currentLayoutId) onLayoutSelect(selected)
                         }
-                    }
-                    // Releasing with the hold preview up commits whatever it
-                    // showed (usually the current language — a no-op) and
-                    // must not type a space.
-                    action == null && holdPreviewShown -> {
-                        val selected = enabledLayoutIds[langIndex]
-                        if (selected != currentLayoutId) onLayoutSelect(selected)
-                    }
-                    action == null -> onKey(key)
-                    action == SpaceSwipeAction.LANGUAGE -> {
-                        val selected = enabledLayoutIds[langIndex]
-                        if (selected != currentLayoutId) {
-                            echoLanguageSwitch(selected)
-                            onLayoutSelect(selected)
+                        action == null -> onKey(key)
+                        action == SpaceSwipeAction.LANGUAGE -> {
+                            val selected = enabledLayoutIds[langIndex]
+                            if (selected != currentLayoutId) {
+                                echoLanguageSwitch(selected)
+                                onLayoutSelect(selected)
+                            }
                         }
+                        else -> {}
                     }
-                    else -> {}
                 }
+            } finally {
+                if (caretDragOpen) onCaretDrag(false)
             }
         }
     } else if (

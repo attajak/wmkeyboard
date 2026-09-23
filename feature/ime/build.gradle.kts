@@ -127,6 +127,8 @@ dependencies {
     "fullImplementation"(libs.mlkit.document.scanner)
 
     testImplementation(libs.junit)
+    // A virtual clock for the coroutine plumbing around the input connection.
+    testImplementation(libs.kotlinx.coroutines.test)
     // An Android runtime on the JVM, so a test can drive WMKeyboardService
     // itself rather than only the pure helpers around it.
     testImplementation(libs.robolectric)
