@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- ================================================================== -->
+    <!-- Gboard theme files and the Rboard collection. Gboard is Google's    -->
+    <!-- keyboard app. Rboard is the name of a community that shares themes  -->
+    <!-- for it. Do not translate either name.                               -->
+    <!-- ================================================================== -->
+
+    <!-- Button in the theme gallery. Keep it short: it sits beside Import,
+         FlorisBoard and HeliBoard. -->
+    <string name="theme_import_gboard_action">Gboard</string>
+
+    <string name="import_gboard_title">Theme from Gboard</string>
+    <string name="import_gboard_chooser_body">Gboard shares a theme as a ZIP file, and the Rboard community shares hundreds of them. Open a ZIP file that you have, or look through the Rboard collection.</string>
+    <string name="import_gboard_file_action">Open a file</string>
+    <string name="import_gboard_browse_action">Browse Rboard</string>
+
+    <!-- %1$d is the number of style rules the app used. %2$d is the number of
+         style rules in the theme. Not a plural: the word "rules" agrees with
+         the second number, which is always more than one when this is shown. -->
+    <string name="import_gboard_body" tools:ignore="PluralsCandidate">The app can use %1$d of the %2$d style rules in this theme. Gboard themes set parts of a keyboard that this app draws in a different way. The app saves the theme but does not turn it on, so that you can look at it first.</string>
+    <string name="import_gboard_looks_body">Gboard draws this theme with key borders and without them. Both come across, as two looks of one theme.</string>
+    <!-- %1$s is who made the theme pack. -->
+    <string name="import_gboard_credit">Made by <xliff:g id="author" example="Someone">%1$s</xliff:g>. The theme stays the work of the person who made it.</string>
+
+    <!-- The two looks of one theme. %1$s is the theme's name. -->
+    <string name="import_gboard_look_borders"><xliff:g id="theme_name" example="Dusk">%1$s</xliff:g>, key borders</string>
+    <string name="import_gboard_look_flat"><xliff:g id="theme_name" example="Dusk">%1$s</xliff:g>, no key borders</string>
+
+    <!-- %1$s is the name of the theme. -->
+    <string name="import_gboard_done">The app saved <xliff:g id="theme_name" example="Dusk">%1$s</xliff:g>. Open Themes to look at it.</string>
+    <!-- %1$s is the theme's name, %2$d how many looks it has (always 2). -->
+    <string name="import_gboard_done_family" tools:ignore="PluralsCandidate">The app saved <xliff:g id="theme_name" example="Dusk">%1$s</xliff:g> with <xliff:g id="count" example="2">%2$d</xliff:g> looks. Open Themes to look at it.</string>
+    <!-- %1$d is the number of themes saved from a pack. -->
+    <plurals name="import_gboard_done_pack">
+        <item quantity="one">The app saved %1$d theme from this pack. Open Themes to look at it.</item>
+        <item quantity="other">The app saved %1$d themes from this pack. Open Themes to look at them.</item>
+    </plurals>
+
+    <string name="import_gboard_unreadable_body">The app cannot read this file as a Gboard theme. It may be damaged, or it may be a different kind of ZIP file.</string>
+    <string name="import_gboard_compiled_body">This is a compiled Gboard theme. Gboard can read it, but its format is not published, so this app cannot. Look for the same theme as a ZIP file with .css files in it.</string>
+
+    <!-- A ZIP file that holds several themes. -->
+    <string name="import_gboard_pack_fallback_title">Theme pack</string>
+    <!-- %1$d is the number of themes in the pack. -->
+    <plurals name="import_gboard_pack_body">
+        <item quantity="one">This pack holds %1$d theme. Press it to look at it.</item>
+        <item quantity="other">This pack holds %1$d themes. Press one to look at it, or add all of them.</item>
+    </plurals>
+    <!-- Shown when a pack is opened from a file manager, where there is no
+         list to pick from. %1$d is the number of themes. -->
+    <plurals name="import_gboard_pack_file_body">
+        <item quantity="one">This Rboard pack holds %1$d theme. Import adds it to your themes and does not turn it on.</item>
+        <item quantity="other">This Rboard pack holds %1$d themes. Import adds all of them to your themes and does not turn any of them on.</item>
+    </plurals>
+    <!-- %1$d is how many themes in the pack could not be read. -->
+    <plurals name="import_gboard_pack_skipped">
+        <item quantity="one">The app cannot read %1$d theme in this pack, because it is compiled or damaged.</item>
+        <item quantity="other">The app cannot read %1$d themes in this pack, because they are compiled or damaged.</item>
+    </plurals>
+    <string name="import_gboard_pack_add_all">Add all</string>
+
+    <!-- Lines in the "what the app changes" list of a Gboard import. -->
+    <string name="import_gboard_dropped_stylesheet">Some style sheets in the file are compiled or missing. The app used the ones that it can read.</string>
+    <string name="import_gboard_dropped_icons">The file has its own pictures for keys such as shift, delete and enter. This app draws its own icons on those keys.</string>
+    <string name="import_gboard_dropped_spacing">The file sets the space inside each key. This app uses one gap between keys for the whole keyboard.</string>
+    <string name="import_gboard_dropped_font">The file asks for a font by name. Gboard themes do not contain the font, so install it yourself and pick it in the theme editor.</string>
+    <string name="import_gboard_dropped_shadow_color">The file picks a colour for the shadows under the keys. The shadows come across, but this app draws them in its own colour.</string>
+    <string name="import_gboard_dropped_corners">The file rounds some corners one at a time, such as the top of the keyboard. This app uses one corner size for each key.</string>
+    <string name="import_gboard_dropped_images">The file puts pictures on parts of the keyboard other than the background and the keys. This app does not use those pictures.</string>
+
+    <!-- ==== The Rboard collection screen. ==== -->
+
+    <string name="rboard_screen_title">Rboard themes</string>
+    <string name="rboard_caption">Rboard is a community collection of Gboard themes. The app gets the list from the Rboard repository on GitHub when you open this screen, and gets a pack only when you press it. The themes stay the work of the people who made them.</string>
+    <string name="rboard_list_loading">Getting the list of theme packs…</string>
+    <string name="rboard_list_error">The app cannot read the Rboard list. The repository may have changed.</string>
+    <string name="rboard_packs_section_title">Theme packs</string>
+    <!-- %1$d is the number of themes in a pack. -->
+    <plurals name="rboard_pack_theme_count">
+        <item quantity="one">%1$d theme</item>
+        <item quantity="other">%1$d themes</item>
+    </plurals>
+    <!-- Subtitle of one pack. %1$s is the number of themes, %2$s who made the pack. -->
+    <string name="rboard_pack_subtitle"><xliff:g id="count" example="10 themes">%1$s</xliff:g>, by <xliff:g id="author" example="Someone">%2$s</xliff:g></string>
+    <!-- %1$s is the name of the pack. -->
+    <string name="rboard_pack_downloading">Getting <xliff:g id="pack" example="Gradients">%1$s</xliff:g>…</string>
+    <string name="rboard_pack_mismatch">The pack that arrived is not the one the list describes, so the app did not open it.</string>
+    <string name="rboard_pack_empty">The app cannot read a theme in this pack.</string>
+    <string name="rboard_back_to_list">All packs</string>
+</resources>

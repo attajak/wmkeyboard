@@ -85,6 +85,8 @@ import com.wasimaster.wmkeyboard.core.fonts.FontImportResult
 import com.wasimaster.wmkeyboard.core.fonts.FontStore
 import com.wasimaster.wmkeyboard.core.theme.ConvertedFont
 import com.wasimaster.wmkeyboard.core.theme.FlexUnsupported
+import com.wasimaster.wmkeyboard.core.theme.GboardResult
+import com.wasimaster.wmkeyboard.core.theme.GboardTheme
 import com.wasimaster.wmkeyboard.core.theme.ThemeCodec
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.theme.groupAsFamily
@@ -223,6 +225,13 @@ object WMFileTypes {
          * what did not. A converted theme must never be presented as one of ours.
          */
         data class FlorisTheme(val result: FlexResult) : Opened
+
+        /**
+         * A Gboard theme ZIP or an Rboard pack of them, already converted.
+         * Its own case for the reason [FlorisTheme] is: the dialog has to say
+         * that it came from another keyboard and how much of it survived.
+         */
+        data class GboardThemeFile(val result: GboardResult) : Opened
 
         /**
          * A Keyman keyboard package: the grid, and the rules that decide what
@@ -444,7 +453,27 @@ object WMFileTypes {
             }.getOrElse { FlexResult.Unreadable }
             return Opened.FlorisTheme(result)
         }
+        if (isGboardManifest(manifest)) {
+            val result = runCatching {
+                context.contentResolver.requireInputStream(uri).use {
+                    GboardTheme.read(it, displayName(context, uri).substringBeforeLast('.'))
+                }
+            }.getOrElse { GboardResult.Unreadable }
+            return Opened.GboardThemeFile(result)
+        }
         return archiveKindFor(manifest)
+    }
+
+    /**
+     * Whether a manifest is a Gboard theme's `metadata.json` or an Rboard
+     * pack's `pack.meta`. Neither carries a format tag: the first is told by
+     * the stylesheet list every Gboard theme names, the second by its
+     * `name=` / `author=` lines, which no JSON manifest can start a line with.
+     */
+    internal fun isGboardManifest(manifest: String): Boolean {
+        if (manifest.contains("\"style_sheets\"")) return true
+        if (manifest.trimStart().startsWith("{")) return false
+        return manifest.lineSequence().any { it.startsWith("name=") || it.startsWith("author=") }
     }
 
     /**
@@ -503,6 +532,8 @@ object WMFileTypes {
             PluginFile.MANIFEST,
             FlexTheme.MANIFEST,
             KeymanPackage.MANIFEST,
+            GboardTheme.METADATA,
+            GboardTheme.PACK_META,
         )
 
     /**
@@ -916,6 +947,8 @@ private fun rememberProposal(
         }
 
         is WMFileTypes.Opened.FlorisTheme -> florisProposal(state.result, repository, context)
+
+        is WMFileTypes.Opened.GboardThemeFile -> gboardProposal(state.result, repository, context)
 
         is WMFileTypes.Opened.KeymanPackageFile ->
             keymanProposal(state.contents, repository, context)
@@ -1400,6 +1433,63 @@ private fun florisProposal(
 }
 
 /**
+ * The confirmation for a Gboard theme ZIP or an Rboard pack.
+ *
+ * Worded as a conversion, like the FlorisBoard one: the rule count leads, the
+ * named losses follow, and nothing is switched on. A pack has no list to pick
+ * from here — this dialog is one question — so it imports every theme in it,
+ * each as its own entry, and says so before the button is pressed.
+ */
+private fun gboardProposal(
+    result: GboardResult,
+    repository: SettingsRepository,
+    context: android.content.Context,
+): ImportProposal {
+    if (result !is GboardResult.Converted) {
+        return ImportProposal(
+            titleRes = R.string.import_unrecognized_title,
+            body = gboardFailureMessage(context, result),
+            apply = null,
+        )
+    }
+    val single = result.themes.singleOrNull()?.takeIf { !result.isPack }
+    if (single != null) {
+        return ImportProposal(
+            titleRes = R.string.import_gboard_title,
+            body = gboardThemeBody(context, single, author = ""),
+            repairs = single.dropped.map { gboardDroppedLine(context, it) },
+            apply = {
+                saveGboardTheme(context, repository, single)
+                gboardSavedMessage(context, single)
+            },
+        )
+    }
+    val count = result.themes.size
+    return ImportProposal(
+        titleRes = R.string.import_name_title,
+        titleArg = result.packName.ifBlank { context.getString(R.string.import_gboard_pack_fallback_title) },
+        body = buildString {
+            append(context.resources.getQuantityString(R.plurals.import_gboard_pack_file_body, count, count))
+            if (result.skipped > 0) {
+                append("\n\n")
+                append(
+                    context.resources.getQuantityString(
+                        R.plurals.import_gboard_pack_skipped,
+                        result.skipped,
+                        result.skipped,
+                    ),
+                )
+            }
+            if (result.packAuthor.isNotBlank()) {
+                append("\n\n").append(context.getString(R.string.import_gboard_credit, result.packAuthor))
+            }
+        },
+        repairs = result.themes.flatMap { it.dropped }.distinct().map { gboardDroppedLine(context, it) },
+        apply = { saveGboardPack(context, repository, result.themes) },
+    )
+}
+
+/**
  * A converted theme as one this app can store: image bytes base64'd into the
  * fields the theme format carries them in, then written out to app-private
  * storage by the same call a native theme import uses.
@@ -1418,7 +1508,9 @@ internal fun ConvertedTheme.stored(
     val spec = theme.copy(
         id = id,
         backgroundImageBase64 = images[FlexTheme.IMAGE_BACKGROUND]?.let(::encode),
-        assets = images.filterKeys { it != FlexTheme.IMAGE_BACKGROUND }
+        // Only a Gboard theme carries a separate landscape photo.
+        backgroundImageLandscapeBase64 = images[GboardTheme.IMAGE_BACKGROUND_LANDSCAPE]?.let(::encode),
+        assets = images.filterKeys { it != FlexTheme.IMAGE_BACKGROUND && it != GboardTheme.IMAGE_BACKGROUND_LANDSCAPE }
             .mapValues { (_, bytes) -> encode(bytes) },
     ).withExtractedImages(dir)
     val installed = fontStore?.let { installConvertedFont(font, it) } ?: return spec

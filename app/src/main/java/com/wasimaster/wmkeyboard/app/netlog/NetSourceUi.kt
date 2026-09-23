@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Keyboard
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Photo
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Save
@@ -131,6 +132,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.ADDONS -> R.string.netlog_source_addons to R.string.netlog_sent_addons
     NetSource.KEYMAN -> R.string.netlog_source_keyman to R.string.netlog_sent_keyman
     NetSource.SIGNAL_STICKERS -> R.string.netlog_source_signal_stickers to R.string.netlog_sent_signal_stickers
+    NetSource.RBOARD_THEMES -> R.string.netlog_source_rboard_themes to R.string.netlog_sent_rboard_themes
     NetSource.LINK_IMPORT -> R.string.netlog_source_link_import to R.string.netlog_sent_link_import
     NetSource.BACKUP -> R.string.netlog_source_backup to R.string.netlog_sent_backup
     NetSource.UPDATES -> R.string.netlog_source_updates to R.string.netlog_sent_updates
@@ -148,6 +150,7 @@ private fun ownerRoute(source: NetSource): String? = when (source) {
     NetSource.DOWNLOAD_FONT -> "fonts"
     NetSource.ADDONS, NetSource.LINK_IMPORT -> "addons"
     NetSource.KEYMAN -> "keymaps"
+    NetSource.RBOARD_THEMES -> "themes"
     NetSource.BACKUP -> "backup"
     NetSource.UPDATES -> "about"
     else -> null
@@ -164,6 +167,7 @@ private fun fallbackIcon(source: NetSource): ImageVector = when (source) {
     NetSource.ADDONS -> Icons.Outlined.Extension
     NetSource.LINK_IMPORT, NetSource.LINK_PREVIEW -> Icons.Outlined.Link
     NetSource.KEYMAN -> Icons.Outlined.Keyboard
+    NetSource.RBOARD_THEMES -> Icons.Outlined.Palette
     NetSource.BACKUP -> Icons.Outlined.Save
     NetSource.SYNONYMS -> Icons.Outlined.SwapHoriz
     NetSource.UPDATES -> Icons.Outlined.SystemUpdate

@@ -3170,7 +3170,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Internal binary formats — No file association and no export path
     - .wmdict — WMDC-magic packed-trie dictionary (codec version 3), memory-mapped for zero-parse loads
     - .wmng — Memory-mapped corpus n-gram pack (version 1)
-- **Importing from other keyboards** `RARE` — FlorisBoard and HeliBoard layouts and themes, written from the published formats — no upstream code (MIT app vs Apache-2.0 / GPL-3.0 sources)
+- **Importing from other keyboards** `RARE` — FlorisBoard and HeliBoard layouts and themes, Gboard and Rboard themes, written from the published formats — no upstream code (MIT app vs Apache-2.0 / GPL-3.0 sources)
   - Foreign layouts `RARE` — Two formats, one parser: FlorisBoard/HeliBoard KeyData JSON and HeliBoard's plain-text layout
     - Format sniff skips comments — First non-blank, non-// character decides JSON vs text, so a commented JSON grid isn't read one key per line
     - Lenient JSON — Comments and trailing commas allowed (HeliBoard's own reader allows both); rows accepted bare or under arrangement/rows/keys/layout
@@ -3195,13 +3195,25 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Saved, not activated — A converted theme goes into the gallery to be looked at first; licence and maintainers from the manifest are shown
     - Zip caps — 256 entries / 16 MB, 256 KB manifest, 4 MB per image; entry names only ever map keys
   - .flex file association `RARE` — The app claims FlorisBoard's extension so a file already on the phone opens; with both installed Android asks which
+  - Gboard theme ZIPs and Rboard packs `RARE` — metadata.json + Gboard's CSS dialect (@def variables, RRGGBBAA colours) converted to ThemeSpec; a pack (ZIP of theme ZIPs + previews) lists its themes, pick one or Add all
+    - Key borders become two looks — Gboard's BORDER flavour sheet is a second look of one theme family, the theme's preferred one first; a no-op flavour collapses to one look
+    - Fallback base sheet — Gboard's standard variables (color_state_key, color_label, color_header…) restated as lowest-priority rules, so variable-only themes convert
+    - What maps — Board (key area over base area), photo + landscape photo, keys, pressed, function, enter (incl. the borderless round badge), space as a per-key style, outlines, corner size/pill/no face, lift, text, hint, strip, popups, glide trail, accent, light/dark
+    - 8 named losses — compiled .binarypb sheets, key icon pictures, per-key padding, fonts, shadow colour, per-corner radius, pictures on other parts, low-contrast fallback; the rest is the "N of M style rules" count, computed from what the mapper read
+    - Tolerant reader — Stray semicolons, 9-digit hex typos, unclosed comments, forward-referenced variables, junk after metadata.json; zip-slip names dropped, 48 MB / 4 MB per image / 128 themes caps
+    - Compiled themes refused by name — A theme that is .binarypb through and through (Gboard's stock ones) says so instead of failing as junk
+    - Opens from a file manager — Recognised inside any ZIP by a root metadata.json or pack.meta; a pack opened that way imports every theme
+  - Rboard collection browser `RARE` — Themes › Gboard › Browse Rboard lists the packs in GboardThemes/PackRepoBeta's list.json; nothing fetched until that screen opens
+    - SHA-256 checked — Each pack is verified against the list's hash before it is read, then cached; the list is capped at 2 MB, a pack at 32 MB
+    - Data saver and network log — Asks once before the first request under Ask each time; every request is logged as "Rboard themes"
+    - Clear error state — A list that is not the expected shape shows an error and Retry, never a half list
 - **Opening files from outside the app** `uncommon` — 10 recognised extensions routed to a dedicated one-dialog activity
   - File associations
     - Name matching, not MIME — Every format is JSON or ZIP, so a MIME filter would claim every .json and archive on the device
     - Compound extensions — .wmtheme.json rather than .wmtheme, so plain .json stays unclaimed
     - Four patterns per extension — Android pathPattern can't backtrack, so my.theme.wmtheme.json needs its own variant; content:// only, via host="*"
   - Content-based identification — The extension gets the file in; reading it decides what to do
-    - ZIP branch — Scans up to 400 entries for pack.json / plugin.json / extension.json, capped at 64 KB, then matches the format tag
+    - ZIP branch — Scans up to 400 entries for pack.json / plugin.json / extension.json / Gboard's metadata.json / Rboard's pack.meta, capped at 64 KB, then matches the format tag
     - Stickers vs icons vs plugins — Sticker and icon packs share pack.json and can only be told apart by the tag inside
     - Text branch order — Config backup, legacy settings, layout, snippets — first matching format tag wins; theme by file name last, and nothing untagged may be added after it
     - Encrypted header detected first — Before the text read, so a large .wmconfig.enc isn't decoded as UTF-8

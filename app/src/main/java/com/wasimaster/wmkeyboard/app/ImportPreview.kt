@@ -37,6 +37,7 @@ import com.wasimaster.wmkeyboard.core.addons.AddonPreviewReader
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.snippets.Snippet
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
+import com.wasimaster.wmkeyboard.core.theme.GboardResult
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.theme.withExtractedImages
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
@@ -77,6 +78,12 @@ internal fun ImportFilePreview(state: WMFileTypes.Opened, uri: Uri) {
             // says how many came across.
             converted?.themes?.firstOrNull()?.let { FlorisFilePreview(it) }
         }
+
+        // The first look of the first theme, drawn by the same miniature: a
+        // pack's dialog already says how many themes it holds.
+        is WMFileTypes.Opened.GboardThemeFile ->
+            (state.result as? GboardResult.Converted)?.themes?.firstOrNull()
+                ?.looks?.firstOrNull()?.let { FlorisFilePreview(it.converted) }
 
         is WMFileTypes.Opened.Layout -> LayoutFilePreview(state.layout.layout)
 

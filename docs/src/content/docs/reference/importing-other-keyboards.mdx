@@ -1,6 +1,6 @@
 ---
 title: "Importing from other keyboards"
-description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType and FUTO: what converts, what doesn't, and why."
+description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType, FUTO and Gboard: what converts, what doesn't, and why."
 sidebar:
   order: 6
 ---
@@ -21,6 +21,8 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
 | `.flex` language pack | FlorisBoard | A Cangjie or stroke table for Chinese |
 | Colour theme text | HeliBoard, LeanType | One theme, from a file or from the clipboard |
+| `.zip` theme | Gboard, the Rboard community | One theme, with a look each for key borders on and off |
+| `.zip` or `.pack` theme pack | Rboard | Any or all of the themes inside, each its own theme |
 | `.keyman-touch-layout` | Keyman | A custom layout, without the keyboard's rules |
 | `.kmp` package | Keyman | A custom layout **and** its typing rules |
 | `.combined` word list | HeliBoard, LeanType, FUTO, any AOSP keyboard | A custom dictionary |
@@ -246,17 +248,58 @@ A theme is saved rather than switched on, the same as a FlorisBoard one, so you 
 
 Both style formats are read. FlorisBoard renamed several parts in 0.5 (the board went from `keyboard` to `window`, the popup from `key-popup` to `key-popup-box`), but the colours and the way they are written did not change, so a 0.4 theme converts as well as a 0.5 one. Most themes still in circulation are the older format.
 
+### Gboard themes and Rboard packs
+
+<SettingsPath path="Appearance / Keyboard themes / Gboard" />
+
+A Gboard theme is a `.zip` holding a `metadata.json`, one or more `.css` style sheets in Gboard's own dialect, and the pictures they name. It is what Gboard exports and imports, and the format the Rboard community has shared several hundred themes in. An Rboard *pack* is a ZIP of those ZIPs, with a picture of each theme beside it.
+
+The **Gboard** button offers two ways in:
+
+- **Open a file** reads a theme or a pack you already have. A pack lists its themes first: press one to see it, or **Add all** to save every theme in it as its own entry.
+- **Browse Rboard** opens a list of the packs in the Rboard repository (`GboardThemes/PackRepoBeta` on GitHub). The app asks GitHub for the list only when you open that screen, and for a pack only when you press it. Each pack is checked against the SHA-256 the list gives for it before it is opened, and kept in the cache so a second look costs nothing. While [Data saver](/privacy/data-saver/) is on, the screen asks before its first request, and the answer covers the packs you open from it. If the Rboard list ever changes shape, the screen says it cannot read it rather than showing a half list; a theme ZIP from anywhere still imports through **Open a file**.
+
+Either way, each theme ends on a dialog with a preview of it, a count (*"The app can use 29 of the 139 style rules in this theme"*), and a line for each loss below. Import saves it; nothing is switched on.
+
+**Key borders become two looks.** Gboard draws a theme with or without key borders by a setting of its own, and a theme ships a separate style sheet for the bordered version. Both come across, as two looks of one theme, the one the theme prefers first. A theme whose border sheet changes nothing this app draws comes across with one look.
+
+What lands:
+
+- The board colour, the bar above the keys, and the navigation bar band.
+- The keys, the pressed key, the function keys and the enter key, including the round badge Gboard draws behind the enter icon in a borderless theme. The space bar's own colour and label become a per-key style.
+- Key outlines and their width, the corner size (a large one becomes a pill, and an empty shape means no key face at all), and the lift under the keys.
+- Key text, the corner hint, the suggestion text and its dividers, the toolbar icons, the popup and its selected highlight, the glide trail and the accent.
+- The background photo, and a separate landscape photo when the theme has one. A picture on the keys becomes a key texture.
+- Light or dark, from the theme's own flag.
+
+Gboard styles far more than this app has, so most of a theme's rules name things with nowhere to go here: GIF and sticker search, the translate bar, Gboard's access points. Those are counted, not listed. What a person would notice is named on the dialog instead:
+
+- **Compiled or missing style sheets.** Gboard can compile a sheet to a binary form (`.binarypb`) whose format is not published. The readable sheets are used; a theme that is compiled through and through is refused with a message that says so. Gboard's own stock themes are all of this kind.
+- **Key icons.** Many themes replace the shift, delete and enter pictures. This app draws its own icons.
+- **The space inside each key.** Gboard pads each key separately; here one gap is set for the whole keyboard.
+- **Fonts.** A Gboard theme names a font and never carries the file.
+- **Shadow colours.** The lift comes across, the colour of the shadow does not.
+- **Corners rounded one at a time**, usually the top of the keyboard.
+- **Pictures on other parts** of the keyboard, such as the bar's tabs.
+- **Unreadable text.** A key, function-key or popup text colour too close to what sits behind it is replaced with a readable one, and the dialog says so. The enter icon and the space bar label are exempt from the line: most community themes draw the first as a picture and hide the second on purpose, so a colour there is often the key's own and was never meant to be read.
+
+A sheet that breaks the rules is read as far as it goes. A stray `;`, a nine-digit colour, a comment that never closes, a variable used before it is defined and a `metadata.json` with junk after it all happen in real themes, and none of them stops the import. Eight hex digits are read as Gboard writes them, alpha last (`#FFFFFF33` is a faint white).
+
 ## Details & edge cases
 
 - **Almost nothing is decided by the file extension.** A file is read and then judged by the format tag inside it. The one exception is this app's own theme file, which carries no tag, so a `.wmtheme.json` name is the only evidence a file was meant to be a theme. Tagged formats are checked first, so a layout from another keyboard renamed `.wmtheme.json` is still refused rather than imported as an empty theme.
 - **Opening a `.flex` from a file manager** works because the app registers that extension. If FlorisBoard is installed too, Android asks which app should open it.
+- **A Gboard `.zip` opens from a file manager by what is inside it.** `.zip` is far too common to claim by name, but the app is offered for ZIP files by type, and one with a Gboard `metadata.json` or an Rboard `pack.meta` at its root is recognised. A pack opened that way has no list to pick from, so Import adds every theme in it.
+- **Size caps.** A theme or pack is read up to 48 MB inflated, 4 MB per picture, 128 themes per pack; a downloaded Rboard pack is refused past 32 MB. Entry names are only ever looked up, never used as paths.
 - **Foreign layout files are not auto-detected from a file manager.** They carry no marker that identifies them, so they go through <SettingsPath path="Layout & size / Key layouts / Import from another keyboard" />, where you have already said what the file is. This app's own `.wmlayout.json` files do open from a file manager, because they carry a format tag.
 - **A foreign layout over 4 MB is refused.** The whole file is decoded as one string, so there is a cap, and the cap is 4 MB. Past it you get the same "The app cannot read that file as a layout" message a genuinely unreadable file gets, with nothing to say the size was the problem. No real grid is anywhere near it, so in practice this only catches a file that is not a layout at all.
 - **Add-on repositories stay native.** Repository payloads are always WM Keyboard's own formats; conversion applies to files you pick yourself.
-- **Nothing is sent anywhere.** Conversion runs on the phone. There is no upload and no server.
+- **Nothing is sent anywhere.** Conversion runs on the phone. There is no upload and no server. **Browse Rboard** is the exception to "no server": it downloads from GitHub, and sends nothing about you.
 
 ## Licences
 
 WM Keyboard reads these formats from their published descriptions. No code from either project is used: FlorisBoard is Apache-2.0 and HeliBoard is GPL-3.0, while WM Keyboard is MIT.
+
+Gboard's theme format has no published description, so its reader was written from the themes in the Rboard repository rather than from any Gboard or Rboard code. Rboard themes state no licence. A theme you import stays the work of whoever made it, and a pack's author is named on the dialog; ask before you publish one.
 
 A `.flex` records its author and its licence, and the confirm dialog reads both out when you open one from a file manager. A theme here has no field to hold them in, so that dialog is where they stop. Write them down while they are in front of you. If you publish a converted theme in an [add-on repository](/development/addon-repos/repo-format/), keep them with it.

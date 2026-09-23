@@ -29,7 +29,7 @@ The exported file is the whole theme, written as plain JSON with no wrapper or f
 
 ## Importing a theme
 
-There are three ways a theme gets imported, and they don't all behave the same way: two apply the theme immediately, one doesn't. Two more buttons on the same row, **FlorisBoard** and **HeliBoard**, read someone else's format rather than this one. They're covered separately below.
+There are three ways a theme gets imported, and they don't all behave the same way: two apply the theme immediately, one doesn't. Three more buttons on the same row, **FlorisBoard**, **HeliBoard** and **Gboard**, read someone else's format rather than this one. They're covered separately below.
 
 ### From the Import button
 
@@ -64,6 +64,10 @@ The gallery's **FlorisBoard** button reads FlorisBoard's own `.flex` theme packa
 ### From a HeliBoard or LeanType theme
 
 The **HeliBoard** button reads the colour themes those two keyboards share. They have no theme file at all: a theme is a line of JSON copied out of the menu at the top of their colour screen, which is why their themes circulate as forum posts. So the button asks where yours is, **Paste** or **Open a file**, and reads either. Both of that keyboard's export shapes work, the ten named colours and the forty-odd internal roles of its *all colours* mode. Like a FlorisBoard import, the theme is saved without being switched on, and the result message says how many of its colours landed. See [Importing other keyboards](/reference/importing-other-keyboards/).
+
+### From a Gboard theme or the Rboard collection
+
+The **Gboard** button asks where the theme is. **Open a file** reads a Gboard theme `.zip`: the file Gboard itself exports, and the format the Rboard community shares hundreds of themes in. A ZIP that holds several themes (an Rboard *pack*) lists them so you can pick one, or **Add all**. **Browse Rboard** opens a list of the packs in the Rboard repository on GitHub; the list is fetched only when you open that screen, and a pack only when you press it. Every theme ends on a dialog with a preview, the count of style rules that came across, and a line for each thing that could not. Like the other two conversions, a theme is saved without being switched on. Gboard draws a theme with or without key borders, and a theme that ships both becomes one theme with two looks. You can also open a Gboard theme or an Rboard pack straight from a file manager. See [Importing other keyboards](/reference/importing-other-keyboards/#gboard-themes-and-rboard-packs).
 
 ## Publishing a theme
 

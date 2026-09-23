@@ -53,6 +53,10 @@ internal object SettingsRoutes {
         // or a row they pressed, where the link importer's confirm or the
         // pack list stands in front of it.
         "signal_pack/{packId}/{packKey}" to "opens on a pack the user picked or pasted; see AddonDeepLink",
+        // Asks GitHub for the Rboard list as it opens. A request to a third
+        // party belongs behind a button the user pressed on the Themes screen,
+        // not behind a link another app can fire.
+        "rboard_themes" to "fetches the Rboard list as it opens; reached from the Themes screen's Gboard button",
     )
 
     /**

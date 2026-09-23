@@ -214,6 +214,8 @@ import kotlin.math.roundToInt
 import androidx.compose.material.icons.outlined.SwapHoriz
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.FlexTheme
+import com.wasimaster.wmkeyboard.core.theme.GboardResult
+import com.wasimaster.wmkeyboard.core.theme.GboardTheme
 import com.wasimaster.wmkeyboard.core.theme.HeliResult
 import com.wasimaster.wmkeyboard.core.theme.HeliTheme
 import androidx.compose.material.icons.outlined.Crop169
@@ -1075,6 +1077,28 @@ fun ThemesScreen(
             applyHeliTheme(text)
         }
     }
+    // Gboard themes: a ZIP picked here, or the Rboard collection on its own
+    // screen. What was read waits in gboardRead for the dialogs to take it.
+    var gboardChooser by remember { mutableStateOf(false) }
+    var gboardRead by remember { mutableStateOf<GboardResult.Converted?>(null) }
+    val gboardLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    val name = WMFileTypes.displayName(context, uri).substringBeforeLast('.')
+                    context.contentResolver.requireInputStream(uri).use { GboardTheme.read(it, name) }
+                }.getOrElse { GboardResult.Unreadable }
+            }
+            if (result is GboardResult.Converted) {
+                gboardRead = result
+            } else {
+                message = gboardFailureMessage(context, result)
+            }
+        }
+    }
     fun export(theme: ThemeSpec) {
         pendingExport = theme
         exportLauncher.launch("${theme.name.ifBlank { "theme" }}.${ThemeCodec.FILE_EXTENSION}")
@@ -1327,6 +1351,38 @@ fun ThemesScreen(
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.theme_import_heli_action))
         }
+        OutlinedButton(onClick = { gboardChooser = true }) {
+            Icon(Icons.Outlined.SwapHoriz, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+            Text(stringResource(R.string.theme_import_gboard_action))
+        }
+    }
+    if (gboardChooser) {
+        AlertDialog(
+            onDismissRequest = { gboardChooser = false },
+            title = { Text(stringResource(R.string.import_gboard_title)) },
+            text = { Text(stringResource(R.string.import_gboard_chooser_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    gboardChooser = false
+                    onNavigate(RBOARD_THEMES_ROUTE)
+                }) { Text(stringResource(R.string.import_gboard_browse_action)) }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    gboardChooser = false
+                    gboardLauncher.launch(GboardTheme.IMPORT_MIME_TYPES)
+                }) { Text(stringResource(R.string.import_gboard_file_action)) }
+            },
+        )
+    }
+    gboardRead?.let { read ->
+        GboardImportDialogs(
+            result = read,
+            repository = repository,
+            onDismiss = { gboardRead = null },
+            onMessage = { message = it },
+        )
     }
     if (heliChooser) {
         val clipboard = LocalClipboardManager.current
