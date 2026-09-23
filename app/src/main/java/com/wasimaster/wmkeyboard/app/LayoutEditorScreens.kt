@@ -141,7 +141,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
-import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
@@ -190,7 +189,9 @@ import com.wasimaster.wmkeyboard.core.layout.roundGridUnit
 import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
 import com.wasimaster.wmkeyboard.core.layout.fallbackLabel
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
-import com.wasimaster.wmkeyboard.core.layout.resolveLayouts
+import com.wasimaster.wmkeyboard.core.layout.findLayout
+import com.wasimaster.wmkeyboard.core.layout.isShippedLayoutId
+import com.wasimaster.wmkeyboard.core.layout.shippedLayoutRank
 import com.wasimaster.wmkeyboard.core.layout.sidePadFor
 import com.wasimaster.wmkeyboard.core.layout.spanBands
 import com.wasimaster.wmkeyboard.core.layout.spanRowWidths
@@ -563,15 +564,24 @@ internal fun KeyLayoutsScreen(
     // have made and every shipped one you have on is the sort of small tax that
     // makes an editor tiring to use.
     val returnTo = remember { ReturnAnchor.take(KEYMAPS_ANCHOR) }
-    val layouts = resolveLayouts(settings.customLayouts)
+    // What this screen lists and nothing more: the shipped layouts that are
+    // switched on, in shipped order, then the user's own grids. Not the whole
+    // catalogue — that is over sixteen hundred layouts, and the JSON ones are
+    // only parsed when something asks for them (see AssetLayouts).
+    val layouts = settings.enabledLayoutIds
+        .filter(::isShippedLayoutId)
+        .distinct()
+        .sortedBy(::shippedLayoutRank)
+        .mapNotNull { findLayout(settings.customLayouts, it) } +
+        settings.customLayouts.filter { !isShippedLayoutId(it.id) }
     val customIds = settings.customLayouts.map { it.id }.toSet()
     // "Shipped" is both the compiled built-ins and the JSON asset layouts.
     // Testing only BuiltInLayouts put every asset layout in neither group — an
     // enabled Français BÉPO was invisible here — and made an *edit* of one look
     // like a layout of the user's own, offering Delete where it should offer
-    // Reset. resolveLayouts already treats the two the same way.
+    // Reset. isShippedLayoutId treats the two the same way.
     val shippedIds = remember(layouts) {
-        (BuiltInLayouts.all + AssetLayouts.all).mapTo(HashSet()) { it.id }
+        layouts.mapNotNullTo(HashSet()) { layout -> layout.id.takeIf(::isShippedLayoutId) }
     }
     // Layouts that arrived from an addon repository rather than from this
     // screen. They live under Languages → Your layouts, which is where the
@@ -1341,7 +1351,7 @@ internal fun KeyLayoutEditorScreen(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val layout = resolveLayouts(settings.customLayouts).firstOrNull { it.id == layoutId }
+    val layout = findLayout(settings.customLayouts, layoutId)
     if (layout == null) {
         Text(
             stringResource(R.string.layout_editor_missing_layout_message),
@@ -5358,7 +5368,7 @@ internal fun KeyLayoutJsonScreen(
     onDone: () -> Unit,
 ) {
     val title = stringResource(R.string.home_screen_layout_json_title)
-    val layout = resolveLayouts(settings.customLayouts).firstOrNull { it.id == layoutId }
+    val layout = findLayout(settings.customLayouts, layoutId)
     if (layout == null) {
         MissingJsonDocument(title, stringResource(R.string.layout_editor_missing_layout_message), onDone)
         return

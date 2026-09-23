@@ -2,8 +2,10 @@ package com.wasimaster.wmkeyboard.core.layout
 
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -39,22 +41,26 @@ class LayoutRegistryTest {
     }
 
     @Test
-    fun `with no customs the registry is exactly the built-ins`() {
-        assertEquals(BuiltInLayouts.all, resolveLayouts(emptyList()))
+    fun `with no customs every built-in is found and nothing else is`() {
+        for (spec in BuiltInLayouts.all) {
+            assertEquals(spec, findLayout(emptyList(), spec.id))
+            assertTrue(isShippedLayoutId(spec.id))
+        }
+        assertNull(findLayout(emptyList(), "custom_1"))
     }
 
     @Test
     fun `a custom layout reusing a built-in id shadows it in place`() {
         val edited = BuiltInLayouts.QWERTY.copy(name = "My QWERTY")
-        val resolved = resolveLayouts(listOf(edited))
-
-        assertEquals("shadowing must not add an entry", BuiltInLayouts.all.size, resolved.size)
+        assertEquals("My QWERTY", findLayout(listOf(edited), BuiltInLayouts.QWERTY_ID)?.name)
+        // Still shipped: deleting the edit gives the built-in back, so its
+        // references are kept rather than dropped.
+        assertTrue(isShippedLayoutId(BuiltInLayouts.QWERTY_ID))
         assertEquals(
-            "the edit takes the built-in's slot",
+            "shipped order is unmoved by the edit",
             BuiltInLayouts.all.indexOfFirst { it.id == BuiltInLayouts.QWERTY_ID },
-            resolved.indexOfFirst { it.id == BuiltInLayouts.QWERTY_ID },
+            shippedLayoutRank(BuiltInLayouts.QWERTY_ID),
         )
-        assertEquals("My QWERTY", resolved.first { it.id == BuiltInLayouts.QWERTY_ID }.name)
     }
 
     @Test
@@ -65,11 +71,11 @@ class LayoutRegistryTest {
     }
 
     @Test
-    fun `a genuinely new custom layout is appended after the built-ins`() {
+    fun `a genuinely new custom layout is found as itself and is not shipped`() {
         val mine = LayoutSpec(id = "custom_1", name = "Mine")
-        val resolved = resolveLayouts(listOf(mine))
-        assertEquals(BuiltInLayouts.all.size + 1, resolved.size)
-        assertEquals(mine, resolved.last())
+        assertEquals(mine, findLayout(listOf(mine), "custom_1"))
+        assertFalse(isShippedLayoutId("custom_1"))
+        assertEquals(Int.MAX_VALUE, shippedLayoutRank("custom_1"))
     }
 
     @Test

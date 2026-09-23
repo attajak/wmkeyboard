@@ -71,7 +71,26 @@ data class GrammarLint(
  * out over a pool would rebuild the ~100ms rule set per thread for nothing.
  */
 object GrammarChecker {
+    /** Loads the library on first read, so read it only on the way to a lint. */
     val available: Boolean get() = HarperNative.available
+
+    /**
+     * Whether this build ships the library, answered without loading it.
+     *
+     * [available] maps and relocates a 5 MB native library to say yes, and the
+     * keyboard asks at every start just to decide how the grammar tool draws
+     * itself; most sessions never lint anything. The class loader can say
+     * whether the library is packaged without opening it. Off Android (unit
+     * tests) there is no such loader and the answer is [available]'s.
+     */
+    val bundled: Boolean by lazy {
+        val loader = GrammarChecker::class.java.classLoader
+        if (loader is dalvik.system.BaseDexClassLoader) {
+            loader.findLibrary(HarperNative.LIBRARY) != null
+        } else {
+            available
+        }
+    }
 
     private val dispatcher =
         Executors.newSingleThreadExecutor { r -> Thread(r, "harper-lint") }.asCoroutineDispatcher()

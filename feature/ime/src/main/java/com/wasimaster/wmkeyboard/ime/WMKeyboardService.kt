@@ -1740,8 +1740,17 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var importedLists: Map<String, WordSource> = emptyMap()
 
-    /** Bundled Bengali entries, kept so the phonetic index can be rebuilt. */
-    private var bengaliAssetEntries: List<Pair<String, Int>> = emptyList()
+    /**
+     * The Bengali word list the phonetic index was built over, kept so the
+     * index can be rebuilt when an imported list changes. The mapped file, not
+     * its entries: a copy of those as a list of pairs was a megabyte of heap
+     * held for a rebuild that rarely comes, and walking the map again then
+     * costs a fraction of a second off the main thread.
+     */
+    private var bengaliDictionary: MappedTrie? = null
+
+    /** Whether a Bengali word list is loaded at all. */
+    private fun bengaliListLoaded(): Boolean = (bengaliDictionary?.wordCount ?: 0) > 0
 
     /**
      * Whether the last dictionary load included Bengali. The transliteration
@@ -2934,14 +2943,15 @@ open class WMKeyboardService : InputMethodService() {
         // that does arrive early simply waits for the same map.
         serviceScope.launch(Dispatchers.Default) { IconDefaults.warm() }
         // Whether the Harper grammar library is present, resolved here so no
-        // keyboard show has to: reading it maps an 11 MB native library. See
-        // [grammarAvailable].
+        // keyboard show has to. See [grammarAvailable]. Asked of the class
+        // loader rather than by loading it: the library is only mapped when
+        // something is actually linted.
         grammarProbe = serviceScope.launch {
-            // IO, not Default: this is a `System.loadLibrary` — a file mapped
-            // and relocated — and on the Default pool it queued behind the two
-            // CPU-bound warm-ups above, which on a two-core phone is exactly
-            // when it would still be unresolved as the keyboard appeared.
-            val available = withContext(Dispatchers.IO) { GrammarChecker.available }
+            // IO, not Default: the loader reads the APK's entry table, and on
+            // the Default pool it queued behind the two CPU-bound warm-ups
+            // above, which on a two-core phone is exactly when it would still
+            // be unresolved as the keyboard appeared.
+            val available = withContext(Dispatchers.IO) { GrammarChecker.bundled }
             if (available) {
                 grammarAvailable = true
                 _uiState.update { it.copy(grammar = it.grammar.copy(available = true)) }
@@ -3745,8 +3755,9 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * Dictionaries and the emoji catalog load off the main thread; the
      * keyboard is usable immediately and suggestions appear when ready. The
-     * JSON asset layouts load alongside them (idempotent) so a language
-     * whose grid is a file resolves once the user switches to it.
+     * JSON asset layouts' index loads alongside them (idempotent) so a language
+     * whose grid is a file resolves once the user switches to it, and the
+     * enabled ones among them are parsed ahead of the next field focus.
      *
      * Run again after a direct-boot unlock ([onUserUnlocked]): the word sources
      * that were unreachable while locked — the downloaded lists, the imported
@@ -3761,6 +3772,10 @@ open class WMKeyboardService : InputMethodService() {
             loadedImportedOnly = importedOnly()
             val loaded = withContext(Dispatchers.Default) {
                 AssetLayouts.load(assets)
+                // The index is all [load] reads; the grids parse on first use.
+                // The ones switched on are about to be asked for on the main
+                // thread by the next field focus, so they are parsed here.
+                AssetLayouts.warm(_uiState.value.settings.enabledLayoutIds)
                 // Older installs inflated the bundled lists into
                 // credential-encrypted storage; they live in the
                 // device-protected area now (see [openLanguageDictionary]).
@@ -3794,11 +3809,6 @@ open class WMKeyboardService : InputMethodService() {
                 Triple(english, bengali, EmojiKeywordPack.merge(bundled, packs))
             }
             val (english, bengali, catalog) = loaded
-            // Flat entry lists for the consumers that build their own indexes
-            // (gesture lexicon, Bengali phonetic index) — a one-off DFS walk.
-            val (englishEntries, bengaliEntries) = withContext(Dispatchers.Default) {
-                english?.entries().orEmpty() to bengali?.entries().orEmpty()
-            }
             val spellingMapOn = bengaliEnabled &&
                 _uiState.value.settings.suggestionStrip.spellingMapEnabledFor("bn")
             loadedSpellingMap = spellingMapOn
@@ -3835,7 +3845,7 @@ open class WMKeyboardService : InputMethodService() {
             // two content queries, off the main thread, refreshed each time the
             // dictionaries reload and whenever the platform reports an edit.
             withContext(Dispatchers.Default) { readSystemDictionary() }
-            bengaliAssetEntries = bengaliEntries
+            bengaliDictionary = bengali
             val customTries = withContext(Dispatchers.Default) { loadCustomDictionaries() }
             customDictionaries = customTries
             val offensiveLangs = enabledLanguageIds()
@@ -20576,7 +20586,7 @@ open class WMKeyboardService : InputMethodService() {
      *
      * The tool's chrome treats "still working it out" as available, rather than
      * waiting: the alternative is telling the user the feature is not in this
-     * build when it is, and the wait would be the 11 MB map this all exists to
+     * build when it is, and the wait would be the APK read this all exists to
      * keep off the show path. Safe to be optimistic because the tool's own
      * handlers read [GrammarChecker] directly, so an over-eager answer here
      * cannot make it try to lint without a library — and the probe's own update
@@ -25975,7 +25985,7 @@ open class WMKeyboardService : InputMethodService() {
             // request carries: a longer selection would come back cut short.
             deeplWriteAvailable = settings.translate.deepl.writeActive &&
                 text.trim().length <= DeepLClient.MAX_CHARS,
-            bengaliLoaded = suggestionEngine != null && bengaliAssetEntries.isNotEmpty(),
+            bengaliLoaded = suggestionEngine != null && bengaliListLoaded(),
             hindiLoaded = suggestionEngine?.extraPhonetic?.containsKey(PhoneticSchemes.HINDI.languageId) == true,
             chatSyntax = ChatSyntax.forPackage(currentPackage),
             content = content,
@@ -26617,7 +26627,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun romanizedConverter(languageId: String): RomanizedConverter? {
         val engine = suggestionEngine ?: return null
         val bengali = languageId == PhoneticSchemes.BENGALI.languageId
-        if (bengali && bengaliAssetEntries.isEmpty()) return null
+        if (bengali && !bengaliListLoaded()) return null
         if (!bengali && languageId !in engine.extraPhonetic) return null
         val backend = engine.phoneticBackend(languageId) ?: return null
         val key = PhoneticBackendKey(backend.spellings, backend.index)
@@ -30583,7 +30593,7 @@ open class WMKeyboardService : InputMethodService() {
         loadedDictToken = token
         val english = openLanguageDictionary("en")
         val bengali = if (loadedBengali) openLanguageDictionary("bn") else null
-        bengaliAssetEntries = bengali?.entries().orEmpty()
+        bengaliDictionary = bengali
         customDictionaries = loadCustomDictionaries()
         suggestionEngine?.let { engine ->
             engine.dictionary = english ?: PackedTrie.EMPTY
@@ -30732,14 +30742,12 @@ open class WMKeyboardService : InputMethodService() {
      * Bengali index over the bundled list plus any imported Bengali list, so
      * imported words are reachable by transliteration and not only by prefix.
      */
-    private fun buildBengaliIndex(): BengaliPhoneticIndex =
-        BengaliPhoneticIndex(
-            if (userUnlocked) {
-                bengaliAssetEntries + CustomDictionaries.entries(filesDir, "bn")
-            } else {
-                bengaliAssetEntries
-            },
+    private fun buildBengaliIndex(): BengaliPhoneticIndex {
+        val bundled = bengaliDictionary?.entries().orEmpty()
+        return BengaliPhoneticIndex(
+            if (userUnlocked) bundled + CustomDictionaries.entries(filesDir, "bn") else bundled,
         )
+    }
 
     fun openSettings() {
         vibrate()

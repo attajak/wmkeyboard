@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import com.wasimaster.wmkeyboard.core.layout.isShippedLayoutId
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -32,8 +33,6 @@ import com.wasimaster.wmkeyboard.core.settings.BoardCornerRadiusRange
 import com.wasimaster.wmkeyboard.core.settings.SidePadScaleRange
 import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
-import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
-import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
 import com.wasimaster.wmkeyboard.ime.ui.gestureBarAtBottom
 import com.wasimaster.wmkeyboard.core.settings.autoBottomPaddingDp
@@ -728,8 +727,7 @@ internal fun LayoutSettings(
     val customs = settings.customLayouts
         .filter {
             !it.secondary &&
-                BuiltInLayouts.byId(it.id) == null &&
-                AssetLayouts.byId(it.id) == null
+                !isShippedLayoutId(it.id)
         }
         .sortedBy { it.name.lowercase() }
     // Turning a layout on is gated on it validating; switching one off never is,

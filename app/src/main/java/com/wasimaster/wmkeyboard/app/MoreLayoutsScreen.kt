@@ -67,8 +67,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.layout.resolveLayoutKeyman
+import com.wasimaster.wmkeyboard.core.layout.resolveLayoutName
 import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
-import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -119,9 +120,11 @@ internal fun MoreLayoutsScreen(
     // Resolved once per custom-layout list: every card needs its name and
     // binding, and the search reads the names on every letter typed.
     val layouts = remember(lang, settings.customLayouts) {
+        // From the layout index, not the grids: a language can have a dozen
+        // converted layouts of a megabyte each, and this list only names them.
         lang.layoutIds.mapNotNull { id ->
-            val spec = resolveLayout(settings.customLayouts, id)
-            spec.keyman?.let { MoreLayout(id, spec.name, it) }
+            resolveLayoutKeyman(settings.customLayouts, id)
+                ?.let { MoreLayout(id, resolveLayoutName(settings.customLayouts, id), it) }
         }
     }
     var query by rememberSaveable { mutableStateOf("") }

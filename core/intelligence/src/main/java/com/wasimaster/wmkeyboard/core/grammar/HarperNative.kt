@@ -7,7 +7,10 @@ package com.wasimaster.wmkeyboard.core.grammar
  * grammar tool into a "not in this build" panel instead of crashing.
  */
 internal object HarperNative {
-    val available: Boolean = runCatching { System.loadLibrary("harper_jni") }.isSuccess
+    const val LIBRARY = "harper_jni"
+
+    /** Loaded the first time this is read, never at class init: see [GrammarChecker.bundled]. */
+    val available: Boolean by lazy { runCatching { System.loadLibrary(LIBRARY) }.isSuccess }
 
     /**
      * Lints [text] and returns a JSON array of lints with UTF-16 spans.

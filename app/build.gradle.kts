@@ -484,11 +484,66 @@ val compileBundledDictionaries =
         toolClasspath.from(dictc)
     }
 
+// Writes assets/layouts-index.tsv: one line per shipped JSON layout, in file
+// order — `id<TAB>name<TAB>langId<TAB>keymanId<TAB>keymanVersion`. The keyboard
+// reads this instead of the layouts themselves (see AssetLayouts): there are
+// over fifteen hundred of them and a user has a handful on, so parsing the rest
+// at every process start only filled the heap and held up the first settings
+// frame. Names, languages and Keyman bindings are what the lists and the
+// search need without opening a grid.
+abstract class GenerateLayoutIndexTask : DefaultTask() {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val layoutsDir: DirectoryProperty
+
+    /** Assets root chosen by AGP; the index lands at its top level. */
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val suffix = ".wmlayout.json"
+        val slurper = groovy.json.JsonSlurper()
+        val lines = layoutsDir.get().asFile.listFiles { f -> f.name.endsWith(suffix) }.orEmpty()
+            .sortedBy { it.name }
+            .map { file ->
+                @Suppress("UNCHECKED_CAST")
+                val root = slurper.parse(file) as Map<String, Any?>
+                @Suppress("UNCHECKED_CAST")
+                val layout = root["layout"] as Map<String, Any?>
+                val id = "asset_" + file.name.removeSuffix(suffix)
+                check(layout["id"] == id) { "${file.name}: id ${layout["id"]} does not match its file name" }
+                fun clean(value: Any?) = (value as? String).orEmpty().replace('\t', ' ').replace('\n', ' ')
+                @Suppress("UNCHECKED_CAST")
+                val keyman = layout["keyman"] as? Map<String, Any?>
+                listOf(
+                    id,
+                    clean(layout["name"]),
+                    clean(layout["langId"]),
+                    clean(keyman?.get("keyboardId")),
+                    clean(keyman?.get("version")),
+                ).joinToString("\t")
+            }
+        val out = outputDir.get().asFile
+        out.mkdirs()
+        out.resolve("layouts-index.tsv").writeText(lines.joinToString("\n", postfix = "\n"))
+    }
+}
+
+val generateLayoutIndex =
+    tasks.register<GenerateLayoutIndexTask>("generateLayoutIndex") {
+        layoutsDir.set(layout.projectDirectory.dir("src/main/assets/layouts"))
+    }
+
 androidComponents {
     onVariants { variant ->
         variant.sources.assets?.addGeneratedSourceDirectory(
             compileBundledDictionaries,
             CompileDictionariesTask::outputDir,
+        )
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            generateLayoutIndex,
+            GenerateLayoutIndexTask::outputDir,
         )
         // The update-channel driver picked at the top of this file, added to
         // every production variant. This is the Variant API rather than the

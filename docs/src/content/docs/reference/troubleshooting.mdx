@@ -48,6 +48,17 @@ If letters themselves are landing late rather than the strip just being slow to 
 
 To confirm it really is the suggestion pass before you start changing things, turn **Suggestions** off under <SettingsPath path="Typing / Suggestions" /> and type a line. If the lag goes away, it's the pass, and one of the levers above will help. If it doesn't, it's something else and worth [filing](#filing-a-useful-bug-report) with a diagnostics report attached.
 
+## The keyboard uses a lot of memory
+
+The keyboard and the settings app run in one process, so the number Android shows you covers both, and it's higher while the settings app is open. With only the keyboard running, this is what it keeps in memory for as long as it's up:
+
+- **The layouts you have switched on.** Over 1,500 layouts ship with the app, but only the ones you use, and the ones a settings screen is showing, are ever loaded.
+- **Your word lists, mostly not.** Dictionaries are read straight from storage and cost next to nothing. The exception is a phonetic language like Bangla: the part that turns "valo" into ভালো keeps an index over the whole downloaded list, so the tier you pick matters. The largest Bangla tier (over 450,000 words) needs about 25 MB for it, and Small only a few. See [Changing the size of a list you already have](/languages/dictionaries/#changing-the-size-of-a-list-you-already-have).
+- **Vocabulary packs**, if you've downloaded any. Every card is kept ready so the nudges can show while you type, which is a few megabytes per pack. Removing packs you've finished with gives it back.
+- **On-device models**: the AI tool, Whisper and on-device translation. They load when you use them and are let go as soon as Android asks for memory back.
+
+[Power saving mode](/typing/power-saving/) turns off more of it in one switch. If the number still looks far too high for what you use, [file a bug](#filing-a-useful-bug-report) with a diagnostics report attached.
+
 ## A permission prompt stopped appearing
 
 Camera, microphone, and calendar access all work the same way, because an IME service can't show Android's runtime-permission dialog itself. Tap **Allow** in a tool's panel and a small, invisible activity opens just long enough to show the system prompt. It closes itself the instant you answer. The keyboard then rechecks the grant the next time it's in the foreground, so you never need to reopen the panel. Each tool documents the pattern on its own page: [Camera](/tools/camera/), [Voice typing](/tools/voice/), and [Calendar](/tools/calendar/).

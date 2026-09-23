@@ -32,54 +32,207 @@ package com.wasimaster.wmkeyboard.core.transliteration
  */
 class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
-    private val byKey = HashMap<String, MutableList<Entry>>()
-    private val freqByWord = HashMap<String, Int>()
+    // ## Layout
+    //
+    // Flat arrays, not a map of lists of objects. The index covers the whole
+    // downloaded list — tens of thousands of words at the smallest tier and
+    // 451k at the largest — and as `HashMap<String, MutableList<Entry>>` plus
+    // a word-to-frequency map it cost ~140 bytes a word: 12 MB of heap at the
+    // small tier, held for the life of the keyboard. Here a word costs its
+    // characters and a handful of ints.
+    //
+    // Entries are sorted by key, then by frequency (highest first), then by
+    // the order they were given in; each run of one key is a bucket. That is
+    // the order the old per-key lists were in, so ties still break the same
+    // way.
 
-    /** One indexed word, with the fold's discarded detail kept alongside. */
-    private class Entry(
-        val word: String,
-        val frequency: Int,
-        val aspiration: String,
-        val endsWithO: Boolean,
-    )
+    /** Every indexed word's characters, back to back, in entry order. */
+    private val wordChars: CharArray
+
+    /** Where entry `i`'s word starts in [wordChars]; one extra slot for the end. */
+    private val wordStart: IntArray
+
+    private val frequencies: IntArray
+
+    /**
+     * Bit `i` set when position `i` of the entry's key was written aspirated.
+     * Positions past [MASK_BITS] are in [longAspiration], which in practice
+     * holds nothing: no Bengali word folds to a key that long.
+     */
+    private val aspirationMasks: IntArray
+    private val longAspiration: Map<Int, String>
+
+    private val endsWithO: BooleanArray
+
+    /** The distinct keys, sorted, back to back. Keys are ASCII by construction. */
+    private val keyBytes: ByteArray
+    private val keyStart: IntArray
+
+    /** Entry range of key `k`: `bucketStart[k] until bucketStart[k + 1]`. */
+    private val bucketStart: IntArray
+
+    /** Entry indexes sorted by word, for [frequencyOf]. */
+    private val byWord: IntArray
+
+    override val maxFrequency: Int
 
     init {
+        val words = ArrayList<String>(entries.size)
+        val keys = ArrayList<String>(entries.size)
+        val aspirations = ArrayList<String>(entries.size)
+        val freqs = ArrayList<Int>(entries.size)
         for ((word, frequency) in entries) {
             val folded = foldBengaliFull(word)
             if (folded.key.isEmpty()) continue
-            byKey.getOrPut(folded.key) { mutableListOf() }
-                .add(Entry(word, frequency, folded.aspiration, endsWithO(word)))
-            freqByWord.merge(word, frequency, ::maxOf)
+            words += word
+            keys += folded.key
+            aspirations += folded.aspiration
+            freqs += frequency
         }
-        byKey.values.forEach { list -> list.sortByDescending { it.frequency } }
+        val order = words.indices.sortedWith(
+            compareBy<Int> { keys[it] }.thenByDescending { freqs[it] }.thenBy { it },
+        )
+        val n = order.size
+        wordStart = IntArray(n + 1)
+        frequencies = IntArray(n)
+        aspirationMasks = IntArray(n)
+        endsWithO = BooleanArray(n)
+        val long = HashMap<Int, String>()
+        var chars = 0
+        for (word in words) chars += word.length
+        wordChars = CharArray(chars)
+        val distinctKeys = ArrayList<String>()
+        val bucketStarts = ArrayList<Int>()
+        var at = 0
+        for ((position, source) in order.withIndex()) {
+            val word = words[source]
+            wordStart[position] = at
+            word.toCharArray(wordChars, at)
+            at += word.length
+            frequencies[position] = freqs[source]
+            val aspiration = aspirations[source]
+            var mask = 0
+            for (i in 0 until minOf(aspiration.length, MASK_BITS)) {
+                if (aspiration[i] == ASPIRATED) mask = mask or (1 shl i)
+            }
+            aspirationMasks[position] = mask
+            if (aspiration.length > MASK_BITS) long[position] = aspiration
+            endsWithO[position] = endsWithO(word)
+            val key = keys[source]
+            if (distinctKeys.isEmpty() || distinctKeys.last() != key) {
+                distinctKeys += key
+                bucketStarts += position
+            }
+        }
+        wordStart[n] = at
+        longAspiration = long
+        bucketStart = IntArray(distinctKeys.size + 1)
+        for (k in bucketStarts.indices) bucketStart[k] = bucketStarts[k]
+        bucketStart[distinctKeys.size] = n
+        keyStart = IntArray(distinctKeys.size + 1)
+        var keyLength = 0
+        for (key in distinctKeys) keyLength += key.length
+        keyBytes = ByteArray(keyLength)
+        var keyAt = 0
+        for ((k, key) in distinctKeys.withIndex()) {
+            keyStart[k] = keyAt
+            for (ch in key) keyBytes[keyAt++] = ch.code.toByte()
+        }
+        keyStart[distinctKeys.size] = keyAt
+        byWord = (0 until n).sortedWith { a, b -> compareWords(a, b) }.toIntArray()
+        maxFrequency = frequencies.maxOrNull() ?: 0
     }
 
-    override val isEmpty: Boolean get() = byKey.isEmpty()
+    override val isEmpty: Boolean get() = bucketStart.size <= 1
+
+    private fun wordAt(position: Int): String =
+        String(wordChars, wordStart[position], wordStart[position + 1] - wordStart[position])
+
+    /** Entries [a] and [b] in [String.compareTo] order of their words. */
+    private fun compareWords(a: Int, b: Int): Int {
+        val aStart = wordStart[a]
+        val aLength = wordStart[a + 1] - aStart
+        val bStart = wordStart[b]
+        val bLength = wordStart[b + 1] - bStart
+        for (i in 0 until minOf(aLength, bLength)) {
+            val diff = wordChars[aStart + i] - wordChars[bStart + i]
+            if (diff != 0) return diff
+        }
+        return aLength - bLength
+    }
+
+    /** Entry [position]'s word against [word], in [String.compareTo] order. */
+    private fun compareWord(position: Int, word: String): Int {
+        val start = wordStart[position]
+        val length = wordStart[position + 1] - start
+        for (i in 0 until minOf(length, word.length)) {
+            val diff = wordChars[start + i] - word[i]
+            if (diff != 0) return diff
+        }
+        return length - word.length
+    }
+
+    /** The bucket for [key], or -1. Binary search over the sorted keys. */
+    private fun bucketOf(key: String): Int {
+        var low = 0
+        var high = keyStart.size - 2
+        while (low <= high) {
+            val mid = (low + high) ushr 1
+            val start = keyStart[mid]
+            val length = keyStart[mid + 1] - start
+            var cmp = 0
+            for (i in 0 until minOf(length, key.length)) {
+                cmp = keyBytes[start + i].toInt() - key[i].code
+                if (cmp != 0) break
+            }
+            if (cmp == 0) cmp = length - key.length
+            when {
+                cmp < 0 -> low = mid + 1
+                cmp > 0 -> high = mid - 1
+                else -> return mid
+            }
+        }
+        return -1
+    }
 
     /** Dictionary words phonetically matching the romanized [input], best first. */
     override fun lookup(input: String): List<String> {
         val folded = foldRomanFull(input)
-        val bucket = byKey[folded.key] ?: return emptyList()
+        val bucket = bucketOf(folded.key)
+        if (bucket < 0) return emptyList()
+        val from = bucketStart[bucket]
+        val until = bucketStart[bucket + 1]
         // One sibling is the overwhelmingly common case; skip the comparator.
-        if (bucket.size == 1) return listOf(bucket[0].word)
+        if (until - from == 1) return listOf(wordAt(from))
         val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
-        return bucket
-            .sortedByDescending { it.frequency.toLong() * SCALE / handicap(it, folded.aspiration, typedFinalO) }
-            .map { it.word }
+        return (from until until)
+            .sortedByDescending { frequencies[it].toLong() * SCALE / handicap(it, folded.aspiration, typedFinalO) }
+            .map(::wordAt)
     }
 
+    /** Whether position [i] of entry [position]'s key was written aspirated. */
+    private fun aspiratedAt(position: Int, i: Int): Boolean =
+        if (i < MASK_BITS) {
+            aspirationMasks[position] and (1 shl i) != 0
+        } else {
+            longAspiration[position]?.getOrNull(i) == ASPIRATED
+        }
+
     /**
-     * What to divide [entry]'s frequency by for disagreeing with what was
-     * actually typed. 1 means it agrees on every count and its frequency
+     * What to divide entry [position]'s frequency by for disagreeing with what
+     * was actually typed. 1 means it agrees on every count and its frequency
      * stands as it is.
      */
-    private fun handicap(entry: Entry, typed: String, typedFinalO: Boolean): Long {
+    private fun handicap(position: Int, typed: String, typedFinalO: Boolean): Long {
         var divisor = 1L
-        if (entry.endsWithO != typedFinalO) divisor *= FINAL_O_MISMATCH
-        val shared = minOf(typed.length, entry.aspiration.length)
+        if (endsWithO[position] != typedFinalO) divisor *= FINAL_O_MISMATCH
+        // An entry's aspiration pattern is as long as its key, and the key is
+        // the typed one — that is how the bucket was found — so [typed], built
+        // in lockstep with it, is exactly as long.
+        val shared = typed.length
         for (i in 0 until shared) {
             val typedAspirated = typed[i] == ASPIRATED
-            val wordAspirated = entry.aspiration[i] == ASPIRATED
+            val wordAspirated = aspiratedAt(position, i)
             if (typedAspirated == wordAspirated) continue
             divisor *= if (typedAspirated) ASPIRATION_MISMATCH_TYPED else ASPIRATION_MISMATCH_WORD
         }
@@ -87,22 +240,48 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
     }
 
     /** Dictionary frequency of a Bengali [word], 0 when unknown. */
-    override fun frequencyOf(word: String): Int = freqByWord[word] ?: 0
+    override fun frequencyOf(word: String): Int {
+        var low = 0
+        var high = byWord.size - 1
+        while (low <= high) {
+            val mid = (low + high) ushr 1
+            val cmp = compareWord(byWord[mid], word)
+            when {
+                cmp < 0 -> low = mid + 1
+                cmp > 0 -> high = mid - 1
+                else -> {
+                    // A word listed twice (the bundled list and an imported
+                    // one) answers with its higher frequency, as it always has.
+                    var best = frequencies[byWord[mid]]
+                    var i = mid - 1
+                    while (i >= 0 && compareWord(byWord[i], word) == 0) best = maxOf(best, frequencies[byWord[i--]])
+                    i = mid + 1
+                    while (i < byWord.size && compareWord(byWord[i], word) == 0) best = maxOf(best, frequencies[byWord[i++]])
+                    return best
+                }
+            }
+        }
+        return 0
+    }
 
     override fun matchStrength(input: String): Int {
         val folded = foldRomanFull(input)
-        val bucket = byKey[folded.key] ?: return 0
+        val bucket = bucketOf(folded.key)
+        if (bucket < 0) return 0
         val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
-        return bucket.maxOf { it.frequency / handicap(it, folded.aspiration, typedFinalO) }.toInt()
+        return (bucketStart[bucket] until bucketStart[bucket + 1])
+            .maxOf { frequencies[it] / handicap(it, folded.aspiration, typedFinalO) }
+            .toInt()
     }
-
-    override val maxFrequency: Int = freqByWord.values.maxOrNull() ?: 0
 
     companion object {
 
         /** Marks a key position whose consonant was written aspirated. */
         private const val ASPIRATED = 'h'
         private const val PLAIN = '.'
+
+        /** Key positions an entry's aspiration fits into as an [Int] mask. */
+        private const val MASK_BITS = 32
 
         /**
          * Disagreements divide a sibling's frequency rather than outranking

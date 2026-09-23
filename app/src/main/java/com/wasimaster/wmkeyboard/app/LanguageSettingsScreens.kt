@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.layout.resolveLayoutKeyman
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryEntry
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
@@ -156,7 +157,7 @@ internal class LanguageSearchKey(language: LanguageDef) {
      */
     private val layouts = language.layoutIds.flatMap { layoutId ->
         listOfNotNull(
-            (BuiltInLayouts.byId(layoutId) ?: AssetLayouts.byId(layoutId))?.name?.lowercase(),
+            (BuiltInLayouts.byId(layoutId)?.name ?: AssetLayouts.nameOf(layoutId))?.lowercase(),
             layoutId.substringAfter('_').lowercase(),
         )
     }
@@ -173,11 +174,10 @@ internal class LanguageSearchKey(language: LanguageDef) {
 
 /**
  * Every registry language paired with its search key. The registry is a
- * constant, but the asset layouts' names arrive only once their JSON finishes
- * parsing off the main thread — so the index is memoised on
- * [AssetLayouts.generation] rather than built once, the same way
- * `resolveLayouts` is: an index built before the load would file every asset
- * layout under no name at all, forever.
+ * constant, but the asset layouts' names arrive only once their index is read
+ * off the main thread — so the index is memoised on [AssetLayouts.generation]
+ * rather than built once: an index built before the load would file every
+ * asset layout under no name at all, forever.
  */
 private object LanguageSearchIndex {
     class Entry(val generation: Int, val index: List<Pair<LanguageDef, LanguageSearchKey>>)
@@ -730,7 +730,7 @@ internal fun addLanguage(
 private fun overflowLayoutIds(lang: LanguageDef, settings: KeyboardSettings): List<String> =
     lang.layoutIds.filter { id ->
         id !in settings.enabledLayoutIds &&
-            resolveLayout(settings.customLayouts, id).keyman != null
+            resolveLayoutKeyman(settings.customLayouts, id) != null
     }
 
 /**

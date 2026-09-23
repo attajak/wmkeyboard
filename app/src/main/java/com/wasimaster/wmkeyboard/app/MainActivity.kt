@@ -284,11 +284,12 @@ class MainActivity : FragmentActivity() {
         repository = SettingsRepository(applicationContext)
         appLock = BiometricAppLock(this, repository)
         // The JSON asset layouts back the tail of the language list; the first
-        // screen waits for them (below) so an enabled asset layout resolves to
-        // its real language. Parsed off the main thread: this is ~350 files
-        // and blocking here held the whole cold start — the window couldn't
-        // even animate open — for as long as a slow phone took to parse them.
-        // Off it, the parse runs alongside DataStore's own first read.
+        // screen waits for their index (below) so an enabled asset layout
+        // resolves to its real language. Only the index: the layouts parse one
+        // at a time as screens ask for them (see AssetLayouts). Reading all of
+        // them here held the first frame for seconds on a slow phone and kept
+        // every one on the heap for the life of the process. Off the main
+        // thread all the same, alongside DataStore's own first read.
         lifecycleScope.launch(Dispatchers.Default) {
             AssetLayouts.load(applicationContext.assets)
             assetLayoutsReady.value = true

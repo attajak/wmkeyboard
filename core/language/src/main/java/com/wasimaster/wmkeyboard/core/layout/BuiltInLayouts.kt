@@ -7,7 +7,7 @@ import com.wasimaster.wmkeyboard.core.script.ComposerType
  *
  * Their ids stay stable so stored references survive: editing one stores a
  * custom layout under the *same* id that shadows the shipped version (see
- * [resolveLayouts]), so a 🌐 cycle pinned to "builtin_probhat" keeps working
+ * [findLayout]), so a 🌐 cycle pinned to "builtin_probhat" keeps working
  * and deleting the edit restores the original grid.
  *
  * Kotlin rather than JSON in assets, unlike the dictionaries: the letter grid
@@ -354,7 +354,7 @@ object BuiltInLayouts {
      * Every compiled-in layout, in shipped order — even where two share a grid
      * (AZERTY and French are the same keys under different languages). This is
      * the boot-critical set drawn on the first frame; the JSON [AssetLayouts]
-     * add the language tail at runtime, and both feed `resolveLayouts`.
+     * add the language tail at runtime, and both feed `findLayout`.
      */
     val all: List<LayoutSpec> = listOf(
         QWERTY, AZERTY, DVORAK, COLEMAK, WORKMAN, HALMAK, AVRO, PROBHAT, JATIYA, FRENCH,

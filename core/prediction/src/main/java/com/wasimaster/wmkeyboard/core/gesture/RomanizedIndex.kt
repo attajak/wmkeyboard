@@ -3,7 +3,6 @@ package com.wasimaster.wmkeyboard.core.gesture
 import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.prediction.FuzzyBeamSearch
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
-import com.wasimaster.wmkeyboard.core.prediction.Trie
 import com.wasimaster.wmkeyboard.core.prediction.WordSource
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import kotlin.math.ln
@@ -41,7 +40,12 @@ import kotlin.math.ln
  * Latin: on a phonetic layout, Latin output is never what the user asked for.
  */
 class RomanizedIndex private constructor(
-    private val curated: Trie,
+    /**
+     * The curated spellings, packed: they never change once built, and as a
+     * node-per-letter [com.wasimaster.wmkeyboard.core.prediction.Trie] the
+     * Bengali set alone held 4 MB of heap for as long as the keyboard ran.
+     */
+    private val curated: WordSource,
     private val downloaded: WordSource,
     private val resolveSpelling: (String) -> List<String>,
     /** Code points the romanized side is written in — the coverage gate's input. */
@@ -96,7 +100,7 @@ class RomanizedIndex private constructor(
 
         /** No romanization available — the layout is not phonetic, or its language
          * is not loaded. Decoding falls back to the ordinary word sources. */
-        val EMPTY = RomanizedIndex(Trie(), PackedTrie.EMPTY, { emptyList() }, emptySet())
+        val EMPTY = RomanizedIndex(PackedTrie.EMPTY, PackedTrie.EMPTY, { emptyList() }, emptySet())
 
         /**
          * Builds a phonetic language's romanization from what the IME has loaded.
@@ -114,14 +118,14 @@ class RomanizedIndex private constructor(
             downloadedRomanized: WordSource = PackedTrie.EMPTY,
             nativeFrequency: (String) -> Int,
         ): RomanizedIndex {
-            val curated = Trie()
+            val curated = ArrayList<Pair<String, Int>>()
             val alphabet = HashSet<Int>()
             for (spelling in spellings.spellings) {
                 if (spelling.length < MIN_SPELLING || !spelling.all { it.isLetter() }) continue
                 val forms = spellings.lookup(spelling)
                 if (forms.isEmpty()) continue
                 val frequency = forms.maxOf(nativeFrequency).coerceAtLeast(1)
-                curated.insert(spelling, frequency)
+                curated += spelling to frequency
                 for (ch in spelling) alphabet.add(ch.lowercaseChar().code)
             }
             if (alphabet.isEmpty()) return EMPTY
@@ -131,7 +135,7 @@ class RomanizedIndex private constructor(
             val resolve = { spelling: String ->
                 spellings.lookup(spelling).ifEmpty { phonetic.lookup(spelling) }
             }
-            return RomanizedIndex(curated, downloadedRomanized, resolve, alphabet)
+            return RomanizedIndex(PackedTrie.of(curated), downloadedRomanized, resolve, alphabet)
         }
 
         /** How far behind its spelling's own score a second reading starts. */

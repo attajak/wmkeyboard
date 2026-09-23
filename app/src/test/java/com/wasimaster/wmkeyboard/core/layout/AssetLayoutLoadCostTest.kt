@@ -8,11 +8,12 @@ import org.junit.Test
 /**
  * What it costs to read every shipped layout, now that there are 1,256 of them.
  *
- * The Keyman conversion took the asset count from 394 to 1,256, and
- * `AssetLayouts.load` decodes all of them in one pass. It runs off the main
- * thread and the keyboard falls back to the built-in grids until it finishes,
- * so this is not a frame-drop risk; it is a "the layout you picked appears a
- * moment late" risk, and it is worth knowing the number rather than assuming it.
+ * The Keyman conversion took the asset count from 394 to 1,256, and it has
+ * grown since. `AssetLayouts.load` used to decode all of them in one pass at
+ * every process start, which cost seconds on a slow phone and held every grid
+ * on the heap (#296); it reads a build-generated index now and parses a layout
+ * the first time something asks for it. This is the cost that change avoids,
+ * and the bound on anything that ever walks the whole set again.
  *
  * ## Why the assertion is loose
  *

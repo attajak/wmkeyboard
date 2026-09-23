@@ -30,17 +30,47 @@ import java.io.InputStream
  * generated one.
  */
 class SpellingMap private constructor(
-    private val byWord: Map<String, List<String>>,
-    private val loanwords: Set<String> = emptySet(),
+    /** Every spelling, in file order. */
+    private val order: Array<String>,
+    /** Spelling `i`'s forms: `forms[formStart[i] until formStart[i + 1]]`, best first. */
+    private val formStart: IntArray,
+    private val forms: Array<String>,
+    /** Spelling positions sorted by spelling, for [lookup]. */
+    private val sorted: IntArray,
+    /** Spelling positions that came from a loanword list, sorted. */
+    private val loanwords: IntArray,
 ) {
+    // Flat arrays rather than a LinkedHashMap of lists: this map is loaded for
+    // as long as a phonetic layout is enabled, and at ~14,000 spellings with
+    // one form apiece the map's entries, lists and nodes were most of its
+    // 3 MB. The spellings keep their file order, which [spellings] promises.
+
+    private val formList = forms.asList()
+
+    private fun positionOf(spelling: String): Int {
+        val key = spelling.trim().lowercase()
+        var low = 0
+        var high = sorted.size - 1
+        while (low <= high) {
+            val mid = (low + high) ushr 1
+            val cmp = order[sorted[mid]].compareTo(key)
+            when {
+                cmp < 0 -> low = mid + 1
+                cmp > 0 -> high = mid - 1
+                else -> return sorted[mid]
+            }
+        }
+        return -1
+    }
 
     /** Bengali forms for [spelling], best first; empty if unmapped. */
-    fun lookup(spelling: String): List<String> =
-        byWord[spelling.trim().lowercase()].orEmpty()
+    fun lookup(spelling: String): List<String> {
+        val position = positionOf(spelling)
+        return if (position < 0) emptyList() else formList.subList(formStart[position], formStart[position + 1])
+    }
 
     /** True when [spelling] has at least one mapped Bengali form. */
-    fun contains(spelling: String): Boolean =
-        byWord.containsKey(spelling.trim().lowercase())
+    fun contains(spelling: String): Boolean = positionOf(spelling) >= 0
 
     /**
      * Whether [spelling] came from a loanword list: the spelling is itself a
@@ -49,18 +79,20 @@ class SpellingMap private constructor(
      * the typist meant this language; a listed loanword does not, which is what
      * a caller deciding between the two scripts needs to know.
      */
-    fun isLoanword(spelling: String): Boolean =
-        spelling.trim().lowercase() in loanwords
+    fun isLoanword(spelling: String): Boolean {
+        val position = positionOf(spelling)
+        return position >= 0 && loanwords.binarySearch(position) >= 0
+    }
 
-    val size: Int get() = byWord.size
+    val size: Int get() = order.size
 
     /** Every spelling this map knows, in file order — the curated romanized
      * vocabulary, which is also what a glide over Avro is decoded against. */
-    val spellings: Set<String> get() = byWord.keys
+    val spellings: List<String> = order.asList()
 
     companion object {
         /** Empty map, used as the default when no asset is supplied (tests). */
-        val EMPTY = SpellingMap(emptyMap())
+        val EMPTY = SpellingMap(emptyArray(), IntArray(1), emptyArray(), IntArray(0), IntArray(0))
 
         /**
          * Languages that ship a spelling map, by
@@ -102,7 +134,25 @@ class SpellingMap private constructor(
                     }
                 }
             }
-            return SpellingMap(byWord, loanwords)
+            val order = byWord.keys.toTypedArray()
+            val formStart = IntArray(order.size + 1)
+            var total = 0
+            for ((i, spelling) in order.withIndex()) {
+                formStart[i] = total
+                total += byWord.getValue(spelling).size
+            }
+            formStart[order.size] = total
+            val forms = arrayOfNulls<String>(total)
+            var at = 0
+            for (spelling in order) for (form in byWord.getValue(spelling)) forms[at++] = form
+            @Suppress("UNCHECKED_CAST")
+            return SpellingMap(
+                order = order,
+                formStart = formStart,
+                forms = forms as Array<String>,
+                sorted = order.indices.sortedBy { order[it] }.toIntArray(),
+                loanwords = order.indices.filter { order[it] in loanwords }.toIntArray(),
+            )
         }
     }
 }

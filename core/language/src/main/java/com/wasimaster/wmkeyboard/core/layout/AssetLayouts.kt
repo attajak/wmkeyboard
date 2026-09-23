@@ -14,11 +14,21 @@ import android.content.res.AssetManager
  * language rather than the build, and each file is user-importable and editable
  * for free.
  *
- * Loaded once by [load]; [all] returns the cache (empty until then) so
- * [resolveLayouts] can splice these in beside the built-ins with no `Context`.
- * Asset layouts are deliberately never in `defaultEnabledIds`, so an empty cache
- * on the first frame only means a not-yet-selected language is briefly absent —
- * never a keyboard with nothing to draw.
+ * ## Read on demand, never all at once
+ *
+ * There are over fifteen hundred of these, 43 MB of JSON, and a user has a
+ * handful switched on. Parsing the lot at every process start — which is what
+ * this object used to do — held every one of them on the heap for the life of
+ * the process (the keyboard's process, which the settings app shares) and put
+ * seconds of parsing on a slow phone between a cold start and the first
+ * settings frame (#296, #313). So [load] reads only the index the build writes
+ * beside them (id, name, language — see `generateLayoutIndex` in the app's
+ * build script), and [byId] parses one file the first time it is asked for and
+ * keeps a bounded number of them after that.
+ *
+ * Asset layouts are deliberately never in `defaultEnabledIds`, so an index that
+ * is not loaded yet on the first frame only means a not-yet-selected language
+ * is briefly absent — never a keyboard with nothing to draw.
  */
 object AssetLayouts {
 
@@ -797,59 +807,137 @@ object AssetLayouts {
     const val SHI_LATN_T9_ID = "asset_shi_latn_t9"
     const val TLY_T9_ID = "asset_tly_t9"
 
-    @Volatile private var cached: List<LayoutSpec> = emptyList()
-    @Volatile private var index: Map<String, LayoutSpec> = emptyMap()
+    /**
+     * One shipped layout as the index describes it, without its grid. [name]
+     * is empty when the index was missing and the file has not been read.
+     */
+    class Entry(
+        val id: String,
+        val name: String,
+        val langId: String,
+        /** The Keyman keyboard whose rules the layout runs, when it has one. */
+        val keyman: KeymanBinding? = null,
+    )
+
+    @Volatile private var assets: AssetManager? = null
+    @Volatile private var entries: List<Entry> = emptyList()
+    @Volatile private var entryById: Map<String, Entry> = emptyMap()
     @Volatile private var loaded = false
 
     /**
-     * Bumped once, when [load] publishes the parsed layouts. Callers that cache
+     * Parsed layouts, most recently used last. Bounded because the settings
+     * app can walk through a great many of them (every language's preview
+     * cards), and the keyboard needs only the few that are switched on: those
+     * are asked for on every field focus, so they never age out.
+     */
+    private val parsed = object : LinkedHashMap<String, LayoutSpec>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, LayoutSpec>?): Boolean =
+            size > PARSED_CAPACITY
+    }
+
+    /**
+     * Bumped once, when [load] publishes the index. Callers that cache
      * anything derived from the shipped set key on it, so a cache built during
-     * the window before the assets have finished parsing — the first frames
-     * after a cold start — is discarded rather than serving a list that is
-     * missing 375 layouts for the rest of the process's life.
+     * the window before the index is read — the first frames after a cold
+     * start — is discarded rather than serving a list that is missing every
+     * asset layout for the rest of the process's life.
      */
     @Volatile
     var generation: Int = 0
         private set
 
-    /** The parsed asset layouts, or empty before [load] has run. */
-    val all: List<LayoutSpec> get() = cached
+    /** Every shipped asset layout, in file order, as the index names it. Empty before [load]. */
+    val index: List<Entry> get() = entries
+
+    /** Whether [id] names a shipped asset layout. No parse. */
+    fun isShipped(id: String): Boolean = id in entryById
+
+    /** [id]'s index entry, when the index was read and names it. No parse. */
+    fun entry(id: String): Entry? = entryById[id]?.takeIf { it.name.isNotEmpty() }
+
+    /**
+     * [id]'s display name, from the index — no parse, unless the index was
+     * missing. Null for an id this build does not ship.
+     */
+    fun nameOf(id: String): String? {
+        val entry = entryById[id] ?: return null
+        return entry.name.ifEmpty { byId(id)?.name.orEmpty() }
+    }
 
     /**
      * The shipped asset layout with this id, or null. The [BuiltInLayouts.byId]
-     * counterpart, for the callers that need "is this id one we ship?" and have
-     * to answer it for both halves of the shipped set.
+     * counterpart.
      *
-     * Indexed rather than scanned: this is on the field-focus path, where it is
-     * asked once per enabled layout, and there are ~375 of these.
+     * Parses the file on first use. That is one small file for nearly every
+     * layout, but it is still I/O, so the paths that can run before the first
+     * frame warm the ones they will need off the main thread ([warm]).
      */
-    fun byId(id: String): LayoutSpec? = index[id]
+    fun byId(id: String): LayoutSpec? {
+        if (id !in entryById) return null
+        synchronized(parsed) { parsed[id] }?.let { return it }
+        val manager = assets ?: return null
+        val spec = runCatching {
+            val text = manager.open("$DIR/${id.removePrefix(ID_PREFIX)}$SUFFIX")
+                .use { it.readBytes().decodeToString() }
+            LayoutFile.decode(text)?.layout
+        }.getOrNull() ?: return null
+        // Two threads racing the same miss both parse; the first one in wins,
+        // so every caller ends up holding the same instance.
+        return synchronized(parsed) { parsed.getOrPut(id) { spec } }
+    }
+
+    /** Parses [ids] now, on the calling thread, so a later [byId] is a lookup. */
+    fun warm(ids: Iterable<String>) {
+        for (id in ids) if (isShipped(id)) byId(id)
+    }
 
     /**
-     * Reads and parses every `.wmlayout.json` under `assets/layouts`, caching the
-     * result. Idempotent; the I/O runs on the calling thread, so call it off the
-     * main thread the way the service loads its dictionaries. A file that fails
-     * to parse is skipped, never fatal — one malformed asset cannot cost the
-     * others.
+     * Reads the index of the shipped layouts. Idempotent and cheap — one small
+     * asset — but still I/O, so call it off the main thread. Falls back to
+     * listing the folder when the index is missing (a build that skipped the
+     * generator), in which case names come from the files as they are parsed.
      */
     fun load(assets: AssetManager) {
         if (loaded) return
-        val names = runCatching { assets.list(DIR)?.asList() }.getOrNull().orEmpty()
-        val parsed = names
-            .filter { it.endsWith(SUFFIX) }
-            .mapNotNull { name ->
-                runCatching {
-                    val text = assets.open("$DIR/$name").use { it.readBytes().decodeToString() }
-                    LayoutFile.decode(text)?.layout
-                }.getOrNull()
+        this.assets = assets
+        val fromIndex = runCatching {
+            assets.open(INDEX).bufferedReader().useLines { lines ->
+                lines.mapNotNull { line ->
+                    val parts = line.split('\t')
+                    if (parts.size < 3 || parts[0].isEmpty()) {
+                        null
+                    } else {
+                        val keyman = parts.getOrNull(3)?.takeIf { it.isNotEmpty() }
+                            ?.let { KeymanBinding(it, parts.getOrNull(4).orEmpty()) }
+                        Entry(parts[0], parts[1], parts[2], keyman)
+                    }
+                }.toList()
             }
-        // Index before list: [byId] reads the index and [all] reads the list,
-        // and a reader that saw the new list must not then find an empty index.
-        index = parsed.associateBy { it.id }
-        cached = parsed
+        }.getOrNull()
+        val loadedEntries = fromIndex ?: runCatching { assets.list(DIR)?.asList() }.getOrNull().orEmpty()
+            .filter { it.endsWith(SUFFIX) }
+            .sorted()
+            .map { name ->
+                val id = ID_PREFIX + name.removeSuffix(SUFFIX)
+                Entry(id, "", "")
+            }
+        // Map before list, as readers of each expect the other to be there.
+        entryById = loadedEntries.associateBy { it.id }
+        entries = loadedEntries
         generation++
         loaded = true
     }
+
+    /** Every file under `assets/layouts` is this prefix plus its file stem. */
+    const val ID_PREFIX = "asset_"
+
+    /**
+     * The build-generated index: `id<TAB>name<TAB>langId<TAB>keymanId<TAB>keymanVersion`
+     * per line, the last two empty for a layout with no Keyman rules.
+     */
+    private const val INDEX = "layouts-index.tsv"
+
+    private const val PARSED_CAPACITY = 48
 
     private val SUFFIX = ".${LayoutFile.FILE_EXTENSION}"
 }

@@ -308,7 +308,7 @@ data class LayoutSpec(
  * language layout, so it is not one either.
  */
 fun secondaryLayouts(custom: List<LayoutSpec>): List<LayoutSpec> =
-    custom.filter { it.secondary && BuiltInLayouts.byId(it.id) == null && AssetLayouts.byId(it.id) == null }
+    custom.filter { it.secondary && !isShippedLayoutId(it.id) }
 
 /**
  * The language this layout types, resolved from [LayoutSpec.langId] against the
@@ -443,54 +443,78 @@ object LayoutCodec {
     internal val json: Json get() = layoutJson
 }
 
+/** Whether [id] names a layout this build ships — built-in or JSON asset. Never parses. */
+fun isShippedLayoutId(id: String): Boolean =
+    BuiltInLayouts.byId(id) != null || AssetLayouts.isShipped(id)
+
 /**
- * Every layout the user has: the shipped ones first in their shipped order — the
- * Kotlin [BuiltInLayouts] then the JSON [AssetLayouts] (empty until loaded off
- * the main thread) — then the user's own. A custom layout whose id matches a
- * shipped one is an *edit* of it: it takes that slot rather than appearing
- * twice, so a reference pinned to "builtin_qwerty" keeps working and deleting
- * the edit restores the shipped grid — which is why the editor's button says
- * "Reset" on a shipped layout and "Delete" on a custom. Same rule as
- * `resolveSymbolSets`.
+ * The layout [id] names among everything the user has, or null when nothing
+ * does. The shipped layouts come first — a custom layout whose id matches a
+ * shipped one is an *edit* of it and takes its place, so a reference pinned to
+ * "builtin_qwerty" keeps working and deleting the edit restores the shipped
+ * grid, which is why the editor's button says "Reset" on a shipped layout and
+ * "Delete" on a custom. Same rule as `resolveSymbolSets`.
+ *
+ * Deliberately one layout rather than the whole catalogue: the catalogue is
+ * over sixteen hundred grids, the JSON ones are parsed only when asked for
+ * (see [AssetLayouts]), and no screen needs more than the few it shows.
+ * [resolveLayout] is the same lookup for callers that need a grid whatever
+ * happens.
  */
-fun resolveLayouts(custom: List<LayoutSpec>): List<LayoutSpec> {
-    val generation = AssetLayouts.generation
-    ResolvedLayouts.cache?.let {
-        if (it.generation == generation && it.custom === custom) return it.resolved
+fun findLayout(custom: List<LayoutSpec>, id: String): LayoutSpec? {
+    return if (isShippedLayoutId(id)) {
+        // `associateBy` semantics: the last edit of a shipped id wins.
+        custom.lastOrNull { it.id == id } ?: BuiltInLayouts.byId(id) ?: AssetLayouts.byId(id)
+    } else {
+        custom.firstOrNull { it.id == id }
     }
-    val shipped = BuiltInLayouts.all + AssetLayouts.all
-    val overrides = custom.associateBy { it.id }
-    val resolvedShipped = shipped.map { overrides[it.id] ?: it }
-    val shippedIds = shipped.mapTo(HashSet()) { it.id }
-    val resolved = resolvedShipped + custom.filter { it.id !in shippedIds }
-    ResolvedLayouts.cache = ResolvedLayouts.Entry(custom, generation, resolved)
-    return resolved
 }
 
 /**
- * One-entry memo for [resolveLayouts].
- *
- * The list it builds is ~1,277 layouts long and building it costs four
- * collections of that size, and the whole thing is a pure function of the
- * user's custom layouts and the shipped set. Callers ask for it far more often
- * than either changes: the settings decode resolves layouts several times per
- * emission, and entering a field resolves one per enabled layout.
- *
- * Keyed on the *identity* of the custom list — the settings object holds one
- * instance for its lifetime, so the hot callers all hit — and on
- * [AssetLayouts.generation], so the empty pre-load shipped set can never be
- * cached past the moment the assets finish parsing. A miss just recomputes;
- * two threads racing both compute the same list and the later write wins.
+ * Where [id] sits in the shipped order — the built-ins first in their compiled
+ * order, then the asset layouts in file order — or [Int.MAX_VALUE] when it is
+ * not shipped. For lists that show shipped layouts in the order they always
+ * have, without building every one of them to find out.
  */
-private object ResolvedLayouts {
-    class Entry(
-        val custom: List<LayoutSpec>,
-        val generation: Int,
-        val resolved: List<LayoutSpec>,
-    )
+fun shippedLayoutRank(id: String): Int {
+    val builtIn = BuiltInLayouts.all.indexOfFirst { it.id == id }
+    if (builtIn >= 0) return builtIn
+    val asset = AssetLayouts.index.indexOfFirst { it.id == id }
+    return if (asset >= 0) BuiltInLayouts.all.size + asset else Int.MAX_VALUE
+}
 
-    @Volatile
-    var cache: Entry? = null
+/**
+ * The index entry [resolveLayout] would answer from for [id], when the answer
+ * is a JSON asset layout the user has not edited. Null means "resolve it":
+ * a built-in, an edit, a custom layout, or an index that was never read.
+ */
+private fun untouchedAssetEntry(custom: List<LayoutSpec>, id: String): AssetLayouts.Entry? {
+    if (BuiltInLayouts.byId(id) != null) return null
+    val entry = AssetLayouts.entry(id) ?: return null
+    return entry.takeIf { custom.none { it.id == id } }
+}
+
+/**
+ * [resolveLayout]'s name, without parsing a JSON layout only to name it: the
+ * lists and summaries that show a layout's name show a great many of them.
+ */
+fun resolveLayoutName(custom: List<LayoutSpec>, id: String): String {
+    val canonical = canonicalLayoutId(id, custom)
+    return untouchedAssetEntry(custom, canonical)?.name ?: resolveLayout(custom, canonical).name
+}
+
+/** [resolveLayout]'s language, without parsing a JSON layout to find it. */
+fun resolveLayoutLanguage(custom: List<LayoutSpec>, id: String): LanguageDef {
+    val canonical = canonicalLayoutId(id, custom)
+    return untouchedAssetEntry(custom, canonical)?.let { LanguageRegistry.byId(it.langId) }
+        ?: resolveLayout(custom, canonical).language()
+}
+
+/** [resolveLayout]'s Keyman binding, without parsing a JSON layout to find it. */
+fun resolveLayoutKeyman(custom: List<LayoutSpec>, id: String): KeymanBinding? {
+    val canonical = canonicalLayoutId(id, custom)
+    val entry = untouchedAssetEntry(custom, canonical)
+    return if (entry != null) entry.keyman else resolveLayout(custom, canonical).keyman
 }
 
 /**
@@ -516,9 +540,9 @@ data class KeymanBinding(
  * Answered by lookup rather than by resolving the whole catalogue and scanning
  * it: this is called once per enabled layout when a field is focused, and
  * building 1,277 layouts to pick one out is the sort of thing that shows up as a
- * keyboard that is slow to appear. The branches mirror [resolveLayouts]
- * exactly — a custom layout sharing a shipped id is an edit of it and wins that
- * slot, a custom-only id resolves to itself, anything else is the default.
+ * keyboard that is slow to appear. The branches mirror [findLayout] exactly —
+ * a custom layout sharing a shipped id is an edit of it and wins that slot, a
+ * custom-only id resolves to itself, anything else is the default.
  */
 fun resolveLayout(custom: List<LayoutSpec>, id: String): LayoutSpec {
     // Retired ids (the per-style fancy layouts) fold onto their replacement
@@ -527,11 +551,14 @@ fun resolveLayout(custom: List<LayoutSpec>, id: String): LayoutSpec {
     // than healing to the default.
     @Suppress("NAME_SHADOWING")
     val id = canonicalLayoutId(id, custom)
-    val shipped = BuiltInLayouts.byId(id) ?: AssetLayouts.byId(id)
-    return if (shipped != null) {
+    return if (isShippedLayoutId(id)) {
         // `associateBy` keeps the last entry for a repeated key, so an override
-        // list with duplicate ids resolves the way it did through the map.
-        custom.lastOrNull { it.id == id } ?: shipped
+        // list with duplicate ids resolves the way it did through the map. The
+        // edit is looked for first: it wins, and finding it costs no parse.
+        custom.lastOrNull { it.id == id }
+            ?: BuiltInLayouts.byId(id)
+            ?: AssetLayouts.byId(id)
+            ?: BuiltInLayouts.default
     } else {
         // Not shipped: this is the `custom.filter { it.id !in shippedIds }`
         // tail, which is scanned front to back.

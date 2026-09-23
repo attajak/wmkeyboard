@@ -48,7 +48,7 @@ import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
 import com.wasimaster.wmkeyboard.prediction.R as PredictionR
 import com.wasimaster.wmkeyboard.core.snippets.MultiExpandMode
 import com.wasimaster.wmkeyboard.core.layout.AlternateColumnsRange
-import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
+import com.wasimaster.wmkeyboard.core.layout.isShippedLayoutId
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.LayoutCodec
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
@@ -8139,13 +8139,14 @@ class SettingsRepository(private val context: Context) {
         // Run the mapping off the main thread. The IME collects on
         // Dispatchers.Main.immediate, so without this the layout and theme
         // JSON was decoded on the thread drawing the keyboard, on the very
-        // frame it was trying to appear. [mapPreferences] touches no Context
-        // and no disk, so it is free to move; its one piece of outside state
-        // is the shipped-layout catalogue, which is immutable except for the
-        // once-per-process [AssetLayouts.load] — and the keyboard re-resolves
-        // the layout for itself on every field focus rather than relying on
-        // this object's copy, so a mapping that ran before the assets finished
-        // parsing is not what decides which grid gets drawn.
+        // frame it was trying to appear. [mapPreferences] touches no Context,
+        // so it is free to move; its one piece of outside state is the
+        // shipped-layout catalogue, whose JSON half parses a layout the first
+        // time it is resolved — one more reason this belongs off main. The
+        // keyboard re-resolves the layout for itself on every field focus
+        // rather than relying on this object's copy, so a mapping that ran
+        // before the layout index was read is not what decides which grid
+        // gets drawn.
         .map { mapPreferences(it) }
         // Every reader of settings also brings the service addresses up to date,
         // so a download manager deep in a feature module reads the address the
@@ -10783,7 +10784,7 @@ class SettingsRepository(private val context: Context) {
      * shipped grid comes back under the same id, so every reference to it stays
      * valid, which is why the reference cleanup below is skipped for those.
      * "Shipped" covers the JSON asset layouts as well as the compiled built-ins:
-     * `resolveLayouts` splices both back in, so an edited BÉPO restores exactly
+     * `findLayout` puts both back, so an edited BÉPO restores exactly
      * like an edited QWERTY does, and stripping its references would switch off
      * a layout that is still there.
      */
@@ -10791,7 +10792,7 @@ class SettingsRepository(private val context: Context) {
         editPrefs { prefs ->
             val current = prefs[CUSTOM_LAYOUTS]?.let { LayoutCodec.decodeList(it) }.orEmpty()
             prefs[CUSTOM_LAYOUTS] = LayoutCodec.encodeList(current.filter { it.id != id })
-            if (BuiltInLayouts.byId(id) != null || AssetLayouts.byId(id) != null) return@editPrefs
+            if (isShippedLayoutId(id)) return@editPrefs
             prefs[ENABLED_LAYOUT_IDS]?.let { stored ->
                 val kept = stored.split(',')
                     .filter { it.isNotEmpty() && it != id }
