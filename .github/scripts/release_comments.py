@@ -642,8 +642,9 @@ def main() -> int:
                 else:
                     gh.request("POST", f"/repos/{args.repo}/issues/{plan.number}/comments",
                                {"body": plan.body})
-                log(f"{action}ed {head}")
-                rows.append((plan, f"{action}ed"))
+                done = {"post": "posted", "update": "updated"}[action]
+                log(f"{done} {head}")
+                rows.append((plan, done))
             except GitHubError as e:
                 failed += 1
                 log(f"::warning::Could not {action} on #{plan.number}: {e}")
