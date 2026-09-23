@@ -5380,7 +5380,6 @@
     <string name="tooldetail_custom_layout_layout_title">Розкладка для відображення</string>
     <string name="tooldetail_dictionary_auto_subtitle">Інструмент шукає вибране слово або поточне слово при відкритті</string>
     <string name="tooldetail_dictionary_auto_title">Шукати слово під курсором</string>
-    <string name="tooldetail_dictionary_info">Визначення надаються через Free Dictionary API (dictionaryapi.dev). Клавіатура надсилає слово, яке ви шукаєте, до цієї служби лише тоді, коли ви використовуєте цей інструмент.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Також зберігати відскановані сторінки в Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Зберегти в галерею</string>
     <string name="tooldetail_doc_scan_info">Це відкриває сканер документів Google, який є частиною сервісів Google Play, з функціями виявлення країв, обрізки та очищення тіней. Відскановані сторінки повертаються як зображення. Клавіатура вставляє їх у чат, як фото з камери, коли вона відкривається знову. Обробка виконується на вашому пристрої.</string>

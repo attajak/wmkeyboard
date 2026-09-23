@@ -31,9 +31,13 @@ object WiktionaryRestClient : VocabAutofill.Source {
         ServiceEndpoints.base(ServiceEndpoint.WIKTIONARY) + "/api/rest_v1/page/definition/" +
             URLEncoder.encode(word.trim(), "UTF-8").replace("+", "%20") + "?redirect=true"
 
-    override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? {
+    override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? =
+        lookup(lemma, NetSource.VOCABULARY)
+
+    /** [lookup], logged under [netSource]: the Dictionary tool asks the same endpoint. */
+    fun lookup(lemma: String, netSource: NetSource): VocabWord? {
         val connection = URL(url(lemma)).openConnection() as HttpURLConnection
-        val netCall = NetLog.call(NetSource.VOCABULARY, "GET", url(lemma), route = "/api/rest_v1/page/definition")
+        val netCall = NetLog.call(netSource, "GET", url(lemma), route = "/api/rest_v1/page/definition")
         try {
             connection.connectTimeout = 8_000
             connection.readTimeout = 12_000

@@ -561,6 +561,7 @@
   {"title":"Shutter sound","name":"tooldetail_camera_shutter_title","route":"tool/CAMERA","screens":["Tools","Camera"],"screen":false},
   {"title":"Haptics","name":"tooldetail_camera_haptics_title","route":"tool/CAMERA","screens":["Tools","Camera"],"screen":false},
   {"title":"Look up the word at the cursor","name":"tooldetail_dictionary_auto_title","route":"tool/DICTIONARY","screens":["Tools","Dictionary"],"screen":false},
+  {"title":"Dictionary sources","name":"tooldetail_dictionary_sources_title","route":"tool/DICTIONARY","screens":["Tools","Dictionary"],"screen":false},
   {"title":"Vocabulary packs","name":"tooldetail_vocab_packs_title","route":"tool/VOCABULARY","screens":["Tools","Vocabulary"],"screen":false},
   {"title":"My lists","name":"tooldetail_vocab_lists_title","route":"tool/VOCABULARY","screens":["Tools","Vocabulary"],"screen":false},
   {"title":"Review","name":"tooldetail_vocab_review_title","route":"tool/VOCABULARY","screens":["Tools","Vocabulary"],"screen":false},

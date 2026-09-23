@@ -5382,7 +5382,6 @@
     <string name="tooldetail_custom_layout_layout_title">Rozloženie na zobrazenie</string>
     <string name="tooldetail_dictionary_auto_subtitle">Nástroj po otvorení vyhľadá vybrané slovo alebo aktuálne slovo</string>
     <string name="tooldetail_dictionary_auto_title">Vyhľadať slovo pod kurzorom</string>
-    <string name="tooldetail_dictionary_info">Definície pochádzajú z rozhrania Free Dictionary API (dictionaryapi.dev). Klávesnica odošle hľadané slovo do tejto služby iba vtedy, keď použijete tento nástroj.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Taktiež ponechať naskenované strany v Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Uložiť do galérie</string>
     <string name="tooldetail_doc_scan_info">Otvorí skener dokumentov od Googlu, ktorý je súčasťou Služieb Google Play a zahŕňa detekciu okrajov, orezanie a odstránenie tieňov. Naskenované stránky sa vrátia ako obrázky. Keď sa klávesnica znova otvorí, vloží ich do četu ako fotografiu z fotoaparátu. Spracovanie prebieha vo vašom zariadení.</string>

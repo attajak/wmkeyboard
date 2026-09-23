@@ -5381,7 +5381,6 @@
     <string name="tooldetail_custom_layout_layout_title">காட்ட வேண்டிய அமைப்பு</string>
     <string name="tooldetail_dictionary_auto_subtitle">கருவி திறக்கும்போது தேர்ந்தெடுக்கப்பட்ட வார்த்தையை அல்லது தற்போதைய வார்த்தையைத் தேடும்</string>
     <string name="tooldetail_dictionary_auto_title">கர்சரில் உள்ள சொல்லைத் தேடவும்</string>
-    <string name="tooldetail_dictionary_info">வரையறைகள் Free Dictionary API (dictionaryapi.dev) இலிருந்து வருகின்றன. நீங்கள் கருவியைப் பயன்படுத்தும் போது மட்டுமே, நீங்கள் தேடும் சொல்லை விசைப்பலகை அந்தச் சேவைக்கு அனுப்புகிறது.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">ஸ்கேன் செய்யப்பட்ட பக்கங்களை Pictures/WM Keyboard கோப்புறையிலும் வைத்திருக்கவும்</string>
     <string name="tooldetail_doc_scan_gallery_title">கேலரியில் சேமிக்கவும்</string>
     <string name="tooldetail_doc_scan_info">இது கூகுள் பிளே சேவைகளின் ஒரு பகுதியான கூகுளின் ஆவண ஸ்கேனரைத் திறக்கும், இதில் விளிம்பு கண்டறிதல், செதுக்குதல் மற்றும் நிழல் சுத்தம் செய்தல் ஆகியவை அடங்கும். ஸ்கேன் செய்யப்பட்ட பக்கங்கள் படங்களாகத் திரும்பும். விசைப்பலகை மீண்டும் திறக்கும்போது, கேமரா புகைப்படம் போல அவற்றைச் சாட்டில் சேர்க்கும். செயலாக்கம் உங்கள் சாதனத்திலேயே நடக்கும்.</string>

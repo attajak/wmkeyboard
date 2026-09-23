@@ -5377,7 +5377,6 @@
     <string name="tooldetail_custom_layout_layout_title">Bố cục hiển thị</string>
     <string name="tooldetail_dictionary_auto_subtitle">Công cụ sẽ tìm kiếm từ được chọn hoặc từ hiện tại khi mở</string>
     <string name="tooldetail_dictionary_auto_title">Tra từ tại vị trí con trỏ</string>
-    <string name="tooldetail_dictionary_info">Định nghĩa được lấy từ Free Dictionary API (dictionaryapi.dev). Bàn phím chỉ gửi từ bạn tra cứu đến dịch vụ đó khi bạn sử dụng công cụ này.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Đồng thời giữ các trang đã quét trong Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Lưu vào thư viện</string>
     <string name="tooldetail_doc_scan_info">Thao tác này mở trình quét tài liệu của Google, một phần của Dịch vụ Google Play, với tính năng phát hiện cạnh, cắt và xóa bóng. Các trang được quét sẽ trả về dưới dạng hình ảnh. Bàn phím sẽ đưa chúng vào cuộc trò chuyện giống như ảnh chụp từ máy ảnh khi mở lại. Quá trình xử lý diễn ra trên thiết bị của bạn.</string>

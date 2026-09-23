@@ -989,6 +989,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_launcher_drilldown_title) { Icons.Outlined.AppShortcut }
         put(R.string.tooldetail_launcher_non_exported_title) { Icons.Outlined.Lock }
         put(R.string.tooldetail_dictionary_auto_title) { Icons.Outlined.Search }
+        put(R.string.tooldetail_dictionary_sources_title) { Icons.Outlined.SwapHoriz }
         // ---- Vocabulary ----
         put(R.string.tooldetail_vocab_packs_title) { Icons.Outlined.Inventory2 }
         put(R.string.tooldetail_vocab_lists_title) { Icons.Outlined.PlaylistAdd }

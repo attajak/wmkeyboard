@@ -5386,7 +5386,6 @@
     <string name="tooldetail_custom_layout_layout_title">التخطيط المراد عرضه</string>
     <string name="tooldetail_dictionary_auto_subtitle">تبحث الأداة عن الكلمة المحددة أو الكلمة الحالية عند فتحها</string>
     <string name="tooldetail_dictionary_auto_title">البحث عن الكلمة الموجودة عند المؤشر</string>
-    <string name="tooldetail_dictionary_info">تأتي التعريفات من Free Dictionary API (dictionaryapi.dev). ترسل لوحة المفاتيح الكلمة التي تبحث عنها إلى تلك الخدمة فقط عند استخدام الأداة.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">احتفظ أيضًا بالصفحات الممسوحة ضوئيًا في Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">حفظ في المعرض</string>
     <string name="tooldetail_doc_scan_info">يفتح هذا ماسح المستندات الضوئي من Google، وهو جزء من خدمات Google Play، مع ميزات اكتشاف الحواف، والقص، وتنظيف الظلال. تعود الصفحات الممسوحة ضوئياً كصور. تضعها لوحة المفاتيح في الدردشة مثل صورة الكاميرا عند فتحها مرة أخرى. تتم المعالجة على جهازك.</string>

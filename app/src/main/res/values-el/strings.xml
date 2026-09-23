@@ -5381,7 +5381,6 @@
     <string name="tooldetail_custom_layout_layout_title">Διάταξη προς εμφάνιση</string>
     <string name="tooldetail_dictionary_auto_subtitle">Το εργαλείο αναζητά την επιλεγμένη λέξη ή την τρέχουσα λέξη όταν ανοίγει</string>
     <string name="tooldetail_dictionary_auto_title">Αναζήτηση της λέξης στον δρομέα</string>
-    <string name="tooldetail_dictionary_info">Οι ορισμοί προέρχονται από το Free Dictionary API (dictionaryapi.dev). Το πληκτρολόγιο στέλνει τη λέξη που αναζητάτε σε αυτή την υπηρεσία, μόνο όταν χρησιμοποιείτε το εργαλείο.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Διατηρήστε επίσης τις σαρωμένες σελίδες στο Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Αποθήκευση στη συλλογή</string>
     <string name="tooldetail_doc_scan_info">Αυτό ανοίγει τον σαρωτή εγγράφων της Google, ο οποίος αποτελεί μέρος των υπηρεσιών Google Play, με ανίχνευση άκρων, περικοπή και καθαρισμό σκιών. Οι σαρωμένες σελίδες επιστρέφουν ως εικόνες. Το πληκτρολόγιο τις τοποθετεί στη συνομιλία όπως μια φωτογραφία από την κάμερα όταν ανοίξει ξανά. Η επεξεργασία εκτελείται στη συσκευή σας.</string>

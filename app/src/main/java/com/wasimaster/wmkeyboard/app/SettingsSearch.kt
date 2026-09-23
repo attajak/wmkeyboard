@@ -1050,6 +1050,7 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.CAMERA, R.string.tooldetail_camera_shutter_title, R.string.tooldetail_camera_shutter_subtitle),
     toolEntry(ToolbarTool.CAMERA, R.string.tooldetail_camera_haptics_title, R.string.tooldetail_camera_haptics_subtitle),
     toolEntry(ToolbarTool.DICTIONARY, R.string.tooldetail_dictionary_auto_title, R.string.tooldetail_dictionary_auto_subtitle),
+    toolEntry(ToolbarTool.DICTIONARY, R.string.tooldetail_dictionary_sources_title, R.string.tooldetail_dictionary_sources_subtitle),
     toolEntry(
         ToolbarTool.VOCABULARY,
         R.string.tooldetail_vocab_packs_title,

@@ -5386,7 +5386,6 @@
     <string name="tooldetail_custom_layout_layout_title">Izgled za prikaz</string>
     <string name="tooldetail_dictionary_auto_subtitle">Alat pretražuje odabranu riječ ili trenutnu riječ kada se otvori</string>
     <string name="tooldetail_dictionary_auto_title">Potraži riječ kod kursora</string>
-    <string name="tooldetail_dictionary_info">Definicije dolaze iz Free Dictionary API-ja (dictionaryapi.dev). Tipkovnica šalje riječ koju tražite toj usluzi samo kada koristite alat.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Također zadrži skenirane stranice u Slike/WM Tipkovnica</string>
     <string name="tooldetail_doc_scan_gallery_title">Spremi u galeriju</string>
     <string name="tooldetail_doc_scan_info">Ovo otvara Googleov skener dokumenata, koji je dio Google Play usluga, s detekcijom rubova, obrezivanjem i čišćenjem sjena. Skenirane stranice vraćaju se kao slike. Tipkovnica ih stavlja u chat poput fotografije s kamere kada se ponovno otvori. Obrada se izvodi na vašem uređaju.</string>

@@ -5380,7 +5380,6 @@
     <string name="tooldetail_custom_layout_layout_title">Rozvržení k zobrazení</string>
     <string name="tooldetail_dictionary_auto_subtitle">Nástroj vyhledá vybrané slovo nebo aktuální slovo při otevření</string>
     <string name="tooldetail_dictionary_auto_title">Vyhledat slovo pod kurzorem</string>
-    <string name="tooldetail_dictionary_info">Definice pocházejí z Free Dictionary API (dictionaryapi.dev). Klávesnice odešle slovo, které hledáte, této službě pouze tehdy, když nástroj použijete.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Skenované stránky ukládat také do Obrázky/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Uložit do galerie</string>
     <string name="tooldetail_doc_scan_info">Tím se otevře skener dokumentů Google, který je součástí Služeb Google Play, s detekcí okrajů, oříznutím a vyčištěním stínů. Naskenované stránky se vrátí jako obrázky. Klávesnice je po opětovném otevření vloží do chatu jako fotografii z fotoaparátu. Zpracování probíhá ve vašem zařízení.</string>

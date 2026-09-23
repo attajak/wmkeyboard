@@ -5384,7 +5384,6 @@
     <string name="tooldetail_custom_layout_layout_title">Rādāmais izkārtojums</string>
     <string name="tooldetail_dictionary_auto_subtitle">Rīks meklē atlasīto vārdu vai pašreizējo vārdu, kad tas tiek atvērts</string>
     <string name="tooldetail_dictionary_auto_title">Meklēt vārdu pie kursora</string>
-    <string name="tooldetail_dictionary_info">Definīcijas nāk no Free Dictionary API (dictionaryapi.dev). Tastatūra nosūta vārdu, kuru meklējat, uz šo pakalpojumu tikai tad, kad izmantojat rīku.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Saglabāt skenētās lapas arī mapē Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Saglabāt galerijā</string>
     <string name="tooldetail_doc_scan_info">Tas atver Google dokumentu skeneri, kas ir daļa no Google Play pakalpojumiem, ar malu noteikšanu, apgriešanu un ēnu tīrīšanu. Skenētās lapas tiek atgrieztas kā attēli. Tastatūra tos ievieto tērzēšanā kā kameras fotoattēlu, kad tā atkal tiek atvērta. Apstrāde notiek jūsu ierīcē.</string>

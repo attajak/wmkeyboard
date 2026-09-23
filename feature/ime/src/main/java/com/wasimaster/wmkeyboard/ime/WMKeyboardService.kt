@@ -354,7 +354,8 @@ import com.wasimaster.wmkeyboard.core.util.PlayServices
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import com.wasimaster.wmkeyboard.ime.ui.KeyGridFocus
 import com.wasimaster.wmkeyboard.ime.ui.PanelFocusController
-import com.wasimaster.wmkeyboard.core.tools.DictionaryClient
+import com.wasimaster.wmkeyboard.core.tools.DictionaryLookup
+import com.wasimaster.wmkeyboard.core.tools.DictionarySource
 import com.wasimaster.wmkeyboard.core.tools.GifItem
 import com.wasimaster.wmkeyboard.core.grammar.GrammarChecker
 import com.wasimaster.wmkeyboard.core.grammar.GrammarEdit
@@ -23581,16 +23582,29 @@ open class WMKeyboardService : InputMethodService() {
                 dictionary = DictionaryUi.Loading(word),
             )
         }
+        val settings = _uiState.value.settings
+        val sources = settings.dictionarySources.filter { it.enabled }.map { it.source }
+        if (sources.isEmpty()) {
+            _uiState.update { it.copy(dictionary = DictionaryUi.NoSources) }
+            return
+        }
+        val codes = VocabLanguages.wantedCodes(
+            settings.vocabulary.translationLangList,
+            settings.enabledLanguages.map { it.id },
+        )
         dictionaryJob = serviceScope.launch {
-            val ui = try {
-                val entries = withContext(Dispatchers.IO) { DictionaryClient.lookup(word) }
-                if (entries.isEmpty()) DictionaryUi.NotFound(word) else DictionaryUi.Ready(entries)
-            } catch (_: DictionaryClient.NotFoundException) {
-                DictionaryUi.NotFound(word)
-            } catch (e: kotlinx.coroutines.CancellationException) {
-                throw e
-            } catch (_: Exception) {
-                DictionaryUi.Error(word)
+            // The packs' index is the vocabulary tool's when it has one
+            // loaded; otherwise the same shared copy, read with the same codes
+            // so the cache is not thrashed.
+            val index = vocabIndex ?: if (DictionarySource.VOCAB_PACKS in sources && userUnlocked) {
+                withContext(Dispatchers.IO) { VocabIndexCache.get(filesDir, codes) }.takeUnless { it.isEmpty }
+            } else {
+                null
+            }
+            val ui = when (val result = DictionaryLookup.resolve(word, sources, DictionaryLookup.fetcher { index })) {
+                is DictionaryLookup.Result.Found -> DictionaryUi.Ready(result.entries, result.source)
+                DictionaryLookup.Result.NotFound -> DictionaryUi.NotFound(word)
+                DictionaryLookup.Result.Failed -> DictionaryUi.Error(word)
             }
             _uiState.update { it.copy(dictionary = ui) }
         }

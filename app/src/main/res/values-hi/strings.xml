@@ -5394,7 +5394,6 @@
     <string name="tooldetail_custom_layout_layout_title">दिखाने के लिए लेआउट</string>
     <string name="tooldetail_dictionary_auto_subtitle">यह टूल खुलने पर चुने गए शब्द या वर्तमान शब्द को खोजता है</string>
     <string name="tooldetail_dictionary_auto_title">कर्सर पर शब्द देखें</string>
-    <string name="tooldetail_dictionary_info">परिभाषाएं फ्री डिक्शनरी एपीआई (dictionaryapi.dev) से आती हैं। कीबोर्ड केवल तभी उस सेवा को शब्द भेजता है जब आप टूल का उपयोग करते हैं।</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">स्कैन किए गए पृष्ठों को Pictures/WM Keyboard में भी रखें</string>
     <string name="tooldetail_doc_scan_gallery_title">गैलरी में सेव करें</string>
     <string name="tooldetail_doc_scan_info">यह Google के दस्तावेज़ स्कैनर को खोलता है, जो Google Play सेवाओं का हिस्सा है, जिसमें एज डिटेक्शन, क्रॉप और शैडो क्लीनअप की सुविधा है। स्कैन किए गए पेज छवियों के रूप में वापस आते हैं। कीबोर्ड उन्हें दोबारा खुलने पर कैमरा फ़ोटो की तरह चैट में डाल देता है। प्रोसेसिंग आपके डिवाइस पर चलती है।</string>

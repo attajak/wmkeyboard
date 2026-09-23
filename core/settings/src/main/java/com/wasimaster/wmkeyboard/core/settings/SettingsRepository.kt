@@ -64,6 +64,8 @@ import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.layout.script
 import com.wasimaster.wmkeyboard.core.tools.AltCalendar
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
+import com.wasimaster.wmkeyboard.core.tools.DictionarySourceChoice
+import com.wasimaster.wmkeyboard.core.tools.DictionarySources
 import com.wasimaster.wmkeyboard.core.tools.CurrencyLabel
 import com.wasimaster.wmkeyboard.core.tools.SolarTimes
 import com.wasimaster.wmkeyboard.core.tools.Weekend
@@ -2876,6 +2878,8 @@ data class KeyboardSettings(
     val gif: GifSettings = GifSettings(),
     /** Dictionary tool looks up the word at the cursor when it opens. */
     val dictionaryAutoLookup: Boolean = true,
+    /** Where the Dictionary tool looks, in the order it asks, each on or off. */
+    val dictionarySources: List<DictionarySourceChoice> = DictionarySources.DEFAULT,
     /** Text-editing tool and selection-editing settings (see [TextEditingSettings]). */
     val textEditing: TextEditingSettings = TextEditingSettings(),
     /** The trackpad tool: sensitivity and the gestures it answers to (see [TrackpadSettings]). */
@@ -7566,6 +7570,7 @@ class SettingsRepository(private val context: Context) {
         private val GIF_SEND_MODE = stringPreferencesKey("gif_send_mode")
         private val QR_SEND_MODE = stringPreferencesKey("qr_send_mode")
         private val DICTIONARY_AUTO_LOOKUP = booleanPreferencesKey("dictionary_auto_lookup")
+        private val DICTIONARY_SOURCES = stringPreferencesKey("dictionary_sources")
         private val TEXT_EDIT_REPEAT_MS = intPreferencesKey("text_edit_repeat_ms")
         private val CURSOR_TOOLS_REPEAT_ON_HOLD =
             booleanPreferencesKey("cursor_tools_repeat_on_hold")
@@ -9070,6 +9075,7 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.gif.stickerSuggestTrigger,
             ),
             dictionaryAutoLookup = p[DICTIONARY_AUTO_LOOKUP] ?: defaults.dictionaryAutoLookup,
+            dictionarySources = p[DICTIONARY_SOURCES]?.let(DictionarySources::decode) ?: defaults.dictionarySources,
             textEditing = TextEditingSettings(
                 repeatMs = p[TEXT_EDIT_REPEAT_MS] ?: defaults.textEditing.repeatMs,
                 cursorToolsRepeatOnHold = p[CURSOR_TOOLS_REPEAT_ON_HOLD]
@@ -10255,6 +10261,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDictionaryAutoLookup(value: Boolean) =
         editPrefs { it[DICTIONARY_AUTO_LOOKUP] = value }
+
+    /** Replaces the Dictionary tool's sources, order and switches together. */
+    suspend fun setDictionarySources(value: List<DictionarySourceChoice>) =
+        editPrefs { it[DICTIONARY_SOURCES] = DictionarySources.encode(value) }
 
     suspend fun setToolboxColumns(value: Int) =
         editPrefs { it[TOOLBOX_COLUMNS] = value.coerceIn(3, 6) }

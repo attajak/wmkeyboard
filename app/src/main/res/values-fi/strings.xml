@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">Näytettävä asettelu</string>
     <string name="tooldetail_dictionary_auto_subtitle">Työkalu etsii valittua sanaa tai nykyistä sanaa, kun se avautuu</string>
     <string name="tooldetail_dictionary_auto_title">Etsi sana kohdistimen kohdalta</string>
-    <string name="tooldetail_dictionary_info">Määritelmät tulevat Free Dictionary API:sta (dictionaryapi.dev). Näppäimistö lähettää hakemasi sanan kyseiseen palveluun vain, kun käytät työkalua.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Säilytä skannatut sivut myös kansiossa Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Tallenna galleriaan</string>
     <string name="tooldetail_doc_scan_info">Tämä avaa Googlen asiakirjaskannerin, joka on osa Google Play -palveluita, sisältäen reunantunnistuksen, rajauksen ja varjojen poiston. Skannatut sivut palautuvat kuvina. Näppäimistö lisää ne keskusteluun kamerakuvan tavoin, kun se avautuu uudelleen. Käsittely tapahtuu laitteellasi.</string>

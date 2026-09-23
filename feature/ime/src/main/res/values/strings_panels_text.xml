@@ -38,6 +38,8 @@
     <!-- Inserts the headword at the cursor. -->
     <string name="ime_dict_insert_action">Insert</string>
     <string name="ime_dict_error">The app cannot reach the dictionary. Check your network and try again.</string>
+    <string name="ime_dict_no_sources">All dictionary sources are off. Turn one on in the Dictionary tool settings.</string>
+    <string name="ime_dict_from">From <xliff:g id="source" example="Wiktionary">%1$s</xliff:g></string>
     <!-- %1$s is the word the user asked for. -->
     <string name="ime_dict_not_found_empty">No entry for “<xliff:g id="word" example="keyboard">%1$s</xliff:g>”. Check the spelling, or try the base form of the word.</string>
 

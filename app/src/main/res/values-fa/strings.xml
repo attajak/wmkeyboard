@@ -5387,7 +5387,6 @@
     <string name="tooldetail_custom_layout_layout_title">طرح‌بندی برای نمایش</string>
     <string name="tooldetail_dictionary_auto_subtitle">این ابزار کلمه انتخاب‌شده یا کلمه فعلی را هنگام باز شدن جستجو می‌کند</string>
     <string name="tooldetail_dictionary_auto_title">جستجوی کلمه در محل مکان‌نما</string>
-    <string name="tooldetail_dictionary_info">تعاریف از API فرهنگ لغت رایگان (dictionaryapi.dev) می‌آیند. صفحه‌کلید فقط زمانی که از ابزار استفاده می‌کنید، کلمه‌ای را که جستجو می‌کنید به آن سرویس می‌فرستد.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">همچنین صفحات اسکن‌شده را در Pictures/WM Keyboard نگه دارید</string>
     <string name="tooldetail_doc_scan_gallery_title">ذخیره در گالری</string>
     <string name="tooldetail_doc_scan_info">این گزینه اسکنر اسناد گوگل را باز می‌کند که بخشی از خدمات Google Play است و دارای قابلیت تشخیص لبه، برش و حذف سایه می‌باشد. صفحات اسکن‌شده به صورت تصویر بازگردانده می‌شوند. صفحه‌کلید پس از باز شدن مجدد، آن‌ها را مانند عکس دوربین در چت قرار می‌دهد. پردازش روی دستگاه شما انجام می‌شود.</string>

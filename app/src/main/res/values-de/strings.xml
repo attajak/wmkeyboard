@@ -5384,7 +5384,6 @@
     <string name="tooldetail_custom_layout_layout_title">Anzuzeigendes Layout</string>
     <string name="tooldetail_dictionary_auto_subtitle">Das Werkzeug sucht beim Öffnen nach dem ausgewählten oder dem aktuellen Wort</string>
     <string name="tooldetail_dictionary_auto_title">Wort am Cursor nachschlagen</string>
-    <string name="tooldetail_dictionary_info">Definitionen stammen von der Free Dictionary API (dictionaryapi.dev). Die Tastatur sendet das Wort, das Sie nachschlagen, nur dann an diesen Dienst, wenn Sie das Werkzeug verwenden.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Scans auch unter Bilder/WM Keyboard speichern</string>
     <string name="tooldetail_doc_scan_gallery_title">In der Galerie speichern</string>
     <string name="tooldetail_doc_scan_info">Dies öffnet den Dokumentenscanner von Google, der Teil der Google Play-Dienste ist, mit Kantenerkennung, Zuschneiden und Schattenentfernung. Gescannte Seiten werden als Bilder zurückgegeben. Die Tastatur fügt sie beim erneuten Öffnen wie ein Kamerafoto in den Chat ein. Die Verarbeitung erfolgt auf deinem Gerät.</string>

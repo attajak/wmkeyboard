@@ -5375,7 +5375,6 @@
     <string name="tooldetail_custom_layout_layout_title">Layout da mostrare</string>
     <string name="tooldetail_dictionary_auto_subtitle">Lo strumento cerca la parola selezionata o la parola corrente quando si apre</string>
     <string name="tooldetail_dictionary_auto_title">Cerca la parola al cursore</string>
-    <string name="tooldetail_dictionary_info">Le definizioni provengono dal Free Dictionary API (dictionaryapi.dev). La tastiera invia la parola che cerchi a quel servizio, solo quando utilizzi lo strumento.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Conserva anche le pagine scansionate in Immagini/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Salva nella galleria</string>
     <string name="tooldetail_doc_scan_info">Questo apre lo scanner di documenti di Google, parte dei servizi Google Play, con rilevamento dei bordi, ritaglio e rimozione delle ombre. Le pagine scansionate vengono restituite come immagini. La tastiera le inserisce nella chat come una foto della fotocamera quando viene riaperta. L\'elaborazione avviene sul tuo dispositivo.</string>

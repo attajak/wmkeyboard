@@ -5377,7 +5377,6 @@
     <string name="tooldetail_custom_layout_layout_title">표시할 레이아웃</string>
     <string name="tooldetail_dictionary_auto_subtitle">도구가 열릴 때 선택한 단어나 현재 단어를 검색합니다</string>
     <string name="tooldetail_dictionary_auto_title">커서 위치의 단어 검색</string>
-    <string name="tooldetail_dictionary_info">정의는 Free Dictionary API(dictionaryapi.dev)에서 제공합니다. 키보드는 도구를 사용할 때만 검색한 단어를 해당 서비스로 전송합니다.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">스캔한 페이지를 Pictures/WM Keyboard에도 보관</string>
     <string name="tooldetail_doc_scan_gallery_title">갤러리에 저장</string>
     <string name="tooldetail_doc_scan_info">Google Play 서비스의 일부인 Google 문서 스캐너가 열리며, 가장자리 감지, 자르기 및 그림자 제거 기능을 제공합니다. 스캔한 페이지는 이미지로 반환됩니다. 키보드가 다시 열리면 카메라 사진처럼 채팅창에 삽입됩니다. 처리는 기기 내에서 수행됩니다.</string>

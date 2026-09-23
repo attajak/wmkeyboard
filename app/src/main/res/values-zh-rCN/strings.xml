@@ -5375,7 +5375,6 @@
     <string name="tooldetail_custom_layout_layout_title">要显示的布局</string>
     <string name="tooldetail_dictionary_auto_subtitle">工具打开时会自动搜索所选单词或当前单词</string>
     <string name="tooldetail_dictionary_auto_title">查找光标处的单词</string>
-    <string name="tooldetail_dictionary_info">定义来自 Free Dictionary API (dictionaryapi.dev)。仅当您使用该工具时，键盘才会将您查询的单词发送到该服务。</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">同时将扫描的页面保存在 Pictures/WM Keyboard 中</string>
     <string name="tooldetail_doc_scan_gallery_title">保存到相册</string>
     <string name="tooldetail_doc_scan_info">这将打开 Google 的文档扫描仪（Google Play 服务的一部分），支持边缘检测、裁剪和阴影清理。扫描的页面将作为图像返回。当键盘再次打开时，它会像相机照片一样将这些图像放入聊天中。处理过程在您的设备上运行。</string>

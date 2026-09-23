@@ -5381,7 +5381,6 @@
     <string name="tooldetail_custom_layout_layout_title">Aspect de afișat</string>
     <string name="tooldetail_dictionary_auto_subtitle">Instrumentul caută cuvântul selectat sau cuvântul curent când se deschide</string>
     <string name="tooldetail_dictionary_auto_title">Caută cuvântul de la cursor</string>
-    <string name="tooldetail_dictionary_info">Definițiile provin de la API-ul Free Dictionary (dictionaryapi.dev). Tastatura trimite cuvântul pe care îl cauți către acel serviciu, doar atunci când folosești instrumentul.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Păstrează paginile scanate și în Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Salvează în galerie</string>
     <string name="tooldetail_doc_scan_info">Aceasta deschide scanerul de documente Google, care face parte din serviciile Google Play, cu detectarea marginilor, decupare și curățarea umbrelor. Paginile scanate revin sub formă de imagini. Tastatura le introduce în chat ca pe o fotografie din cameră când se deschide din nou. Procesarea rulează pe dispozitivul tău.</string>

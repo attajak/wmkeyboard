@@ -5386,7 +5386,6 @@
     <string name="tooldetail_custom_layout_layout_title">Skipulag til sýnis</string>
     <string name="tooldetail_dictionary_auto_subtitle">Verkfærið leitar að völdu orði eða núverandi orði þegar það opnast</string>
     <string name="tooldetail_dictionary_auto_title">Fletta upp orðinu við bendilinn</string>
-    <string name="tooldetail_dictionary_info">Skilgreiningar koma frá Free Dictionary API (dictionaryapi.dev). Lyklaborðið sendir orðið sem þú leitar að til þeirrar þjónustu, aðeins þegar þú notar verkfærið.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Geyma einnig skannaðar síður í Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Vista í myndasafn</string>
     <string name="tooldetail_doc_scan_info">Þetta opnar skjalaskanna Google, sem er hluti af Google Play þjónustu, með brúnagreiningu, klippingu og skuggaeyðingu. Skönnuðar síður koma til baka sem myndir. Lyklaborðið setur þær í spjallið eins og myndavélarmynd þegar það opnast aftur. Vinnslan fer fram á tækinu þínu.</string>

@@ -5376,7 +5376,6 @@
     <string name="tooldetail_custom_layout_layout_title">Disposition à afficher</string>
     <string name="tooldetail_dictionary_auto_subtitle">L\'outil recherche le mot sélectionné ou le mot actuel à l\'ouverture</string>
     <string name="tooldetail_dictionary_auto_title">Rechercher le mot au curseur</string>
-    <string name="tooldetail_dictionary_info">Les définitions proviennent de l\'API Free Dictionary (dictionaryapi.dev). Le clavier envoie le mot que vous recherchez à ce service, uniquement lorsque vous utilisez l\'outil.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Conserver également les pages numérisées dans Images/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Enregistrer dans la galerie</string>
     <string name="tooldetail_doc_scan_info">Ceci ouvre le scanner de documents de Google, qui fait partie des services Google Play, avec détection des bords, recadrage et nettoyage des ombres. Les pages numérisées sont renvoyées sous forme d\'images. Le clavier les insère dans la discussion comme une photo d\'appareil photo lorsqu\'il s\'ouvre à nouveau. Le traitement s\'effectue sur votre appareil.</string>

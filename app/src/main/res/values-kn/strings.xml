@@ -5394,7 +5394,6 @@
     <string name="tooldetail_custom_layout_layout_title">ತೋರಿಸಬೇಕಾದ ಲೇಔಟ್</string>
     <string name="tooldetail_dictionary_auto_subtitle">ಉಪಕರಣವು ತೆರೆದಾಗ ಆಯ್ಕೆಮಾಡಿದ ಪದವನ್ನು ಅಥವಾ ಪ್ರಸ್ತುತ ಪದವನ್ನು ಹುಡುಕುತ್ತದೆ</string>
     <string name="tooldetail_dictionary_auto_title">ಕರ್ಸರ್‌ನಲ್ಲಿರುವ ಪದವನ್ನು ಹುಡುಕಿ</string>
-    <string name="tooldetail_dictionary_info">ವ್ಯಾಖ್ಯಾನಗಳು ಫ್ರೀ ಡಿಕ್ಷನರಿ API (dictionaryapi.dev) ನಿಂದ ಬಂದಿವೆ. ನೀವು ಈ ಉಪಕರಣವನ್ನು ಬಳಸಿದಾಗ ಮಾತ್ರ ಕೀಬೋರ್ಡ್ ನೀವು ಹುಡುಕುವ ಪದವನ್ನು ಆ ಸೇವೆಗೆ ಕಳುಹಿಸುತ್ತದೆ.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">ಸ್ಕ್ಯಾನ್ ಮಾಡಿದ ಪುಟಗಳನ್ನು Pictures/WM Keyboard ನಲ್ಲಿಯೂ ಇರಿಸಿ</string>
     <string name="tooldetail_doc_scan_gallery_title">ಗ್ಯಾಲರಿಗೆ ಉಳಿಸಿ</string>
     <string name="tooldetail_doc_scan_info">ಇದು ಗೂಗಲ್‌ನ ಡಾಕ್ಯುಮೆಂಟ್ ಸ್ಕ್ಯಾನರ್ ಅನ್ನು ತೆರೆಯುತ್ತದೆ, ಇದು ಗೂಗಲ್ ಪ್ಲೇ ಸೇವೆಗಳ ಭಾಗವಾಗಿದೆ, ಇದು ಎಡ್ಜ್ ಡಿಟೆಕ್ಷನ್, ಕ್ರಾಪ್ ಮತ್ತು ಶ್ಯಾಡೋ ಕ್ಲೀನಪ್ ಅನ್ನು ಹೊಂದಿದೆ. ಸ್ಕ್ಯಾನ್ ಮಾಡಿದ ಪುಟಗಳು ಚಿತ್ರಗಳಾಗಿ ಹಿಂತಿರುಗುತ್ತವೆ. ಕೀಬೋರ್ಡ್ ಮತ್ತೆ ತೆರೆದಾಗ ಅದು ಕ್ಯಾಮೆರಾ ಫೋಟೋದಂತೆ ಚಾಟ್‌ನಲ್ಲಿ ಅವುಗಳನ್ನು ಇರಿಸುತ್ತದೆ. ಪ್ರಕ್ರಿಯೆಯು ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ನಡೆಯುತ್ತದೆ.</string>

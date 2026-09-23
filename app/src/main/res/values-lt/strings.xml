@@ -5381,7 +5381,6 @@
     <string name="tooldetail_custom_layout_layout_title">Rodomas išdėstymas</string>
     <string name="tooldetail_dictionary_auto_subtitle">Įrankis ieško pasirinkto žodžio arba esamo žodžio, kai jis atsidaro</string>
     <string name="tooldetail_dictionary_auto_title">Ieškoti žodžio ties žymekliu</string>
-    <string name="tooldetail_dictionary_info">Apibrėžimai gaunami iš „Free Dictionary API“ (dictionaryapi.dev). Klaviatūra siunčia ieškomą žodį šiai paslaugai tik tada, kai naudojate įrankį.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Taip pat išsaugokite nuskaitytus puslapius aplanke „Pictures/WM Keyboard“</string>
     <string name="tooldetail_doc_scan_gallery_title">Išsaugoti galerijoje</string>
     <string name="tooldetail_doc_scan_info">Tai atidaro „Google“ dokumentų skaitytuvą, kuris yra „Google Play“ paslaugų dalis, su kraštų aptikimu, apkarpymu ir šešėlių valymu. Nuskaityti puslapiai grįžta kaip vaizdai. Klaviatūra įdeda juos į pokalbį kaip fotoaparato nuotrauką, kai ji vėl atsidaro. Apdorojimas vyksta jūsų įrenginyje.</string>

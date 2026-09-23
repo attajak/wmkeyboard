@@ -5373,7 +5373,6 @@
     <string name="tooldetail_custom_layout_layout_title">Gösterilecek düzen</string>
     <string name="tooldetail_dictionary_auto_subtitle">Araç, açıldığında seçilen kelimeyi veya mevcut kelimeyi arar</string>
     <string name="tooldetail_dictionary_auto_title">İmleçteki kelimeyi ara</string>
-    <string name="tooldetail_dictionary_info">Tanımlar Free Dictionary API\'den (dictionaryapi.dev) gelir. Klavye, aradığınız kelimeyi yalnızca aracı kullandığınızda o servise gönderir.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Taranmış sayfaları Pictures/WM Keyboard klasöründe de tut</string>
     <string name="tooldetail_doc_scan_gallery_title">Galeriye kaydet</string>
     <string name="tooldetail_doc_scan_info">Bu, Google Play hizmetlerinin bir parçası olan Google belge tarayıcısını kenar algılama, kırpma ve gölge temizleme özellikleriyle açar. Taranan sayfalar resim olarak geri döner. Klavye, tekrar açıldığında bunları bir kamera fotoğrafı gibi sohbete yerleştirir. İşleme cihazınızda gerçekleşir.</string>

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.core.tools.DictEntry
 import com.wasimaster.wmkeyboard.core.tools.DictMeaning
+import com.wasimaster.wmkeyboard.core.tools.DictionarySource
 import com.wasimaster.wmkeyboard.ime.DictionaryUi
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
@@ -135,7 +136,8 @@ internal fun DictionaryPanel(
             is DictionaryUi.NotFound -> DictionaryMessage(
                 stringResource(R.string.ime_dict_not_found_empty, dict.word),
             )
-            is DictionaryUi.Ready -> DictionaryEntries(state, dict.entries, onLookup, onInsert, onAddToVocab)
+            DictionaryUi.NoSources -> DictionaryMessage(stringResource(R.string.ime_dict_no_sources))
+            is DictionaryUi.Ready -> DictionaryEntries(state, dict.entries, dict.source, onLookup, onInsert, onAddToVocab)
         }
     }
 }
@@ -157,6 +159,7 @@ private fun DictionaryMessage(text: String) {
 private fun DictionaryEntries(
     state: KeyboardUiState,
     entries: List<DictEntry>,
+    source: DictionarySource,
     onLookup: (String) -> Unit,
     onInsert: (String) -> Unit,
     onAddToVocab: (String) -> Unit,
@@ -255,6 +258,16 @@ private fun DictionaryEntries(
                     DictionaryMeaning(meaning, serif, onLookup)
                 }
             }
+        }
+        // Which source answered: the user's order decides, and Wiktionary's
+        // licence asks for the credit.
+        item(key = "source") {
+            Text(
+                stringResource(R.string.ime_dict_from, stringResource(source.labelRes)),
+                color = kb.toolbarIcon,
+                fontSize = 11.sp,
+                modifier = Modifier.padding(top = 12.dp),
+            )
         }
     }
 }

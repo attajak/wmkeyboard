@@ -5383,7 +5383,6 @@
     <string name="tooldetail_custom_layout_layout_title">Layout att visa</string>
     <string name="tooldetail_dictionary_auto_subtitle">Verktyget söker efter det markerade ordet eller det aktuella ordet när det öppnas</string>
     <string name="tooldetail_dictionary_auto_title">Slå upp ordet vid markören</string>
-    <string name="tooldetail_dictionary_info">Definitioner kommer från Free Dictionary API (dictionaryapi.dev). Tangentbordet skickar ordet du slår upp till den tjänsten, endast när du använder verktyget.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Behåll även skannade sidor i Bilder/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Spara i galleriet</string>
     <string name="tooldetail_doc_scan_info">Detta öppnar Googles dokumentskanner, som är en del av Google Play-tjänster, med kantdetektering, beskärning och skuggrensning. Skannade sidor kommer tillbaka som bilder. Tangentbordet lägger in dem i chatten som ett kamerafoto när det öppnas igen. Bearbetningen sker på din enhet.</string>

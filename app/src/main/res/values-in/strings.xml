@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">Tata letak untuk ditampilkan</string>
     <string name="tooldetail_dictionary_auto_subtitle">Alat ini mencari kata yang dipilih atau kata saat ini saat dibuka</string>
     <string name="tooldetail_dictionary_auto_title">Cari kata di kursor</string>
-    <string name="tooldetail_dictionary_info">Definisi berasal dari Free Dictionary API (dictionaryapi.dev). Keyboard mengirimkan kata yang Anda cari ke layanan tersebut, hanya saat Anda menggunakan alat ini.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Simpan juga halaman yang dipindai di Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Simpan ke galeri</string>
     <string name="tooldetail_doc_scan_info">Ini membuka pemindai dokumen Google, yang merupakan bagian dari layanan Google Play, dengan deteksi tepi, pemangkasan, dan pembersihan bayangan. Halaman yang dipindai kembali sebagai gambar. Papan ketik memasukkannya ke dalam obrolan seperti foto kamera saat dibuka kembali. Pemrosesan berjalan di perangkat Anda.</string>

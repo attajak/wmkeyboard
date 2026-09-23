@@ -5383,7 +5383,6 @@
     <string name="tooldetail_custom_layout_layout_title">Layout der skal vises</string>
     <string name="tooldetail_dictionary_auto_subtitle">Værktøjet søger efter det valgte ord eller det aktuelle ord, når det åbnes</string>
     <string name="tooldetail_dictionary_auto_title">Slå ordet ved markøren op</string>
-    <string name="tooldetail_dictionary_info">Definitioner kommer fra Free Dictionary API (dictionaryapi.dev). Tastaturet sender det ord, du slår op, til den tjeneste, kun når du bruger værktøjet.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Behold også scannede sider i Billeder/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Gem i galleriet</string>
     <string name="tooldetail_doc_scan_info">Dette åbner Googles dokumentscanner, som er en del af Google Play-tjenester, med kantregistrering, beskæring og fjernelse af skygger. scannede sider returneres som billeder. Tastaturet indsætter dem i chatten som et kamerabillede, når det åbnes igen. Behandlingen kører på din enhed.</string>

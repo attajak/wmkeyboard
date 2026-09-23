@@ -81,7 +81,7 @@ The settings page's caption: "The searches and the article text come from the fr
 
 ## Looking up definitions
 
-The dictionary looks up English words with the Free Dictionary API (dictionaryapi.dev). No key, no account. Open **Dictionary** with auto-lookup on, which is the default (see Options below), and it immediately looks up your current selection, or the word touching the cursor if nothing is selected.
+The dictionary looks up English words in a chain of sources you put in order (see [Dictionary sources](#dictionary-sources) below). None of them needs a key or an account. Open **Dictionary** with auto-lookup on, which is the default (see Options below), and it immediately looks up your current selection, or the word touching the cursor if nothing is selected.
 
 <PhoneFrame caption="A dictionary entry, showing serif headword, pronunciation audio, numbered definitions and synonym chips.">
 {/* shot: tools/dictionary-entry */}
@@ -90,8 +90,21 @@ The dictionary looks up English words with the Free Dictionary API (dictionaryap
 - Auto-lookup only picks up **Latin-script words**. A word holding any character outside that range, Bengali script for instance, is skipped quietly rather than looked up and shown "not found." The word also has to be 40 characters or fewer and hold at least one letter. Surrounding quotes and hyphens are trimmed off first.
 - If there's nothing to look up and no earlier result is still on screen, the tool drops straight into its own search field instead.
 - Headwords render in a **serif display font (Lora)**, deliberately distinct from the rest of the keyboard's typography, falling back to the system serif if the font hasn't downloaded yet.
-- Each entry shows the word and, when the API has them, its IPA phonetic transcription and a pronunciation-audio play button. An **Insert** chip types the headword itself at the cursor, not a definition.
+- Each entry shows the word and, when the source has them, its IPA phonetic transcription and a pronunciation-audio play button. The **Wiktionary definitions** source carries neither. An **Insert** chip types the headword itself at the cursor, not a definition.
 - Each meaning lists its part of speech, numbered definitions with optional italic example sentences, and up to 12 tappable **synonym**/**antonym** chips per row. Tapping a chip looks that word up in turn.
+- A line under the last entry names the source that answered, for example "From Wiktionary".
+- "The app cannot reach the dictionary" means no source could be reached: you're offline, or every online source you left on is down. A word that every reachable source answered for, without an entry, shows "No entry for" instead.
+
+### Dictionary sources
+
+The tool asks the first source that is on. When that source doesn't know the word, or can't be reached, it asks the next one, so one service being down doesn't stop the tool. The default order, all on:
+
+1. **Vocabulary packs**: the [vocabulary](/tools/vocabulary/) packs you downloaded, read on the device. Only knows the packs' words, but sends nothing and works offline.
+2. **Wiktionary**: Wiktionary's full entry through kaikki.org, with definitions, examples, IPA and recordings.
+3. **Wiktionary definitions**: Wiktionary's own definition endpoint on wiktionary.org. Definitions and examples only, but small and fast.
+4. **Free Dictionary API**: dictionaryapi.dev. Last because it's often down for days at a time; while it's down, every look-up waits about 8 seconds on it before giving up.
+
+Drag a source to change the order, and switch one off to never ask it. With every source off, the panel says so rather than looking anything up. Before version 0.5.12 the Free Dictionary API was the only source, so an outage there broke the tool on every device.
 
 ### Options
 
@@ -100,8 +113,10 @@ The dictionary looks up English words with the Free Dictionary API (dictionaryap
 - **Turn on**: already on.
 - **Icon colour**: only shown if colorful tool icons are on globally.
 - **Look up the word at the cursor**: on by default. Its description on the settings screen reads "The tool searches the selected word or the current word when it opens". Turn it off and Dictionary always opens on its own empty search field.
+- **Dictionary sources**: a drag list with a switch per source. See [Dictionary sources](#dictionary-sources) above.
+- **Servers** (F-Droid build only): the addresses of kaikki.org, Wiktionary and the Free Dictionary API, for a mirror or a copy you host yourself.
 
-The settings page's caption: "Definitions come from the Free Dictionary API (dictionaryapi.dev). The keyboard sends the word that you look up to that service, only when you use the tool." [Power saving](/typing/power-saving/)'s "Background network" toggle overrides this row. While that toggle is on, auto-lookup is forced off whatever you've set here. A look-up nobody explicitly asked for is exactly what it exists to stop.
+The settings page's caption: "Definitions come from the sources below, in their order. The keyboard sends the word that you look up to an online source only when you use the tool." [Power saving](/typing/power-saving/)'s "Background network" toggle overrides this row. While that toggle is on, auto-lookup is forced off whatever you've set here. A look-up nobody explicitly asked for is exactly what it exists to stop.
 
 ## Details & edge cases
 
@@ -109,6 +124,6 @@ The settings page's caption: "Definitions come from the Free Dictionary API (dic
 - **Default hardware letters:** <KeyCap>W</KeyCap> for web search, <KeyCap>I</KeyCap> for image search, <KeyCap>D</KeyCap> for dictionary. Wikipedia has no letter of its own out of the box, so reach it through the toolbox (<KeyCap>T</KeyCap>), or [rebind a letter to it yourself](/reference/shortcuts/).
 - **Discoverable by typing.** Typing "search", "images", "wiki"/"wikipedia", or "define"/"dict" as the last word before your cursor offers a [smart chip](/smart/chips/) that opens the matching tool. The keyword list is editable per tool, and only shows while that tool is enabled.
 - **None of these four are edition-gated.** Full and lite behave identically across all four tools here.
-- **Attribution.** Brave Search results, Wikipedia's article text, and the Free Dictionary API's definitions are all credited under "Online services" on the app's About → Open-source licences screen, alongside the terms each service is used under. Wikipedia's text is CC BY-SA, which keeps its own license independent of the app's.
+- **Attribution.** Brave Search results, Wikipedia's article text, Wiktionary's entries, and the Free Dictionary API's definitions are all credited under "Online services" on the app's About → Open-source licences screen, alongside the terms each service is used under. Wikipedia's and Wiktionary's text is CC BY-SA, which keeps its own license independent of the app's.
 
 For what leaves your device and when, across every network tool, see [network policy](/privacy/network/). For the GIF and sticker tools' different, search-as-you-type behavior, see [GIFs](/emoji/gifs/).

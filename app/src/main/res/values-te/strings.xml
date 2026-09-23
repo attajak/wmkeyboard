@@ -5387,7 +5387,6 @@
     <string name="tooldetail_custom_layout_layout_title">చూపించాల్సిన లేఅవుట్</string>
     <string name="tooldetail_dictionary_auto_subtitle">ఈ టూల్ తెరిచినప్పుడు ఎంచుకున్న పదాన్ని లేదా ప్రస్తుత పదాన్ని వెతుకుతుంది</string>
     <string name="tooldetail_dictionary_auto_title">కర్సర్ వద్ద ఉన్న పదాన్ని వెతకండి</string>
-    <string name="tooldetail_dictionary_info">నిర్వచనాలు ఫ్రీ డిక్షనరీ API (dictionaryapi.dev) నుండి వస్తాయి. మీరు సాధనాన్ని ఉపయోగించినప్పుడు మాత్రమే కీబోర్డ్ మీరు వెతికే పదాన్ని ఆ సేవకు పంపుతుంది.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">స్కాన్ చేసిన పేజీలను Pictures/WM Keyboardలో కూడా ఉంచండి</string>
     <string name="tooldetail_doc_scan_gallery_title">గ్యాలరీకి సేవ్ చేయండి</string>
     <string name="tooldetail_doc_scan_info">ఇది గూగుల్ ప్లే సర్వీసెస్‌లో భాగంగా ఉన్న గూగుల్ డాక్యుమెంట్ స్కానర్‌ను తెరుస్తుంది, ఇందులో ఎడ్జ్ డిటెక్షన్, క్రాప్ మరియు షాడో క్లీనప్ ఉంటాయి. స్కాన్ చేసిన పేజీలు చిత్రాలుగా తిరిగి వస్తాయి. కీబోర్డ్ మళ్లీ తెరిచినప్పుడు వాటిని కెమెరా ఫోటోలాగే చాట్‌లో ఉంచుతుంది. ప్రాసెసింగ్ మీ పరికరంలోనే జరుగుతుంది.</string>

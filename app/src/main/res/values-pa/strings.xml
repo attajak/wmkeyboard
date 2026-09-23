@@ -5390,7 +5390,6 @@
     <string name="tooldetail_custom_layout_layout_title">ਦਿਖਾਉਣ ਲਈ ਲੇਆਉਟ</string>
     <string name="tooldetail_dictionary_auto_subtitle">ਟੂਲ ਖੁੱਲ੍ਹਣ \'ਤੇ ਚੁਣੇ ਗਏ ਸ਼ਬਦ ਜਾਂ ਮੌਜੂਦਾ ਸ਼ਬਦ ਦੀ ਖੋਜ ਕਰਦਾ ਹੈ</string>
     <string name="tooldetail_dictionary_auto_title">ਕਰਸਰ \'ਤੇ ਸ਼ਬਦ ਲੱਭੋ</string>
-    <string name="tooldetail_dictionary_info">ਪਰਿਭਾਸ਼ਾਵਾਂ ਫ੍ਰੀ ਡਿਕਸ਼ਨਰੀ API (dictionaryapi.dev) ਤੋਂ ਆਉਂਦੀਆਂ ਹਨ। ਕੀਬੋਰਡ ਤੁਹਾਡੇ ਦੁਆਰਾ ਖੋਜੇ ਗਏ ਸ਼ਬਦ ਨੂੰ ਉਸ ਸੇਵਾ ਨੂੰ ਭੇਜਦਾ ਹੈ, ਸਿਰਫ਼ ਉਦੋਂ ਜਦੋਂ ਤੁਸੀਂ ਟੂਲ ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋ।</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">ਸਕੈਨ ਕੀਤੇ ਪੰਨਿਆਂ ਨੂੰ Pictures/WM Keyboard ਵਿੱਚ ਵੀ ਰੱਖੋ</string>
     <string name="tooldetail_doc_scan_gallery_title">ਗੈਲਰੀ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰੋ</string>
     <string name="tooldetail_doc_scan_info">ਇਹ ਗੂਗਲ ਦਾ ਡੌਕੂਮੈਂਟ ਸਕੈਨਰ ਖੋਲ੍ਹਦਾ ਹੈ, ਜੋ ਗੂਗਲ ਪਲੇ ਸੇਵਾਵਾਂ ਦਾ ਹਿੱਸਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਐਜ ਡਿਟੈਕਸ਼ਨ, ਕ੍ਰੌਪ ਅਤੇ ਸ਼ੈਡੋ ਕਲੀਨਅੱਪ ਦੀ ਸੁਵਿਧਾ ਹੈ। ਸਕੈਨ ਕੀਤੇ ਪੰਨੇ ਚਿੱਤਰਾਂ ਦੇ ਰੂਪ ਵਿੱਚ ਵਾਪਸ ਆਉਂਦੇ ਹਨ। ਜਦੋਂ ਕੀਬੋਰਡ ਦੁਬਾਰਾ ਖੁੱਲ੍ਹਦਾ ਹੈ, ਤਾਂ ਇਹ ਉਹਨਾਂ ਨੂੰ ਕੈਮਰਾ ਫੋਟੋ ਵਾਂਗ ਚੈਟ ਵਿੱਚ ਪਾ ਦਿੰਦਾ ਹੈ। ਪ੍ਰੋਸੈਸਿੰਗ ਤੁਹਾਡੀ ਡਿਵਾਈਸ \'ਤੇ ਚੱਲਦੀ ਹੈ।</string>

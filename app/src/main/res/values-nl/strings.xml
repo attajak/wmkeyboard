@@ -5382,7 +5382,6 @@
     <string name="tooldetail_custom_layout_layout_title">Indeling om te tonen</string>
     <string name="tooldetail_dictionary_auto_subtitle">De tool doorzoekt het geselecteerde woord of het huidige woord wanneer deze wordt geopend</string>
     <string name="tooldetail_dictionary_auto_title">Zoek het woord bij de cursor op</string>
-    <string name="tooldetail_dictionary_info">Definities zijn afkomstig van de Free Dictionary API (dictionaryapi.dev). Het toetsenbord verstuurt het opgezochte woord alleen naar die dienst wanneer u het hulpmiddel gebruikt.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Bewaar gescande pagina\'s ook in Afbeeldingen/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Opslaan in de galerij</string>
     <string name="tooldetail_doc_scan_info">Dit opent de documentscanner van Google, onderdeel van Google Play-services, met randdetectie, bijsnijden en schaduwverwijdering. Gescande pagina\'s worden als afbeeldingen geretourneerd. Het toetsenbord plaatst ze in de chat als een camerafoto wanneer het weer wordt geopend. De verwerking vindt plaats op uw apparaat.</string>

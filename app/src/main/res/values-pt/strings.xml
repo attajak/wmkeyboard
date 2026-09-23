@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">Layout para exibir</string>
     <string name="tooldetail_dictionary_auto_subtitle">A ferramenta pesquisa a palavra selecionada ou a palavra atual quando é aberta</string>
     <string name="tooldetail_dictionary_auto_title">Pesquisar a palavra no cursor</string>
-    <string name="tooldetail_dictionary_info">As definições vêm da API Free Dictionary (dictionaryapi.dev). O teclado envia a palavra que você pesquisa para esse serviço, apenas quando você usa a ferramenta.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Também manter páginas digitalizadas em Imagens/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Salvar na galeria</string>
     <string name="tooldetail_doc_scan_info">Isso abre o scanner de documentos do Google, que faz parte dos serviços do Google Play, com detecção de bordas, corte e limpeza de sombras. As páginas digitalizadas retornam como imagens. O teclado as coloca no chat como uma foto da câmera quando ele abre novamente. O processamento é executado no seu dispositivo.</string>

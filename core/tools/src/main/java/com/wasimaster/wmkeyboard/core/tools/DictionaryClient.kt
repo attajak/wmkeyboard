@@ -40,8 +40,8 @@ data class DictEntry(
 
 /**
  * Minimal client for the Free Dictionary API (dictionaryapi.dev — no key,
- * no account). Only called from the dictionary tool when the user looks a
- * word up.
+ * no account). One of the Dictionary tool's sources (see [DictionaryLookup]),
+ * asked only when the user looks a word up.
  */
 object DictionaryClient {
 

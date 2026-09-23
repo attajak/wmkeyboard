@@ -5387,7 +5387,6 @@
     <string name="tooldetail_custom_layout_layout_title">Postavitev za prikaz</string>
     <string name="tooldetail_dictionary_auto_subtitle">Orodje ob odprtju poišče izbrano besedo ali trenutno besedo</string>
     <string name="tooldetail_dictionary_auto_title">Poišči besedo pri kazalki</string>
-    <string name="tooldetail_dictionary_info">Definicije prihajajo iz vmesnika Free Dictionary API (dictionaryapi.dev). Tipkovnica pošlje besedo, ki jo iščete, tej storitvi samo takrat, ko uporabite orodje.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Skenirane strani shranite tudi v Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Shrani v galerijo</string>
     <string name="tooldetail_doc_scan_info">To odpre Googlov optični bralnik dokumentov, ki je del storitev Google Play, z zaznavanjem robov, obrezovanjem in čiščenjem senc. Skenirane strani se vrnejo kot slike. Tipkovnica jih ob ponovnem odprtju vstavi v klepet kot fotografijo fotoaparata. Obdelava poteka v vaši napravi.</string>

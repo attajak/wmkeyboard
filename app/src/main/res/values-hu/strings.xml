@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">Megjelenítendő elrendezés</string>
     <string name="tooldetail_dictionary_auto_subtitle">Az eszköz megnyitáskor megkeresi a kijelölt vagy az aktuális szót</string>
     <string name="tooldetail_dictionary_auto_title">Szó keresése a kurzornál</string>
-    <string name="tooldetail_dictionary_info">A definíciók a Free Dictionary API-ból (dictionaryapi.dev) származnak. A billentyűzet csak akkor küldi el a keresett szót az adott szolgáltatásnak, amikor az eszközt használja.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">A beolvasott oldalak mentése a Képek/WM Keyboard mappába is</string>
     <string name="tooldetail_doc_scan_gallery_title">Mentés a galériába</string>
     <string name="tooldetail_doc_scan_info">Ez megnyitja a Google dokumentumszkennert, amely a Google Play-szolgáltatások része, élfelismeréssel, vágással és árnyéktisztítással. A beolvasott oldalak képként érkeznek vissza. A billentyűzet úgy helyezi be őket a csevegésbe, mint egy fényképet, amikor újra megnyílik. A feldolgozás az eszközön fut.</string>

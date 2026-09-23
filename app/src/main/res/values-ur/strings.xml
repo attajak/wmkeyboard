@@ -5382,7 +5382,6 @@
     <string name="tooldetail_custom_layout_layout_title">دکھانے کے لیے لے آؤٹ</string>
     <string name="tooldetail_dictionary_auto_subtitle">یہ ٹول منتخب کردہ لفظ یا موجودہ لفظ کو کھلنے پر تلاش کرتا ہے</string>
     <string name="tooldetail_dictionary_auto_title">کرسر پر موجود لفظ تلاش کریں</string>
-    <string name="tooldetail_dictionary_info">تعریفیں فری ڈکشنری API (dictionaryapi.dev) سے آتی ہیں۔ کی بورڈ اس لفظ کو اس سروس پر بھیجتا ہے جسے آپ تلاش کرتے ہیں، صرف تب جب آپ ٹول استعمال کرتے ہیں۔</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">اسکین شدہ صفحات کو Pictures/WM Keyboard میں بھی رکھیں</string>
     <string name="tooldetail_doc_scan_gallery_title">گیلری میں محفوظ کریں</string>
     <string name="tooldetail_doc_scan_info">یہ گوگل کا ڈاکومنٹ اسکینر کھولتا ہے، جو گوگل پلے سروسز کا حصہ ہے، جس میں ایج ڈیٹیکشن، کراپ اور شیڈو کلین اپ شامل ہے۔ اسکین شدہ صفحات تصاویر کے طور پر واپس آتے ہیں۔ کی بورڈ انہیں دوبارہ کھلنے پر کیمرہ فوٹو کی طرح چیٹ میں ڈال دیتا ہے۔ پروسیسنگ آپ کے آلے پر چلتی ہے۔</string>

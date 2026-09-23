@@ -5390,7 +5390,6 @@
     <string name="tooldetail_custom_layout_layout_title">Mpangilio wa kuonyesha</string>
     <string name="tooldetail_dictionary_auto_subtitle">Zana hutafuta neno lililochaguliwa au neno la sasa inapofunguka</string>
     <string name="tooldetail_dictionary_auto_title">Tafuta neno kwenye kishale</string>
-    <string name="tooldetail_dictionary_info">Ufafanuzi hutoka kwa Free Dictionary API (dictionaryapi.dev). Kibodi hutuma neno unalotafuta kwa huduma hiyo, pale tu unapotumia zana hiyo.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Pia hifadhi kurasa zilizochanganuliwa kwenye Picha/Kibodi ya WM</string>
     <string name="tooldetail_doc_scan_gallery_title">Hifadhi kwenye ghala</string>
     <string name="tooldetail_doc_scan_info">Hii inafungua kichanganuzi cha hati cha Google, ambacho ni sehemu ya huduma za Google Play, chenye utambuzi wa kingo, upunguzaji na usafishaji wa vivuli. Kurasa zilizochanganuliwa hurudi kama picha. Kibodi huziweka kwenye gumzo kama picha ya kamera inapofunguka tena. Uchakataji hufanyika kwenye kifaa chako.</string>

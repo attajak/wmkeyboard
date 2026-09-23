@@ -5390,7 +5390,6 @@
     <string name="tooldetail_custom_layout_layout_title">കാണിക്കേണ്ട ലേഔട്ട്</string>
     <string name="tooldetail_dictionary_auto_subtitle">ടൂൾ തുറക്കുമ്പോൾ തിരഞ്ഞെടുത്ത വാക്കോ നിലവിലെ വാക്കോ ഈ ടൂൾ തിരയുന്നു</string>
     <string name="tooldetail_dictionary_auto_title">കർസറിലുള്ള വാക്ക് തിരയുക</string>
-    <string name="tooldetail_dictionary_info">നിർവചനങ്ങൾ വരുന്നത് ഫ്രീ ഡിക്ഷണറി API-യിൽ (dictionaryapi.dev) നിന്നാണ്. നിങ്ങൾ ടൂൾ ഉപയോഗിക്കുമ്പോൾ മാത്രം, നിങ്ങൾ തിരയുന്ന വാക്ക് കീബോർഡ് ആ സേവനത്തിലേക്ക് അയയ്ക്കുന്നു.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">സ്കാൻ ചെയ്ത പേജുകൾ Pictures/WM Keyboard-ലും സൂക്ഷിക്കുക</string>
     <string name="tooldetail_doc_scan_gallery_title">ഗാലറിയിലേക്ക് സേവ് ചെയ്യുക</string>
     <string name="tooldetail_doc_scan_info">ഇത് ഗൂഗിൾ പ്ലേ സേവനങ്ങളുടെ ഭാഗമായ ഗൂഗിളിന്റെ ഡോക്യുമെന്റ് സ്കാനർ തുറക്കുന്നു. ഇതിൽ എഡ്ജ് ഡിറ്റക്ഷൻ, ക്രോപ്പ്, ഷാഡോ ക്ലീനപ്പ് എന്നിവയുണ്ട്. സ്കാൻ ചെയ്ത പേജുകൾ ചിത്രങ്ങളായി ലഭിക്കും. കീബോർഡ് വീണ്ടും തുറക്കുമ്പോൾ ക്യാമറ ഫോട്ടോ പോലെ അവ ചാറ്റിലേക്ക് ചേർക്കുന്നു. പ്രോസസ്സിംഗ് നിങ്ങളുടെ ഉപകരണത്തിൽ തന്നെ നടക്കുന്നു.</string>

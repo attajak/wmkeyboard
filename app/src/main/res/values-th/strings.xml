@@ -5375,7 +5375,6 @@
     <string name="tooldetail_custom_layout_layout_title">เลย์เอาต์ที่จะแสดง</string>
     <string name="tooldetail_dictionary_auto_subtitle">เครื่องมือจะค้นหาคำที่เลือกหรือคำปัจจุบันเมื่อเปิดขึ้น</string>
     <string name="tooldetail_dictionary_auto_title">ค้นหาคำที่เคอร์เซอร์</string>
-    <string name="tooldetail_dictionary_info">คำจำกัดความมาจาก Free Dictionary API (dictionaryapi.dev) แป้นพิมพ์จะส่งคำที่คุณค้นหาไปยังบริการนั้นเฉพาะเมื่อคุณใช้เครื่องมือนี้เท่านั้น</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">เก็บหน้าเอกสารที่สแกนไว้ใน Pictures/WM Keyboard ด้วย</string>
     <string name="tooldetail_doc_scan_gallery_title">บันทึกลงในแกลเลอรี</string>
     <string name="tooldetail_doc_scan_info">การดำเนินการนี้จะเปิดเครื่องสแกนเอกสารของ Google ซึ่งเป็นส่วนหนึ่งของบริการ Google Play พร้อมฟีเจอร์ตรวจจับขอบ ครอบตัด และลบเงา หน้าที่สแกนจะถูกส่งกลับมาเป็นรูปภาพ แป้นพิมพ์จะนำรูปภาพเหล่านั้นไปใส่ในแชทเหมือนกับรูปถ่ายจากกล้องเมื่อเปิดขึ้นมาอีกครั้ง การประมวลผลจะทำงานบนอุปกรณ์ของคุณ</string>

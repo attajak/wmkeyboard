@@ -1567,10 +1567,19 @@ sealed interface DictionaryUi {
     /** Nothing looked up yet (no word at the cursor, or auto-lookup off). */
     data object Idle : DictionaryUi
     data class Loading(val word: String) : DictionaryUi
+
+    /** No source could be reached. */
     data class Error(val word: String) : DictionaryUi
-    /** The API knows no entry for this word. */
+
+    /** Every source that answered knows no entry for this word. */
     data class NotFound(val word: String) : DictionaryUi
-    data class Ready(val entries: List<com.wasimaster.wmkeyboard.core.tools.DictEntry>) : DictionaryUi
+
+    /** The user turned every source off. */
+    data object NoSources : DictionaryUi
+    data class Ready(
+        val entries: List<com.wasimaster.wmkeyboard.core.tools.DictEntry>,
+        val source: com.wasimaster.wmkeyboard.core.tools.DictionarySource,
+    ) : DictionaryUi
 }
 
 /** The vocabulary panel's three views. */

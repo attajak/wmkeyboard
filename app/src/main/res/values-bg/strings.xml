@@ -5382,7 +5382,6 @@
     <string name="tooldetail_custom_layout_layout_title">Оформление за показване</string>
     <string name="tooldetail_dictionary_auto_subtitle">Инструментът търси избраната дума или текущата дума при отваряне</string>
     <string name="tooldetail_dictionary_auto_title">Търсене на думата при курсора</string>
-    <string name="tooldetail_dictionary_info">Дефинициите идват от API на Free Dictionary (dictionaryapi.dev). Клавиатурата изпраща думата, която търсите, към тази услуга само когато използвате инструмента.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Също така запазвайте сканираните страници в Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Запазване в галерията</string>
     <string name="tooldetail_doc_scan_info">Това отваря скенера за документи на Google, който е част от услугите на Google Play, с откриване на краища, изрязване и почистване на сенки. Сканираните страници се връщат като изображения. Клавиатурата ги поставя в чата като снимка от камерата, когато се отвори отново. Обработката се извършва на вашето устройство.</string>

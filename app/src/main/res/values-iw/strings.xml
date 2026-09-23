@@ -5383,7 +5383,6 @@
     <string name="tooldetail_custom_layout_layout_title">פריסה להצגה</string>
     <string name="tooldetail_dictionary_auto_subtitle">הכלי מחפש את המילה שנבחרה או את המילה הנוכחית כשהוא נפתח</string>
     <string name="tooldetail_dictionary_auto_title">חפש את המילה בסמן</string>
-    <string name="tooldetail_dictionary_info">הגדרות מגיעות מ-Free Dictionary API (dictionaryapi.dev). המקלדת שולחת את המילה שאתה מחפש לשירות זה, רק כאשר אתה משתמש בכלי.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">שמור גם דפים סרוקים ב-Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">שמור בגלריה</string>
     <string name="tooldetail_doc_scan_info">פעולה זו פותחת את סורק המסמכים של Google, המהווה חלק משירותי Google Play, עם זיהוי קצוות, חיתוך וניקוי צללים. דפים סרוקים חוזרים כתמונות. המקלדת מציבה אותם בצ\'אט כמו תמונת מצלמה כשהיא נפתחת שוב. העיבוד מתבצע על המכשיר שלך.</string>

@@ -5388,7 +5388,6 @@
     <string name="tooldetail_custom_layout_layout_title">Kuvatav paigutus</string>
     <string name="tooldetail_dictionary_auto_subtitle">Tööriist otsib valitud sõna või praegust sõna, kui see avaneb</string>
     <string name="tooldetail_dictionary_auto_title">Otsi kursoril olevat sõna</string>
-    <string name="tooldetail_dictionary_info">Definitsioonid pärinevad Free Dictionary API-st (dictionaryapi.dev). Klaviatuur saadab otsitava sõna sellele teenusele ainult siis, kui kasutate tööriista.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Hoia skannitud lehti ka kaustas Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Salvesta galeriisse</string>
     <string name="tooldetail_doc_scan_info">See avab Google\'i dokumendiskanneri, mis on osa Google Play teenustest, koos servatuvastuse, kärpimise ja varjude eemaldamisega. Skannitud lehed tulevad tagasi piltidena. Klaviatuur lisab need vestlusesse nagu kaameraga tehtud foto, kui see uuesti avaneb. Töötlemine toimub teie seadmes.</string>

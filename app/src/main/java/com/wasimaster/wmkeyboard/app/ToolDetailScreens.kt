@@ -62,6 +62,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.material3.Switch
+import androidx.compose.ui.text.style.TextOverflow
+import com.wasimaster.wmkeyboard.core.tools.DictionarySource
+import com.wasimaster.wmkeyboard.core.tools.DictionarySourceChoice
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wasimaster.wmkeyboard.core.ui.toolAccentColorArgb
 import com.wasimaster.wmkeyboard.core.ui.toolAccentEndColorArgb
@@ -922,7 +926,54 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.dictionaryAutoLookup,
                     ) { scope.launch { repository.setDictionaryAutoLookup(it) } }
                 }
-                serverItems(repository, settings, endpoints = listOf(ServiceEndpoint.DICTIONARY_API))
+                item {
+                    // Where the tool looks, in the order it asks: a source is
+                    // only asked when those above it did not know the word or
+                    // were unreachable.
+                    val sources = settings.dictionarySources
+                    val save: (List<DictionarySourceChoice>) -> Unit = { scope.launch { repository.setDictionarySources(it) } }
+                    ControlSetting(
+                        R.string.tooldetail_dictionary_sources_title,
+                        subtitle = stringResource(R.string.tooldetail_dictionary_sources_subtitle),
+                        info = stringResource(R.string.tooldetail_dictionary_sources_info),
+                    ) {
+                        val names = DictionarySource.entries.associateWith { stringResource(it.labelRes) }
+                        ReorderableColumn(
+                            items = sources,
+                            label = { names[it.source].orEmpty() },
+                            onReorder = save,
+                            modifier = Modifier.padding(top = 8.dp),
+                            rowHeight = DictionarySourceRowHeight,
+                        ) { choice ->
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    names[choice.source].orEmpty(),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                                Text(
+                                    stringResource(choice.source.descriptionRes),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis,
+                                )
+                            }
+                            Switch(
+                                checked = choice.enabled,
+                                onCheckedChange = { on ->
+                                    save(sources.map { if (it.source == choice.source) it.copy(enabled = on) else it })
+                                },
+                            )
+                        }
+                    }
+                }
+                serverItems(
+                    repository,
+                    settings,
+                    endpoints = listOf(ServiceEndpoint.KAIKKI, ServiceEndpoint.WIKTIONARY, ServiceEndpoint.DICTIONARY_API),
+                )
             }
         }
         ToolbarTool.TEXT_EDIT -> SettingsGroup(stringResource(R.string.tooldetail_options_group)) {
@@ -3764,3 +3815,5 @@ private fun grammarCategoryInfo(category: GrammarCategory): Int = when (category
     GrammarCategory.ENGAGEMENT -> R.string.tooldetail_grammar_engagement_info
     GrammarCategory.DELIVERY -> R.string.tooldetail_grammar_delivery_info
 }
+
+private val DictionarySourceRowHeight = 64.dp

@@ -146,7 +146,10 @@
     <!-- Dictionary tool. -->
     <string name="tooldetail_dictionary_auto_title">Look up the word at the cursor</string>
     <string name="tooldetail_dictionary_auto_subtitle">The tool searches the selected word or the current word when it opens</string>
-    <string name="tooldetail_dictionary_info">Definitions come from the Free Dictionary API (dictionaryapi.dev). The keyboard sends the word that you look up to that service, only when you use the tool.</string>
+    <string name="tooldetail_dictionary_info">Definitions come from the sources below, in their order. The keyboard sends the word that you look up to an online source only when you use the tool.</string>
+    <string name="tooldetail_dictionary_sources_title">Dictionary sources</string>
+    <string name="tooldetail_dictionary_sources_subtitle">Where the tool looks for definitions, in order</string>
+    <string name="tooldetail_dictionary_sources_info">The tool asks the first source that is on. When that source does not know the word, or cannot be reached, the tool asks the next one. Drag a source to change the order, and turn off a source to never ask it. Online sources receive only the word you look up.</string>
 
     <!-- Text editing tool. -->
     <string name="tooldetail_text_edit_repeat_title">Key repeat interval</string>

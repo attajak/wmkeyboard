@@ -5380,7 +5380,6 @@
     <string name="tooldetail_custom_layout_layout_title">Układ do wyświetlenia</string>
     <string name="tooldetail_dictionary_auto_subtitle">Narzędzie wyszukuje wybrane słowo lub bieżące słowo po otwarciu</string>
     <string name="tooldetail_dictionary_auto_title">Wyszukaj słowo przy kursorze</string>
-    <string name="tooldetail_dictionary_info">Definicje pochodzą z Free Dictionary API (dictionaryapi.dev). Klawiatura wysyła wyszukiwane słowo do tej usługi tylko wtedy, gdy używasz tego narzędzia.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Zachowaj również zeskanowane strony w Pictures/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Zapisz w galerii</string>
     <string name="tooldetail_doc_scan_info">Otwiera to skaner dokumentów Google, będący częścią usług Google Play, z funkcją wykrywania krawędzi, przycinania i usuwania cieni. Zeskanowane strony wracają jako obrazy. Klawiatura umieszcza je w czacie tak jak zdjęcie z aparatu, gdy zostanie ponownie otwarta. Przetwarzanie odbywa się na Twoim urządzeniu.</string>

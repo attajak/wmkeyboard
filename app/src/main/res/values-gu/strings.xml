@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">બતાવવા માટેનું લેઆઉટ</string>
     <string name="tooldetail_dictionary_auto_subtitle">જ્યારે ટૂલ ખુલે છે ત્યારે તે પસંદ કરેલા શબ્દ અથવા વર્તમાન શબ્દને શોધે છે</string>
     <string name="tooldetail_dictionary_auto_title">કર્સર પરના શબ્દને શોધો</string>
-    <string name="tooldetail_dictionary_info">વ્યાખ્યાઓ ફ્રી ડિક્શનરી API (dictionaryapi.dev) માંથી આવે છે. કીબોર્ડ તમે જે શબ્દ શોધો છો તે ફક્ત ત્યારે જ તે સેવાને મોકલે છે જ્યારે તમે ટૂલનો ઉપયોગ કરો છો.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">સ્કેન કરેલા પેજને Pictures/WM Keyboard માં પણ રાખો</string>
     <string name="tooldetail_doc_scan_gallery_title">ગેલેરીમાં સેવ કરો</string>
     <string name="tooldetail_doc_scan_info">આ Google નું ડોક્યુમેન્ટ સ્કેનર ખોલે છે, જે Google Play સેવાઓનો ભાગ છે, જેમાં એજ ડિટેક્શન, ક્રોપ અને શેડો ક્લીનઅપની સુવિધા છે. સ્કેન કરેલા પેજ ઈમેજ તરીકે પાછા આવે છે. જ્યારે કીબોર્ડ ફરીથી ખુલે છે ત્યારે તે તેને કેમેરા ફોટાની જેમ ચેટમાં મૂકે છે. પ્રોસેસિંગ તમારા ઉપકરણ પર ચાલે છે.</string>

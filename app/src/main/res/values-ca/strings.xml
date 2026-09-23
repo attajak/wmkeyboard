@@ -5378,7 +5378,6 @@
     <string name="tooldetail_custom_layout_layout_title">Disseny a mostrar</string>
     <string name="tooldetail_dictionary_auto_subtitle">L\'eina cerca la paraula seleccionada o la paraula actual quan s\'obre</string>
     <string name="tooldetail_dictionary_auto_title">Cerca la paraula al cursor</string>
-    <string name="tooldetail_dictionary_info">Les definicions provenen de l\'API de Free Dictionary (dictionaryapi.dev). El teclat envia la paraula que cerqueu a aquest servei, només quan utilitzeu l\'eina.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">Guarda també les pàgines escanejades a Imatges/WM Keyboard</string>
     <string name="tooldetail_doc_scan_gallery_title">Desa a la galeria</string>
     <string name="tooldetail_doc_scan_info">Això obre l\'escàner de documents de Google, que forma part dels serveis de Google Play, amb detecció de vores, retall i neteja d\'ombres. Les pàgines escanejades tornen com a imatges. El teclat les posa al xat com una foto de càmera quan es torna a obrir. El processament s\'executa al teu dispositiu.</string>

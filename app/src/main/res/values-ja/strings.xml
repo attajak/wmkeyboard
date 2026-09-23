@@ -5377,7 +5377,6 @@
     <string name="tooldetail_custom_layout_layout_title">表示するレイアウト</string>
     <string name="tooldetail_dictionary_auto_subtitle">ツールを開いたときに、選択した単語または現在の単語を検索します</string>
     <string name="tooldetail_dictionary_auto_title">カーソル位置の単語を検索</string>
-    <string name="tooldetail_dictionary_info">定義はFree Dictionary API (dictionaryapi.dev) から取得されます。キーボードは、ツールを使用する場合にのみ、検索した単語をそのサービスに送信します。</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">スキャンしたページを「Pictures/WM Keyboard」にも保存する</string>
     <string name="tooldetail_doc_scan_gallery_title">ギャラリーに保存</string>
     <string name="tooldetail_doc_scan_info">これにより、Google Play開発者サービスの一部であるGoogleのドキュメントスキャナーが開き、エッジ検出、トリミング、影の除去が行われます。スキャンされたページは画像として返されます。キーボードが再度開くと、カメラの写真のようにチャットに挿入されます。処理はデバイス上で実行されます。</string>

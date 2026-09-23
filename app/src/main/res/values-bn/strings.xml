@@ -5401,7 +5401,6 @@
     <string name="tooldetail_custom_layout_layout_title">দেখানোর জন্য লেআউট</string>
     <string name="tooldetail_dictionary_auto_subtitle">টুলটি খোলার সময় নির্বাচিত শব্দ বা বর্তমান শব্দটি অনুসন্ধান করে</string>
     <string name="tooldetail_dictionary_auto_title">কার্সারে থাকা শব্দটি খুঁজুন</string>
-    <string name="tooldetail_dictionary_info">সংজ্ঞাগুলো ফ্রি ডিকশনারি এপিআই (dictionaryapi.dev) থেকে নেওয়া হয়েছে। আপনি যখন টুলটি ব্যবহার করেন, শুধুমাত্র তখনই কিবোর্ড আপনার খোঁজা শব্দটি সেই সার্ভিসে পাঠায়।</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">স্ক্যান করা পৃষ্ঠাগুলো Pictures/WM Keyboard-এও রাখুন</string>
     <string name="tooldetail_doc_scan_gallery_title">গ্যালারিতে সেভ করুন</string>
     <string name="tooldetail_doc_scan_info">এটি গুগল প্লে পরিষেবার অংশ হিসেবে গুগলের ডকুমেন্ট স্ক্যানার খোলে, যাতে এজ ডিটেকশন, ক্রপ এবং শ্যাডো ক্লিনআপ সুবিধা রয়েছে। স্ক্যান করা পৃষ্ঠাগুলো ছবি হিসেবে ফিরে আসে। কীবোর্ডটি আবার খোলার সময় ক্যামেরা থেকে তোলা ছবির মতো সেগুলোকে চ্যাটে যুক্ত করে। প্রসেসিং আপনার ডিভাইসেই সম্পন্ন হয়।</string>

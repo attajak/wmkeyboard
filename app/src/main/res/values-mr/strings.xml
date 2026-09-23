@@ -5383,7 +5383,6 @@
     <string name="tooldetail_custom_layout_layout_title">दाखवण्यासाठी लेआउट</string>
     <string name="tooldetail_dictionary_auto_subtitle">टूल उघडल्यावर निवडलेला शब्द किंवा सध्याचा शब्द शोधते</string>
     <string name="tooldetail_dictionary_auto_title">कर्सरवरील शब्द शोधा</string>
-    <string name="tooldetail_dictionary_info">व्याख्या फ्री डिक्शनरी API (dictionaryapi.dev) कडून येतात. कीबोर्ड तुम्ही शोधलेला शब्द त्या सेवेला पाठवतो, फक्त जेव्हा तुम्ही टूल वापरता.</string>
     <string name="tooldetail_doc_scan_gallery_subtitle">स्कॅन केलेली पृष्ठे Pictures/WM Keyboard मध्ये देखील ठेवा</string>
     <string name="tooldetail_doc_scan_gallery_title">गॅलरीत सेव्ह करा</string>
     <string name="tooldetail_doc_scan_info">हे Google चे डॉक्युमेंट स्कॅनर उघडते, जे Google Play सेवांचा भाग आहे, ज्यामध्ये एज डिटेक्शन, क्रॉप आणि शॅडो क्लीनअपची सुविधा आहे. स्कॅन केलेली पृष्ठे प्रतिमा म्हणून परत येतात. कीबोर्ड पुन्हा उघडल्यावर तो त्यांना कॅमेरा फोटोप्रमाणे चॅटमध्ये टाकतो. प्रक्रिया तुमच्या डिव्हाइसवर चालते.</string>

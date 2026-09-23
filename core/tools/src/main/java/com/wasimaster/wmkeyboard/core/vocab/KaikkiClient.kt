@@ -60,7 +60,7 @@ object KaikkiClient : VocabAutofill.Source {
     override fun lookup(lemma: String, translationCodes: List<String>): VocabWord? =
         lookup(lemma, translationCodes, NetSource.VOCABULARY)
 
-    /** [lookup], logged under [netSource]: the synonym look-up asks the same page (#321). */
+    /** [lookup], logged under [netSource]: the synonym look-up (#321) and the Dictionary tool ask the same page. */
     fun lookup(lemma: String, translationCodes: List<String>, netSource: NetSource): VocabWord? {
         val connection = URL(url(lemma)).openConnection() as HttpURLConnection
         val netCall = NetLog.call(netSource, "GET", url(lemma), route = "/dictionary")
