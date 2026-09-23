@@ -6059,9 +6059,6 @@
     <string name="typing_glide_commit_scope_info">Umugqa weziphakamiso yilapho umbala wokulungisa ngokuzenzakalelayo ukhona, ngakho uhlala ubonisa umbala. Iphilisi legama lihamba ngaphezu komunwe wakho futhi yilokho abantu abaningi abakubukayo ngenkathi beslayida, ngakho liphethe umbala ngokuzenzakalelayo. Amagama adwetshwe ezikhiye nawo angawuthwala, okwenza lonke ibhodi liphendule shazi kodwa kungumbala omningi ngesikhathi esisodwa.</string>
     <string name="typing_glide_commit_scope_subtitle">Umugqa wesiphakamiso, igama elingaphezu komunwe wakho, noma amagama akuzikhiye</string>
     <string name="typing_glide_commit_scope_title">Lapho umbala ubonakala khona</string>
-    <string name="typing_glide_dwell_info">I-glide idweba \"good\" kanye \"god\" ngendlela efanayo, ngoba u-o ungukhiye owodwa futhi umunwe wakho uwuwela kanye. Hlala kokhiye isikhashana ukuze usho ukuthi uhlamvu lukhona kabili. Inani liyisiphindaphindo sesivinini sakho kuleyo glide efanayo, hhayi inombolo yemizuzwana, ngakho isebenza ku-glide esheshayo neyancane ngokufanayo. Inani eliphansi lamukela ukuma okufushane, kodwa i-glide eqaphile ehamba kancane yonke indawo ibhala izinhlamvu kabili yodwa. Inani eliphezulu licela ukuma okucacile.</string>
-    <string name="typing_glide_dwell_subtitle">Isikhathi sokuhlala okhiye ukuze ubhale uhlamvu kabili</string>
-    <string name="typing_glide_dwell_title">Misa kancane ukuze uphindaphinde uhlamvu</string>
     <string name="typing_glide_end_radius_info">Kulinganiswa ngobubanzi bokhiye. Ikhibhodi inikeza igama kuphela uma uphakamise umunwe wakho usondele kuleli banga kuhlamvu lokugcina lwalelo gama. Ukuphela kokushelela kulapho ukunyakaza kume khona, ngakho-ke kuvame ukungabi nembile njengokuqala. Leli yinani elihlukile ngaleso sizathu. Likhuphule uma ukushelela kwakho kudlula uhlamvu lokugcina.</string>
     <string name="typing_glide_end_radius_subtitle">Ukuthi ukuphela kokuslayida kungaba kude kangakanani nohlamvu lokugcina</string>
     <string name="typing_glide_end_radius_title">Radius yephutha lokuphela</string>
@@ -6074,8 +6071,6 @@
     <string name="typing_glide_loop_extent_info">Kukalwa ngobubanzi bokhiye. Uphawu kufanele lube luncane ngokwanele ukuhlala kokhiye owodwa. Igama elinjenge-\"murderer\" lihamba lizungeze indandatho yokhiye abaseduze komunye nomunye futhi lidweba umbuthano obanzi ongasho lutho, ngakho gcina lokhu ngaphansi kobubanzi bokhiye owodwa. Inani eliphansi libala kuphela umbuthano oqinile futhi ligcina izinhlamvu ezizungezile ngaphandle kwawo.</string>
     <string name="typing_glide_loop_extent_subtitle">Imibuthano ebanzi iyindlela edlula okhiye, hhayi uphawu kokukodwa</string>
     <string name="typing_glide_loop_extent_title">I-loop enkulu kunazo zonke ebalwayo</string>
-    <string name="typing_glide_loop_info">Lolu wuhlobo lophawu i-Swype eyalufundisa. Shelelela kuhlamvu, zungeza kulo kanye, bese uqhubeka. Umbuthano awubizi lutho egameni, ngoba ikhibhodi isusa i-loop ebangeni umunwe wakho owuhambile. Valela lokhu uma ukushelela kwakho kugobile endleleni futhi uthola izinhlamvu ezibhalwe kabili ongazicelanga.</string>
-    <string name="typing_glide_loop_radius_info">Kulinganiswa ngobubanzi bokhiye. Ikhibhodi inikeza umbuthano okhiye oseduze naphakathi nendawo. Umbuthano odwetshwe ngokhiye uhlala cishe ingxenye yesithathu yokhiye ohlangothini olulodwa, ngakho inani eliphansi kakhulu alitholi hlamvu kulo futhi uphawu alwenzi lutho. Inani eliphezulu linganikeza uphawu okhiye olandelayo.</string>
     <string name="typing_glide_loop_radius_subtitle">Ukuthi isikhungo sombuthano kufanele sibe seduze kangakanani nohlamvu</string>
     <string name="typing_glide_loop_radius_title">Ukugxilisa iluphu</string>
     <string name="typing_glide_loop_subtitle">Dweba isiyingi esincane enkinobheni ukuze ubhale uhlamvu kabili</string>
@@ -6146,15 +6141,9 @@
     <string name="typing_glide_vocabulary_info">I-glide itshela ikhibhodi ukuthi yiziphi izinkinobho umunwe wakho owusondele, nangaluphi uhlelo. Amagama amaningi alingana nalokho ngokukhululekile, ngakho ikhibhodi isebenzisa imvamisa yamagama ukuze ikhethe elilodwa lawo. Isichazamazwi esikhulu siphethe amagama amaningi angavamile, futhi igama elingavamile elisimo salo silingana kangcono linganqoba phezu kwegama obulisho. Lesi silungiselelo sikhawulela i-glide kumagama ajwayelekile kakhulu esichazamazwini. Ishintsha ukuthayipha kwe-glide kuphela. Iziphakamiso, ukuqedwa kwamagama nokulungisa ngokuzenzakalelayo kusasebenzisa wonke amagama, ngoba izinhlamvu ozithayiphayo zisho okuningi kuneswayipha. Amagama owafundisa ikhibhodi awasoze akhawulelwa. Isichazamazwi esiza nekhibhodi sincane kunayo yonke imikhawulo lapha, ngakho lesi silungiselelo asenzi lutho uze ulande noma ungenise uhlu olukhulu lwamagama.</string>
     <string name="typing_glide_vocabulary_subtitle">Nciphisa ukushelela emagameni ajwayelekile kakhulu esichazamazwi sakho</string>
     <string name="typing_glide_vocabulary_title">Amagama angakhiqizwa ukushelela</string>
-    <string name="typing_glide_wiggle_extent_info">Kukalwa ngobubanzi bokhiye. Gcina lokhu ngaphansi kobubanzi bokhiye owodwa, noma igama elisuka kokhiye owodwa liye kokhiye olandelayo bese libuyela emuva lifundeka njengohlamvu olulodwa olubhalwe kabili. Kusetshenziswa kuphela ngenkathi inkinobho engenhla ivuliwe.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Ukuthi umunwe ungahamba ibanga elingakanani ekuhlikihleni</string>
     <string name="typing_glide_wiggle_extent_title">Ukuzamazama okukhulu okubalwayo</string>
-    <string name="typing_glide_wiggle_info">Olunye uphawu abantu abalusebenzisela uhlamvu olubhalwe kabili: esikhundleni sombuthano, basikhipha phezu kokhiye. Lokhu kuvaliwe, ngoba ukujika kancane okudwetshwe ngomunwe ongazinzile kubukeka kufana kakhulu, bese ikhibhodi ibhala izinhlamvu kabili ozibhale kanye. Yivule uma lokhu kuyiphawu olwenzayo.</string>
-    <string name="typing_glide_wiggle_strength_info">Inani elingamaphesenti ayi-100 lenza uphawu lube luhle njengombuthano. Inani eliphansi lishiya njengokusikisela, okungase kuhlulwe yigama elivame kakhulu. Kusetshenziswa kuphela ngenkathi iswishi engenhla ivuliwe.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Ukuthi ukuhlikihla kubalwa kangakanani njengobufakazi bezinhlamvu ezimbili</string>
     <string name="typing_glide_wiggle_strength_title">Amandla okuzamazama</string>
-    <string name="typing_glide_wiggle_subtitle">Hlikihla emuva naphambili kokhiye ukuze ubhale uhlamvu kabili</string>
-    <string name="typing_glide_wiggle_title">Nyikinya ukuze uphindaphinde uhlamvu</string>
     <string name="typing_group_autopilot_subtitle">Khulisa indawo yokuthinta yezinhlamvu ozithayiphayo ngokulandelayo</string>
     <string name="typing_group_autopilot_title">I-Autopilot</string>
     <string name="typing_group_backspace_title">Backspace</string>

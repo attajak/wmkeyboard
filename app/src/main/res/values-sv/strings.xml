@@ -6049,9 +6049,6 @@
     <string name="typing_glide_commit_scope_info">Förslagsfältet är där autokorrigeringsfärgen redan finns, så den visar alltid färgen. Ordpillret ligger ovanför fingertoppen och är vad de flesta tittar på medan de sveper, så det bär också färgen som standard. Orden som ritas på tangenterna kan också bära den, vilket gör att hela tangentbordet svarar vid en blick men det blir mycket färg på en gång.</string>
     <string name="typing_glide_commit_scope_subtitle">Förslagsfältet, ordet ovanför ditt finger eller orden på tangenterna</string>
     <string name="typing_glide_commit_scope_title">Var färgen visas</string>
-    <string name="typing_glide_dwell_info">En glidrörelse ritar \"good\" och \"god\" på samma sätt, eftersom o är en tangent och ditt finger korsar den en gång. Stanna på tangenten en stund för att ange att bokstaven finns där två gånger. Värdet är en multipel av din egen hastighet i samma glidrörelse, inte ett antal sekunder, så det fungerar lika bra vid en snabb som en långsam glidrörelse. Ett lågt värde accepterar ett kort stopp, men en noggrann glidrörelse som saktar ner överallt skriver då bokstäver två gånger av sig själv. Ett högt värde kräver ett tydligt stopp.</string>
-    <string name="typing_glide_dwell_subtitle">Hur länge man ska stanna på en tangent för att skriva bokstaven två gånger</string>
-    <string name="typing_glide_dwell_title">Pausa för att dubblera en bokstav</string>
     <string name="typing_glide_end_radius_info">Mätt i tangentbredder. Tangentbordet föreslår ett ord endast när du har lyft fingret så här nära ordets sista bokstav. Slutet på en glidrörelse är där en rörelse stannar, så det är oftast mindre exakt än början. Detta är ett separat värde av den anledningen. Flytta det uppåt om dina glidrörelser glider förbi den sista bokstaven.</string>
     <string name="typing_glide_end_radius_subtitle">Hur långt från den sista bokstaven slutet på en glidning kan vara</string>
     <string name="typing_glide_end_radius_title">Radie för slutfel</string>
@@ -6064,8 +6061,6 @@
     <string name="typing_glide_loop_extent_info">Mätt i tangentbredder. Ett märke måste vara tillräckligt litet för att sitta på en tangent. Ett ord som \"murderer\" går runt en ring av tangenter bredvid varandra och ritar en bred cirkel som inte betyder något sådant, så håll detta under bredden av en tangent. Ett lågt värde räknar bara en tät cirkel och håller bokstäverna runt den utanför.</string>
     <string name="typing_glide_loop_extent_subtitle">Bredare cirklar är en väg genom tangenter, inte ett märke på en</string>
     <string name="typing_glide_loop_extent_title">Största loop som räknas</string>
-    <string name="typing_glide_loop_info">Detta är märket Swype lärde ut. Glid till bokstaven, gå runt den en gång och fortsätt. Cirkeln kostar inte ordet något, eftersom tangentbordet tar bort loopen från avståndet ditt finger färdades. Stäng av detta om dina glidningar kröker sig på vägen och du får bokstäver skrivna två gånger som du inte bad om.</string>
-    <string name="typing_glide_loop_radius_info">Mätt i tangentbredder. Tangentbordet ger en cirkel till tangenten närmast dess mitt. En cirkel dragen genom en tangent sitter ungefär en tredjedel av en tangent åt ena sidan, så ett mycket lågt värde hittar ingen bokstav för den och märket gör ingenting. Ett högt värde kan ge märket till tangenten bredvid.</string>
     <string name="typing_glide_loop_radius_subtitle">Hur nära bokstaven mitten av en cirkel måste vara</string>
     <string name="typing_glide_loop_radius_title">Loop-centrering</string>
     <string name="typing_glide_loop_subtitle">Rita en liten cirkel på en tangent för att skriva bokstaven två gånger</string>
@@ -6134,15 +6129,9 @@
     <string name="typing_glide_vocabulary_info">Ett svep talar om för tangentbordet vilka tangenter ditt finger var nära, och i vilken ordning. Många ord passar det löst, så tangentbordet använder ordfrekvens för att välja ett av dem. En stor ordbok innehåller många sällsynta ord, och ett sällsynt ord vars form passar lite bättre kan vinna över ordet du menade. Denna inställning begränsar ett svep till de vanligaste orden i ordboken. Det ändrar endast svepskrivning. Förslag, ordkomplettering och autokorrekt använder fortfarande varje ord, eftersom bokstäverna du skriver säger mycket mer än ett svep gör. Ord du lär tangentbordet begränsas aldrig. Ordboken som följer med tangentbordet är mindre än varje gräns här, så den här inställningen gör ingenting förrän du laddar ner eller importerar en stor ordlista.</string>
     <string name="typing_glide_vocabulary_subtitle">Begränsa svepning till de vanligaste orden i din ordbok</string>
     <string name="typing_glide_vocabulary_title">Ord som en svepning kan producera</string>
-    <string name="typing_glide_wiggle_extent_info">Mätt i tangentbredder. Håll detta under bredden av en tangent, annars läses ett ord som går från en tangent till grann-tangenten och tillbaka som en bokstav skriven två gånger. Används endast när reglaget ovan är på.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Hur långt fingret kan röra sig vid en gnidning</string>
     <string name="typing_glide_wiggle_extent_title">Största vickning som räknas</string>
-    <string name="typing_glide_wiggle_info">Det andra tecknet folk använder för en bokstav skriven två gånger: istället för en cirkel skrubbar de över tangenten. Detta är avstängt, eftersom en långsam sväng ritad med ett ostadigt finger ser ungefär likadan ut, och tangentbordet skriver då bokstäver två gånger som du skrev en gång. Slå på det om detta är tecknet du gör.</string>
-    <string name="typing_glide_wiggle_strength_info">Ett värde på 100 procent gör markeringen lika bra som en cirkel. Ett lägre värde lämnar den som ett tips, vilket ett mycket vanligare ord fortfarande kan vinna över. Används endast när reglaget ovan är på.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Hur mycket en gnidning räknas som bevis på två bokstäver</string>
     <string name="typing_glide_wiggle_strength_title">Vickningsstyrka</string>
-    <string name="typing_glide_wiggle_subtitle">Gnugga fram och tillbaka på en tangent för att skriva bokstaven två gånger</string>
-    <string name="typing_glide_wiggle_title">Vicka för att dubblera en bokstav</string>
     <string name="typing_group_autopilot_subtitle">Bredda touch-området för bokstäverna du skriver härnäst</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Radera tangenter</string>

@@ -6042,9 +6042,6 @@
     <string name="typing_glide_commit_scope_info">Bilah saran adalah tempat warna koreksi otomatis berada, jadi bilah ini selalu menampilkan warna tersebut. Pil kata muncul di atas ujung jari Anda dan merupakan hal yang paling banyak dilihat orang saat mereka menggeser, jadi pil ini juga membawa warna tersebut secara default. Kata-kata yang digambar di atas tombol juga bisa membawanya, yang membuat seluruh papan merespons sekilas tetapi terlalu banyak warna sekaligus.</string>
     <string name="typing_glide_commit_scope_subtitle">Strip saran, kata di atas jari Anda, atau kata-kata pada tombol</string>
     <string name="typing_glide_commit_scope_title">Tempat warna ditampilkan</string>
-    <string name="typing_glide_dwell_info">Glide menggambar \"good\" dan \"god\" dengan cara yang sama, karena o adalah satu tombol dan jari Anda melewatinya satu kali. Tetap di tombol sejenak untuk menyatakan bahwa huruf tersebut ada dua kali. Nilainya adalah kelipatan dari kecepatan Anda sendiri dalam glide yang sama, bukan jumlah detik, jadi ini berfungsi baik dalam glide cepat maupun lambat. Nilai rendah menerima pemberhentian singkat, tetapi glide hati-hati yang melambat di mana-mana kemudian menulis huruf dua kali dengan sendirinya. Nilai tinggi meminta pemberhentian yang jelas.</string>
-    <string name="typing_glide_dwell_subtitle">Berapa lama harus menahan pada tombol untuk menulis huruf dua kali</string>
-    <string name="typing_glide_dwell_title">Jeda untuk menggandakan huruf</string>
     <string name="typing_glide_end_radius_info">Diukur dalam lebar tombol. Papan ketik menawarkan kata hanya ketika Anda mengangkat jari sedekat ini dengan huruf terakhir kata tersebut. Akhir dari luncuran adalah tempat gerakan berhenti, jadi biasanya kurang akurat daripada awalnya. Ini adalah nilai terpisah karena alasan tersebut. Naikkan nilainya jika luncuran Anda meluncur melewati huruf terakhir.</string>
     <string name="typing_glide_end_radius_subtitle">Seberapa jauh akhir geseran bisa berada dari huruf terakhir</string>
     <string name="typing_glide_end_radius_title">Radius kesalahan akhir</string>
@@ -6057,8 +6054,6 @@
     <string name="typing_glide_loop_extent_info">Diukur dalam lebar tombol. Tanda harus cukup kecil untuk berada di satu tombol. Kata seperti \"murderer\" mengelilingi cincin tombol di sebelah satu sama lain dan menggambar lingkaran lebar yang tidak berarti apa-apa, jadi jaga agar ini di bawah lebar satu tombol. Nilai rendah hanya menghitung lingkaran ketat dan menjaga huruf di sekitarnya tetap di luar.</string>
     <string name="typing_glide_loop_extent_subtitle">Lingkaran yang lebih lebar adalah jalur melalui tombol, bukan tanda pada satu tombol</string>
     <string name="typing_glide_loop_extent_title">Putaran terbesar yang dihitung</string>
-    <string name="typing_glide_loop_info">Ini adalah tanda yang diajarkan Swype. Geser ke huruf, putar satu kali, dan lanjutkan. Lingkaran tersebut tidak membebani kata, karena papan ketik menghilangkan loop dari jarak yang ditempuh jari Anda. Matikan ini jika geseran Anda melengkung di jalan dan Anda mendapatkan huruf yang ditulis dua kali yang tidak Anda minta.</string>
-    <string name="typing_glide_loop_radius_info">Diukur dalam lebar tombol. Papan ketik memberikan lingkaran ke tombol yang paling dekat dengan tengahnya. Lingkaran yang ditarik melalui tombol berada sekitar sepertiga tombol ke satu sisi, jadi nilai yang sangat rendah tidak menemukan huruf untuknya dan tanda tersebut tidak melakukan apa-apa. Nilai yang tinggi dapat memberikan tanda ke tombol di sebelahnya.</string>
     <string name="typing_glide_loop_radius_subtitle">Seberapa dekat pusat lingkaran harus berada dengan huruf</string>
     <string name="typing_glide_loop_radius_title">Pemusatan loop</string>
     <string name="typing_glide_loop_subtitle">Gambar lingkaran kecil pada tombol untuk menulis huruf dua kali</string>
@@ -6126,15 +6121,9 @@
     <string name="typing_glide_vocabulary_info">Glide memberi tahu papan ketik tombol mana yang didekati jari Anda, dan dalam urutan apa. Banyak kata yang cocok dengan itu secara longgar, jadi papan ketik menggunakan frekuensi kata untuk memilih salah satunya. Kamus besar menyimpan banyak kata langka, dan kata langka yang bentuknya sedikit lebih pas bisa mengalahkan kata yang Anda maksud. Pengaturan ini membatasi glide ke kata-kata yang paling umum dalam kamus. Ini hanya mengubah pengetikan glide. Saran, pelengkapan kata, dan koreksi otomatis masih menggunakan setiap kata, karena huruf yang Anda ketik mengatakan lebih banyak daripada gesekan. Kata-kata yang Anda ajarkan ke papan ketik tidak pernah dibatasi. Kamus yang disertakan dengan papan ketik lebih kecil dari setiap batas di sini, jadi pengaturan ini tidak melakukan apa pun sampai Anda mengunduh atau mengimpor daftar kata yang besar.</string>
     <string name="typing_glide_vocabulary_subtitle">Batasi luncuran ke kata-kata yang paling umum di kamus Anda</string>
     <string name="typing_glide_vocabulary_title">Kata-kata yang dapat dihasilkan oleh luncuran</string>
-    <string name="typing_glide_wiggle_extent_info">Diukur dalam lebar tombol. Jaga agar ini di bawah lebar satu tombol, atau kata yang berpindah dari satu tombol ke tombol di sebelahnya dan kembali terbaca sebagai satu huruf yang ditulis dua kali. Hanya digunakan saat sakelar di atas aktif.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Seberapa jauh jari bisa bergerak dalam satu gosokan</string>
     <string name="typing_glide_wiggle_extent_title">Goyangan terbesar yang dihitung</string>
-    <string name="typing_glide_wiggle_info">Tanda lain yang digunakan orang untuk huruf yang ditulis dua kali: alih-alih lingkaran, mereka menggeser jari di atas tombol. Ini dimatikan, karena putaran lambat yang digambar dengan jari yang tidak stabil terlihat hampir sama, dan papan tik kemudian menulis huruf dua kali padahal Anda menulisnya satu kali. Nyalakan jika ini adalah tanda yang Anda buat.</string>
-    <string name="typing_glide_wiggle_strength_info">Nilai 100 persen membuat tanda tersebut sama baiknya dengan lingkaran. Nilai yang lebih rendah menjadikannya sebagai petunjuk, yang masih bisa dikalahkan oleh kata yang jauh lebih umum. Hanya digunakan saat sakelar di atas aktif.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Seberapa besar gesekan dihitung sebagai bukti dua huruf</string>
     <string name="typing_glide_wiggle_strength_title">Kekuatan goyangan</string>
-    <string name="typing_glide_wiggle_subtitle">Gosok maju mundur pada tombol untuk menulis huruf dua kali</string>
-    <string name="typing_glide_wiggle_title">Goyangkan untuk menggandakan huruf</string>
     <string name="typing_group_autopilot_subtitle">Perlebar area sentuh huruf yang akan Anda ketik selanjutnya</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Backspace</string>

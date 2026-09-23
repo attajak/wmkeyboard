@@ -6045,9 +6045,6 @@
     <string name="typing_glide_commit_scope_info">Pasek sugestii to miejsce, w którym już znajduje się kolor autokorekty, więc zawsze go wyświetla. Chmurka ze słowem unosi się nad opuszkiem palca i to na nią większość ludzi patrzy podczas pisania gestami, więc domyślnie również zawiera ten kolor. Słowa narysowane na klawiszach również mogą go zawierać, co sprawia, że cała klawiatura reaguje na pierwszy rzut oka, ale jest to duża ilość koloru naraz.</string>
     <string name="typing_glide_commit_scope_subtitle">Pasek sugestii, słowo nad palcem lub słowa na klawiszach</string>
     <string name="typing_glide_commit_scope_title">Gdzie wyświetlany jest kolor</string>
-    <string name="typing_glide_dwell_info">Pisanie gestem rysuje \"good\" i \"god\" w ten sam sposób, ponieważ litera o jest jednym klawiszem, a Twój palec przechodzi przez nią tylko raz. Zatrzymaj się na klawiszu na chwilę, aby wskazać, że litera występuje dwukrotnie. Wartość ta jest wielokrotnością Twojej własnej prędkości w tym samym geście, a nie liczbą sekund, więc działa tak samo przy szybkim, jak i wolnym pisaniu. Niska wartość akceptuje krótkie zatrzymanie, ale staranny gest, który zwalnia w każdym miejscu, sam wpisuje litery dwukrotnie. Wysoka wartość wymaga wyraźnego zatrzymania.</string>
-    <string name="typing_glide_dwell_subtitle">Jak długo pozostać na klawiszu, aby napisać literę dwukrotnie</string>
-    <string name="typing_glide_dwell_title">Zatrzymaj, aby podwoić literę</string>
     <string name="typing_glide_end_radius_info">Mierzone w szerokościach klawiszy. Klawiatura podpowiada słowo tylko wtedy, gdy palec został podniesiony tak blisko ostatniej litery tego słowa. Koniec gestu to miejsce, w którym ruch się zatrzymuje, więc jest zazwyczaj mniej dokładny niż początek. Z tego powodu jest to osobna wartość. Zwiększ ją, jeśli Twoje gesty wykraczają poza ostatnią literę.</string>
     <string name="typing_glide_end_radius_subtitle">Jak daleko od ostatniej litery może znajdować się koniec gestu</string>
     <string name="typing_glide_end_radius_title">Promień błędu końcowego</string>
@@ -6060,8 +6057,6 @@
     <string name="typing_glide_loop_extent_info">Mierzone w szerokościach klawiszy. Znak musi być wystarczająco mały, aby zmieścić się na jednym klawiszu. Słowo takie jak \"murderer\" krąży wokół pierścienia sąsiadujących klawiszy i rysuje szeroki okrąg, który nic nie oznacza, więc utrzymuj to poniżej szerokości jednego klawisza. Niska wartość uwzględnia tylko ciasny okrąg i wyklucza z niego litery wokół niego.</string>
     <string name="typing_glide_loop_extent_subtitle">Szersze koła to ścieżka przez klawisze, a nie znak na jednym</string>
     <string name="typing_glide_loop_extent_title">Największa pętla, która się liczy</string>
-    <string name="typing_glide_loop_info">To jest znak, którego nauczył Swype. Przesuń palcem do litery, okrąż ją raz i kontynuuj. Kółko nie wpływa na słowo, ponieważ klawiatura odejmuje pętlę od dystansu przebytego przez palec. Wyłącz to, jeśli Twoje ruchy ślizgowe zakręcają po drodze i powodują dwukrotne wpisanie liter, których nie chciałeś.</string>
-    <string name="typing_glide_loop_radius_info">Mierzone w szerokościach klawiszy. Klawiatura nadaje koło klawiszowi najbliżej jego środka. Koło narysowane przez klawisz znajduje się około jednej trzeciej klawisza z jednej strony, więc bardzo niska wartość nie znajduje dla niego żadnej litery, a znak nic nie robi. Wysoka wartość może przekazać znak sąsiedniemu klawiszowi.</string>
     <string name="typing_glide_loop_radius_subtitle">Jak blisko litery musi znajdować się środek okręgu</string>
     <string name="typing_glide_loop_radius_title">Centrowanie pętli</string>
     <string name="typing_glide_loop_subtitle">Narysuj małe kółko na klawiszu, aby napisać literę dwukrotnie</string>
@@ -6129,15 +6124,9 @@
     <string name="typing_glide_vocabulary_info">Pisanie gestami informuje klawiaturę, w pobliżu których klawiszy przesunął się palec i w jakiej kolejności. Wiele słów pasuje do tego luźno, więc klawiatura używa częstotliwości występowania słów, aby wybrać jedno z nich. Duży słownik zawiera wiele rzadkich słów, a rzadkie słowo, którego kształt pasuje nieco lepiej, może wygrać ze słowem, o które Ci chodziło. To ustawienie ogranicza pisanie gestami do najpopularniejszych słów w słowniku. Zmienia to tylko pisanie gestami. Sugestie, uzupełnianie słów i autokorekta nadal używają każdego słowa, ponieważ wpisywane litery mówią znacznie więcej niż przesunięcie palcem. Słowa, których uczysz klawiaturę, nigdy nie są ograniczane. Słownik dostarczony z klawiaturą jest mniejszy niż jakikolwiek limit tutaj, więc to ustawienie nie robi nic, dopóki nie pobierzesz lub nie zaimportujesz dużej listy słów.</string>
     <string name="typing_glide_vocabulary_subtitle">Ogranicz pisanie gestami do najczęstszych słów w Twoim słowniku</string>
     <string name="typing_glide_vocabulary_title">Słowa, które może wygenerować gest</string>
-    <string name="typing_glide_wiggle_extent_info">Mierzone w szerokościach klawiszy. Utrzymuj tę wartość poniżej szerokości jednego klawisza, w przeciwnym razie słowo, które przechodzi z jednego klawisza na sąsiedni i z powrotem, zostanie odczytane jako jedna litera napisana dwukrotnie. Używane tylko wtedy, gdy powyższy przełącznik jest włączony.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Jak daleko palec może się poruszyć podczas pocierania</string>
     <string name="typing_glide_wiggle_extent_title">Największy ruch, który się liczy</string>
-    <string name="typing_glide_wiggle_info">Inny znak, którego ludzie używają do oznaczenia litery napisanej dwukrotnie: zamiast kółka, pocierają klawisz. Jest to wyłączone, ponieważ powolny ruch wykonany niepewnym palcem wygląda bardzo podobnie, a klawiatura wtedy zapisuje litery dwukrotnie, mimo że napisałeś je raz. Włącz to, jeśli to jest znak, którego używasz.</string>
-    <string name="typing_glide_wiggle_strength_info">Wartość 100 procent sprawia, że znak jest tak dobry jak koło. Niższa wartość pozostawia go jako wskazówkę, z którą znacznie częstsze słowo wciąż może wygrać. Używane tylko wtedy, gdy powyższy przełącznik jest włączony.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Jak bardzo potarcie liczy się jako dowód na dwie litery</string>
     <string name="typing_glide_wiggle_strength_title">Siła drgania</string>
-    <string name="typing_glide_wiggle_subtitle">Pocieraj tam i z powrotem po klawiszu, aby napisać literę dwukrotnie</string>
-    <string name="typing_glide_wiggle_title">Poruszaj, aby podwoić literę</string>
     <string name="typing_group_autopilot_subtitle">Poszerz obszar dotyku liter, które wpiszesz jako następne</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Klawisze usuwania</string>

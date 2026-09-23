@@ -6045,9 +6045,6 @@
     <string name="typing_glide_commit_scope_info">Pasiūlymų juostoje jau yra automatinio taisymo spalva, todėl ji visada rodo spalvą. Žodžio burbuliukas rodomas virš jūsų piršto galiuko ir yra tai, ką dauguma žmonių stebi braukdami, todėl jis taip pat pagal numatytuosius nustatymus turi spalvą. Ant klavišų nupiešti žodžiai taip pat gali ją turėti, todėl visa klaviatūra reaguoja iš pirmo žvilgsnio, tačiau tai yra daug spalvų vienu metu.</string>
     <string name="typing_glide_commit_scope_subtitle">Pasiūlymų juosta, žodis virš jūsų piršto arba žodžiai ant klavišų</string>
     <string name="typing_glide_commit_scope_title">Kur rodoma spalva</string>
-    <string name="typing_glide_dwell_info">Braukimas rašo „good“ ir „god“ vienodai, nes „o“ yra vienas klavišas, o jūsų pirštas jį kerta vieną kartą. Palaikykite ant klavišo akimirką, kad pasakytumėte, jog raidė yra du kartus. Vertė yra jūsų pačių greičio tame pačiame braukime kartotinis, o ne sekundžių skaičius, todėl ji veikia tiek greitame, tiek lėtame braukime. Maža vertė priima trumpą sustojimą, bet atsargus braukimas, kuris visur sulėtėja, tada pats rašo raides du kartus. Didelė vertė reikalauja aiškaus sustojimo.</string>
-    <string name="typing_glide_dwell_subtitle">Kiek laiko užtrukti ties klavišu, kad raidė būtų parašyta du kartus</string>
-    <string name="typing_glide_dwell_title">Pristabdykite, kad padvigubintumėte raidę</string>
     <string name="typing_glide_end_radius_info">Matuojama klavišų pločiais. Klaviatūra pasiūlo žodį tik tada, kai atitraukėte pirštą taip arti paskutinės to žodžio raidės. Braukimo pabaiga yra vieta, kur judesys sustoja, todėl ji paprastai yra mažiau tiksli nei pradžia. Dėl šios priežasties tai yra atskira reikšmė. Padidinkite ją, jei braukdami peršokate paskutinę raidę.</string>
     <string name="typing_glide_end_radius_subtitle">Kiek toli slydimo pabaiga gali būti nuo paskutinės raidės</string>
     <string name="typing_glide_end_radius_title">Pabaigos klaidos spindulys</string>
@@ -6060,8 +6057,6 @@
     <string name="typing_glide_loop_extent_info">Matuojama klavišų pločiais. Žymė turi būti pakankamai maža, kad tilptų ant vieno klavišo. Žodis, pvz., „murderer“, apjuosia šalia esančių klavišų žiedą ir nubrėžia platų apskritimą, kuris nieko nereiškia, todėl laikykite tai mažesniu nei vieno klavišo pločiu. Maža vertė skaičiuoja tik griežtą apskritimą ir neįtraukia aplink esančių raidžių.</string>
     <string name="typing_glide_loop_extent_subtitle">Platesni apskritimai yra kelias per klavišus, o ne žymė ant vieno</string>
     <string name="typing_glide_loop_extent_title">Didžiausia kilpa, kuri skaičiuojama</string>
-    <string name="typing_glide_loop_info">Tai yra „Swype“ išmokyta žymė. Slyskite iki raidės, vieną kartą ją apjuoskite ir tęskite toliau. Apskritimas žodžiui nieko nekainuoja, nes klaviatūra atima kilpą iš atstumo, kurį nuvažiavo jūsų pirštas. Išjunkite tai, jei jūsų slydimai užsiriečia pakeliui ir gaunate du kartus parašytas raides, kurių neprašėte.</string>
-    <string name="typing_glide_loop_radius_info">Matuojama klavišų pločiais. Klaviatūra suteikia apskritimą klavišui, esančiam arčiausiai jo vidurio. Apskritimas, nubrėžtas per klavišą, yra maždaug trečdaliu klavišo į vieną pusę, todėl labai maža vertė neranda jam raidės ir žymė nieko nedaro. Didelė vertė gali suteikti žymę gretimam klavišui.</string>
     <string name="typing_glide_loop_radius_subtitle">Kaip arti raidės turi būti apskritimo centras</string>
     <string name="typing_glide_loop_radius_title">Kilpos centravimas</string>
     <string name="typing_glide_loop_subtitle">Nubrėžkite mažą apskritimą ant klavišo, kad parašytumėte raidę du kartus</string>
@@ -6130,15 +6125,9 @@
     <string name="typing_glide_vocabulary_info">Braukimas nurodo klaviatūrai, šalia kokių klavišų praėjo jūsų pirštas ir kokia tvarka. Daug žodžių atitinka šį judesį, todėl klaviatūra pasirenka vieną iš jų pagal žodžių dažnumą. Dideliame žodyne yra daug retų žodžių, ir retas žodis, kurio forma šiek tiek geriau atitinka judesį, gali nugalėti jūsų norėtą žodį. Šis nustatymas apriboja braukimą tik dažniausiai vartojamais žodžiais žodyne. Tai keičia tik braukimo rašymą. Pasiūlymai, žodžių užbaigimas ir automatinė taisa vis tiek naudoja visus žodžius, nes jūsų įvedamos raidės pasako daug daugiau nei braukimas. Jūsų išmokyti žodžiai niekada neapribojami. Su klaviatūra pateikiamas žodynas yra mažesnis už bet kokį čia nustatytą limitą, todėl šis nustatymas nieko nekeičia, kol neatsisiunčiate arba neimportuojate didelio žodžių sąrašo.</string>
     <string name="typing_glide_vocabulary_subtitle">Apriboti braukimą dažniausiai naudojamais žodžiais jūsų žodyne</string>
     <string name="typing_glide_vocabulary_title">Žodžiai, kuriuos galima suformuoti braukiant</string>
-    <string name="typing_glide_wiggle_extent_info">Matuojama klavišų pločiais. Laikykite tai mažesniu nei vieno klavišo pločiu, kitaip žodis, einantis nuo vieno klavišo iki kaimyninio ir atgal, bus skaitomas kaip viena raidė, parašyta du kartus. Naudojama tik tada, kai aukščiau esantis jungiklis įjungtas.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kiek pirštas gali nukrypti braukiant</string>
     <string name="typing_glide_wiggle_extent_title">Didžiausias virpesys, kuris skaičiuojamas</string>
-    <string name="typing_glide_wiggle_info">Kita žymė, kurią žmonės naudoja raidei parašyti du kartus: vietoj apskritimo jie patrina klavišą. Tai išjungta, nes lėtas posūkis, nubrėžtas netvirtu pirštu, atrodo panašiai, ir klaviatūra tada rašo raides du kartus, nors jūs parašėte vieną. Įjunkite tai, jei naudojate būtent šią žymę.</string>
-    <string name="typing_glide_wiggle_strength_info">100 procentų vertė padaro žymę tokią pat gerą kaip apskritimas. Mažesnė vertė palieka ją kaip užuominą, kurią vis dar gali nugalėti daug dažniau vartojamas žodis. Naudojama tik tada, kai aukščiau esantis jungiklis įjungtas.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Kiek trynimas skaičiuojamas kaip dviejų raidžių įrodymas</string>
     <string name="typing_glide_wiggle_strength_title">Virpėjimo stiprumas</string>
-    <string name="typing_glide_wiggle_subtitle">Braukite pirmyn ir atgal per klavišą, kad parašytumėte raidę du kartus</string>
-    <string name="typing_glide_wiggle_title">Vibruokite, kad padvigubintumėte raidę</string>
     <string name="typing_group_autopilot_subtitle">Padidinti kitų rašomų raidžių lietimo sritį</string>
     <string name="typing_group_autopilot_title">Autopilotas</string>
     <string name="typing_group_backspace_title">Ištrinti klavišus</string>

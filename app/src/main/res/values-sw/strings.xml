@@ -6055,9 +6055,6 @@
     <string name="typing_glide_commit_scope_info">Utepe wa mapendekezo ndipo rangi ya kusahihisha kiotomatiki ilipo, kwa hivyo huonyesha rangi hiyo kila wakati. Kidonge cha neno hupanda juu ya ncha ya kidole chako na ndicho watu wengi hutazama wanapoteleza, kwa hivyo hubeba rangi hiyo pia kwa chaguo-msingi. Maneno yaliyochorwa kwenye funguo yanaweza kuibeba pia, jambo ambalo hufanya ubao mzima kujibu kwa haraka lakini ni rangi nyingi kwa wakati mmoja.</string>
     <string name="typing_glide_commit_scope_subtitle">Utepe wa mapendekezo, neno lililo juu ya kidole chako, au maneno yaliyo kwenye funguo</string>
     <string name="typing_glide_commit_scope_title">Mahali ambapo rangi inaonekana</string>
-    <string name="typing_glide_dwell_info">Kutelezesha kidole huchora \"good\" na \"god\" kwa njia sawa, kwa sababu o ni ufunguo mmoja na kidole chako kinauvuka mara moja. Kaa kwenye ufunguo kwa muda ili kusema kuwa herufi iko hapo mara mbili. Thamani ni zidisho la kasi yako mwenyewe katika kutelezesha huko huko, si idadi ya sekunde, kwa hivyo inafanya kazi katika kutelezesha kwa haraka na kwa polepole vilevile. Thamani ya chini inakubali kusimama kwa muda mfupi, lakini kutelezesha kwa uangalifu kunakopunguza kasi kila mahali kutaandika herufi mara mbili peke yake. Thamani ya juu inahitaji kusimama wazi.</string>
-    <string name="typing_glide_dwell_subtitle">Muda wa kukaa kwenye ufunguo ili kuandika herufi mara mbili</string>
-    <string name="typing_glide_dwell_title">Sitisha ili kurudia herufi</string>
     <string name="typing_glide_end_radius_info">Imepimwa kwa upana wa funguo. Kibodi hutoa neno tu wakati umeinua kidole chako karibu na herufi ya mwisho ya neno hilo. Mwisho wa kuteleza ni mahali ambapo miondoko huacha, kwa hivyo kwa kawaida huwa sahihi kidogo kuliko mwanzo. Hii ni thamani tofauti kwa sababu hiyo. Isongeze juu ikiwa kuteleza kwako kunapita herufi ya mwisho.</string>
     <string name="typing_glide_end_radius_subtitle">Umbali ambao mwisho wa kutelezesha unaweza kuwa kutoka kwa herufi ya mwisho</string>
     <string name="typing_glide_end_radius_title">Radi ya hitilafu ya mwisho</string>
@@ -6070,8 +6067,6 @@
     <string name="typing_glide_loop_extent_info">Imepimwa kwa upana wa vitufe. Alama lazima iwe ndogo ya kutosha kukaa kwenye kitufe kimoja. Neno kama \"murderer\" huzunguka vitufe vilivyo karibu na kila kimoja na kuchora duara pana ambayo haimaanishi chochote, kwa hivyo iweke chini ya upana wa kitufe kimoja. Thamani ya chini huhesabu tu duara iliyokazwa na kuweka herufi zinazoizunguka nje yake.</string>
     <string name="typing_glide_loop_extent_subtitle">Duru pana ni njia kupitia vitufe, si alama kwenye kimoja</string>
     <string name="typing_glide_loop_extent_title">Loop kubwa zaidi inayohisabu</string>
-    <string name="typing_glide_loop_info">Hii ndiyo alama ambayo Swype ilifundisha. Telezesha kidole kwenye herufi, zunguka mara moja, na uendelee. Mduara haugharimu neno lolote, kwa sababu kibodi huondoa kitanzi kwenye umbali ambao kidole chako kimesafiri. Zima hii ikiwa kuteleza kwako kunajikunja njiani na unapata herufi zilizoandikwa mara mbili ambazo hukuziomba.</string>
-    <string name="typing_glide_loop_radius_info">Imepimwa kwa upana wa vitufe. Kibodi hutoa duara kwa kitufe kilicho karibu na katikati yake. Duara iliyochorwa kupitia kitufe hukaa karibu theluthi moja ya kitufe upande mmoja, kwa hivyo thamani ya chini sana haipati herufi kwa ajili yake na alama haifanyi chochote. Thamani ya juu inaweza kutoa alama kwa kitufe cha jirani.</string>
     <string name="typing_glide_loop_radius_subtitle">Jinsi katikati ya duara inavyopaswa kuwa karibu na herufi</string>
     <string name="typing_glide_loop_radius_title">Kuweka kituo cha duara</string>
     <string name="typing_glide_loop_subtitle">Chora duara ndogo kwenye kitufe ili kuandika herufi mara mbili</string>
@@ -6139,15 +6134,9 @@
     <string name="typing_glide_vocabulary_info">Kutelezesha kidole huambia kibodi vitufe ambavyo kidole chako kilipita karibu navyo, na kwa mpangilio gani. Maneno mengi yanafaa kwa njia hiyo, kwa hivyo kibodi hutumia marudio ya maneno kuchagua moja wapo. Kamusi kubwa ina maneno mengi adimu, na neno adimu ambalo umbo lake linafaa zaidi linaweza kushinda neno ulilokusudia. Mpangilio huu hupunguza kutelezesha kidole kwa maneno ya kawaida zaidi kwenye kamusi. Inabadilisha kutelezesha kidole wakati wa kuandika pekee. Mapendekezo, kukamilisha maneno na kusahihisha kiotomatiki bado hutumia kila neno, kwa sababu herufi unazoandika zinasema mengi zaidi kuliko kutelezesha kidole. Maneno unayofundisha kibodi hayapunguzwi kamwe. Kamusi inayokuja na kibodi ni ndogo kuliko kila kikomo hapa, kwa hivyo mpangilio huu haufanyi chochote hadi upakue au kuingiza orodha kubwa ya maneno.</string>
     <string name="typing_glide_vocabulary_subtitle">Punguza kutelezesha kidole kwenye maneno ya kawaida zaidi katika kamusi yako</string>
     <string name="typing_glide_vocabulary_title">Maneno ambayo glide inaweza kutoa</string>
-    <string name="typing_glide_wiggle_extent_info">Imepimwa kwa upana wa funguo. Iweke chini ya upana wa ufunguo mmoja, au neno linalotoka kwenye ufunguo mmoja kwenda kwenye ufunguo wa jirani na kurudi litasomeka kama herufi moja iliyoandikwa mara mbili. Inatumika tu wakati swichi iliyo hapo juu imewashwa.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kidole kinaweza kwenda umbali gani katika msuguano</string>
     <string name="typing_glide_wiggle_extent_title">Mtikisiko mkubwa zaidi unaohesabika</string>
-    <string name="typing_glide_wiggle_info">Alama nyingine ambayo watu hutumia kwa herufi iliyoandikwa mara mbili: badala ya duara, wanasugua juu ya ufunguo. Hii imezimwa, kwa sababu mzunguko wa polepole unaochorwa kwa kidole kisicho imara unaonekana sawa, na kibodi kisha huandika herufi mara mbili ambazo uliandika mara moja. Iwake ikiwa hii ndiyo alama unayotengeneza.</string>
-    <string name="typing_glide_wiggle_strength_info">Thamani ya asilimia 100 hufanya alama kuwa nzuri kama duara. Thamani ya chini huiacha kama dokezo, ambalo neno la kawaida zaidi linaweza kushinda. Inatumika tu wakati swichi iliyo hapo juu imewashwa.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Kiasi gani cha msuguano huhesabiwa kama ushahidi wa herufi mbili</string>
     <string name="typing_glide_wiggle_strength_title">Nguvu ya mtikisiko</string>
-    <string name="typing_glide_wiggle_subtitle">Sugua mbele na nyuma kwenye ufunguo ili kuandika herufi mara mbili</string>
-    <string name="typing_glide_wiggle_title">Tikisa ili kurudia herufi</string>
     <string name="typing_group_autopilot_subtitle">Panua eneo la kugusa la herufi unazochapa baadaye</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Futa funguo</string>

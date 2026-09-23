@@ -6052,9 +6052,6 @@
     <string name="typing_glide_commit_scope_info">Soovituste riba on koht, kus automaatkorrektuuri värv juba eksisteerib, seega kuvab see alati värvi. Sõnapall liigub üle sinu sõrmeotsa ja on see, mida enamik inimesi libistades jälgib, seega kannab see vaikimisi ka värvi. Klahvidele joonistatud sõnad võivad seda samuti kanda, mis paneb kogu klaviatuuri pilguga vastama, kuid see on korraga palju värvi.</string>
     <string name="typing_glide_commit_scope_subtitle">Soovitusteriba, sõrmest ülalpool olev sõna või klahvidel olevad sõnad</string>
     <string name="typing_glide_commit_scope_title">Kus värv kuvatakse</string>
-    <string name="typing_glide_dwell_info">Libistades kirjutades joonistuvad \"good\" ja \"god\" samamoodi, sest o on üks klahv ja sõrm läbib seda ühe korra. Peatu klahvil hetkeks, et märkida, et täht on seal kaks korda. Väärtus on kordaja sinu enda libistamiskiirusele, mitte sekundite arv, seega töötab see nii kiire kui aeglase libistamise korral. Madal väärtus aktsepteerib lühikest peatust, kuid hoolikas libistamine, mis igal pool aeglustub, kirjutab tähed ise kaks korda. Kõrge väärtus nõuab selget peatust.</string>
-    <string name="typing_glide_dwell_subtitle">Kui kaua peab klahvil püsima, et tähte kaks korda kirjutada</string>
-    <string name="typing_glide_dwell_title">Peata, et tähte kahekordistada</string>
     <string name="typing_glide_end_radius_info">Mõõdetud klahvi laiustes. Klaviatuur pakub sõna ainult siis, kui tõstsite sõrme viimasele tähele nii lähedale. Libistamise lõpp on koht, kus liikumine peatub, seega on see tavaliselt vähem täpne kui algus. Sel põhjusel on see eraldi väärtus. Suurendage seda, kui teie libistamised lähevad viimasest tähest mööda.</string>
     <string name="typing_glide_end_radius_subtitle">Kui kaugel võib libistamise lõpp viimasest tähest olla</string>
     <string name="typing_glide_end_radius_title">Lõpu vea raadius</string>
@@ -6067,8 +6064,6 @@
     <string name="typing_glide_loop_extent_info">Mõõdetud klahvilaiustes. Märk peab olema piisavalt väike, et mahtuda ühele klahvile. Sõna nagu \"murderer\" käib ümber üksteise kõrval olevate klahvide ringi ja joonistab laia ringi, mis ei tähenda midagi sellist, seega hoidke see ühe klahvi laiusest väiksemana. Madal väärtus loeb ainult tihedat ringi ja jätab seda ümbritsevad tähed sellest välja.</string>
     <string name="typing_glide_loop_extent_subtitle">Laiemad ringid on teekond läbi klahvide, mitte märk ühel klahvil</string>
     <string name="typing_glide_loop_extent_title">Suurim loendatav silmus</string>
-    <string name="typing_glide_loop_info">See on märk, mida Swype õpetas. Libista täheni, tee selle ümber üks ring ja jätka. Ring ei maksa sõnale midagi, sest klaviatuur eemaldab silmuse sinu sõrme läbitud vahemaast. Lülita see välja, kui sinu libistamised teel kõverduvad ja saad topelt tähti, mida sa ei soovinud.</string>
-    <string name="typing_glide_loop_radius_info">Mõõdetud klahvi laiustes. Klaviatuur määrab ringi sellele klahvile, mis on kõige lähemal selle keskkohale. Klahvi kaudu joonistatud ring asub umbes kolmandiku klahvi võrra ühel pool, seega väga madal väärtus ei leia selle jaoks ühtegi tähte ja märk ei tee midagi. Kõrge väärtus võib määrata märgi naaberklahvile.</string>
     <string name="typing_glide_loop_radius_subtitle">Kui lähedal tähele peab ringi keskpunkt olema</string>
     <string name="typing_glide_loop_radius_title">Silmuse tsentreerimine</string>
     <string name="typing_glide_loop_subtitle">Joonista klahvil väike ring, et kirjutada täht kaks korda</string>
@@ -6137,15 +6132,9 @@
     <string name="typing_glide_vocabulary_info">Libistamine annab klaviatuurile teada, milliste klahvide lähedalt teie sõrm möödus ja mis järjekorras. Paljud sõnad sobivad sellega lõdvalt, seega kasutab klaviatuur ühe neist valimiseks sõnade sagedust. Suur sõnastik sisaldab palju haruldasi sõnu ja haruldane sõna, mille kuju sobib veidi paremini, võib võita sõna, mida mõtlesite. See säte piirab libistamise sõnastiku kõige tavalisemate sõnadega. See muudab ainult libistades tippimist. Soovitused, sõnade lõpetamine ja automaatkorrektuur kasutavad endiselt kõiki sõnu, sest sisestatud tähed ütlevad palju rohkem kui libistamine. Klaviatuurile õpetatud sõnu ei piirata kunagi. Klaviatuuriga kaasas olev sõnastik on väiksem kui ükski siinne piirang, seega see säte ei tee midagi enne, kui laadite alla või impordite suure sõnaloendi.</string>
     <string name="typing_glide_vocabulary_subtitle">Piira libistamist oma sõnastiku kõige sagedasemate sõnadega</string>
     <string name="typing_glide_vocabulary_title">Sõnad, mida libistamine võib tekitada</string>
-    <string name="typing_glide_wiggle_extent_info">Mõõdetud klahvilaiustes. Hoia see ühe klahvi laiusest väiksemana, muidu loetakse ühelt klahvilt kõrvalklahvile ja tagasi liikuv sõna üheks kaks korda kirjutatud täheks. Kasutatakse ainult siis, kui ülaltoodud lüliti on sisse lülitatud.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Kui kaugele võib sõrm hõõrumisel minna</string>
     <string name="typing_glide_wiggle_extent_title">Suurim loetav kõikumine</string>
-    <string name="typing_glide_wiggle_info">Teine märk, mida inimesed kasutavad topelttähe puhul: ringi asemel hõõrutakse üle klahvi. See on eksitav, sest ebakindla sõrmega tehtud aeglane pööre näeb välja üsna samasugune ja klaviatuur kirjutab siis tähed topelt, kuigi kirjutasid need vaid ühe korra. Lülita see sisse, kui teed just sellise märgi.</string>
-    <string name="typing_glide_wiggle_strength_info">100-protsendiline väärtus muudab märgi sama heaks kui ringi. Madalam väärtus jätab selle vihjeks, mille vastu võib tavalisem sõna siiski võita. Kasutatakse ainult siis, kui ülaltoodud lüliti on sisse lülitatud.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Kui palju hõõrumist loetakse tõendiks kahe tähe kohta</string>
     <string name="typing_glide_wiggle_strength_title">Värina tugevus</string>
-    <string name="typing_glide_wiggle_subtitle">Tähe kahekordistamiseks hõõruge klahvil edasi-tagasi</string>
-    <string name="typing_glide_wiggle_title">Tähe kahekordistamiseks liigutage</string>
     <string name="typing_group_autopilot_subtitle">Laienda järgmiste trükitavate tähtede puuteala</string>
     <string name="typing_group_autopilot_title">Autopiloot</string>
     <string name="typing_group_backspace_title">Kustuta klahvid</string>

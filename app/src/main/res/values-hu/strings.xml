@@ -6042,9 +6042,6 @@
     <string name="typing_glide_commit_scope_info">A javaslatsáv az a hely, ahol az automatikus javítás színe már jelen van, így mindig mutatja a színt. A szókiemelő az ujjbegyed felett lebeg, és a legtöbben ezt figyelik gépelés közben, ezért alapértelmezés szerint ez is hordozza a színt. A billentyűkre rajzolt szavak is hordozhatják, ami egy pillantással láthatóvá teszi az egész táblát, de egyszerre túl sok szín lehet.</string>
     <string name="typing_glide_commit_scope_subtitle">A javaslatsáv, az ujjad feletti szó, vagy a billentyűkön lévő szavak</string>
     <string name="typing_glide_commit_scope_title">Ahol a szín megjelenik</string>
-    <string name="typing_glide_dwell_info">A csúsztatás a \"good\" és a \"god\" szavakat ugyanúgy rajzolja ki, mivel az o egy billentyű, és az ujjad egyszer halad át rajta. Maradj a billentyűn egy pillanatig, hogy jelezd, a betű kétszer szerepel. Az érték a saját sebességed többszöröse ugyanazon csúsztatáson belül, nem másodpercek száma, így gyors és lassú csúsztatásnál is működik. Az alacsony érték elfogad egy rövid megállást, de egy óvatos, mindenhol lelassuló csúsztatás magától is kétszer írja a betűket. A magas érték egyértelmű megállást igényel.</string>
-    <string name="typing_glide_dwell_subtitle">Mennyi ideig kell egy billentyűn maradni a betű kétszeri leírásához</string>
-    <string name="typing_glide_dwell_title">Szünet a betű duplázásához</string>
     <string name="typing_glide_end_radius_info">Billentyűszélességben mérve. A billentyűzet csak akkor ajánl fel egy szót, ha az ujját ilyen közel emelte fel az adott szó utolsó betűjéhez. A csúsztatás vége az a pont, ahol a mozgás megáll, ezért általában kevésbé pontos, mint a kezdete. Emiatt ez egy külön érték. Növelje az értéket, ha a csúsztatásai túlmutatnak az utolsó betűn.</string>
     <string name="typing_glide_end_radius_subtitle">Milyen messze lehet a csúsztatás vége az utolsó betűtől</string>
     <string name="typing_glide_end_radius_title">Végpont hiba sugara</string>
@@ -6057,8 +6054,6 @@
     <string name="typing_glide_loop_extent_info">Billentyűszélességben mérve. A jelölésnek elég kicsinek kell lennie ahhoz, hogy egy billentyűn elférjen. Egy olyan szó, mint a \"murderer\", körbejárja az egymás melletti billentyűket, és egy széles kört rajzol, ami semmit sem jelent, ezért tartsa ezt egy billentyű szélességén belül. Az alacsony érték csak a szoros köröket számolja, és a körülötte lévő betűket kihagyja.</string>
     <string name="typing_glide_loop_extent_subtitle">A szélesebb körök a billentyűkön keresztüli útvonalat jelzik, nem egyetlen billentyűn lévő jelet</string>
     <string name="typing_glide_loop_extent_title">Legnagyobb hurok, ami számít</string>
-    <string name="typing_glide_loop_info">Ez az a jel, amit a Swype tanított. Csúsztassa az ujját a betűre, tegyen egy kört rajta, majd folytassa. A kör nem kerül semmibe a szónak, mert a billentyűzet levonja a hurkot az ujj által megtett távolságból. Kapcsolja ki ezt, ha a csúsztatásai kunkorodnak útközben, és olyan betűket ír kétszer, amiket nem kért.</string>
-    <string name="typing_glide_loop_radius_info">Billentyűszélességben mérve. A billentyűzet egy kört rendel a középpontjához legközelebbi billentyűhöz. Egy billentyűn áthaladó kör a billentyű egyharmadánál helyezkedik el, így egy nagyon alacsony érték nem talál hozzá betűt, és a jelölés nem csinál semmit. Egy magas érték a szomszédos billentyűhöz rendelheti a jelölést.</string>
     <string name="typing_glide_loop_radius_subtitle">Milyen közel kell lennie a kör középpontjának a betűhöz</string>
     <string name="typing_glide_loop_radius_title">Hurok központosítása</string>
     <string name="typing_glide_loop_subtitle">Rajzoljon egy kis kört egy billentyűn a betű kétszeri leírásához</string>
@@ -6126,15 +6121,9 @@
     <string name="typing_glide_vocabulary_info">A csúsztatás megmondja a billentyűzetnek, hogy mely billentyűk közelében járt az ujja, és milyen sorrendben. Sok szó illik erre lazán, ezért a billentyűzet a szógyakoriságot használja az egyik kiválasztásához. Egy nagy szótár sok ritka szót tartalmaz, és egy ritka szó, amelynek alakja egy kicsit jobban illeszkedik, megelőzheti a kívánt szót. Ez a beállítás a csúsztatást a szótár leggyakoribb szavaira korlátozza. Csak a csúsztatva gépelést változtatja meg. A javaslatok, a szó kiegészítése és az automatikus javítás továbbra is minden szót használ, mert a begépelt betűk sokkal többet mondanak, mint egy csúsztatás. A billentyűzetnek megtanított szavak soha nem korlátozottak. A billentyűzethez tartozó szótár kisebb, mint az itt megadott korlátok, így ez a beállítás nem tesz semmit, amíg le nem tölt vagy importál egy nagy szólistát.</string>
     <string name="typing_glide_vocabulary_subtitle">Csúsztatás korlátozása a szótárad leggyakoribb szavaira</string>
     <string name="typing_glide_vocabulary_title">Szavak, amelyeket egy csúsztatás létrehozhat</string>
-    <string name="typing_glide_wiggle_extent_info">Billentyűszélességben mérve. Tartsa ezt egy billentyű szélessége alatt, különben egy olyan szó, amely az egyik billentyűről a szomszédosra megy, majd vissza, kétszer leírt betűként lesz értelmezve. Csak akkor használatos, ha a fenti kapcsoló be van kapcsolva.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Milyen messzire mehet az ujj egy dörzsölés során</string>
     <string name="typing_glide_wiggle_extent_title">A legnagyobb számító rezgés</string>
-    <string name="typing_glide_wiggle_info">A másik jel, amit az emberek a kétszer leírt betűhöz használnak: kör helyett a billentyűn való oda-vissza mozgatás. Ez ki van kapcsolva, mert egy bizonytalan ujjal rajzolt lassú mozdulat nagyon hasonlít erre, és a billentyűzet így kétszer írja le azokat a betűket, amiket csak egyszer akart. Kapcsolja be, ha ezt a jelet használja.</string>
-    <string name="typing_glide_wiggle_strength_info">A 100 százalékos érték a jelölést olyan jóvá teszi, mint egy kör. Az alacsonyabb érték csak utalásként hagyja meg, amelyet egy sokkal gyakoribb szó még mindig legyőzhet. Csak akkor használatos, ha a fenti kapcsoló be van kapcsolva.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Mennyire számít egy dörzsölés két betű bizonyítékának</string>
     <string name="typing_glide_wiggle_strength_title">Mozgatás erőssége</string>
-    <string name="typing_glide_wiggle_subtitle">Dörzsöld ide-oda a billentyűn a betű duplázásához</string>
-    <string name="typing_glide_wiggle_title">Rezegtetés egy betű megkettőzéséhez</string>
     <string name="typing_group_autopilot_subtitle">Növeld a következőként begépelt betűk érintési területét</string>
     <string name="typing_group_autopilot_title">Autópilóta</string>
     <string name="typing_group_backspace_title">Törlőbillentyűk</string>

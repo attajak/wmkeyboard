@@ -66,15 +66,32 @@ object GestureEvalBaseline {
      * strokes that loop, which this corpus never does: with every doubled
      * letter drawn as a circle, top-1 on the doubled words goes .750 -> .852.
      * The measurement is on `GlideBeam.Tuning.loopExtent`.
+     *
+     * 2026-09-24, the loop made the only doubling mark (issue #337): a pause
+     * and a wiggle now say a letter is in the word and never that it is in
+     * it twice, a pause is claimed only by the key it happened on, and the
+     * inside of a loop is charged to every key but its own. .9480 -> .9415,
+     * clean .9860 -> .9820, and every language gives back about as much.
+     * This one is the corpus disagreeing with the user rather than the
+     * decoder getting worse: [SwipeCorpus] draws every doubled letter with a
+     * hesitation on it, which is exactly the "a pause means twice" reading
+     * the issue asked to have removed, and the reporter, drawing real strokes
+     * on a device, found the same change a clear gain: the same-row words
+     * `write`, `wire` and `wrote` come apart. Of the loss, about half is
+     * that reading going, and the rest the loop's inside charge on the
+     * tremor curls a sloppy stroke draws; see `GlideBeam.Tuning.loopExclusion`
+     * for why that charge is small. The nearest-key pause claim measured as
+     * nothing either way on this corpus, which pauses only on doubled letters
+     * and pivots. Every floor below was re-measured the same day.
      */
     val ENGLISH = Floors(
-        top1 = 0.9480,
-        top3 = 0.9910,
-        mrr = 0.9689,
-        clean = 0.9860,
-        light = 0.9800,
-        typical = 0.9360,
-        sloppy = 0.8900,
+        top1 = 0.9415,
+        top3 = 0.9890,
+        mrr = 0.9650,
+        clean = 0.9820,
+        light = 0.9700,
+        typical = 0.9320,
+        sloppy = 0.8820,
     )
 
     /**
@@ -98,13 +115,13 @@ object GestureEvalBaseline {
      * consult, and top-1 would fall a long way below what is measured here.
      */
     val BENGALI = Floors(
-        top1 = 0.7965,
-        top3 = 0.8895,
-        mrr = 0.8455,
-        clean = 0.8200,
-        light = 0.8480,
+        top1 = 0.7955,
+        top3 = 0.8890,
+        mrr = 0.8444,
+        clean = 0.8220,
+        light = 0.8500,
         typical = 0.7760,
-        sloppy = 0.7420,
+        sloppy = 0.7340,
     )
 
     /**
@@ -115,13 +132,13 @@ object GestureEvalBaseline {
      * arrangements.
      */
     val CYRILLIC = Floors(
-        top1 = 0.9605,
-        top3 = 0.9920,
-        mrr = 0.9763,
-        clean = 0.9880,
-        light = 0.9860,
-        typical = 0.9620,
-        sloppy = 0.9060,
+        top1 = 0.9535,
+        top3 = 0.9885,
+        mrr = 0.9709,
+        clean = 0.9860,
+        light = 0.9800,
+        typical = 0.9580,
+        sloppy = 0.8900,
     )
 
     /**
@@ -138,13 +155,13 @@ object GestureEvalBaseline {
      * never are. Avro is also the layout most Bengali typists actually use.
      */
     val AVRO = Floors(
-        top1 = 0.9450,
-        top3 = 0.9930,
-        mrr = 0.9683,
-        clean = 0.9880,
-        light = 0.9660,
-        typical = 0.9440,
-        sloppy = 0.8820,
+        top1 = 0.9410,
+        top3 = 0.9925,
+        mrr = 0.9662,
+        clean = 0.9820,
+        light = 0.9640,
+        typical = 0.9460,
+        sloppy = 0.8720,
     )
 
     /** Run-to-run drift is nil (the corpus is seeded), so this is small. */

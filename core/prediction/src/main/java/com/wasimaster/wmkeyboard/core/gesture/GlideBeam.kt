@@ -112,15 +112,22 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         /** Flat charge for a doubled letter, which the stroke's shape cannot show. */
         val repeatCost: Float = 0.1f,
         /**
-         * Extra charge for a doubled letter the finger did *not* pause on.
+         * Extra charge for a doubled letter the finger did *not* loop on.
          *
          * A stroke draws `good` and `god` identically — the o is one key, visited
-         * once — so shape has nothing to say and frequency decides. Timing has
-         * one thing to say: a finger writing a letter twice tends to hesitate
-         * there. This charges the doubling only when that hesitation is absent,
-         * which leaves the dwelled case exactly as cheap as it was.
+         * once — so shape has nothing to say and frequency decides. The loop is
+         * the one mark that says a letter is written twice (see [loopExtent]),
+         * and this charges the doubling when that mark is absent, so an
+         * unmarked stroke leans to the single spelling.
+         *
+         * A pause used to waive it too, and that gave a pause two meanings at
+         * once: "this letter is in the word" and "this letter is in it twice".
+         * A hold on the i of `write` then read as much as a vote for a doubled
+         * i as for the i, and a hold on the f of `of` had to be long enough to
+         * double it or it did nothing (issue #337). A pause now says only the
+         * first thing — see [unclaimedDwell] — and a doubling asks for a loop.
          */
-        val dwellPenalty: Float = 0.4f,
+        val unloopedRepeat: Float = 0.4f,
         /**
          * How many times the stroke's own even pace a step has to take for the
          * finger to read as having stopped dead there.
@@ -133,25 +140,35 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
          * lowering this makes a shorter hesitation count for a whole pause and
          * raising it asks for a longer one.
          *
-         * Read by both halves of the pause model — [dwellPenalty], which waives
-         * a doubled letter's charge, and [unclaimedDwell], which charges the
-         * words that ignore the pause — so one number decides what counts as a
-         * pause at all. Floored where it is used (see [dwellScale]): at zero
-         * every step of an evenly drawn stroke is 0/0.
+         * Read by [unclaimedDwell], which charges the words that ignore the
+         * pause, and by nothing else: a pause no longer bears on doubled
+         * letters (see [unloopedRepeat]). Floored where it is used (see
+         * [dwellScale]): at zero every step of an evenly drawn stroke is 0/0.
          */
         val dwellFull: Float = 3.0f,
         /**
          * Charge per unit of pause a finished word leaves unexplained.
          *
-         * [dwellPenalty] reads a pause as evidence *for* a doubled letter. This
-         * reads it as evidence against every word that has no letter there at
-         * all: a finger that stopped on a key was, far more often than not,
-         * writing that key, and a candidate whose letters never go near it is
-         * explaining the stroke's shape while ignoring its clock (issue #52).
-         * Charged once per pause, on the whole word, so it is not a tax on
-         * length the way a per-letter "did you slow down here" charge would
+         * A pause is the mark for "this letter is in the word", and this is
+         * the whole of how it is read: as evidence against every word that has
+         * no letter there. A finger that stopped on a key was, far more often
+         * than not, writing that key, and a candidate whose letters never go
+         * near it is explaining the stroke's shape while ignoring its clock
+         * (issue #52). It is what separates the words a QWERTY stroke draws
+         * along one row — `write`, `wire`, `wrote` — which shape cannot: a
+         * hold on the i costs `wrote` and nothing else (issue #337).
+         *
+         * A pause is claimed by the key it happened on — the nearest one, or
+         * one within `DWELL_TIE` of as near, for a stop on the line between
+         * two — and never by the key next door. A claim as wide as the pause's
+         * reach let the o of `wrote` answer for a hold drawn a little right of
+         * the i, which is exactly the hold the charge exists to read. A wiggle,
+         * when wiggles are read, files the same kind of event as a full pause
+         * weighted by [wiggleWeight]: the moving way to say the same thing.
+         * Charged as one event per mark, on the whole word, so it is not a tax
+         * on length the way a per-letter "did you slow down here" charge would
          * be — a long word and a short one pay the same for the same ignored
-         * pause. Zero switches it off.
+         * mark. Zero switches it off.
          *
          * Swept on the graded corpus, whose only pauses are the doubled-letter
          * hesitations and the slowing into every pivot:
@@ -190,11 +207,21 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
          *    the travel between the letters on either side reads as it would
          *    without the loop — for `god` and `good` alike;
          *  - a doubled letter on that key has its [repeatCost] and
-         *    [dwellPenalty] waived, a charge dropped rather than a credit
+         *    [unloopedRepeat] waived, a charge dropped rather than a credit
          *    given, so a state's `extra` never falls below its parent's;
          *  - every finished word that does *not* double a letter there pays
          *    [unclaimedLoop] at emit, the way a word that ignores a pause pays
-         *    [unclaimedDwell].
+         *    [unclaimedDwell];
+         *  - the samples inside it belong to that key: every other key pays
+         *    [loopExclusion] more there, so the circle's edge, which passes
+         *    over the keys around the one it is drawn on, does not pull their
+         *    letters into the word (issue #337). A word that meant one of
+         *    them places it on the way in or out, where the stroke really
+         *    went.
+         *
+         * "That key" is one key, the nearest to the loop's centre within
+         * [loopRadius]. The loop is the only doubling mark: a pause and a
+         * wiggle say a letter is in the word, never that it is in it twice.
          *
          * A credit to the repeat itself is the natural reading and was
          * rejected on the bound: a state popped before its descendant collects
@@ -225,26 +252,49 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
          * How near a key a loop's centre has to sit, in key widths, for the
          * loop to be a mark on that key.
          *
-         * Tighter than the pause's own reach (`DWELL_RADIUS_SQ`), and for a
+         * Tighter than the pause's own reach (`DWELL_RADIUS`), and for a
          * reason the two readings do not share: a circle drawn through a key
          * centres about a third of a key off it, so the reach has to cover
-         * that, and the next key along must not be credited for the same
-         * circle. Both halves of the loop model read it — the waiver a doubled
-         * letter gets, and the [unclaimedLoop] every word that ignores the loop
-         * pays — so one number decides which key a loop is about.
+         * that. Only the nearest key inside it is credited, so a loop is about
+         * one key however wide this is set. Every part of the loop model reads
+         * the same key — the waiver a doubled letter gets, the [unclaimedLoop]
+         * every word that ignores the loop pays, and the samples no other key
+         * may be placed on — so one number decides which key a loop is about.
          */
         val loopRadius: Float = 0.6f,
         /**
          * Widest a *wiggle* may be — a window with a loop's arc for its extent
-         * but no net turning, the back-and-forth some people draw for a
-         * doubled letter — in key widths. Must stay under one key pitch, or a
-         * word that goes x-y-x-y across two adjacent keys reads as one. 0
+         * but no net turning, the back-and-forth some people rub over a key
+         * they want counted — in key widths. Must stay under one key pitch, or
+         * a word that goes x-y-x-y across two adjacent keys reads as one. 0
          * switches wiggles off, which is the default: at the sloppy end of
          * the corpus a slow pivot with tremor on it looks the same.
+         *
+         * A wiggle is a pause drawn in motion, for a finger that would rather
+         * not stop, and is read as one: evidence the key is in the word,
+         * charged through [unclaimedDwell] against the words without it. It
+         * never doubles a letter; that is the loop's job alone (issue #337).
+         * Its arc is still collapsed out of the travel and its inside still
+         * belongs to its key, the same as a loop's.
          */
         val wiggleExtent: Float = 0f,
-        /** A wiggle's worth as a doubled-letter mark, relative to a loop's, 0 to 1. */
+        /** A wiggle's worth as a pause, as a share of a full stop on the key, 0 to 1. */
         val wiggleWeight: Float = 0f,
+        /**
+         * Extra location cost, per sample, for placing any key but a mark's
+         * own inside a loop or a wiggle; see [loopExtent]. Zero lets the
+         * circle's edge place the letters around it as freely as any stretch
+         * of stroke.
+         *
+         * A charge rather than a wall, and a small one, because the corpus
+         * says so. Walling the inside off ([maxPointCost]) cost .9440 ->
+         * .9410 on English and .7340 -> .7280 on Probhat's sloppy strokes,
+         * all of it on the tremor curls a slow pivot draws, which read as
+         * loops and sit where the next letter's approach begins. At 1.5 the
+         * same strokes give back .9440 -> .9415 and nothing on Probhat; at
+         * 4 it is the wall again.
+         */
+        val loopExclusion: Float = 1.5f,
         /**
          * Charge per unit of loop a finished word leaves undoubled — the
          * credit for looping, expressed as a charge on every other word so
@@ -415,8 +465,8 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
              * rather than retyped beside a slider. These are the middle of the
              * band the sweep covered (`GlideTuningSweepTest`): an extent under
              * one key pitch, so a word crossing two adjacent keys can never
-             * read as one, and half a loop's worth of doubling evidence, since
-             * a back-and-forth is the weaker of the two marks.
+             * read as one, and half a full stop's worth of evidence, since a
+             * rub is easier to draw by accident than a stop.
              */
             val WIGGLES_ON = DEFAULT.copy(wiggleExtent = 0.5f, wiggleWeight = 0.5f)
 
@@ -500,7 +550,13 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         // *words*; a completion scores on a prefix's alignment plus a guess,
         // and letting one raise the floor would prune real words that the
         // guess merely outscored.
-        val ahead = if (lookAhead > 0) HashMap<String, Candidate>() else null
+        //
+        // A stroke that ends on a loop asks for no guesses at all. The loop
+        // is a deliberate mark on the last key the finger reached, and a
+        // finger that drew it and lifted has said where the word ends: with
+        // "finish words early" on, a circle closing "see" was otherwise
+        // read as the start of "seer" (issue #337).
+        val ahead = if (lookAhead > 0 && !endsOnLoop(ws)) HashMap<String, Candidate>() else null
         // One budget across every source, carried in a box so `searchOne` can
         // spend from it without threading a return value back.
         val budget = intArrayOf(tuning.lookAheadBudget)
@@ -522,6 +578,11 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         )
         val read = rescoreShape(ranked, keys, ws, shapes).take(limit)
         if (ahead.isNullOrEmpty()) return read
+        // A word the stroke spelled out is never also offered as a guess at
+        // where it was going: one source can read it while another's prefix
+        // completes to it, and the merged list would carry it twice.
+        val readWords = read.mapTo(HashSet()) { it.word }
+        val guesses = ahead.values.filterNot { it.word in readWords }
         // Merged into one ranked list so a caller sees the decoder's whole
         // opinion in score order; `Candidate.ahead` is what tells the two
         // apart, and every caller that cares checks it.
@@ -533,7 +594,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         // guess extending it paid nothing. "thing" drawn to its last letter
         // lost to "things" on that gap alone, and a word the stroke had
         // spelled out could be beaten by any longer word it started.
-        val completions = rescoreShape(ahead.values.toList(), keys, ws, shapes)
+        val completions = rescoreShape(guesses, keys, ws, shapes)
             .take(lookAhead)
         return (read + completions).sortedWith(
             compareByDescending<Candidate> { it.score }.thenBy { it.word }
@@ -726,7 +787,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                 // bound stays admissible since the charge can only lower
                 // a score, never raise one.
                 val shape = total + extra + unclaimedDwell(s, keys, ws) +
-                    unclaimedLoop(s, keys, ws)
+                    unclaimedLoop(s, ws)
                 if (length >= MIN_WORD_LENGTH && walker.isWord(node) &&
                     walker.frequency(node) >= minFrequency
                 ) {
@@ -736,7 +797,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                         val word = ws.materialize(s)
                         if (!listedNonWord(word, src)) {
                             emit(word, score, shape.toDouble(), src.tier, results)
-                            if (results.size >= k) floor = kthBest(results, k)
+                            if (results.size >= k) floor = kthBest(results, k, ws)
                         }
                     }
                 }
@@ -806,8 +867,8 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                     // holds no evidence of it at all: the alignment carries
                     // over untouched and the repeat pays a flat charge instead.
                     // Without the charge every doubled spelling would shadow
-                    // its single one for free. A pause or a loop on the key
-                    // is the evidence, and waives it.
+                    // its single one for free. A loop on the key is the
+                    // evidence, and waives it; a pause is not (issue #337).
                     minCol = ws.floorCost[s]
                     childExtra += repeatCharge(lastKey, ws)
                 } else {
@@ -922,13 +983,17 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         var steps = 0
         while (steps < MAX_WORD_LENGTH) {
             if (walker.isWord(at) && walker.frequency(at) == best) break
-            val count = walker.childrenInto(at, ws.children)
+            // Its own buffer: `ws.children` belongs to the walk that called
+            // this, and sharing it would make the walk correct only for as
+            // long as it happens to refill the buffer after this returns.
+            val children = ws.lookAheadChildren
+            val count = walker.childrenInto(at, children)
             var next = -1
             var label = '\u0000'
             for (i in 0 until count) {
-                if (walker.maxSubtree(ws.children.nodes[i]) == best) {
-                    next = ws.children.nodes[i]
-                    label = ws.children.labels[i]
+                if (walker.maxSubtree(children.nodes[i]) == best) {
+                    next = children.nodes[i]
+                    label = children.labels[i]
                     break
                 }
             }
@@ -1118,20 +1183,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     }
 
     /**
-     * Scores how long the finger lingered on each key.
+     * Finds where the finger lingered and files each hold as a pause event.
      *
      * Because the path is resampled by arc length, a sample's timestamp gap is
      * the reciprocal of speed with no differentiating required: a step that took
      * much longer than the stroke's even pace is a step the finger was barely
-     * moving through. A key's score is the slowest moment anywhere near it, so a
-     * pause counts wherever in the key it happened.
+     * moving through.
      *
-     * Zero throughout for a stroke with no clock, which is every synthetic path
-     * in a test that does not care about timing — and zero is the right answer
+     * Nothing for a stroke with no clock, which is every synthetic path in a
+     * test that does not care about timing — and nothing is the right answer
      * there, since no-evidence and no-pause should charge the same.
      */
     private fun buildDwell(keys: GlideKeyMap, ws: GlideWorkspace) {
-        if (tuning.dwellPenalty <= 0f && tuning.unclaimedDwell <= 0f) return
+        if (tuning.unclaimedDwell <= 0f) return
         val n = GlideWorkspace.SAMPLE_POINTS
         val span = (ws.pathT[n - 1] - ws.pathT[0]).toFloat()
         if (span <= 0f) return
@@ -1145,13 +1209,33 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
             val score = if (lingering > 1f) 1f else lingering
             recordPause(j, score, runEnd, ws)
             runEnd = j
-            for (k in 0 until keys.keyCount) {
-                val dx = ws.pathX[j] - keys.keyX[k]
-                val dy = ws.pathY[j] - keys.keyY[k]
-                if (dx * dx + dy * dy > DWELL_RADIUS_SQ) continue
-                if (score > ws.keyDwell[k]) ws.keyDwell[k] = score
-            }
         }
+        for (p in 0 until ws.pauseCount) {
+            val j = ws.pauseAt[p]
+            placePause(p, ws.pathX[j], ws.pathY[j], keys, ws)
+        }
+    }
+
+    /**
+     * Puts pause event [p] at ([x], [y]) and works out which keys may claim
+     * it: those within `DWELL_RADIUS` of it and no more than `DWELL_TIE`
+     * farther than the nearest key. A stop is on one key, so the key next door
+     * does not get to answer for it; the tie is for a stop drawn on the line
+     * between two, which says nothing about which of them was meant and
+     * should favour neither.
+     */
+    private fun placePause(p: Int, x: Float, y: Float, keys: GlideKeyMap, ws: GlideWorkspace) {
+        var nearestSq = Float.MAX_VALUE
+        for (k in 0 until keys.keyCount) {
+            val dx = x - keys.keyX[k]
+            val dy = y - keys.keyY[k]
+            val d = dx * dx + dy * dy
+            if (d < nearestSq) nearestSq = d
+        }
+        val reach = minOf(DWELL_RADIUS, sqrt(nearestSq) + DWELL_TIE)
+        ws.pauseX[p] = x
+        ws.pauseY[p] = y
+        ws.pauseReachSq[p] = reach * reach
     }
 
     /**
@@ -1180,20 +1264,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
      * The pauses along the stroke that none of state [s]'s letters sit on,
      * summed by how still the finger was at each, times [Tuning.unclaimedDwell].
      *
-     * A pause is claimed by a key within [DWELL_RADIUS_SQ] of where it happened —
-     * the same reach [buildDwell] gives a pause when it credits a doubled letter,
-     * so the two readings of one hold agree about which keys it could be about.
-     * The word's keys are read straight off the parent chain, so this costs a
-     * walk of the word per pause and allocates nothing.
+     * A pause is claimed by a key within the reach [placePause] gave it: the
+     * key it happened on, and never its neighbour. The word's keys are read
+     * straight off the parent chain, so this costs a walk of the word per pause
+     * and allocates nothing.
      */
     private fun unclaimedDwell(s: Int, keys: GlideKeyMap, ws: GlideWorkspace): Float {
         val weight = tuning.unclaimedDwell
         if (weight <= 0f || ws.pauseCount == 0) return 0f
         var charge = 0f
         for (p in 0 until ws.pauseCount) {
-            val j = ws.pauseAt[p]
-            val px = ws.pathX[j]
-            val py = ws.pathY[j]
+            val px = ws.pauseX[p]
+            val py = ws.pauseY[p]
+            val reachSq = ws.pauseReachSq[p]
             var claimed = false
             var cur = s
             while (cur >= 0 && !claimed) {
@@ -1201,7 +1284,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                 if (key >= 0) {
                     val dx = px - keys.keyX[key]
                     val dy = py - keys.keyY[key]
-                    claimed = dx * dx + dy * dy <= DWELL_RADIUS_SQ
+                    claimed = dx * dx + dy * dy <= reachSq
                 }
                 cur = ws.parent[cur]
             }
@@ -1213,12 +1296,14 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     // ---- loops ----
 
     /**
-     * Finds the places the finger went round on itself and files each as an
-     * event: the samples it covers, where it sat, and how much of a
-     * doubled-letter mark it is. Then credits the keys within reach of each
-     * and collapses the events' arc out of [GlideWorkspace.arcAt]. See
-     * [Tuning.loopExtent] for the reading. Nothing happens at zero extent, and
-     * a stroke with no loops leaves the workspace as it found it.
+     * Finds the places the finger went round on itself or rubbed back and
+     * forth and files each as an event: the samples it covers, where it sat,
+     * the key it is on, and how much of a doubled-letter mark it is — a loop
+     * all of one, a wiggle none, since a wiggle files a pause instead. Then
+     * leaves each event's inside to its key and collapses the events' arc out
+     * of [GlideWorkspace.arcAt]. See [Tuning.loopExtent] for the reading and
+     * [Tuning.wiggleExtent] for the wiggle's. Nothing happens at zero extent,
+     * and a stroke with no loops leaves the workspace as it found it.
      *
      * The search runs on a fine resample of the stroke rather than on the
      * alignment's [GlideWorkspace.SAMPLE_POINTS]: on a long word those sit
@@ -1253,19 +1338,82 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
             }
             val b = windowEnd(window)
             val extent = sqrt(extentSq(from, b, ws))
-            val score = when {
-                windowRoundness(window) >= LOOP_ROUNDNESS && extent <= tuning.loopExtent -> 1f
-                tuning.wiggleExtent > 0f && extent <= tuning.wiggleExtent -> tuning.wiggleWeight
-                else -> -1f
-            }
-            if (score < 0f) {
+            val loop = windowRoundness(window) >= LOOP_ROUNDNESS && extent <= tuning.loopExtent
+            val wiggle = !loop && tuning.wiggleExtent > 0f && extent <= tuning.wiggleExtent
+            if (!loop && !wiggle) {
                 a++
                 continue
             }
-            recordLoop(from, b, score, keys, ws)
+            val e = recordLoop(from, b, if (loop) 1f else 0f, keys, ws)
+            if (wiggle) recordWiggle(e, keys, ws)
             a = b + 1
         }
-        if (ws.loopCount > 0) collapseArc(ws)
+        if (ws.loopCount > 0) {
+            excludeNeighbours(keys, ws)
+            collapseArc(ws)
+        }
+    }
+
+    /**
+     * Whether the stroke's last doubling loop ends within [END_LOOP_REACH] of
+     * where the finger lifted, measured along the collapsed arc: a loop drawn
+     * as the stroke's last act, with at most the flick of the lift after it.
+     */
+    private fun endsOnLoop(ws: GlideWorkspace): Boolean {
+        val last = GlideWorkspace.SAMPLE_POINTS - 1
+        for (e in ws.loopCount - 1 downTo 0) {
+            if (ws.loopScore[e] <= 0f || ws.loopKey[e] < 0) continue
+            return ws.arcAt[last] - ws.arcAt[ws.loopTo[e]] <= END_LOOP_REACH
+        }
+        return false
+    }
+
+    /**
+     * Files the wiggle recorded as loop event [e] as a pause on its key,
+     * worth [Tuning.wiggleWeight] of a full stop: a rub is how a finger that
+     * would rather not stop says the key is in the word. The loop event it
+     * also is carries no doubling weight and is kept only so its arc is
+     * collapsed and its inside left to its key.
+     */
+    private fun recordWiggle(e: Int, keys: GlideKeyMap, ws: GlideWorkspace) {
+        val p = ws.pauseCount
+        if (tuning.unclaimedDwell <= 0f || tuning.wiggleWeight <= 0f) return
+        if (p >= GlideWorkspace.SAMPLE_POINTS) return
+        ws.pauseAt[p] = (ws.loopFrom[e] + ws.loopTo[e]) / 2
+        ws.pauseScore[p] = tuning.wiggleWeight
+        placePause(p, ws.loopX[e], ws.loopY[e], keys, ws)
+        ws.pauseCount = p + 1
+    }
+
+    /**
+     * Leaves the samples strictly inside every mark to the mark's own key:
+     * every other key pays [Tuning.loopExclusion] more there, up to
+     * [Tuning.maxPointCost].
+     *
+     * A loop drawn on the o of `good` sweeps over the i, the p, the k and the
+     * l on its way round, and before this the alignment was free to place any
+     * of their letters on those samples — so the circle that meant "the o
+     * twice" pulled in words that went through the keys around it (issue
+     * #337). The first and last samples of the window stay open to every key:
+     * that is where the stroke arrives from the letter before and leaves for
+     * the one after. A mark on no key excludes nothing.
+     */
+    private fun excludeNeighbours(keys: GlideKeyMap, ws: GlideWorkspace) {
+        val charge = tuning.loopExclusion
+        if (charge <= 0f) return
+        val keyCount = keys.keyCount
+        val cost = ws.pointCost
+        val cap = tuning.maxPointCost
+        for (e in 0 until ws.loopCount) {
+            val own = ws.loopKey[e]
+            if (own < 0) continue
+            for (j in ws.loopFrom[e] + 1 until ws.loopTo[e]) {
+                val base = j * keyCount
+                for (k in 0 until keyCount) {
+                    if (k != own) cost[base + k] = minOf(cap, cost[base + k] + charge)
+                }
+            }
+        }
     }
 
     /**
@@ -1401,11 +1549,14 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
     /**
      * Files the fine window `[from, to]` as a loop event of strength [score]:
-     * its centroid, the alignment samples it covers, and how much of its
-     * path its chord is — what the collapse leaves of it. Credits every key
-     * within [Tuning.loopRadius] of the centroid.
+     * its centroid, the alignment samples it covers, how much of its path its
+     * chord is — what the collapse leaves of it — and its key, the one nearest
+     * the centroid within [Tuning.loopRadius], or -1. Only that key is
+     * credited: a loop is a mark on one key, and crediting every key in reach
+     * let a circle drawn a little off the f of `off` double the d of `odd`
+     * (issue #337). Returns the event's index.
      */
-    private fun recordLoop(from: Int, to: Int, score: Float, keys: GlideKeyMap, ws: GlideWorkspace) {
+    private fun recordLoop(from: Int, to: Int, score: Float, keys: GlideKeyMap, ws: GlideWorkspace): Int {
         val xs = ws.fineX
         val ys = ws.fineY
         var cx = 0f
@@ -1445,13 +1596,20 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         ws.loopY[e] = cy
         ws.loopScore[e] = score
         ws.loopCount = e + 1
-        val radiusSq = tuning.loopRadiusSq
+        var own = -1
+        var nearestSq = tuning.loopRadiusSq
         for (k in 0 until keys.keyCount) {
             val kx = cx - keys.keyX[k]
             val ky = cy - keys.keyY[k]
-            if (kx * kx + ky * ky > radiusSq) continue
-            if (score > ws.keyLoop[k]) ws.keyLoop[k] = score
+            val d = kx * kx + ky * ky
+            if (d <= nearestSq) {
+                nearestSq = d
+                own = k
+            }
         }
+        ws.loopKey[e] = own
+        if (own >= 0 && score > ws.keyLoop[own]) ws.keyLoop[own] = score
+        return e
     }
 
     /**
@@ -1485,30 +1643,33 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     }
 
     /**
-     * What a doubled letter on [key] pays: the flat [Tuning.repeatCost], plus
-     * [Tuning.dwellPenalty] to the extent the finger did not pause there, the
-     * whole of it waived to the extent the finger looped there. A charge
-     * dropped and never a credit, so `extra` only ever grows along a chain
-     * and the bound stays admissible.
+     * What a doubled letter on [key] pays: the flat [Tuning.repeatCost] plus
+     * [Tuning.unloopedRepeat], the whole of it waived to the extent the finger
+     * looped there. Only a loop waives it: a pause or a wiggle says the key is
+     * in the word, not that it is in it twice (issue #337). A charge dropped
+     * and never a credit, so `extra` only ever grows along a chain and the
+     * bound stays admissible.
      */
     private fun repeatCharge(key: Int, ws: GlideWorkspace): Float =
-        (tuning.repeatCost + tuning.dwellPenalty * (1f - ws.keyDwell[key])) * (1f - ws.keyLoop[key])
+        (tuning.repeatCost + tuning.unloopedRepeat) * (1f - ws.keyLoop[key])
 
     /**
      * The loops along the stroke that none of state [s]'s *doubled* letters
-     * sit on, summed by strength, times [Tuning.unclaimedLoop]. A repeat is a
-     * state spelling the same letter as its parent one character further on;
+     * sit on, summed by strength, times [Tuning.unclaimedLoop]. A loop is
+     * claimed only by a doubling on its own key (see [recordLoop]). A repeat is
+     * a state spelling the same letter as its parent one character further on;
      * the half-letter state of a surrogate pair carries its parent's letter
      * at the parent's length, which keeps it out.
      */
-    private fun unclaimedLoop(s: Int, keys: GlideKeyMap, ws: GlideWorkspace): Float {
+    private fun unclaimedLoop(s: Int, ws: GlideWorkspace): Float {
         val weight = tuning.unclaimedLoop
         if (weight <= 0f || ws.loopCount == 0) return 0f
-        val radiusSq = tuning.loopRadiusSq
         var charge = 0f
         for (e in 0 until ws.loopCount) {
-            val lx = ws.loopX[e]
-            val ly = ws.loopY[e]
+            // A wiggle's event doubles nothing, and a loop on no key is
+            // ignored by every word alike, which orders nothing.
+            val own = ws.loopKey[e]
+            if (ws.loopScore[e] <= 0f || own < 0) continue
             var claimed = false
             var cur = s
             while (cur >= 0 && !claimed) {
@@ -1516,10 +1677,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                 if (parent >= 0 && ws.letterCp[cur] == ws.letterCp[parent] &&
                     ws.length[cur].toInt() == ws.length[parent] + 1
                 ) {
-                    val key = ws.lastKey[cur]
-                    val dx = lx - keys.keyX[key]
-                    val dy = ly - keys.keyY[key]
-                    claimed = dx * dx + dy * dy <= radiusSq
+                    claimed = ws.lastKey[cur] == own
                 }
                 cur = parent
             }
@@ -1773,13 +1931,19 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         }
     }
 
-    private fun kthBest(results: HashMap<String, Candidate>, k: Int): Double {
-        if (results.size < k) return Double.NEGATIVE_INFINITY
-        val scores = DoubleArray(results.size)
+    /** The [k]th best score in [results], sorted in the workspace's scratch rather than a fresh array per emit. */
+    private fun kthBest(results: HashMap<String, Candidate>, k: Int, ws: GlideWorkspace): Double {
+        val size = results.size
+        if (size < k) return Double.NEGATIVE_INFINITY
+        var scores = ws.scoreScratch
+        if (scores.size < size) {
+            scores = DoubleArray(size)
+            ws.scoreScratch = scores
+        }
         var i = 0
         for (c in results.values) scores[i++] = c.score
-        scores.sort()
-        return scores[scores.size - k]
+        java.util.Arrays.sort(scores, 0, size)
+        return scores[size - k]
     }
 
     private fun distance(a: GesturePoint, b: GesturePoint): Float {
@@ -1814,8 +1978,16 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
         private const val SHAPE_BYTE_LIMIT = 127
 
-        /** How near a key a pause has to happen to count as a pause on it. */
-        private const val DWELL_RADIUS_SQ = 0.8f * 0.8f
+        /** How near a key a pause has to happen to count as a pause on it, in key widths. */
+        private const val DWELL_RADIUS = 0.8f
+
+        /**
+         * How much farther than the nearest key another key may sit from a
+         * pause and still claim it, in key widths: enough for a stop drawn on
+         * the line between two keys to belong to both, not enough for the key
+         * next door to answer for a stop a little off centre.
+         */
+        private const val DWELL_TIE = 0.25f
 
         /**
          * Arc over extent a window needs to be a loop: a straight pass is 1,
@@ -1844,6 +2016,13 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
 
         /** Below this extent a window is tremor, whatever its path: a loop a finger means is wider than a third of a key. */
         private const val MIN_LOOP_EXTENT_SQ = 0.3f * 0.3f
+
+        /**
+         * Most stroke a loop may have after it, in key widths, and still be
+         * the stroke's closing mark: the lift's own flick, not a move on to
+         * another key, which is a key width away.
+         */
+        private const val END_LOOP_REACH = 0.5f
 
         /** Runaway backstop; floor pruning ends healthy walks far earlier. */
         const val MAX_POPS = 2000

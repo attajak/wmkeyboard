@@ -72,8 +72,8 @@ class GlideTuningSweepTest {
         axis("shapeChannel", listOf(20.0, 30.0, 45.0, 65.0, 90.0), cases, keys, sources) {
             base.copy(shapeChannel = it)
         }
-        axis("dwellPenalty", listOf(0.0f, 0.2f, 0.4f, 0.7f, 1.2f, 2.0f), cases, keys, sources) {
-            base.copy(dwellPenalty = it)
+        axis("unloopedRepeat", listOf(0.0f, 0.2f, 0.4f, 0.7f, 1.2f, 2.0f), cases, keys, sources) {
+            base.copy(unloopedRepeat = it)
         }
         val unclaimed = listOf(0.0f, 0.25f, 0.5f, 1.0f, 2.0f, 4.0f)
         axis("unclaimedDwell", unclaimed, cases, keys, sources) {
@@ -130,8 +130,8 @@ class GlideTuningSweepTest {
         axis("repeatCost (loopOnDoubles=1)", listOf(0.0f, 0.1f, 0.35f, 0.6f, 1.0f), looping, keys, sources) {
             base.copy(repeatCost = it)
         }
-        axis("dwellPenalty (loopOnDoubles=1)", listOf(0.0f, 0.2f, 0.4f, 0.7f, 1.2f), looping, keys, sources) {
-            base.copy(dwellPenalty = it)
+        axis("unloopedRepeat (loopOnDoubles=1)", listOf(0.0f, 0.2f, 0.4f, 0.7f, 1.2f), looping, keys, sources) {
+            base.copy(unloopedRepeat = it)
         }
         // The two ends of a stroke, held apart: a touch-down is a placement
         // and a lift-off is the end of a movement, so one number for both was

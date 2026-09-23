@@ -69,21 +69,18 @@ class GlideWorkspace {
     var pointCost = FloatArray(SAMPLE_POINTS * INITIAL_KEYS); private set
 
     /**
-     * How long the finger lingered on each key, 0 (flew past) to 1 (stopped
-     * dead). The one thing a stroke's shape cannot say is whether a letter was
-     * written twice, and this is the only evidence there is.
-     */
-    var keyDwell = FloatArray(INITIAL_KEYS); private set
-
-    /**
-     * The pauses themselves, as events rather than per-key maxima: the sample
-     * each hold sits on and how still the finger was there, 0 to 1. One event
-     * per hold however many samples it stretches over. [keyDwell] answers "did
-     * the finger pause on *this* key"; these answer the converse a finished
-     * word is charged for — "which pauses did it fail to account for".
+     * The pauses, as events: the sample each hold sits on, how still the
+     * finger was there, 0 to 1, where it was in key widths, and the squared
+     * reach within which a key claims it. One event per hold however many
+     * samples it stretches over, and one per wiggle when wiggles are read.
+     * They answer the question a finished word is charged for — "which pauses
+     * did it fail to account for".
      */
     val pauseAt = IntArray(SAMPLE_POINTS)
     val pauseScore = FloatArray(SAMPLE_POINTS)
+    val pauseX = FloatArray(SAMPLE_POINTS)
+    val pauseY = FloatArray(SAMPLE_POINTS)
+    val pauseReachSq = FloatArray(SAMPLE_POINTS)
     var pauseCount = 0
 
     /**
@@ -101,13 +98,16 @@ class GlideWorkspace {
     /**
      * The places the finger went round on itself — a loop or a back-and-forth
      * on one key — as events: the window of samples each covers, its centroid
-     * in key widths, and how much of a doubled-letter mark it is, 0 to 1.
+     * in key widths, the one key it is a mark on (-1 for none), and how much
+     * of a doubled-letter mark it is, 0 to 1 (0 for a wiggle, which files a
+     * pause instead).
      */
     val loopFrom = IntArray(SAMPLE_POINTS)
     val loopTo = IntArray(SAMPLE_POINTS)
     val loopX = FloatArray(SAMPLE_POINTS)
     val loopY = FloatArray(SAMPLE_POINTS)
     val loopScore = FloatArray(SAMPLE_POINTS)
+    val loopKey = IntArray(SAMPLE_POINTS)
     /** How much of each loop's path its chord is — what the collapse leaves of it. */
     val loopShrink = FloatArray(SAMPLE_POINTS)
     var loopCount = 0
@@ -131,7 +131,7 @@ class GlideWorkspace {
         }
     }
 
-    /** Per key, the strongest loop event within reach of it; the twin of [keyDwell]. */
+    /** Per key, the strongest loop event that key is the mark of. */
     var keyLoop = FloatArray(INITIAL_KEYS); private set
 
     /** Keys the drawn path passes close enough to be spelling. */
@@ -144,6 +144,12 @@ class GlideWorkspace {
     var endKey = BooleanArray(INITIAL_KEYS); private set
 
     val children = com.wasimaster.wmkeyboard.core.prediction.ChildBuffer()
+
+    /** The look-ahead's own child buffer, so its descent never shares [children] with the walk. */
+    val lookAheadChildren = com.wasimaster.wmkeyboard.core.prediction.ChildBuffer()
+
+    /** Where the walk sorts its results' scores to find the floor, reused across emits. */
+    var scoreScratch = DoubleArray(INITIAL)
 
     /**
      * Where a candidate column is built before anyone knows whether it is worth
@@ -188,13 +194,11 @@ class GlideWorkspace {
             nearKey = BooleanArray(keyCount)
             startKey = BooleanArray(keyCount)
             endKey = BooleanArray(keyCount)
-            keyDwell = FloatArray(keyCount)
             keyLoop = FloatArray(keyCount)
         } else {
             nearKey.fill(false, 0, keyCount)
             startKey.fill(false, 0, keyCount)
             endKey.fill(false, 0, keyCount)
-            keyDwell.fill(0f, 0, keyCount)
             keyLoop.fill(0f, 0, keyCount)
         }
         pauseCount = 0

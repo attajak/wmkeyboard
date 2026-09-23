@@ -6041,9 +6041,6 @@
     <string name="typing_glide_commit_scope_info">제안 스트립은 자동 수정 색상이 이미 표시되는 곳이므로 항상 색상을 보여줍니다. 단어 필은 손가락 끝 위에서 움직이며 글라이드 중에 대부분의 사람들이 보는 곳이므로 기본적으로 색상도 함께 표시됩니다. 키에 그려진 단어에도 색상을 적용할 수 있어 한눈에 전체 키보드 상태를 알 수 있지만, 한꺼번에 너무 많은 색상이 표시될 수 있습니다.</string>
     <string name="typing_glide_commit_scope_subtitle">제안 스트립, 손가락 위의 단어 또는 키 위의 단어</string>
     <string name="typing_glide_commit_scope_title">색상이 표시되는 위치</string>
-    <string name="typing_glide_dwell_info">글라이드는 \'good\'과 \'god\'을 같은 방식으로 그립니다. \'o\'는 하나의 키이고 손가락이 한 번 지나가기 때문입니다. 글자가 두 번 들어간다는 것을 알리려면 키 위에 잠시 머무르세요. 이 값은 초 단위가 아니라 같은 글라이드 내에서의 속도 배수이므로 빠른 글라이드와 느린 글라이드 모두에서 동일하게 작동합니다. 낮은 값은 짧은 멈춤을 허용하지만, 모든 곳에서 속도를 늦추는 신중한 글라이드는 스스로 글자를 두 번 씁니다. 높은 값은 확실한 멈춤을 요구합니다.</string>
-    <string name="typing_glide_dwell_subtitle">글자를 두 번 입력하기 위해 키 위에 머물러야 하는 시간</string>
-    <string name="typing_glide_dwell_title">멈춰서 글자 두 번 입력하기</string>
     <string name="typing_glide_end_radius_info">키 너비 단위로 측정됩니다. 키보드는 손가락을 해당 단어의 마지막 글자에 이만큼 가까이 떼었을 때만 단어를 제안합니다. 글라이드의 끝은 움직임이 멈추는 지점이므로 보통 시작보다 정확도가 떨어집니다. 이러한 이유로 별도의 값을 사용합니다. 글라이드가 마지막 글자를 지나쳐 버린다면 이 값을 높이세요.</string>
     <string name="typing_glide_end_radius_subtitle">글라이드 끝 지점이 마지막 글자로부터 떨어질 수 있는 거리</string>
     <string name="typing_glide_end_radius_title">종료 오류 반경</string>
@@ -6056,8 +6053,6 @@
     <string name="typing_glide_loop_extent_info">키 너비 단위로 측정됩니다. 표시는 한 키 안에 들어갈 정도로 작아야 합니다. \"murderer\"와 같은 단어는 인접한 키들을 원형으로 지나가며 큰 원을 그리는데, 이는 의도한 글자 입력이 아니므로 이 값을 키 너비 이하로 유지하세요. 낮은 값으로 설정하면 좁은 원만 인식하고 주변 글자는 포함하지 않습니다.</string>
     <string name="typing_glide_loop_extent_subtitle">더 큰 원은 특정 키에 대한 표시가 아니라 키를 가로지르는 경로로 인식됩니다</string>
     <string name="typing_glide_loop_extent_title">인식되는 가장 큰 루프</string>
-    <string name="typing_glide_loop_info">이것은 Swype가 가르친 표시입니다. 글자로 글라이드하고, 그 위를 한 번 돌고, 계속 진행하세요. 키보드가 손가락이 이동한 거리에서 루프를 제거하므로 원은 단어에 영향을 주지 않습니다. 글라이드 도중 곡선이 생겨 원하지 않는 글자가 두 번 입력된다면 이 기능을 끄세요.</string>
-    <string name="typing_glide_loop_radius_info">키 너비 단위로 측정됩니다. 키보드는 중심에서 가장 가까운 키에 원을 할당합니다. 키를 통과하는 원은 키의 약 3분의 1 정도 옆에 위치하므로, 값이 너무 낮으면 문자를 찾지 못해 아무런 동작도 하지 않습니다. 값이 너무 높으면 옆에 있는 키에 문자가 할당될 수 있습니다.</string>
     <string name="typing_glide_loop_radius_subtitle">원의 중심이 글자에 얼마나 가까워야 하는지 설정</string>
     <string name="typing_glide_loop_radius_title">루프 중심 설정</string>
     <string name="typing_glide_loop_subtitle">키 위에서 작은 원을 그려 글자를 두 번 입력하세요</string>
@@ -6125,15 +6120,9 @@
     <string name="typing_glide_vocabulary_info">글라이드 타이핑은 손가락이 지나간 키와 그 순서를 키보드에 알려줍니다. 많은 단어가 이 경로와 느슨하게 일치하므로 키보드는 단어 빈도를 사용하여 그중 하나를 선택합니다. 대형 사전에는 희귀 단어가 많이 포함되어 있으며, 모양이 조금 더 잘 맞는 희귀 단어가 의도한 단어보다 우선할 수 있습니다. 이 설정은 글라이드 타이핑을 사전에서 가장 일반적인 단어로 제한합니다. 글라이드 타이핑에만 영향을 미칩니다. 제안, 단어 완성 및 자동 수정은 여전히 모든 단어를 사용합니다. 입력하는 문자가 스와이프보다 훨씬 더 많은 정보를 제공하기 때문입니다. 키보드에 학습시킨 단어는 제한되지 않습니다. 키보드와 함께 제공되는 사전은 여기의 모든 제한보다 작으므로 대형 단어 목록을 다운로드하거나 가져오기 전까지는 이 설정이 아무런 효과가 없습니다.</string>
     <string name="typing_glide_vocabulary_subtitle">글라이드 입력을 사전에서 가장 많이 사용하는 단어로 제한합니다</string>
     <string name="typing_glide_vocabulary_title">글라이드로 입력할 수 있는 단어</string>
-    <string name="typing_glide_wiggle_extent_info">키 너비 단위로 측정됩니다. 키 하나 너비 미만으로 유지하십시오. 그렇지 않으면 한 키에서 옆 키로 갔다가 돌아오는 단어가 글자 하나를 두 번 쓴 것으로 읽힐 수 있습니다. 위의 스위치가 켜져 있을 때만 사용됩니다.</string>
     <string name="typing_glide_wiggle_extent_subtitle">문지를 때 손가락이 이동할 수 있는 거리</string>
     <string name="typing_glide_wiggle_extent_title">인식되는 최대 흔들림 범위</string>
-    <string name="typing_glide_wiggle_info">글자를 두 번 쓸 때 사용하는 또 다른 표시입니다. 원을 그리는 대신 키 위를 문지릅니다. 불안정한 손가락으로 천천히 돌리면 한 번 쓴 글자가 두 번 쓴 것처럼 보일 수 있어 이 기능은 꺼져 있습니다. 이 표시를 사용하는 경우 켜십시오.</string>
-    <string name="typing_glide_wiggle_strength_info">100%로 설정하면 원과 동일하게 인식됩니다. 값이 낮을수록 힌트로만 남으며, 더 흔한 단어가 우선순위를 가질 수 있습니다. 위의 스위치가 켜져 있을 때만 사용됩니다.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">문지르기가 두 글자의 증거로 간주되는 정도</string>
     <string name="typing_glide_wiggle_strength_title">흔들기 강도</string>
-    <string name="typing_glide_wiggle_subtitle">키 위를 앞뒤로 문질러 글자를 두 번 입력</string>
-    <string name="typing_glide_wiggle_title">흔들어서 글자 두 번 입력하기</string>
     <string name="typing_group_autopilot_subtitle">다음에 입력할 문자의 터치 영역을 넓힙니다</string>
     <string name="typing_group_autopilot_title">자동 조종</string>
     <string name="typing_group_backspace_title">백스페이스</string>

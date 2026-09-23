@@ -76,10 +76,15 @@ class GlideBeamTest {
      */
     private fun pausedAt(path: List<GesturePoint>, letter: Char): List<GesturePoint> {
         val key = centers.getValue(letter.code)
+        return pausedNear(path, key.x, key.y)
+    }
+
+    /** [pausedAt], with the hold on the stroke's point nearest ([x], [y]) rather than nearest a key. */
+    private fun pausedNear(path: List<GesturePoint>, x: Float, y: Float): List<GesturePoint> {
         var nearest = 0
         var best = Float.MAX_VALUE
         path.forEachIndexed { i, p ->
-            val d = (p.x - key.x) * (p.x - key.x) + (p.y - key.y) * (p.y - key.y)
+            val d = (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y)
             if (d < best) {
                 best = d
                 nearest = i
@@ -216,13 +221,38 @@ class GlideBeamTest {
     }
 
     @Test
-    fun `a doubled letter needs the finger to have paused on it`() {
+    fun `an unmarked doubling loses to the single spelling`() {
         // The stroke is identical either way — the o is one key, crossed once —
-        // so the only thing that can separate "good" from "god" is whether the
-        // finger hesitated there. "good" is the commoner word by frequency, and
-        // that deliberately is not enough on its own.
+        // so the only thing that can separate "good" from "god" is a mark
+        // drawn on the o. "good" is the commoner word by frequency, and that
+        // deliberately is not enough on its own.
         assertEquals("god", decode(gestureFor("god")).first())
-        assertEquals("good", decode(pausedAt(gestureFor("god"), 'o')).first())
+    }
+
+    @Test
+    fun `a pause says a letter is there, not that it is there twice`() {
+        // Issue #337: a hold used to waive the doubling charge, so it meant
+        // "the o twice" as much as "the o". Now only a loop doubles; both
+        // spellings claim the hold on the o alike, and the single one keeps
+        // the lead it has on an unmarked stroke.
+        assertEquals("god", decode(pausedAt(gestureFor("god"), 'o')).first())
+        assertEquals("good", decode(loopedAt(gestureFor("god"), 'o')).first())
+    }
+
+    @Test
+    fun `a pause belongs to the key it happened on`() {
+        // A hold drawn a little off the y toward the u, 0.3 of a key: the y is
+        // the nearest key and the u is still inside the old claim radius.
+        // Letting the u answer for it let "tu" ignore the one thing the
+        // finger said about the y (#337).
+        val paused = GlideBeam(GlideBeam.Tuning(unclaimedDwell = 1f))
+        val src = sourcesOf(listOf("tu" to 900, "tyu" to 300))
+        val y = centers.getValue('y'.code)
+        val stroke = pausedNear(gestureFor("tyu"), y.x + 0.3f * keyWidth, y.y)
+        assertEquals("tyu", paused.decode(stroke, grid, keyWidth, src, workspace, 4).first().word)
+        // Halfway between the two it is either key's, and frequency decides.
+        val between = pausedNear(gestureFor("tyu"), y.x + 0.5f * keyWidth, y.y)
+        assertEquals("tu", paused.decode(between, grid, keyWidth, src, workspace, 4).first().word)
     }
 
     @Test
@@ -242,8 +272,7 @@ class GlideBeamTest {
     @Test
     fun `a claimed pause costs nothing`() {
         // The charge is for pauses a word ignores, so a pause on one of its
-        // own letters must leave its cost exactly where it was. A word with no
-        // doubled letter, or the pause would also be waiving dwellPenalty.
+        // own letters must leave its cost exactly where it was.
         val paused = GlideBeam(GlideBeam.Tuning(unclaimedDwell = 1f))
         val untimed = paused.decode(gestureFor("help"), grid, keyWidth, sources, workspace, 4)
         val timed = paused.decode(pausedAt(gestureFor("help"), 'l'), grid, keyWidth, sources, workspace, 4)
@@ -356,36 +385,109 @@ class GlideBeamTest {
     }
 
     @Test
-    fun `asking for a longer pause makes a doubled letter dearer`() {
-        // The setting behind "Pause to double a letter" (#270). The hold is
-        // the only evidence the o is written twice, so what the weight moves
-        // is how much of the doubling the hold pays for. Read against the
+    fun `asking for a longer pause makes an ignored pause cheaper`() {
+        // The setting behind "Pause to mark a letter" (#270, #337). The hold
+        // on the y is evidence against the word with no y, so what the weight
+        // moves is how much of a stop the hold counts as. Read against the
         // stroke's own pace, which is why the test is about the charge and
         // not about a threshold in milliseconds: this hold is some twenty
         // times the stroke's mean step, so it is a full stop at every value
-        // the setting can reach, and only an unreachable one leaves it as
-        // ordinary travel.
-        val stroke = pausedAt(gestureFor("god"), 'o')
-        val prompt = costOf("good", stroke, GlideBeam(GlideBeam.Tuning(dwellFull = 1f)))
-        val shipped = costOf("good", stroke, beam)
-        val patient = costOf("good", stroke, GlideBeam(GlideBeam.Tuning(dwellFull = NO_PAUSE_COUNTS)))
-        assertTrue("$prompt then $shipped then $patient", prompt <= shipped)
-        assertTrue("$shipped then $patient", shipped < patient)
-        // And the stroke still reads as the doubled word throughout: the
-        // weight decides what a hold is worth, not whether one was drawn.
-        assertEquals("good", decode(stroke).first())
+        // the setting can reach, and only an unreachable one leaves it part
+        // of one.
+        val src = sourcesOf(listOf("tu" to 900, "tyu" to 300))
+        val stroke = pausedAt(gestureFor("tyu"), 'y')
+        fun ignoring(beam: GlideBeam) =
+            beam.decode(stroke, grid, keyWidth, src, workspace, 8).first { it.word == "tu" }.shapeCost
+        val prompt = ignoring(GlideBeam(GlideBeam.Tuning(dwellFull = 1f)))
+        val shipped = ignoring(beam)
+        val patient = ignoring(GlideBeam(GlideBeam.Tuning(dwellFull = NO_PAUSE_COUNTS)))
+        assertTrue("$prompt then $shipped then $patient", prompt >= shipped)
+        assertTrue("$shipped then $patient", shipped > patient)
     }
 
     @Test
-    fun `a rub on a key is a doubled letter only with wiggles on`() {
-        // The setting behind "Wiggle to double a letter" (#270). The stroke
-        // carries a back-and-forth on the o and no clock, so the shipped
-        // tuning, which reads wiggles not at all, has nothing to go on.
-        val stroke = wiggledAt(gestureFor("god"), 'o')
-        assertEquals("god", decode(stroke).first())
+    fun `a rub on a key marks the letter only with wiggles on`() {
+        // The setting behind "Wiggle to mark a letter" (#270, #337). The
+        // stroke carries a back-and-forth on the y and no clock. At no
+        // strength the rub is found and its arc collapsed, but it says
+        // nothing, so frequency keeps "tu"; at full strength it counts the
+        // way a pause would. (With wiggles off altogether the rub's arc stays
+        // in the travel, and "tu" cannot stretch its one gap over it.)
+        val src = sourcesOf(listOf("tu" to 900, "tyu" to 300))
+        val stroke = wiggledAt(gestureFor("tyu"), 'y')
+        val silent = GlideBeam(GlideBeam.Tuning.WIGGLES_ON.copy(wiggleWeight = 0f))
+        assertEquals("tu", silent.decode(stroke, grid, keyWidth, src, workspace, 4).first().word)
         val reading = GlideBeam(GlideBeam.Tuning.WIGGLES_ON.copy(wiggleWeight = 1f))
-        assertEquals("good", reading.decode(stroke, grid, keyWidth, sources, workspace, 4).first().word)
+        assertEquals("tyu", reading.decode(stroke, grid, keyWidth, src, workspace, 4).first().word)
     }
+
+    @Test
+    fun `a rub on a key does not double its letter`() {
+        // Issue #337: the loop is the one doubling mark. A rub on the o says
+        // the o is in the word, which "god" and "good" both agree with.
+        val stroke = wiggledAt(gestureFor("god"), 'o')
+        val reading = GlideBeam(GlideBeam.Tuning.WIGGLES_ON.copy(wiggleWeight = 1f))
+        assertEquals("god", reading.decode(stroke, grid, keyWidth, sources, workspace, 4).first().word)
+    }
+
+    @Test
+    fun `a loop that ends the stroke ends the word`() {
+        // Issue #337: with "finish words early" on, a circle closing "see"
+        // came back as "seer". Here the guess would win on frequency alone
+        // (ln 5001/401 is past the per-letter look-ahead charge), and does
+        // on the same stroke without the loop, so it is the loop that stops it.
+        val src = sourcesOf(listOf("see" to 400, "seer" to 5000))
+        val plain = beam.decode(gestureFor("se"), grid, keyWidth, src, workspace, 4, lookAhead = 4)
+        assertTrue("plain $plain", plain.any { it.ahead > 0 })
+        val looped = loopedAt(gestureFor("se"), 'e')
+        val read = beam.decode(looped, grid, keyWidth, src, workspace, 4, lookAhead = 4)
+        assertEquals("see", read.first().word)
+        assertTrue("no guesses in ${read.map { it.word }}", read.none { it.ahead > 0 })
+    }
+
+    @Test
+    fun `a loop is a mark on one key however wide its reach`() {
+        // A reach of 1.2 keys takes in the o and the keys around it; only the
+        // nearest may be credited, or a circle on the o doubles the i and the
+        // p as well (#337).
+        val wide = GlideBeam(GlideBeam.Tuning(loopRadius = 1.2f))
+        wide.decode(loopedAt(gestureFor("god"), 'o'), grid, keyWidth, sources, workspace, 4)
+        assertEquals(1, workspace.loopCount)
+        val credited = (0 until grid.keyCount).filter { workspace.keyLoop[it] > 0f }
+        assertEquals(listOf(grid.keyIndex('o'.code)), credited)
+        assertEquals(grid.keyIndex('o'.code), workspace.loopKey[0])
+    }
+
+    @Test
+    fun `the inside of a loop belongs to its key`() {
+        // The circle's edge passes over the keys around the o. Inside the
+        // window every other key pays the exclusion charge, so the edge does
+        // not pull their letters into the word; its own key, and the first
+        // and last samples, stay as they were (#337).
+        val stroke = loopedAt(gestureFor("god"), 'o')
+        GlideBeam(GlideBeam.Tuning(loopExclusion = 0f)).decode(stroke, grid, keyWidth, sources, workspace, 4)
+        val open = workspace.pointCost.copyOf()
+        decode(stroke)
+        assertEquals(1, workspace.loopCount)
+        val own = workspace.loopKey[0]
+        val from = workspace.loopFrom[0]
+        val to = workspace.loopTo[0]
+        assertTrue("window $from..$to", to - from >= 2)
+        val tuning = GlideBeam.Tuning()
+        val n = grid.keyCount
+        for (j in 0 until GlideWorkspace.SAMPLE_POINTS) {
+            for (k in 0 until n) {
+                val at = j * n + k
+                val expected = if (j in from + 1 until to && k != own) {
+                    minOf(tuning.maxPointCost, open[at] + tuning.loopExclusion)
+                } else {
+                    open[at]
+                }
+                assertEquals("sample $j key $k", expected, workspace.pointCost[at], 1e-6f)
+            }
+        }
+    }
+
 
     @Test
     fun `an alignment on a looped stroke still lands each key`() {

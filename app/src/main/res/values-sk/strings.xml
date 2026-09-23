@@ -6047,9 +6047,6 @@
     <string name="typing_glide_commit_scope_info">Pás s návrhmi je miesto, kde sa už nachádza farba automatických opráv, takže farbu zobrazuje vždy. Bublina so slovom sa vznáša nad vaším prstom a je to to, čo väčšina ľudí sleduje počas písania gestami, takže predvolene nesie farbu aj ona. Slová vykreslené na klávesoch ju môžu niesť tiež, vďaka čomu celá klávesnica na prvý pohľad reaguje, ale je to naraz veľa farieb.</string>
     <string name="typing_glide_commit_scope_subtitle">Panel návrhov, slovo nad vaším prstom alebo slová na klávesách</string>
     <string name="typing_glide_commit_scope_title">Kde sa zobrazuje farba</string>
-    <string name="typing_glide_dwell_info">Kĺzavé písanie napíše „good“ a „god“ rovnako, pretože písmeno „o“ je jeden kláves a váš prst ho prechádza raz. Zostaňte na klávese chvíľu, aby ste naznačili, že písmeno je tam dvakrát. Hodnota je násobkom vašej vlastnej rýchlosti pri tom istom kĺzaní, nie počtom sekúnd, takže funguje rovnako pri rýchlom aj pomalom kĺzaní. Nízka hodnota akceptuje krátke zastavenie, ale opatrné kĺzanie, ktoré všade spomalí, potom samo napíše písmená dvakrát. Vysoká hodnota vyžaduje jasné zastavenie.</string>
-    <string name="typing_glide_dwell_subtitle">Ako dlho zostať na klávese, aby sa písmeno napísalo dvakrát</string>
-    <string name="typing_glide_dwell_title">Pozastavením zdvojíte písmeno</string>
     <string name="typing_glide_end_radius_info">Merané v šírkach klávesov. Klávesnica ponúkne slovo iba vtedy, ak ste zdvihli prst tak blízko k poslednému písmenu daného slova. Koniec kĺzavého pohybu je miesto, kde sa pohyb zastaví, takže je zvyčajne menej presný ako začiatok. Z tohto dôvodu ide o samostatnú hodnotu. Ak vaše kĺzavé pohyby prechádzajú za posledné písmeno, posuňte túto hodnotu nahor.</string>
     <string name="typing_glide_end_radius_subtitle">Ako ďaleko môže byť koniec kĺzavého písania od posledného písmena</string>
     <string name="typing_glide_end_radius_title">Polomer chyby pri ukončení</string>
@@ -6062,8 +6059,6 @@
     <string name="typing_glide_loop_extent_info">Merané v šírkach klávesov. Značka musí byť dostatočne malá, aby sa zmestila na jeden kláves. Slovo ako „vrah“ obchádza kruh susedných klávesov a vykresľuje široký kruh, ktorý nič neznamená, preto ho udržujte pod šírkou jedného klávesu. Nízka hodnota počíta iba tesný kruh a ponecháva písmená okolo neho mimo neho.</string>
     <string name="typing_glide_loop_extent_subtitle">Širšie kruhy sú cestou cez klávesy, nie značkou na jednom z nich</string>
     <string name="typing_glide_loop_extent_title">Najväčšia slučka, ktorá sa počíta</string>
-    <string name="typing_glide_loop_info">Toto je značka, ktorú naučil Swype. Kĺžte na písmeno, raz ho obíďte a pokračujte ďalej. Kruh nestojí slovo nič, pretože klávesnica odoberie slučku zo vzdialenosti, ktorú váš prst prešiel. Vypnite to, ak sa vaše kĺzanie krúti a dostávate písmená napísané dvakrát, o čo ste nežiadali.</string>
-    <string name="typing_glide_loop_radius_info">Merané v šírkach klávesov. Klávesnica priradí krúžok klávesu najbližšie k jeho stredu. Krúžok nakreslený cez kláves leží asi tretinu klávesu na jednej strane, takže veľmi nízka hodnota nenájde žiadne písmeno a značka nič neurobí. Vysoká hodnota môže priradiť značku susednému klávesu.</string>
     <string name="typing_glide_loop_radius_subtitle">Ako blízko k písmenu musí byť stred kruhu</string>
     <string name="typing_glide_loop_radius_title">Centrovanie slučky</string>
     <string name="typing_glide_loop_subtitle">Nakreslite malý kruh na klávese, aby sa písmeno napísalo dvakrát</string>
@@ -6131,15 +6126,9 @@
     <string name="typing_glide_vocabulary_info">Kĺzanie hovorí klávesnici, okolo ktorých klávesov prešiel váš prst a v akom poradí. Mnoho slov tomu voľne zodpovedá, takže klávesnica používa frekvenciu slov na výber jedného z nich. Veľký slovník obsahuje mnoho zriedkavých slov a zriedkavé slovo, ktorého tvar sedí o niečo lepšie, môže vyhrať nad slovom, ktoré ste mysleli. Toto nastavenie obmedzuje kĺzanie na najbežnejšie slová v slovníku. Mení iba písanie kĺzaním. Návrhy, dopĺňanie slov a automatické opravy stále používajú každé slovo, pretože písmená, ktoré napíšete, hovoria oveľa viac ako prejdenie prstom. Slová, ktoré naučíte klávesnicu, nie sú nikdy obmedzené. Slovník, ktorý je súčasťou klávesnice, je menší ako akýkoľvek limit, takže toto nastavenie nič nerobí, kým si nestiahnete alebo neimportujete veľký zoznam slov.</string>
     <string name="typing_glide_vocabulary_subtitle">Obmedziť posúvanie na najbežnejšie slová vo vašom slovníku</string>
     <string name="typing_glide_vocabulary_title">Slová, ktoré možno vytvoriť ťahom</string>
-    <string name="typing_glide_wiggle_extent_info">Merané v šírkach kláves. Udržujte túto hodnotu pod šírkou jedného klávesu, inak sa slovo, ktoré prechádza z jedného klávesu na susedný a späť, prečíta ako jedno písmeno napísané dvakrát. Používa sa iba vtedy, keď je vyššie uvedený prepínač zapnutý.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Ako ďaleko môže prst zájsť pri trení</string>
     <string name="typing_glide_wiggle_extent_title">Najväčšie zakolísanie, ktoré sa počíta</string>
-    <string name="typing_glide_wiggle_info">Ďalšia značka, ktorú ľudia používajú pre písmeno napísané dvakrát: namiesto krúžku prejdú prstom po klávese. Toto je nepresné, pretože pomalý pohyb nakreslený neistým prstom vyzerá veľmi podobne a klávesnica potom napíše písmená dvakrát, hoci ste ich napísali raz. Zapnite to, ak je to značka, ktorú robíte.</string>
-    <string name="typing_glide_wiggle_strength_info">Hodnota 100 percent urobí značku takou dobrou ako kruh. Nižšia hodnota ju ponechá ako náznak, ktorý môže stále prekonať oveľa bežnejšie slovo. Používa sa iba vtedy, keď je vyššie uvedený prepínač zapnutý.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">Do akej miery sa trenie počíta ako dôkaz dvoch písmen</string>
     <string name="typing_glide_wiggle_strength_title">Sila zakrútenia</string>
-    <string name="typing_glide_wiggle_subtitle">Trením tam a späť po klávese napíšete písmeno dvakrát</string>
-    <string name="typing_glide_wiggle_title">Zakrútením zdvojíte písmeno</string>
     <string name="typing_group_autopilot_subtitle">Zväčšiť dotykovú oblasť písmen, ktoré píšete ako ďalšie</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Klávesy na odstránenie</string>

@@ -6049,9 +6049,6 @@
     <string name="typing_glide_commit_scope_info">De suggestiebalk is waar de autocorrectiekleur al leeft, dus deze toont altijd de kleur. De woordpil zweeft boven je vingertop en is waar de meeste mensen naar kijken terwijl ze glijden, dus deze draagt standaard ook de kleur. De woorden op de toetsen kunnen deze ook dragen, wat het hele bord in één oogopslag laat reageren, maar het is veel kleur tegelijk.</string>
     <string name="typing_glide_commit_scope_subtitle">De suggestiebalk, het woord boven je vinger of de woorden op de toetsen</string>
     <string name="typing_glide_commit_scope_title">Waar de kleur wordt getoond</string>
-    <string name="typing_glide_dwell_info">Een glide tekent \"goed\" en \"god\" op dezelfde manier, omdat de o één toets is en je vinger er één keer overheen gaat. Blijf even op de toets om aan te geven dat de letter er twee keer staat. De waarde is een veelvoud van je eigen snelheid in diezelfde glide, niet een aantal seconden, dus het werkt zowel bij een snelle als een langzame glide. Een lage waarde accepteert een korte stop, maar een zorgvuldige glide die overal vertraagt, schrijft dan uit zichzelf letters dubbel. Een hoge waarde vraagt om een duidelijke stop.</string>
-    <string name="typing_glide_dwell_subtitle">Hoe lang je op een toets moet blijven om de letter twee keer te schrijven</string>
-    <string name="typing_glide_dwell_title">Pauzeer om een letter te verdubbelen</string>
     <string name="typing_glide_end_radius_info">Gemeten in toetsbreedtes. Het toetsenbord stelt alleen een woord voor als je je vinger zo dicht bij de laatste letter van dat woord hebt opgetild. Het einde van een glide is waar een beweging stopt, dus het is meestal minder nauwkeurig dan het begin. Dit is om die reden een aparte waarde. Verhoog deze waarde als je glides voorbij de laatste letter glijden.</string>
     <string name="typing_glide_end_radius_subtitle">Hoe ver het einde van een veegbeweging van de laatste letter mag afstaan</string>
     <string name="typing_glide_end_radius_title">Eindfoutradius</string>
@@ -6064,8 +6061,6 @@
     <string name="typing_glide_loop_extent_info">Gemeten in toetsbreedtes. Een teken moet klein genoeg zijn om op één toets te passen. Een woord als \"moordenaar\" gaat rond een ring van toetsen die naast elkaar liggen en tekent een brede cirkel die niets betekent, dus houd dit onder de breedte van één toets. Een lage waarde telt alleen een krappe cirkel en houdt de letters eromheen erbuiten.</string>
     <string name="typing_glide_loop_extent_subtitle">Grotere cirkels zijn een pad door toetsen, geen markering op één toets</string>
     <string name="typing_glide_loop_extent_title">Grootste lus die telt</string>
-    <string name="typing_glide_loop_info">Dit is het teken dat Swype heeft geleerd. Glijd naar de letter, ga er één keer omheen en ga door. De cirkel kost het woord niets, omdat het toetsenbord de lus uit de afstand haalt die je vinger heeft afgelegd. Schakel dit uit als je glijbewegingen onderweg krullen en je letters dubbel krijgt die je niet wilde.</string>
-    <string name="typing_glide_loop_radius_info">Gemeten in toetsbreedtes. Het toetsenbord geeft een cirkel aan de toets die het dichtst bij het midden ligt. Een cirkel die door een toets wordt getrokken, ligt ongeveer een derde van een toets aan één kant, dus een zeer lage waarde vindt er geen letter voor en het teken doet niets. Een hoge waarde kan het teken aan de buurtoets geven.</string>
     <string name="typing_glide_loop_radius_subtitle">Hoe dicht bij de letter het midden van een cirkel moet zijn</string>
     <string name="typing_glide_loop_radius_title">Luscentrering</string>
     <string name="typing_glide_loop_subtitle">Teken een kleine cirkel op een toets om de letter twee keer te schrijven</string>
@@ -6134,15 +6129,9 @@
     <string name="typing_glide_vocabulary_info">Een glide vertelt het toetsenbord welke toetsen je vinger in de buurt passeerde, en in welke volgorde. Veel woorden passen daar losjes bij, dus het toetsenbord gebruikt woordfrequentie om er een te selecteren. Een groot woordenboek bevat veel zeldzame woorden, en een zeldzaam woord waarvan de vorm iets beter past, kan winnen van het woord dat je bedoelde. Deze instelling beperkt een glide tot de meest voorkomende woorden in het woordenboek. Het verandert alleen het glide-typen. Suggesties, woordaanvulling en autocorrectie gebruiken nog steeds elk woord, omdat de letters die je typt veel meer zeggen dan een veegbeweging. Woorden die je het toetsenbord leert, worden nooit beperkt. Het woordenboek dat bij het toetsenbord wordt geleverd, is kleiner dan elke limiet hier, dus deze instelling doet niets totdat je een grote woordenlijst downloadt of importeert.</string>
     <string name="typing_glide_vocabulary_subtitle">Beperk een glide tot de meest voorkomende woorden in je woordenboek</string>
     <string name="typing_glide_vocabulary_title">Woorden die een glide kan produceren</string>
-    <string name="typing_glide_wiggle_extent_info">Gemeten in toetsbreedtes. Houd dit onder de breedte van één toets, anders wordt een woord dat van de ene toets naar de aangrenzende toets gaat en weer terug, gelezen als één letter die twee keer is geschreven. Alleen gebruikt terwijl de schakelaar hierboven aan staat.</string>
     <string name="typing_glide_wiggle_extent_subtitle">Hoe ver de vinger kan gaan bij een wrijfbeweging</string>
     <string name="typing_glide_wiggle_extent_title">Grootste wiebel die telt</string>
-    <string name="typing_glide_wiggle_info">De andere markering die mensen gebruiken voor een letter die twee keer wordt geschreven: in plaats van een cirkel, wrijven ze over de toets. Dit staat uit, omdat een langzame bocht getekend met een onvaste vinger er ongeveer hetzelfde uitziet, en het toetsenbord dan letters twee keer schrijft die je één keer hebt geschreven. Zet dit aan als dit de markering is die je maakt.</string>
-    <string name="typing_glide_wiggle_strength_info">Een waarde van 100 procent maakt het teken zo goed als een cirkel. Een lagere waarde laat het als een hint, waar een veel algemener woord nog steeds van kan winnen. Alleen gebruikt terwijl de schakelaar hierboven aan staat.</string>
-    <string name="typing_glide_wiggle_strength_subtitle">In hoeverre een wrijfbeweging telt als bewijs voor twee letters</string>
     <string name="typing_glide_wiggle_strength_title">Wiggle-sterkte</string>
-    <string name="typing_glide_wiggle_subtitle">Wrijf heen en weer op een toets om de letter twee keer te schrijven</string>
-    <string name="typing_glide_wiggle_title">Wiebelen om een letter te dubbelen</string>
     <string name="typing_group_autopilot_subtitle">Vergroot het aanraakgebied van de letters die je daarna typt</string>
     <string name="typing_group_autopilot_title">Autopilot</string>
     <string name="typing_group_backspace_title">Verwijder-toetsen</string>
