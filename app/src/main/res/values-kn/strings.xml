@@ -1669,8 +1669,6 @@
         <item quantity="other">ನೀವು ಈಗಾಗಲೇ %1$d ಸ್ಟಿಕ್ಕರ್ ಪ್ಯಾಕ್‌ಗಳನ್ನು ಹೊಂದಿದ್ದೀರಿ.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">ನಿಮ್ಮ ಪ್ಯಾಕ್‌ಗಳು</string>
-    <string name="import_sticker_search_words_hint">ಕೀಬೋರ್ಡ್ ಈ ಸ್ಟಿಕ್ಕರ್ ಅನ್ನು ಈ ಯಾವುದೇ ಪದಗಳ ಮೂಲಕ ಹುಡುಕುತ್ತದೆ. ಅವುಗಳ ನಡುವೆ ಸ್ಪೇಸ್ ನೀಡಿ, ಉದಾಹರಣೆಗೆ: ಬೆಕ್ಕು 😂 ಸಂತೋಷ</string>
-    <string name="import_sticker_search_words_label">ಹುಡುಕಾಟ ಪದಗಳು</string>
     <string name="import_stickers_add_title">ಸ್ಟಿಕ್ಕರ್‌ಗಳನ್ನು ಸೇರಿಸಿ</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ಅಪ್ಲಿಕೇಶನ್ %1$d ಸ್ಟಿಕ್ಕರ್ ಅನ್ನು ಸೇರಿಸಿದೆ.</item>

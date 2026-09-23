@@ -37,7 +37,7 @@ class StickerPackAdoptionTest {
         )
         val pack = (result as StickerImportResult.Imported).pack
         assertEquals("signal:fb535407d2f6497ec074df8b9c51dd1d", pack.source)
-        assertEquals(listOf("😀"), pack.stickers.first().emojis)
+        assertEquals(listOf("😀"), pack.stickers.first().keywords)
         // Survives the store being read back from disk.
         assertEquals(pack.source, StickerPackStore(temp.root).pack(pack.id)?.source)
     }

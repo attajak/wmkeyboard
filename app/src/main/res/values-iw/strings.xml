@@ -1667,8 +1667,6 @@
         <item quantity="other">כבר יש לך %1$d חבילות מדבקות.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">החבילות שלך</string>
-    <string name="import_sticker_search_words_hint">המקלדת מוצאת את המדבקה הזו לפי כל אחת מהמילים האלה. שים רווח ביניהן, לדוגמה: חתול 😂 שמח</string>
-    <string name="import_sticker_search_words_label">מילות חיפוש</string>
     <string name="import_stickers_add_title">הוספת מדבקות</string>
     <plurals name="import_stickers_added">
         <item quantity="one">האפליקציה הוסיפה %1$d מדבקה.</item>

@@ -148,7 +148,7 @@ class StickerPackStoreTest {
         val cats = store.createPack("Cats")!!
         val dogs = store.createPack("Dogs")!!
         store.addSticker(cats.id, webp(1), name = "grumpy")
-        store.addSticker(dogs.id, webp(2), name = "happy", emojis = listOf("🐶"))
+        store.addSticker(dogs.id, webp(2), name = "happy", keywords = listOf("🐶"))
 
         assertEquals(2, store.searchAsGifItems("").size)
         assertEquals(1, store.searchAsGifItems("grump").size)
@@ -165,7 +165,7 @@ class StickerPackStoreTest {
         val pack = store.createPack("Cats")!!
         store.addSticker(pack.id, webp(1), name = "first")
         val target = (
-            store.addSticker(pack.id, webp(2), name = "grumpy", emojis = listOf("cat"))
+            store.addSticker(pack.id, webp(2), name = "grumpy", keywords = listOf("cat"))
                 as StickerAddResult.Added
             ).sticker
         val oldFile = store.fileFor(pack.id, target)!!
@@ -176,7 +176,7 @@ class StickerPackStoreTest {
 
         assertEquals(target.id, sticker.id)
         assertEquals("grumpy", sticker.name)
-        assertEquals(listOf("cat"), sticker.emojis)
+        assertEquals(listOf("cat"), sticker.keywords)
         assertEquals(target.addedAt, sticker.addedAt)
         // Still second in the pack: an edit is not a re-add.
         assertEquals(1, store.pack(pack.id)!!.stickers.indexOfFirst { it.id == target.id })
@@ -225,9 +225,19 @@ class StickerPackStoreTest {
         val pack = store.createPack("Cats")!!
         // What an imported "grumpy cat" looks like once the editor has split
         // it: first word in the name, the rest in the tags.
-        store.addSticker(pack.id, webp(), name = "grumpy", emojis = listOf("cat"))
+        store.addSticker(pack.id, webp(), name = "grumpy", keywords = listOf("cat"))
 
         assertEquals(1, store.searchAsGifItems("grumpy cat").size)
+    }
+
+    @Test
+    fun `a sticker found by its triggers becomes the same item a search lists`() {
+        val store = store()
+        val pack = store.createPack("Cats")!!
+        val sticker = (store.addSticker(pack.id, webp(), name = "grumpy") as StickerAddResult.Added).sticker
+
+        assertEquals(store.searchAsGifItems("").single(), store.asGifItem(pack.id, sticker))
+        assertEquals(null, store.asGifItem("gone", sticker))
     }
 
     @Test

@@ -1663,8 +1663,6 @@
         <item quantity="other">Vous avez déjà %1$d packs d\'autocollants.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Vos packs</string>
-    <string name="import_sticker_search_words_hint">Le clavier trouve cet autocollant par l\'un de ces mots. Mettez un espace entre eux, par exemple : chat 😂 heureux</string>
-    <string name="import_sticker_search_words_label">Mots de recherche</string>
     <string name="import_stickers_add_title">Ajouter des autocollants</string>
     <plurals name="import_stickers_added">
         <item quantity="one">L\'application a ajouté %1$d autocollant.</item>

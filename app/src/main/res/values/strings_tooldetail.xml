@@ -353,6 +353,24 @@
     <string name="tooldetail_sticker_packs_group">Your stickers</string>
     <string name="tooldetail_sticker_packs_title">Sticker packs</string>
     <string name="tooldetail_sticker_packs_subtitle">Make, edit, import and export your own packs</string>
+    <string name="tooldetail_sticker_suggest_group">Suggest while typing</string>
+    <string name="tooldetail_sticker_suggest_title">Offer your stickers as you type</string>
+    <string name="tooldetail_sticker_suggest_subtitle">In a chat, type the title of a sticker, one of its keywords or one of its emoji to see it</string>
+    <string name="tooldetail_sticker_suggest_info">Only your own stickers, from your sticker packs. A sticker shows when the text before the cursor ends with its full title, with one of its keywords, or with one of its emoji. Set the title and the keywords when you edit a sticker in its pack. The keyboard does this only in fields that can receive images, so it never offers a sticker that the app cannot take. It also works in the emoji panel: pick an emoji that one of your stickers has and the sticker shows above the panel. Nothing leaves the phone to find them.</string>
+    <string name="tooldetail_sticker_suggest_style_title">Where they show</string>
+    <string name="tooldetail_sticker_suggest_style_tray">Tray</string>
+    <string name="tooldetail_sticker_suggest_style_strip">On the strip</string>
+    <string name="tooldetail_sticker_suggest_style_chip">One chip</string>
+    <!-- One line under each option in the "Where they show" picker. -->
+    <string name="tooldetail_sticker_suggest_style_tray_desc">A row of large stickers above the suggestion strip. The word suggestions stay where they are</string>
+    <string name="tooldetail_sticker_suggest_style_strip_desc">Three small stickers on the suggestion strip, next to the words. A button shows the rest</string>
+    <string name="tooldetail_sticker_suggest_style_chip_desc">A small chip on the strip that says how many stickers there are. Tap it to see them</string>
+    <string name="tooldetail_sticker_suggest_trigger_title">After you send one</string>
+    <string name="tooldetail_sticker_suggest_trigger_delete">Remove the typed text</string>
+    <string name="tooldetail_sticker_suggest_trigger_keep">Keep the typed text</string>
+    <!-- One line under each option in the "After you send one" picker. -->
+    <string name="tooldetail_sticker_suggest_trigger_delete_desc">The sticker replaces the title, keyword or emoji that you typed</string>
+    <string name="tooldetail_sticker_suggest_trigger_keep_desc">The sticker is sent and your text stays in the field</string>
     <string name="tooldetail_media_layout_group">Layout</string>
     <string name="tooldetail_media_full_bleed_title">Full-screen picker</string>
     <string name="tooldetail_media_full_bleed_subtitle">Hide the toolbar and move the search up next to a back button</string>

@@ -1666,8 +1666,6 @@
         <item quantity="other">Du har redan %1$d klistermärkepaket.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Dina paket</string>
-    <string name="import_sticker_search_words_hint">Tangentbordet hittar detta klistermärke genom något av dessa ord. Sätt ett mellanslag mellan dem, till exempel: katt 😂 glad</string>
-    <string name="import_sticker_search_words_label">Sökord</string>
     <string name="import_stickers_add_title">Lägg till klistermärken</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Appen lade till %1$d klistermärke.</item>

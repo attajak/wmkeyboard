@@ -1669,8 +1669,6 @@
         <item quantity="other">لديك بالفعل %1$d حزم ملصقات.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">حزمك</string>
-    <string name="import_sticker_search_words_hint">تعثر لوحة المفاتيح على هذا الملصق بأي من هذه الكلمات. ضع مسافة بينها، على سبيل المثال: قطة 😂 سعيد</string>
-    <string name="import_sticker_search_words_label">كلمات البحث</string>
     <string name="import_stickers_add_title">إضافة ملصقات</string>
     <plurals name="import_stickers_added">
         <item quantity="one">أضاف التطبيق ملصقاً واحداً (%1$d).</item>

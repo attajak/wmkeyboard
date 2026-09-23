@@ -1663,8 +1663,6 @@
         <item quantity="other">你已经拥有 %1$d 个贴纸包。</item>
     </plurals>
     <string name="import_sticker_packs_section_title">您的贴纸包</string>
-    <string name="import_sticker_search_words_hint">键盘可以通过这些词中的任意一个找到此贴纸。请用空格分隔，例如：猫 😂 开心</string>
-    <string name="import_sticker_search_words_label">搜索词</string>
     <string name="import_stickers_add_title">添加贴纸</string>
     <plurals name="import_stickers_added">
         <item quantity="one">应用已添加 %1$d 个贴纸。</item>

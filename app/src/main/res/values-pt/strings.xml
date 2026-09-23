@@ -1664,8 +1664,6 @@
         <item quantity="other">Você já tem %1$d pacotes de figurinhas.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Os seus pacotes</string>
-    <string name="import_sticker_search_words_hint">O teclado encontra este adesivo por qualquer uma destas palavras. Coloque um espaço entre elas, por exemplo: gato 😂 feliz</string>
-    <string name="import_sticker_search_words_label">Palavras de pesquisa</string>
     <string name="import_stickers_add_title">Adicionar figurinhas</string>
     <plurals name="import_stickers_added">
         <item quantity="one">O aplicativo adicionou %1$d figurinha.</item>

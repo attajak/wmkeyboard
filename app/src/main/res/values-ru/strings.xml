@@ -1667,8 +1667,6 @@
         <item quantity="other">У вас уже есть %1$d наборов стикеров.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Ваши наборы</string>
-    <string name="import_sticker_search_words_hint">Клавиатура находит этот стикер по любому из этих слов. Разделяйте их пробелом, например: кот 😂 счастье</string>
-    <string name="import_sticker_search_words_label">Поисковые слова</string>
     <string name="import_stickers_add_title">Добавить стикеры</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Приложение добавило %1$d стикер.</item>

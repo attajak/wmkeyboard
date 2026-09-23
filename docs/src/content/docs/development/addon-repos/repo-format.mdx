@@ -301,14 +301,21 @@ rebuilds do not churn the index.
     "author": "…",
     "description": "…",
     "stickers": [
-      { "id": "airplane", "fileName": "airplane.png", "mime": "image/png", "name": "Airplane" }
+      { "id": "airplane", "fileName": "airplane.png", "mime": "image/png", "name": "Airplane",
+        "emojis": ["✈️", "travel", "flight"] }
     ]
   }
 }
 ```
 
 Unlike icon packs, sticker entry names **are** listed explicitly. `id` keys the sticker,
-`name` is what the user searches, and `fileName` locates the image inside the archive.
+`fileName` locates the image inside the archive, `name` is the sticker's title, and
+`emojis` is its list of keywords. Despite the name, a keyword can be a word, a phrase or an
+emoji. The key is still called `emojis` because every pack already out there says so. A
+hand-written manifest may call the list `keywords` instead, or use both, and the two are
+merged. Both fields are optional. The title and the keywords are what the sticker panel's
+search matches, and they're also what [offers the sticker while typing](/emoji/stickers/#stickers-as-you-type):
+the full title, or any one keyword.
 
 `stickers[]` belongs **inside `pack`**: that is what the app writes on export and what it
 reads back. Three near-misses are accepted anyway, because they are what hand-written packs

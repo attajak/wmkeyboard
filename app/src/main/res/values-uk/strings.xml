@@ -1665,8 +1665,6 @@
         <item quantity="other">У вас уже є %1$d наборів стікерів.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Ваші набори</string>
-    <string name="import_sticker_search_words_hint">Клавіатура знаходить цей стікер за будь-яким із цих слів. Розділяйте їх пробілом, наприклад: кіт 😂 щасливий</string>
-    <string name="import_sticker_search_words_label">Слова для пошуку</string>
     <string name="import_stickers_add_title">Додати стікери</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Додаток додав %1$d стікер.</item>

@@ -1667,8 +1667,6 @@
         <item quantity="other">Du har allerede %1$d klistermærkepakker.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Dine pakker</string>
-    <string name="import_sticker_search_words_hint">Tastaturet finder dette klistermærke ved hjælp af et af disse ord. Sæt et mellemrum mellem dem, for eksempel: kat 😂 glad</string>
-    <string name="import_sticker_search_words_label">Søgeord</string>
     <string name="import_stickers_add_title">Tilføj klistermærker</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Appen tilføjede %1$d klistermærke.</item>

@@ -1314,6 +1314,9 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
 /** Rows on the tool pages, from Translate through the AI tool. */
 private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.STICKER, R.string.tooldetail_sticker_packs_title, R.string.tooldetail_sticker_packs_subtitle),
+    toolEntry(ToolbarTool.STICKER, R.string.tooldetail_sticker_suggest_title, R.string.tooldetail_sticker_suggest_subtitle),
+    toolEntry(ToolbarTool.STICKER, R.string.tooldetail_sticker_suggest_style_title),
+    toolEntry(ToolbarTool.STICKER, R.string.tooldetail_sticker_suggest_trigger_title),
     toolEntry(ToolbarTool.GIF, R.string.tooldetail_media_full_bleed_title, R.string.tooldetail_media_full_bleed_subtitle),
     toolEntry(ToolbarTool.STICKER, R.string.tooldetail_media_full_bleed_title, R.string.tooldetail_media_full_bleed_subtitle),
     toolEntry(ToolbarTool.GIF, R.string.tooldetail_media_klipy_label, R.string.tooldetail_media_klipy_hint),

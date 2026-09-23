@@ -2201,6 +2201,33 @@ data class DictionaryChip(
 )
 
 /**
+ * One of the user's own stickers, offered because the text before the cursor
+ * asked for it (#329). [span] is how many characters the trigger that matched
+ * it occupies, which is what a send takes back when the setting says to.
+ */
+data class StickerOfferItem(
+    val item: com.wasimaster.wmkeyboard.core.tools.GifItem,
+    val span: Int,
+)
+
+/**
+ * The stickers the text before the cursor asks for: their title typed out, a
+ * keyword, or an emoji they carry (see `StickerTriggerIndex`).
+ *
+ * [expanded] is the tray opened from the narrower styles' chip or their "more"
+ * button; [inEmojiPanel] marks an offer raised by an emoji picked in the emoji
+ * panel, which always shows as the tray, since the panel has no strip of words
+ * to share.
+ */
+data class StickerOffer(
+    /** The trigger as it was typed, for the chip's label and the tray's description. */
+    val trigger: String,
+    val stickers: List<StickerOfferItem>,
+    val expanded: Boolean = false,
+    val inEmojiPanel: Boolean = false,
+)
+
+/**
  * Immutable UI state rendered by the Compose keyboard. The service owns a
  * MutableStateFlow of this and mutates it via copy().
  */
@@ -2584,6 +2611,8 @@ data class KeyboardUiState(
      * chip over the suggestion strip.
      */
     val smart: SmartSuggest.SmartHit? = null,
+    /** Stickers of the user's own that the text before the cursor asks for (#329). */
+    val stickerOffer: StickerOffer? = null,
     /** Input a chip loaded into the tool it is about to open; consumed once. */
     val toolPrefill: ToolPrefill? = null,
     /** The word-of-the-day chip, offered once on the first field of the day. */

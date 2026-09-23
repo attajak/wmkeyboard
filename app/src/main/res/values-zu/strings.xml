@@ -1667,8 +1667,6 @@
         <item quantity="other">Usuvele unamaphakethe we-sticker angu-%1$d.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Amaphakethe akho</string>
-    <string name="import_sticker_search_words_hint">Ikhibhodi ithola lesi sitika nganoma yiliphi lala magama. Faka isikhala phakathi kwawo, ngokwesibonelo: ikati 😂 happy</string>
-    <string name="import_sticker_search_words_label">Amagama okusesha</string>
     <string name="import_stickers_add_title">Engeza izitikha</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Uhlelo lokusebenza lungeze isitikha esingu-%1$d.</item>

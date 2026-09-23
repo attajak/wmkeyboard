@@ -1665,8 +1665,6 @@
         <item quantity="other">آپ کے پاس پہلے ہی %1$d اسٹیکر پیکس موجود ہیں۔</item>
     </plurals>
     <string name="import_sticker_packs_section_title">آپ کے پیکس</string>
-    <string name="import_sticker_search_words_hint">کی بورڈ ان الفاظ میں سے کسی کے ذریعے بھی یہ اسٹیکر تلاش کر لیتا ہے۔ ان کے درمیان اسپیس ڈالیں، مثال کے طور پر: cat 😂 happy</string>
-    <string name="import_sticker_search_words_label">تلاش کے الفاظ</string>
     <string name="import_stickers_add_title">اسٹیکرز شامل کریں</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ایپ نے %1$d اسٹیکر شامل کیا۔</item>

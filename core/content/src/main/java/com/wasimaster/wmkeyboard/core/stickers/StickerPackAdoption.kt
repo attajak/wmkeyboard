@@ -142,7 +142,7 @@ object StickerPackAdoption {
             fileName = fileName,
             mime = processed.mime,
             name = item.name.trim(),
-            emojis = item.emojis,
+            keywords = item.emojis,
             animated = processed.animated,
             aspectRatio = processed.aspectRatio,
             addedAt = if (item.addedAt > 0) item.addedAt else now,

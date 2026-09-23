@@ -1667,8 +1667,6 @@
         <item quantity="other">Sinulla on jo %1$d tarrapakettia.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Omat pakkauksesi</string>
-    <string name="import_sticker_search_words_hint">Näppäimistö löytää tämän tarran millä tahansa näistä sanoista. Laita välilyönti niiden väliin, esimerkiksi: kissa 😂 iloinen</string>
-    <string name="import_sticker_search_words_label">Hakusanat</string>
     <string name="import_stickers_add_title">Lisää tarroja</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Sovellus lisäsi %1$d tarran.</item>

@@ -1666,8 +1666,6 @@
         <item quantity="other">మీ దగ్గర ఇప్పటికే %1$d స్టిక్కర్ ప్యాక్‌లు ఉన్నాయి.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">మీ ప్యాక్‌లు</string>
-    <string name="import_sticker_search_words_hint">కీబోర్డ్ ఈ పదాలలో దేనినైనా ఉపయోగించి ఈ స్టిక్కర్‌ను కనుగొంటుంది. వాటి మధ్య ఖాళీని ఉంచండి, ఉదాహరణకు: cat 😂 happy</string>
-    <string name="import_sticker_search_words_label">పదాలను వెతకండి</string>
     <string name="import_stickers_add_title">స్టిక్కర్లను జోడించండి</string>
     <plurals name="import_stickers_added">
         <item quantity="one">యాప్ %1$d స్టిక్కర్‌ను జోడించింది.</item>

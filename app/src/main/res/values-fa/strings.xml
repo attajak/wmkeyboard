@@ -1667,8 +1667,6 @@
         <item quantity="other">شما قبلاً %1$d بسته استیکر دارید.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">بسته‌های شما</string>
-    <string name="import_sticker_search_words_hint">صفحه‌کلید این استیکر را با هر یک از این کلمات پیدا می‌کند. بین آن‌ها فاصله بگذارید، برای مثال: گربه 😂 شاد</string>
-    <string name="import_sticker_search_words_label">کلمات جستجو</string>
     <string name="import_stickers_add_title">افزودن استیکرها</string>
     <plurals name="import_stickers_added">
         <item quantity="one">برنامه %1$d استیکر اضافه کرد.</item>

@@ -1663,8 +1663,6 @@
         <item quantity="other">すでに %1$d 個のステッカーパックを所有しています。</item>
     </plurals>
     <string name="import_sticker_packs_section_title">自分のパック</string>
-    <string name="import_sticker_search_words_hint">キーボードはこれらの単語のいずれかでステッカーを検索します。単語の間にスペースを入れてください（例: 猫 😂 幸せ）</string>
-    <string name="import_sticker_search_words_label">検索ワード</string>
     <string name="import_stickers_add_title">ステッカーを追加</string>
     <plurals name="import_stickers_added">
         <item quantity="one">アプリは%1$d個のステッカーを追加しました。</item>

@@ -1663,8 +1663,6 @@
         <item quantity="other">Zaten %1$d çıkartma paketiniz var.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Paketleriniz</string>
-    <string name="import_sticker_search_words_hint">Klavye bu çıkartmayı bu kelimelerden herhangi biriyle bulur. Aralarına boşluk koyun, örneğin: kedi 😂 mutlu</string>
-    <string name="import_sticker_search_words_label">Arama kelimeleri</string>
     <string name="import_stickers_add_title">Çıkartma ekle</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Uygulama %1$d çıkartma ekledi.</item>

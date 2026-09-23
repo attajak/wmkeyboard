@@ -1666,8 +1666,6 @@
         <item quantity="other">உங்களிடம் ஏற்கனவே %1$d ஸ்டிக்கர் பேக்குகள் உள்ளன.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">உங்கள் பேக்குகள்</string>
-    <string name="import_sticker_search_words_hint">இந்த ஸ்டிக்கரை இந்த வார்த்தைகளில் எதைக் கொண்டும் கீபோர்டு கண்டறியும். அவற்றுக்கிடையே இடைவெளி விடவும், உதாரணமாக: பூனை 😂 மகிழ்ச்சி</string>
-    <string name="import_sticker_search_words_label">தேடல் சொற்கள்</string>
     <string name="import_stickers_add_title">ஸ்டிக்கர்களைச் சேர்க்கவும்</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ஆப் %1$d ஸ்டிக்கரைச் சேர்த்தது.</item>

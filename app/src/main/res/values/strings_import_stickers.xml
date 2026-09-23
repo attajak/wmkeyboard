@@ -347,8 +347,10 @@
 
     <string name="import_sticker_edit_title">Edit sticker</string>
     <string name="import_name_label">Name</string>
-    <string name="import_sticker_search_words_label">Search words</string>
-    <string name="import_sticker_search_words_hint">The keyboard finds this sticker by any of these words. Put a space between them, for example: cat 😂 happy</string>
+    <string name="import_sticker_title_label">Title</string>
+    <string name="import_sticker_title_hint">When you type the full title in a chat, the keyboard offers this sticker.</string>
+    <string name="import_sticker_keywords_label">Keywords</string>
+    <string name="import_sticker_keywords_hint">Other words or emoji that also offer this sticker. Put a comma between words. Emoji need nothing between them. For example: cat, good night, 😂🐱</string>
     <string name="import_sticker_move_up">Move up</string>
     <string name="import_sticker_move_down">Move down</string>
     <string name="import_sticker_move_pack">Move to another pack</string>

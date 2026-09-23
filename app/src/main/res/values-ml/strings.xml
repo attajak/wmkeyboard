@@ -1665,8 +1665,6 @@
         <item quantity="other">നിങ്ങളുടെ പക്കൽ ഇതിനകം %1$d സ്റ്റിക്കർ പാക്കുകൾ ഉണ്ട്.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">നിങ്ങളുടെ പാക്കുകൾ</string>
-    <string name="import_sticker_search_words_hint">ഈ വാക്കുകളിൽ ഏതെങ്കിലും ഉപയോഗിച്ച് കീബോർഡ് ഈ സ്റ്റിക്കർ കണ്ടെത്തുന്നു. അവയ്ക്കിടയിൽ ഒരു സ്പേസ് ഇടുക, ഉദാഹരണത്തിന്: പൂച്ച 😂 സന്തോഷം</string>
-    <string name="import_sticker_search_words_label">തിരയൽ വാക്കുകൾ</string>
     <string name="import_stickers_add_title">സ്റ്റിക്കറുകൾ ചേർക്കുക</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ആപ്പ് %1$d സ്റ്റിക്കർ ചേർത്തു.</item>

@@ -1667,8 +1667,6 @@
         <item quantity="other">Už máte %1$d balíkov nálepiek.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Vaše balíky</string>
-    <string name="import_sticker_search_words_hint">Klávesnica nájde túto nálepku podľa ktoréhokoľvek z týchto slov. Vložte medzi ne medzeru, napríklad: mačka 😂 šťastný</string>
-    <string name="import_sticker_search_words_label">Hľadané slová</string>
     <string name="import_stickers_add_title">Pridať nálepky</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplikácia pridala %1$d nálepku.</item>

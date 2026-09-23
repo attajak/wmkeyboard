@@ -1668,8 +1668,6 @@
         <item quantity="other">Teil on juba %1$d kleebisepakki.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Teie pakid</string>
-    <string name="import_sticker_search_words_hint">Klaviatuur leiab selle kleebise nende sõnade järgi. Pane nende vahele tühik, näiteks: kass 😂 rõõmus</string>
-    <string name="import_sticker_search_words_label">Otsingusõnad</string>
     <string name="import_stickers_add_title">Lisa kleebised</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Rakendus lisas %1$d kleebise.</item>

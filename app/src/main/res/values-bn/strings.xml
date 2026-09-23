@@ -1668,8 +1668,6 @@
         <item quantity="other">আপনার কাছে ইতিমধ্যে %1$dটি স্টিকার প্যাক আছে।</item>
     </plurals>
     <string name="import_sticker_packs_section_title">আপনার প্যাকগুলি</string>
-    <string name="import_sticker_search_words_hint">কীবোর্ড এই স্টিকারটিকে এই শব্দগুলির যেকোনো একটি দ্বারা খুঁজে পায়। তাদের মধ্যে একটি স্পেস দিন, উদাহরণস্বরূপ: cat 😂 happy</string>
-    <string name="import_sticker_search_words_label">অনুসন্ধানের শব্দ</string>
     <string name="import_stickers_add_title">স্টিকার যোগ করুন</string>
     <plurals name="import_stickers_added">
         <item quantity="one">অ্যাপটি %1$dটি স্টিকার যোগ করেছে।</item>

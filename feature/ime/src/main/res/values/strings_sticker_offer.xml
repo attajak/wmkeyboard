@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Stickers of the user's own, offered while they type a sticker's title, a keyword or an emoji (#329). -->
+
+    <!-- Screen reader label for one offered sticker. %1$s is the sticker's title. -->
+    <string name="ime_sticker_offer_item_desc">Send sticker %1$s</string>
+    <!-- Screen reader label for an offered sticker that has no title. -->
+    <string name="ime_sticker_offer_item_untitled_desc">Send this sticker</string>
+    <!-- Screen reader label for the button that hides the offered stickers. %1$s is the text that asked for them, for example "cat" or an emoji. -->
+    <string name="ime_sticker_offer_dismiss_desc">Hide the stickers for <xliff:g id="trigger">%1$s</xliff:g></string>
+    <!-- Button after the first few offered stickers on the suggestion strip, which shows the rest. %1$d is how many more there are. -->
+    <string name="ime_sticker_offer_more" tools:ignore="PluralsCandidate">+%1$d</string>
+    <!-- Chip on the suggestion strip that opens the offered stickers. -->
+    <plurals name="ime_sticker_offer_count">
+        <item quantity="one">%1$d sticker</item>
+        <item quantity="other">%1$d stickers</item>
+    </plurals>
+</resources>

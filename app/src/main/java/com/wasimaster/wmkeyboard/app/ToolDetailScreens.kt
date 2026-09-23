@@ -89,6 +89,8 @@ import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
 import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.QrEccLevel
+import com.wasimaster.wmkeyboard.core.settings.StickerSuggestStyle
+import com.wasimaster.wmkeyboard.core.settings.StickerTriggerAction
 import com.wasimaster.wmkeyboard.core.tools.AltCalendar
 import com.wasimaster.wmkeyboard.core.tools.Weekend
 import com.wasimaster.wmkeyboard.core.tools.isSouthernHemisphere
@@ -1683,6 +1685,75 @@ internal fun ToolDetailSettings(
                             route = "sticker_packs",
                             onClick = { onNavigate("sticker_packs") },
                         )
+                    }
+                }
+                // Your own stickers offered while you type their title, a
+                // keyword or an emoji (#329). Only the sticker page: the GIF
+                // tool has no stickers of your own to offer.
+                SettingsGroup(stringResource(R.string.tooldetail_sticker_suggest_group)) {
+                    item {
+                        ToggleSetting(
+                            R.string.tooldetail_sticker_suggest_title,
+                            stringResource(R.string.tooldetail_sticker_suggest_subtitle),
+                            settings.gif.stickerSuggest,
+                            info = stringResource(R.string.tooldetail_sticker_suggest_info),
+                            default = SettingsDefaults.gif.stickerSuggest,
+                        ) { scope.launch { repository.setStickerSuggest(it) } }
+                    }
+                    if (settings.gif.stickerSuggest) {
+                        item {
+                            ChoiceSetting(
+                                title = R.string.tooldetail_sticker_suggest_style_title,
+                                options = listOf(
+                                    StickerSuggestStyle.TRAY to
+                                        stringResource(R.string.tooldetail_sticker_suggest_style_tray),
+                                    StickerSuggestStyle.STRIP to
+                                        stringResource(R.string.tooldetail_sticker_suggest_style_strip),
+                                    StickerSuggestStyle.CHIP to
+                                        stringResource(R.string.tooldetail_sticker_suggest_style_chip),
+                                ),
+                                selected = settings.gif.stickerSuggestStyle,
+                                default = SettingsDefaults.gif.stickerSuggestStyle,
+                                detail = { style ->
+                                    ChoiceDetail(
+                                        stringResource(
+                                            when (style) {
+                                                StickerSuggestStyle.TRAY ->
+                                                    R.string.tooldetail_sticker_suggest_style_tray_desc
+                                                StickerSuggestStyle.STRIP ->
+                                                    R.string.tooldetail_sticker_suggest_style_strip_desc
+                                                StickerSuggestStyle.CHIP ->
+                                                    R.string.tooldetail_sticker_suggest_style_chip_desc
+                                            },
+                                        ),
+                                    )
+                                },
+                            ) { scope.launch { repository.setStickerSuggestStyle(it) } }
+                        }
+                        item {
+                            ChoiceSetting(
+                                title = R.string.tooldetail_sticker_suggest_trigger_title,
+                                options = listOf(
+                                    StickerTriggerAction.DELETE to
+                                        stringResource(R.string.tooldetail_sticker_suggest_trigger_delete),
+                                    StickerTriggerAction.KEEP to
+                                        stringResource(R.string.tooldetail_sticker_suggest_trigger_keep),
+                                ),
+                                selected = settings.gif.stickerSuggestTrigger,
+                                default = SettingsDefaults.gif.stickerSuggestTrigger,
+                                detail = { action ->
+                                    ChoiceDetail(
+                                        stringResource(
+                                            if (action == StickerTriggerAction.DELETE) {
+                                                R.string.tooldetail_sticker_suggest_trigger_delete_desc
+                                            } else {
+                                                R.string.tooldetail_sticker_suggest_trigger_keep_desc
+                                            },
+                                        ),
+                                    )
+                                },
+                            ) { scope.launch { repository.setStickerSuggestTrigger(it) } }
+                        }
                     }
                 }
             }

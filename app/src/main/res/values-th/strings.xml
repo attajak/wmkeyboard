@@ -1664,8 +1664,6 @@
         <item quantity="other">คุณมีชุดสติกเกอร์ %1$d ชุดอยู่แล้ว</item>
     </plurals>
     <string name="import_sticker_packs_section_title">ชุดสติกเกอร์ของคุณ</string>
-    <string name="import_sticker_search_words_hint">แป้นพิมพ์จะค้นหาสติกเกอร์นี้โดยใช้คำเหล่านี้ เว้นวรรคระหว่างคำ เช่น: แมว 😂 มีความสุข</string>
-    <string name="import_sticker_search_words_label">คำค้นหา</string>
     <string name="import_stickers_add_title">เพิ่มสติกเกอร์</string>
     <plurals name="import_stickers_added">
         <item quantity="one">แอปเพิ่มสติกเกอร์จำนวน %1$d รายการแล้ว</item>

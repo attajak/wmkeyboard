@@ -1666,8 +1666,6 @@
         <item quantity="other">Masz już %1$d pakietów naklejek.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Twoje pakiety</string>
-    <string name="import_sticker_search_words_hint">Klawiatura znajduje tę naklejkę po dowolnym z tych słów. Wstaw między nimi spację, na przykład: kot 😂 szczęśliwy</string>
-    <string name="import_sticker_search_words_label">Słowa wyszukiwania</string>
     <string name="import_stickers_add_title">Dodaj naklejki</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplikacja dodała %1$d naklejkę.</item>

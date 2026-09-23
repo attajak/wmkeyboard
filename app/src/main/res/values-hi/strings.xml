@@ -1667,8 +1667,6 @@
         <item quantity="other">आपके पास पहले से ही %1$d स्टिकर पैक हैं।</item>
     </plurals>
     <string name="import_sticker_packs_section_title">आपके पैक</string>
-    <string name="import_sticker_search_words_hint">कीबोर्ड इस स्टिकर को इन शब्दों में से किसी के द्वारा ढूंढता है। उनके बीच एक स्पेस डालें, उदाहरण के लिए: cat 😂 happy</string>
-    <string name="import_sticker_search_words_label">खोज शब्द</string>
     <string name="import_stickers_add_title">स्टिकर जोड़ें</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ऐप ने %1$d स्टिकर जोड़ा।</item>

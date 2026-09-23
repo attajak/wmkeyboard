@@ -1667,8 +1667,6 @@
         <item quantity="other">Već imate %1$d paketa naljepnica.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Vaši paketi</string>
-    <string name="import_sticker_search_words_hint">Tipkovnica pronalazi ovu naljepnicu pomoću bilo koje od ovih riječi. Stavite razmak između njih, na primjer: mačka 😂 sretan</string>
-    <string name="import_sticker_search_words_label">Riječi za pretraživanje</string>
     <string name="import_stickers_add_title">Dodaj naljepnice</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplikacija je dodala %1$d naljepnicu.</item>

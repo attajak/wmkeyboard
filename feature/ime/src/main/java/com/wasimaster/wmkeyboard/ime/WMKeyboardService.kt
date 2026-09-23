@@ -297,6 +297,7 @@ import com.wasimaster.wmkeyboard.core.snippets.SnippetStore
 import com.wasimaster.wmkeyboard.core.stickers.StickerAddResult
 import com.wasimaster.wmkeyboard.core.support.Support
 import com.wasimaster.wmkeyboard.core.stickers.StickerImage
+import com.wasimaster.wmkeyboard.core.stickers.StickerTriggerIndex
 import com.wasimaster.wmkeyboard.core.settings.GifSourceMode
 import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.GLIDE_OUTCOMES_FILE
@@ -4874,6 +4875,7 @@ open class WMKeyboardService : InputMethodService() {
             if (state.language.id == FancyStyles.LANG_ID) turnFancyOff(state, quiet = true)
         }
         smartMutedAfter = null
+        stickerMutedAfter = null
         patternMutedAfter = null
         // A new field is a fresh audience for the intent chips; a restart is
         // the same field talking, where a retired hint stays retired.
@@ -5108,6 +5110,9 @@ open class WMKeyboardService : InputMethodService() {
                 // onUpdateSelection re-derives it once the new field settles,
                 // but that can lag the switch, leaving a stale chip up.
                 smart = null,
+                // The same for the stickers a trigger offered (#329): the new
+                // field may take no images at all.
+                stickerOffer = null,
                 // What this editor takes through commitContent, read once here
                 // rather than at send time so the media panels can show up
                 // front that a GIF has nowhere to land (see [acceptsRichMedia]).
@@ -14171,6 +14176,9 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private fun refreshSmartSuggestion() {
+        // Every path that re-reads the text for a chip re-reads it for the
+        // stickers too; they have their own gate, below.
+        refreshStickerOffer()
         val state = _uiState.value
         val enabled = state.settings.smartSuggestions &&
             !state.secureField && !state.fieldNoSuggestions &&
@@ -14419,6 +14427,174 @@ open class WMKeyboardService : InputMethodService() {
     /** A panel has loaded its prefill; drop it so reopening starts clean. */
     fun onToolPrefillConsumed() {
         if (_uiState.value.toolPrefill != null) _uiState.update { it.copy(toolPrefill = null) }
+    }
+
+    // ---- stickers offered while typing (#329) ----
+
+    /** Triggers of every sticker the user owns, rebuilt when the packs change. */
+    private var stickerTriggers = StickerTriggerIndex.EMPTY
+
+    /** The pack store's [StickerPackStore.stateToken] [stickerTriggers] was built at. */
+    private var stickerTriggersToken = Long.MIN_VALUE
+    private var stickerOfferJob: Job? = null
+
+    /**
+     * The text before the cursor when an offer was sent from or dismissed.
+     * Until the text changes, the same trigger does not raise the same offer
+     * again: with "keep the text" on, the word that asked is still there, and
+     * a tray that comes straight back after every send would never let go.
+     * Same one-shot shape as [smartMutedAfter].
+     */
+    private var stickerMutedAfter: String? = null
+
+    /**
+     * Whether stickers may be offered here at all: the setting on, and a
+     * field that takes images, since an offer the field cannot receive would
+     * dead-end in the clipboard fallback. The emoji panel is the one panel
+     * that offers them, for an emoji picked in it.
+     */
+    private fun stickerOffersAllowed(state: KeyboardUiState): Boolean =
+        state.settings.gif.stickerSuggest && state.acceptsRichMedia && !state.secureField &&
+            (state.panel == PanelMode.NONE || state.panel == PanelMode.EMOJI)
+
+    /**
+     * Its own lock, not the service's: the glide key maps synchronize on the
+     * service, and a rebuild here must never hold up a swipe.
+     */
+    private val stickerTriggerLock = Any()
+
+    private fun stickerTriggerIndex(): StickerTriggerIndex = synchronized(stickerTriggerLock) {
+        stickerPackStore.reloadIfChanged()
+        val token = stickerPackStore.stateToken()
+        if (token != stickerTriggersToken) {
+            stickerTriggers = StickerTriggerIndex.build(stickerPackStore.packs())
+            stickerTriggersToken = token
+        }
+        stickerTriggers
+    }
+
+    private fun clearStickerOffer() {
+        stickerOfferJob?.cancel()
+        if (_uiState.value.stickerOffer != null) _uiState.update { it.copy(stickerOffer = null) }
+    }
+
+    /**
+     * Re-reads the text before the cursor for a sticker's title, keyword or
+     * emoji. Debounced and off the main thread like the smart chip's read, and
+     * skipped outright for anybody with no packs, so a keyboard that has no
+     * stickers to offer pays nothing per keystroke.
+     */
+    private fun refreshStickerOffer() {
+        val state = _uiState.value
+        val ic = currentInputConnection
+        if (ic == null || !stickerOffersAllowed(state) || stickerPackStore.isEmpty()) {
+            clearStickerOffer()
+            return
+        }
+        stickerOfferJob?.cancel()
+        stickerOfferJob = serviceScope.launch {
+            delay(SMART_SUGGEST_DEBOUNCE_MS)
+            val still = _uiState.value
+            if (!stickerOffersAllowed(still)) {
+                if (still.stickerOffer != null) _uiState.update { it.copy(stickerOffer = null) }
+                return@launch
+            }
+            val inEmojiPanel = still.panel == PanelMode.EMOJI
+            val (before, match) = withContext(Dispatchers.Default) {
+                val text = ic.getTextBeforeCursor(StickerTriggerIndex.LOOKBEHIND, 0)?.toString().orEmpty()
+                // In the emoji panel the text before the cursor was typed
+                // before the panel opened; only the emoji picked in it counts.
+                text to stickerTriggerIndex().match(text, emojiOnly = inEmojiPanel)
+            }
+            val offer = when {
+                before == stickerMutedAfter -> null
+                match == null -> null
+                else -> {
+                    stickerMutedAfter = null
+                    val previous = _uiState.value.stickerOffer
+                    val items = match.hits.mapNotNull { hit ->
+                        stickerPackStore.asGifItem(hit.packId, hit.sticker)
+                            ?.let { com.wasimaster.wmkeyboard.ime.StickerOfferItem(it, hit.span) }
+                    }
+                    items.takeIf { it.isNotEmpty() }?.let {
+                        com.wasimaster.wmkeyboard.ime.StickerOffer(
+                            trigger = match.trigger,
+                            stickers = it,
+                            // A tray opened by hand stays open while the same
+                            // trigger is still being offered.
+                            expanded = previous?.expanded == true && previous.trigger == match.trigger,
+                            inEmojiPanel = inEmojiPanel,
+                        )
+                    }
+                }
+            }
+            if (match == null) stickerMutedAfter = null
+            if (offer != _uiState.value.stickerOffer) _uiState.update { it.copy(stickerOffer = offer) }
+        }
+    }
+
+    /**
+     * A sticker the text asked for was tapped: take the trigger back out when
+     * the setting says so, then send the sticker the way the sticker panel
+     * would, with the sticker tool's own send mode.
+     *
+     * The span is matched again against the text as it is now, not taken
+     * from the offer: the offer is a debounce behind the keys, and deleting a
+     * span that no longer ends in the trigger would eat whatever was typed
+     * since.
+     */
+    fun onStickerOfferPick(pick: com.wasimaster.wmkeyboard.ime.StickerOfferItem) {
+        val state = _uiState.value
+        val offer = state.stickerOffer ?: return
+        if (!state.acceptsRichMedia) {
+            vibrate()
+            return
+        }
+        stopVoiceForManualInput()
+        val ic = currentInputConnection
+        if (ic != null &&
+            state.settings.gif.stickerSuggestTrigger == com.wasimaster.wmkeyboard.core.settings.StickerTriggerAction.DELETE
+        ) {
+            val before = ic.getTextBeforeCursor(StickerTriggerIndex.LOOKBEHIND, 0)?.toString().orEmpty()
+            val span = stickerTriggerIndex().match(before, emojiOnly = offer.inEmojiPanel)
+                ?.hits
+                ?.firstOrNull { stickerPackStore.asGifItem(it.packId, it.sticker)?.id == pick.item.id }
+                ?.span
+            if (span != null && span > 0) {
+                ic.beginBatchEdit()
+                commitComposing(ic, autocorrect = false)
+                ic.deleteSurroundingText(span, 0)
+                ic.endBatchEdit()
+                revision = null
+                composing = StringBuilder()
+                lastGestureWord = null
+                _uiState.update {
+                    it.copy(
+                        composingPreview = "", suggestions = emptyList(),
+                        emojiSuggestions = emptyList(), octopus = emptyMap(),
+                    )
+                }
+            }
+        }
+        stickerMutedAfter = ic?.getTextBeforeCursor(StickerTriggerIndex.LOOKBEHIND, 0)?.toString()
+        clearStickerOffer()
+        insertLocalSticker(pick.item, state.settings.stickerSendMode)
+        refreshSuggestions()
+    }
+
+    /** The narrower styles' chip or "more" button: open the tray with every match. */
+    fun onStickerOfferExpand() {
+        vibrate()
+        _uiState.update { state -> state.copy(stickerOffer = state.stickerOffer?.copy(expanded = true)) }
+    }
+
+    /** The tray's close button: this trigger is answered until the text changes. */
+    fun onStickerOfferDismiss() {
+        vibrate()
+        stickerMutedAfter = currentInputConnection
+            ?.getTextBeforeCursor(StickerTriggerIndex.LOOKBEHIND, 0)
+            ?.toString()
+        clearStickerOffer()
     }
 
     /**
@@ -25152,6 +25328,11 @@ open class WMKeyboardService : InputMethodService() {
                 onFilter = ::onDictionaryFilterSelect,
             ),
             vocab = vocabCallbacks(),
+            stickerOffer = com.wasimaster.wmkeyboard.ime.ui.StickerOfferCallbacks(
+                onPick = ::onStickerOfferPick,
+                onExpand = ::onStickerOfferExpand,
+                onDismiss = ::onStickerOfferDismiss,
+            ),
             selection = com.wasimaster.wmkeyboard.ime.ui.SelectionMacroCallbacks(
                 onMacro = ::onSelectionMacro,
                 onPick = ::onSelectionPick,
@@ -26945,6 +27126,9 @@ open class WMKeyboardService : InputMethodService() {
         commitToField(emoji)
         learnEmoji(emoji)
         recordEmojiUse(emoji)
+        // An emoji one of the user's stickers carries offers that sticker, in
+        // the panel as well as on the keys (#329).
+        refreshStickerOffer()
         // "Return to keyboard after emoji": one insertion from the panel drops
         // straight back to the keys instead of keeping the panel open for a run.
         val closeAfter = _uiState.value.settings.emoji.closeAfterInsert &&

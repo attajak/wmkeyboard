@@ -1668,8 +1668,6 @@
         <item quantity="other">Jums jau ir %1$d uzlīmju komplekti.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Jūsu pakotnes</string>
-    <string name="import_sticker_search_words_hint">Tastatūra atrod šo uzlīmi pēc jebkura no šiem vārdiem. Ievietojiet atstarpi starp tiem, piemēram: kaķis 😂 laimīgs</string>
-    <string name="import_sticker_search_words_label">Meklēšanas vārdi</string>
     <string name="import_stickers_add_title">Pievienot uzlīmes</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Lietotne pievienoja %1$d uzlīmi.</item>

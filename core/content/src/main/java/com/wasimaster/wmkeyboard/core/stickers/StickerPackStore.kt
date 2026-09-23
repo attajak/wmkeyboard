@@ -242,14 +242,13 @@ class StickerPackStore(private var baseDir: File?) {
     }
 
     /**
-     * Local stickers as grid items. [query] matches the sticker's search words
-     * and the pack name case-insensitively; blank shows everything. [packId]
-     * limits the result to one pack (null = all packs, in pack order).
+     * Local stickers as grid items. [query] matches the sticker's title, its
+     * keywords and the pack name case-insensitively; blank shows everything.
+     * [packId] limits the result to one pack (null = all packs, in pack order).
      *
-     * Name and tags are matched as one line rather than field by field, so a
-     * query can span both — the editor shows them as one list of words, and
-     * an imported "grumpy cat" whose name is split across the two fields has
-     * to keep matching the phrase.
+     * Title and keywords are matched as one line rather than field by field,
+     * so a query can span both: a sticker saved by an older build as "grumpy"
+     * with the tag "cat" has to keep matching "grumpy cat".
      */
     @Synchronized
     fun searchAsGifItems(query: String, packId: String? = null): List<GifItem> {
@@ -261,23 +260,40 @@ class StickerPackStore(private var baseDir: File?) {
             val packMatches = needle.isEmpty() || pack.name.contains(needle, ignoreCase = true)
             for (sticker in pack.stickers) {
                 val matches = packMatches ||
-                    StickerSearchWords.haystack(sticker).contains(needle, ignoreCase = true)
+                    StickerKeywords.haystack(sticker).contains(needle, ignoreCase = true)
                 if (!matches) continue
-                // Paths are ours — hex ids under a pack_<millis> directory —
-                // so a plain file:// URL needs no escaping.
-                val url = "file://" + File(File(dir, pack.id), sticker.fileName).absolutePath
-                items += GifItem(
-                    id = itemId(pack.id, sticker.id),
-                    previewUrl = url,
-                    fullUrl = url,
-                    mime = sticker.mime,
-                    aspectRatio = sticker.aspectRatio,
-                    source = GifSource.LOCAL,
-                    title = sticker.name.ifBlank { pack.name },
-                )
+                items += gifItem(dir, pack, sticker)
             }
         }
         return items
+    }
+
+    /**
+     * [sticker] as a grid item, the way [searchAsGifItems] would list it, or
+     * null when the pack is gone or the store has no directory yet. For the
+     * stickers offered while typing (#329), which are found by
+     * [StickerTriggerIndex] rather than by a search.
+     */
+    @Synchronized
+    fun asGifItem(packId: String, sticker: CustomSticker): GifItem? {
+        val dir = baseDir ?: return null
+        val pack = packs.firstOrNull { it.id == packId } ?: return null
+        return gifItem(dir, pack, sticker)
+    }
+
+    private fun gifItem(dir: File, pack: StickerPack, sticker: CustomSticker): GifItem {
+        // Paths are ours — hex ids under a pack_<millis> directory — so a
+        // plain file:// URL needs no escaping.
+        val url = "file://" + File(File(dir, pack.id), sticker.fileName).absolutePath
+        return GifItem(
+            id = itemId(pack.id, sticker.id),
+            previewUrl = url,
+            fullUrl = url,
+            mime = sticker.mime,
+            aspectRatio = sticker.aspectRatio,
+            source = GifSource.LOCAL,
+            title = sticker.name.ifBlank { pack.name },
+        )
     }
 
     private fun itemId(packId: String, stickerId: String) = "$ITEM_PREFIX${packId}_$stickerId"
@@ -361,7 +377,7 @@ class StickerPackStore(private var baseDir: File?) {
         packId: String,
         processed: ProcessedSticker,
         name: String = "",
-        emojis: List<String> = emptyList(),
+        keywords: List<String> = emptyList(),
         now: Long = System.currentTimeMillis(),
         original: ByteArray? = null,
     ): StickerAddResult {
@@ -392,7 +408,7 @@ class StickerPackStore(private var baseDir: File?) {
             fileName = fileName,
             mime = processed.mime,
             name = name.trim(),
-            emojis = emojis,
+            keywords = keywords,
             animated = processed.animated,
             aspectRatio = processed.aspectRatio,
             addedAt = now,
@@ -476,13 +492,13 @@ class StickerPackStore(private var baseDir: File?) {
     }
 
     @Synchronized
-    fun updateSticker(packId: String, stickerId: String, name: String, emojis: List<String>) {
+    fun updateSticker(packId: String, stickerId: String, name: String, keywords: List<String>) {
         val index = packs.indexOfFirst { it.id == packId }
         if (index < 0) return
         val stickers = packs[index].stickers.toMutableList()
         val at = stickers.indexOfFirst { it.id == stickerId }
         if (at < 0) return
-        stickers[at] = stickers[at].copy(name = name.trim(), emojis = emojis)
+        stickers[at] = stickers[at].copy(name = name.trim(), keywords = keywords)
         packs[index] = packs[index].copy(stickers = stickers)
         save()
     }

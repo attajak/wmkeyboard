@@ -1666,8 +1666,6 @@
         <item quantity="other">Ja teniu %1$d paquets d\'adhesius.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Els teus paquets</string>
-    <string name="import_sticker_search_words_hint">El teclat troba aquest adhesiu amb qualsevol d\'aquestes paraules. Separa-les amb un espai, per exemple: gat 😂 feliç</string>
-    <string name="import_sticker_search_words_label">Paraules de cerca</string>
     <string name="import_stickers_add_title">Afegeix adhesius</string>
     <plurals name="import_stickers_added">
         <item quantity="one">L\'aplicació ha afegit %1$d adhesiu.</item>

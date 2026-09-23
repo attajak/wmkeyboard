@@ -1666,8 +1666,6 @@
         <item quantity="other">Jūs jau turite %1$d lipdukų rinkinių.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Jūsų paketai</string>
-    <string name="import_sticker_search_words_hint">Klaviatūra randa šį lipduką pagal bet kurį iš šių žodžių. Įdėkite tarpą tarp jų, pavyzdžiui: katė 😂 laimingas</string>
-    <string name="import_sticker_search_words_label">Paieškos žodžiai</string>
     <string name="import_stickers_add_title">Pridėti lipdukus</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Programėlė pridėjo %1$d lipduką.</item>

@@ -1665,8 +1665,6 @@
         <item quantity="other">તમારી પાસે પહેલેથી જ %1$d સ્ટીકર પેક છે.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">તમારા પેક્સ</string>
-    <string name="import_sticker_search_words_hint">કીબોર્ડ આ સ્ટીકરને આમાંથી કોઈપણ શબ્દ દ્વારા શોધે છે. તેમની વચ્ચે એક જગ્યા મૂકો, ઉદાહરણ તરીકે: cat 😂 happy</string>
-    <string name="import_sticker_search_words_label">શોધ શબ્દો</string>
     <string name="import_stickers_add_title">સ્ટીકરો ઉમેરો</string>
     <plurals name="import_stickers_added">
         <item quantity="one">એપે %1$d સ્ટીકર ઉમેર્યું.</item>

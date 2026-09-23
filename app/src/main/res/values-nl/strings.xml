@@ -1667,8 +1667,6 @@
         <item quantity="other">Je hebt al %1$d stickerpakketten.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Jouw pakketten</string>
-    <string name="import_sticker_search_words_hint">Het toetsenbord vindt deze sticker via een van deze woorden. Zet er een spatie tussen, bijvoorbeeld: kat 😂 blij</string>
-    <string name="import_sticker_search_words_label">Zoekwoorden</string>
     <string name="import_stickers_add_title">Stickers toevoegen</string>
     <plurals name="import_stickers_added">
         <item quantity="one">De app heeft %1$d sticker toegevoegd.</item>

@@ -1666,8 +1666,6 @@
         <item quantity="other">ਤੁਹਾਡੇ ਕੋਲ ਪਹਿਲਾਂ ਹੀ %1$d ਸਟਿੱਕਰ ਪੈਕ ਹਨ।</item>
     </plurals>
     <string name="import_sticker_packs_section_title">ਤੁਹਾਡੇ ਪੈਕ</string>
-    <string name="import_sticker_search_words_hint">ਕੀਬੋਰਡ ਇਹ ਸਟਿੱਕਰ ਇਹਨਾਂ ਵਿੱਚੋਂ ਕਿਸੇ ਵੀ ਸ਼ਬਦ ਦੁਆਰਾ ਲੱਭਦਾ ਹੈ। ਉਹਨਾਂ ਦੇ ਵਿਚਕਾਰ ਇੱਕ ਸਪੇਸ ਪਾਓ, ਉਦਾਹਰਨ ਲਈ: ਬਿੱਲੀ 😂 ਖੁਸ਼</string>
-    <string name="import_sticker_search_words_label">ਖੋਜ ਸ਼ਬਦ</string>
     <string name="import_stickers_add_title">ਸਟਿੱਕਰ ਸ਼ਾਮਲ ਕਰੋ</string>
     <plurals name="import_stickers_added">
         <item quantity="one">ਐਪ ਨੇ %1$d ਸਟਿੱਕਰ ਜੋੜਿਆ।</item>

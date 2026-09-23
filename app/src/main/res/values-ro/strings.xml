@@ -1665,8 +1665,6 @@
         <item quantity="other">Ai deja %1$d pachete de stickere.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Pachetele tale</string>
-    <string name="import_sticker_search_words_hint">Tastatura găsește acest autocolant după oricare dintre aceste cuvinte. Pune un spațiu între ele, de exemplu: pisică 😂 fericit</string>
-    <string name="import_sticker_search_words_label">Cuvinte de căutare</string>
     <string name="import_stickers_add_title">Adaugă stickere</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplicația a adăugat %1$d autocolant.</item>

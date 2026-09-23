@@ -1110,6 +1110,9 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_handwriting_pause_title) { Icons.Outlined.Timer }
         put(R.string.tooldetail_handwriting_languages_title) { Icons.Outlined.Language }
         put(R.string.tooldetail_sticker_packs_title) { Icons.AutoMirrored.Outlined.StickyNote2 }
+        put(R.string.tooldetail_sticker_suggest_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.tooldetail_sticker_suggest_style_title) { Icons.Outlined.ViewAgenda }
+        put(R.string.tooldetail_sticker_suggest_trigger_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.tooldetail_media_full_bleed_title) { Icons.Outlined.Fullscreen }
         put(R.string.tooldetail_media_sticker_send_title) { Icons.AutoMirrored.Outlined.Send }
         put(R.string.tooldetail_media_gif_send_title) { Icons.AutoMirrored.Outlined.Send }

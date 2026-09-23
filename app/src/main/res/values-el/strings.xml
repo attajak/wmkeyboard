@@ -1667,8 +1667,6 @@
         <item quantity="other">Έχετε ήδη %1$d πακέτα αυτοκόλλητων.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Τα πακέτα σας</string>
-    <string name="import_sticker_search_words_hint">Το πληκτρολόγιο βρίσκει αυτό το αυτοκόλλητο με οποιαδήποτε από αυτές τις λέξεις. Βάλτε ένα κενό ανάμεσά τους, για παράδειγμα: γάτα 😂 χαρούμενος</string>
-    <string name="import_sticker_search_words_label">Λέξεις αναζήτησης</string>
     <string name="import_stickers_add_title">Προσθήκη αυτοκόλλητων</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Η εφαρμογή πρόσθεσε %1$d αυτοκόλλητο.</item>

@@ -1668,8 +1668,6 @@
         <item quantity="other">Že imate %1$d paketov nalepk.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Vaši paketi</string>
-    <string name="import_sticker_search_words_hint">Tipkovnica najde to nalepko s katero koli od teh besed. Mednje vstavite presledek, na primer: mačka 😂 vesel</string>
-    <string name="import_sticker_search_words_label">Iskalne besede</string>
     <string name="import_stickers_add_title">Dodaj nalepke</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplikacija je dodala %1$d nalepko.</item>

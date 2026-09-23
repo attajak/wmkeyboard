@@ -1663,8 +1663,6 @@
         <item quantity="other">Bạn đã có %1$d gói nhãn dán.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Các gói của bạn</string>
-    <string name="import_sticker_search_words_hint">Bàn phím tìm thấy nhãn dán này bằng bất kỳ từ nào trong số này. Hãy đặt dấu cách giữa các từ, ví dụ: mèo 😂 vui vẻ</string>
-    <string name="import_sticker_search_words_label">Từ khóa tìm kiếm</string>
     <string name="import_stickers_add_title">Thêm nhãn dán</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Ứng dụng đã thêm %1$d nhãn dán.</item>

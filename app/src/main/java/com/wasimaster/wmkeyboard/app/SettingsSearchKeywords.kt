@@ -184,6 +184,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.typing_auto_close_brackets_title, R.string.search_kw_typing_auto_close_brackets)
     put(R.string.typing_wrap_selection_title, R.string.search_kw_typing_wrap_selection)
     put(R.string.update_row_check_title, R.string.search_kw_update_row_check)
+    put(R.string.tooldetail_sticker_suggest_title, R.string.search_kw_sticker_suggest)
     put(R.string.tooldetail_translate_engine_title, R.string.search_kw_translate_engine)
     put(R.string.tooldetail_translate_models_group, R.string.search_kw_translate_models)
     put(R.string.tooldetail_translate_downloaded_first_title, R.string.search_kw_translate_downloaded_first)

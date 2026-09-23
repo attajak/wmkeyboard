@@ -1666,8 +1666,6 @@
         <item quantity="other">Már van %1$d matricacsomagod.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Saját csomagok</string>
-    <string name="import_sticker_search_words_hint">A billentyűzet ezek közül bármelyik szó alapján megtalálja ezt a matricát. Tegyél szóközt közéjük, például: macska 😂 boldog</string>
-    <string name="import_sticker_search_words_label">Keresőszavak</string>
     <string name="import_stickers_add_title">Matricák hozzáadása</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Az alkalmazás hozzáadott %1$d matricát.</item>

@@ -1669,8 +1669,6 @@
         <item quantity="other">Tayari una vifurushi %1$d vya vibandiko.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Vifurushi vyako</string>
-    <string name="import_sticker_search_words_hint">Kibodi hupata kibandiko hiki kwa maneno yoyote haya. Weka nafasi kati yao, kwa mfano: paka 😂 furaha</string>
-    <string name="import_sticker_search_words_label">Maneno ya kutafuta</string>
     <string name="import_stickers_add_title">Ongeza vibandiko</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Programu imeongeza stika %1$d.</item>

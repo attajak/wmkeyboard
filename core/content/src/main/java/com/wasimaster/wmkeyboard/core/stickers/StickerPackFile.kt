@@ -92,6 +92,11 @@ private data class ReadSticker(
     val mime: String = "",
     val name: String = "",
     val emojis: List<String> = emptyList(),
+    /**
+     * What a hand-written manifest may call [emojis] now that the list holds
+     * words as well. Read and merged; [CustomSticker] writes `emojis`.
+     */
+    val keywords: List<String> = emptyList(),
     val addedAt: Long = 0L,
 ) {
     /**
@@ -245,7 +250,7 @@ object StickerPackFile {
                 StickerPackAdoption.Incoming(
                     label = declared.label(),
                     name = declared.name,
-                    emojis = declared.emojis,
+                    emojis = (declared.emojis + declared.keywords).distinct(),
                     addedAt = declared.addedAt,
                     problem = if (source.isEmpty()) {
                         ContentText(R.string.core_content_sticker_repair_no_image_named)

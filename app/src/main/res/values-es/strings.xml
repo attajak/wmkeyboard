@@ -1667,8 +1667,6 @@
         <item quantity="other">Ya tienes %1$d paquetes de stickers.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Tus paquetes</string>
-    <string name="import_sticker_search_words_hint">El teclado encuentra este sticker mediante cualquiera de estas palabras. Pon un espacio entre ellas, por ejemplo: gato 😂 feliz</string>
-    <string name="import_sticker_search_words_label">Palabras de búsqueda</string>
     <string name="import_stickers_add_title">Añadir pegatinas</string>
     <plurals name="import_stickers_added">
         <item quantity="one">La aplicación añadió %1$d pegatina.</item>

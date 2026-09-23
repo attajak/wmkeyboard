@@ -1668,8 +1668,6 @@
         <item quantity="other">Þú ert nú þegar með %1$d límmiðapakka.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Þínir pakkar</string>
-    <string name="import_sticker_search_words_hint">Lyklaborðið finnur þennan límmiða með hvaða orði sem er af þessum. Settu bil á milli þeirra, til dæmis: köttur 😂 hamingjusamur</string>
-    <string name="import_sticker_search_words_label">Leitarorð</string>
     <string name="import_stickers_add_title">Bæta við límmiðum</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Forritið bætti við %1$d límmiða.</item>

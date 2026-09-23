@@ -1667,8 +1667,6 @@
         <item quantity="other">Sie haben bereits %1$d Sticker-Pakete.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Ihre Pakete</string>
-    <string name="import_sticker_search_words_hint">Die Tastatur findet diesen Sticker über jedes dieser Wörter. Setzen Sie ein Leerzeichen dazwischen, zum Beispiel: Katze 😂 glücklich</string>
-    <string name="import_sticker_search_words_label">Suchwörter</string>
     <string name="import_stickers_add_title">Sticker hinzufügen</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Die App hat %1$d Sticker hinzugefügt.</item>

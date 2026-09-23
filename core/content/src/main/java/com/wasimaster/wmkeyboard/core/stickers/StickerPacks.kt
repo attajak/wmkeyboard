@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.stickers
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,10 +16,22 @@ data class CustomSticker(
     val fileName: String,
     /** image/webp or image/gif; see [StickerImage] for why nothing else survives. */
     val mime: String,
-    /** Optional label, matched by the panel's search box. */
+    /**
+     * The sticker's title: what a screen reader calls it, and a word that
+     * offers it while typing once it is typed out in full (see
+     * [StickerTriggerIndex]).
+     */
     val name: String = "",
-    /** Optional emoji tags, also matched by search. */
-    val emojis: List<String> = emptyList(),
+    /**
+     * Words, phrases and emoji the sticker is found by — in the panel's search
+     * box, and while typing, where a keyword may be any shorter handle for it.
+     *
+     * Stored under `emojis`, the name this list had when it only held emoji
+     * tags: every `.wmstickers` file and every pack an older build wrote says
+     * that, and a Signal pack's per-sticker emoji arrives here as well.
+     */
+    @SerialName("emojis")
+    val keywords: List<String> = emptyList(),
     val animated: Boolean = false,
     /** width/height, for grid cell sizing. Static stickers are always 1f. */
     val aspectRatio: Float = 1f,

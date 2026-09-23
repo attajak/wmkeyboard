@@ -368,6 +368,55 @@ class StickerPackFileTest {
     }
 
     /**
+     * Keywords are written under `emojis`, the key every older build and every
+     * pack already out there uses, so a pack exported now still carries its
+     * keywords into an older build. A hand-written manifest may say `keywords`
+     * instead, or both.
+     */
+    @Test
+    fun `keywords travel under the old emojis key and a keywords key is read too`() {
+        val source = store("source")
+        val pack = source.createPack("Cats")!!
+        source.addSticker(pack.id, passthrough(byteArrayOf(1))!!, name = "grumpy", keywords = listOf("cat", "😾"))
+        val bytes = export(source, source.pack(pack.id)!!)
+        val manifestText = java.util.zip.ZipInputStream(ByteArrayInputStream(bytes)).use { zip ->
+            generateSequence { zip.nextEntry }.first { it.name == "pack.json" }
+            zip.readBytes().decodeToString()
+        }
+        assertTrue(manifestText.contains("\"emojis\""))
+        assertFalse(manifestText.contains("\"keywords\""))
+        val imported = StickerPackFile.import(
+            ByteArrayInputStream(bytes),
+            store("target"),
+            FALLBACK_NAME,
+            normalize = passthrough,
+        ) as StickerImportResult.Imported
+        assertEquals(listOf("cat", "😾"), imported.pack.stickers.single().keywords)
+
+        val manifest = """
+            {"format":"wmkeyboard-stickers","version":1,
+             "pack":{"id":"p","name":"Hand"},
+             "stickers":[{"id":"a","name":"Wave","file":"a.png","emojis":["👋"],"keywords":["hello","👋"]}]}
+        """.trimIndent()
+        val out = ByteArrayOutputStream()
+        ZipOutputStream(out).use { zip ->
+            zip.putNextEntry(ZipEntry("pack.json"))
+            zip.write(manifest.toByteArray())
+            zip.closeEntry()
+            zip.putNextEntry(ZipEntry("a.png"))
+            zip.write(byteArrayOf(1, 2, 3))
+            zip.closeEntry()
+        }
+        val hand = StickerPackFile.import(
+            ByteArrayInputStream(out.toByteArray()),
+            store("hand"),
+            FALLBACK_NAME,
+            normalize = passthrough,
+        ) as StickerImportResult.Imported
+        assertEquals(listOf("👋", "hello"), hand.pack.stickers.single().keywords)
+    }
+
+    /**
      * The reader cannot name a nameless pack itself: it holds no `Context`, so
      * the caller hands it the already-resolved words.
      */

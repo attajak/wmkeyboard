@@ -1663,8 +1663,6 @@
         <item quantity="other">Anda sudah memiliki %1$d paket stiker.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">Paket Anda</string>
-    <string name="import_sticker_search_words_hint">Papan ketik menemukan stiker ini dengan kata-kata ini. Beri spasi di antaranya, contoh: kucing 😂 senang</string>
-    <string name="import_sticker_search_words_label">Kata pencarian</string>
     <string name="import_stickers_add_title">Tambahkan stiker</string>
     <plurals name="import_stickers_added">
         <item quantity="one">Aplikasi menambahkan %1$d stiker.</item>

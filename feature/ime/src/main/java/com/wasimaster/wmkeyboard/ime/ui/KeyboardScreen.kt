@@ -2769,6 +2769,8 @@ private fun TopBar(
     onSmartOpen: () -> Unit = {},
     /** The vocabulary chips' callbacks; rides [ToolHoldCallbacks] on the way here. */
     vocab: VocabCallbacks = VocabCallbacks(),
+    /** The stickers offered while typing, for the two styles that draw on the strip (#329). */
+    stickerOffer: StickerOfferCallbacks = StickerOfferCallbacks(),
     onStripOfferAction: (StripOfferAction) -> Unit = {},
     onClipboardSuggestion: (ClipItem) -> Unit = {},
     onClipboardSuggestionDismiss: () -> Unit = {},
@@ -2804,6 +2806,8 @@ private fun TopBar(
     val hasSuggestions =
         (!openersAtRest && (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())) ||
         state.smart != null || recentClipChip ||
+        // Stickers a typed word asked for, in the styles that draw them here.
+        stickerStripShows(state) ||
         // The one-time-code chip counts as strip content for the same reason
         // the paste chip does: it lands exactly when nothing is being typed.
         state.otpSuggestion != null ||
@@ -3678,6 +3682,19 @@ private fun TopBar(
                     dismissDescription = stringResource(R.string.ime_glide_search_all_dismiss_desc),
                     onAccept = { onStripOfferAction(StripOfferAction.Accept()) },
                     onDismiss = { onStripOfferAction(StripOfferAction.Decline) },
+                )
+            }
+            // Stickers of the user's own that the text before the cursor asked
+            // for (#329), in the two styles that put them here rather than in
+            // the tray above. Narrow, like a keyword chip: the word that asked
+            // may simply be a word, so the candidates keep their place.
+            val stickerOfferNow = state.stickerOffer
+            if (stickerOfferNow != null && stickerStripShows(state)) {
+                StickerStripOffer(
+                    offer = stickerOfferNow,
+                    style = state.settings.gif.stickerSuggestStyle,
+                    callbacks = stickerOffer,
+                    modifier = Modifier.padding(start = 4.dp),
                 )
             }
             // A recognised sum/conversion answers the text directly, so it
@@ -9679,61 +9696,74 @@ private fun KeyboardBody(
             fun BarRowSlot(row: BarRow) {
                 Column(modifier = Modifier.barRowFill(barFill)) {
                     when (row) {
-                        BarRow.TOPBAR -> when {
-                            // Before every other case, the toolbar's own
-                            // visibility included: the word card has handed
-                            // the keys to this bar, so it is the only thing
-                            // on screen that says what they are typing (#138).
-                            state.wordSpell != null -> WordSpellBar(state, suggestionHold.onCard)
-                            !topBarVisible -> {}
-                            // The strip placement swaps the whole bar rather than adding
-                            // a surface to TopBar's own flip: with a selection live there
-                            // are no word candidates to show (nothing is being typed), and
-                            // the toolbar is one tap away under the macros' own gesture.
-                            // Only with no panel open, because there the chevron on this
-                            // row is the way back out of the panel.
-                            stripMacros -> SelectionMacroBar(state, toolHold.selection)
-                            // The strip given up for the tools' own row (#302).
-                            // Compact dictation still takes it: that bar is the
-                            // session's only status and its only way out.
-                            state.settings.toolbarBehavior.stripHidden && !state.voice.strip -> {}
-                            else -> WithNetActivityDot(
-                                state.settings.networkLog.showOnKeyboard,
-                                state.settings.toolColorOverrides,
-                            ) { TopBar(
-                                state,
-                                toolsRowOpen = toolsRowOpen,
-                                onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
-                                onSuggestion = onSuggestion,
-                                suggestionHold = suggestionHold,
-                                onJoinSuggestion = onJoinSuggestion,
-                                onRevisionSuggestion = onRevisionSuggestion,
-                                onCandidate = onCandidate,
-                                onCandidatesExpand = onCandidatesExpand,
-                                onEmoji = onEmoji,
-                                onEmojiSuggestion = onEmojiSuggestion,
-                                onPunctuation = onPunctuation,
-                                onPanelChange = onPanelChange,
-                                onToolTap = onToolTap,
-                                drag = drag,
-                                onVoiceToggle = onVoiceToggle,
-                                onVoiceUndo = onVoiceUndo,
-                                onVoicePermissionRequest = onVoicePermissionRequest,
-                                onOpenVoiceSettings = onOpenVoiceSettings,
-                                onVoiceAction = onVoiceRailKey,
-                                onDismissInlineSuggestions = onDismissInlineSuggestions,
-                                onSmartAccept = onSmartAccept,
-                                onSmartOpen = onSmartOpen,
-                                vocab = toolHold.vocab,
-                                onStripOfferAction = onStripOfferAction,
-                                onClipboardSuggestion = onClipboardItem,
-                                onClipboardSuggestionDismiss = onClipboardSuggestionDismiss,
-                                onClipboardEntity = onClipboardEntity,
-                                onOtpAccept = onOtpAccept,
-                                onOtpDismiss = onOtpDismiss,
-                                onEmojiRowShown = onEmojiRowShown,
-                                onSwipeDownHide = onHideKeyboard,
-                            ) }
+                        BarRow.TOPBAR -> {
+                            // Stickers the text asked for (#329), in a row of
+                            // their own directly above the strip. Drawn with
+                            // the toolbar switched off too: it is an offer
+                            // about the text, not a part of the toolbar. The
+                            // emoji panel keeps it even full-bleed, since an
+                            // emoji picked there is what raises it.
+                            val trayFitsPanel = !fullBleed || state.panel == PanelMode.EMOJI
+                            if (trayFitsPanel && !lockHidden && !clipboardSearching && !emojiSearching) {
+                                StickerTrayRow(state, toolHold.stickerOffer)
+                            }
+                            when {
+                                // Before every other case, the toolbar's own
+                                // visibility included: the word card has handed
+                                // the keys to this bar, so it is the only thing
+                                // on screen that says what they are typing (#138).
+                                state.wordSpell != null -> WordSpellBar(state, suggestionHold.onCard)
+                                !topBarVisible -> {}
+                                // The strip placement swaps the whole bar rather than adding
+                                // a surface to TopBar's own flip: with a selection live there
+                                // are no word candidates to show (nothing is being typed), and
+                                // the toolbar is one tap away under the macros' own gesture.
+                                // Only with no panel open, because there the chevron on this
+                                // row is the way back out of the panel.
+                                stripMacros -> SelectionMacroBar(state, toolHold.selection)
+                                // The strip given up for the tools' own row (#302).
+                                // Compact dictation still takes it: that bar is the
+                                // session's only status and its only way out.
+                                state.settings.toolbarBehavior.stripHidden && !state.voice.strip -> {}
+                                else -> WithNetActivityDot(
+                                    state.settings.networkLog.showOnKeyboard,
+                                    state.settings.toolColorOverrides,
+                                ) { TopBar(
+                                    state,
+                                    toolsRowOpen = toolsRowOpen,
+                                    onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
+                                    onSuggestion = onSuggestion,
+                                    suggestionHold = suggestionHold,
+                                    onJoinSuggestion = onJoinSuggestion,
+                                    onRevisionSuggestion = onRevisionSuggestion,
+                                    onCandidate = onCandidate,
+                                    onCandidatesExpand = onCandidatesExpand,
+                                    onEmoji = onEmoji,
+                                    onEmojiSuggestion = onEmojiSuggestion,
+                                    onPunctuation = onPunctuation,
+                                    onPanelChange = onPanelChange,
+                                    onToolTap = onToolTap,
+                                    drag = drag,
+                                    onVoiceToggle = onVoiceToggle,
+                                    onVoiceUndo = onVoiceUndo,
+                                    onVoicePermissionRequest = onVoicePermissionRequest,
+                                    onOpenVoiceSettings = onOpenVoiceSettings,
+                                    onVoiceAction = onVoiceRailKey,
+                                    onDismissInlineSuggestions = onDismissInlineSuggestions,
+                                    onSmartAccept = onSmartAccept,
+                                    onSmartOpen = onSmartOpen,
+                                    vocab = toolHold.vocab,
+                                    stickerOffer = toolHold.stickerOffer,
+                                    onStripOfferAction = onStripOfferAction,
+                                    onClipboardSuggestion = onClipboardItem,
+                                    onClipboardSuggestionDismiss = onClipboardSuggestionDismiss,
+                                    onClipboardEntity = onClipboardEntity,
+                                    onOtpAccept = onOtpAccept,
+                                    onOtpDismiss = onOtpDismiss,
+                                    onEmojiRowShown = onEmojiRowShown,
+                                    onSwipeDownHide = onHideKeyboard,
+                                ) }
+                            }
                         }
                         BarRow.EMOJI -> if (showEmojiRow) {
                             EmojiBarStrip(
@@ -21544,6 +21574,8 @@ data class ToolHoldCallbacks(
     val dictionaryBar: DictionaryBarCallbacks = DictionaryBarCallbacks(),
     /** The vocabulary panel's and chips' callbacks; here for the same reason as [dictionaryBar]. */
     val vocab: VocabCallbacks = VocabCallbacks(),
+    /** The stickers offered while typing (#329); here for the same reason as [dictionaryBar]. */
+    val stickerOffer: StickerOfferCallbacks = StickerOfferCallbacks(),
     /**
      * The selection bar's callbacks (a chip, a ladder pick, an AI button).
      * Ride this bundle for the reason [dictionaryBar] does: it is the nearest

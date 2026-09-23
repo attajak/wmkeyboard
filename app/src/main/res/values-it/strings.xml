@@ -1664,8 +1664,6 @@
         <item quantity="other">Hai già %1$d pacchetti di adesivi.</item>
     </plurals>
     <string name="import_sticker_packs_section_title">I tuoi pacchetti</string>
-    <string name="import_sticker_search_words_hint">La tastiera trova questo adesivo tramite una di queste parole. Inserisci uno spazio tra di esse, ad esempio: gatto 😂 felice</string>
-    <string name="import_sticker_search_words_label">Parole di ricerca</string>
     <string name="import_stickers_add_title">Aggiungi sticker</string>
     <plurals name="import_stickers_added">
         <item quantity="one">L\'app ha aggiunto %1$d adesivo.</item>

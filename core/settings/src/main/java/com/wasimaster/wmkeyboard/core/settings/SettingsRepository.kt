@@ -748,6 +748,25 @@ enum class GifContentFilter { OFF, LOW, MEDIUM, HIGH }
 enum class GifSourceMode { TABS, MIX }
 
 /**
+ * How stickers of your own are offered while you type their title, a keyword
+ * or an emoji (#329).
+ *
+ * [TRAY] is a row of full-size stickers above the suggestion strip, arriving
+ * with the match and leaving with it; the strip keeps its words. [STRIP] puts
+ * a few small ones on the strip beside the words, with a button that opens the
+ * tray for the rest. [CHIP] is one narrow chip saying how many there are,
+ * which opens the tray when tapped.
+ */
+enum class StickerSuggestStyle { TRAY, STRIP, CHIP }
+
+/**
+ * What sending a suggested sticker does to the text that asked for it:
+ * [DELETE] takes the title, keyword or emoji back out of the field, so the
+ * sticker stands in for it; [KEEP] leaves the text where it is.
+ */
+enum class StickerTriggerAction { DELETE, KEEP }
+
+/**
  * Key-press sound. [CLICK] and [STANDARD] come from the device's own sound
  * pack, so they match the stock keyboard's palette; [POP], [THOCK] and [CHIME]
  * are synthesised in-app. [CUSTOM] plays a file from
@@ -2248,6 +2267,16 @@ data class GifSettings(
     val resultLimit: Int = 24,
     /** How GIF picks are sent. Sticker mode only applies to WebP-backed GIFs. */
     val sendMode: MediaSendMode = MediaSendMode.IMAGE,
+    /**
+     * Offer your own stickers while typing: a sticker's full title, one of
+     * its keywords, or an emoji it carries (#329). Only in a field that takes
+     * images, so only in the places a sticker could be sent.
+     */
+    val stickerSuggest: Boolean = true,
+    /** Where those stickers show up; see [StickerSuggestStyle]. */
+    val stickerSuggestStyle: StickerSuggestStyle = StickerSuggestStyle.TRAY,
+    /** What sending one does to the text that asked for it; see [StickerTriggerAction]. */
+    val stickerSuggestTrigger: StickerTriggerAction = StickerTriggerAction.DELETE,
 )
 
 /**
@@ -7519,6 +7548,9 @@ class SettingsRepository(private val context: Context) {
         private val GIF_SOURCE_MODE = stringPreferencesKey("gif_source_mode")
         private val GIF_CONTENT_FILTER = stringPreferencesKey("gif_content_filter")
         private val GIF_RESULT_LIMIT = intPreferencesKey("gif_result_limit")
+        private val STICKER_SUGGEST = booleanPreferencesKey("sticker_suggest")
+        private val STICKER_SUGGEST_STYLE = stringPreferencesKey("sticker_suggest_style")
+        private val STICKER_SUGGEST_TRIGGER = stringPreferencesKey("sticker_suggest_trigger")
         private val SEARCH_SAFE = booleanPreferencesKey("search_safe")
         private val SEARCH_RESULT_COUNT = intPreferencesKey("search_result_count")
         private val WIKI_LANGUAGE = stringPreferencesKey("wiki_language")
@@ -8864,6 +8896,13 @@ class SettingsRepository(private val context: Context) {
                 sendMode = p[GIF_SEND_MODE]
                     ?.let { runCatching { MediaSendMode.valueOf(it) }.getOrNull() }
                     ?: defaults.gif.sendMode,
+                stickerSuggest = p[STICKER_SUGGEST] ?: defaults.gif.stickerSuggest,
+                stickerSuggestStyle = p[STICKER_SUGGEST_STYLE]
+                    ?.let { runCatching { StickerSuggestStyle.valueOf(it) }.getOrNull() }
+                    ?: defaults.gif.stickerSuggestStyle,
+                stickerSuggestTrigger = p[STICKER_SUGGEST_TRIGGER]
+                    ?.let { runCatching { StickerTriggerAction.valueOf(it) }.getOrNull() }
+                    ?: defaults.gif.stickerSuggestTrigger,
             ),
             dictionaryAutoLookup = p[DICTIONARY_AUTO_LOOKUP] ?: defaults.dictionaryAutoLookup,
             textEditing = TextEditingSettings(
@@ -14223,6 +14262,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGifSourceMode(value: GifSourceMode) =
         editPrefs { it[GIF_SOURCE_MODE] = value.name }
+
+    suspend fun setStickerSuggest(value: Boolean) =
+        editPrefs { it[STICKER_SUGGEST] = value }
+
+    suspend fun setStickerSuggestStyle(value: StickerSuggestStyle) =
+        editPrefs { it[STICKER_SUGGEST_STYLE] = value.name }
+
+    suspend fun setStickerSuggestTrigger(value: StickerTriggerAction) =
+        editPrefs { it[STICKER_SUGGEST_TRIGGER] = value.name }
 
     suspend fun setGifContentFilter(value: GifContentFilter) =
         editPrefs { it[GIF_CONTENT_FILTER] = value.name }
