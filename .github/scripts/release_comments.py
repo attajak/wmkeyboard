@@ -488,7 +488,8 @@ def compose(plan: Plan, *, tag: str, version: str, release_url: str, repo: str,
     lines.append("")
     get = f"The APKs are on the [release page]({release_url}) now."
     if stores:
-        get += (f" {join_words(stores)} usually take 2 to 3 days to publish a new version, "
+        verb = "takes" if len(stores) == 1 else "take"
+        get += (f" {join_words(stores)} usually {verb} 2 to 3 days to publish a new version, "
                 "so if the store still shows the older one, it is on its way.")
     lines.append(get)
     lines.append("")
