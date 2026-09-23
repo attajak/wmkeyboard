@@ -423,6 +423,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Cursor slide — 16 dp of horizontal drag per character; commits the composing buffer first and marks a scrub window
   - 2-D cursor touchpad `uncommon` — Vertical drag also steps the caret by lines; claims the down direction from swipe-to-hide
   - Swipe down to hide `uncommon` — Downward drag past 40 dp, steeper than wide, dismisses the keyboard; separate from the toolbar's own swipe-down
+  - Key flicks `RARE` — Short (0.5–2 key heights), straight (detour ≤1.4×), quick (≤250 ms) flicks inside a 30° cone, judged at the lift by keyFlick in two places (inside the glide lift, and a loop of its own on the Initial pass for strokes glide never claimed). Down types the corner hint (layoutBehavior.hintFlick, #178); up types the shifted form, shiftLabel or the letter's capital, without touching shift (layoutBehavior.capitalFlick). Both off by default. An up-flick off a key carrying an octopus word is left to the octopus
+  - 🌐 typing guard `RARE` — layoutBehavior.globeTypingGuardMs, 0–1000 ms in 50 ms steps, default 0 (off): a 🌐 tap within the window after a key that typed into the field (Text, Keyman, Space, Delete, ⌦, Enter, Newline) is dropped at the top of dispatchKey; 🌐 bursts, shift and mode keys do not arm it, and the hold picker is untouched
   - Spacebar label control `uncommon` — Language / layout / both, or a custom string where %s is the live language name
     - Direction arrows — ◀ ▶ drawn around the label only when a slot is set to Language and more than one mode is enabled
 - **Backspace behaviour** — Tap, hold-repeat and word-swipe are one state machine on the key
@@ -526,6 +528,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Direct-boot aware — Every macro that would start an activity is dropped before the first unlock, leaving select all, copy and the case ladder, which only touch the field the user is already in
     - Toolbar switch — The Selection actions tool flips the feature from the keyboard, so the bar can be on only for the stretch it is wanted
   - Long-press letter shortcuts `uncommon` — A/C/V/X/Z/Y carry select-all, copy, paste, cut, undo and redo as entries in their own alternates popup, after the accents the key already has; all six on by default, and each key stays on any layout by naming its own letter
+    - Slide from 🌐 `RARE` — longPressLetterActions.globeDrag, off by default: a drag off 🌐 rides the #67 chord-drag loop (first on the Initial pass, trail line from the key) and the key it lifts on runs its shortcut through the same six letters (letters rebinding included), independent of the six popup switches; a drag that starts after the long-press delay is left to the language picker; glide, octopus and handwriting refuse strokes that start on 🌐 while it is on
     - Raw-keystroke mode — Optional Ctrl+A/C/V/X as real key events instead of performContextMenuAction, for terminals
 - **Key press behaviour** — Long press, popups, repeat, chording and press feedback
   - Long-press alternates — Delay 150–700 ms (default 300); popup radius, shape and font scale all themed or user-set

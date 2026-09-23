@@ -26,6 +26,7 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.core.settings.BottomRowHeightRange
+import com.wasimaster.wmkeyboard.core.settings.GlobeTypingGuardMsRange
 import com.wasimaster.wmkeyboard.core.settings.SidePadScaleRange
 import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
@@ -922,6 +923,32 @@ internal fun LayoutSettings(
                 info = stringResource(R.string.layout_globe_recent_info),
                 default = SettingsDefaults.globeRecentOrder,
             ) { scope.launch { repository.setGlobeRecentOrder(it) } }
+        }
+        item {
+            val offLabel = stringResource(CommonR.string.common_off)
+            val msFormat = stringResource(R.string.typing_value_milliseconds)
+            SliderSetting(
+                R.string.layout_globe_guard_title,
+                subtitle = stringResource(
+                    if (settings.showGlobeKey) {
+                        R.string.layout_globe_guard_subtitle
+                    } else {
+                        R.string.layout_globe_hidden_subtitle
+                    },
+                ),
+                value = settings.layoutBehavior.globeTypingGuardMs.toFloat(),
+                range = GlobeTypingGuardMsRange.first.toFloat()..GlobeTypingGuardMsRange.last.toFloat(),
+                // Steps of 50 ms: finer than that is not a difference a thumb
+                // can tell, and a readout that only moves in round numbers
+                // is one the user can set again.
+                display = {
+                    val ms = (it / 50f).roundToInt() * 50
+                    if (ms == 0) offLabel else msFormat.format(ms)
+                },
+                info = stringResource(R.string.layout_globe_guard_info),
+                enabled = settings.showGlobeKey,
+                default = SettingsDefaults.layoutBehavior.globeTypingGuardMs.toFloat(),
+            ) { scope.launch { repository.setGlobeTypingGuardMs((it / 50f).roundToInt() * 50) } }
         }
         // The two rows below act on the 🌐 key, so with it hidden neither has
         // anything to change. Greyed out rather than removed, so turning the key

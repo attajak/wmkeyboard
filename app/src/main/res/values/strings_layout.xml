@@ -163,6 +163,9 @@
     <string name="layout_globe_recent_title">🌐 goes back to the last language</string>
     <string name="layout_globe_recent_subtitle">Tap quickly to go further back</string>
     <string name="layout_globe_recent_info">When this is on, one tap on the 🌐 key goes back to the layout you used before this one, and the next tap comes back again. This is useful with many languages when you only type two or three of them at a time. Tap several times quickly to go further back, most recently used first. A list shows where you are. When this is off, each tap goes to the next layout in your switch order. This also changes the language key on a physical keyboard. This setting is off by default.</string>
+    <string name="layout_globe_guard_title">Ignore 🌐 right after typing</string>
+    <string name="layout_globe_guard_subtitle">A tap on 🌐 just after a letter does nothing</string>
+    <string name="layout_globe_guard_info">The 🌐 key is next to the spacebar and the comma, so a fast thumb can hit it by mistake in the middle of a word and change the language. Set a time here and a tap on 🌐 that comes sooner than this after a typed key does nothing. A tap after a pause changes the language as usual, and so do quick taps one after the other on 🌐 itself. Press and hold 🌐 to open the language list at any time. Letters, space, backspace and enter count as typing. Shift and the mode keys do not. This setting is off by default.</string>
     <!-- Subtitle of the two settings that change the 🌐 key, while it is hidden. -->
     <string name="layout_globe_hidden_subtitle">No effect while the 🌐 key is hidden</string>
     <string name="layout_split_large_only_title">Split only on wide screens</string>

@@ -192,7 +192,8 @@ The repeat interval is two sliders, because delete and space are held for opposi
 | Ctrl shortcuts as raw key events | Toggle | On / Off | Off |
 | Hold shortcuts | Filter chips, any number | Select all, Copy, Cut, Paste, Undo, Redo | All six on |
 | Action first *(shown once at least one hold shortcut is on)* | Toggle | On / Off | Off |
-| Shortcut keys *(same)* | Nav row → dialog | one letter per action | a c v x z y |
+| Slide from 🌐 for shortcuts | Toggle | On / Off | Off |
+| Shortcut keys *(shown once a hold shortcut or the 🌐 slide is on)* | Nav row → dialog | one letter per action | a c v x z y |
 
 **Press and hold hints** puts a small corner label on each key, previewing its first press-and-hold character.
 
@@ -210,7 +211,9 @@ The repeat interval is two sliders, because delete and space are held for opposi
 
 **Action first** sits next to Hold shortcuts and starts off. Off, holding a shortcut letter still opens on its first accent, the same as a letter with no shortcuts. Copy or cut still sits at the end of that popup. Turn it on and the shortcut moves to the front instead, so a plain hold on <KeyCap>C</KeyCap> runs Copy right away. Keep your finger down and slide on to reach `çć` instead of releasing. It needs **Choose without lifting**, under Alternate keys, turned on, since a popup that just sits open has nothing to run on release.
 
-**Shortcut keys** is one row for all six bindings rather than six rows, and it appears whenever at least one of them is on. The shipped `a c v x z y` is a QWERTY answer, so a layout without those letters (Bangla, Russian) needs the whole set moved onto keys it actually draws. The row's subtitle lists the keys currently bound. Tap it to open a dialog with one field per switched-on action, saved in one go.
+**Slide from 🌐 for shortcuts** is off by default. On, pressing 🌐 and sliding onto one of the six shortcut keys runs that key's action when you lift, whether or not its hold shortcut is on. See [Switching languages](/languages/switching/#sliding-from--onto-a-shortcut).
+
+**Shortcut keys** is one row for all six bindings rather than six rows, and it appears whenever at least one of them, or the 🌐 slide, is on. The shipped `a c v x z y` is a QWERTY answer, so a layout without those letters (Bangla, Russian) needs the whole set moved onto keys it actually draws. The row's subtitle lists the keys currently bound. Tap it to open a dialog with one field per switched-on action, saved in one go.
 
 <PhoneFrame caption="Press and hold shortcuts: the currency keys field and the hold-letter toggles.">
   <Shot id="reference/settings/keypress-long-press-shortcuts" alt="Long-press shortcuts: the currency keys field and the Hold-letter toggles." />

@@ -49,6 +49,25 @@ internal fun hintFlick(
     points: List<GesturePoint>,
     keyHeightPx: Float,
     minTravelPx: Float,
+): Boolean = keyFlick(points, keyHeightPx, minTravelPx, KeyFlickDirection.DOWN)
+
+/** Which way a [keyFlick] goes: down for the corner hint, up for the capital. */
+internal enum class KeyFlickDirection { UP, DOWN }
+
+/**
+ * Whether a stroke is the short, straight, quick flick off a key in [direction]:
+ * the shape [hintFlick] tests for downward, and the up-flick that types a key's
+ * capital tests for upward. Same cone, length, straightness and clock both ways,
+ * so the two gestures feel like one pair.
+ *
+ * An upward stroke is also what the octopus flick takes a floating word with;
+ * that one is decided by its callers, which leave a key carrying a word to it.
+ */
+internal fun keyFlick(
+    points: List<GesturePoint>,
+    keyHeightPx: Float,
+    minTravelPx: Float,
+    direction: KeyFlickDirection,
 ): Boolean {
     if (keyHeightPx <= 0f || points.size < 2) return false
     val first = points.first()
@@ -56,8 +75,9 @@ internal fun hintFlick(
     if (last.t - first.t > HINT_FLICK_MAX_MS) return false
 
     val dx = last.x - first.x
-    val dy = last.y - first.y
-    // Downward, and inside the cone.
+    // Measured along the flick's own direction: positive is the right way.
+    val dy = if (direction == KeyFlickDirection.DOWN) last.y - first.y else first.y - last.y
+    // The right way, and inside the cone.
     if (dy <= 0f) return false
     val direct = hypot(dx, dy)
     if (direct < minTravelPx) return false
@@ -72,7 +92,7 @@ internal fun hintFlick(
     return travelled <= direct * HINT_FLICK_MAX_DETOUR
 }
 
-/** Degrees between the stroke and straight down. */
+/** Degrees between the stroke and straight along its direction. */
 private fun angleOffDown(dx: Float, dy: Float): Float =
     Math.toDegrees(atan2(abs(dx).toDouble(), dy.toDouble())).toFloat()
 

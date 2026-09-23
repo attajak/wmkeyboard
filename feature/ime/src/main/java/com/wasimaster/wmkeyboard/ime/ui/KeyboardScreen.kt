@@ -311,6 +311,10 @@ import com.wasimaster.wmkeyboard.ime.top
 import com.wasimaster.wmkeyboard.ime.glideAnchor
 import com.wasimaster.wmkeyboard.ime.HINT_FLICK_MIN_TRAVEL_HEIGHTS
 import com.wasimaster.wmkeyboard.ime.hintFlick
+import com.wasimaster.wmkeyboard.ime.KeyFlickDirection
+import com.wasimaster.wmkeyboard.ime.keyFlick
+import com.wasimaster.wmkeyboard.ime.globeDragAction
+import com.wasimaster.wmkeyboard.ime.startsGlobeDrag
 import com.wasimaster.wmkeyboard.ime.CONTRACTION_SUFFIXES
 import com.wasimaster.wmkeyboard.ime.POSSESSIVE_REACH_WIDTHS
 import com.wasimaster.wmkeyboard.ime.contractionFlick
@@ -11780,6 +11784,35 @@ internal fun KeyRects.hintFlickTarget(point: Offset): Pair<Key, Rect>? {
 }
 
 /**
+ * What a short flick up off this key types (the up-flick capital), or null when
+ * it takes none: the shifted character the layout gave it, else its letter's
+ * capital. A key whose shift changes nothing (a digit with no shifted twin, a
+ * script without case) has nothing to flick for, and so do the keys that own a
+ * drag of their own, as with [takesHintFlick].
+ *
+ * The same spelling [shiftChordKey] commits for a shift drag onto the key, so
+ * the two gestures for "this key, shifted" always agree.
+ */
+internal fun Key.capitalFlickText(): String? {
+    if (action != KeyAction.Text || flick.isNotEmpty() || ownsDrag()) return null
+    val base = output ?: label
+    if (base.isEmpty()) return null
+    shiftLabel?.takeIf { it.isNotEmpty() && it != base }?.let { return it }
+    return base.uppercase().takeIf { it != base }
+}
+
+/**
+ * The key an up-flick beginning at [point] would type the capital of, with that
+ * capital and the key's cell, or null when nothing there takes one. Root space,
+ * like [KeyRects.keyAt].
+ */
+internal fun KeyRects.capitalFlickTarget(point: Offset): Pair<String, Rect>? {
+    val text = keyAt(point)?.capitalFlickText() ?: return null
+    val cell = cellAt(point) ?: return null
+    return text to cell
+}
+
+/**
  * The least a hint flick may travel, as a multiple of the system touch slop:
  * the floor under [HINT_FLICK_MIN_TRAVEL_HEIGHTS] on a key too short for half
  * its height to mean anything.
@@ -13423,6 +13456,17 @@ private fun KeyRows(
     // never claimed — glide off, a symbol layer, a punctuation key — by the
     // loop of its own further down.
     val hintFlickOn = state.settings.layoutBehavior.hintFlick
+    // Its upward twin: a short flick up off a letter types the capital. Judged
+    // at the same two places, and it gives way to an octopus word on the key,
+    // whose flick is also upward.
+    val capitalFlickOn = state.settings.layoutBehavior.capitalFlick
+    // A drag off 🌐 onto one of the six shortcut letters runs its action. Read
+    // live by the loops that must leave such a drag alone, so switching it
+    // does not restart every gesture detector on the grid.
+    val globeDragLive = rememberUpdatedState(state.settings.longPressLetterActions.globeDrag)
+    val letterActionsLive = rememberUpdatedState(state.settings.longPressLetterActions)
+    val globeHoldMs = rememberUpdatedState(state.settings.longPressDelayMs.toLong())
+    val onGlobeShortcut = LocalClipboardKeyAction.current
     // Read live rather than captured: the words change on every keystroke, and
     // a pointer loop restarted that often would be a loop that misses touches.
     val octopusLive = rememberUpdatedState(state.octopus)
@@ -13632,14 +13676,20 @@ private fun KeyRows(
             // decides, and both shift and a Ctrl key sitting one row under the
             // letters are well inside the radius [nearLetterKey] would call a
             // glide start.
-            .pointerInput(stampedOnKey, trailMs) {
+            //
+            // A drag off 🌐 rides the same loop when its shortcut drag is on:
+            // the key it lifts on runs that letter's shortcut (copy on `c`),
+            // the way Ctrl onto C would, and for the same reason it is claimed
+            // here, first, before a glide can take it.
+            .pointerInput(stampedOnKey, trailMs, onGlobeShortcut) {
                 awaitEachGesture {
                     val down = awaitFirstDown(
                         requireUnconsumed = false,
                         pass = PointerEventPass.Initial,
                     )
                     val source = liveRects.value.keyAt(down.position + boxOrigin)
-                    if (!source.startsChordDrag()) return@awaitEachGesture
+                    val globe = source.startsGlobeDrag(globeDragLive.value)
+                    if (!source.startsChordDrag() && !globe) return@awaitEachGesture
                     // The band is anchored on the key rather than on the
                     // fingertip: a chord is "from this key to that one", and
                     // the cell's centre says so however the press landed in it.
@@ -13662,6 +13712,12 @@ private fun KeyRows(
                         if (!dragging &&
                             (change.position - down.position).getDistance() > slop
                         ) {
+                            // A 🌐 held still long enough has opened the
+                            // language picker, and a drag from there is the
+                            // picker's: the key's own press is left as it is.
+                            if (globe && change.uptimeMillis - down.uptimeMillis >= globeHoldMs.value) {
+                                return@awaitEachGesture
+                            }
                             dragging = true
                             trail.beginLine(anchor.x, anchor.y)
                         }
@@ -13689,6 +13745,9 @@ private fun KeyRows(
                         // the way out, so the tap it would have been is fired
                         // here rather than swallowed.
                         target === source -> stampedOnKey(target)
+                        // Onto a key with no shortcut: nothing, like a chord
+                        // onto a key no hardware keyboard could send.
+                        globe -> globeDragAction(target, letterActionsLive.value)?.let(onGlobeShortcut)
                         else -> {
                             val mod = source.modifierKey()
                             val fired =
@@ -13763,7 +13822,7 @@ private fun KeyRows(
                     // (#243): backspace sits against the bottom letter row.
                     // So is a spacebar swipe (#333).
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
-                    if (downKey.ownsDrag() ||
+                    if (downKey.ownsDrag() || downKey.startsGlobeDrag(globeDragLive.value) ||
                         downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
@@ -13880,6 +13939,7 @@ private fun KeyRows(
                     // swipes too (#333), which sideways lie wholly inside it.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
+                        downKey.startsGlobeDrag(globeDragLive.value) ||
                         downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
@@ -13889,6 +13949,12 @@ private fun KeyRows(
                     // judged at the lift, but the key it began on cannot change.
                     val hintTarget = if (hintFlickOn) {
                         liveRects.value.hintFlickTarget(down.position + boxOrigin)
+                    } else {
+                        null
+                    }
+                    // And the capital an up-flick would type, fixed the same way.
+                    val capitalTarget = if (capitalFlickOn) {
+                        liveRects.value.capitalFlickTarget(down.position + boxOrigin)
                     } else {
                         null
                     }
@@ -14223,6 +14289,28 @@ private fun KeyRows(
                             stampedOnText(hintTarget.first.longPress.first())
                             return@awaitEachGesture
                         }
+                        // Its upward twin, the capital. Not over a key carrying
+                        // an octopus word ([flickAnchor] is set only then): an
+                        // upward flick there has always taken the word.
+                        if (capitalTarget != null && flickAnchor == null && segments.isEmpty() &&
+                            !picker.isOpen &&
+                            keyFlick(
+                                points = seg,
+                                keyHeightPx = capitalTarget.second.height,
+                                minTravelPx = maxOf(
+                                    capitalTarget.second.height * HINT_FLICK_MIN_TRAVEL_HEIGHTS,
+                                    slop * effectiveSlop * OCTOPUS_SLOP_CLEARANCE,
+                                ),
+                                direction = KeyFlickDirection.UP,
+                            )
+                        ) {
+                            trail.release()
+                            if (previewedSeg) {
+                                keyList?.let { onGesture(seg, it, keyWidth.value, GlideVerdict.Cancel) }
+                            }
+                            stampedOnText(capitalTarget.first)
+                            return@awaitEachGesture
+                        }
                         // Lifting on a target takes that word; lifting in the
                         // cancel zone takes nothing; lifting anywhere else takes
                         // the decoder's own first choice, so an ignored picker
@@ -14306,6 +14394,7 @@ private fun KeyRows(
                     // either.
                     val downKey = liveRects.value.keyAt(down.position + boxOrigin)
                     if (downKey.ownsDrag() || downKey.startsPossessiveSwipe(possessiveChar) ||
+                        downKey.startsGlobeDrag(globeDragLive.value) ||
                         downKey.ownsDeleteStroke() || downKey.ownsSpaceStroke()
                     ) {
                         return@awaitEachGesture
@@ -14368,12 +14457,26 @@ private fun KeyRows(
             // exactly as the octopus flick does, so a stroke that turns out not
             // to be a flick still lands on the key it began on; a consumed lift
             // is what tells that key to drop the press it would have typed.
-            .pointerInput(hintFlickOn) {
-                if (!hintFlickOn) return@pointerInput
+            //
+            // The up-flick capital shares the loop: one stroke, judged at the
+            // lift against whichever of the two its key takes. An upward stroke
+            // off a key carrying an octopus word is left for the octopus loop,
+            // which runs on the Main pass after this one.
+            .pointerInput(hintFlickOn, capitalFlickOn, octopusFlickWanted) {
+                if (!hintFlickOn && !capitalFlickOn) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
-                    val (key, cell) = liveRects.value.hintFlickTarget(down.position + boxOrigin)
-                        ?: return@awaitEachGesture
+                    val at = down.position + boxOrigin
+                    val hint = if (hintFlickOn) liveRects.value.hintFlickTarget(at) else null
+                    val capital = if (capitalFlickOn) {
+                        liveRects.value.capitalFlickTarget(at)?.takeUnless {
+                            octopusFlickWanted &&
+                                nearestOctopusCentre(liveCenters.value, octopusLive.value.keys, down.position) != null
+                        }
+                    } else {
+                        null
+                    }
+                    val cell = hint?.second ?: capital?.second ?: return@awaitEachGesture
                     // Floored at the system slop with room to spare, so a tiny
                     // key cannot turn a sloppy tap into a flick.
                     val minTravel = maxOf(
@@ -14391,9 +14494,17 @@ private fun KeyRows(
                         if (change.isConsumed || alternatesGate.open) return@awaitEachGesture
                         points.add(GesturePoint(change.position.x, change.position.y, change.uptimeMillis))
                         if (!change.pressed) {
-                            if (hintFlick(points, cell.height, minTravel)) {
+                            val typed = when {
+                                hint != null && hintFlick(points, cell.height, minTravel) ->
+                                    hint.first.longPress.first()
+                                capital != null &&
+                                    keyFlick(points, cell.height, minTravel, KeyFlickDirection.UP) ->
+                                    capital.first
+                                else -> null
+                            }
+                            if (typed != null) {
                                 change.consume()
-                                stampedOnText(key.longPress.first())
+                                stampedOnText(typed)
                             }
                             return@awaitEachGesture
                         }

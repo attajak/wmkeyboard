@@ -1359,9 +1359,9 @@ internal fun KeyPressShortcutsSettings(
             }
         }
         val holdActions = settings.longPressLetterActions
-        if (holdActions.selectAll || holdActions.copy || holdActions.paste ||
+        val anyHoldAction = holdActions.selectAll || holdActions.copy || holdActions.paste ||
             holdActions.cut || holdActions.undo || holdActions.redo
-        ) {
+        if (anyHoldAction) {
             item {
                 ToggleSetting(
                     R.string.keypress_hold_action_first_title,
@@ -1371,6 +1371,19 @@ internal fun KeyPressShortcutsSettings(
                     default = SettingsDefaults.longPressLetterActions.actionFirst,
                 ) { scope.launch { repository.setLongPressActionFirst(it) } }
             }
+        }
+        item {
+            // The same six shortcuts, reached by sliding off 🌐 onto the key.
+            ToggleSetting(
+                R.string.keypress_globe_drag_title,
+                stringResource(R.string.keypress_globe_drag_subtitle),
+                holdActions.globeDrag,
+                info = stringResource(R.string.keypress_globe_drag_info),
+                default = SettingsDefaults.longPressLetterActions.globeDrag,
+            ) { scope.launch { repository.setGlobeDragShortcuts(it) } }
+        }
+        // The keys matter to both gestures, so either one keeps the row.
+        if (anyHoldAction || holdActions.globeDrag) {
             item { HoldShortcutLettersSetting(repository, holdActions) }
         }
     }

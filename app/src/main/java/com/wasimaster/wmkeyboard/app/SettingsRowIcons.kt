@@ -517,6 +517,7 @@ internal object SettingsRowIcons {
         put(R.string.keypress_ctrl_raw_title) { Icons.Outlined.Terminal }
         put(R.string.keypress_hold_actions_title) { Icons.Outlined.SelectAll }
         put(R.string.keypress_hold_action_first_title) { Icons.Outlined.Bolt }
+        put(R.string.keypress_globe_drag_title) { Icons.Outlined.Gesture }
 
         // ---- Emoji ----
         put(R.string.langemoji_emoji_toolbar_title) { Icons.Outlined.EmojiEmotions }
@@ -602,6 +603,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_comma_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.layout_show_globe_title) { Icons.Outlined.Language }
         put(R.string.layout_globe_recent_title) { Icons.Outlined.History }
+        put(R.string.layout_globe_guard_title) { Icons.Outlined.Timer }
         put(R.string.layout_globe_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.layout_swap_comma_globe_title) { Icons.Outlined.SwapHoriz }
         put(R.string.layout_globe_in_one_place_title) { Icons.Outlined.PinDrop }
@@ -895,6 +897,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_space_cursor_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.typing_space_swipe_down_hide_title) { Icons.Outlined.SwipeDown }
         put(R.string.typing_hint_flick_title) { Icons.Outlined.SwipeDownAlt }
+        put(R.string.typing_capital_flick_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.typing_space_hold_keys_label) { Icons.Outlined.TouchApp }
         put(R.string.typing_backspace_swipe_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.typing_backspace_unit_title) { Icons.AutoMirrored.Outlined.Backspace }

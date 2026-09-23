@@ -5610,6 +5610,9 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var lastSelectionUpdateAt = 0L
 
+    /** When a key last typed into the field, for the 🌐 guard: see [globeTapGuarded]. */
+    private var lastTypedKeyAt = 0L
+
     /** The last onStartInput for a different field than the one before it. */
     private var inlineFieldStartedAt = 0L
 
@@ -6118,6 +6121,19 @@ open class WMKeyboardService : InputMethodService() {
     private var keymanFrameRuleLayer = false
 
     private fun dispatchKey(key: Key) {
+        // A 🌐 tap straight out of typing is a thumb that missed the spacebar
+        // or the comma, when the user asked for that to be ignored. Dropped
+        // before anything else runs, so it costs the field nothing at all.
+        if (key.action == KeyAction.LanguageSwitch &&
+            globeTapGuarded(
+                SystemClock.uptimeMillis(),
+                lastTypedKeyAt,
+                _uiState.value.settings.layoutBehavior.globeTypingGuardMs,
+            )
+        ) {
+            return
+        }
+        if (key.action.typesIntoField()) lastTypedKeyAt = SystemClock.uptimeMillis()
         stopVoiceForManualInput()
         // Armed by the enter key itself, below, and spent by the caret update
         // that answers it. Cleared here so a field that reports no update at

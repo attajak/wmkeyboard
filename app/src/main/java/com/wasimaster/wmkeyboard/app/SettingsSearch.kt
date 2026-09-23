@@ -506,6 +506,7 @@ private fun SearchStrings.typingGesturesRows(): List<SettingsSearchEntry> {
         row(R.string.typing_space_cursor_2d_title, R.string.typing_space_cursor_2d_subtitle),
         row(R.string.typing_space_swipe_down_hide_title, R.string.typing_space_swipe_down_hide_subtitle),
         row(R.string.typing_hint_flick_title, R.string.typing_hint_flick_subtitle),
+        row(R.string.typing_capital_flick_title, R.string.typing_capital_flick_subtitle),
         row(R.string.typing_possessive_swipe_title, R.string.typing_possessive_swipe_subtitle),
         row(R.string.typing_space_hold_keys_label),
         row(R.string.typing_spacebar_language_arrows_title, R.string.typing_spacebar_language_arrows_subtitle),
@@ -634,6 +635,7 @@ private fun SearchStrings.keypressShortcutsRows(): List<SettingsSearchEntry> {
         row(R.string.keypress_ctrl_raw_title, R.string.keypress_ctrl_raw_subtitle),
         row(R.string.keypress_hold_actions_title, R.string.keypress_hold_actions_subtitle),
         row(R.string.keypress_hold_action_first_title, R.string.keypress_hold_action_first_subtitle),
+        row(R.string.keypress_globe_drag_title, R.string.keypress_globe_drag_subtitle),
     )
 }
 
@@ -784,6 +786,7 @@ private fun SearchStrings.layoutRows(): List<SettingsSearchEntry> {
         row(R.string.layout_comma_emoji_title, R.string.layout_comma_emoji_subtitle),
         row(R.string.layout_show_globe_title, R.string.layout_show_globe_subtitle),
         row(R.string.layout_globe_recent_title, R.string.layout_globe_recent_subtitle),
+        row(R.string.layout_globe_guard_title, R.string.layout_globe_guard_subtitle),
         row(R.string.layout_globe_emoji_title, R.string.layout_globe_emoji_subtitle),
         row(R.string.layout_swap_comma_globe_title, R.string.layout_swap_comma_globe_subtitle),
         row(R.string.layout_globe_in_one_place_title, R.string.layout_globe_in_one_place_subtitle),

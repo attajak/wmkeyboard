@@ -109,6 +109,18 @@ Only the layout you stop on counts as used, so tapping past a language on the wa
 There's a separate **Comma key opens emoji** toggle (off by default) that replaces the comma key with an emoji key instead. It's independent of the globe-key setting above. Don't confuse the two.
 :::
 
+### Ignoring a 🌐 tap right after typing
+
+<SettingsPath path="Layout & size / Bottom row keys / Ignore 🌐 right after typing" />
+
+The 🌐 key sits between the comma and the spacebar, so a fast thumb aiming for either lands on it now and then, and the language changes in the middle of a word. **Ignore 🌐 right after typing** (off by default) sets a short window, from 50 ms up to a full second: a 🌐 tap that comes sooner than that after a typed key does nothing. Letters, space, backspace and enter count as typing. Shift, the mode keys and the tools don't, and neither does 🌐 itself, so quick taps through the list with **🌐 goes back to the last language** still work. A deliberate switch comes after a pause, which is longer than the window, and a press and hold still opens the picker at any time. The window is greyed out while the key is hidden.
+
+### Sliding from 🌐 onto a shortcut
+
+<SettingsPath path="Key press / Press and hold shortcuts / Slide from 🌐 for shortcuts" />
+
+With **Slide from 🌐 for shortcuts** on (off by default), putting your finger on 🌐 and sliding it onto a letter runs that letter's editing shortcut when you lift: onto <KeyCap>C</KeyCap> copies, <KeyCap>V</KeyCap> pastes, <KeyCap>X</KeyCap> cuts, <KeyCap>A</KeyCap> selects all, <KeyCap>Z</KeyCap> undoes and <KeyCap>Y</KeyCap> redoes. They're the same six actions on the same keys as the [hold shortcuts](/typing/basics/#hold-a-letter-for-a-quick-edit), including any keys you moved them to, but the slide works whether the hold shortcuts are on or off. A line follows your finger from the key, as with the Shift and Ctrl drags. Lifting anywhere else does nothing, and sliding back onto 🌐 before you lift switches language like a tap. The slide has to start before the hold opens the language picker; once the picker is up, the finger belongs to it.
+
 To take the key off the bottom row altogether, turn off **Show the 🌐 key** in the same group. The spacebar gets its width. Switching still works from the spacebar, so keep a swipe set to Language if you type in more than one.
 
 ## Reordering and trimming the ring
@@ -176,6 +188,8 @@ Automation apps such as Tasker, and `adb` on a computer, can switch too. They se
 | Spacebar long press keys | Typing → Gestures | Blank (the hold opens the picker) |
 | Show the 🌐 key | Layout & size → Bottom row keys | On |
 | 🌐 goes back to the last language | Layout & size → Bottom row keys | Off |
+| Ignore 🌐 right after typing | Layout & size → Bottom row keys | Off (50–1000 ms when on) |
+| Slide from 🌐 for shortcuts | Key press → Press and hold shortcuts | Off |
 | Emoji key instead of 🌐 | Layout & size → Bottom row keys | On |
 | Comma key opens emoji | Layout & size → Bottom row keys | Off |
 | Your languages / Switch order | Languages | Seeded from your phone's language list, then QWERTY, capped at 4 layouts |

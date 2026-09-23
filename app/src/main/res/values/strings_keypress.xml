@@ -222,6 +222,9 @@
     <string name="keypress_hold_action_first_title">Action first</string>
     <string name="keypress_hold_action_first_subtitle">Press and hold runs the action instead of showing the accents</string>
     <string name="keypress_hold_action_first_info">The action usually sits at the end of the popup, so a plain press and hold gives you the first accent. With this on it moves to the front, and a press and hold on one of the shortcut keys runs the action straight away. The accents are still there: keep your finger down and slide onto the one you want. This needs Hold to select, under Alternate keys.</string>
+    <string name="keypress_globe_drag_title">Slide from 🌐 for shortcuts</string>
+    <string name="keypress_globe_drag_subtitle">Press 🌐 and slide onto C to copy, V to paste</string>
+    <string name="keypress_globe_drag_info">Put your finger on the 🌐 key, slide it onto a shortcut key and lift: onto A selects all, C copies, V pastes, X cuts, Z undoes and Y redoes. These are the same keys and the same actions as the hold shortcuts, and you can change the keys under Shortcut keys. This works when the hold shortcuts are off too. Lift anywhere else and nothing happens. Slide back onto 🌐 to change the language as a tap does. If you hold 🌐 still until the language list opens, the slide is for the list. This setting is off by default.</string>
     <string name="keypress_hold_action_select_all_label">Select all</string>
     <string name="keypress_hold_action_copy_label">Copy</string>
     <string name="keypress_hold_action_cut_label">Cut</string>

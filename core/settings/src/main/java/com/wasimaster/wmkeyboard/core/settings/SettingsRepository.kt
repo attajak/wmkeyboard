@@ -1967,7 +1967,28 @@ data class LongPressLetterActions(
      * entry is what a plain hold commits" comes from.
      */
     val actionFirst: Boolean = false,
+    /**
+     * Press 🌐 and slide onto one of the six [letters] to run its action on
+     * release: onto `c` copies, onto `v` pastes, and so on. The same six
+     * actions as the long press, on the same keys, and independent of the six
+     * switches above (those decide what each key's popup offers). A drag that
+     * starts once the 🌐 hold has already opened the language picker is left to
+     * the picker. Off by default: it changes what a drag off 🌐 does.
+     */
+    val globeDrag: Boolean = false,
 ) {
+    /**
+     * The action bound to the key that types [text], as an index into
+     * [letters] in declaration order, or -1 when that key carries none.
+     */
+    fun actionFor(text: String): Int {
+        val ch = text.singleOrNull()?.lowercaseChar() ?: return -1
+        for (i in DEFAULT_LONG_PRESS_LETTERS.indices) {
+            if (letterFor(i)?.lowercaseChar() == ch) return i
+        }
+        return -1
+    }
+
     /**
      * The key [action] is bound to, or null when this value is malformed.
      * [action] is an index into [letters] in the declaration order above.
@@ -4641,6 +4662,9 @@ data class PerAppLanguageSettings(
 /** Bounds for the Morse commit pause, in ms; the settings slider shares them. */
 val MorseCommitMsRange = 300..2000
 
+/** Bounds for [LayoutBehaviorSettings.globeTypingGuardMs]; 0 is off. The slider shares them. */
+val GlobeTypingGuardMsRange = 0..1000
+
 /** How many languages the user said they type in during onboarding. */
 enum class PersonaLanguages { UNSET, ONE, MANY }
 
@@ -5764,6 +5788,27 @@ data class LayoutBehaviorSettings(
      * decoder, and the setting's own text says what it costs.
      */
     val hintFlick: Boolean = false,
+    /**
+     * The upward twin of [hintFlick]: a short, quick swipe up on a letter
+     * types its capital, or on a key with a shifted character of its own
+     * ([com.wasimaster.wmkeyboard.core.layout.Key.shiftLabel]) that character,
+     * without touching shift. What Gboard-patches calls up-flick uppercase.
+     *
+     * A key carrying an octopus word keeps its flick for the word. Off by
+     * default for the reason [hintFlick] is: a fast glide that opens straight
+     * up off a key ("de") can read as a flick.
+     */
+    val capitalFlick: Boolean = false,
+    /**
+     * For this long after a typed key, a tap on the 🌐 key is ignored, in ms
+     * (0 = off). The globe sits between `?123`/comma and the spacebar, and a
+     * thumb reaching for either mid-word lands on it often enough to switch
+     * language in the middle of a sentence. A deliberate switch comes after a
+     * pause; an accidental one comes straight out of typing. Holding the key
+     * still opens the picker at any time. Off by default: nothing about the
+     * key changes until someone asks for it.
+     */
+    val globeTypingGuardMs: Int = 0,
     /**
      * Turn the spacebar cursor slide into a 2-D touchpad: a vertical drag moves
      * the caret up and down as well as left and right. Only applies while a
@@ -7142,6 +7187,9 @@ class SettingsRepository(private val context: Context) {
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
         private val GLOBE_IN_ONE_PLACE = booleanPreferencesKey("globe_in_one_place")
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
+        private val CAPITAL_FLICK = booleanPreferencesKey("capital_flick")
+        private val GLOBE_TYPING_GUARD_MS = intPreferencesKey("globe_typing_guard_ms")
+        private val GLOBE_DRAG_SHORTCUTS = booleanPreferencesKey("globe_drag_shortcuts")
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
         private val HINT_OFFSET = intPreferencesKey("hint_offset_dp")
@@ -8766,6 +8814,9 @@ class SettingsRepository(private val context: Context) {
                     p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
                 globeInOnePlace = p[GLOBE_IN_ONE_PLACE] ?: defaults.layoutBehavior.globeInOnePlace,
                 hintFlick = p[HINT_FLICK] ?: defaults.layoutBehavior.hintFlick,
+                capitalFlick = p[CAPITAL_FLICK] ?: defaults.layoutBehavior.capitalFlick,
+                globeTypingGuardMs = p[GLOBE_TYPING_GUARD_MS]?.coerceIn(GlobeTypingGuardMsRange)
+                    ?: defaults.layoutBehavior.globeTypingGuardMs,
                 spaceCursor2d = p[SPACE_CURSOR_2D] ?: defaults.layoutBehavior.spaceCursor2d,
                 spaceHoldKeys = p[SPACE_HOLD_KEYS]
                     ?.split('\n')?.filter { it.isNotEmpty() }
@@ -8855,6 +8906,7 @@ class SettingsRepository(private val context: Context) {
                 letters = p[LONG_PRESS_LETTERS] ?: defaults.longPressLetterActions.letters,
                 actionFirst = p[LONG_PRESS_ACTION_FIRST]
                     ?: defaults.longPressLetterActions.actionFirst,
+                globeDrag = p[GLOBE_DRAG_SHORTCUTS] ?: defaults.longPressLetterActions.globeDrag,
             ),
             emojiToolbar = p[EMOJI_TOOLBAR] ?: defaults.emojiToolbar,
             coloredToolIcons = p[COLORED_TOOL_ICONS] ?: defaults.coloredToolIcons,
@@ -13374,6 +13426,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHintFlick(value: Boolean) =
         editPrefs { it[HINT_FLICK] = value }
+
+    suspend fun setCapitalFlick(value: Boolean) =
+        editPrefs { it[CAPITAL_FLICK] = value }
+
+    suspend fun setGlobeTypingGuardMs(value: Int) =
+        editPrefs { it[GLOBE_TYPING_GUARD_MS] = value.coerceIn(GlobeTypingGuardMsRange) }
+
+    suspend fun setGlobeDragShortcuts(value: Boolean) =
+        editPrefs { it[GLOBE_DRAG_SHORTCUTS] = value }
 
     suspend fun setSpaceCursor2d(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_2D] = value }

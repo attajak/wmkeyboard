@@ -2050,6 +2050,16 @@ internal fun TypingGesturesSettings(
             ) { scope.launch { repository.setHintFlick(it) } }
         }
         item {
+            // The hint flick's upward twin: a quick flick up types the capital.
+            ToggleSetting(
+                R.string.typing_capital_flick_title,
+                stringResource(R.string.typing_capital_flick_subtitle),
+                settings.layoutBehavior.capitalFlick,
+                info = stringResource(R.string.typing_capital_flick_info),
+                default = SettingsDefaults.layoutBehavior.capitalFlick,
+            ) { scope.launch { repository.setCapitalFlick(it) } }
+        }
+        item {
             // Issue #169: a short straight swipe from a punctuation key to s
             // appends 's to the last word. Its own key, its own row, outside
             // the glide block: it works on tapped words with glide typing off.
