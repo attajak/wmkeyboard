@@ -19,9 +19,8 @@ TOOLBOX = Image.open(CAPS / "toolbox-grid.png")
 CALC = Image.open(CAPS / "tools-calculator.png")
 TH_ALT = Image.open(CAPS / "theme-light-altbg.png")
 EMOJI = Image.open(CAPS / "emoji-search.png")
-ROOT_SHOTS = CAPS.parent.parent  # repo root staging
-DICT = Image.open(ROOT_SHOTS / "screenshot_dictionary.jpg")
-SAKURA = Image.open(ROOT_SHOTS / "screenshot_sakura.jpg")
+DICT = Image.open(CAPS / "tools-dictionary.jpg")
+SAKURA = Image.open(CAPS / "theme-sakura.jpg")
 
 gen.KB_TOP.update({id(AI): 1212, id(CLIP): 1212, id(TOOLBOX): 1212,
                    id(CALC): 1212, id(TH_ALT): 1216, id(EMOJI): 850,
@@ -115,7 +114,7 @@ def offline():
 
     f_b = font("Inter", 30, 540)
     chip_row(img, W // 2, ob[3] + 42,
-             [("No cloud", CYAN), ("No accounts", None),
+             [("On-device", CYAN), ("No accounts", None),
               ("Private by default", VIOLET)], f_b)
 
     vignette(img)
@@ -128,7 +127,7 @@ def ai():
     img = base((900, 240, 400), (140, 900, 420), (960, 1700, 360))
     f_h = font("Manrope", 84, 800)
     text(img, (W // 2, 208), "Rewrite, translate, fix", f_h, anchor="ma")
-    headline_two_tone(img, W // 2, 314, "", "without the cloud", "", size=84)
+    headline_two_tone(img, W // 2, 314, "", "right on your phone", "", size=84)
     text(img, (W // 2, 452), "Small models run on the phone itself.",
          font("Inter", 33, 480), fill=BODY, anchor="ma")
     text(img, (W // 2, 502), "Cloud providers are yours to add, or ignore.",

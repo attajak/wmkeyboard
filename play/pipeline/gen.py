@@ -13,8 +13,13 @@ from wmkit import (AMBER, BODY, CYAN, LIME, MAGENTA, SS, VIOLET, WHITE,
                    blob, canvas, chip, font, gradient_text, grain, phone,
                    rrect, save, text, vignette)
 
-CAPS = Path("/mnt/user-data/uploads/WMKeyboard/play/screencaps")
-LOGO = Path("/mnt/user-data/uploads/WMKeyboard/docs/src/assets/logo-mark.png")
+# Staged copies first (Claude's cloud workspace), then the repo itself, so the
+# same file runs in both places without edits. Same pattern as gen_tablet.py.
+HERE = Path(__file__).resolve().parent
+CAPS = next(p for p in (Path("/mnt/user-data/uploads/WMKeyboard/play/screencaps"),
+                        HERE.parent / "screencaps") if p.is_dir())
+LOGO = next(p for p in (Path("/mnt/user-data/uploads/WMKeyboard/docs/src/assets/logo-mark.png"),
+                        HERE.parents[1] / "docs/src/assets/logo-mark.png") if p.is_file())
 OUT = Path(__file__).parent / "out"
 OUT.mkdir(exist_ok=True)
 
@@ -148,7 +153,7 @@ def hero():
     ]
     right = [
         ("Material You theming", None, 880),
-        ("Clipboard with OTP codes", CYAN, 1030),
+        ("Clipboard history & pins", CYAN, 1030),
         ("Per-app modes", VIOLET, 1180),
         ("Long-press accents", None, 1330),
         ("Word-swipe delete", None, 1480),
@@ -176,7 +181,7 @@ def hero():
     chip_row(img, W // 2, ob[3] + 40,
              [("One-handed", None), ("Split", None), ("Floating", None),
               ("Offline first", CYAN)], f_b)
-    text(img, (W // 2, ob[3] + 140), "No accounts. No trackers. Works offline.",
+    text(img, (W // 2, ob[3] + 140), "No accounts. No ads. Learning stays on your phone.",
          font("Inter", 32, 520), fill=BODY, anchor="ma")
 
     vignette(img)
@@ -274,13 +279,13 @@ def feature_graphic():
     img.paste(rgba.convert("RGB"))
 
     text(img, (130, 370), "WM Keyboard", font("Manrope", 122, 800))
-    gradient_text(img, (132, 546), "Private. Offline. Yours.",
+    gradient_text(img, (132, 546), "Private. Offline-first. Yours.",
                   font("Manrope", 60, 640), VIOLET, CYAN)
 
     f_c = font("Inter", 38, 540)
     x = 132
     d = ImageDraw.Draw(img, "RGBA")
-    for s, a in [("No trackers", LIME), ("Works offline", CYAN),
+    for s, a in [("No ads", LIME), ("On-device AI", CYAN),
                  ("Bangla-first", MAGENTA)]:
         w, _ = chip(img, x, 668, s, accent=a, fnt=f_c, dot=True,
                     pad_x=28, pad_y=17)
@@ -337,7 +342,7 @@ def chip_wall():
     headline_two_tone(img, W // 2, 244, "It does ", "that", ", too.", size=86)
     text(img, (W // 2, 382), "A sample of what ships inside, all real.",
          font("Inter", 34, 480), fill=BODY, anchor="ma")
-    text(img, (W // 2, 434), "Network features are strictly opt-in.",
+    text(img, (W // 2, 434), "Every network feature is documented.",
          font("Inter", 34, 480), fill=BODY, anchor="ma")
 
     d = ImageDraw.Draw(img, "RGBA")
@@ -372,7 +377,7 @@ def chip_wall():
     grad_line = K.h_gradient(((W - 200) * SS, 2 * SS), VIOLET, CYAN)
     img.paste(grad_line, (100 * SS, y * SS))
     text(img, (W // 2, y + 40),
-         "No trackers. No accounts. Everything stays on your phone.",
+         "No ads. No accounts. Learning stays on your phone.",
          font("Inter", 32, 560), fill=(225, 230, 242), anchor="ma")
 
     vignette(img)

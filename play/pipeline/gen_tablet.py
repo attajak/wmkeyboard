@@ -203,14 +203,14 @@ def s01_hero():
                 [("A keyboard that", "", ""), ("does ", "so much more", "")],
                 ["Every chip here is a real feature."],
                 [("Glide in any language", CYAN),
-                 ("Clipboard with OTP codes", None),
+                 ("Clipboard history & pins", None),
                  ("Per-app modes", VIOLET),
                  ("Spacebar is a trackpad", LIME),
                  ("Semantic emoji search", MAGENTA),
                  ("Works before unlock", None)])
     sh = load("kb-english-dark")
     tablet(img, sh, 1180, 240, 1280, crop_top=int(sh.height * 0.055))
-    text(img, (1180 + 640, 1330), "No accounts. No trackers. Works offline.",
+    text(img, (1180 + 640, 1330), "No accounts. No ads. Learning stays on your device.",
          font("Inter", 30, 500), fill=BODY, anchor="ma")
     return finish(img, "01-hero.png")
 
@@ -250,7 +250,7 @@ def s03_offline():
     img = base((300, 200, 500), (2250, 1150, 520), (200, 1300, 400))
     left_column(img,
                 [("Made for", "", ""), ("", "big screens", "")],
-                ["Split it for thumbs, float it anywhere,", "everything offline as always."],
+                ["Split it for thumbs, float it anywhere,", "with the same offline typing."],
                 [("Split keyboard", VIOLET),
                  ("Floating keyboard", CYAN),
                  ("Foldable-aware", None),
@@ -269,7 +269,7 @@ def s04_ai():
     img = base((2250, 220, 480), (300, 1150, 500), (2200, 1300, 380))
     left_column(img,
                 [("Rewrite, translate, fix", "", ""),
-                 ("", "without the cloud", "")],
+                 ("", "right on your tablet", "")],
                 ["Small models run on the tablet itself.",
                  "Cloud providers are yours to add, or ignore."],
                 [("Pick your model", VIOLET),
@@ -343,7 +343,7 @@ def s08_chip_wall():
             text(img, (x, 170), s, f)
         x += K.measure(d, s, f)[0] // SS
     text(img, (W // 2, 310), "A sample of what ships inside, all real. "
-         "Network features are strictly opt-in.",
+         "Every network feature is documented.",
          font("Inter", 32, 480), fill=BODY, anchor="ma")
 
     f_c = font("Inter", 29, 540)
@@ -375,7 +375,7 @@ def s08_chip_wall():
     img.paste(K.h_gradient(((W - 800) * SS, 2 * SS), VIOLET, CYAN),
               (400 * SS, y * SS))
     text(img, (W // 2, y + 30),
-         "No trackers. No accounts. Everything stays on your phone.",
+         "No ads. No accounts. Learning stays on your device.",
          font("Inter", 30, 560), fill=(225, 230, 242), anchor="ma")
     return finish(img, "08-chip-wall.png")
 
