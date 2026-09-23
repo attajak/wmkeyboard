@@ -13,6 +13,10 @@ default_platform(:android)
 PLAY_PROPS = {
   "wmkb.enablePlayStore" => "true",
   "wmkb.enableGms" => "true",
+  # A developer's local.properties may turn the diagnostic crash screen on. Its
+  # handler kills the process instead of passing the crash on, so a Play build
+  # carrying it reports no crashes to Android vitals or the pre-launch report.
+  "wmkb.enableCrashScreen" => "false",
 }.freeze
 
 SIDELOAD_PROPS = {
