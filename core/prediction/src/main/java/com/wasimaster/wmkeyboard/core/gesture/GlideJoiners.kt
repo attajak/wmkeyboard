@@ -45,6 +45,49 @@ object GlideJoiners {
         else -> false
     }
 
+    /**
+     * Whether [word] is a list entry that uses a joiner to spell something that
+     * is not a word. A decoder that steps over joiners reaches these too, and
+     * the big downloadable lists hold them at high counts (issue #304).
+     *
+     * The English `en_full` list is built from film subtitles, which write
+     * speech down as it was spoken. Two kinds of entry come out of that:
+     *
+     *  - **Ends on a joiner.** An interrupted word (`that-` at 6,685, `can-`,
+     *    `to-`) or a sentence-final full stop left on the word (`no.` at
+     *    11,666). A joiner sits *inside* a word, the way [isJoiner] says, and
+     *    one at the end is not inside anything. It is also the same stroke as
+     *    the bare word, so it can only ever be a second or third choice, and
+     *    the slot it takes is one a real word would have had.
+     *  - **A stutter.** `n-no`, `c-can`, `t-that`, `c-c-can`: the part before
+     *    the hyphen starts the part after it again. A stutter draws the same
+     *    as the word it stutters, with one extra repeat, so it sat in the
+     *    strip's second slot after nearly every common word.
+     *
+     * The stutter test is by spelling alone, so it also catches a few real
+     * words (`D-Day`, `t-test`). Each is the same stroke as a much commoner
+     * word (`day`, `test`), so it seldom reached the strip anyway, and the
+     * decoder only applies this to word lists. A word the user taught the
+     * keyboard is still glided however it is spelled.
+     */
+    fun isNonWord(word: String): Boolean {
+        if (word.isEmpty()) return false
+        if (isJoiner(word.codePointBefore(word.length))) return true
+        var hyphen = -1
+        for (i in word.indices) {
+            if (isHyphen(word[i].code)) {
+                hyphen = i
+                break
+            }
+        }
+        if (hyphen <= 0) return false
+        val rest = word.length - hyphen - 1
+        return hyphen < rest && word.regionMatches(hyphen + 1, word, 0, hyphen, ignoreCase = true)
+    }
+
+    private fun isHyphen(codePoint: Int): Boolean =
+        codePoint == '-'.code || codePoint == HYPHEN || codePoint == NON_BREAKING_HYPHEN
+
     /** U+2010 HYPHEN — what a list typeset rather than typed spells `-` as. */
     private const val HYPHEN = 0x2010
 

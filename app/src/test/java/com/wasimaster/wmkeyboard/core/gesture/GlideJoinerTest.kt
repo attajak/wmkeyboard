@@ -145,6 +145,44 @@ class GlideJoinerTest {
     }
 
     /**
+     * Issue #304. The subtitle-built `en_full` list holds interrupted words and
+     * stutters at high counts, and once joiners could be stepped over they
+     * filled the strip's second and third slots behind the word itself.
+     */
+    @Test
+    fun aListsInterruptedWordsAndStuttersAreNotOffered() {
+        val sources = sourcesOf(
+            "can" to 900, "can-" to 400, "can." to 300, "c-can" to 200, "c-c-can" to 100, "cab" to 50,
+        )
+        val decoded = decode("can", sources, limit = 6)
+        assertEquals("can", decoded.first())
+        assertTrue(decoded.contains("cab"))
+        for (junk in listOf("can-", "can.", "c-can", "c-c-can")) assertFalse(junk, decoded.contains(junk))
+    }
+
+    /** What the user wrote or added is theirs, however it is spelled. */
+    @Test
+    fun theUsersOwnWordsAreOfferedWhateverTheirSpelling() {
+        val trie = Trie().apply {
+            insert("t-test", 5)
+            insert("etc.", 5)
+        }
+        val user = trie.walkers().map { FuzzyBeamSearch.WalkSource(it, 0.0, FuzzyBeamSearch.Tier.USER) }
+        assertTrue(decode("ttest", user).contains("t-test"))
+        assertTrue(decode("etc", user).contains("etc."))
+    }
+
+    @Test
+    fun nonWordsAreToldApartFromWordsWithJoiners() {
+        for (word in listOf("that-", "no.", "n-no", "c-c-can", "wh-what", "T-that")) {
+            assertTrue(word, GlideJoiners.isNonWord(word))
+        }
+        for (word in listOf("e-mail", "co-op", "go-go", "so-so", "f-droid", "wasi.me", "no")) {
+            assertFalse(word, GlideJoiners.isNonWord(word))
+        }
+    }
+
+    /**
      * A hyphenated reading has to be alignable, or it takes no shape lesson
      * (#52) and no casing (`GlideCase.Letters`) from the stroke that drew it.
      * The offsets are the *word's*, so they point past the hyphen.

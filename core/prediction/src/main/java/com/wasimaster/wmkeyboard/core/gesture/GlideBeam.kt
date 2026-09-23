@@ -733,8 +733,11 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
                     val score = src.logWeight + ln1p(walker.frequency(node)) -
                         tuning.shapeWeight * shape
                     if (score > floor - EPS || results.size < k) {
-                        emit(ws.materialize(s), score, shape.toDouble(), src.tier, results)
-                        if (results.size >= k) floor = kthBest(results, k)
+                        val word = ws.materialize(s)
+                        if (!listedNonWord(word, src)) {
+                            emit(word, score, shape.toDouble(), src.tier, results)
+                            if (results.size >= k) floor = kthBest(results, k)
+                        }
                     }
                 }
                 if (ahead != null && budget[0] > 0 && length >= MIN_LOOKAHEAD_PREFIX) {
@@ -835,6 +838,16 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
     }
 
     /**
+     * Whether [word] is a word list's non-word that the decoder should not
+     * offer: an interrupted word, a stray full stop or a stutter (see
+     * [GlideJoiners.isNonWord], issue #304). Only for word lists. The personal
+     * lexicon holds what this user wrote or added, and #230 was about letting
+     * them glide exactly that.
+     */
+    private fun listedNonWord(word: String, src: FuzzyBeamSearch.WalkSource): Boolean =
+        src.tier == FuzzyBeamSearch.Tier.DICTIONARY && GlideJoiners.isNonWord(word)
+
+    /**
      * Descends the edge [label] into [child] without spending any of the stroke:
      * the alignment column, the letter count, the last key and the last letter
      * all carry over untouched, and only [extra] may differ from the parent's.
@@ -926,6 +939,7 @@ class GlideBeam(private val tuning: Tuning = Tuning()) {
         }
         if (steps == 0 || word.length <= prefix.length) return
         val spelled = word.toString()
+        if (listedNonWord(spelled, src)) return
         val extra = spelled.length - prefix.length
         val score = src.logWeight + ln1p(best) - tuning.shapeWeight * shape -
             tuning.lookAheadCost * extra
