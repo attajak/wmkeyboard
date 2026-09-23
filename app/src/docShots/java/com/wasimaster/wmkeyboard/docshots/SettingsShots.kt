@@ -77,6 +77,9 @@ class SettingsShots(
         }
 
         private const val TOP_FRACTION = 0.28f
+
+        /** 24 dp at 440 dpi: clear of the list's top edge, ring and all. */
+        private const val LIST_MARGIN_PX = 66f
     }
 
     @get:Rule
@@ -211,7 +214,10 @@ class SettingsShots(
             val scrollable = rule.onAllNodes(hasScrollAction()).fetchSemanticsNodes()
                 .maxByOrNull { it.size.height } ?: return
             val height = rule.onAllNodes(all).fetchSemanticsNodes().maxOf { it.size.height }
-            val dy = node.screenBounds().top - height * TOP_FRACTION
+            // Never above the list's own top: a screen that pins something over
+            // its list (Layout's keyboard preview) would hide the ring under it.
+            val top = maxOf(height * TOP_FRACTION, scrollable.screenBounds().top + LIST_MARGIN_PX)
+            val dy = node.screenBounds().top - top
             if (kotlin.math.abs(dy) < 4f) return
             rule.onNode(SemanticsMatcher("scrollable ${scrollable.id}") { it.id == scrollable.id })
                 .performSemanticsAction(SemanticsActions.ScrollBy) { it(0f, dy) }
