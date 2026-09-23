@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
+import com.wasimaster.wmkeyboard.BuildConfig
 import android.graphics.BitmapFactory
 import androidx.annotation.StringRes
 import androidx.activity.compose.BackHandler
@@ -1351,7 +1352,16 @@ fun ThemesScreen(
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.theme_import_heli_action))
         }
-        OutlinedButton(onClick = { gboardChooser = true }) {
+        // The Play build has no Rboard browser (it would fetch a collection of
+        // unlicensed third-party artwork from inside the app), so there is
+        // nothing to choose between and the button opens the file picker.
+        OutlinedButton(onClick = {
+            if (BuildConfig.ENABLE_PLAY_STORE) {
+                gboardLauncher.launch(GboardTheme.IMPORT_MIME_TYPES)
+            } else {
+                gboardChooser = true
+            }
+        }) {
             Icon(Icons.Outlined.SwapHoriz, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.theme_import_gboard_action))

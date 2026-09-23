@@ -3203,7 +3203,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Tolerant reader — Stray semicolons, 9-digit hex typos, unclosed comments, forward-referenced variables, junk after metadata.json; zip-slip names dropped, 48 MB / 4 MB per image / 128 themes caps
     - Compiled themes refused by name — A theme that is .binarypb through and through (Gboard's stock ones) says so instead of failing as junk
     - Opens from a file manager — Recognised inside any ZIP by a root metadata.json or pack.meta; a pack opened that way imports every theme
-  - Rboard collection browser `RARE` — Themes › Gboard › Browse Rboard lists the packs in GboardThemes/PackRepoBeta's list.json; nothing fetched until that screen opens
+  - Rboard collection browser `RARE` — Themes › Gboard › Browse Rboard lists the packs in GboardThemes/PackRepoBeta's list.json; nothing fetched until that screen opens; left out of the Play build (ENABLE_PLAY_STORE: route not registered, the Gboard button opens the file picker)
     - SHA-256 checked — Each pack is verified against the list's hash before it is read, then cached; the list is capped at 2 MB, a pack at 32 MB
     - Data saver and network log — Asks once before the first request under Ask each time; every request is logged as "Rboard themes"
     - Clear error state — A list that is not the expected shape shows an error and Retry, never a half list
