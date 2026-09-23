@@ -1,6 +1,34 @@
 package com.wasimaster.wmkeyboard.app
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.navigationBars
@@ -43,6 +71,14 @@ import com.wasimaster.wmkeyboard.ime.ui.KeyPreviewBandMode
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardScreen
 import com.wasimaster.wmkeyboard.ime.ui.LocalKeyPreviewBand
 import com.wasimaster.wmkeyboard.ime.ui.LocalKeyboardPreviewHost
+import com.wasimaster.wmkeyboard.ime.ui.rememberAutoThemeDarkSlot
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.roundToInt
 
@@ -65,6 +101,15 @@ import kotlin.math.roundToInt
  * the scaled height of the whole board, so a five-row layout draws taller than
  * a four-row one, as it will on screen.
  *
+ * The board is composed once and then kept as a bitmap ([LayoutPreviewCache]):
+ * a keyboard is far too much to compose for every card on a screen, and again
+ * for every card a carousel scrolls back into view. The state and the cache key
+ * are worked out off the main thread; only the composition itself is not, and
+ * the cards take turns at it ([BoardRenderGate]) so a screen of them spreads
+ * over frames instead of stalling one. Until a card's turn comes it shows a
+ * skeleton, or, when the settings changed under a picture it already has, that
+ * picture, repainted in place once the new one is taken.
+ *
  * It is a picture and nothing more: touches, focus and the screen reader all
  * stop at its edge, so a tap or a swipe over it belongs to whatever holds it —
  * the card's toggle, the carousel's scroll — and TalkBack reads the card's name
@@ -82,22 +127,138 @@ fun LayoutKeyboardPreview(
         DeviceForm.of(configuration.smallestScreenWidthDp)
     }
     val television = remember(context) { context.isTelevision() }
-    val state = remember(settings, layoutId, form, television) {
-        layoutPreviewState(settings, layoutId, form, television)
+    val density = LocalDensity.current
+    val systemDark = isSystemInDarkTheme()
+    val darkSlot = rememberAutoThemeDarkSlot(settings, systemDark)
+    val environment = remember(context, configuration, density, systemDark, darkSlot) {
+        previewEnvironment(context, configuration, density, systemDark, darkSlot)
     }
-    // The screen wants a flow, as the service hands it one. Published after
-    // the composition that built it, so the collector sees each state once.
-    val stateFlow = remember { MutableStateFlow(state) }
-    SideEffect { stateFlow.value = state }
+    // What the card shows: the picture for these settings once there is one,
+    // and until then the last picture of this layout, if this process has
+    // taken one.
+    var picture by remember(layoutId) { mutableStateOf(LayoutPreviewCache.stale(layoutId)) }
+    // The board being composed to take the picture from, or null.
+    var render by remember(layoutId) { mutableStateOf<BoardRender?>(null) }
+    // Whether the next picture fades in. Not when it replaces the live board
+    // on show: the two are the same pixels, and a fade would start from
+    // nothing the moment the board goes.
+    var fade by remember { mutableStateOf(true) }
+    var widthPx by remember { mutableIntStateOf(0) }
+    val layer = rememberGraphicsLayer()
+
+    LaunchedEffect(settings, layoutId, form, television, environment, widthPx) {
+        if (widthPx == 0) return@LaunchedEffect
+        val (state, key) = withContext(Dispatchers.Default) {
+            val state = layoutPreviewState(settings, layoutId, form, television)
+            state to LayoutPreviewCache.keyOf(context, settings, state, form, television, environment, widthPx)
+        }
+        val cached = LayoutPreviewCache.get(key) ?: LayoutPreviewCache.load(context, key)
+        if (cached != null) {
+            LayoutPreviewCache.put(layoutId, key, cached)
+            fade = render == null || picture != null
+            picture = cached
+            render = null
+            return@LaunchedEffect
+        }
+        val job = BoardRender(state)
+        BoardRenderGate.mutex.withLock {
+            render = job
+            // Held until the board has composed and drawn, and a frame or two
+            // past that for whatever it recomposes on its first frame; then
+            // the next card's turn. A card composed but never placed — the
+            // one a lazy row prefetches — does not draw, and gives its turn
+            // up rather than hold the queue.
+            withTimeoutOrNull(FIRST_DRAW_TIMEOUT_MS) {
+                job.drawn.await()
+                repeat(SETTLE_FRAMES) { withFrameNanos { } }
+            }
+        }
+        job.drawn.await()
+        // What the board loads for itself — an icon pack, key textures, a
+        // photo — arrives a moment after it first draws. A first picture goes
+        // up once most of it is in; the one kept comes later, once the rest
+        // has had time too, so a slow photo decode cannot leave a picture
+        // without its photo in the cache for good. A card scrolled away
+        // before then keeps nothing and simply renders again next time.
+        delay(SETTLE_MS)
+        val first = layer.toImageBitmap()
+        fade = picture != null
+        picture = first
+        delay(KEEP_SETTLE_MS)
+        val kept = layer.toImageBitmap()
+        LayoutPreviewCache.put(layoutId, key, kept)
+        LayoutPreviewCache.save(context, key, kept)
+        fade = false
+        picture = kept
+        render = null
+    }
 
     Box(
         modifier = modifier
+            .onSizeChanged { widthPx = it.width }
             .clearAndSetSemantics {}
             // A D-pad or a hardware Tab walking the settings screen must not
             // wander into the preview's toolbar buttons.
             .focusProperties { onEnter = { cancelFocusChange() } }
             .focusGroup(),
     ) {
+        val job = render
+        Crossfade(
+            picture,
+            animationSpec = if (fade) tween(PICTURE_FADE_MS) else snap(),
+            label = "layoutPreview",
+        ) { shown ->
+            if (shown != null) {
+                Image(
+                    bitmap = shown,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(shown.width.toFloat() / shown.height.coerceAtLeast(1)),
+                )
+            } else if (job == null) {
+                BoardSkeleton(LayoutPreviewCache.lastAspect)
+            }
+        }
+        if (job != null) {
+            // Drawn only when there is no picture to show: otherwise the board
+            // is recorded for the picture and nothing else, and the old
+            // picture stays up until the new one replaces it.
+            val visible = picture == null
+            LiveBoard(
+                state = job.state,
+                modifier = Modifier.drawWithContent {
+                    layer.record { this@drawWithContent.drawContent() }
+                    if (visible) drawLayer(layer)
+                    job.drawn.complete(Unit)
+                },
+            )
+        }
+    }
+}
+
+/** A board waiting to be composed and captured. */
+private class BoardRender(val state: KeyboardUiState) {
+    val drawn = CompletableDeferred<Unit>()
+}
+
+/** The turn cards take at composing a board, one at a time. */
+private object BoardRenderGate {
+    val mutex = Mutex()
+}
+
+/**
+ * The live keyboard behind a picture. Laid out at the screen's width and
+ * scaled to the card's by [ScaledBoard].
+ */
+@Composable
+private fun LiveBoard(state: KeyboardUiState, modifier: Modifier) {
+    // The screen wants a flow, as the service hands it one. Published after
+    // the composition that built it, so the collector sees each state once.
+    val stateFlow = remember { MutableStateFlow(state) }
+    SideEffect { stateFlow.value = state }
+    Box(modifier) {
         ScaledBoard {
             CompositionLocalProvider(
                 // Clipped to the card, so a bubble has nowhere to escape to;
@@ -138,6 +299,75 @@ fun LayoutKeyboardPreview(
         )
     }
 }
+
+/**
+ * A card's stand-in until its picture is taken: a board's outline, a strip
+ * along the top and four rows of keys, pulsing. Drawn rather than composed key
+ * by key, and animated in the draw phase, so a screen of them costs nothing.
+ */
+@Composable
+private fun BoardSkeleton(aspect: Float) {
+    val colors = MaterialTheme.colorScheme
+    val pulse = rememberInfiniteTransition(label = "boardSkeleton").animateFloat(
+        initialValue = 0.45f,
+        targetValue = 0.9f,
+        animationSpec = infiniteRepeatable(tween(SKELETON_PULSE_MS), RepeatMode.Reverse),
+        label = "boardSkeletonPulse",
+    )
+    Canvas(
+        Modifier
+            .fillMaxWidth()
+            .aspectRatio(aspect),
+    ) {
+        drawRect(colors.surfaceContainerHighest)
+        val key = colors.surface.copy(alpha = pulse.value)
+        val pad = 4.dp.toPx()
+        val gap = 3.dp.toPx()
+        val radius = CornerRadius(3.dp.toPx())
+        // The strip takes the share a toolbar does; the keys split the rest.
+        val strip = size.height * 0.14f
+        drawRoundRect(
+            key,
+            topLeft = Offset(pad, pad),
+            size = Size(size.width * 0.4f, strip - pad * 1.5f),
+            cornerRadius = radius,
+        )
+        val rows = SkeletonRows.size
+        val rowHeight = (size.height - strip - pad - gap * (rows - 1)) / rows
+        val span = size.width - pad * 2
+        val unit = (span - gap * (SKELETON_ROW_UNITS - 1)) / SKELETON_ROW_UNITS
+        for ((index, widths) in SkeletonRows.withIndex()) {
+            val top = strip + index * (rowHeight + gap)
+            val used = widths.sum() * unit + gap * (widths.size - 1)
+            var left = pad + (span - used) / 2f
+            for (width in widths) {
+                drawRoundRect(
+                    key,
+                    topLeft = Offset(left, top),
+                    size = Size(width * unit, rowHeight),
+                    cornerRadius = radius,
+                )
+                left += width * unit + gap
+            }
+        }
+    }
+}
+
+/** A QWERTY board's rows, in key widths; the widest row sets the unit. */
+private val SkeletonRows = listOf(
+    List(10) { 1f },
+    List(9) { 1f },
+    listOf(1.5f) + List(7) { 1f } + listOf(1.5f),
+    listOf(1.5f, 1f, 4f, 1f, 1.5f),
+)
+private const val SKELETON_ROW_UNITS = 10
+
+private const val FIRST_DRAW_TIMEOUT_MS = 600L
+private const val SETTLE_FRAMES = 2
+private const val SETTLE_MS = 250L
+private const val KEEP_SETTLE_MS = 1_200L
+private const val PICTURE_FADE_MS = 180
+private const val SKELETON_PULSE_MS = 700
 
 /**
  * The callbacks every preview hands the keyboard. Nothing reaches them, since
