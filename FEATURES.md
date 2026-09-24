@@ -2840,7 +2840,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Power saving can force it on `uncommon` — underPowerSaving() ORs its 'drop animations' switch into the same flag.
 - **Screen transitions** `RARE` — Settings-app switch for slower phones: off drops the row-to-heading flights and the SharedTransitionLayout behind them.
   - Removes the lookahead pass, not just the motion — The layout lays the whole settings tree out twice on every pass whether anything flies or not.
-  - Screens survive the flip — The old tree goes for one frame and saves its state, the new one restores it (moving composed nodes out of a lookahead scope crashes Compose); back stack, scroll and fields keep their place, and the plain nav slide stays.
+  - Screens survive the flip — A flip recreates the activity, the rotation path, so back stack, scroll and fields come back (moving composed nodes out of a lookahead scope crashes Compose); the plain nav slide stays.
   - Two panes only mute the flights — The layout stays, so a fold or rotation never rebuilds the screens.
 - **Touch and motor accommodations** `RARE` — Touch group on the Accessibility screen.
   - Ignore repeated presses (tremor filter) `RARE` — 0–500 ms, default off; drops a second contact on the same key inside the window.

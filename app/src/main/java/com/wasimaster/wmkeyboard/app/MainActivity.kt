@@ -110,12 +110,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -604,25 +602,20 @@ private fun SettingsNavHost(
     // changes width on a fold or a rotation, and that must not rebuild the
     // screens.
     val layoutWanted = settings.appUi.screenTransitions && !settings.reduceMotion
-    // The screens cannot be moved into or out of the layout while composed:
-    // Compose crashes measuring a node taken out of a lookahead scope
-    // (LookaheadDelegate.getAlignmentLinesOwner). So a flip takes the old tree
-    // down for one frame, which saves its state into [screenState], and builds
-    // the new one on the next, which restores it: the back stack, the scroll
-    // and the fields keep their place. Null is that one empty frame.
-    var layoutShown by remember { mutableStateOf<Boolean?>(layoutWanted) }
+    // Decided once per activity. The screens cannot be moved into or out of
+    // the layout while composed (Compose crashes measuring a node taken out of
+    // a lookahead scope, in LookaheadDelegate.getAlignmentLinesOwner), and
+    // rebuilding them in place lost the scroll. So a flip recreates the
+    // activity instead: the same path as a rotation, which already brings back
+    // the back stack, the scroll and the fields. The settings are loaded
+    // before this is first composed, so the new activity starts on the right
+    // side and does not flip again.
+    val layoutShown = remember { layoutWanted }
+    val context = LocalContext.current
     LaunchedEffect(layoutWanted) {
-        if (layoutShown == layoutWanted) return@LaunchedEffect
-        layoutShown = null
-        // The first frame applies the null (the old tree goes and saves);
-        // the second composes the new tree against the saved state.
-        withFrameNanos {}
-        withFrameNanos {}
-        layoutShown = layoutWanted
+        if (layoutWanted != layoutShown) context.findActivity()?.recreate()
     }
-    val screenState = rememberSaveableStateHolder()
     val screens: @Composable (SharedTransitionScope?) -> Unit = { shared ->
-        screenState.SaveableStateProvider(SettingsScreensStateKey) {
         CompositionLocalProvider(
             LocalSharedTransition provides if (twoPane) null else shared,
             LocalSettingsCrumbTrail provides crumbs,
@@ -673,17 +666,13 @@ private fun SettingsNavHost(
                 SettingsNavGraph(navController, repository, settings, pending, onPendingHandled)
             }
         }
-        }
     }
-    when (layoutShown) {
-        true -> SharedTransitionLayout(modifier = Modifier.fillMaxSize()) { screens(this) }
-        false -> Box(modifier = Modifier.fillMaxSize()) { screens(null) }
-        null -> Box(modifier = Modifier.fillMaxSize())
+    if (layoutShown) {
+        SharedTransitionLayout(modifier = Modifier.fillMaxSize()) { screens(this) }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) { screens(null) }
     }
 }
-
-/** The one key the settings screens save their state under across a layout flip. */
-private const val SettingsScreensStateKey = "settings-screens"
 
 /**
  * Whether this window is wide enough to hold two settings screens at once.
