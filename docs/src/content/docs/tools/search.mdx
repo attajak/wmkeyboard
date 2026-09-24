@@ -29,6 +29,8 @@ Both tools run on the Brave Search API by default, or on a SearXNG instance you 
 - **Web search**: tap a result to insert its URL at the cursor. A separate open-in-browser icon on each row launches the link in your browser instead, which leaves the keyboard entirely. They're two distinct actions. Each row shows the title, host, and an HTML-stripped snippet.
 - **Image search**: tap a thumbnail to download the full image and insert it directly, on the same `commitContent` path the clipboard and GIF tools use. Long-press a thumbnail to insert its URL as plain text instead. The grid dedupes results by image URL before drawing them, since Brave can return the same full-size image for more than one widely-reposted result.
 
+Results stay put after you leave. Open one link in your browser, come back, and open the tool again: the same list is there under the same search, so reading several results costs one request, not one per visit, and the list can't change under you. Tap the **✕** at the end of the search bar to clear it and start a new search, or tap the bar itself to edit the search you ran. Web search and image search each keep their own. They're held in memory only, so they're gone once Android closes the keyboard.
+
 <PhoneFrame side caption="The Tools screen before a Brave API key is configured: the switch is greyed out.">
 <Shot id="tools/search-needs-key" alt="The web search panel before a Brave API key is configured." />
 </PhoneFrame>
@@ -49,7 +51,7 @@ Web search and image search are two separate tool screens, reached from **Tools 
 - **Results for each search**: a slider from 1 to 10, defaulting to **8**. ("Each search uses one API request either way," the app notes.) The Brave API itself allows up to 20 results per request. The app's slider stops lower, at 10.
 - **Results per row**: image search only, and 3 by default. How many image results sit side by side, from 2 to 5. Fewer columns means bigger previews, which is easier to judge before you send one.
 
-The settings page's own caption: "Web and image search share everything here. They search the whole web. The Brave plan includes a free monthly credit of about a thousand searches. Brave asks for attribution, so the panel shows 'via Brave'." That attribution is a small **"via Brave"** label inside the search bar, at its right end, shown whenever a usable key exists.
+The settings page's own caption: "Web and image search share everything here. They search the whole web. The Brave plan includes a free monthly credit of about a thousand searches. Brave asks for attribution, so the panel shows 'via Brave'." That attribution is a small **"via Brave"** label inside the search bar, at its right end (just before the **✕** when there's a search to clear), shown whenever a usable key exists.
 
 ## Reading Wikipedia
 

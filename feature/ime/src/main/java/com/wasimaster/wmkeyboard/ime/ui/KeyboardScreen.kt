@@ -1143,6 +1143,7 @@ fun KeyboardScreen(
     onHandwritingUndo: () -> Unit = {},
     onHandwritingDownload: () -> Unit = {},
     onMediaQueryTap: () -> Unit = {},
+    onMediaQueryClear: () -> Unit = {},
     onMediaRetry: () -> Unit = {},
     onGifSelect: (GifItem) -> Unit = {},
     onGifSourceSelect: (GifSource) -> Unit = {},
@@ -1379,6 +1380,7 @@ fun KeyboardScreen(
                 onHandwritingUndo = onHandwritingUndo,
                 onHandwritingDownload = onHandwritingDownload,
                 onMediaQueryTap = onMediaQueryTap,
+                onMediaQueryClear = onMediaQueryClear,
                 onMediaRetry = onMediaRetry,
                 onGifSelect = onGifSelect,
                 onGifSourceSelect = onGifSourceSelect,
@@ -9787,6 +9789,7 @@ private fun KeyboardBody(
     onHandwritingUndo: () -> Unit,
     onHandwritingDownload: () -> Unit,
     onMediaQueryTap: () -> Unit,
+    onMediaQueryClear: () -> Unit,
     onMediaRetry: () -> Unit,
     onGifSelect: (GifItem) -> Unit,
     onGifSourceSelect: (GifSource) -> Unit,
@@ -10568,6 +10571,7 @@ private fun KeyboardBody(
                             state = state,
                             placeholder = stringResource(R.string.ime_web_search_hint),
                             onQueryTap = onMediaQueryTap,
+                            onClear = onMediaQueryClear,
                             attribution = stringResource(R.string.ime_search_attribution_brave)
                                 .takeIf { ToolApiKeys.hasSearchProvider(state.settings) },
                         )
@@ -10590,6 +10594,7 @@ private fun KeyboardBody(
                             state = state,
                             placeholder = stringResource(R.string.ime_image_search_hint),
                             onQueryTap = onMediaQueryTap,
+                            onClear = onMediaQueryClear,
                             attribution = stringResource(R.string.ime_search_attribution_brave)
                                 .takeIf { ToolApiKeys.hasSearchProvider(state.settings) },
                         )

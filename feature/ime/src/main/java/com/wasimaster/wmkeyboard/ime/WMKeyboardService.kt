@@ -4276,6 +4276,7 @@ open class WMKeyboardService : InputMethodService() {
                 onHandwritingUndo = ::onHandwritingUndo,
                 onHandwritingDownload = ::onHandwritingDownload,
                 onMediaQueryTap = ::onMediaQueryTap,
+                onMediaQueryClear = ::onMediaQueryClear,
                 onMediaRetry = ::onMediaRetry,
                 onGifSelect = ::onGifSelect,
                 onGifSourceSelect = ::onGifSourceSelect,
@@ -18233,14 +18234,18 @@ open class WMKeyboardService : InputMethodService() {
                         (it.toolPrefill as? ToolPrefill.Gif)?.query ?: restored.query
                     PanelMode.WIKIPEDIA ->
                         (it.toolPrefill as? ToolPrefill.Lookup)?.term ?: restored.query
+                    PanelMode.WEB_SEARCH, PanelMode.IMAGE_SEARCH ->
+                        keptSearchQuery(it, next) ?: restored.query
                     else -> restored.query
                 },
                 // Web/image search and translate open straight into their
-                // search box (there is nothing to show yet); gif/sticker
+                // search box (there is nothing to show yet), unless the last
+                // search's results are still there to read (#347); gif/sticker
                 // open on their previous search, or trending. Wikipedia
                 // keeps a previous article/results if it has one.
-                mediaSearchActive = next == PanelMode.WEB_SEARCH || next == PanelMode.IMAGE_SEARCH ||
-                    next == PanelMode.TRANSLATE || next == PanelMode.QR_GEN ||
+                mediaSearchActive = next == PanelMode.TRANSLATE || next == PanelMode.QR_GEN ||
+                    ((next == PanelMode.WEB_SEARCH || next == PanelMode.IMAGE_SEARCH) &&
+                        keptSearchQuery(it, next) == null) ||
                     (next == PanelMode.WIKIPEDIA && it.wiki !is WikiUi.Article && it.wiki !is WikiUi.SearchResults),
                 mediaDownloadingId = null,
                 mediaDownloadProgress = null,
@@ -18330,11 +18335,26 @@ open class WMKeyboardService : InputMethodService() {
                 runWikiSearch(it.term)
                 onToolPrefillConsumed()
             }
+            // A finished search is still on screen when the panel comes back
+            // (#347): reading one result in the browser and returning for the
+            // next must not cost a second request, or return different links.
             PanelMode.WEB_SEARCH -> _uiState.update {
-                it.copy(webSearch = if (hasSearchKey()) WebSearchUi.Idle else WebSearchUi.NeedKey)
+                it.copy(
+                    webSearch = when {
+                        !hasSearchKey() -> WebSearchUi.NeedKey
+                        it.webSearch is WebSearchUi.Ready -> it.webSearch
+                        else -> WebSearchUi.Idle
+                    },
+                )
             }
             PanelMode.IMAGE_SEARCH -> _uiState.update {
-                it.copy(imageSearch = if (hasSearchKey()) ImageSearchUi.Idle else ImageSearchUi.NeedKey)
+                it.copy(
+                    imageSearch = when {
+                        !hasSearchKey() -> ImageSearchUi.NeedKey
+                        it.imageSearch is ImageSearchUi.Ready -> it.imageSearch
+                        else -> ImageSearchUi.Idle
+                    },
+                )
             }
             PanelMode.GRAMMAR -> {
                 currentInputConnection?.let { commitComposing(it, autocorrect = false) }
@@ -23945,6 +23965,42 @@ open class WMKeyboardService : InputMethodService() {
     fun onMediaQueryTap() {
         vibrate()
         _uiState.update { it.copy(mediaSearchActive = !it.mediaSearchActive, mediaAction = null) }
+    }
+
+    /**
+     * The query behind the web or image search results [panel] would reopen
+     * on, or null when there are none to keep. Results live in memory only,
+     * until a new search or the clear button replaces them (#347).
+     */
+    private fun keptSearchQuery(state: KeyboardUiState, panel: PanelMode): String? {
+        if (!ToolApiKeys.hasSearchProvider(state.settings)) return null
+        return when (panel) {
+            PanelMode.WEB_SEARCH -> (state.webSearch as? WebSearchUi.Ready)?.query
+            PanelMode.IMAGE_SEARCH -> (state.imageSearch as? ImageSearchUi.Ready)?.query
+            else -> null
+        }
+    }
+
+    /**
+     * The clear button in the web/image search bar: drops the kept results and
+     * the query, and hands the keys to the search box for a new search.
+     */
+    fun onMediaQueryClear() {
+        vibrate()
+        val panel = _uiState.value.panel
+        if (panel == PanelMode.WEB_SEARCH) webSearchJob?.cancel()
+        if (panel == PanelMode.IMAGE_SEARCH) imageSearchJob?.cancel()
+        val idle = hasSearchKey()
+        _uiState.update {
+            it.copy(
+                mediaQuery = "",
+                mediaSearchActive = true,
+                mediaAction = null,
+                panelFocus = null,
+                webSearch = if (panel == PanelMode.WEB_SEARCH && idle) WebSearchUi.Idle else it.webSearch,
+                imageSearch = if (panel == PanelMode.IMAGE_SEARCH && idle) ImageSearchUi.Idle else it.imageSearch,
+            )
+        }
     }
 
     /**

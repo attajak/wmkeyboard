@@ -41,6 +41,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -425,6 +426,8 @@ internal fun RowScope.MediaHeaderSearchBar(
     // A default argument cannot hold a resource, hence the null.
     activePlaceholder: String? = null,
     focused: Boolean = false,
+    // Shown while there is a query: starts a new search. Null hides it.
+    onClear: (() -> Unit)? = null,
 ) {
     val kb = LocalKbTheme.current
     val activeHint = activePlaceholder ?: stringResource(R.string.ime_media_search_active_hint)
@@ -463,6 +466,17 @@ internal fun RowScope.MediaHeaderSearchBar(
                 color = kb.secondaryText,
                 fontSize = 9.sp,
                 modifier = Modifier.padding(start = 6.dp),
+            )
+        }
+        if (onClear != null && state.mediaQuery.isNotEmpty()) {
+            Icon(
+                Icons.Outlined.Close,
+                contentDescription = stringResource(R.string.ime_clipboard_search_clear_desc),
+                modifier = Modifier
+                    .padding(start = 6.dp)
+                    .size(16.dp)
+                    .clickable { onClear() },
+                tint = kb.toolbarIcon,
             )
         }
     }
