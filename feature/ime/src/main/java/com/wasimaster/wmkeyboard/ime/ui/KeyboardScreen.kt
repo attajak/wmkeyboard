@@ -9700,30 +9700,31 @@ private fun CaptureStrip(state: KeyboardUiState, capture: CaptureCallbacks) {
             .height(state.settings.toolbarHeightDp.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        // Dictation into this field (#353): a microphone at the start of its
+        // Dictation into this field (#353): a microphone at the end of its
         // strip, and while the phrase is being said the strip says so.
-        if (state.captureTarget()?.takesDictation == true) {
+        val dictation = state.captureTarget()?.takesDictation == true
+        if (dictation && state.fieldVoiceSpeaks()) {
+            FieldVoiceStatus(state.voice, capture.onVoice)
+        } else {
+            LatinSuggestionChips(
+                candidates = state.captureSuggestions,
+                enabled = true,
+                alpha = { 1f },
+                slotCount = state.settings.suggestionStrip.slotCount,
+                textScale = state.settings.suggestionStrip.textScale,
+                scrollable = state.settings.suggestionStrip.scrollable,
+                textPadding = state.settings.suggestionStrip.chipPadding.dp,
+                centerPrimaryEnabled = state.settings.suggestionStrip.suggestionPrimaryCenter,
+                shiftState = state.shiftState,
+                onSuggestion = capture.onSuggestion,
+                overflow = state.settings.suggestionStrip.overflow,
+            )
+        }
+        if (dictation) {
             FieldVoiceMic(state.voice, mine = state.voice.field == state.captureKey()) {
                 capture.onVoice(CaptureVoiceAction.TOGGLE)
             }
-            if (state.fieldVoiceSpeaks()) {
-                FieldVoiceStatus(state.voice, capture.onVoice)
-                return@Row
-            }
         }
-        LatinSuggestionChips(
-            candidates = state.captureSuggestions,
-            enabled = true,
-            alpha = { 1f },
-            slotCount = state.settings.suggestionStrip.slotCount,
-            textScale = state.settings.suggestionStrip.textScale,
-            scrollable = state.settings.suggestionStrip.scrollable,
-            textPadding = state.settings.suggestionStrip.chipPadding.dp,
-            centerPrimaryEnabled = state.settings.suggestionStrip.suggestionPrimaryCenter,
-            shiftState = state.shiftState,
-            onSuggestion = capture.onSuggestion,
-            overflow = state.settings.suggestionStrip.overflow,
-        )
     }
 }
 

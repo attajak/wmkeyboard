@@ -947,7 +947,7 @@ internal fun VoiceMicChip(
 }
 
 /**
- * The microphone at the start of a keyboard-owned field's strip (#353): a tap
+ * The microphone at the end of a keyboard-owned field's strip (#353): a tap
  * dictates into that field, and while it listens a tap finishes the phrase.
  *
  * [mine] says the session in [voice] is this field's. Only then does the button
@@ -961,7 +961,7 @@ internal fun FieldVoiceMic(voice: VoiceUi, mine: Boolean, onToggle: () -> Unit) 
     val busy = mine && (voice.status == VoiceStatus.FINISHING || voice.status == VoiceStatus.TRANSCRIBING)
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.padding(start = 4.dp, end = 2.dp),
+        modifier = Modifier.padding(start = 2.dp, end = 6.dp),
     ) {
         // Static under reduce motion, like every other mic ring here.
         val ringScale by animateFloatAsState(
@@ -1085,7 +1085,6 @@ internal fun RowScope.FieldVoiceStatus(voice: VoiceUi, onAction: (CaptureVoiceAc
         contentDescription = stringResource(R.string.ime_voice_strip_close_desc),
         tint = kb.toolbarIcon,
         modifier = Modifier
-            .padding(end = 4.dp)
             .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
             .clickable { onAction(CaptureVoiceAction.CLOSE) }
             .padding(6.dp)
