@@ -1178,6 +1178,7 @@ internal fun EmojiDictRow(entry: EmojiDictEntry) {
 
     WmRow(
         title = stringResource(R.string.languages_emoji_keywords_title),
+        icon = SettingsRowIcons[R.string.languages_emoji_keywords_title],
         supporting = {
             Text(
                 when (status) {
@@ -1419,6 +1420,7 @@ private fun CjkDictPackManager(
         item(visible = CjkDictCatalog.forLang(langId).any { it.id in FLEX_FILLABLE_PACKS }) {
             WmRow(
                 title = stringResource(R.string.languages_cjk_flex_import_title),
+                icon = SettingsRowIcons[R.string.languages_cjk_flex_import_title],
                 subtitle = flexMessage ?: stringResource(R.string.languages_cjk_flex_import_subtitle),
                 trailing = {
                     TextButton(

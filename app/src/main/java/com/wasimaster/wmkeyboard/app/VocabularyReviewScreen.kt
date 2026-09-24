@@ -128,7 +128,7 @@ internal fun VocabReviewScreen(
                 item { CaptionText(stringResource(R.string.vocab_review_empty_body)) }
             }
             item {
-                WmRow(title = stringResource(R.string.vocab_review_ahead_action), subtitle = stringResource(R.string.vocab_review_ahead_subtitle), onClick = {
+                WmRow(title = stringResource(R.string.vocab_review_ahead_action), subtitle = stringResource(R.string.vocab_review_ahead_subtitle), icon = SettingsRowIcons[R.string.vocab_review_ahead_action], onClick = {
                     ahead = true
                     queue = null
                     counts = IntArray(ReviewGrade.entries.size)

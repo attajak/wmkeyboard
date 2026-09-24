@@ -392,7 +392,7 @@ private fun MacroChip(
     val kb = LocalKbTheme.current
     val shape = kb.chipShape()
     val label = if (speaking) stringResource(R.string.ime_selection_macro_stop_label) else stringResource(macro.labelRes)
-    val icon = if (speaking) Icons.Outlined.StopCircle else macroIcon(macro)
+    val icon = if (speaking) Icons.Outlined.StopCircle else selectionMacroIcon(macro)
     val description = when {
         busy -> stringResource(R.string.ime_selection_macro_busy_desc)
         app != null -> stringResource(R.string.ime_selection_macro_open_in_desc, app.name)
@@ -518,14 +518,15 @@ private fun AiChip(spec: AiActionSpec, onClick: () -> Unit) {
 }
 
 /**
- * The glyph for a macro, or null for the case options.
+ * The glyph for a macro, or null for the case options. Public so the
+ * settings list of these actions can wear the same glyphs as the bar.
  *
  * The case chips are written in the case they apply ("UPPER CASE",
  * "snake_case"), which already shows what each one does; an icon beside them
  * would say it a second time in a worse language. Exhaustive on purpose: a
  * new member without a glyph is a compile error, not an iconless chip.
  */
-private fun macroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
+fun selectionMacroIcon(macro: SelectionMacro): ImageVector? = when (macro) {
     SelectionMacro.UNDO -> Icons.AutoMirrored.Outlined.Undo
     SelectionMacro.SELECT_ALL -> Icons.Outlined.SelectAll
     SelectionMacro.COPY -> Icons.Outlined.ContentCopy

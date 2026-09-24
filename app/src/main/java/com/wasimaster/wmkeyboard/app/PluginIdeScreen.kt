@@ -192,6 +192,7 @@ internal fun PluginIdeProjectsScreen(onNavigate: (String) -> Unit) {
         item {
             WmRow(
                 title = stringResource(R.string.plugin_ide_new_title),
+                icon = SettingsRowIcons[R.string.plugin_ide_new_title],
                 subtitle = stringResource(R.string.plugin_ide_new_subtitle),
                 trailing = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null) },
                 onClick = { creating = PluginTemplate.BLANK },
@@ -207,6 +208,7 @@ internal fun PluginIdeProjectsScreen(onNavigate: (String) -> Unit) {
         item {
             WmRow(
                 title = stringResource(R.string.plugin_ide_import_title),
+                icon = SettingsRowIcons[R.string.plugin_ide_import_title],
                 subtitle = stringResource(R.string.plugin_ide_import_subtitle),
                 trailing = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null) },
                 onClick = { importLauncher.launch(PluginFile.IMPORT_MIME_TYPES) },

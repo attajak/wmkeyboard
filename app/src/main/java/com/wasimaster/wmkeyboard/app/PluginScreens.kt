@@ -91,6 +91,7 @@ internal fun PluginsScreen(onNavigate: (String) -> Unit) {
                 WmRow(
                     title = title,
                     subtitle = stringResource(R.string.plugins_allow_subtitle),
+                    icon = SettingsRowIcons[R.string.plugins_allow_title],
                     trailing = {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             // Hand-built rather than a ToggleSetting, because
@@ -137,6 +138,7 @@ internal fun PluginsScreen(onNavigate: (String) -> Unit) {
         item {
             WmRow(
                 title = stringResource(R.string.plugin_ide_entry_title),
+                icon = SettingsRowIcons[R.string.plugin_ide_entry_title],
                 subtitle = stringResource(R.string.plugin_ide_entry_subtitle),
                 trailing = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null) },
                 onClick = { onNavigate("plugin_ide") },
@@ -198,6 +200,7 @@ internal fun PluginsScreen(onNavigate: (String) -> Unit) {
             item {
                 WmRow(
                     title = stringResource(R.string.plugins_install_file_title),
+                    icon = SettingsRowIcons[R.string.plugins_install_file_title],
                     subtitle = stringResource(R.string.plugins_install_file_subtitle),
                     onClick = { picker.launch(PluginFile.IMPORT_MIME_TYPES) },
                 )
@@ -313,6 +316,7 @@ internal fun PluginDetailScreen(pluginId: String, onNavigate: (String) -> Unit, 
         item {
             WmRow(
                 title = stringResource(R.string.plugin_ide_edit_title),
+                icon = SettingsRowIcons[R.string.plugin_ide_edit_title],
                 subtitle = stringResource(R.string.plugin_ide_edit_subtitle),
                 trailing = { Icon(Icons.AutoMirrored.Outlined.ArrowForward, contentDescription = null) },
                 onClick = {

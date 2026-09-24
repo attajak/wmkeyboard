@@ -1426,6 +1426,7 @@ private fun HoldShortcutLettersSetting(
         WmRow(
             title = title,
             subtitle = summary.ifEmpty { stringResource(R.string.keypress_hold_letters_subtitle) },
+            icon = SettingsRowIcons[R.string.keypress_hold_letters_title],
             trailing = {
                 ResetSetting(title, actions.letters != DEFAULT_LONG_PRESS_LETTERS) {
                     scope.launch { repository.setLongPressLetters(DEFAULT_LONG_PRESS_LETTERS) }

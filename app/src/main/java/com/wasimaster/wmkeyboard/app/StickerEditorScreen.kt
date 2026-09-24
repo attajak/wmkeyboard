@@ -398,7 +398,7 @@ internal fun StickerEditorScreen(request: StickerEditRequest, onDone: () -> Unit
         EditorMode.CROP -> CaptionText(stringResource(R.string.import_sticker_editor_crop_hint))
         EditorMode.ERASE, EditorMode.RESTORE -> {
             SliderRow(
-                title = stringResource(R.string.import_sticker_editor_brush_size_label),
+                title = R.string.import_sticker_editor_brush_size_label,
                 value = brushPx,
                 range = MIN_BRUSH_PX..MAX_BRUSH_PX,
                 display = { "${it.roundToInt()}" },
@@ -406,7 +406,7 @@ internal fun StickerEditorScreen(request: StickerEditRequest, onDone: () -> Unit
         }
         EditorMode.BORDER -> {
             SliderRow(
-                title = stringResource(R.string.import_sticker_editor_border_width_label),
+                title = R.string.import_sticker_editor_border_width_label,
                 value = state.border.widthPx,
                 range = 0f..OutlineSpec.MAX_WIDTH_PX,
                 display = { "${it.roundToInt()}" },
@@ -428,6 +428,7 @@ internal fun StickerEditorScreen(request: StickerEditRequest, onDone: () -> Unit
             item {
                 WmRow(
                     title = stringResource(R.string.import_sticker_editor_cutout_action),
+                    icon = SettingsRowIcons[R.string.import_sticker_editor_cutout_action],
                     subtitle = stringResource(
                         when {
                             modelReady -> R.string.import_sticker_editor_cutout_subtitle

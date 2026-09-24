@@ -384,6 +384,7 @@ private fun LoadedPack(
 
                 mine != null -> WmRow(
                     title = stringResource(R.string.import_signal_added_title),
+                    icon = SettingsRowIcons[R.string.import_signal_added_title],
                     subtitle = stringResource(R.string.import_signal_added_subtitle, mine.name),
                     accent = routeAccent("sticker_packs"),
                     onClick = onOpenMine,

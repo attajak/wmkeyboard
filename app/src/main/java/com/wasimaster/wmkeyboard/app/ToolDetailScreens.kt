@@ -575,6 +575,7 @@ internal fun ToolDetailSettings(
             item {
                 WmRow(
                     title = stringResource(R.string.tooldetail_plugins_manage_title),
+                    icon = SettingsRowIcons[R.string.tooldetail_plugins_manage_title],
                     subtitle = stringResource(R.string.tooldetail_plugins_manage_subtitle),
                     onClick = { onNavigate("plugins") },
                 )
@@ -2178,6 +2179,7 @@ internal fun ToolDetailSettings(
                             ToggleSetting(
                                 title = stringResource(kind.labelRes),
                                 subtitle = null,
+                                icon = SettingsRowIcons[kind.labelRes],
                                 checked = kind !in hiddenKinds,
                                 onChange = { on ->
                                     scope.launch { repository.setGrammarKindShown(kind, on) }
@@ -2202,9 +2204,7 @@ internal fun ToolDetailSettings(
                     }
                     item(visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         ToggleSetting(
-                            stringResource(
-                                R.string.tooldetail_grammar_no_suggestions_title,
-                            ),
+                            R.string.tooldetail_grammar_no_suggestions_title,
                             stringResource(
                                 R.string.tooldetail_grammar_no_suggestions_subtitle,
                             ),
@@ -2266,6 +2266,7 @@ internal fun ToolDetailSettings(
                     val remembered = settings.symbolRecents.size
                     WmRow(
                         title = stringResource(R.string.tooldetail_symbols_clear_title),
+                        icon = SettingsRowIcons[R.string.tooldetail_symbols_clear_title],
                         subtitle = if (remembered == 0) {
                             stringResource(R.string.tooldetail_symbols_clear_empty)
                         } else {
@@ -3089,6 +3090,7 @@ private fun ToolKeywordSetting(
             WmRow(
                 title = stringResource(CommonR.string.common_reset_defaults),
                 subtitle = defaults.joinToString(", "),
+                icon = SettingsRowIcons[CommonR.string.common_reset_defaults],
                 onClick = {
                     text = defaults.joinToString(", ")
                     scope.launch { repository.setToolKeywords(tool, defaults) }

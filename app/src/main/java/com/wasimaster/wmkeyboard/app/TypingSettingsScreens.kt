@@ -122,7 +122,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 /** One spacebar-swipe slot (quick or hold+swipe): nothing / language / cursor. */
 @Composable
 private fun SpaceSwipeSetting(
-    title: String,
+    @StringRes title: Int,
     subtitle: String,
     info: String,
     value: SpaceSwipeAction,
@@ -1980,7 +1980,7 @@ internal fun TypingGesturesSettings(
     SettingsGroup(stringResource(R.string.typing_group_spacebar_title)) {
         item {
             SpaceSwipeSetting(
-                title = stringResource(R.string.typing_space_short_swipe_title),
+                title = R.string.typing_space_short_swipe_title,
                 subtitle = stringResource(R.string.typing_space_short_swipe_subtitle),
                 info = stringResource(R.string.typing_space_short_swipe_info),
                 value = settings.spaceShortSwipe,
@@ -1989,7 +1989,7 @@ internal fun TypingGesturesSettings(
         }
         item {
             SpaceSwipeSetting(
-                title = stringResource(R.string.typing_space_long_swipe_title),
+                title = R.string.typing_space_long_swipe_title,
                 subtitle = stringResource(R.string.typing_space_long_swipe_subtitle),
                 info = stringResource(R.string.typing_space_long_swipe_info),
                 value = settings.spaceLongSwipe,
@@ -2360,7 +2360,7 @@ internal fun HardwareShortcutsSettings(repository: SettingsRepository, settings:
         ) {
             item {
                 NavRow(
-                    leaderTitle,
+                    R.string.hardware_shortcuts_leader_title,
                     stringResource(R.string.hardware_shortcuts_leader_subtitle),
                     value = leaderName,
                     onClick = { editingLeader = true },

@@ -195,6 +195,7 @@ internal fun AccessibilitySettings(
                         stringResource(R.string.passthrough_service_label),
                     )
                 },
+                icon = SettingsRowIcons[R.string.accessibility_passthrough_service_title],
             ) { accessibility() }
         }
     }

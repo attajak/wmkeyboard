@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -302,7 +303,7 @@ internal fun AiToolSettings(
         if (settings.ai.provider != AiProvider.ON_DEVICE) {
             item {
                 TokenPresetSetting(
-                    title = stringResource(R.string.toolai_ai_max_tokens_title),
+                    title = R.string.toolai_ai_max_tokens_title,
                     subtitle = stringResource(R.string.toolai_ai_max_tokens_subtitle),
                     value = settings.ai.maxTokens,
                     presets = MaxTokenPresets,
@@ -313,7 +314,7 @@ internal fun AiToolSettings(
         } else {
             item {
                 TokenPresetSetting(
-                    title = stringResource(R.string.toolai_ai_local_context_title),
+                    title = R.string.toolai_ai_local_context_title,
                     subtitle = stringResource(R.string.toolai_ai_local_context_subtitle),
                     value = settings.ai.localContextTokens,
                     presets = LocalContextPresets,
@@ -433,7 +434,7 @@ private val LocalContextPresets = listOf(1024, 2048, 4096, 8192, 16_384)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun TokenPresetSetting(
-    title: String,
+    @StringRes title: Int,
     subtitle: String,
     value: Int,
     presets: List<Int>,

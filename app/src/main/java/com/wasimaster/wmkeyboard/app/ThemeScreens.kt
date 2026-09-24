@@ -111,6 +111,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -2362,7 +2363,7 @@ fun ThemeEditorScreen(
     ) {
         item {
             ColorRow(
-                stringResource(R.string.theme_board_background_title),
+                R.string.theme_board_background_title,
                 theme.boardBackground,
                 supportsAlpha = true,
             ) {
@@ -2371,7 +2372,7 @@ fun ThemeEditorScreen(
         }
         item {
             GradientEditor(
-                title = stringResource(R.string.theme_board_gradient_title),
+                title = R.string.theme_board_gradient_title,
                 subtitle = stringResource(R.string.theme_board_gradient_subtitle),
                 gradient = theme.boardGradient,
                 defaultGradient = GradientSpec(
@@ -2387,7 +2388,7 @@ fun ThemeEditorScreen(
             // their fallback swatch is the board's own colour and Auto is the
             // resting state (issue #109).
             NullableColorRow(
-                stringResource(R.string.theme_suggestion_bar_title),
+                R.string.theme_suggestion_bar_title,
                 theme.suggestionBarBackground,
                 fallback = theme.boardBackground,
                 supportsAlpha = true,
@@ -2397,7 +2398,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_navigation_bar_title),
+                R.string.theme_navigation_bar_title,
                 theme.navigationBarBackground,
                 fallback = theme.boardBackground,
                 supportsAlpha = true,
@@ -2409,7 +2410,7 @@ fun ThemeEditorScreen(
             // The rail beside the board in one-handed mode. Auto leaves it
             // transparent, so the board runs on behind it.
             NullableColorRow(
-                stringResource(R.string.theme_one_handed_title),
+                R.string.theme_one_handed_title,
                 theme.oneHandedPanelBackground,
                 fallback = theme.boardBackground,
                 supportsAlpha = true,
@@ -2422,7 +2423,7 @@ fun ThemeEditorScreen(
         if (theme.oneHandedPanelBackground != null) {
             item {
                 NullableColorRow(
-                    stringResource(R.string.theme_one_handed_icon_title),
+                    R.string.theme_one_handed_icon_title,
                     theme.oneHandedPanelIcon,
                     fallback = theme.secondaryText ?: theme.suggestionText ?: theme.keyText,
                     onChange = { update { t -> t.copy(oneHandedPanelIcon = it) } },
@@ -2473,7 +2474,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_image_opacity_title),
+                    R.string.theme_image_opacity_title,
                     value = theme.backgroundImageOpacity,
                     range = 0f..1f,
                     display = { "${(it * 100).toInt()}%" },
@@ -2481,7 +2482,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_image_blur_title),
+                    R.string.theme_image_blur_title,
                     value = theme.backgroundImageBlur,
                     range = 0f..25f,
                     display = { if (it < 0.5f) offLabel else it.toInt().toString() },
@@ -2710,6 +2711,7 @@ fun ThemeEditorScreen(
             // say what the key will look like. The dialog draws each one.
             WmRow(
                 title = stringResource(R.string.theme_key_shape_title),
+                icon = SettingsRowIcons[R.string.theme_key_shape_title],
                 subtitle = keyShapeName(theme.keyShape),
                 trailing = {
                     KeyShapeSwatch(
@@ -2723,7 +2725,7 @@ fun ThemeEditorScreen(
         }
         item {
             ColorRow(
-                stringResource(R.string.theme_letter_keys_title),
+                R.string.theme_letter_keys_title,
                 theme.keyBackground,
                 supportsAlpha = true,
             ) {
@@ -2732,7 +2734,7 @@ fun ThemeEditorScreen(
         }
         item {
             GradientEditor(
-                title = stringResource(R.string.theme_key_gradient_title),
+                title = R.string.theme_key_gradient_title,
                 subtitle = stringResource(R.string.theme_key_gradient_subtitle),
                 gradient = theme.keyGradient,
                 defaultGradient = GradientSpec(
@@ -2744,13 +2746,13 @@ fun ThemeEditorScreen(
             )
         }
         item {
-            ColorRow(stringResource(R.string.theme_key_text_title), theme.keyText) {
+            ColorRow(R.string.theme_key_text_title, theme.keyText) {
                 update { t -> t.copy(keyText = it) }
             }
         }
         item {
             ColorRow(
-                stringResource(R.string.theme_modifier_keys_title),
+                R.string.theme_modifier_keys_title,
                 theme.modifierKeyBackground,
                 supportsAlpha = true,
             ) {
@@ -2759,39 +2761,39 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_modifier_key_text_title),
+                R.string.theme_modifier_key_text_title,
                 theme.modifierKeyText, fallback = theme.keyText,
                 onChange = { update { t -> t.copy(modifierKeyText = it) } },
             )
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_hint_text_title),
+                R.string.theme_hint_text_title,
                 theme.hintText, fallback = theme.keyText,
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(hintText = it) } },
             )
         }
         item {
-            ColorRow(stringResource(R.string.theme_enter_key_title), theme.enterKeyBackground) {
+            ColorRow(R.string.theme_enter_key_title, theme.enterKeyBackground) {
                 update { t -> t.copy(enterKeyBackground = it) }
             }
         }
         item {
-            ColorRow(stringResource(R.string.theme_enter_key_icon_title), theme.enterKeyText) {
+            ColorRow(R.string.theme_enter_key_icon_title, theme.enterKeyText) {
                 update { t -> t.copy(enterKeyText = it) }
             }
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_pressed_key_title),
+                R.string.theme_pressed_key_title,
                 theme.pressedKeyBackground, fallback = theme.effectivePressed(),
                 onChange = { update { t -> t.copy(pressedKeyBackground = it) } },
             )
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_key_border_title),
+                R.string.theme_key_border_title,
                 theme.keyBorderColor, fallback = theme.keyText,
                 onChange = { update { t -> t.copy(keyBorderColor = it) } },
             )
@@ -2799,7 +2801,7 @@ fun ThemeEditorScreen(
         if (theme.keyBorderColor != null) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_border_width_title),
+                    R.string.theme_border_width_title,
                     value = theme.keyBorderWidthDp,
                     range = 0f..3f,
                     display = { "%.1f dp".format(it) },
@@ -2811,7 +2813,7 @@ fun ThemeEditorScreen(
             // the key's own outline. Shapes that cannot cast one stay flat
             // however far this is pushed, and so does a see-through key.
             SliderRow(
-                stringResource(R.string.theme_key_elevation_title),
+                R.string.theme_key_elevation_title,
                 value = theme.keyElevationDp,
                 range = 0f..MAX_ELEVATION_DP,
                 display = { "%.1f dp".format(it) },
@@ -2915,7 +2917,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_texture_opacity_title),
+                    R.string.theme_texture_opacity_title,
                     value = theme.keyTextureOpacity,
                     range = 0.1f..1f,
                     display = { "${(it * 100).toInt()}%" },
@@ -3067,7 +3069,7 @@ fun ThemeEditorScreen(
     SettingsGroup(stringResource(R.string.theme_accent_section_title), foldKey = "theme/accent") {
         item {
             ColorRow(
-                stringResource(R.string.theme_accent_title),
+                R.string.theme_accent_title,
                 theme.accent,
                 info = stringResource(R.string.theme_accent_body),
             ) {
@@ -3076,7 +3078,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_gesture_trail_title),
+                R.string.theme_gesture_trail_title,
                 theme.gestureTrailColor, fallback = theme.accent,
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(gestureTrailColor = it) } },
@@ -3084,7 +3086,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_popup_background_title),
+                R.string.theme_popup_background_title,
                 theme.popupBackground, fallback = theme.effectivePopup(),
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(popupBackground = it) } },
@@ -3092,7 +3094,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_popup_text_title),
+                R.string.theme_popup_text_title,
                 theme.popupText, fallback = theme.keyText,
                 onChange = { update { t -> t.copy(popupText = it) } },
             )
@@ -3105,6 +3107,7 @@ fun ThemeEditorScreen(
             val popupShape = keyShapeKindOrNull(theme.popupShape) ?: settings.popup.shape
             WmRow(
                 title = stringResource(R.string.theme_popup_shape_title),
+                icon = SettingsRowIcons[R.string.theme_popup_shape_title],
                 subtitle = keyShapeName(popupShape),
                 trailing = {
                     KeyShapeSwatch(
@@ -3154,7 +3157,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_popup_border_title),
+                R.string.theme_popup_border_title,
                 theme.popupBorderColor, fallback = theme.popupText ?: theme.keyText,
                 onChange = { update { t -> t.copy(popupBorderColor = it) } },
             )
@@ -3162,7 +3165,7 @@ fun ThemeEditorScreen(
         if (theme.popupBorderColor != null) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_border_width_title),
+                    R.string.theme_border_width_title,
                     value = theme.popupBorderWidthDp,
                     range = 0f..3f,
                     display = { "%.1f dp".format(it) },
@@ -3171,7 +3174,7 @@ fun ThemeEditorScreen(
         }
         item {
             SliderRow(
-                stringResource(R.string.theme_popup_elevation_title),
+                R.string.theme_popup_elevation_title,
                 value = theme.popupElevationDp ?: DEFAULT_POPUP_ELEVATION_DP,
                 range = 0f..MAX_ELEVATION_DP,
                 display = { "%.1f dp".format(it) },
@@ -3181,7 +3184,7 @@ fun ThemeEditorScreen(
             // The highlight under the alternate your finger is on, and under
             // the selected row of the language picker.
             NullableColorRow(
-                stringResource(R.string.theme_popup_selected_title),
+                R.string.theme_popup_selected_title,
                 theme.popupSelectedBackground, fallback = theme.accent,
                 supportsAlpha = true,
                 info = stringResource(R.string.theme_popup_selected_body),
@@ -3191,7 +3194,7 @@ fun ThemeEditorScreen(
         theme.popupSelectedBackground?.let { highlight ->
             item {
                 NullableColorRow(
-                    stringResource(R.string.theme_popup_selected_text_title),
+                    R.string.theme_popup_selected_text_title,
                     theme.popupSelectedText,
                     fallback = onColorFor(highlight),
                     onChange = { update { t -> t.copy(popupSelectedText = it) } },
@@ -3208,6 +3211,7 @@ fun ThemeEditorScreen(
             )
             WmRow(
                 title = stringResource(R.string.theme_menu_shape_title),
+                icon = SettingsRowIcons[R.string.theme_menu_shape_title],
                 subtitle = if (menuShape == null) {
                     stringResource(
                         R.string.theme_shape_auto_safe_value,
@@ -3233,6 +3237,7 @@ fun ThemeEditorScreen(
             val toolShape = keyShapeKindOrNull(theme.toolShape) ?: settings.toolShape
             WmRow(
                 title = stringResource(R.string.theme_tool_shape_title),
+                icon = SettingsRowIcons[R.string.theme_tool_shape_title],
                 subtitle = keyShapeName(toolShape),
                 trailing = {
                     KeyShapeSwatch(
@@ -3246,7 +3251,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_tool_icons_title), theme.toolbarIcon,
+                R.string.theme_tool_icons_title, theme.toolbarIcon,
                 fallback = colorOf(theme.keyText).copy(alpha = 0.65f)
                     .compositeOver(colorOf(theme.boardBackground)).argb(),
                 onChange = { update { t -> t.copy(toolbarIcon = it) } },
@@ -3254,7 +3259,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_tool_circles_title),
+                R.string.theme_tool_circles_title,
                 theme.toolCircleBackground, fallback = theme.effectiveToolCircle(),
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(toolCircleBackground = it) } },
@@ -3262,7 +3267,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_tool_circle_active_title),
+                R.string.theme_tool_circle_active_title,
                 theme.toolCircleActiveBackground, fallback = theme.effectivePressed(),
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(toolCircleActiveBackground = it) } },
@@ -3273,7 +3278,7 @@ fun ThemeEditorScreen(
             // the fill: a FlorisBoard sheet states the two separately, and
             // deriving one from the other threw away a colour the theme set.
             NullableColorRow(
-                stringResource(R.string.theme_tool_circle_active_icon_title),
+                R.string.theme_tool_circle_active_icon_title,
                 theme.toolCircleActiveIcon,
                 fallback = theme.toolCircleActiveBackground?.let(::onColorFor) ?: theme.accent,
                 onChange = { update { t -> t.copy(toolCircleActiveIcon = it) } },
@@ -3283,7 +3288,7 @@ fun ThemeEditorScreen(
             // Colour then width, the way the key border is set: the colour is
             // what turns the outline on, and the width row appears with it.
             NullableColorRow(
-                stringResource(R.string.theme_tool_border_title),
+                R.string.theme_tool_border_title,
                 theme.toolBorderColor, fallback = theme.toolbarIcon ?: theme.keyText,
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(toolBorderColor = it) } },
@@ -3292,7 +3297,7 @@ fun ThemeEditorScreen(
         if (theme.toolBorderColor != null) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_tool_border_width_title),
+                    R.string.theme_tool_border_width_title,
                     value = theme.toolBorderWidthDp,
                     range = 0f..3f,
                     display = { "%.1f dp".format(it) },
@@ -3301,7 +3306,7 @@ fun ThemeEditorScreen(
         }
         item {
             SliderRow(
-                stringResource(R.string.theme_tool_elevation_title),
+                R.string.theme_tool_elevation_title,
                 value = theme.toolElevationDp,
                 range = 0f..MAX_ELEVATION_DP,
                 display = { "%.1f dp".format(it) },
@@ -3312,7 +3317,7 @@ fun ThemeEditorScreen(
     SettingsGroup(stringResource(R.string.theme_panels_section_title), foldKey = "theme/panels") {
         item {
             NullableColorRow(
-                stringResource(R.string.theme_cards_title),
+                R.string.theme_cards_title,
                 theme.chipBackground, fallback = theme.modifierKeyBackground,
                 supportsAlpha = true,
                 onChange = { update { t -> t.copy(chipBackground = it) } },
@@ -3320,7 +3325,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_suggestion_text_title),
+                R.string.theme_suggestion_text_title,
                 theme.suggestionText, fallback = theme.keyText,
                 onChange = { update { t -> t.copy(suggestionText = it) } },
             )
@@ -3330,7 +3335,7 @@ fun ThemeEditorScreen(
             // panel parts. Both used to be the suggestion colour at a fixed
             // alpha, which no theme could overrule.
             NullableColorRow(
-                stringResource(R.string.theme_secondary_text_title),
+                R.string.theme_secondary_text_title,
                 theme.secondaryText,
                 fallback = theme.suggestionText ?: theme.keyText,
                 supportsAlpha = true,
@@ -3340,7 +3345,7 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_divider_title),
+                R.string.theme_divider_title,
                 theme.dividerColor,
                 fallback = theme.suggestionText ?: theme.keyText,
                 supportsAlpha = true,
@@ -3357,14 +3362,14 @@ fun ThemeEditorScreen(
     ) {
         item {
             NullableColorRow(
-                stringResource(R.string.theme_chip_text_title),
+                R.string.theme_chip_text_title,
                 theme.chipText, fallback = theme.modifierKeyText ?: theme.keyText,
                 onChange = { update { t -> t.copy(chipText = it) } },
             )
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_chip_active_title),
+                R.string.theme_chip_active_title,
                 theme.chipActiveBackground,
                 fallback = theme.toolCircleActiveBackground ?: theme.effectivePressed(),
                 supportsAlpha = true,
@@ -3373,14 +3378,14 @@ fun ThemeEditorScreen(
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_chip_active_text_title),
+                R.string.theme_chip_active_text_title,
                 theme.chipActiveText, fallback = theme.accent,
                 onChange = { update { t -> t.copy(chipActiveText = it) } },
             )
         }
         item {
             NullableColorRow(
-                stringResource(R.string.theme_chip_border_title),
+                R.string.theme_chip_border_title,
                 theme.chipBorderColor, fallback = theme.accent,
                 onChange = { update { t -> t.copy(chipBorderColor = it) } },
             )
@@ -3388,7 +3393,7 @@ fun ThemeEditorScreen(
         if (theme.chipBorderColor != null) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_border_width_title),
+                    R.string.theme_border_width_title,
                     value = theme.chipBorderWidthDp,
                     range = 0f..3f,
                     display = { "%.1f dp".format(it) },
@@ -3397,7 +3402,7 @@ fun ThemeEditorScreen(
         }
         item {
             SliderRow(
-                stringResource(R.string.theme_card_elevation_title),
+                R.string.theme_card_elevation_title,
                 value = theme.cardElevationDp,
                 range = 0f..MAX_ELEVATION_DP,
                 display = { "%.1f dp".format(it) },
@@ -3407,6 +3412,7 @@ fun ThemeEditorScreen(
             val chipShape = keyShapeKindOrNull(theme.chipShape) ?: KeyShapeKind.ROUNDED
             WmRow(
                 title = stringResource(R.string.theme_chip_shape_title),
+                icon = SettingsRowIcons[R.string.theme_chip_shape_title],
                 subtitle = keyShapeName(chipShape),
                 trailing = {
                     KeyShapeSwatch(
@@ -3424,7 +3430,7 @@ fun ThemeEditorScreen(
         ) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_chip_radius_title),
+                    R.string.theme_chip_radius_title,
                     value = (theme.chipCornerRadiusDp ?: DefaultChipRadiusDp).toFloat(),
                     range = 0f..24f,
                     display = { "${it.toInt()} dp" },
@@ -3440,6 +3446,7 @@ fun ThemeEditorScreen(
             )
             WmRow(
                 title = stringResource(R.string.theme_card_shape_title),
+                icon = SettingsRowIcons[R.string.theme_card_shape_title],
                 subtitle = if (cardShape == null) {
                     stringResource(
                         R.string.theme_shape_auto_safe_value,
@@ -3490,7 +3497,7 @@ fun ThemeEditorScreen(
         }
         item(visible = hasCustomRadii) {
             SliderRow(
-                stringResource(R.string.theme_key_radius_title),
+                R.string.theme_key_radius_title,
                 value = (theme.keyCornerRadiusDp ?: 8).toFloat(),
                 range = 0f..28f,
                 display = { "${it.toInt()} dp" },
@@ -3498,7 +3505,7 @@ fun ThemeEditorScreen(
         }
         item(visible = hasCustomRadii) {
             SliderRow(
-                stringResource(R.string.theme_popup_radius_title),
+                R.string.theme_popup_radius_title,
                 value = (theme.popupCornerRadiusDp ?: settings.popup.cornerRadiusDp).toFloat(),
                 range = 0f..40f,
                 display = { "${it.toInt()} dp" },
@@ -3506,7 +3513,7 @@ fun ThemeEditorScreen(
         }
         item(visible = hasCustomRadii) {
             SliderRow(
-                stringResource(R.string.theme_tool_circle_radius_title),
+                R.string.theme_tool_circle_radius_title,
                 value = (theme.toolCircleRadiusDp ?: 20).toFloat(),
                 range = 0f..20f,
                 display = { if (it.toInt() == 0) offLabel else "${it.toInt()} dp" },
@@ -3576,7 +3583,7 @@ fun ThemeEditorScreen(
         if (hasLayoutOverrides) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_tool_width_title),
+                    R.string.theme_tool_width_title,
                     value = (theme.toolWidthDp ?: 38).toFloat(),
                     range = 38f..64f,
                     display = { "${it.toInt()} dp" },
@@ -3584,7 +3591,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_toolbar_height_title),
+                    R.string.theme_toolbar_height_title,
                     value = (theme.toolbarHeightDp ?: 44).toFloat(),
                     range = 32f..80f,
                     display = { "${it.toInt()} dp" },
@@ -3600,7 +3607,7 @@ fun ThemeEditorScreen(
                 val height = (if (onKey) theme.popupHeightDp else theme.popupFloatingHeightDp)
                     ?: settings.popup.heightFor(onKey)
                 SliderRow(
-                    stringResource(R.string.theme_popup_height_title),
+                    R.string.theme_popup_height_title,
                     value = height.toFloat(),
                     range = 32f..160f,
                     display = { "${it.toInt()} dp" },
@@ -3616,7 +3623,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_key_height_title),
+                    R.string.theme_key_height_title,
                     value = (theme.keyHeightDp ?: 48).toFloat(),
                     range = 32f..100f,
                     display = { "${it.toInt()} dp" },
@@ -3624,7 +3631,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_key_gap_title),
+                    R.string.theme_key_gap_title,
                     value = theme.keyGapScale ?: 1f,
                     range = 0f..2f,
                     display = { "%.2f×".format(it) },
@@ -3632,7 +3639,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_side_padding_left_title),
+                    R.string.theme_side_padding_left_title,
                     value = theme.sidePadLeftScale ?: theme.sidePadScale ?: 0f,
                     range = SidePadScaleRange,
                     display = { "${(it * 100).toInt()} %" },
@@ -3640,7 +3647,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_side_padding_right_title),
+                    R.string.theme_side_padding_right_title,
                     value = theme.sidePadRightScale ?: theme.sidePadScale ?: 0f,
                     range = SidePadScaleRange,
                     display = { "${(it * 100).toInt()} %" },
@@ -3648,7 +3655,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_font_scale_title),
+                    R.string.theme_font_scale_title,
                     value = theme.fontScale ?: 1f,
                     range = 0.7f..1.5f,
                     display = { "%.2f×".format(it) },
@@ -3663,7 +3670,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_hint_scale_title),
+                    R.string.theme_hint_scale_title,
                     value = theme.hintFontScale ?: 1f,
                     range = 0.5f..2f,
                     display = { "%.2f×".format(it) },
@@ -3671,7 +3678,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_trail_width_title),
+                    R.string.theme_trail_width_title,
                     value = theme.gestureTrailWidthDp ?: 10f,
                     range = 2f..24f,
                     display = { "${it.toInt()} dp" },
@@ -3679,7 +3686,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_trail_opacity_title),
+                    R.string.theme_trail_opacity_title,
                     value = theme.gestureTrailOpacity ?: 0.55f,
                     range = 0.1f..1f,
                     display = { "${(it * 100).toInt()} %" },
@@ -3713,7 +3720,7 @@ fun ThemeEditorScreen(
         }
         item(visible = theme.animation != ThemeAnimation.NONE) {
             SliderRow(
-                stringResource(R.string.theme_animation_speed_title),
+                R.string.theme_animation_speed_title,
                 value = theme.animationSpeed,
                 range = 0.25f..3f,
                 display = { "%.2f×".format(it) },
@@ -3842,7 +3849,7 @@ fun ThemeEditorScreen(
         if (keyEffectKindOrNull(theme.keyEffect) != null) {
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_intensity_title),
+                    R.string.theme_effect_intensity_title,
                     value = theme.keyEffectIntensity,
                     range = 0.4f..2.4f,
                     display = { "%.1f×".format(it) },
@@ -3876,7 +3883,7 @@ fun ThemeEditorScreen(
                         ChoiceDetail(stringResource(R.string.theme_effect_color_random_desc)),
                 )
                 ChoiceSetting(
-                    title = stringResource(R.string.theme_effect_color_title),
+                    title = R.string.theme_effect_color_title,
                     info = stringResource(R.string.theme_effect_color_body),
                     detail = { colourDetail[it] },
                     options = KeyEffectColorMode.entries.map { option ->
@@ -3900,14 +3907,14 @@ fun ThemeEditorScreen(
             }
             item(visible = keyEffectColorMode(theme.keyEffectColor) == KeyEffectColorMode.CUSTOM) {
                 NullableColorRow(
-                    stringResource(R.string.theme_effect_color_custom_label),
+                    R.string.theme_effect_color_custom_label,
                     theme.keyEffectCustomColor, fallback = theme.accent,
                     onChange = { update { t -> t.copy(keyEffectCustomColor = it) } },
                 )
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_size_title),
+                    R.string.theme_effect_size_title,
                     value = theme.keyEffectSize,
                     range = EFFECT_SIZE_RANGE,
                     display = { "%.1f×".format(it) },
@@ -3915,7 +3922,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_speed_title),
+                    R.string.theme_effect_speed_title,
                     value = theme.keyEffectSpeed,
                     range = EFFECT_SPEED_RANGE,
                     display = { "%.1f×".format(it) },
@@ -3923,7 +3930,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_spread_title),
+                    R.string.theme_effect_spread_title,
                     value = theme.keyEffectSpread,
                     range = EFFECT_SPREAD_RANGE,
                     display = { "%d%%".format((it * 100).roundToInt()) },
@@ -3931,7 +3938,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_gravity_title),
+                    R.string.theme_effect_gravity_title,
                     value = theme.keyEffectGravity,
                     range = EFFECT_GRAVITY_RANGE,
                     display = { "%.1f×".format(it) },
@@ -3940,7 +3947,7 @@ fun ThemeEditorScreen(
             }
             item {
                 SliderRow(
-                    stringResource(R.string.theme_effect_duration_title),
+                    R.string.theme_effect_duration_title,
                     value = theme.keyEffectDurationMs.toFloat(),
                     range = EFFECT_DURATION_RANGE.first.toFloat()..
                         EFFECT_DURATION_RANGE.last.toFloat(),
@@ -4509,35 +4516,35 @@ private fun KeyOverrideDialog(
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 NullableColorRow(
-                    stringResource(R.string.theme_key_background_title),
+                    R.string.theme_key_background_title,
                     override.background, fallback = theme.keyBackground,
                     supportsAlpha = true,
                     onChange = { onChange(override.copy(background = it)) },
                 )
                 NullableColorRow(
-                    stringResource(R.string.theme_key_text_title),
+                    R.string.theme_key_text_title,
                     override.text, fallback = theme.keyText,
                     onChange = { onChange(override.copy(text = it)) },
                 )
                 NullableColorRow(
-                    stringResource(R.string.theme_hint_text_title),
+                    R.string.theme_hint_text_title,
                     override.hint, fallback = theme.hintText ?: theme.keyText,
                     onChange = { onChange(override.copy(hint = it)) },
                 )
                 NullableColorRow(
-                    stringResource(R.string.theme_key_border_title),
+                    R.string.theme_key_border_title,
                     override.border, fallback = theme.keyBorderColor ?: theme.keyText,
                     onChange = { onChange(override.copy(border = it)) },
                 )
                 if (popupsShown) {
                     NullableColorRow(
-                        stringResource(R.string.theme_popup_background_title),
+                        R.string.theme_popup_background_title,
                         override.popupBackground,
                         fallback = theme.popupBackground ?: theme.keyBackground,
                         onChange = { onChange(override.copy(popupBackground = it)) },
                     )
                     NullableColorRow(
-                        stringResource(R.string.theme_popup_text_title),
+                        R.string.theme_popup_text_title,
                         override.popupText, fallback = theme.popupText ?: theme.keyText,
                         onChange = { onChange(override.copy(popupText = it)) },
                     )
@@ -4622,6 +4629,7 @@ private fun KeyOverrideDialog(
                 }
                 WmRow(
                     title = stringResource(R.string.theme_key_override_shape_title),
+                    icon = SettingsRowIcons[R.string.theme_key_override_shape_title],
                     subtitle = keyShapeKindOrNull(override.shape)?.let { keyShapeName(it) }
                         ?: stringResource(CommonR.string.common_auto),
                     onClick = { shapePickerOpen = true },
@@ -4637,14 +4645,14 @@ private fun KeyOverrideDialog(
                     label = stringResource(R.string.theme_key_override_bold_label),
                 ) { bold -> onChange(override.copy(bold = bold)) }
                 ToggleSetting(
-                    title = stringResource(R.string.theme_key_override_label_size_title),
+                    title = R.string.theme_key_override_label_size_title,
                     subtitle = override.labelScale?.let { "${(it * 100).toInt()}%" }
                         ?: stringResource(CommonR.string.common_auto),
                     checked = override.labelScale != null,
                 ) { on -> onChange(override.copy(labelScale = if (on) 1f else null)) }
                 override.labelScale?.let { scale ->
                     SliderRow(
-                        stringResource(R.string.theme_key_override_label_size_title),
+                        R.string.theme_key_override_label_size_title,
                         value = scale,
                         range = KEY_OVERRIDE_LABEL_SCALE_RANGE,
                         display = { "${(it * 100).toInt()}%" },
@@ -4693,31 +4701,31 @@ private fun DecalDialog(
                 ThemePreview(theme, animatedBadge = false)
                 Spacer(Modifier.height(8.dp))
                 SliderRow(
-                    stringResource(R.string.theme_decal_x_title),
+                    R.string.theme_decal_x_title,
                     value = decal.x,
                     range = 0f..1f,
                     display = { "${(it * 100).toInt()}%" },
                 ) { onChange(decal.copy(x = (it * 100).toInt() / 100f)) }
                 SliderRow(
-                    stringResource(R.string.theme_decal_y_title),
+                    R.string.theme_decal_y_title,
                     value = decal.y,
                     range = 0f..1f,
                     display = { "${(it * 100).toInt()}%" },
                 ) { onChange(decal.copy(y = (it * 100).toInt() / 100f)) }
                 SliderRow(
-                    stringResource(R.string.theme_decal_size_title),
+                    R.string.theme_decal_size_title,
                     value = decal.scale,
                     range = 0.05f..0.8f,
                     display = { "${(it * 100).toInt()}%" },
                 ) { onChange(decal.copy(scale = (it * 100).toInt() / 100f)) }
                 SliderRow(
-                    stringResource(R.string.theme_decal_rotation_title),
+                    R.string.theme_decal_rotation_title,
                     value = decal.rotationDeg,
                     range = -180f..180f,
                     display = { "${it.toInt()}°" },
                 ) { onChange(decal.copy(rotationDeg = it.toInt().toFloat())) }
                 SliderRow(
-                    stringResource(R.string.theme_image_opacity_title),
+                    R.string.theme_image_opacity_title,
                     value = decal.opacity,
                     range = 0.1f..1f,
                     display = { "${(it * 100).toInt()}%" },
@@ -4867,7 +4875,7 @@ private fun openLink(context: android.content.Context, url: String) {
  */
 @Composable
 private fun GradientEditor(
-    title: String,
+    @StringRes title: Int,
     subtitle: String,
     gradient: GradientSpec?,
     defaultGradient: GradientSpec,
@@ -4901,7 +4909,7 @@ private fun GradientEditor(
     ) { type -> onChange(gradient.copy(type = type)) }
     if (gradient.type != GradientType.RADIAL) {
         SliderRow(
-            stringResource(R.string.theme_gradient_angle_title),
+            R.string.theme_gradient_angle_title,
             value = gradient.angleDeg,
             range = 0f..360f,
             display = { "${it.toInt()}°" },
@@ -4909,7 +4917,12 @@ private fun GradientEditor(
     }
     gradient.colors.forEachIndexed { index, stop ->
         val stopTitle = stringResource(R.string.theme_gradient_color_title, index + 1)
-        ColorRow(stopTitle, stop, supportsAlpha = true) { picked ->
+        ColorRow(
+            stopTitle,
+            stop,
+            supportsAlpha = true,
+            icon = SettingsRowIcons[R.string.theme_gradient_color_title],
+        ) { picked ->
             onChange(
                 gradient.copy(
                     colors = gradient.colors.toMutableList().also { it[index] = picked },
@@ -5111,11 +5124,23 @@ private fun CropImageDialog(
 /** Shared with the sticker editor, which needs the same throttled slider. */
 @Composable
 internal fun SliderRow(
+    @StringRes title: Int,
+    value: Float,
+    range: ClosedFloatingPointRange<Float>,
+    display: (Float) -> String,
+    info: String? = null,
+    onChange: (Float) -> Unit,
+) = SliderRow(stringResource(title), value, range, display, info, SettingsRowIcons[title], onChange)
+
+/** [SliderRow] for a title that is not one fixed resource. */
+@Composable
+internal fun SliderRow(
     title: String,
     value: Float,
     range: ClosedFloatingPointRange<Float>,
     display: (Float) -> String,
     info: String? = null,
+    icon: ImageVector? = null,
     onChange: (Float) -> Unit,
 ) {
     // One of the few sliders that keeps writing while the finger is down
@@ -5127,6 +5152,7 @@ internal fun SliderRow(
         range = range,
         display = display,
         info = info,
+        icon = icon,
         live = true,
         onChange = onChange,
     )
@@ -5135,15 +5161,26 @@ internal fun SliderRow(
 /** A required color: tap the swatch to edit. */
 @Composable
 private fun ColorRow(
+    @StringRes title: Int,
+    color: Long,
+    supportsAlpha: Boolean = false,
+    info: String? = null,
+    onChange: (Long) -> Unit,
+) = ColorRow(stringResource(title), color, supportsAlpha, info, SettingsRowIcons[title], onChange)
+
+@Composable
+private fun ColorRow(
     title: String,
     color: Long,
     supportsAlpha: Boolean = false,
     info: String? = null,
+    icon: ImageVector? = null,
     onChange: (Long) -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
     WmRow(
         title = title,
+        icon = icon,
         trailing = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (info != null) InfoButton(title = title, detail = info)
@@ -5167,6 +5204,16 @@ private fun ColorRow(
 
 /** An optional color: shows the derived fallback until overridden; resettable. */
 @Composable
+private fun NullableColorRow(
+    @StringRes title: Int,
+    color: Long?,
+    fallback: Long,
+    supportsAlpha: Boolean = false,
+    info: String? = null,
+    onChange: (Long?) -> Unit,
+) = NullableColorRow(stringResource(title), color, fallback, supportsAlpha, info, SettingsRowIcons[title], onChange)
+
+@Composable
 // detekt (1.23, K1 frontend) reads `color ?: fallback` in this @Composable as
 // having an unreachable right-hand side. `color` is a nullable parameter with no
 // preceding narrowing, and the Kotlin 2.2 compiler reports nothing here.
@@ -5177,11 +5224,13 @@ private fun NullableColorRow(
     fallback: Long,
     supportsAlpha: Boolean = false,
     info: String? = null,
+    icon: ImageVector? = null,
     onChange: (Long?) -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
     WmRow(
         title = title,
+        icon = icon,
         supporting = if (color == null) {
             {
                 Text(

@@ -794,7 +794,7 @@ internal fun SnippetFolderScreen(
         }
         item {
             ToggleSetting(
-                title = stringResource(R.string.expander_folder_enabled_title),
+                title = R.string.expander_folder_enabled_title,
                 subtitle = stringResource(R.string.expander_folder_enabled_subtitle),
                 checked = here.enabled,
                 onChange = { on -> mutate { it.setFolderEnabled(folderId, on) } },

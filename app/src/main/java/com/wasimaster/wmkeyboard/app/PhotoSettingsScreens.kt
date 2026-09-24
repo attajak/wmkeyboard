@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -215,6 +216,7 @@ fun PhotoRotationScreen(
             item {
                 WmRow(
                     title = stringResource(R.string.photo_rotation_shuffle_title),
+                    icon = SettingsRowIcons[R.string.photo_rotation_shuffle_title],
                     subtitle = stringResource(R.string.photo_rotation_shuffle_subtitle),
                     enabled = pool.size >= 2,
                     trailing = {
@@ -276,7 +278,7 @@ fun PhotoRotationScreen(
                 // service and a photo picked off the device are the same thing
                 // to a rotation, and both live in the collection.
                 SourceToggle(
-                    title = stringResource(R.string.photo_rotation_source_saved_title),
+                    title = R.string.photo_rotation_source_saved_title,
                     subtitle = stringResource(R.string.photo_rotation_source_saved_subtitle),
                     kind = RotationSourceKind.SAVED,
                     photos = photos,
@@ -284,7 +286,7 @@ fun PhotoRotationScreen(
             }
             item {
                 SourceToggle(
-                    title = stringResource(R.string.photo_rotation_source_online_title),
+                    title = R.string.photo_rotation_source_online_title,
                     subtitle = stringResource(R.string.photo_rotation_source_online_subtitle),
                     kind = RotationSourceKind.ONLINE,
                     photos = photos,
@@ -444,6 +446,7 @@ fun PhotoRotationScreen(
             item {
                 WmRow(
                     title = stringResource(R.string.photo_rotation_delete_downloads_title),
+                    icon = SettingsRowIcons[R.string.photo_rotation_delete_downloads_title],
                     subtitle = stringResource(R.string.photo_rotation_delete_downloads_subtitle),
                     trailing = {
                         TextButton(onClick = {
@@ -675,7 +678,7 @@ private fun HighContrastNote(settings: KeyboardSettings) {
 
 @Composable
 private fun SourceToggle(
-    title: String,
+    @StringRes title: Int,
     subtitle: String,
     kind: RotationSourceKind,
     photos: PhotoBackgroundSettings,

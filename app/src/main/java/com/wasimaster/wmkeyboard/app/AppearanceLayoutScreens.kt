@@ -72,6 +72,7 @@ private fun ResetPinnedToolsSetting(repository: SettingsRepository, scope: Corou
         WmRow(
             title = title,
             subtitle = stringResource(R.string.home_reset_pinned_tools_subtitle),
+            icon = SettingsRowIcons[R.string.home_reset_pinned_tools_title],
             trailing = {
                 OutlinedButton(onClick = { confirm = true }) {
                     Text(stringResource(CommonR.string.common_reset))
@@ -1199,6 +1200,7 @@ internal fun LayoutSizeSettings(
                             values.keyboardWidthPercent ?: settings.keyboardWidthPercent,
                         )
                     },
+                    icon = SettingsRowIcons[variant.labelRes],
                     onClick = {
                         expandedVariant = if (expandedVariant == variant) null else variant
                     },
@@ -1383,6 +1385,7 @@ internal fun LayoutOneHandedSettings(
                         SettingsRepository.ONE_HANDED_WIDTH_MAX.toFloat(),
                     display = { percentFormat.format(it.toInt()) },
                     info = stringResource(R.string.layout_one_handed_width_info),
+                    icon = SettingsRowIcons[R.string.layout_one_handed_width_title],
                     default = SettingsDefaults.oneHanded.forLandscape(landscape)
                         .widthPercent.toFloat(),
                 ) { scope.launch { repository.setOneHandedWidthPercent(landscape, it.toInt()) } }
@@ -1399,6 +1402,7 @@ internal fun LayoutOneHandedSettings(
                         SettingsRepository.ONE_HANDED_HEIGHT_SCALE_MAX.toFloat(),
                     display = { percentFormat.format(it.toInt()) },
                     info = stringResource(R.string.layout_one_handed_height_info),
+                    icon = SettingsRowIcons[R.string.layout_one_handed_height_title],
                     default = SettingsDefaults.oneHanded.forLandscape(landscape)
                         .heightScale.toFloat(),
                 ) { scope.launch { repository.setOneHandedHeightScale(landscape, it.toInt()) } }
@@ -1414,6 +1418,7 @@ internal fun LayoutOneHandedSettings(
                         R.string.layout_one_handed_side_subtitle,
                         orientationLabel,
                     ),
+                    icon = SettingsRowIcons[R.string.layout_one_handed_side_title],
                     options = OneHandedSide.entries.map { side ->
                         side to stringResource(layoutOneHandedSideLabelRes(side))
                     },

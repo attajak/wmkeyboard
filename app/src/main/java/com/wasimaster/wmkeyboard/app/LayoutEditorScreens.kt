@@ -1570,6 +1570,7 @@ internal fun KeyLayoutEditorScreen(
         item {
             WmRow(
                 title = stringResource(R.string.layout_editor_name_title),
+                icon = SettingsRowIcons[R.string.layout_editor_name_title],
                 subtitle = layout.name,
                 onClick = { renaming = true },
             )
@@ -1579,6 +1580,7 @@ internal fun KeyLayoutEditorScreen(
             // keyboard mode carries and the same picker, customs included.
             WmRow(
                 title = stringResource(R.string.layout_editor_theme_title),
+                icon = SettingsRowIcons[R.string.layout_editor_theme_title],
                 subtitle = layout.themeId?.let { themeDisplayName(settings, it) }
                     ?: stringResource(R.string.layout_editor_theme_inherit_subtitle),
                 trailing = {
@@ -1596,6 +1598,7 @@ internal fun KeyLayoutEditorScreen(
         item(visible = !secondary) {
             WmRow(
                 title = stringResource(R.string.layout_editor_language_title),
+                icon = SettingsRowIcons[R.string.layout_editor_language_title],
                 subtitle = layout.langId.takeIf { it.isNotBlank() }
                     ?.let { LanguageRegistry.byId(it).displayName }
                     ?: stringResource(R.string.layout_editor_language_unset),
@@ -1961,6 +1964,7 @@ internal fun KeyLayoutEditorScreen(
         item {
             ReorderSetting(
                 title = stringResource(R.string.layout_editor_reorder_rows_title),
+                icon = SettingsRowIcons[R.string.layout_editor_reorder_rows_title],
                 dialogTitle = stringResource(R.string.layout_editor_row_order_dialog_title),
                 items = rows.indices.toList(),
                 label = { i -> rowReorderLabel(context, i + 1, rows[i].size) },
@@ -1980,6 +1984,7 @@ internal fun KeyLayoutEditorScreen(
                         R.string.layout_editor_reorder_keys_title,
                         ref.row + 1,
                     ),
+                    icon = SettingsRowIcons[R.string.layout_editor_reorder_keys_title],
                     dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
                     // Positions, not the keys themselves — the same shape the
                     // row reorder above uses, and for the stronger of its two
@@ -2044,6 +2049,7 @@ internal fun KeyLayoutEditorScreen(
                     R.string.layout_editor_layer_theme_title,
                     stringResource(layerTitleRes(layer)),
                 ),
+                icon = SettingsRowIcons[R.string.layout_editor_layer_theme_title],
                 subtitle = layerThemeId?.let { themeDisplayName(settings, it) }
                     ?: stringResource(R.string.layout_editor_layer_theme_inherit_subtitle),
                 trailing = {
@@ -2084,6 +2090,7 @@ internal fun KeyLayoutEditorScreen(
             // global settings can hold an answer for one layout.
             WmRow(
                 title = stringResource(R.string.layout_editor_font_title),
+                icon = SettingsRowIcons[R.string.layout_editor_font_title],
                 subtitle = layout.appearance?.fontId?.let {
                     KeyboardFonts.displayName(context, it, settings.customFontName)
                 } ?: stringResource(R.string.layout_editor_font_inherit),
@@ -4534,7 +4541,7 @@ private fun ActionAlternatesRows(
     var pickingLayoutAt by remember { mutableStateOf<Int?>(null) }
 
     ControlSetting(
-        stringResource(R.string.layout_editor_action_alternates_label),
+        R.string.layout_editor_action_alternates_label,
         subtitle = stringResource(R.string.layout_editor_action_alternates_hint),
     ) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
@@ -4865,7 +4872,10 @@ internal fun RowHeightRow(
         ceiling = MaxRowHeightScale,
         hardMax = MaxRowHeightScale,
     )
-    ControlSetting(stringResource(R.string.layout_editor_row_height_label, height)) {
+    ControlSetting(
+        stringResource(R.string.layout_editor_row_height_label, height),
+        icon = SettingsRowIcons[R.string.layout_editor_row_height_label],
+    ) {
         WmSlider(
             value = sliderPosition(height, travel),
             onValueChange = { onChange(roundGridUnit(it)) },
@@ -4928,7 +4938,11 @@ internal fun LayoutFontScaleRow(
         ceiling = LayoutFontScaleRange.endInclusive,
         hardMax = LayoutFontScaleRange.endInclusive,
     )
-    ControlSetting(if (scale == null) autoTitle else title, subtitle = hint) {
+    ControlSetting(
+        if (scale == null) autoTitle else title,
+        subtitle = hint,
+        icon = SettingsRowIcons[R.string.layout_editor_font_scale_label],
+    ) {
         WmSlider(
             value = sliderPosition(shown, travel),
             onValueChange = { onChange(roundGridUnit(it)) },
@@ -4984,6 +4998,7 @@ private fun KeyLabelScaleRow(key: Key, onChange: (Float?) -> Unit) {
             stringResource(R.string.layout_editor_key_label_scale_label, scale)
         },
         subtitle = stringResource(R.string.layout_editor_key_label_scale_hint),
+        icon = SettingsRowIcons[R.string.layout_editor_key_label_scale_label],
     ) {
         if (scale != null) {
             WmSlider(
@@ -5068,6 +5083,7 @@ private fun KeyRowSpanRow(span: Int, rowsBelow: Int, onChange: (Int) -> Unit) {
     ControlSetting(
         pluralStringResource(R.plurals.layout_editor_key_row_span_label, span, span),
         subtitle = stringResource(R.string.layout_editor_key_row_span_hint),
+        icon = SettingsRowIcons[R.string.layout_editor_key_row_span_hint],
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(top = 4.dp)) {
             for (choice in choices) {
@@ -5091,7 +5107,10 @@ private fun KeyWidthRow(
 ) {
     val remaining = gridWeight - otherWidthsInRow
     val travel = sliderTravel(width, floor = 0.5f, ceiling = 5f, hardMax = MaxKeyWidth)
-    ControlSetting(stringResource(R.string.layout_editor_key_width_label, width)) {
+    ControlSetting(
+        stringResource(R.string.layout_editor_key_width_label, width),
+        icon = SettingsRowIcons[R.string.layout_editor_key_width_label],
+    ) {
         // Continuous, landing on hundredths. It used to move in quarters, on the
         // grounds that a free slider writes 1.0374 into a file people are invited
         // to hand-edit — true, but quarters cannot express the 1.43 that seven

@@ -192,6 +192,7 @@ internal fun PanelLayoutsGroup(custom: List<PanelLayoutSpec>, onNavigate: (Strin
                 val isCustom = custom.any { it.panel == kind }
                 WmRow(
                     title = name,
+                    icon = SettingsRowIcons[panelTitleRes(kind)],
                     subtitle = stringResource(
                         if (isCustom) R.string.panel_layout_value_custom else R.string.panel_layout_value_default,
                     ),
@@ -550,6 +551,7 @@ internal fun PanelEditorBody(
         item {
             ReorderSetting(
                 title = stringResource(R.string.layout_editor_reorder_rows_title),
+                icon = SettingsRowIcons[R.string.layout_editor_reorder_rows_title],
                 dialogTitle = stringResource(R.string.layout_editor_row_order_dialog_title),
                 items = rows.indices.toList(),
                 label = { i -> rowReorderLabel(context, i + 1, rows[i].size) },
@@ -563,6 +565,7 @@ internal fun PanelEditorBody(
             item(visible = ref.row in rows.indices && rows[ref.row].size > 1) {
                 ReorderSetting(
                     title = stringResource(R.string.layout_editor_reorder_keys_title, ref.row + 1),
+                    icon = SettingsRowIcons[R.string.layout_editor_reorder_keys_title],
                     dialogTitle = stringResource(R.string.layout_editor_key_order_dialog_title),
                     items = rows[ref.row].indices.toList(),
                     label = { keyReorderLabel(context, rows[ref.row][it]) },
@@ -601,6 +604,7 @@ internal fun PanelEditorBody(
             val clearLabel = stringResource(CommonR.string.common_clear)
             WmRow(
                 title = stringResource(R.string.layout_editor_panel_theme_title),
+                icon = SettingsRowIcons[R.string.layout_editor_panel_theme_title],
                 subtitle = grid.themeId?.let { themeDisplayName(settings, it) }
                     ?: stringResource(R.string.layout_editor_panel_theme_inherit_subtitle),
                 trailing = {

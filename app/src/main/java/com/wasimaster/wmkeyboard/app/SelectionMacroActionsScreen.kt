@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Abc
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
@@ -40,6 +41,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.effectiveTimeZones
 import com.wasimaster.wmkeyboard.core.tools.orderedAiActions
+import com.wasimaster.wmkeyboard.ime.ui.selectionMacroIcon
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.TimeZone
@@ -182,6 +184,10 @@ private fun MacroRow(
     WmRow(
         title = stringResource(macro.labelRes),
         subtitle = stringResource(macroDescription(macro)),
+        // The chip's own glyph, so the list reads as the bar it configures. The
+        // case options have none on the bar (their names are written in the case
+        // they apply) and share one here, so the column of tiles stays unbroken.
+        icon = selectionMacroIcon(macro) ?: Icons.Outlined.Abc,
         trailing = {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (optionsRoute != null) {

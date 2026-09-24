@@ -76,7 +76,7 @@ internal fun KeymanRulesRow(binding: KeymanBinding, layoutName: String, refreshK
     NavRow(
         title = stringResource(R.string.languages_keyman_rules_title_for, layoutName),
         subtitle = subtitle,
-        icon = null,
+        icon = SettingsRowIcons[R.string.languages_keyman_rules_title_for],
     ) {
         // A second press on an installed row removes the rules rather than
         // re-fetching them, so the row is its own undo.

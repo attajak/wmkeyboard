@@ -465,6 +465,7 @@ internal fun StickerPackScreen(
             WmRow(
                 title = pack.name,
                 subtitle = stringResource(R.string.import_sticker_pack_rename_subtitle),
+                icon = SettingsRowIcons[R.string.import_sticker_pack_rename_subtitle],
                 onClick = { renaming = pack.name },
             )
         }

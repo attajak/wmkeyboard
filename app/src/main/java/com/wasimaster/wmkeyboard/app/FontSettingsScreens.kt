@@ -116,6 +116,7 @@ internal fun FontSettings(
                 val script = choices.script.name
                 NavRow(
                     title = stringResource(R.string.fonts_script_header, stringResource(choices.labelRes)),
+                    icon = SettingsRowIcons[R.string.fonts_script_header],
                     value = KeyboardFonts.displayName(
                         context,
                         settings.scriptFontIds[script] ?: KeyboardFonts.DEFAULT_ID,

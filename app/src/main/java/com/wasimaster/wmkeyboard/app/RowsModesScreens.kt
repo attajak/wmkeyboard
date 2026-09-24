@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.core.settings.DefaultBarOrder
@@ -1261,12 +1262,14 @@ internal fun <T> ReorderSetting(
     dialogTitle: String,
     items: List<T>,
     label: (T) -> String,
+    icon: ImageVector? = null,
     onReordered: (List<T>) -> Unit,
 ) {
     var open by remember { mutableStateOf(false) }
     val enabled = items.size > 1
     WmRow(
         title = title,
+        icon = icon,
         subtitle = if (enabled) {
                 items.joinToString(" · ", limit = 4) { label(it) }
             } else {
@@ -1637,6 +1640,7 @@ internal fun ModeEditor(
             var themePickerOpen by remember { mutableStateOf(false) }
             WmRow(
                 title = stringResource(R.string.modes_theme_title),
+                icon = SettingsRowIcons[R.string.modes_theme_title],
                 subtitle = mode.themeId?.let { themeDisplayName(settings, it) }
                     ?: stringResource(R.string.modes_theme_inherit_subtitle),
                 trailing = {
@@ -1891,6 +1895,7 @@ internal fun ModeEditor(
             WmRow(
                 title = stringResource(R.string.modes_field_hints_title),
                 subtitle = stringResource(R.string.modes_field_hints_body),
+                icon = SettingsRowIcons[R.string.modes_field_hints_title],
             )
         }
         for (hint in mode.hints) {

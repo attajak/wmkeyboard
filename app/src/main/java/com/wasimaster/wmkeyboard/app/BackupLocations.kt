@@ -727,7 +727,7 @@ private fun WebDavPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit
         return next.copy(webDavUrl = p.url(next.webDavServer, next.webDavUser, next.webDavFolder))
     }
     ChoiceSetting(
-        title = stringResource(R.string.backup_webdav_preset_title),
+        title = R.string.backup_webdav_preset_title,
         options = WebDavPreset.entries.map { it to if (it == WebDavPreset.CUSTOM) other else it.label },
         selected = preset,
     ) { picked ->
@@ -873,7 +873,7 @@ private fun S3Part(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
         onChange(draft.copy(s3 = fixed))
     }
     ChoiceSetting(
-        title = stringResource(R.string.backup_s3_preset_title),
+        title = R.string.backup_s3_preset_title,
         options = S3Preset.entries.map { it to if (it == S3Preset.CUSTOM) other else it.label },
         selected = preset,
     ) { picked ->
@@ -1126,7 +1126,7 @@ private fun SmbPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
 private fun GitPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) {
     val git = draft.git
     ChoiceSetting(
-        title = stringResource(R.string.backup_git_provider_title),
+        title = R.string.backup_git_provider_title,
         options = listOf(
             GitProvider.GITHUB to stringResource(R.string.backup_git_provider_github),
             GitProvider.GITLAB to stringResource(R.string.backup_git_provider_gitlab),
@@ -1238,7 +1238,7 @@ private fun ImapPart(draft: BackupLocation, onChange: (BackupLocation) -> Unit) 
         keyboardType = KeyboardType.Uri,
     ) { onChange(draft.copy(imap = imap.copy(host = it.trim()))) }
     ChoiceSetting(
-        title = stringResource(R.string.backup_imap_security_title),
+        title = R.string.backup_imap_security_title,
         options = listOf(
             ImapSecurity.TLS to stringResource(R.string.backup_imap_security_tls),
             ImapSecurity.STARTTLS to stringResource(R.string.backup_imap_security_starttls),
@@ -1368,7 +1368,7 @@ private fun DrivePart(draft: BackupLocation, onMessage: (String) -> Unit, onChan
     LaunchedEffect(driveScope) { authorized = authorizer.authorized(context, driveScope) }
 
     ChoiceSetting(
-        title = stringResource(R.string.backup_drive_space_title),
+        title = R.string.backup_drive_space_title,
         options = listOf(
             DriveSpace.APP_DATA to stringResource(R.string.backup_drive_space_hidden),
             DriveSpace.FOLDER to stringResource(R.string.backup_drive_space_folder),
