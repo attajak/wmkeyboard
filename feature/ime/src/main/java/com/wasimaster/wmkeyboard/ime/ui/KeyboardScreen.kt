@@ -735,7 +735,7 @@ internal class LanguageSwitchEcho {
 internal val LocalLanguageSwitchEcho = staticCompositionLocalOf { LanguageSwitchEcho() }
 
 /** How long a switched-to language is on screen in all, swipe preview plus [LanguageSwitchEcho]. */
-private const val LanguageSwitchEchoMs = 700L
+private const val LanguageSwitchEchoMs = 500L
 
 /**
  * A language the swipe preview showed for this long before the lift has been

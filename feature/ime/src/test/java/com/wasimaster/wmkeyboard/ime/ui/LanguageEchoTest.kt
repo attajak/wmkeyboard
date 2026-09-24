@@ -12,13 +12,13 @@ class LanguageEchoTest {
 
     @Test
     fun `a flick that lifts at once echoes in full`() {
-        assertEquals(700L, languageEchoMs(0L))
+        assertEquals(500L, languageEchoMs(0L))
     }
 
     @Test
     fun `a brief preview tops the echo up to the full time`() {
-        assertEquals(670L, languageEchoMs(30L))
-        assertEquals(451L, languageEchoMs(249L))
+        assertEquals(470L, languageEchoMs(30L))
+        assertEquals(251L, languageEchoMs(249L))
     }
 
     @Test
@@ -29,6 +29,6 @@ class LanguageEchoTest {
 
     @Test
     fun `a clock that runs backwards counts as unseen`() {
-        assertEquals(700L, languageEchoMs(-5L))
+        assertEquals(500L, languageEchoMs(-5L))
     }
 }
