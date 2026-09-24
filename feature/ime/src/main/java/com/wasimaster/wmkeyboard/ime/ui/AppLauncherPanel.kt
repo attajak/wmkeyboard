@@ -5,10 +5,27 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Fullscreen
+import androidx.compose.material.icons.outlined.Link
+import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.outlined.PictureInPictureAlt
+import androidx.compose.material.icons.outlined.VerticalSplit
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.wasimaster.wmkeyboard.core.settings.LauncherOpenMode
+import com.wasimaster.wmkeyboard.core.settings.LauncherSplitCombo
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -77,15 +94,37 @@ class LauncherPanelCallbacks(
     val onHideToggle: (String) -> Unit = {},
     /** Resolves an app's icon through the service's LRU cache, off-main. */
     val iconFor: suspend (LauncherApp) -> ImageBitmap? = { null },
+    /** Opens one app in an explicit mode, from the hold menu. */
+    val onAppOpen: (LauncherApp, LauncherOpenMode) -> Unit = { _, _ -> },
+    val onComboTap: (LauncherSplitCombo) -> Unit = {},
+    val onComboAdd: (LauncherSplitCombo) -> Unit = {},
+    val onComboRemove: (LauncherSplitCombo) -> Unit = {},
+    /** Whether split-screen launches can work here; see `AppLaunchModes`. */
+    val splitAvailable: () -> Boolean = { false },
+    /** Whether the device has a freeform window mode at all. */
+    val freeformAvailable: () -> Boolean = { false },
 )
+
+/** What the hold menu is open on: an app, or a saved split pair. */
+private sealed interface LauncherMenuTarget {
+    data class App(val app: LauncherApp) : LauncherMenuTarget
+    data class Combo(val combo: LauncherSplitCombo) : LauncherMenuTarget
+}
 
 /**
  * The app-launcher tool: a searchable grid of every launchable app, a
- * pinned/recents row, and (long-press, from either) a per-app page carrying
- * the pin, hide and App-info actions plus the activities inside the app. The
- * service owns the catalog and the launches; this panel renders
+ * pinned/recents row, a row of saved split-screen pairs, and (long-press, from
+ * any of them) a menu: open normally, in a floating window or in split screen,
+ * start a pair, pin, or go to the app's page with its hide and App-info
+ * actions and the activities inside it. The service owns the catalog and the
+ * launches; this panel renders
  * [KeyboardUiState.launcherApps]/[KeyboardUiState.launcherDetail]
  * and reports taps.
+ *
+ * The menu and the pick-a-second-app step of a new pair are local state and
+ * drawn inside the panel rather than in a popup window: both are over the
+ * moment the panel closes, and a window of their own would bring the IME
+ * popup focus and touch rules along for nothing.
  *
  * [iconFor] resolves one app's icon off the main thread through the service's
  * LRU cache — cells draw a neutral placeholder until theirs lands, so a cold
@@ -97,6 +136,12 @@ internal fun AppLauncherPanel(
     callbacks: LauncherPanelCallbacks,
     onQueryTap: () -> Unit,
 ) {
+    var menu by remember { mutableStateOf<LauncherMenuTarget?>(null) }
+    var pairing by remember { mutableStateOf<LauncherApp?>(null) }
+    // Read once per panel open: both are device facts that a developer-option
+    // flip is the only thing to change, and the next open picks that up.
+    val splitAvailable = remember { callbacks.splitAvailable() }
+    val freeformAvailable = remember { callbacks.freeformAvailable() }
     val detail = state.launcherDetail
     if (detail != null) {
         LauncherDetail(
@@ -106,10 +151,73 @@ internal fun AppLauncherPanel(
         )
         return
     }
-    LauncherGrid(
-        state, callbacks.iconFor, callbacks.onAppTap,
-        callbacks.onOpenDetail, onQueryTap,
-    )
+    val pick: (LauncherApp) -> Unit = { app ->
+        val first = pairing
+        when {
+            first == null -> callbacks.onAppTap(app)
+            // The first app again backs out rather than pairing an app with itself.
+            first.packageName == app.packageName -> pairing = null
+            else -> {
+                callbacks.onComboAdd(LauncherSplitCombo(first.packageName, app.packageName))
+                pairing = null
+            }
+        }
+    }
+    Box(Modifier.fillMaxSize()) {
+        LauncherGrid(
+            state = state,
+            iconFor = callbacks.iconFor,
+            onAppTap = pick,
+            onAppLongPress = { app -> if (pairing != null) pick(app) else menu = LauncherMenuTarget.App(app) },
+            onQueryTap = onQueryTap,
+            combos = if (splitAvailable && pairing == null) state.settings.launcher.combos else emptyList(),
+            onComboTap = callbacks.onComboTap,
+            onComboLongPress = { menu = LauncherMenuTarget.Combo(it) },
+            pairing = pairing,
+            onCancelPairing = { pairing = null },
+        )
+        when (val target = menu) {
+            is LauncherMenuTarget.App -> AppMenu(
+                state = state,
+                app = target.app,
+                iconFor = callbacks.iconFor,
+                splitAvailable = splitAvailable,
+                freeformAvailable = freeformAvailable,
+                onDismiss = { menu = null },
+                onOpen = { mode ->
+                    menu = null
+                    callbacks.onAppOpen(target.app, mode)
+                },
+                onPair = {
+                    menu = null
+                    pairing = target.app
+                },
+                onPinToggle = {
+                    menu = null
+                    callbacks.onPinToggle(target.app.packageName)
+                },
+                onOpenPage = {
+                    menu = null
+                    callbacks.onOpenDetail(target.app)
+                },
+            )
+            is LauncherMenuTarget.Combo -> ComboMenu(
+                state = state,
+                combo = target.combo,
+                iconFor = callbacks.iconFor,
+                onDismiss = { menu = null },
+                onOpen = {
+                    menu = null
+                    callbacks.onComboTap(target.combo)
+                },
+                onRemove = {
+                    menu = null
+                    callbacks.onComboRemove(target.combo)
+                },
+            )
+            null -> Unit
+        }
+    }
 }
 
 @Composable
@@ -117,10 +225,14 @@ private fun LauncherGrid(
     state: KeyboardUiState,
     iconFor: suspend (LauncherApp) -> ImageBitmap?,
     onAppTap: (LauncherApp) -> Unit,
-    onOpenDetail: (LauncherApp) -> Unit,
+    onAppLongPress: (LauncherApp) -> Unit,
     onQueryTap: () -> Unit,
+    combos: List<LauncherSplitCombo>,
+    onComboTap: (LauncherSplitCombo) -> Unit,
+    onComboLongPress: (LauncherSplitCombo) -> Unit,
+    pairing: LauncherApp?,
+    onCancelPairing: () -> Unit,
 ) {
-    val kb = LocalKbTheme.current
     val launcher = state.settings.launcher
     val query = state.mediaQuery
     val hidden = launcher.hidden.toSet()
@@ -147,6 +259,18 @@ private fun LauncherGrid(
     } else {
         emptyList()
     }
+    // A pair whose app was uninstalled drops out of the row but stays saved,
+    // so reinstalling the app brings the pair back.
+    val shownCombos = if (query.isEmpty() && !state.mediaSearchActive && combos.isNotEmpty()) {
+        val byPackage = state.launcherApps.associateBy { it.packageName }
+        combos.mapNotNull { combo ->
+            val first = byPackage[combo.first] ?: return@mapNotNull null
+            val second = byPackage[combo.second] ?: return@mapNotNull null
+            Triple(combo, first, second)
+        }
+    } else {
+        emptyList()
+    }
 
     PanelFocusTarget(PanelMode.APP_LAUNCHER, 1, 1, FocusRegion.SEARCH) { onQueryTap() }
     PanelFocusTarget(PanelMode.APP_LAUNCHER, shortcuts.size, shortcuts.size, FocusRegion.CHIPS) {
@@ -161,6 +285,35 @@ private fun LauncherGrid(
         sorted.getOrNull(it)?.let(onAppTap)
     }
 
+    // Above every state, empty results included: a search that finds nothing
+    // mid-pick must still show what the next tap is for and how to back out.
+    Column(Modifier.fillMaxSize()) {
+        if (pairing != null) PairingBanner(pairing.label, onCancelPairing)
+        LauncherGridBody(
+            state, iconFor, onAppTap, onAppLongPress, sorted, shortcuts, shownCombos,
+            onComboTap, onComboLongPress, fixedColumns, iconShape, hidden,
+        )
+    }
+}
+
+@Suppress("LongParameterList")
+@Composable
+private fun LauncherGridBody(
+    state: KeyboardUiState,
+    iconFor: suspend (LauncherApp) -> ImageBitmap?,
+    onAppTap: (LauncherApp) -> Unit,
+    onAppLongPress: (LauncherApp) -> Unit,
+    sorted: List<LauncherApp>,
+    shortcuts: List<LauncherApp>,
+    shownCombos: List<Triple<LauncherSplitCombo, LauncherApp, LauncherApp>>,
+    onComboTap: (LauncherSplitCombo) -> Unit,
+    onComboLongPress: (LauncherSplitCombo) -> Unit,
+    fixedColumns: Int?,
+    iconShape: Shape?,
+    hidden: Set<String>,
+) {
+    val kb = LocalKbTheme.current
+    val launcher = state.settings.launcher
     when {
         state.launcherLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -192,6 +345,36 @@ private fun LauncherGrid(
             }
         }
         else -> Column(Modifier.fillMaxSize()) {
+            if (shownCombos.isNotEmpty()) {
+                Text(
+                    stringResource(R.string.ime_launcher_combos_label),
+                    color = kb.secondaryText,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(start = 14.dp, top = 2.dp),
+                )
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(58.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    rowItemsIndexed(
+                        shownCombos,
+                        key = { _, (combo, _, _) -> "combo:${combo.first}/${combo.second}" },
+                    ) { _, (combo, first, second) ->
+                        ComboCell(
+                            combo = combo,
+                            first = first,
+                            second = second,
+                            shape = iconShape,
+                            iconFor = iconFor,
+                            onTap = { onComboTap(combo) },
+                            onLongPress = { onComboLongPress(combo) },
+                        )
+                    }
+                }
+            }
             if (shortcuts.isNotEmpty()) {
                 Text(
                     stringResource(
@@ -216,7 +399,7 @@ private fun LauncherGrid(
                             shape = iconShape,
                             iconFor = iconFor,
                             onTap = { onAppTap(app) },
-                            onLongPress = { onOpenDetail(app) },
+                            onLongPress = { onAppLongPress(app) },
                         )
                     }
                 }
@@ -244,9 +427,9 @@ private fun LauncherGrid(
                         iconFor = iconFor,
                         onTap = { onAppTap(app) },
                         // One meaning for a hold everywhere in this panel: the
-                        // app's page. Pinning and hiding both live there, and a
-                        // hold that pinned instead left hiding with no door.
-                        onLongPress = { onOpenDetail(app) },
+                        // app's menu, whose last item is the app's page, so
+                        // hiding keeps its door.
+                        onLongPress = { onAppLongPress(app) },
                     )
                 }
             }
@@ -414,6 +597,294 @@ private fun ShortcutCell(
             modifier = Modifier.width(52.dp),
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+/** What the next tap does while a pair is being made, and the way out. */
+@Composable
+private fun PairingBanner(firstLabel: String, onCancel: () -> Unit) {
+    val kb = LocalKbTheme.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(kb.chip)
+            .padding(start = 12.dp, end = 4.dp, top = 2.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            Icons.Outlined.VerticalSplit,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = kb.toolbarIcon,
+        )
+        Text(
+            stringResource(R.string.ime_launcher_pair_prompt, firstLabel),
+            color = kb.suggestionText,
+            fontSize = 12.sp,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp),
+        )
+        Text(
+            stringResource(R.string.ime_launcher_pair_cancel),
+            color = kb.accent,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable(onClick = onCancel)
+                .padding(horizontal = 10.dp, vertical = 8.dp),
+        )
+    }
+}
+
+/** A saved pair: the two icons overlapped, first in front, and its name. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun ComboCell(
+    combo: LauncherSplitCombo,
+    first: LauncherApp,
+    second: LauncherApp,
+    shape: Shape?,
+    iconFor: suspend (LauncherApp) -> ImageBitmap?,
+    onTap: () -> Unit,
+    onLongPress: () -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    val feedback = LocalKeyPressFeedback.current
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .combinedClickable(
+                onClick = onTap,
+                onLongClick = {
+                    feedback()
+                    onLongPress()
+                },
+            )
+            .padding(horizontal = 8.dp, vertical = 3.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(Modifier.width(50.dp).height(36.dp)) {
+            Box(
+                Modifier
+                    .size(30.dp)
+                    .align(Alignment.BottomEnd),
+            ) { AppIcon(second, sizeDp = 30, shape = shape, iconFor = iconFor) }
+            Box(
+                Modifier
+                    .size(30.dp)
+                    .align(Alignment.TopStart),
+            ) { AppIcon(first, sizeDp = 30, shape = shape, iconFor = iconFor) }
+        }
+        Text(
+            comboLabel(combo, first, second),
+            color = kb.secondaryText,
+            fontSize = 9.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.width(72.dp),
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun comboLabel(combo: LauncherSplitCombo, first: LauncherApp, second: LauncherApp): String =
+    combo.name.ifBlank { stringResource(R.string.ime_launcher_combo_label, first.label, second.label) }
+
+/**
+ * The hold menu on one app. The three open modes lead; split screen and
+ * making a pair are left out where split screen cannot work, and the
+ * floating window says so when the device has no freeform mode to put it in
+ * (it still opens, full screen). The app's page — screens, hide, App info —
+ * closes the list, so everything a hold used to reach is still one step away.
+ */
+@Suppress("LongParameterList")
+@Composable
+private fun AppMenu(
+    state: KeyboardUiState,
+    app: LauncherApp,
+    iconFor: suspend (LauncherApp) -> ImageBitmap?,
+    splitAvailable: Boolean,
+    freeformAvailable: Boolean,
+    onDismiss: () -> Unit,
+    onOpen: (LauncherOpenMode) -> Unit,
+    onPair: () -> Unit,
+    onPinToggle: () -> Unit,
+    onOpenPage: () -> Unit,
+) {
+    val launcher = state.settings.launcher
+    val shape = launcherIconShape(launcher.iconShape)
+    val pinned = app.packageName in launcher.pinned
+    LauncherMenuSheet(
+        header = { AppIcon(app, sizeDp = 28, shape = shape, iconFor = iconFor) },
+        title = app.label,
+        onDismiss = onDismiss,
+    ) {
+        LauncherMenuItem(
+            Icons.Outlined.Fullscreen,
+            stringResource(R.string.ime_launcher_open_action),
+        ) { onOpen(LauncherOpenMode.NORMAL) }
+        LauncherMenuItem(
+            Icons.Outlined.PictureInPictureAlt,
+            stringResource(R.string.ime_launcher_open_floating_action),
+            note = if (freeformAvailable) null else stringResource(R.string.ime_launcher_floating_unsupported),
+        ) { onOpen(LauncherOpenMode.FLOATING) }
+        if (splitAvailable) {
+            LauncherMenuItem(
+                Icons.Outlined.VerticalSplit,
+                stringResource(R.string.ime_launcher_open_split_action),
+            ) { onOpen(LauncherOpenMode.SPLIT) }
+            LauncherMenuItem(
+                Icons.Outlined.Link,
+                stringResource(R.string.ime_launcher_pair_action),
+                onClick = onPair,
+            )
+        }
+        LauncherMenuItem(
+            Icons.Outlined.PushPin,
+            stringResource(if (pinned) R.string.ime_launcher_unpin_action else R.string.ime_launcher_pin_action),
+            onClick = onPinToggle,
+        )
+        LauncherMenuItem(
+            Icons.Outlined.MoreHoriz,
+            stringResource(
+                if (launcher.activityDrilldown) R.string.ime_launcher_page_action
+                else R.string.ime_launcher_page_no_screens_action,
+            ),
+            onClick = onOpenPage,
+        )
+    }
+}
+
+/** The hold menu on a saved pair: open it, or remove it. */
+@Composable
+private fun ComboMenu(
+    state: KeyboardUiState,
+    combo: LauncherSplitCombo,
+    iconFor: suspend (LauncherApp) -> ImageBitmap?,
+    onDismiss: () -> Unit,
+    onOpen: () -> Unit,
+    onRemove: () -> Unit,
+) {
+    val byPackage = state.launcherApps.associateBy { it.packageName }
+    val first = byPackage[combo.first]
+    val second = byPackage[combo.second]
+    val shape = launcherIconShape(state.settings.launcher.iconShape)
+    LauncherMenuSheet(
+        header = { if (first != null) AppIcon(first, sizeDp = 28, shape = shape, iconFor = iconFor) },
+        title = if (first != null && second != null) {
+            comboLabel(combo, first, second)
+        } else {
+            combo.name.ifBlank { "${combo.first} + ${combo.second}" }
+        },
+        onDismiss = onDismiss,
+    ) {
+        LauncherMenuItem(
+            Icons.Outlined.VerticalSplit,
+            stringResource(R.string.ime_launcher_combo_open_action),
+            onClick = onOpen,
+        )
+        LauncherMenuItem(
+            Icons.Outlined.Delete,
+            stringResource(R.string.ime_launcher_combo_remove_action),
+            onClick = onRemove,
+        )
+    }
+}
+
+/**
+ * A menu drawn inside the panel over a scrim that closes it. Scrolls when the
+ * keyboard is short: the app menu runs to six rows.
+ */
+@Composable
+private fun LauncherMenuSheet(
+    header: @Composable () -> Unit,
+    title: String,
+    onDismiss: () -> Unit,
+    items: @Composable ColumnScope.() -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    val closeLabel = stringResource(R.string.ime_launcher_menu_close)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(kb.board.copy(alpha = 0.72f))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClickLabel = closeLabel,
+                onClick = onDismiss,
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .widthIn(max = 340.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(kb.popup)
+                // Swallows taps between rows so they do not reach the scrim.
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {},
+                )
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 4.dp),
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.size(28.dp)) { header() }
+                Text(
+                    title,
+                    color = kb.popupText,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 10.dp),
+                )
+            }
+            items()
+        }
+    }
+}
+
+@Composable
+private fun LauncherMenuItem(
+    icon: ImageVector,
+    label: String,
+    note: String? = null,
+    onClick: () -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp), tint = kb.popupText)
+        Column(Modifier.padding(start = 12.dp)) {
+            Text(label, color = kb.popupText, fontSize = 13.sp)
+            if (note != null) {
+                Text(
+                    note,
+                    color = kb.popupText.copy(alpha = 0.65f),
+                    fontSize = 10.sp,
+                )
+            }
+        }
     }
 }
 

@@ -3941,6 +3941,74 @@ enum class AppSortOrder { ALPHABETICAL, RECENT_FIRST }
 enum class LauncherIconShape { CIRCLE, ROUNDED, SYSTEM }
 
 /**
+ * Where a tap in the app-launcher panel opens the app. [FLOATING] asks for a
+ * centred window and lands full screen on a phone without a freeform or
+ * desktop mode; [SPLIT] puts the app beside the one being typed in and needs
+ * Android 12L (API 32) or later, where the system split screen accepts an
+ * adjacent launch from a keyboard.
+ */
+enum class LauncherOpenMode { NORMAL, FLOATING, SPLIT }
+
+/**
+ * Two apps the launcher opens side by side: [first] on top (or left), then
+ * [second] beside it. [name] is optional; the panel falls back to both labels.
+ */
+data class LauncherSplitCombo(
+    val first: String,
+    val second: String,
+    val name: String = "",
+) {
+    companion object {
+        /**
+         * One combo per line, `first<TAB>second<TAB>name`. Tabs and line breaks
+         * in a name become spaces on the way in, so a name can never break the
+         * record it sits in.
+         */
+        fun encode(combos: List<LauncherSplitCombo>): String =
+            combos.joinToString("\n") { combo ->
+                val name = combo.name
+                    .replace('\t', ' ')
+                    .replace('\n', ' ')
+                    .replace('\r', ' ')
+                    .trim()
+                listOf(combo.first, combo.second, name).joinToString("\t")
+            }
+
+        /** Skips malformed lines rather than failing the whole list. */
+        fun decode(raw: String?): List<LauncherSplitCombo> =
+            raw.orEmpty().split('\n').mapNotNull { line ->
+                val parts = line.split('\t')
+                val first = parts.getOrNull(0)?.trim().orEmpty()
+                val second = parts.getOrNull(1)?.trim().orEmpty()
+                if (first.isEmpty() || second.isEmpty()) return@mapNotNull null
+                LauncherSplitCombo(first, second, parts.getOrNull(2)?.trim().orEmpty())
+            }
+
+        /**
+         * [combos] with [combo] appended, unless the same pair in the same
+         * order is already there: a second copy would only be a second chip.
+         */
+        fun add(
+            combos: List<LauncherSplitCombo>,
+            combo: LauncherSplitCombo,
+        ): List<LauncherSplitCombo> =
+            if (combos.any { it.first == combo.first && it.second == combo.second }) {
+                combos
+            } else {
+                combos + combo
+            }
+
+        /** [combos] with the entry at [from] moved to [to]; out of range is a no-op. */
+        fun move(combos: List<LauncherSplitCombo>, from: Int, to: Int): List<LauncherSplitCombo> {
+            if (from !in combos.indices || to !in combos.indices || from == to) return combos
+            val next = combos.toMutableList()
+            next.add(to, next.removeAt(from))
+            return next
+        }
+    }
+}
+
+/**
  * App-launcher tool settings, grouped like [AiSettings] (same 255-slot
  * rationale). The keys stay flat (`launcher_*`), so backup and locked-settings
  * handling need no change.
@@ -3985,6 +4053,10 @@ data class LauncherToolSettings(
      * results, shows it again.
      */
     val hidden: List<String> = emptyList(),
+    /** What a plain tap on an app does; the hold menu offers all three. */
+    val openMode: LauncherOpenMode = LauncherOpenMode.NORMAL,
+    /** User-made split-screen pairs, in the user's order. */
+    val combos: List<LauncherSplitCombo> = emptyList(),
 ) {
     companion object {
         const val MAX_RECENTS = 10
@@ -8007,6 +8079,8 @@ class SettingsRepository(private val context: Context) {
         private val LAUNCHER_ICON_SIZE = intPreferencesKey("launcher_icon_size")
         private val LAUNCHER_ICON_SHAPE = stringPreferencesKey("launcher_icon_shape")
         private val LAUNCHER_HIDDEN = stringPreferencesKey("launcher_hidden")
+        private val LAUNCHER_OPEN_MODE = stringPreferencesKey("launcher_open_mode")
+        private val LAUNCHER_COMBOS = stringPreferencesKey("launcher_combos")
         private val MEDIA_PIN_WHILE_PLAYING = booleanPreferencesKey("media_pin_while_playing")
         private val SELF_HOSTED_LIBRETRANSLATE_URL = stringPreferencesKey("self_hosted_libretranslate_url")
         private val SELF_HOSTED_LIBRETRANSLATE_KEY = stringPreferencesKey("self_hosted_libretranslate_key")
@@ -9735,6 +9809,10 @@ class SettingsRepository(private val context: Context) {
                     ?.let { runCatching { LauncherIconShape.valueOf(it) }.getOrNull() }
                     ?: defaults.launcher.iconShape,
                 hidden = p[LAUNCHER_HIDDEN]?.split('\t')?.filter { it.isNotEmpty() }.orEmpty(),
+                openMode = p[LAUNCHER_OPEN_MODE]
+                    ?.let { runCatching { LauncherOpenMode.valueOf(it) }.getOrNull() }
+                    ?: defaults.launcher.openMode,
+                combos = LauncherSplitCombo.decode(p[LAUNCHER_COMBOS]),
             ),
             mediaControl = MediaControlSettings(
                 pinWhilePlaying = p[MEDIA_PIN_WHILE_PLAYING]
@@ -9968,6 +10046,36 @@ class SettingsRepository(private val context: Context) {
         }
 
     suspend fun clearLauncherHidden() = editPrefs { it.remove(LAUNCHER_HIDDEN) }
+
+    suspend fun setLauncherOpenMode(value: LauncherOpenMode) =
+        editPrefs { it[LAUNCHER_OPEN_MODE] = value.name }
+
+    /** Appends a split pair; the same pair in the same order is kept once. */
+    suspend fun addLauncherCombo(combo: LauncherSplitCombo) = editLauncherCombos {
+        LauncherSplitCombo.add(it, combo)
+    }
+
+    suspend fun removeLauncherCombo(combo: LauncherSplitCombo) = editLauncherCombos { it - combo }
+
+    suspend fun moveLauncherCombo(from: Int, to: Int) = editLauncherCombos {
+        LauncherSplitCombo.move(it, from, to)
+    }
+
+    /** Replaces the combo at [index]: a rename or a side swap. */
+    suspend fun updateLauncherCombo(index: Int, combo: LauncherSplitCombo) = editLauncherCombos {
+        if (index in it.indices) it.toMutableList().apply { set(index, combo) } else it
+    }
+
+    private suspend fun editLauncherCombos(
+        change: (List<LauncherSplitCombo>) -> List<LauncherSplitCombo>,
+    ) = editPrefs { prefs ->
+        val next = change(LauncherSplitCombo.decode(prefs[LAUNCHER_COMBOS]))
+        if (next.isEmpty()) {
+            prefs.remove(LAUNCHER_COMBOS)
+        } else {
+            prefs[LAUNCHER_COMBOS] = LauncherSplitCombo.encode(next)
+        }
+    }
 
     suspend fun setMediaPinWhilePlaying(value: Boolean) =
         editPrefs { it[MEDIA_PIN_WHILE_PLAYING] = value }

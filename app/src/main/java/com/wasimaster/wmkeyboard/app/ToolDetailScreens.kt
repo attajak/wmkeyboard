@@ -24,6 +24,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import com.wasimaster.wmkeyboard.app.media.MusicApps
+import com.wasimaster.wmkeyboard.app.launcher.LauncherCombos
+import com.wasimaster.wmkeyboard.core.settings.LauncherOpenMode
+import com.wasimaster.wmkeyboard.ime.AppLaunchModes
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.notify.DownloadKeys
@@ -437,8 +440,54 @@ internal fun ToolDetailSettings(
                 }
             }
         }
-        ToolbarTool.APP_LAUNCHER ->
+        ToolbarTool.APP_LAUNCHER -> {
+            val launcherContext = LocalContext.current
+            val splitSupported = remember { AppLaunchModes.splitSupported(launcherContext) }
             SettingsGroup(stringResource(R.string.tooldetail_launcher_group)) {
+                item {
+                    // Split screen is left out where the keyboard cannot start
+                    // it (before Android 12L); a stored choice of it reads as
+                    // Normally there, which is also what a tap then does.
+                    val openModes = buildList {
+                        add(
+                            LauncherOpenMode.NORMAL to
+                                stringResource(R.string.tooldetail_launcher_open_mode_normal_label),
+                        )
+                        add(
+                            LauncherOpenMode.FLOATING to
+                                stringResource(R.string.tooldetail_launcher_open_mode_floating_label),
+                        )
+                        if (splitSupported) {
+                            add(
+                                LauncherOpenMode.SPLIT to
+                                    stringResource(R.string.tooldetail_launcher_open_mode_split_label),
+                            )
+                        }
+                    }
+                    val openMode = settings.launcher.openMode
+                    ChoiceSetting(
+                        R.string.tooldetail_launcher_open_mode_title,
+                        subtitle = stringResource(R.string.tooldetail_launcher_open_mode_subtitle),
+                        info = stringResource(
+                            if (splitSupported) R.string.tooldetail_launcher_open_mode_info
+                            else R.string.tooldetail_launcher_open_mode_info_no_split,
+                        ),
+                        options = openModes,
+                        selected = if (openModes.any { it.first == openMode }) openMode else LauncherOpenMode.NORMAL,
+                        default = SettingsDefaults.launcher.openMode,
+                    ) { scope.launch { repository.setLauncherOpenMode(it) } }
+                }
+                item(visible = splitSupported) {
+                    val count = settings.launcher.combos.size
+                    NavRow(
+                        title = R.string.tooldetail_launcher_combos_title,
+                        subtitle = if (count == 0) {
+                            stringResource(R.string.tooldetail_launcher_combos_none_subtitle)
+                        } else {
+                            pluralStringResource(R.plurals.tooldetail_launcher_combos_count, count, count)
+                        },
+                    ) { onNavigate(LauncherCombos.ROUTE) }
+                }
                 item {
                     ChoiceSetting(
                         R.string.tooldetail_launcher_sort_title,
@@ -573,6 +622,7 @@ internal fun ToolDetailSettings(
                     )
                 }
             }
+        }
         ToolbarTool.PLUGINS -> SettingsGroup(stringResource(R.string.tooldetail_plugins_group)) {
             item {
                 WmRow(

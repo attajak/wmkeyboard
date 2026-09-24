@@ -46,7 +46,7 @@
     <string name="tooldetail_launcher_recents_info">The keyboard keeps the last 10 apps you opened from this tool, on your device only. Turn this off to stop the tracking and delete the list.</string>
     <string name="tooldetail_launcher_drilldown_title">Open screens inside apps</string>
     <string name="tooldetail_launcher_drilldown_subtitle">List an app’s screens on its page</string>
-    <string name="tooldetail_launcher_drilldown_info">Press and hold an app to open its page. With this off the page keeps its pin, hide and App info actions and leaves the screens out.</string>
+    <string name="tooldetail_launcher_drilldown_info">Press and hold an app and pick the last item in the menu to open its page. With this off the page keeps its pin, hide and App info actions and leaves the screens out.</string>
     <string name="tooldetail_launcher_non_exported_title">Show private screens</string>
     <string name="tooldetail_launcher_non_exported_subtitle">Also list screens that only the app itself may open</string>
     <string name="tooldetail_launcher_non_exported_info">Android does not let other apps open these screens. They show dimmed, and a press on one does nothing. Useful to explore what an app contains.</string>
@@ -687,11 +687,24 @@
     <string name="tooldetail_launcher_icon_shape_system_label">As on the phone</string>
     <string name="tooldetail_launcher_icon_shape_info">As on the phone shows each icon with the shape your home screen gives it. Old apps without an adaptive icon keep their own outline.</string>
     <string name="tooldetail_launcher_hidden_title">Hidden apps</string>
-    <string name="tooldetail_launcher_hidden_none_subtitle">No apps are hidden. Press and hold an app in the panel, then tap the eye on its page.</string>
+    <string name="tooldetail_launcher_hidden_none_subtitle">No apps are hidden. Press and hold an app in the panel, open its page from the menu, then tap the eye.</string>
     <plurals name="tooldetail_launcher_hidden_count">
         <item quantity="one">%1$d app hidden. Tap to show it again.</item>
         <item quantity="other">%1$d apps hidden. Tap to show all of them again.</item>
     </plurals>
+    <string name="tooldetail_launcher_open_mode_title">Open apps</string>
+    <string name="tooldetail_launcher_open_mode_subtitle">What a tap on an app does</string>
+    <string name="tooldetail_launcher_open_mode_normal_label">Normally</string>
+    <string name="tooldetail_launcher_open_mode_floating_label">Floating</string>
+    <string name="tooldetail_launcher_open_mode_split_label">Split screen</string>
+    <string name="tooldetail_launcher_open_mode_info">A press and hold on an app offers all three whatever you pick here. Split screen puts the app beside the one you are typing in and needs Android 12L or later. A floating window needs a device with a desktop or freeform window mode, such as many tablets; elsewhere the app opens full screen.</string>
+    <string name="tooldetail_launcher_open_mode_info_no_split">A press and hold on an app offers both whatever you pick here. A floating window needs a device with a desktop or freeform window mode, such as many tablets; elsewhere the app opens full screen. Split screen needs Android 12L or later.</string>
+    <string name="tooldetail_launcher_combos_title">Split screen pairs</string>
+    <plurals name="tooldetail_launcher_combos_count">
+        <item quantity="one">%1$d pair</item>
+        <item quantity="other">%1$d pairs</item>
+    </plurals>
+    <string name="tooldetail_launcher_combos_none_subtitle">Two apps that open side by side with one tap</string>
 
     <string name="tooldetail_camera_timer_title">Self-timer</string>
     <string name="tooldetail_camera_timer_subtitle">The timer the camera opens on</string>

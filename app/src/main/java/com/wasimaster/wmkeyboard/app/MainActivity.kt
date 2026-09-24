@@ -1124,6 +1124,15 @@ private fun SettingsNavGraph(
                 MusicAppsScreen(repository, settings)
             }
         }
+        composable(com.wasimaster.wmkeyboard.app.launcher.LauncherCombos.ROUTE) {
+            SettingsScreen(
+                stringResource(R.string.launchercombos_title),
+                { navController.popBackStack() },
+                route = com.wasimaster.wmkeyboard.app.launcher.LauncherCombos.ROUTE,
+            ) {
+                com.wasimaster.wmkeyboard.app.launcher.LauncherCombosScreen(repository, settings)
+            }
+        }
         composable("kdeconnect/devices") {
             SettingsScreen(
                 stringResource(R.string.kdeconnect_devices_title),

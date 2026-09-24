@@ -82,6 +82,8 @@ import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
+import com.wasimaster.wmkeyboard.core.settings.LauncherOpenMode
+import com.wasimaster.wmkeyboard.core.settings.LauncherSplitCombo
 import com.wasimaster.wmkeyboard.core.settings.BlacklistScope
 import android.provider.DocumentsContract
 import android.provider.Settings
@@ -14091,6 +14093,12 @@ open class WMKeyboardService : InputMethodService() {
             onDetailClose = ::onLauncherDetailClose,
             onHideToggle = ::onLauncherHideToggle,
             iconFor = ::launcherIconFor,
+            onAppOpen = ::onLauncherAppOpen,
+            onComboTap = ::onLauncherComboTap,
+            onComboAdd = ::onLauncherComboAdd,
+            onComboRemove = ::onLauncherComboRemove,
+            splitAvailable = { AppLaunchModes.splitSupported(this) },
+            freeformAvailable = { AppLaunchModes.freeformSupported(this) },
         )
     }
 
@@ -14153,15 +14161,45 @@ open class WMKeyboardService : InputMethodService() {
         return bitmap
     }
 
+    /** A plain tap opens the app the way the **Open apps** setting says. */
     fun onLauncherAppTap(app: LauncherApp) {
-        val intent = packageManager.getLaunchIntentForPackage(app.packageName)
-            ?: Intent().setComponent(app.component)
-        launchFromLauncherPanel(intent, app.packageName)
+        onLauncherAppOpen(app, effectiveLauncherOpenMode())
+    }
+
+    /** One app in an explicit mode, from the hold menu or a plain tap. */
+    fun onLauncherAppOpen(app: LauncherApp, mode: LauncherOpenMode) {
+        launchFromLauncherPanel(launcherIntentFor(app), app.packageName, mode)
     }
 
     fun onLauncherActivityTap(activity: LauncherActivity) {
-        launchFromLauncherPanel(Intent().setComponent(activity.component), activity.packageName)
+        launchFromLauncherPanel(
+            Intent().setComponent(activity.component),
+            activity.packageName,
+            effectiveLauncherOpenMode(),
+        )
     }
+
+    /**
+     * The tap setting, with split screen falling back to a plain open where it
+     * cannot work: a setting restored from a newer phone must not leave every
+     * tap doing nothing.
+     */
+    private fun effectiveLauncherOpenMode(): LauncherOpenMode {
+        val mode = _uiState.value.settings.launcher.openMode
+        return if (mode == LauncherOpenMode.SPLIT && !AppLaunchModes.splitSupported(this)) {
+            LauncherOpenMode.NORMAL
+        } else {
+            mode
+        }
+    }
+
+    private fun launcherIntentFor(app: LauncherApp): Intent =
+        packageManager.getLaunchIntentForPackage(app.packageName)
+            ?: Intent().setComponent(app.component)
+
+    /** The launch intent of an installed package, or null when it is gone. */
+    private fun launcherIntentFor(packageName: String): Intent? =
+        runCatching { packageManager.getLaunchIntentForPackage(packageName) }.getOrNull()
 
     /**
      * Starts the target and closes the panel — the foreground app is about to
@@ -14169,15 +14207,64 @@ open class WMKeyboardService : InputMethodService() {
      * (a non-exported activity, an OEM background-start rule) just keep the
      * panel up.
      */
-    private fun launchFromLauncherPanel(intent: Intent, packageName: String) {
-        val started = runCatching {
-            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }.isSuccess
-        if (!started) return
+    private fun launchFromLauncherPanel(
+        intent: Intent,
+        packageName: String,
+        mode: LauncherOpenMode = LauncherOpenMode.NORMAL,
+    ) {
+        if (!startLauncherIntent(intent, mode, currentInputEditorInfo?.packageName)) return
         serviceScope.launch { settingsRepository.addLauncherRecent(packageName) }
+        closeLauncherPanel()
+    }
+
+    private fun startLauncherIntent(
+        intent: Intent,
+        mode: LauncherOpenMode,
+        foregroundPackage: String?,
+    ): Boolean = runCatching {
+        val options = AppLaunchModes.prepare(this, intent, mode, foregroundPackage)
+        startActivity(intent, options)
+    }.isSuccess
+
+    private fun closeLauncherPanel() {
         if (_uiState.value.panel == PanelMode.APP_LAUNCHER) {
             onPanelChange(PanelMode.APP_LAUNCHER)
         }
+    }
+
+    private var launcherComboJob: Job? = null
+
+    /**
+     * Opens a split pair: the first app full screen, then — once it is the
+     * top task — the second with the launch-adjacent flag, which the system
+     * split screen turns into a pair. Both launches run from here because the
+     * keyboard stays the current input method (and so exempt from the
+     * background-start rules) after the first app takes focus.
+     */
+    fun onLauncherComboTap(combo: LauncherSplitCombo) {
+        val first = launcherIntentFor(combo.first) ?: return
+        val second = launcherIntentFor(combo.second) ?: return
+        if (!AppLaunchModes.splitSupported(this)) {
+            launchFromLauncherPanel(first, combo.first)
+            return
+        }
+        launcherComboJob?.cancel()
+        if (!startLauncherIntent(first, LauncherOpenMode.NORMAL, null)) return
+        closeLauncherPanel()
+        launcherComboJob = serviceScope.launch {
+            delay(AppLaunchModes.COMBO_SECOND_LAUNCH_DELAY_MS)
+            startLauncherIntent(second, LauncherOpenMode.SPLIT, combo.first)
+            settingsRepository.addLauncherRecent(combo.second)
+            settingsRepository.addLauncherRecent(combo.first)
+        }
+    }
+
+    fun onLauncherComboAdd(combo: LauncherSplitCombo) {
+        serviceScope.launch { settingsRepository.addLauncherCombo(combo) }
+    }
+
+    fun onLauncherComboRemove(combo: LauncherSplitCombo) {
+        serviceScope.launch { settingsRepository.removeLauncherCombo(combo) }
     }
 
     /**

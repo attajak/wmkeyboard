@@ -538,6 +538,26 @@
     <string name="ime_launcher_hidden_label">Hidden from the grid</string>
     <!-- Marks a screen inside an app that only the app itself may open. -->
     <string name="ime_launcher_not_exported_label">Not openable from outside the app</string>
+    <!-- The menu a press and hold on an app opens. -->
+    <string name="ime_launcher_open_action">Open</string>
+    <string name="ime_launcher_open_floating_action">Open in a floating window</string>
+    <string name="ime_launcher_open_split_action">Open in split screen</string>
+    <!-- Under "Open in a floating window" on a device without a desktop or freeform window mode. -->
+    <string name="ime_launcher_floating_unsupported">This device may open it full screen</string>
+    <string name="ime_launcher_pair_action">Pair in split screen with…</string>
+    <!-- Opens the app's own page: its screens (activities), hide and App info. -->
+    <string name="ime_launcher_page_action">Screens, hide and App info…</string>
+    <string name="ime_launcher_page_no_screens_action">Hide and App info…</string>
+    <string name="ime_launcher_menu_close">Close menu</string>
+    <!-- Banner while picking the second app of a split-screen pair. %1$s is the first app's name. -->
+    <string name="ime_launcher_pair_prompt">Tap the app to open beside %1$s</string>
+    <string name="ime_launcher_pair_cancel">Cancel</string>
+    <!-- Label over the row of saved split-screen pairs. -->
+    <string name="ime_launcher_combos_label">Split screen pairs</string>
+    <!-- A pair's label when it has no name. %1$s and %2$s are the two app names. -->
+    <string name="ime_launcher_combo_label">%1$s + %2$s</string>
+    <string name="ime_launcher_combo_open_action">Open both in split screen</string>
+    <string name="ime_launcher_combo_remove_action">Remove this pair</string>
 
     <!-- The Snippets panel. Keep the words inside the braces as they are: the
          keyboard looks for them and puts a value in their place. -->

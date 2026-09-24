@@ -1223,6 +1223,13 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.KDE_CONNECT, R.string.kdeconnect_media_title, R.string.kdeconnect_media_subtitle),
     // Subtitle left off: the drawn one says whether the grant is in place.
     toolEntry(ToolbarTool.KDE_CONNECT, R.string.kdeconnect_media_access_title),
+    toolEntry(
+        ToolbarTool.APP_LAUNCHER,
+        R.string.tooldetail_launcher_open_mode_title,
+        R.string.tooldetail_launcher_open_mode_subtitle,
+    ),
+    // Subtitle left off: it counts the pairs.
+    toolEntry(ToolbarTool.APP_LAUNCHER, R.string.tooldetail_launcher_combos_title),
     toolEntry(ToolbarTool.APP_LAUNCHER, R.string.tooldetail_launcher_sort_title, R.string.tooldetail_launcher_sort_subtitle),
     toolEntry(ToolbarTool.APP_LAUNCHER, R.string.tooldetail_launcher_labels_title, R.string.tooldetail_launcher_labels_subtitle),
     toolEntry(ToolbarTool.APP_LAUNCHER, R.string.tooldetail_launcher_columns_title, R.string.tooldetail_launcher_columns_subtitle),
@@ -2046,6 +2053,15 @@ private fun SearchStrings.sectionRows(): List<SettingsSearchEntry> {
             route = "musicapps",
             screenParent = R.string.home_tools_title,
             keywords = R.string.search_kw_musicapps,
+        ),
+        // The same shape for the app launcher's split-screen pairs.
+        entry(
+            title = R.string.launchercombos_title,
+            subtitle = R.string.launchercombos_caption,
+            screen = toolTitle(ToolbarTool.APP_LAUNCHER),
+            route = "launchercombos",
+            screenParent = R.string.home_tools_title,
+            keywords = R.string.search_kw_launchercombos,
         ),
         // The same shape for KDE Connect's devices screen (#285).
         entry(
