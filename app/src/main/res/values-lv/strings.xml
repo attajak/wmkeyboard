@@ -1458,7 +1458,6 @@
     <string name="import_floris_dropped_contrast">Taustiņa teksta krāsa bija pārāk tuvu taustiņa krāsai, lai to varētu izlasīt. Lietotne izvēlējās krāsu, kuru varat izlasīt.</string>
     <string name="import_floris_dropped_corners">Taustiņiem ir viens stūra izmērs. Fails iestata atšķirīgu izmēru katram stūrim.</string>
     <string name="import_floris_dropped_dynamic_baseline">Dažas krāsas šajā failā seko fona attēlam tālruņos, kas to atbalsta. Šis tālrunis to neatbalsta, tāpēc lietotne tām izmantoja standarta Android krāsas.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Dažas krāsas šajā failā seko jūsu fona attēlam. Lietotne saglabāja krāsas, kuras jūsu fona attēls sniedz šobrīd. Tās paliek nemainīgas, kad vēlāk maināt fona attēlu.</string>
     <string name="import_floris_dropped_font">Fonts nav iekļauts. Fonts šajā lietotnē ir atsevišķs papildinājums.</string>
     <string name="import_floris_dropped_shadow_color">Fails izvēlas krāsu ēnām zem taustiņiem. Ēnas tiek pārnestas, bet šī lietotne tās zīmē savā krāsā.</string>
     <string name="import_floris_dropped_spacing">Atstarpe ap atsevišķām daļām nav iestatīta. Šī lietotne iestata taustiņu atstarpi visai tastatūrai.</string>

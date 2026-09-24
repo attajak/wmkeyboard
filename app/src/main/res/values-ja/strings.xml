@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">キーの文字色がキーの色に近すぎて読み取れませんでした。読み取り可能な色が選択されました。</string>
     <string name="import_floris_dropped_corners">キーの角のサイズが統一されています。ファイル側では角ごとに異なるサイズが設定されています。</string>
     <string name="import_floris_dropped_dynamic_baseline">このファイルの一部の色は、対応する端末で壁紙に追従します。この端末は非対応のため、アプリは標準のAndroidカラーを使用しました。</string>
-    <string name="import_floris_dropped_dynamic_snapshot">このファイルの一部の色は壁紙に連動します。アプリは現在の壁紙の色を保存しました。後で壁紙を変更しても、これらの色はそのまま維持されます。</string>
     <string name="import_floris_dropped_font">フォントは含まれていません。フォントはこのアプリの別のアドオンです。</string>
     <string name="import_floris_dropped_shadow_color">ファイルはキーの下の影の色を選択します。影は引き継がれますが、このアプリは独自のカラーで描画します。</string>
     <string name="import_floris_dropped_spacing">個々のパーツ周辺の間隔が設定されていません。このアプリはキーボード全体のキー間隔を設定します。</string>

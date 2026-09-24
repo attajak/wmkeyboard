@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">En tastetekstfarve var for tæt på tastfarven til at kunne læses. Appen valgte en farve, som du kan læse.</string>
     <string name="import_floris_dropped_corners">Taster har én hjørnestørrelse. Filen angiver en forskellig størrelse for hvert hjørne.</string>
     <string name="import_floris_dropped_dynamic_baseline">Nogle farver i denne fil følger tapetet på telefoner, der understøtter det. Denne telefon gør ikke, så appen brugte standard Android-farverne til dem.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Nogle farver i denne fil følger dit tapet. Appen gemte de farver, som dit tapet giver lige nu. De forbliver, som de er, når du senere skifter tapet.</string>
     <string name="import_floris_dropped_font">Skrifttypen er ikke inkluderet. En skrifttype er en separat tilføjelse i denne app.</string>
     <string name="import_floris_dropped_shadow_color">Filen vælger en farve til skyggerne under tasterne. Skyggerne overføres, men denne app tegner dem i sin egen farve.</string>
     <string name="import_floris_dropped_spacing">Afstand omkring enkelte dele er ikke indstillet. Denne app indstiller tastafstanden for hele tastaturet.</string>

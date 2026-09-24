@@ -1458,7 +1458,6 @@
     <string name="import_floris_dropped_contrast">Textalitur lykils var of líkur lit lykilsins til að vera læsilegur. Forritið valdi lit sem þú getur lesið.</string>
     <string name="import_floris_dropped_corners">Takkar hafa eina hornstærð. Skráin setur mismunandi stærð fyrir hvert horn.</string>
     <string name="import_floris_dropped_dynamic_baseline">Sumir litir í þessari skrá fylgja veggfóðrinu á símum sem styðja það. Þessi sími gerir það ekki, svo forritið notaði staðlaða Android-liti fyrir þá.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Sumir litir í þessari skrá fylgja veggfóðrinu þínu. Forritið vistaði litina sem veggfóðrið þitt gefur núna. Þeir haldast eins þegar þú breytir veggfóðrinu síðar.</string>
     <string name="import_floris_dropped_font">Leturgerðin er ekki innifalin. Leturgerð er sérstök viðbót í þessu forriti.</string>
     <string name="import_floris_dropped_shadow_color">Skráin velur lit fyrir skuggana undir lyklunum. Skuggarnir koma með, en þetta forrit teiknar þá í sínum eigin lit.</string>
     <string name="import_floris_dropped_spacing">Bil í kringum staka hluta er ekki stillt. Þetta forrit stillir bil milli lykla fyrir allt lyklaborðið.</string>

@@ -65,6 +65,12 @@ internal class Stylesheet(
     val fontSources: Map<String, String> = emptyMap(),
     /** The family a rule asks for, if any; the key to [fontSources]. */
     val requestedFont: String? = null,
+    /**
+     * Every Material You role the sheet named, keyed by [wallpaperRoleKey], with
+     * the colour it resolved to. Stored on the converted theme so that it can
+     * follow the wallpaper later; see [ThemeSpec.wallpaperRoles].
+     */
+    val wallpaperRoles: Map<String, Long> = emptyMap(),
 ) {
 
     /**
@@ -139,6 +145,7 @@ internal class Stylesheet(
             val dropped = linkedSetOf<FlexUnsupported>()
             val unknown = linkedSetOf<String>()
             val fontSources = linkedMapOf<String, String>()
+            val roles = linkedMapOf<String, Long>()
             var requestedFont: String? = null
             val rules = mutableListOf<SnyggRule>()
             var count = 0
@@ -158,7 +165,7 @@ internal class Stylesheet(
                 val declarations = (value as? JsonObject) ?: continue
                 count++
                 requestedFont = requestedFont ?: fontFamilyOf(declarations)
-                val rule = ruleOf(raw, declarations, defines, palette, night, dropped)
+                val rule = ruleOf(raw, declarations, Resolver(defines, palette, night, dropped, roles))
                 if (rule == null) {
                     dropped += FlexUnsupported.UNKNOWN_ELEMENT
                     parseSelector(raw)?.element?.let { unknown += it }
@@ -181,27 +188,29 @@ internal class Stylesheet(
                 unknown,
                 fontSources,
                 requestedFont,
+                roles,
             )
         }
 
-        @Suppress("LongParameterList")
-        private fun ruleOf(
-            raw: String,
-            declarations: JsonObject,
-            defines: Map<String, String>,
-            palette: SnyggPalette,
-            night: Boolean,
-            dropped: MutableSet<FlexUnsupported>,
-        ): SnyggRule? {
+        /** What a declaration's value is resolved against, and where it reports to. */
+        private class Resolver(
+            val defines: Map<String, String>,
+            val palette: SnyggPalette,
+            val night: Boolean,
+            val dropped: MutableSet<FlexUnsupported>,
+            val roles: MutableMap<String, Long>,
+        )
+
+        private fun ruleOf(raw: String, declarations: JsonObject, resolver: Resolver): SnyggRule? {
             val selector = parseSelector(raw) ?: return null
             val element = ELEMENTS[selector.element] ?: return null
             val properties = declarations.mapNotNull { (name, value) ->
                 val key = name.normalizeName()
-                val text = valueOf(value, defines, palette, night, dropped)
+                val text = valueOf(value, resolver)
                 // After resolving, because what a declaration *says* decides
                 // whether anything was lost: `font-family: inherit` is the
                 // sheet declining to change the font, not a font going missing.
-                noteUnsupported(key, text, dropped)
+                noteUnsupported(key, text, resolver.dropped)
                 if (text == null) return@mapNotNull null
                 PROPERTIES[key]?.let { it to text }
             }.toMap()
@@ -274,19 +283,13 @@ internal class Stylesheet(
          * one field that carries the colour, which is how the theme editor
          * writes a value it also wants to remember the picker state for.
          */
-        private fun valueOf(
-            value: JsonElement,
-            defines: Map<String, String>,
-            palette: SnyggPalette,
-            night: Boolean,
-            dropped: MutableSet<FlexUnsupported>,
-        ): String? {
+        private fun valueOf(value: JsonElement, resolver: Resolver): String? {
             val raw = when (value) {
                 is JsonPrimitive -> value.content
                 is JsonObject -> value.string("value") ?: value.string("color") ?: value.string("\$")
                 is JsonArray -> null
             } ?: return null
-            return resolveDynamic(resolve(raw, defines), palette, night, dropped)
+            return resolveDynamic(resolve(raw, resolver.defines), resolver)
         }
 
         /**
@@ -314,18 +317,15 @@ internal class Stylesheet(
          * against the device palette.
          *
          * Reported as [FlexUnsupported.DYNAMIC_COLOR] whether or not it
-         * resolves, because either way the stored theme is a snapshot: it
-         * carries the colours the wallpaper gives today and will not follow a
-         * new one the way FlorisBoard does.
+         * resolves, so the import can say the theme follows the wallpaper. The
+         * role and the colour it resolved to are recorded in
+         * [Resolver.roles]: that record is what lets the stored theme move
+         * with the next wallpaper instead of keeping today's colours.
          */
-        private fun resolveDynamic(
-            raw: String,
-            palette: SnyggPalette,
-            night: Boolean,
-            dropped: MutableSet<FlexUnsupported>,
-        ): String {
+        private fun resolveDynamic(raw: String, resolver: Resolver): String {
+            val night = resolver.night
             if (!raw.startsWith(DYNAMIC, ignoreCase = true)) return raw
-            dropped += FlexUnsupported.DYNAMIC_COLOR
+            resolver.dropped += FlexUnsupported.DYNAMIC_COLOR
             val head = raw.substringBefore('(').lowercase()
             val role = raw.substringAfter('(', "").substringBefore(')').trim()
             if (role.isEmpty()) return raw
@@ -336,7 +336,8 @@ internal class Stylesheet(
                 head.contains("dark") -> true
                 else -> night
             }
-            val resolved = palette.resolve(scheme, role) ?: return raw
+            val resolved = resolver.palette.resolve(scheme, role) ?: return raw
+            resolver.roles.putIfAbsent(wallpaperRoleKey(scheme, role), resolved)
             // Written in the order the parser reads eight hex digits in, which
             // is CSS's `#RRGGBBAA` and not the ARGB the palette holds. Emitting
             // ARGB here rotated every dynamic colour's channels by one byte.

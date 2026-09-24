@@ -156,6 +156,10 @@
     <string name="theme_seed_section_body">The app makes all the colors from one seed color. You can change each color below.</string>
     <string name="theme_editor_dark_title">Dark theme</string>
     <string name="theme_editor_dark_subtitle">The seed color makes a dark palette or a light palette</string>
+    <string name="theme_follow_wallpaper_title">Follow wallpaper colors</string>
+    <string name="theme_follow_wallpaper_subtitle">The colors change to match your wallpaper. Each color keeps its lightness, so the text stays easy to read.</string>
+    <string name="theme_follow_wallpaper_unsupported">Needs Android 12 or later</string>
+    <string name="theme_follow_wallpaper_info">The colors below are the colors that the theme stores. With this on, the keyboard shows them in your wallpaper colors. Turn it off to get the stored colors back. A color that you change here keeps its new value only if the theme came from a FlorisBoard file that names wallpaper colors; in all other themes, the new color also changes to match the wallpaper.</string>
 
     <!-- Theme editor: the board behind the keys. -->
     <string name="theme_board_section_title">Board</string>

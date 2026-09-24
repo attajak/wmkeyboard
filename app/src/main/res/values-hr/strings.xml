@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Boja teksta tipke bila je previše slična boji tipke za čitanje. Aplikacija je odabrala boju koju možete pročitati.</string>
     <string name="import_floris_dropped_corners">Tipke imaju jednu veličinu kuta. Datoteka postavlja različitu veličinu za svaki kut.</string>
     <string name="import_floris_dropped_dynamic_baseline">Neke boje u ovoj datoteci prate pozadinu na telefonima koji to podržavaju. Ovaj telefon to ne podržava, pa je aplikacija za njih koristila standardne Android boje.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Neke boje u ovoj datoteci prate vašu pozadinu. Aplikacija je spremila boje koje vaša pozadina trenutno daje. One ostaju takve kakve jesu kada kasnije promijenite pozadinu.</string>
     <string name="import_floris_dropped_font">Font nije uključen. Font je zaseban dodatak u ovoj aplikaciji.</string>
     <string name="import_floris_dropped_shadow_color">Datoteka odabire boju za sjene ispod tipki. Sjene se prenose, ali ih ova aplikacija iscrtava svojom bojom.</string>
     <string name="import_floris_dropped_spacing">Razmak oko pojedinačnih dijelova nije postavljen. Ova aplikacija postavlja razmak tipki za cijelu tipkovnicu.</string>

@@ -1455,7 +1455,6 @@
     <string name="import_floris_dropped_contrast">کلید کے متن کا رنگ کلید کے رنگ سے بہت قریب تھا جسے پڑھنا مشکل تھا۔ ایپ نے ایسا رنگ منتخب کیا ہے جسے آپ پڑھ سکتے ہیں۔</string>
     <string name="import_floris_dropped_corners">کیز کے کونے کا ایک سائز ہوتا ہے۔ فائل ہر کونے کے لیے الگ سائز سیٹ کرتی ہے۔</string>
     <string name="import_floris_dropped_dynamic_baseline">اس فائل میں کچھ رنگ ان فونز پر وال پیپر کی پیروی کرتے ہیں جو اس کی حمایت کرتے ہیں۔ یہ فون ایسا نہیں کرتا، اس لیے ایپ نے ان کے لیے معیاری اینڈرائیڈ رنگ استعمال کیے ہیں۔</string>
-    <string name="import_floris_dropped_dynamic_snapshot">اس فائل میں کچھ رنگ آپ کے وال پیپر کی پیروی کرتے ہیں۔ ایپ نے ان رنگوں کو محفوظ کر لیا ہے جو آپ کا وال پیپر ابھی دے رہا ہے۔ جب آپ بعد میں اپنا وال پیپر تبدیل کرتے ہیں تو وہ ویسے ہی رہتے ہیں۔</string>
     <string name="import_floris_dropped_font">فونٹ شامل نہیں ہے۔ اس ایپ میں فونٹ ایک الگ ایڈ آن ہے۔</string>
     <string name="import_floris_dropped_shadow_color">فائل کلیدوں کے نیچے سائے کے لیے ایک رنگ منتخب کرتی ہے۔ سائے آ جاتے ہیں، لیکن یہ ایپ انہیں اپنے رنگ میں کھینچتی ہے۔</string>
     <string name="import_floris_dropped_spacing">انفرادی حصوں کے ارد گرد کی جگہ سیٹ نہیں ہے۔ یہ ایپ پورے کی بورڈ کے لیے کلیدی خلا کو سیٹ کرتی ہے۔</string>

@@ -1458,7 +1458,6 @@
     <string name="import_floris_dropped_contrast">Barva besedila tipke je bila preblizu barvi tipke za branje. Aplikacija je izbrala barvo, ki jo lahko preberete.</string>
     <string name="import_floris_dropped_corners">Tipke imajo eno velikost vogala. Datoteka nastavi drugačno velikost za vsak vogal.</string>
     <string name="import_floris_dropped_dynamic_baseline">Nekatere barve v tej datoteki sledijo ozadju na telefonih, ki to podpirajo. Ta telefon tega ne podpira, zato je aplikacija zanje uporabila standardne barve sistema Android.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Nekatere barve v tej datoteki sledijo vašemu ozadju. Aplikacija je shranila barve, ki jih vaše ozadje daje trenutno. Ostanejo takšne, kot so, ko kasneje spremenite ozadje.</string>
     <string name="import_floris_dropped_font">Pisava ni vključena. Pisava je v tej aplikaciji ločen dodatek.</string>
     <string name="import_floris_dropped_shadow_color">Datoteka izbere barvo za sence pod tipkami. Sence se prenesejo, vendar jih ta aplikacija izriše v svoji barvi.</string>
     <string name="import_floris_dropped_spacing">Razmik okoli posameznih delov ni nastavljen. Ta aplikacija nastavi razmik med tipkami za celotno tipkovnico.</string>

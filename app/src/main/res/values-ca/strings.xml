@@ -1456,7 +1456,6 @@
     <string name="import_floris_dropped_contrast">Un color del text de la tecla era massa semblant al color de la tecla per llegir-lo. L\'aplicació ha triat un color que podeu llegir.</string>
     <string name="import_floris_dropped_corners">Les tecles tenen una mida de cantonada. El fitxer estableix una mida diferent per a cada cantonada.</string>
     <string name="import_floris_dropped_dynamic_baseline">Alguns colors d\'aquest fitxer segueixen el fons de pantalla en telèfons que ho admeten. Aquest telèfon no ho fa, així que l\'aplicació ha utilitzat els colors estàndard d\'Android per a ells.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Alguns colors d\'aquest fitxer segueixen el vostre fons de pantalla. L\'aplicació ha desat els colors que el vostre fons de pantalla proporciona ara mateix. Es mantenen tal com són quan canvieu el fons de pantalla més tard.</string>
     <string name="import_floris_dropped_font">La tipografia no està inclosa. Una tipografia és un complement separat en aquesta aplicació.</string>
     <string name="import_floris_dropped_shadow_color">El fitxer tria un color per a les ombres sota les tecles. Les ombres s\'importen, però aquesta aplicació les dibuixa amb el seu propi color.</string>
     <string name="import_floris_dropped_spacing">L\'espai al voltant de les parts individuals no està definit. Aquesta aplicació estableix l\'espai entre tecles per a tot el teclat.</string>

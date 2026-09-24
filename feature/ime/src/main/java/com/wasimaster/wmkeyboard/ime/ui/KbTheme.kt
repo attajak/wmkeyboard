@@ -61,6 +61,8 @@ import com.wasimaster.wmkeyboard.core.settings.ColorVisionFilter
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.ThemeMode
 import com.wasimaster.wmkeyboard.core.settings.activeThemeSpec
+import com.wasimaster.wmkeyboard.core.theme.deviceWallpaperPalette
+import com.wasimaster.wmkeyboard.core.theme.followingWallpaper
 import com.wasimaster.wmkeyboard.core.settings.effectiveThemeId
 import com.wasimaster.wmkeyboard.core.tools.SolarCalculator
 import androidx.compose.ui.unit.Dp
@@ -1085,7 +1087,14 @@ fun KeyboardThemeProvider(
     val resolved = remember(
         settings, systemDark, darkSlot, rotationStates, context, configuration,
     ) {
-        val spec = settings.activeThemeSpec(darkSlot)
+        // A theme that follows the wallpaper is moved onto it here, on the way
+        // to the screen, the same way the rotating photo is laid over below:
+        // the stored theme keeps its own colours, so turning the switch off
+        // gives them back. `configuration` in the keys is what re-runs this
+        // when the wallpaper changes (issue #357).
+        val spec = settings.activeThemeSpec(darkSlot)?.let { stored ->
+            if (stored.followWallpaper) stored.followingWallpaper(deviceWallpaperPalette(context)) else stored
+        }
         if (spec == null) {
             // Under auto-theme the chosen slot decides light vs dark directly;
             // otherwise the theme mode does.

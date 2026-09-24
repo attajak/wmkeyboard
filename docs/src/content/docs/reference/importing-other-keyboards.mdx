@@ -212,7 +212,9 @@ Colours mostly land. These all have somewhere to go:
 
 **On a phone below Android 12 there is no such palette**, so those colours resolve against stock Material instead and the dialog says that rather than claiming your wallpaper was read.
 
-The catch is that the result is a snapshot. A theme here stores fixed colours, so a converted theme keeps the colours your wallpaper gave it at the moment you imported it and does not follow the next wallpaper. Re-import it after a wallpaper change, or turn on Material You in <SettingsPath path="Appearance / Keyboard themes" /> to have the app's own themes follow it.
+**And they keep following it.** The converted theme remembers which Material You colour each part came from, so when you change your wallpaper the keyboard moves those parts onto the new colours, the same as FlorisBoard does. The theme's **Follow wallpaper colors** switch in the [theme editor](/themes/editor/#following-your-wallpaper) is on after the import; turn it off to keep the colours you have today. A colour you change in the editor stays as you set it. A theme imported before version 0.5.13 has no such record: import it again to get this.
+
+Themes from other keyboards, and FlorisBoard themes written in fixed colours, can follow the wallpaper as well. They start with the switch off, and when you turn it on each colour keeps its lightness and takes your wallpaper's hue.
 
 FlorisBoard styles a much larger set of keyboard parts than this app draws, so the rest is reported rather than approximated:
 

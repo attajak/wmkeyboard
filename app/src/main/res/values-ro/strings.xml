@@ -1455,7 +1455,6 @@
     <string name="import_floris_dropped_contrast">O culoare a textului tastei era prea apropiată de culoarea tastei pentru a fi lizibilă. Aplicația a ales o culoare pe care o poți citi.</string>
     <string name="import_floris_dropped_corners">Tastele au o singură dimensiune de colț. Fișierul setează o dimensiune diferită pentru fiecare colț.</string>
     <string name="import_floris_dropped_dynamic_baseline">Unele culori din acest fișier urmează imaginea de fundal pe telefoanele care suportă acest lucru. Acest telefon nu suportă, așa că aplicația a folosit culorile standard Android pentru ele.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Unele culori din acest fișier urmează imaginea de fundal. Aplicația a salvat culorile pe care le oferă imaginea de fundal în acest moment. Acestea rămân neschimbate atunci când schimbi imaginea de fundal mai târziu.</string>
     <string name="import_floris_dropped_font">Fontul nu este inclus. Un font este un add-on separat în această aplicație.</string>
     <string name="import_floris_dropped_shadow_color">Fișierul alege o culoare pentru umbrele de sub taste. Umbrele sunt preluate, dar această aplicație le desenează în propria sa culoare.</string>
     <string name="import_floris_dropped_spacing">Spațierea din jurul părților individuale nu este setată. Această aplicație setează spațiul dintre taste pentru întreaga tastatură.</string>

@@ -1459,7 +1459,6 @@
     <string name="import_floris_dropped_contrast">كان لون نص المفتاح قريبًا جدًا من لون المفتاح بحيث يصعب قراءته. اختار التطبيق لونًا يمكنك قراءته.</string>
     <string name="import_floris_dropped_corners">للمفاتيح حجم زاوية واحد. يحدد الملف حجماً مختلفاً لكل زاوية.</string>
     <string name="import_floris_dropped_dynamic_baseline">بعض الألوان في هذا الملف تتبع خلفية الشاشة على الهواتف التي تدعم ذلك. هذا الهاتف لا يدعم ذلك، لذا استخدم التطبيق ألوان أندرويد القياسية لها.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">تتبع بعض الألوان في هذا الملف خلفية شاشتك. حفظ التطبيق الألوان التي توفرها خلفيتك حالياً. ستبقى كما هي عند تغيير خلفيتك لاحقاً.</string>
     <string name="import_floris_dropped_font">الخط غير مضمن. الخط هو إضافة منفصلة في هذا التطبيق.</string>
     <string name="import_floris_dropped_shadow_color">يختار الملف لوناً للظلال تحت المفاتيح. الظلال تظهر، لكن هذا التطبيق يرسمها بلونه الخاص.</string>
     <string name="import_floris_dropped_spacing">المسافة حول الأجزاء الفردية غير مضبوطة. يضبط هذا التطبيق فجوة المفاتيح للوحة المفاتيح بأكملها.</string>

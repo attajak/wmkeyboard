@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Een belangrijke tekstkleur was te dicht bij de kleur van de toets om leesbaar te zijn. De app heeft een kleur gekozen die je wel kunt lezen.</string>
     <string name="import_floris_dropped_corners">Toetsen hebben één hoekgrootte. Het bestand stelt een andere grootte in voor elke hoek.</string>
     <string name="import_floris_dropped_dynamic_baseline">Sommige kleuren in dit bestand volgen de achtergrond op telefoons die dit ondersteunen. Deze telefoon doet dat niet, dus de app heeft de standaard Android-kleuren voor deze onderdelen gebruikt.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Sommige kleuren in dit bestand volgen je achtergrond. De app heeft de kleuren opgeslagen die je achtergrond op dit moment geeft. Ze blijven zoals ze zijn wanneer je later je achtergrond wijzigt.</string>
     <string name="import_floris_dropped_font">Het lettertype is niet inbegrepen. Een lettertype is een afzonderlijke add-on in deze app.</string>
     <string name="import_floris_dropped_shadow_color">Het bestand kiest een kleur voor de schaduwen onder de toetsen. De schaduwen worden overgenomen, maar deze app tekent ze in zijn eigen kleur.</string>
     <string name="import_floris_dropped_spacing">De ruimte rondom losse onderdelen is niet ingesteld. Deze app stelt de toetsafstand in voor het hele toetsenbord.</string>

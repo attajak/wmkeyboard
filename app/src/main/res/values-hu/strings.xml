@@ -1456,7 +1456,6 @@
     <string name="import_floris_dropped_contrast">Egy billentyűszöveg színe túl közel volt a billentyű színéhez, így olvashatatlan volt. Az alkalmazás egy olvasható színt választott helyette.</string>
     <string name="import_floris_dropped_corners">A gomboknak egy sarokméretük van. A fájl minden sarokhoz külön méretet állít be.</string>
     <string name="import_floris_dropped_dynamic_baseline">A fájlban lévő egyes színek követik a háttérképet az azt támogató telefonokon. Ez a telefon nem támogatja ezt, ezért az alkalmazás a szabványos Android-színeket használta hozzájuk.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">A fájlban lévő egyes színek a háttérképhez igazodnak. Az alkalmazás elmentette azokat a színeket, amelyeket a háttérkép jelenleg biztosít. Ezek akkor is változatlanok maradnak, ha később megváltoztatja a háttérképet.</string>
     <string name="import_floris_dropped_font">A betűtípus nincs mellékelve. A betűtípus egy külön kiegészítő ebben az alkalmazásban.</string>
     <string name="import_floris_dropped_shadow_color">A fájl színt választ a billentyűk alatti árnyékokhoz. Az árnyékok átkerülnek, de ez az alkalmazás a saját színével rajzolja meg őket.</string>
     <string name="import_floris_dropped_spacing">Az egyes részek körüli térköz nincs beállítva. Ez az alkalmazás a teljes billentyűzetre vonatkozóan állítja be a billentyűk közötti távolságot.</string>

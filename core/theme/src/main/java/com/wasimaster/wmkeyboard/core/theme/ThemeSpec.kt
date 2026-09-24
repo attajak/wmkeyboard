@@ -591,6 +591,24 @@ data class ThemeSpec(
      */
     val assets: Map<String, String> = emptyMap(),
     /**
+     * Whether the colours follow the wallpaper, the way the Default theme's do
+     * with Material You on. Off keeps the fixed colours every theme has always
+     * had. Android 12 and later only: an older phone has no wallpaper palette,
+     * and the theme draws its stored colours there. See [followingWallpaper]
+     * for how a theme that was not written against the wallpaper is moved onto
+     * it.
+     */
+    val followWallpaper: Boolean = false,
+    /**
+     * The Material You roles the theme was written against, each with the
+     * colour it had when the theme was made: `dark:primary` to `0xFF…`. Set by
+     * a FlorisBoard import, whose stylesheets name roles instead of colours;
+     * empty everywhere else. With [followWallpaper] on, a colour still equal to
+     * one of these values takes that role's value from the wallpaper now.
+     * Keys are built by [wallpaperRoleKey].
+     */
+    val wallpaperRoles: Map<String, Long> = emptyMap(),
+    /**
      * The family's display name, when this theme heads one (see [variants]).
      * Null on every variant and on themes with no variants; built-in families
      * are named through [builtInThemeFamilyNameRes] instead, so their label
@@ -1134,6 +1152,10 @@ fun ThemeSpec.reseeded(seed: Long, dark: Boolean): ThemeSpec {
         suggestionText = null,
         suggestionBarBackground = null,
         navigationBarBackground = null,
+        // The recorded roles described the palette that has just been replaced,
+        // so nothing on the theme matches them any more. Clearing them lets
+        // [followWallpaper] map the new palette by tone instead of doing nothing.
+        wallpaperRoles = emptyMap(),
     )
 }
 

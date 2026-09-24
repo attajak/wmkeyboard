@@ -1454,7 +1454,6 @@
     <string name="import_floris_dropped_contrast">Un colore del testo del tasto era troppo simile al colore del tasto per essere letto. L\'app ha scelto un colore leggibile.</string>
     <string name="import_floris_dropped_corners">I tasti hanno una dimensione d\'angolo. Il file imposta una dimensione diversa per ogni angolo.</string>
     <string name="import_floris_dropped_dynamic_baseline">Alcuni colori in questo file seguono lo sfondo sui telefoni che lo supportano. Questo telefono non lo fa, quindi l\'app ha utilizzato i colori standard di Android per essi.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Alcuni colori in questo file seguono il tuo sfondo. L\'app ha salvato i colori forniti dal tuo sfondo in questo momento. Rimarranno invariati quando cambierai lo sfondo in seguito.</string>
     <string name="import_floris_dropped_font">Il font non è incluso. Un font è un componente aggiuntivo separato in questa app.</string>
     <string name="import_floris_dropped_shadow_color">Il file sceglie un colore per le ombre sotto i tasti. Le ombre vengono importate, ma questa app le disegna con il proprio colore.</string>
     <string name="import_floris_dropped_spacing">Lo spazio attorno alle singole parti non è impostato. Questa app imposta lo spazio tra i tasti per l\'intera tastiera.</string>

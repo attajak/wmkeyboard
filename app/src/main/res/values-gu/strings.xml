@@ -1455,7 +1455,6 @@
     <string name="import_floris_dropped_contrast">કી ટેક્સ્ટનો રંગ કીના રંગની ખૂબ નજીક હોવાથી વાંચી શકાતો નહોતો. એપ દ્વારા એવો રંગ પસંદ કરવામાં આવ્યો છે જે તમે વાંચી શકો.</string>
     <string name="import_floris_dropped_corners">કીના ખૂણાનું કદ એકસરખું હોય છે. ફાઇલ દરેક ખૂણા માટે અલગ કદ સેટ કરે છે.</string>
     <string name="import_floris_dropped_dynamic_baseline">આ ફાઇલમાંના કેટલાક રંગો તેને સપોર્ટ કરતા ફોન પર વૉલપેપરને અનુસરે છે. આ ફોન તેને સપોર્ટ કરતું નથી, તેથી એપે તેમના માટે પ્રમાણભૂત Android રંગોનો ઉપયોગ કર્યો છે.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">આ ફાઇલમાં કેટલાક રંગો તમારા વૉલપેપરને અનુસરે છે. એપે તે રંગો સાચવ્યા છે જે તમારું વૉલપેપર અત્યારે આપે છે. જ્યારે તમે પછીથી તમારું વૉલપેપર બદલો છો ત્યારે તે તેવા જ રહે છે.</string>
     <string name="import_floris_dropped_font">ફોન્ટ સામેલ નથી. આ એપમાં ફોન્ટ એક અલગ એડ-ઓન છે.</string>
     <string name="import_floris_dropped_shadow_color">ફાઇલ કીની નીચેના પડછાયાઓ માટે રંગ પસંદ કરે છે. પડછાયાઓ આવે છે, પરંતુ આ એપ તેમને પોતાના રંગમાં દોરે છે.</string>
     <string name="import_floris_dropped_spacing">સિંગલ ભાગોની આસપાસની જગ્યા સેટ નથી. આ એપ આખા કીબોર્ડ માટે કી ગેપ સેટ કરે છે.</string>

@@ -1454,7 +1454,6 @@
     <string name="import_floris_dropped_contrast">สีข้อความของปุ่มใกล้เคียงกับสีของปุ่มมากเกินไปจนอ่านไม่ออก แอปจึงเลือกสีที่คุณสามารถอ่านได้</string>
     <string name="import_floris_dropped_corners">ปุ่มมีขนาดมุมเดียว ไฟล์นี้กำหนดขนาดที่แตกต่างกันสำหรับแต่ละมุม</string>
     <string name="import_floris_dropped_dynamic_baseline">สีบางสีในไฟล์นี้เป็นไปตามวอลเปเปอร์บนโทรศัพท์ที่รองรับ แต่โทรศัพท์เครื่องนี้ไม่รองรับ แอปจึงใช้สีมาตรฐานของ Android แทน</string>
-    <string name="import_floris_dropped_dynamic_snapshot">สีบางสีในไฟล์นี้เป็นไปตามวอลเปเปอร์ของคุณ แอปได้บันทึกสีที่วอลเปเปอร์ของคุณแสดงอยู่ในขณะนี้ไว้แล้ว สีเหล่านี้จะคงเดิมแม้ว่าคุณจะเปลี่ยนวอลเปเปอร์ในภายหลัง</string>
     <string name="import_floris_dropped_font">ไม่รวมแบบอักษร แบบอักษรเป็นส่วนเสริมแยกต่างหากในแอปนี้</string>
     <string name="import_floris_dropped_shadow_color">ไฟล์เลือกสีสำหรับเงาใต้ปุ่ม เงาจะถูกนำมาใช้ แต่แอปนี้จะวาดเงาด้วยสีของตัวเอง</string>
     <string name="import_floris_dropped_spacing">ไม่ได้ตั้งค่าช่องว่างรอบส่วนประกอบแต่ละส่วน แอปนี้จะตั้งค่าช่องว่างระหว่างปุ่มสำหรับแป้นพิมพ์ทั้งหมด</string>

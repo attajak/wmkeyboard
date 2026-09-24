@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">키 텍스트 색상이 키 색상과 너무 비슷하여 읽기 어려웠습니다. 앱이 읽을 수 있는 색상을 선택했습니다.</string>
     <string name="import_floris_dropped_corners">키의 모서리 크기가 하나로 설정되어 있습니다. 파일에서 각 모서리에 대해 다른 크기를 설정하고 있습니다.</string>
     <string name="import_floris_dropped_dynamic_baseline">이 파일의 일부 색상은 이를 지원하는 휴대폰의 배경화면을 따릅니다. 이 휴대폰은 이를 지원하지 않으므로 앱에서 표준 Android 색상을 사용했습니다.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">이 파일의 일부 색상은 배경 화면을 따릅니다. 앱이 현재 배경 화면의 색상을 저장했습니다. 나중에 배경 화면을 변경해도 해당 색상은 그대로 유지됩니다.</string>
     <string name="import_floris_dropped_font">폰트가 포함되어 있지 않습니다. 폰트는 이 앱에서 별도의 애드온으로 제공됩니다.</string>
     <string name="import_floris_dropped_shadow_color">파일이 키 아래 그림자의 색상을 선택합니다. 그림자는 가져오지만, 이 앱은 자체 색상으로 그립니다.</string>
     <string name="import_floris_dropped_spacing">개별 부품 주변의 간격이 설정되지 않았습니다. 이 앱은 전체 키보드의 키 간격을 설정합니다.</string>

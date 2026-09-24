@@ -35,7 +35,9 @@ None of the built-in themes are editable in place. Tapping the pencil on one mak
 
 ## Matching your wallpaper
 
-Turn on **Material You colors** and the **Default (system)** theme pulls its palette from your phone's wallpaper, the same way Android's own system UI does. It's off by default, because the app and the Default theme ship with a palette of their own — the deep indigo and violet the launcher icon is built from — and wallpaper color replaces it. It only takes effect on Android 12 and up. The switch still shows on older versions, where it has nothing to do. Wallpaper color only ever applies to the Default theme, because every built-in and custom theme carries its own fixed palette regardless of this switch. The same toggle recolors the settings app as well as the keyboard.
+Turn on **Material You colors** and the **Default (system)** theme pulls its palette from your phone's wallpaper, the same way Android's own system UI does. It's off by default, because the app and the Default theme ship with a palette of their own — the deep indigo and violet the launcher icon is built from — and wallpaper color replaces it. It only takes effect on Android 12 and up. The switch still shows on older versions, where it has nothing to do. This switch only changes the Default theme, and it recolors the settings app as well as the keyboard.
+
+Any other theme can follow the wallpaper too, one theme at a time. Open it in the [theme editor](/themes/editor/#following-your-wallpaper) and turn on **Follow wallpaper colors**. That works for your own themes, copies of the built-in ones, and themes imported from FlorisBoard, Gboard, Rboard or HeliBoard. A FlorisBoard theme written in Material You colors, such as FloriStyle, has it on from the moment you import it.
 
 ## Dark mode and AMOLED
 
@@ -75,7 +77,7 @@ A **Change the theme** row appears once either half is random, and it decides ho
 
 <SettingsPath path="Appearance / Keyboard themes" />
 
-- **Material You colors** (default off). Wallpaper-based dynamic color for the Default theme and the settings app, in place of the app's own indigo palette. It does nothing below Android 12, and nothing to built-in or custom themes.
+- **Material You colors** (default off). Wallpaper-based dynamic color for the Default theme and the settings app, in place of the app's own indigo palette. It does nothing below Android 12, and nothing to built-in or custom themes. Those have their own **Follow wallpaper colors** switch in the theme editor.
 - **Mode** (default System). System, Light, Dark, or AMOLED, applied to the settings app and the Default theme.
 - **Auto theme** (default off). Once on, pick a light theme, a dark theme, and a trigger (System light or dark, Time of day, or Sunrise and sunset). The time-of-day picker starts at 7:00 AM for the light theme and 7:00 PM for the dark theme.
 - **Light theme** and **Dark theme** (default One theme, Default (system) in both). Each row opens a picker that holds one theme or a set to select from at random.

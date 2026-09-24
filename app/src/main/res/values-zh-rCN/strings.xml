@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">按键文字颜色与按键颜色过于接近，难以阅读。应用已为您选择了一种可读的颜色。</string>
     <string name="import_floris_dropped_corners">按键具有统一的圆角大小。该文件为每个圆角设置了不同的大小。</string>
     <string name="import_floris_dropped_dynamic_baseline">此文件中的某些颜色在支持的手机上会跟随壁纸变化。由于此手机不支持，应用已为其使用了标准的 Android 颜色。</string>
-    <string name="import_floris_dropped_dynamic_snapshot">此文件中的某些颜色会跟随您的壁纸变化。应用已保存了当前壁纸提供的颜色。当您稍后更改壁纸时，这些颜色将保持不变。</string>
     <string name="import_floris_dropped_font">未包含该字体。字体在此应用中是单独的插件。</string>
     <string name="import_floris_dropped_shadow_color">该文件为按键下方的阴影选择了颜色。阴影会被导入，但本应用会使用其自身的颜色来绘制它们。</string>
     <string name="import_floris_dropped_spacing">未设置单个部件周围的间距。此应用将设置整个键盘的按键间隙。</string>

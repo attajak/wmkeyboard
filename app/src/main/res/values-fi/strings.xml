@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Näppäimen tekstin väri oli liian lähellä näppäimen väriä luettavuuden kannalta. Sovellus valitsi värin, jota voit lukea.</string>
     <string name="import_floris_dropped_corners">Näppäimillä on yksi kulmakoko. Tiedosto asettaa eri koon jokaiselle kulmalle.</string>
     <string name="import_floris_dropped_dynamic_baseline">Jotkin tämän tiedoston värit seuraavat taustakuvaa puhelimissa, jotka tukevat sitä. Tämä puhelin ei tue sitä, joten sovellus käytti niille Androidin vakiovärejä.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Jotkin tämän tiedoston värit seuraavat taustakuvaasi. Sovellus tallensi värit, jotka taustakuvasi antaa juuri nyt. Ne pysyvät ennallaan, vaikka vaihtaisit taustakuvaa myöhemmin.</string>
     <string name="import_floris_dropped_font">Fontti ei sisälly. Fontti on erillinen lisäosa tässä sovelluksessa.</string>
     <string name="import_floris_dropped_shadow_color">Tiedosto valitsee värin näppäinten alla oleville varjoille. Varjot tulevat mukana, mutta tämä sovellus piirtää ne omalla värillään.</string>
     <string name="import_floris_dropped_spacing">Yksittäisten osien välistä väliä ei ole asetettu. Tämä sovellus asettaa näppäinvälin koko näppäimistölle.</string>

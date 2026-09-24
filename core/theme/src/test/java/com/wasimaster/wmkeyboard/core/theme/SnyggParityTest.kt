@@ -190,8 +190,47 @@ class SnyggParityTest {
         assertEquals(0xFF000000, t.boardBackground)
         assertEquals(0xFFFFFFFF, t.keyBackground)
         assertEquals(0xFFFF0000, t.enterKeyBackground)
-        // Reported, because the stored theme is a snapshot of today's wallpaper.
+        // Reported, so the import can say the theme follows the wallpaper.
         assertTrue(FlexUnsupported.DYNAMIC_COLOR in convert(body, true, palette).dropped)
+    }
+
+    /**
+     * Issue #357: the roles a sheet named are kept on the theme, with the
+     * colours they had at import, so the keyboard can move them onto the next
+     * wallpaper. A theme written in roles follows the wallpaper from the start,
+     * as it does in FlorisBoard.
+     */
+    @Test
+    fun `the roles a sheet names travel with the theme`() {
+        val palette = SnyggPalette(
+            light = mapOf("surface" to 0xFFFFFFFF),
+            dark = mapOf("primary" to 0xFFFF0000, "surface" to 0xFF000000),
+        )
+        val body = """
+            {
+              "window": { "background": "dynamic-dark-color(surface)" },
+              "key": { "background": "dynamic-light-color(surface)", "foreground": "#000000" },
+              "key[code=10]": { "background": "dynamic-dark-color(primary)" }
+            }
+        """
+        val t = theme(body, night = true, palette = palette)
+        assertTrue(t.followWallpaper)
+        assertEquals(
+            mapOf(
+                "dark:surface" to 0xFF000000,
+                "light:surface" to 0xFFFFFFFF,
+                "dark:primary" to 0xFFFF0000,
+            ),
+            t.wallpaperRoles,
+        )
+    }
+
+    /** A sheet of fixed colours has nothing to follow, and does not start to. */
+    @Test
+    fun `a sheet with no roles does not follow the wallpaper`() {
+        val t = theme("""{ "window": { "background": "#101010" }, "key": { "background": "#202020" } }""")
+        assertTrue(!t.followWallpaper)
+        assertTrue(t.wallpaperRoles.isEmpty())
     }
 
     /** `dynamic-color(...)` with no scheme named follows the theme's own day/night flag. */

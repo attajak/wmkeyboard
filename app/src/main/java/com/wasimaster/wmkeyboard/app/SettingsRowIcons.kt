@@ -419,6 +419,7 @@ internal object SettingsRowIcons {
 
         // ---- The theme editor ----
         put(R.string.theme_editor_dark_title) { Icons.Outlined.Contrast }
+        put(R.string.theme_follow_wallpaper_title) { Icons.Outlined.ColorLens }
         put(R.string.theme_crop_image_title) { Icons.Outlined.Crop }
         put(R.string.theme_crop_landscape_title) { Icons.Outlined.Crop169 }
         put(R.string.theme_background_animated_title) { Icons.Outlined.Animation }

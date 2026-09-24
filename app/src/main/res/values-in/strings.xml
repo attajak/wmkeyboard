@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">Warna teks tombol terlalu dekat dengan warna tombol sehingga sulit dibaca. Aplikasi memilih warna yang dapat Anda baca.</string>
     <string name="import_floris_dropped_corners">Tombol memiliki satu ukuran sudut. File tersebut menetapkan ukuran yang berbeda untuk setiap sudut.</string>
     <string name="import_floris_dropped_dynamic_baseline">Beberapa warna dalam file ini mengikuti wallpaper pada ponsel yang mendukungnya. Ponsel ini tidak mendukungnya, jadi aplikasi menggunakan warna Android standar untuk warna tersebut.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Beberapa warna dalam file ini mengikuti wallpaper Anda. Aplikasi menyimpan warna yang diberikan wallpaper Anda saat ini. Warna tersebut tetap seperti apa adanya saat Anda mengubah wallpaper nanti.</string>
     <string name="import_floris_dropped_font">Font tidak disertakan. Font adalah add-on terpisah di aplikasi ini.</string>
     <string name="import_floris_dropped_shadow_color">File tersebut memilih warna untuk bayangan di bawah tombol. Bayangannya muncul, tetapi aplikasi ini menggambarnya dengan warnanya sendiri.</string>
     <string name="import_floris_dropped_spacing">Jarak di sekitar bagian tunggal tidak diatur. Aplikasi ini mengatur celah tombol untuk seluruh papan ketik.</string>

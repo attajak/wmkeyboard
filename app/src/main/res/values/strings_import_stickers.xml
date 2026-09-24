@@ -174,9 +174,10 @@
     <string name="import_floris_dropped_spacing">The file sets its own spacing around single keys and panels. This app uses one gap between keys for the whole keyboard, so those spacings are not used.</string>
     <string name="import_floris_dropped_font">The file asks for a font by name but does not contain it. A theme that carries its font is installed with it; this one does not, so install the font yourself and pick it in the theme editor.</string>
     <!-- A stylesheet may name a Material You role instead of a colour. The app
-         resolves it against the palette in use at import and stores the result,
-         so the theme keeps those colours but stops following the wallpaper. -->
-    <string name="import_floris_dropped_dynamic_snapshot">Some colours in this file follow your wallpaper. The app saved the colours that your wallpaper gives right now. They stay as they are when you change your wallpaper later.</string>
+         resolves it against the palette in use at import, remembers the role,
+         and moves the colour when the wallpaper changes (issue #357). The
+         switch named here is theme_follow_wallpaper_title. -->
+    <string name="import_floris_dropped_dynamic_follows">Some colours in this file follow your wallpaper. They change when you change your wallpaper. To keep the colours that they have now, turn off \"Follow wallpaper colors\" in the theme editor.</string>
     <!-- Shown instead of the line above when the phone has no wallpaper
          colours to read, which is every phone below Android 12. The colours
          still resolved, but against stock Material rather than the wallpaper. -->

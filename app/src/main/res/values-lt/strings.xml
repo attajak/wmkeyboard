@@ -1456,7 +1456,6 @@
     <string name="import_floris_dropped_contrast">Pagrindinė teksto spalva buvo per artima pagrindinei spalvai, kad būtų galima skaityti. Programa pasirinko spalvą, kurią galite perskaityti.</string>
     <string name="import_floris_dropped_corners">Klavišai turi vieną kampo dydį. Failas nustato skirtingą dydį kiekvienam kampui.</string>
     <string name="import_floris_dropped_dynamic_baseline">Kai kurios šio failo spalvos atitinka ekrano užsklandą telefonuose, kurie tai palaiko. Šis telefonas to nepalaiko, todėl programa joms naudojo standartines „Android“ spalvas.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Kai kurios šio failo spalvos atitinka jūsų ekrano užsklandą. Programa išsaugojo spalvas, kurias šiuo metu suteikia jūsų ekrano užsklanda. Jos išlieka tokios pačios, kai vėliau pakeičiate ekrano užsklandą.</string>
     <string name="import_floris_dropped_font">Šriftas neįtrauktas. Šriftas šioje programoje yra atskiras priedas.</string>
     <string name="import_floris_dropped_shadow_color">Failas parenka spalvą šešėliams po klavišais. Šešėliai perkeliami, bet ši programa juos piešia savo spalva.</string>
     <string name="import_floris_dropped_spacing">Tarpai aplink atskiras dalis nenustatyti. Ši programa nustato klavišų tarpus visai klaviatūrai.</string>

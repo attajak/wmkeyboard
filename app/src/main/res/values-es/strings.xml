@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Un color de texto de tecla estaba demasiado cerca del color de la tecla para leerlo. La aplicación eligió un color que puedes leer.</string>
     <string name="import_floris_dropped_corners">Las teclas tienen un tamaño de esquina. El archivo establece un tamaño diferente para cada esquina.</string>
     <string name="import_floris_dropped_dynamic_baseline">Algunos colores en este archivo siguen el fondo de pantalla en teléfonos que lo admiten. Este teléfono no lo hace, por lo que la aplicación utilizó los colores estándar de Android para ellos.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Algunos colores en este archivo siguen tu fondo de pantalla. La aplicación guardó los colores que tu fondo de pantalla proporciona en este momento. Permanecen como están cuando cambias tu fondo de pantalla más tarde.</string>
     <string name="import_floris_dropped_font">La fuente no está incluida. Una fuente es un complemento separado en esta aplicación.</string>
     <string name="import_floris_dropped_shadow_color">El archivo elige un color para las sombras debajo de las teclas. Las sombras se transfieren, pero esta aplicación las dibuja con su propio color.</string>
     <string name="import_floris_dropped_spacing">El espacio alrededor de partes individuales no está configurado. Esta aplicación establece el espacio entre teclas para todo el teclado.</string>

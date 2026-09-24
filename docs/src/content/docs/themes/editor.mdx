@@ -45,6 +45,17 @@ At the top of the editor, a **Dark theme** switch and a row of swatches let you 
 
 Tapping a swatch, or flipping Dark theme, recomputes the board, key, accent, and popup colors from that seed and shade. It preserves everything that isn't seed-derived, so a reseed doesn't erase work you've done elsewhere in the editor. Your background image and its opacity/blur, both gradients, the key shape, the key border color and width, the gesture-trail color, all three corner-radius overrides, and the animation type and speed all carry over untouched. Anything you hand-picked that *is* seed-derived (a manually recolored key-text or popup color, say) gets overwritten, since there's no way to tell "kept the default" apart from "picked to match."
 
+## Following your wallpaper
+
+Under the seed swatches, **Follow wallpaper colors** makes the theme change color with your wallpaper, the way the Default theme does with Material You on. It's off for a theme you make, and it needs Android 12 or later, because older phones have no wallpaper palette to read.
+
+The theme keeps its own colors. The keyboard moves them onto your wallpaper's palette as it draws them, so turning the switch off gives you the stored colors back, and the color rows in the editor always show the stored ones. How the colors move depends on where the theme came from:
+
+- **Most themes** (your own, copies of built-ins, Gboard, Rboard and HeliBoard imports) keep how light or dark each color is and take the wallpaper's hue. Greys go to the wallpaper's neutral tones, colors go to its main accent, and a color on the far side of the color wheel from the theme's accent goes to the wallpaper's third accent, so a two-color theme stays two colors. Because the lightness stays put, text that was easy to read stays easy to read. Pure black and pure white stay as they are.
+- **FlorisBoard themes written in Material You colors**, such as FloriStyle and Gboardish, remember which Material You color each part used. They follow the wallpaper exactly as they would in FlorisBoard, and the switch is already on when you import one. A color you change in the editor stays the color you picked.
+
+Tapping a seed swatch or flipping **Dark theme** keeps the switch as it is.
+
 ## Options
 
 <SettingsPath path="Appearance / Keyboard themes / (edit a theme)" />

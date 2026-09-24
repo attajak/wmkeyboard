@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">कुंजी का टेक्स्ट रंग कुंजी के रंग के बहुत करीब था जिसे पढ़ा नहीं जा सकता था। ऐप ने एक ऐसा रंग चुना है जिसे आप पढ़ सकते हैं।</string>
     <string name="import_floris_dropped_corners">कुंजियों का एक कोना आकार होता है। फ़ाइल प्रत्येक कोने के लिए एक अलग आकार सेट करती है।</string>
     <string name="import_floris_dropped_dynamic_baseline">इस फ़ाइल के कुछ रंग उन फ़ोन पर वॉलपेपर का अनुसरण करते हैं जो इसका समर्थन करते हैं। यह फ़ोन ऐसा नहीं करता है, इसलिए ऐप ने उनके लिए मानक Android रंगों का उपयोग किया है।</string>
-    <string name="import_floris_dropped_dynamic_snapshot">इस फ़ाइल में कुछ रंग आपके वॉलपेपर का अनुसरण करते हैं। ऐप ने उन रंगों को सहेजा है जो आपका वॉलपेपर अभी देता है। जब आप बाद में अपना वॉलपेपर बदलते हैं तो वे वैसे ही रहते हैं।</string>
     <string name="import_floris_dropped_font">फ़ॉन्ट शामिल नहीं है। इस ऐप में फ़ॉन्ट एक अलग ऐड-ऑन है।</string>
     <string name="import_floris_dropped_shadow_color">फ़ाइल कुंजियों के नीचे की छाया के लिए एक रंग चुनती है। छायाएँ आ जाती हैं, लेकिन यह ऐप उन्हें अपने रंग में दिखाता है।</string>
     <string name="import_floris_dropped_spacing">अलग-अलग हिस्सों के आसपास की जगह सेट नहीं है। यह ऐप पूरे कीबोर्ड के लिए की गैप सेट करता है।</string>

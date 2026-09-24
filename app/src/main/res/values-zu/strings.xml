@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Umbala wombhalo wokhiye wawusondele kakhulu kumbala wokhiye ukuze ufundeke. Uhlelo lokusebenza lukhethe umbala ongawufunda.</string>
     <string name="import_floris_dropped_corners">Okhiye banosayizi wekhona owodwa. Ifayela libeka usayizi ohlukile wekhona ngalinye.</string>
     <string name="import_floris_dropped_dynamic_baseline">Eminye imibala kule fayela ilandela isithombe sangemuva kumafoni akusekelayo. Le foni ayikwenzi lokho, ngakho uhlelo lokusebenza lusebenzise imibala ejwayelekile ye-Android kuyo.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Eminye imibala kule fayela ilandela isithombe sangemuva sakho. Uhlelo lokusebenza lulondoloze imibala isithombe sakho sangemuva esikunikeza yona njengamanje. Ihlala injalo uma ushintsha isithombe sakho sangemuva kamuva.</string>
     <string name="import_floris_dropped_font">Ifonti ayifakiwe. Ifonti iyisengezo esihlukile kulolu hlelo lokusebenza.</string>
     <string name="import_floris_dropped_shadow_color">Ifayela likhetha umbala wemithunzi engaphansi kokhiye. Imithunzi iyeza, kodwa lolu hlelo lokusebenza luyidweba ngombala walo.</string>
     <string name="import_floris_dropped_spacing">Isikhala esizungeze izingxenye ezilodwa asisethiwe. Lolu hlelo lokusebenza lusetha igebe lokhiye kuyo yonke ikhibhodi.</string>

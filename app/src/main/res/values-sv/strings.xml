@@ -1456,7 +1456,6 @@
     <string name="import_floris_dropped_contrast">En tangenttextfärg var för lik tangentfärgen för att vara läsbar. Appen valde en färg som du kan läsa.</string>
     <string name="import_floris_dropped_corners">Tangenter har en hörnstorlek. Filen anger en annan storlek för varje hörn.</string>
     <string name="import_floris_dropped_dynamic_baseline">Vissa färger i den här filen följer bakgrundsbilden på telefoner som stöder det. Den här telefonen gör inte det, så appen använde standardfärgerna för Android för dem.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Vissa färger i den här filen följer din bakgrundsbild. Appen sparade de färger som din bakgrundsbild ger just nu. De förblir som de är när du ändrar din bakgrundsbild senare.</string>
     <string name="import_floris_dropped_font">Typsnittet ingår inte. Ett typsnitt är ett separat tillägg i den här appen.</string>
     <string name="import_floris_dropped_shadow_color">Filen väljer en färg för skuggorna under tangenterna. Skuggorna följer med, men den här appen ritar dem i sin egen färg.</string>
     <string name="import_floris_dropped_spacing">Mellanrum runt enskilda delar är inte inställt. Denna app ställer in tangentavståndet för hela tangentbordet.</string>

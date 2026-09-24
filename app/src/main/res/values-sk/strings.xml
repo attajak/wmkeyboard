@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Farba textu klávesy bola príliš blízko farbe klávesy na čítanie. Aplikácia vybrala farbu, ktorú môžete čítať.</string>
     <string name="import_floris_dropped_corners">Klávesy majú jednu veľkosť rohu. Súbor nastavuje pre každý roh inú veľkosť.</string>
     <string name="import_floris_dropped_dynamic_baseline">Niektoré farby v tomto súbore nasledujú tapetu na telefónoch, ktoré to podporujú. Tento telefón to nepodporuje, takže aplikácia pre ne použila štandardné farby systému Android.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Niektoré farby v tomto súbore nasledujú vašu tapetu. Aplikácia uložila farby, ktoré vaša tapeta poskytuje práve teraz. Zostanú také, aké sú, keď neskôr zmeníte tapetu.</string>
     <string name="import_floris_dropped_font">Písmo nie je zahrnuté. Písmo je v tejto aplikácii samostatný doplnok.</string>
     <string name="import_floris_dropped_shadow_color">Súbor vyberá farbu tieňov pod klávesmi. Tiene sa prenesú, ale táto aplikácia ich vykresľuje vlastnou farbou.</string>
     <string name="import_floris_dropped_spacing">Medzery okolo jednotlivých častí nie sú nastavené. Táto aplikácia nastavuje medzeru medzi klávesmi pre celú klávesnicu.</string>

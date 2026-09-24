@@ -1456,7 +1456,6 @@
     <string name="import_floris_dropped_contrast">Kolor tekstu klawisza był zbyt zbliżony do koloru klawisza, aby był czytelny. Aplikacja wybrała kolor, który jest czytelny.</string>
     <string name="import_floris_dropped_corners">Klawisze mają jeden rozmiar narożnika. Plik ustawia inny rozmiar dla każdego narożnika.</string>
     <string name="import_floris_dropped_dynamic_baseline">Niektóre kolory w tym pliku podążają za tapetą na telefonach, które to obsługują. Ten telefon tego nie robi, więc aplikacja użyła dla nich standardowych kolorów Androida.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Niektóre kolory w tym pliku są dopasowane do Twojej tapety. Aplikacja zapisała kolory, które obecnie daje Twoja tapeta. Pozostają one niezmienione, gdy później zmienisz tapetę.</string>
     <string name="import_floris_dropped_font">Czcionka nie jest dołączona. Czcionka jest oddzielnym dodatkiem w tej aplikacji.</string>
     <string name="import_floris_dropped_shadow_color">Plik wybiera kolor cieni pod klawiszami. Cienie zostaną przeniesione, ale ta aplikacja rysuje je we własnym kolorze.</string>
     <string name="import_floris_dropped_spacing">Odstępy wokół pojedynczych części nie są ustawione. Ta aplikacja ustawia odstępy między klawiszami dla całej klawiatury.</string>

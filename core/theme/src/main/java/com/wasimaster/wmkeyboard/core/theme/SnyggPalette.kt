@@ -16,13 +16,15 @@ package com.wasimaster.wmkeyboard.core.theme
  * conversion stays unit-testable, and `:app` passes the device palette (see
  * `dynamicSnyggPalette`) on Android 12 and up. Off that, [Baseline] stands in.
  *
- * ### Resolving once is not the same as resolving live
+ * ### Resolved once, then followed
  *
  * FlorisBoard re-resolves when the wallpaper changes. A [ThemeSpec] holds
- * literal colours, so a converted theme is a snapshot of the palette the device
- * had at import. That is the honest trade: the alternative is a theme with no
- * colours at all. The import reports it as [FlexUnsupported.DYNAMIC_COLOR] so
- * the user knows their theme will not follow a new wallpaper on its own.
+ * literal colours, so a converted theme stores the palette the device had at
+ * import, and beside it the roles those colours came from
+ * ([ThemeSpec.wallpaperRoles]). When the keyboard draws the theme it moves
+ * every colour still equal to a role's old value onto that role's value now
+ * (see [followingWallpaper]), which is what makes the theme follow the next
+ * wallpaper. Issue #357 was the theme staying in the first wallpaper's colours.
  */
 data class SnyggPalette(
     /** Role name (normalized, lowercase) to ARGB, for the light scheme. */

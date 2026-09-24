@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">Màu văn bản của phím quá gần với màu của phím nên khó đọc. Ứng dụng đã chọn một màu mà bạn có thể đọc được.</string>
     <string name="import_floris_dropped_corners">Các phím có một kích thước góc. Tệp thiết lập kích thước khác nhau cho mỗi góc.</string>
     <string name="import_floris_dropped_dynamic_baseline">Một số màu trong tệp này tuân theo hình nền trên các điện thoại hỗ trợ tính năng đó. Điện thoại này không hỗ trợ, vì vậy ứng dụng đã sử dụng các màu Android tiêu chuẩn cho chúng.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Một số màu trong tệp này tuân theo hình nền của bạn. Ứng dụng đã lưu các màu mà hình nền của bạn cung cấp ngay lúc này. Chúng sẽ giữ nguyên như vậy khi bạn thay đổi hình nền sau này.</string>
     <string name="import_floris_dropped_font">Phông chữ không được bao gồm. Phông chữ là một tiện ích bổ sung riêng biệt trong ứng dụng này.</string>
     <string name="import_floris_dropped_shadow_color">Tệp này chọn màu cho bóng đổ dưới các phím. Các bóng đổ được chuyển sang, nhưng ứng dụng này vẽ chúng bằng màu riêng của mình.</string>
     <string name="import_floris_dropped_spacing">Khoảng cách xung quanh các phần đơn lẻ không được thiết lập. Ứng dụng này đặt khoảng cách phím cho toàn bộ bàn phím.</string>

@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import com.wasimaster.wmkeyboard.BuildConfig
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -216,6 +217,7 @@ import kotlin.math.roundToInt
 import androidx.compose.material.icons.outlined.SwapHoriz
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.FlexTheme
+import com.wasimaster.wmkeyboard.core.theme.dynamicSnyggPalette
 import com.wasimaster.wmkeyboard.core.theme.GboardResult
 import com.wasimaster.wmkeyboard.core.theme.GboardTheme
 import com.wasimaster.wmkeyboard.core.theme.HeliResult
@@ -2335,6 +2337,25 @@ fun ThemeEditorScreen(
                 stringResource(R.string.theme_editor_dark_subtitle),
                 checked = theme.dark,
             ) { dark -> update { t -> t.reseeded(t.enterKeyBackground, dark) } }
+        }
+        item {
+            // Issue #357. The theme keeps its own colours and the keyboard moves
+            // them onto the wallpaper on the way to the screen, so this is a
+            // switch rather than a one-way conversion: off gives them back.
+            val supported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            ToggleSetting(
+                R.string.theme_follow_wallpaper_title,
+                stringResource(
+                    if (supported) {
+                        R.string.theme_follow_wallpaper_subtitle
+                    } else {
+                        R.string.theme_follow_wallpaper_unsupported
+                    },
+                ),
+                checked = theme.followWallpaper,
+                info = stringResource(R.string.theme_follow_wallpaper_info),
+                enabled = supported,
+            ) { follow -> update { t -> t.copy(followWallpaper = follow) } }
         }
         item {
             LazyRow(

@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">Une couleur de texte de touche était trop proche de la couleur de la touche pour être lisible. L\'application a choisi une couleur lisible.</string>
     <string name="import_floris_dropped_corners">Les touches ont une taille de coin unique. Le fichier définit une taille différente pour chaque coin.</string>
     <string name="import_floris_dropped_dynamic_baseline">Certaines couleurs de ce fichier suivent le fond d\'écran sur les téléphones qui le prennent en charge. Ce téléphone ne le fait pas, donc l\'application a utilisé les couleurs Android standard pour celles-ci.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Certaines couleurs dans ce fichier suivent votre fond d\'écran. L\'application a enregistré les couleurs que votre fond d\'écran donne actuellement. Elles resteront telles quelles lorsque vous changerez votre fond d\'écran plus tard.</string>
     <string name="import_floris_dropped_font">La police n\'est pas incluse. Une police est un module complémentaire distinct dans cette application.</string>
     <string name="import_floris_dropped_shadow_color">Le fichier choisit une couleur pour les ombres sous les touches. Les ombres sont importées, mais cette application les dessine avec sa propre couleur.</string>
     <string name="import_floris_dropped_spacing">L\'espacement autour des éléments individuels n\'est pas défini. Cette application définit l\'écartement des touches pour l\'ensemble du clavier.</string>

@@ -1453,7 +1453,6 @@
     <string name="import_floris_dropped_contrast">Bir tuş metni rengi, okunabilirlik için tuş rengine çok yakındı. Uygulama, okuyabileceğiniz bir renk seçti.</string>
     <string name="import_floris_dropped_corners">Tuşların tek bir köşe boyutu vardır. Dosya her köşe için farklı bir boyut ayarlıyor.</string>
     <string name="import_floris_dropped_dynamic_baseline">Bu dosyadaki bazı renkler, destekleyen telefonlarda duvar kağıdını takip eder. Bu telefon desteklemediği için uygulama onlar için standart Android renklerini kullandı.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Bu dosyadaki bazı renkler duvar kağıdınızı takip eder. Uygulama, duvar kağıdınızın şu anda verdiği renkleri kaydetti. Daha sonra duvar kağıdınızı değiştirdiğinizde bunlar oldukları gibi kalırlar.</string>
     <string name="import_floris_dropped_font">Font dahil edilmedi. Font, bu uygulamada ayrı bir eklentidir.</string>
     <string name="import_floris_dropped_shadow_color">Dosya, tuşların altındaki gölgeler için bir renk seçer. Gölgeler aktarılır ancak bu uygulama onları kendi renginde çizer.</string>
     <string name="import_floris_dropped_spacing">Tekil parçaların etrafındaki boşluk ayarlanmadı. Bu uygulama, tüm klavye için tuş boşluğunu ayarlar.</string>

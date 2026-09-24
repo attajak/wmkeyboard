@@ -170,6 +170,11 @@ internal class SnyggMapper(private val style: Stylesheet) {
             accent = accentColor(enter, resolvedBoard),
             gestureTrailColor = trailColor(),
             keyOverrides = keyOverrides(resolvedKey, resolvedBoard, dropped),
+            // A sheet written in Material You roles is a theme that follows the
+            // wallpaper in FlorisBoard, so it follows it here too. The switch
+            // stays in the editor for anyone who wants today's colours kept.
+            followWallpaper = style.wallpaperRoles.isNotEmpty(),
+            wallpaperRoles = style.wallpaperRoles,
         )
         return ConvertedTheme(theme, images, fontOf(files, dropped))
     }

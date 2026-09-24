@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">Eine Tasten-Textfarbe war zu nah an der Tastenfarbe, um sie lesen zu können. Die App hat eine Farbe gewählt, die Sie lesen können.</string>
     <string name="import_floris_dropped_corners">Tasten haben eine Eckengröße. Die Datei legt für jede Ecke eine andere Größe fest.</string>
     <string name="import_floris_dropped_dynamic_baseline">Einige Farben in dieser Datei folgen dem Hintergrundbild auf Telefonen, die dies unterstützen. Dieses Telefon tut dies nicht, daher hat die App die Standard-Android-Farben dafür verwendet.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Einige Farben in dieser Datei folgen Ihrem Hintergrundbild. Die App hat die Farben gespeichert, die Ihr Hintergrundbild gerade vorgibt. Sie bleiben so, wie sie sind, wenn Sie Ihr Hintergrundbild später ändern.</string>
     <string name="import_floris_dropped_font">Die Schriftart ist nicht enthalten. Eine Schriftart ist ein separates Add-on in dieser App.</string>
     <string name="import_floris_dropped_shadow_color">Die Datei wählt eine Farbe für die Schatten unter den Tasten. Die Schatten werden übernommen, aber diese App zeichnet sie in ihrer eigenen Farbe.</string>
     <string name="import_floris_dropped_spacing">Der Abstand um einzelne Teile ist nicht festgelegt. Diese App legt den Tastenabstand für die gesamte Tastatur fest.</string>

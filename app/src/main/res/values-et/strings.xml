@@ -1458,7 +1458,6 @@
     <string name="import_floris_dropped_contrast">Klahvi teksti värv oli klahvi värvile liiga lähedal, et seda lugeda. Rakendus valis värvi, mida saate lugeda.</string>
     <string name="import_floris_dropped_corners">Klahvidel on üks nurgasuurus. Fail määrab iga nurga jaoks erineva suuruse.</string>
     <string name="import_floris_dropped_dynamic_baseline">Mõned selle faili värvid järgivad taustapilti telefonides, mis seda toetavad. See telefon seda ei tee, seega kasutas rakendus nende jaoks standardseid Androidi värve.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">Mõned selle faili värvid järgivad sinu taustapilti. Rakendus salvestas värvid, mida sinu taustapilt praegu pakub. Need jäävad samaks, kui sa hiljem taustapilti muudad.</string>
     <string name="import_floris_dropped_font">Fonti ei ole kaasatud. Font on selles rakenduses eraldi lisandmoodul.</string>
     <string name="import_floris_dropped_shadow_color">Fail valib klahvide all olevate varjude värvi. Varjud kantakse üle, kuid see rakendus joonistab need oma värviga.</string>
     <string name="import_floris_dropped_spacing">Üksikute osade ümber pole vahet seatud. See rakendus määrab klahvide vahe kogu klaviatuuri jaoks.</string>

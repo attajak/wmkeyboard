@@ -80,6 +80,7 @@ import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.theme.ConvertedTheme
 import com.wasimaster.wmkeyboard.core.theme.FlexResult
 import com.wasimaster.wmkeyboard.core.theme.FlexTheme
+import com.wasimaster.wmkeyboard.core.theme.dynamicSnyggPalette
 import com.wasimaster.wmkeyboard.core.fonts.FontFile
 import com.wasimaster.wmkeyboard.core.fonts.FontImportResult
 import com.wasimaster.wmkeyboard.core.fonts.FontStore
@@ -1585,7 +1586,7 @@ private fun florisDroppedRes(dropped: FlexUnsupported): Int = when (dropped) {
     FlexUnsupported.PER_CORNER_RADIUS -> R.string.import_floris_dropped_corners
     FlexUnsupported.PER_ELEMENT_SPACING -> R.string.import_floris_dropped_spacing
     FlexUnsupported.FONT -> R.string.import_floris_dropped_font
-    FlexUnsupported.DYNAMIC_COLOR -> R.string.import_floris_dropped_dynamic_snapshot
+    FlexUnsupported.DYNAMIC_COLOR -> R.string.import_floris_dropped_dynamic_follows
     FlexUnsupported.UNKNOWN_ELEMENT -> R.string.import_floris_dropped_unknown
     FlexUnsupported.LOW_CONTRAST_FALLBACK -> R.string.import_floris_dropped_contrast
 }

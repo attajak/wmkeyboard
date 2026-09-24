@@ -351,10 +351,11 @@ enum class FlexUnsupported {
     FONT,
 
     /**
-     * The sheet named a Material You role. It is resolved against the device's
-     * palette (see [SnyggPalette]) and stored as a literal colour, so the theme
-     * is a snapshot: it will not follow the next wallpaper the way FlorisBoard
-     * does.
+     * The sheet named a Material You role. Not a loss any more: it is resolved
+     * against the device's palette (see [SnyggPalette]), and the role is kept on
+     * the theme so that it follows the next wallpaper the way FlorisBoard does
+     * (see [ThemeSpec.wallpaperRoles]). Still reported, because the import says
+     * so, and says something different on a phone with no wallpaper palette.
      */
     DYNAMIC_COLOR,
     UNKNOWN_ELEMENT,

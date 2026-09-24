@@ -53,6 +53,7 @@ import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.theme.brush
 import com.wasimaster.wmkeyboard.core.theme.keyShapeFor
 import com.wasimaster.wmkeyboard.core.theme.keyShapeKindOrNull
+import com.wasimaster.wmkeyboard.core.theme.rememberWallpaperFollowed
 
 /**
  * Miniature keyboard drawn from the spec: toolbar, two key rows, bottom row.
@@ -74,6 +75,23 @@ fun ThemePreview(
     imageOverride: Any? = null,
     landscape: Boolean = false,
     animatedBadge: Boolean = true,
+) = ThemePreviewContent(
+    // In the wallpaper's colours when the theme follows it, so the card and
+    // the keyboard never disagree about what the theme looks like today.
+    theme = rememberWallpaperFollowed(theme),
+    modifier = modifier,
+    imageOverride = imageOverride,
+    landscape = landscape,
+    animatedBadge = animatedBadge,
+)
+
+@Composable
+private fun ThemePreviewContent(
+    theme: ThemeSpec,
+    modifier: Modifier,
+    imageOverride: Any?,
+    landscape: Boolean,
+    animatedBadge: Boolean,
 ) {
     // Half the 3 dp the rows space their keys by, so a leaning shape spills
     // into the gap here exactly as it does on the keyboard itself.

@@ -1457,7 +1457,6 @@
     <string name="import_floris_dropped_contrast">צבע טקסט של מקש היה קרוב מדי לצבע המקש כדי לקרוא אותו. האפליקציה בחרה צבע שניתן לקרוא.</string>
     <string name="import_floris_dropped_corners">למקשים יש גודל פינה אחד. הקובץ מגדיר גודל שונה לכל פינה.</string>
     <string name="import_floris_dropped_dynamic_baseline">חלק מהצבעים בקובץ זה עוקבים אחר הטפט בטלפונים התומכים בכך. טלפון זה אינו תומך, לכן האפליקציה השתמשה בצבעי אנדרואיד הסטנדרטיים עבורם.</string>
-    <string name="import_floris_dropped_dynamic_snapshot">חלק מהצבעים בקובץ זה תואמים לטפט שלך. האפליקציה שמרה את הצבעים שהטפט שלך מספק כרגע. הם יישארו כפי שהם גם אם תשנה את הטפט מאוחר יותר.</string>
     <string name="import_floris_dropped_font">הגופן אינו כלול. גופן הוא תוסף נפרד באפליקציה זו.</string>
     <string name="import_floris_dropped_shadow_color">הקובץ בוחר צבע עבור הצללים מתחת למקשים. הצללים עוברים, אך אפליקציה זו מציירת אותם בצבע משלה.</string>
     <string name="import_floris_dropped_spacing">המרווח סביב חלקים בודדים לא הוגדר. אפליקציה זו מגדירה את המרווח בין המקשים עבור כל המקלדת.</string>
