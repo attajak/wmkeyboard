@@ -80,5 +80,7 @@
          the site the language data comes from. -->
     <string name="core_intel_ocr_download_error_http">The GitHub server did not send the file. The error code is HTTP <xliff:g id="status_code" example="404">%1$s</xliff:g>.</string>
     <string name="core_intel_ocr_download_error_interrupted">The connection stopped during the download. Try again.</string>
+    <!-- The language data is on the device, but Tesseract could not load it. -->
+    <string name="core_intel_ocr_pack_error_broken">The downloaded language data is damaged, so the scanner could not use it. Download it again.</string>
 
 </resources>

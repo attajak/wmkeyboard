@@ -45,6 +45,8 @@ After a capture, the recognized words appear as tappable chips grouped by line:
 - **Copy** and **Insert** act on whatever's currently selected.
 - **Scan again** discards the capture and returns to the viewfinder. A select-all/deselect-all toggle flips every chip at once.
 
+Tesseract reads each photo twice, once with a threshold set from each small area of the photo and once with one threshold for the whole photo, and keeps whichever read found more text. The first copes with uneven light: a shadow across the page, the dark corners of a phone photo, or the torch's bright spot. The second copes with light text on a dark screen. "No text found" means both reads came back empty. If recognition itself fails, the panel says **Could not read** instead. If a downloaded language won't load, the scanner deletes that language's data and offers the download again.
+
 If your device has no camera, the panel shows a message instead of a blank viewfinder.
 
 ## Scanning QR codes and barcodes

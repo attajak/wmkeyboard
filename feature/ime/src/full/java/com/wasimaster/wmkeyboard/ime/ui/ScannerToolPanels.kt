@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.text.format.Formatter
+import android.util.Log
 import android.util.Rational
 import android.util.Size
 import android.view.Surface
@@ -96,6 +97,7 @@ import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
 import com.wasimaster.wmkeyboard.core.clipboard.LinkPreview
 import com.wasimaster.wmkeyboard.core.ocr.OcrLanguages
 import com.wasimaster.wmkeyboard.core.ocr.OcrPacks
+import com.wasimaster.wmkeyboard.core.ocr.TesseractException
 import com.wasimaster.wmkeyboard.core.ocr.TesseractOcr
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
@@ -116,6 +118,7 @@ import java.io.File
 import java.util.Locale
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -126,8 +129,15 @@ import kotlinx.coroutines.withContext
 /** One recognized word, tappable in the result view. [id] is global. */
 private class OcrWord(val id: Int, val text: String)
 
-/** A frozen capture with its recognized text, as lines of words. */
-private class OcrResult(val bitmap: Bitmap, val lines: List<List<OcrWord>>) {
+/**
+ * A frozen capture with its recognized text, as lines of words. [errorRes]
+ * is set when recognition failed, which is not the same as finding no text.
+ */
+private class OcrResult(
+    val bitmap: Bitmap,
+    val lines: List<List<OcrWord>>,
+    @StringRes val errorRes: Int? = null,
+) {
     val wordCount = lines.sumOf { it.size }
 }
 
@@ -315,7 +325,7 @@ private fun OcrContent(
                 }.getOrNull()
             } ?: return@launch
             stage = OcrStage.Recognizing(bitmap)
-            val lines = withContext(Dispatchers.Default) {
+            val read = withContext(Dispatchers.Default) {
                 runCancellable {
                     if (readPack != null) {
                         readWithTesseract(filesDir, readPack, bitmap)
@@ -329,9 +339,27 @@ private fun OcrContent(
                                 }
                             }
                     }
-                }.getOrDefault(emptyList())
+                }
             }
-            stage = OcrStage.Done(OcrResult(bitmap, lines))
+            // A failed read is an error on screen, never "no text found":
+            // that is what hid a broken engine from the user.
+            val failure = read.exceptionOrNull()
+            stage = when {
+                failure == null -> OcrStage.Done(OcrResult(bitmap, read.getOrThrow()))
+                // The pack went missing or would not load (and was deleted):
+                // back to the viewfinder, which now offers the download.
+                failure is TesseractException && readPack != null &&
+                    failure.reason == TesseractException.Reason.PACK_MISSING -> {
+                    OcrPacks.refresh(filesDir, listOf(readPack))
+                    OcrStage.Viewfinder
+                }
+                failure is TesseractException &&
+                    failure.reason == TesseractException.Reason.PACK_BROKEN -> OcrStage.Viewfinder
+                else -> {
+                    Log.w(OCR_LOG_TAG, "text recognition failed", failure)
+                    OcrStage.Done(OcrResult(bitmap, emptyList(), R.string.ime_scanner_ocr_read_error))
+                }
+            }
         }
     }
 
@@ -625,10 +653,14 @@ private fun OcrPromptButton(
 
 private val WHITESPACE = Regex("\\s+")
 
-/** Tesseract's text as the panel's lines of words. */
+private const val OCR_LOG_TAG = "WMKB-OCR"
+
+/**
+ * Tesseract's text as the panel's lines of words. Throws
+ * [TesseractException] when the read failed rather than found nothing.
+ */
 private suspend fun readWithTesseract(filesDir: File, pack: String, bitmap: Bitmap): List<List<OcrWord>> {
-    val argb = if (bitmap.config == Bitmap.Config.ARGB_8888) bitmap else bitmap.copy(Bitmap.Config.ARGB_8888, false)
-    val text = TesseractOcr.recognize(filesDir, pack, argb).orEmpty()
+    val text = TesseractOcr.recognize(filesDir, pack, bitmap)
     var id = 0
     return text.lines()
         .map { line -> line.split(WHITESPACE).filter { it.isNotEmpty() } }
@@ -738,7 +770,9 @@ private fun OcrResultView(
                 onRescan()
             }
             Text(
-                if (result.wordCount == 0) {
+                if (result.errorRes != null) {
+                    stringResource(R.string.ime_scanner_ocr_failed_label)
+                } else if (result.wordCount == 0) {
                     stringResource(R.string.ime_scanner_ocr_no_text_label)
                 } else {
                     pluralStringResource(
@@ -775,7 +809,7 @@ private fun OcrResultView(
         if (result.wordCount == 0) {
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
-                    stringResource(R.string.ime_scanner_ocr_empty),
+                    stringResource(result.errorRes ?: R.string.ime_scanner_ocr_empty),
                     color = kb.secondaryText,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center,
@@ -1362,8 +1396,12 @@ private fun barcodeFormatLabelRes(format: Int): Int = when (format) {
     else -> R.string.ime_scanner_format_generic
 }
 
-/** Suspends over a Play Services [Task] (same trick as Handwriting.kt). */
+/**
+ * Suspends over a Play Services [Task]. A failed task throws its exception:
+ * cancelling the continuation instead would unwind the capture as if the
+ * panel had closed, and leave it on the reading spinner.
+ */
 private suspend fun <T> Task<T>.await(): T = suspendCancellableCoroutine { cont ->
     addOnSuccessListener { cont.resume(it) }
-    addOnFailureListener { if (cont.isActive) cont.cancel(it) }
+    addOnFailureListener { if (cont.isActive) cont.resumeWithException(it) }
 }

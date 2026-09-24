@@ -61,14 +61,20 @@ Java_com_wasimaster_wmkeyboard_core_ocr_TesseractNative_nativeCreate(
     return static_cast<jlong>(reinterpret_cast<intptr_t>(engine.release()));
 }
 
-// Reads an ARGB_8888 bitmap. Returns the text with words split by spaces and
-// lines by newlines, or null when the bitmap is unusable or the read was
-// cancelled.
+// Reads an ARGB_8888 bitmap, turned black and white with Tesseract's
+// thresholding_method `thresholding` (0 Otsu, 2 Sauvola; TesseractOcr says
+// why it reads with both). Returns the text with words split by spaces and
+// lines by newlines: empty when the photo held nothing readable, null only
+// when the read itself failed (unusable bitmap, unknown method, engine
+// error) or was cancelled.
 JNIEXPORT jstring JNICALL
 Java_com_wasimaster_wmkeyboard_core_ocr_TesseractNative_nativeRecognize(
-    JNIEnv* env, jclass, jlong handle, jobject bitmap) {
+    JNIEnv* env, jclass, jlong handle, jobject bitmap, jint thresholding) {
     Engine* engine = FromHandle(handle);
     if (engine == nullptr) return nullptr;
+    if (!engine->api.SetVariable("thresholding_method", std::to_string(thresholding).c_str())) {
+        return nullptr;
+    }
 
     AndroidBitmapInfo info;
     if (AndroidBitmap_getInfo(env, bitmap, &info) != ANDROID_BITMAP_RESULT_SUCCESS ||

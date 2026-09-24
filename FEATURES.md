@@ -2462,7 +2462,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Sentence-start capitalisation only for en-US, never in a secure field
 - **Scanners** `uncommon` — Three camera tools: text OCR, QR/barcode, and document scan
   - Text scan (OCR) `RARE` — ML Kit Latin text recognition inside the keyboard, full-bleed over the toolbar
-    - Tesseract for other scripts (#306) `RARE` — engine setting Automatic / ML Kit / Tesseract; language chip on the viewfinder; tessdata_fast packs downloaded per enabled language from the panel or the tool page; slim 1.7 MB native library (native/tesseract-jni)
+    - Tesseract for other scripts (#306) `RARE` — engine setting Automatic / ML Kit / Tesseract; language chip on the viewfinder; tessdata_fast packs downloaded per enabled language from the panel or the tool page; slim 1.7 MB native library (native/tesseract-jni); reads twice (Sauvola local threshold, then Otsu) and keeps the read with more text, since global Otsu blacked out unevenly lit photos; a failed read or a pack that won't load shows as an error, not as "no text"
     - Recognised words become tappable chips grouped by line
     - Start-with-everything-selected toggle — on by default: tap to deselect and trim the capture down
     - Select-all / deselect-all toggle, Copy and Insert act on the selection

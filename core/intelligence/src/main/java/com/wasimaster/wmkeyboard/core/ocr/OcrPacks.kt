@@ -125,6 +125,16 @@ object OcrPacks {
         set(pack, Status.NotDownloaded)
     }
 
+    /**
+     * For a pack that is on disk but that Tesseract would not load: deletes
+     * it and reports it failed, so the scanner and the settings page offer
+     * the download again instead of reading nothing with it.
+     */
+    fun markBroken(filesDir: File, pack: String) {
+        file(filesDir, pack).delete()
+        set(pack, Status.Failed(R.string.core_intel_ocr_pack_error_broken))
+    }
+
     private fun set(pack: String, status: Status) {
         _states.update { it + (pack to status) }
     }

@@ -22,6 +22,10 @@
     <!-- Companion of common_select_all on the same button. -->
     <string name="ime_scanner_ocr_deselect_all_desc">Deselect all</string>
     <string name="ime_scanner_ocr_empty">The scanner found no text. Hold the camera closer, add more light, then try again.</string>
+    <!-- Shown above the result instead of ime_scanner_ocr_no_text_label when
+         text recognition itself failed, as opposed to finding no text. -->
+    <string name="ime_scanner_ocr_failed_label">Could not read</string>
+    <string name="ime_scanner_ocr_read_error">Text recognition stopped with an error, so the scanner could not read this photo. Try again.</string>
     <!-- Language chip on the viewfinder. %1$s is the name of a language. -->
     <string name="ime_scanner_ocr_language_desc">Text language: <xliff:g id="language" example="Bangla">%1$s</xliff:g>. Tap to change.</string>
     <!-- Tesseract reads a language only after its data is on the phone.

@@ -44,15 +44,26 @@ their time in.
   unreadable. `dataDir` is the `tessdata` directory itself (Tesseract 5 does
   not append `tessdata/`). `languages` is a pack name such as `ben`, or
   `ben+eng`. The engine is LSTM only.
-- `nativeRecognize(handle, bitmap) -> String?`: the bitmap must be
-  ARGB_8888. Words are split by spaces and lines by newlines. Null when
-  the bitmap is unusable or the read was cancelled.
+- `nativeRecognize(handle, bitmap, thresholding) -> String?`: the bitmap
+  must be ARGB_8888. `thresholding` is Tesseract's `thresholding_method`
+  (0 Otsu, 2 Sauvola). Words are split by spaces and lines by newlines.
+  Empty when the photo held no text; null only when the read failed (the
+  bitmap is unusable, the engine errored) or was cancelled.
 - `nativeCancel(handle)` is safe from any thread while a read runs.
 - `nativeDestroy(handle)`, `nativeVersion()`.
 - One engine is not safe to share across threads. `TesseractOcr` keeps every
   call on one thread of its own.
 
 ## Traps found on the way
+
+- Tesseract's default thresholding is one global Otsu threshold for the
+  whole image. Phone photos are never evenly lit: vignetting, a shadow or
+  the torch's hot spot and the threshold turns a whole region black, text
+  and all, so a sharp photo of print came back as no text at all. The
+  keyboard reads with Sauvola (a local threshold) and also with Otsu, which
+  still wins on light text on a dark screen, and keeps the better read.
+  Reproduce on a desktop with `tesseract photo.png - --oem 1 --psm 3 -c
+  thresholding_method=0` against `=2`.
 
 - Tesseract4Android's `Java_*` functions are not marked `JNIEXPORT`. Built with
   `-fvisibility=hidden` they vanish and the linker drops everything (a
