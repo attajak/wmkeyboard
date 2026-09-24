@@ -3700,6 +3700,7 @@ internal fun SliderSetting(
     icon: ImageVector? = SettingsRowIcons[title],
     enabled: Boolean = true,
     default: Float? = null,
+    onReset: (() -> Unit)? = null,
     preview: ((Float) -> Unit)? = null,
     onChange: (Float) -> Unit,
 ) = SliderSetting(
@@ -3713,6 +3714,7 @@ internal fun SliderSetting(
     highlightKey = title,
     enabled = enabled,
     default = default,
+    onReset = onReset,
     preview = preview,
     onChange = onChange,
 )
@@ -3742,6 +3744,13 @@ internal fun SliderSetting(
     // [ToggleSetting]'s own `enabled`.
     enabled: Boolean = true,
     default: Float? = null,
+    /**
+     * For a setting whose default is "unset", not a number: the reset shows
+     * whenever this is non-null and runs it instead of writing [default], which
+     * would pin the value the automatic one happens to be here. [default] is
+     * then only where the slider sits.
+     */
+    onReset: (() -> Unit)? = null,
     /**
      * Acts on the value under the finger on every step, for a row whose whole
      * point is heard or felt rather than stored — the key sound's volume, a
@@ -3789,8 +3798,12 @@ internal fun SliderSetting(
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.weight(1f, fill = false),
                     )
-                    ResetSetting(title, default != null && value != default, possible = default != null) {
-                        onChange(default ?: 0f)
+                    if (onReset != null) {
+                        ResetSetting(title, true, possible = true, onReset)
+                    } else {
+                        ResetSetting(title, default != null && value != default, possible = default != null) {
+                            onChange(default ?: 0f)
+                        }
                     }
                     if (info != null) InfoButton(title, info)
                 }

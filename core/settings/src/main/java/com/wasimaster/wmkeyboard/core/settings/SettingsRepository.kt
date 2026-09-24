@@ -11697,6 +11697,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setBottomPaddingDp(value: Int) =
         editPrefs { it[BOTTOM_PADDING] = value.coerceIn(0, MAX_BOTTOM_PADDING_DP) }
 
+    /** Hands bottom padding back to the automatic amount, [autoBottomPaddingDp]. */
+    suspend fun resetBottomPaddingDp() = editPrefs { it.remove(BOTTOM_PADDING) }
+
     suspend fun setKeyCornerRadiusDp(value: Int) =
         editPrefs { it[KEY_CORNER_RADIUS] = value.coerceIn(0, 28) }
 

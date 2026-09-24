@@ -1096,6 +1096,12 @@ internal fun LayoutSizeSettings(
                 display = { dpFormat.format(it.toInt()) },
                 info = stringResource(R.string.layout_bottom_padding_info),
                 default = autoBottomPadding.toFloat(),
+                // Back to automatic, not to the number it shows here.
+                onReset = if (settings.bottomPaddingDp != null) {
+                    { scope.launch { repository.resetBottomPaddingDp() } }
+                } else {
+                    null
+                },
             ) { scope.launch { repository.setBottomPaddingDp(it.toInt()) } }
         }
         item {
