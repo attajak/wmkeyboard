@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard can complete names and email addresses straight out of your contacts, and app names straight out of your launcher, so `"was"` completes to Wasi and `"john"` completes to `john.doe@gmail.com`. All three sources are off by default, and everything they read stays in memory on the device. Nothing is written to disk and nothing is sent anywhere.
 
 <PhoneFrame caption="A contact name completing in the suggestion strip, mid-word.">
-  {/* shot: smart/contact-name-suggestion */}
+  <Shot id="smart/contact-name-suggestion" alt="A contact name completing in the suggestion strip, mid-word." />
 </PhoneFrame>
 
 ## What gets suggested

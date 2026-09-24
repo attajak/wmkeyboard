@@ -67,10 +67,11 @@ class SettingsShots(
         @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
         fun shots(): List<Array<Any>> {
             val only = System.getProperty("wmkb.docShots.only")?.takeIf { it.isNotBlank() }?.toRegex()
+            val modes = shotModes()
             return SHOTS
                 .filter { only == null || only.containsMatchIn(it.id) }
                 .flatMap { shot ->
-                    listOf(false, true).map { dark ->
+                    modes.map { dark ->
                         arrayOf(shot, dark, "${shot.id} ${if (dark) "dark" else "light"}")
                     }
                 }
@@ -90,6 +91,7 @@ class SettingsShots(
     @Test
     fun capture() {
         val app = ApplicationProvider.getApplicationContext<Application>()
+        grantInternet(app)
         RuntimeEnvironment.setQualifiers(if (dark) "+night" else "+notnight")
         SettingsHighlight.clear()
         SettingsHighlight.hold = true
@@ -121,6 +123,7 @@ class SettingsShots(
         androidx.test.espresso.IdlingPolicies.setIdlingResourceTimeout(8, java.util.concurrent.TimeUnit.SECONDS)
         ActivityScenario.launch<android.app.Activity>(intent).use {
             val steps = StepsImpl(compose)
+            if (shot.freezeClock) compose.mainClock.autoAdvance = false
             val base = File(out, "${shot.id}.${if (dark) "dark" else "light"}")
             base.parentFile?.mkdirs()
             try {
@@ -149,6 +152,7 @@ class SettingsShots(
             )
         }
         SettingsHighlight.clear()
+        resetFakes()
     }
 
     private class StepsImpl(override val rule: ComposeTestRule) : Steps {
@@ -173,7 +177,7 @@ class SettingsShots(
                 last = count
                 Thread.sleep(120)
             }
-            rule.waitForIdle()
+            if (rule.mainClock.autoAdvance) rule.waitForIdle()
         }
 
         /**
@@ -183,11 +187,12 @@ class SettingsShots(
          * screenful stays a skeleton and nothing down there can be found.
          */
         private fun tick() {
-            if (!rule.mainClock.autoAdvance) return
+            // A stopped clock (a focused field's blinking cursor) is moved by
+            // hand, and never waited on: it would never read idle.
             rule.mainClock.advanceTimeBy(100)
             org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper())
                 .idleFor(java.time.Duration.ofMillis(100))
-            rule.waitForIdle()
+            if (rule.mainClock.autoAdvance) rule.waitForIdle()
         }
 
         fun ringHighlight() {

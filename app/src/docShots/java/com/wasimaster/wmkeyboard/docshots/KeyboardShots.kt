@@ -19,6 +19,7 @@ import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -74,10 +75,11 @@ class KeyboardShots(
         @ParameterizedRobolectricTestRunner.Parameters(name = "{2}")
         fun shots(): List<Array<Any>> {
             val only = System.getProperty("wmkb.docShots.only")?.takeIf { it.isNotBlank() }?.toRegex()
+            val modes = shotModes()
             return KB_SHOTS
                 .filter { only == null || only.containsMatchIn(it.id) }
                 .flatMap { shot ->
-                    listOf(false, true).map { dark ->
+                    modes.map { dark ->
                         arrayOf(shot, dark, "${shot.id} ${if (dark) "dark" else "light"}")
                     }
                 }
@@ -92,7 +94,10 @@ class KeyboardShots(
     @Test
     fun capture() {
         val app = ApplicationProvider.getApplicationContext<Application>()
+        grantInternet(app)
+        // A hardware keyboard is a configuration, the way Android reports one.
         RuntimeEnvironment.setQualifiers(if (dark) "+night" else "+notnight")
+        if (shot.hardwareKeyboard) RuntimeEnvironment.setQualifiers("+keysexposed-qwerty")
         androidx.test.espresso.IdlingPolicies.setMasterPolicyTimeout(8, TimeUnit.SECONDS)
         androidx.test.espresso.IdlingPolicies.setIdlingResourceTimeout(8, TimeUnit.SECONDS)
         val repo = SettingsRepository(app)
@@ -143,6 +148,7 @@ class KeyboardShots(
             File("${base.path}.json").writeText("{}\n")
             runCatching { controller?.destroy() }
         }
+        resetFakes()
     }
 
     /**
@@ -195,6 +201,10 @@ class ShotKeyboard : WMKeyboardService() {
 
     override fun getCurrentInputConnection(): InputConnection? = ic
     override fun getCurrentInputEditorInfo(): EditorInfo? = info ?: super.getCurrentInputEditorInfo()
+
+    // The window is shown on a phone; here nothing calls showWindow(), and the
+    // service would read every hardware key as arriving with its view hidden.
+    override fun isInputViewShown(): Boolean = true
 }
 
 /** One keyboard docs screenshot. [id] is the manifest id. */
@@ -208,6 +218,8 @@ data class KbShot(
     val text: String? = null,
     val seed: suspend Seed.() -> Unit = {},
     val steps: KbSteps.() -> Unit = {},
+    /** A physical keyboard is attached: Android's `qwerty` configuration. */
+    val hardwareKeyboard: Boolean = false,
 )
 
 interface KbSteps {
@@ -238,6 +250,24 @@ interface KbSteps {
      * [dx] px sideways and [dy] down, and leaves it held for the capture.
      */
     fun drag(label: String, dx: Float, dy: Float = 0f, holdMillis: Long = 0)
+
+    /** Holds the node described as [description] (a grid tile with no text). */
+    fun holdDescription(description: String, millis: Long = 700)
+
+    /** Selects the first occurrence of [text] in the field, as a long-press would. */
+    fun select(text: String)
+
+    /** Presses and releases a key on a physical keyboard. */
+    fun hardwareKey(keyCode: Int, meta: Int = 0)
+
+    /** One reading from the sensor of [type], handed to whoever listens. */
+    fun sensorEvent(type: Int, vararg values: Float)
+
+    /** Drives the speech recogniser the service created last. */
+    fun speech(event: org.robolectric.shadows.ShadowSpeechRecognizer.() -> Unit)
+
+    /** Lets [millis] of wall time pass: for work on real background threads. */
+    fun pause(millis: Long)
 
     fun settle()
 }
@@ -313,8 +343,14 @@ private class KbStepsImpl(override val rule: ComposeTestRule) : KbSteps {
         settle()
     }
 
+    private fun byTextOrDescription(label: String, substring: Boolean = true) =
+        rule.onAllNodesWithText(label, substring = substring).let { byText ->
+            if (byText.fetchSemanticsNodes().isNotEmpty()) byText.onFirst()
+            else rule.onAllNodesWithContentDescription(label, substring = substring).onFirst()
+        }
+
     override fun drag(label: String, dx: Float, dy: Float, holdMillis: Long) {
-        val node = rule.onAllNodesWithText(label, substring = true).onFirst()
+        val node = byTextOrDescription(label)
         node.performTouchInput { down(center) }
         if (holdMillis > 0) {
             rule.mainClock.advanceTimeBy(holdMillis)
@@ -326,10 +362,67 @@ private class KbStepsImpl(override val rule: ComposeTestRule) : KbSteps {
         repeat(6) { tick() }
     }
 
+    override fun holdDescription(description: String, millis: Long) {
+        val node = rule.onAllNodesWithContentDescription(description, substring = true).onFirst()
+        node.performTouchInput { down(center) }
+        rule.mainClock.advanceTimeBy(millis)
+        repeat(6) { tick() }
+    }
+
+    override fun select(text: String) {
+        val ic = requireNotNull(service.currentInputConnection) { "no field focused" }
+        val before = ic.getTextBeforeCursor(4000, 0)?.toString().orEmpty()
+        val after = ic.getTextAfterCursor(4000, 0)?.toString().orEmpty()
+        val start = (before + after).indexOf(text)
+        require(start >= 0) { "\"$text\" is not in the field" }
+        ic.setSelection(start, start + text.length)
+        // No input-method manager relays the change here, so hand it over the
+        // way the platform would.
+        service.onUpdateSelection(before.length, before.length, start, start + text.length, -1, -1)
+        settle()
+    }
+
+    override fun hardwareKey(keyCode: Int, meta: Int) {
+        val now = android.os.SystemClock.uptimeMillis()
+        val down = android.view.KeyEvent(now, now, android.view.KeyEvent.ACTION_DOWN, keyCode, 0, meta)
+        val up = android.view.KeyEvent(now, now + 30, android.view.KeyEvent.ACTION_UP, keyCode, 0, meta)
+        service.onKeyDown(keyCode, down)
+        service.onKeyUp(keyCode, up)
+        tick()
+    }
+
+    override fun sensorEvent(type: Int, vararg values: Float) {
+        val manager = service.getSystemService(android.hardware.SensorManager::class.java)
+        val sensor = manager.getDefaultSensor(type) ?: error("no sensor of type $type was seeded")
+        val event = org.robolectric.shadows.SensorEventBuilder.newBuilder()
+            .setSensor(sensor)
+            .setValues(values)
+            .setTimestamp(android.os.SystemClock.elapsedRealtimeNanos())
+            .build()
+        shadowOf(manager).sendSensorEventToListeners(event)
+        repeat(4) { tick() }
+    }
+
+    override fun speech(event: org.robolectric.shadows.ShadowSpeechRecognizer.() -> Unit) {
+        val recognizer = org.robolectric.shadows.ShadowSpeechRecognizer.getLatestSpeechRecognizer()
+            ?: error("the service has not created a speech recogniser")
+        shadowOf(recognizer).event()
+        repeat(4) { tick() }
+    }
+
+    override fun pause(millis: Long) {
+        val until = System.currentTimeMillis() + millis
+        while (System.currentTimeMillis() < until) {
+            tick()
+            Thread.sleep(50)
+        }
+    }
+
     override fun tap(text: String, substring: Boolean) {
         val byText = rule.onAllNodesWithText(text, substring = substring)
         val node = if (byText.fetchSemanticsNodes().isNotEmpty()) byText.onFirst()
         else rule.onAllNodesWithContentDescription(text, substring = substring).onFirst()
+        runCatching { node.performScrollTo() }
         node.performClick()
         settle()
     }
@@ -349,7 +442,7 @@ val KB_SHOTS: List<KbShot> = listOf(
     }),
     KbShot("themes/amoled-default-theme", seed = { repo.setThemeMode(com.wasimaster.wmkeyboard.core.settings.ThemeMode.AMOLED) }),
     KbShot("emoji/emoji-row-own", seed = { repo.setEmojiBarMode(com.wasimaster.wmkeyboard.core.settings.EmojiBarMode.ALWAYS) }),
-    KbShot("typing/symbol-row-picker", seed = { repo.setSymbolRowEnabled(true) }),
+    KbShot("typing/symbol-row-picker", seed = { repo.setSymbolRowEnabled(true) }, steps = { tap("Switch the symbol set") }),
     KbShot("typing/size-position-one-handed", hint = "Message", seed = {
         repo.setOneHandedMode(com.wasimaster.wmkeyboard.core.settings.OneHandedMode.RIGHT)
     }, steps = { type("See you at six") }),
@@ -378,7 +471,8 @@ val KB_SHOTS: List<KbShot> = listOf(
     KbShot("smart/suggestion-strip-emoji-tail", steps = { type("birthday") }),
     KbShot("emoji/word-suggestions", steps = { type("birthday") }),
     KbShot("smart/suggestion-strip-ambiguous-correction", steps = { type("helo") }),
-    KbShot("smart/punctuation-chips", seed = { repo.setPunctuationSuggestions(true) }, steps = { type("hello") }),
+    // "hello" has emoji of its own, and emoji take the strip's tail before punctuation.
+    KbShot("smart/punctuation-chips", seed = { repo.setPunctuationSuggestions(true) }, steps = { type("testing") }),
     KbShot("smart/suggestion-strip-shift-recase", steps = { type("world"); key(Key(label = "", action = KeyAction.Shift)); settle() }),
     KbShot("start/migrating-suggestion-center", steps = { type("hte") }),
     KbShot("emoji/inline-colon-search", steps = { type(":cat") }),
@@ -391,9 +485,7 @@ val KB_SHOTS: List<KbShot> = listOf(
 
     // ------------------------------------------------------------ languages
     KbShot("languages/probhat-key-grid", seed = { layout("builtin_probhat") }),
-    KbShot("languages/avro-lenient-spelling", seed = { layout("builtin_avro") }, steps = { type("ami valo asi ") }),
-    KbShot("languages/cjk-pinyin-candidate-strip", seed = { layout("asset_zh_pinyin") }, steps = { type("nihao") }),
-    KbShot("languages/cjk-cangjie-keys", seed = { layout("asset_zh_cangjie") }, steps = { type("ab") }),
+    KbShot("languages/avro-lenient-spelling", seed = { layout("builtin_avro") }, steps = { type("ami valo achi ") }),
     KbShot("languages/cjk-japanese-flick", seed = { layout("asset_ja_flick") }),
     KbShot("languages/fancy-text-bold-field", seed = { layout("asset_fancy") }, steps = { type("hello") }),
     KbShot("languages/notation-music-field", seed = { layout("asset_music") }),
@@ -439,24 +531,22 @@ val KB_SHOTS: List<KbShot> = listOf(
     KbShot("tools/typing-test-panel", steps = { panel(PanelMode.TYPING_TEST) }),
     KbShot("typing/modes-tool-panel", steps = { panel(PanelMode.MODES) }),
     KbShot("typing/modes-manual-picker", steps = { panel(PanelMode.MODES) }),
-    KbShot("tools/snippets-panel", hint = "Message", steps = { panel(PanelMode.SNIPPETS) }),
     KbShot("reference/troubleshooting-panel-captures-input", steps = { panel(PanelMode.SNIPPETS) }),
     KbShot("typing/sound-haptics-toolbar-panel", steps = { panel(PanelMode.SOUND_HAPTICS) }),
     KbShot("tools/moon-phase-panel", mode = "blank", steps = { panel(PanelMode.MOON_PHASE) }),
     KbShot("tools/media-access-prompt", mode = "blank", steps = { panel(PanelMode.MEDIA_CONTROL) }),
     KbShot("tools/camera-permission-gate", mode = "blank", steps = { panel(PanelMode.CAMERA) }),
-    KbShot("tools/handwriting-panel-writing", mode = "blank", steps = { panel(PanelMode.HANDWRITING) }),
     KbShot("tools/ai-need-setup", steps = { panel(PanelMode.AI) }),
     KbShot("tools/search-needs-key", steps = { panel(PanelMode.WEB_SEARCH) }),
     KbShot("tools/calendar-month-grid", seed = { grant(android.Manifest.permission.READ_CALENDAR) }, steps = { panel(PanelMode.CALENDAR) }),
-)
+) + MORE_KB_SHOTS
 
 /** Makes [id] the only other layout beside QWERTY, and the one showing. */
-private suspend fun Seed.layout(id: String) {
+internal suspend fun Seed.layout(id: String) {
     repo.setEnabledLayoutIds(listOf("builtin_qwerty", id))
     repo.setActiveLayoutId(id)
 }
 
-private fun Seed.grant(permission: String) {
+internal fun Seed.grant(permission: String) {
     shadowOf(context as Application).grantPermissions(permission)
 }

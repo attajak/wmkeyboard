@@ -7,11 +7,12 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 The GIF tool searches Klipy and GIPHY from a panel inside the keyboard, then sends the result straight into the field you're typing in. No switching apps, no copy-paste. On the F-Droid build it also searches Wikimedia Commons without any key at all, an educational corpus rather than reaction GIFs. Every other build needs a Klipy or GIPHY key before the tool can search anything.
 
 <PhoneFrame caption="The GIF panel, showing trending results on open.">
-  {/* shot: emoji/gif-panel-trending */}
+  <Shot id="emoji/gif-panel-trending" alt="The GIF panel, showing trending results on open." />
 </PhoneFrame>
 
 ## Searching for a GIF
@@ -27,7 +28,7 @@ If neither provider has a key configured, the panel shows a "needs an API key" n
 ## Sending a GIF
 
 <PhoneFrame side caption="A field that can't accept images. The panel dims and shows the standing notice.">
-  {/* shot: emoji/gif-no-rich-media */}
+  <Shot id="emoji/gif-no-rich-media" alt="A field that can't accept images — the panel dims and shows the standing notice." />
 </PhoneFrame>
 
 Tap a result and it downloads and lands in the field in one step. There's no separate "insert" confirmation. What happens next depends on what the field will accept:
@@ -50,7 +51,7 @@ Back (or tapping outside the menu) closes it without doing anything.
 Saving to a pack is sticker-only, since a GIF can't become one. That row shows on the [sticker panel's](/emoji/stickers/) version of this menu, not here.
 
 <PhoneFrame caption="Long-press menu over a GIF result: Copy and Report.">
-  {/* shot: emoji/gif-long-press */}
+  <Shot id="emoji/gif-long-press" alt="Long-press menu over a GIF result: Copy and Report." />
 </PhoneFrame>
 
 ## Options

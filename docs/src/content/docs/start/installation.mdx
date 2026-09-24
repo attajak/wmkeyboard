@@ -9,6 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
 import { Steps } from '@astrojs/starlight/components';
+import Shot from '@components/Shot.astro';
 
 Install it from [F-Droid](https://f-droid.org/packages/com.wasimaster.wmkeyboard/), or grab a signed APK from the releases page and install that like any other app. Building it yourself works too, and takes a few minutes if you already have the Android SDK. Google Play is coming.
 
@@ -66,7 +67,7 @@ That 41 MB does not shrink with the architecture you pick, because the translati
 The build produces one APK per CPU architecture only when `wmkb.splitApks` is on, which is how the release APKs above are made. With the flag off, a release build packs all three architectures into one APK, and a debug build carries `arm64-v8a` alone. See [Building from source](/development/building/) for the full set of build flags.
 
 <PhoneFrame caption="First launch after install, before the setup wizard starts.">
-  {/* shot: start/first-launch */}
+  <Shot id="start/first-launch" alt="First launch after install, before the setup wizard starts." />
 </PhoneFrame>
 
 ## Choosing an edition

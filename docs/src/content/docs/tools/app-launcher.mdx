@@ -8,13 +8,14 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The app launcher puts your app drawer inside the keyboard: a searchable grid of every launchable app, with the ones you pinned and the ones you opened recently in a row on top. Tap an app to jump to it. Hold one to look inside it and open a specific screen, like a settings page or a compose view, without going through the app's own navigation first.
 
 It's handy mid-conversation: someone asks for a booking reference, you hop to the airline app, copy it, and the keyboard is still where you left it when you come back.
 
 <PhoneFrame caption="The app grid with a pinned row on top and search in the header.">
-  {/* shot: tools/app-launcher-grid */}
+  <Shot id="tools/app-launcher-grid" alt="The app grid with a pinned row on top and search in the header." />
 </PhoneFrame>
 
 ## Opening the panel

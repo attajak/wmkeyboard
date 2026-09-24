@@ -7,13 +7,14 @@ sidebar:
 
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
+import Shot from '@components/Shot.astro';
 
 [Network policy](/privacy/network/) says what each feature sends. This screen lets you check it. Every request the keyboard's own code makes lands here as it happens: the feature that made it, the server it went to, how much data went each way, how it ended, and whether you asked for it or it happened by itself.
 
 <SettingsPath path="Privacy / Network activity" />
 
 <PhoneFrame caption="Network activity: the live line, today's totals with the chart split by feature, and the By feature and Servers contacted cards.">
-  {/* shot: privacy/network-activity-screen */}
+  <Shot id="privacy/network-activity-screen" alt="Network activity: the live line, today's totals with the chart split by feature, and the By feature and Servers contacted cards." />
 </PhoneFrame>
 
 ## Reading the screen

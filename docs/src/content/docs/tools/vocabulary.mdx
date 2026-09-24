@@ -8,11 +8,12 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 The **Vocabulary** tool teaches you words while you type. Install a pack (the Word Smart and Barron's GRE lists come first), and when you type a plain word that one of the pack's words says better, a chip on the suggestion strip offers it: **hate → abhor**. Tap the chip for the word's card: its meaning, how to say it, where it comes from, and the words around it. Hold the chip to swap the word in. The same packs feed flashcards, in the keyboard and in the app, and a word of the day.
 
 <PhoneFrame caption="The card for abhor: pronunciation, senses, synonyms and antonyms, the word family, and where the word came from.">
-  {/* shot: tools/vocabulary-card */}
+  <Shot id="tools/vocabulary-card" alt="The card for abhor: pronunciation, senses, synonyms and antonyms, the word family, and where the word came from." />
 </PhoneFrame>
 
 ## Getting a pack

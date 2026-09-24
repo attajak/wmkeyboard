@@ -27,7 +27,7 @@ Tapping **Flashlight** turns the device's torch on or off immediately. There's n
 The toolbox tile mirrors the torch's real state. Flip the torch on from the system quick-settings tile instead of the keyboard and the Flashlight tile lights up to match. Turning it off from either place turns it off in both.
 
 <PhoneFrame caption="Flashlight is a direct toggle, with no panel. The toolbox tile lights up while the torch is on.">
-  {/* shot: tools/flashlight-toggled-on */}
+  <Shot id="tools/flashlight-toggled-on" alt="Flashlight is a direct toggle — no panel opens; the toolbox tile lights up while the torch is on." />
 </PhoneFrame>
 
 ### Options
@@ -43,7 +43,7 @@ The toolbox tile mirrors the torch's real state. Flip the torch on from the syst
 Turn on **Show the qibla** and a 🕋 marker rides the rose, pointing toward the Kaaba. The compass has no location field of its own. It reuses whatever location you've already saved in the [Weather](#weather) tool's settings, and without one saved the panel prints "Qibla needs a saved location. Save one in the settings of the weather tool." instead of a bearing. Everything is calculated on-device from that saved latitude and longitude. The compass itself never touches the network.
 
 <PhoneFrame caption="The compass panel: rotating rose, degree readout, and the qibla marker pointing toward Mecca.">
-  {/* shot: tools/compass-panel-qibla */}
+  <Shot id="tools/compass-panel-qibla" alt="The compass panel: rotating rose, degree readout, and the qibla marker pointing toward Mecca." />
 </PhoneFrame>
 
 ### Options
@@ -58,7 +58,7 @@ Turn on **Show the qibla** and a 🕋 marker rides the rose, pointing toward the
 **Bubble level** turns the accelerometer, or the gravity sensor on a device that has one, into three gauges at once. A circular bullseye bubble combines pitch and roll, and a vertical and a horizontal tube vial each track one axis alone. The bullseye turns accent-colored once both pitch and roll are within about a degree of flat. Each tube vial turns accent-colored independently on its own single-axis threshold, so a vial can read level a moment before or after the bullseye agrees.
 
 <PhoneFrame caption="Bubble level: a bullseye bubble plus a vertical and horizontal tube vial, with an angle readout below.">
-  {/* shot: tools/level-panel */}
+  <Shot id="tools/level-panel" alt="Bubble level: a bullseye bubble plus a vertical and horizontal tube vial, with an angle readout below." />
 </PhoneFrame>
 
 ### Options
@@ -90,7 +90,7 @@ The panel shows a painted lit/dark disc, one of eight phase names (New moon, Wax
 A fetched result is reused for as long as **How often to check** says, 15 minutes out of the box, so reopening the panel is usually instant. A refresh button in the panel forces a new request. Until you save a location the panel shows a prompt with an **Open settings** shortcut instead of any weather data. If a fetch fails it shows a retry button rather than stale numbers.
 
 <PhoneFrame side caption="Weather: current conditions plus a stat grid of feels-like, humidity, wind, and whatever else Open-Meteo returns for that location.">
-  {/* shot: tools/weather-panel-ready */}
+  <Shot id="tools/weather-panel-ready" alt="Weather: current conditions plus a stat grid — feels-like, humidity, wind, and whatever else Open-Meteo returns for that location." />
 </PhoneFrame>
 
 Once a location is set, the panel shows an emoji and short description for the current conditions, the place name with today's high and low, and a wrapping grid of stats. Feels-like temperature, humidity, and wind speed with an 8-point cardinal direction always appear. Rain chance, cloud cover, pressure, UV index, sunrise and sunset each appear only when Open-Meteo's response actually includes them.

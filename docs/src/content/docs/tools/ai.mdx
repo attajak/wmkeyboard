@@ -14,7 +14,7 @@ import Shot from '@components/Shot.astro';
 The AI tool runs a fixed set of one-tap writing actions against whatever text is in the field you're typing in: rewrite, summarize, translate, and more. Where they run is up to you. Pick a cloud provider with your own API key, a self-hosted Ollama or LM Studio server on your network, or a model that downloads once and answers entirely on the device.
 
 <PhoneFrame caption="The AI panel's action chips, ready to run against the text in the field.">
-  {/* shot: tools/ai-panel-idle */}
+  <Shot id="tools/ai-panel-idle" alt="The AI panel's action chips, ready to run against the text in the field." />
 </PhoneFrame>
 
 ## Using it
@@ -43,7 +43,7 @@ If a model stops mid-answer because it hit the length ceiling, the panel says so
 ### Seeing what changed
 
 <PhoneFrame side caption="A Fix grammar result in the Changes view, with the old spellings struck through.">
-  {/* shot: tools/ai-result-changes */}
+  <Shot id="tools/ai-result-changes" alt="A Fix grammar result in the Changes view, with the old spellings struck through." />
 </PhoneFrame>
 
 A finished result gets a **Result** / **Changes** pair of chips. Changes compares the answer against the text the action ran on and marks what the model added and what it took out, the way `git diff` does. It's the one thing the plain result can't show you: after a Fix grammar run, the spelling it corrected is simply gone from the screen.
@@ -55,7 +55,7 @@ Two cases can't be compared, so they don't offer the chips: **Continue**, which 
 The chips are on by default. **Open a result on the changes** (off by default) makes the panel start there instead.
 
 <PhoneFrame caption="A streamed result with Replace, Insert, and the strip-markdown checkbox.">
-  {/* shot: tools/ai-result-ready */}
+  <Shot id="tools/ai-result-ready" alt="A streamed result with Replace, Insert, and the strip-markdown checkbox." />
 </PhoneFrame>
 
 ### Reporting a result

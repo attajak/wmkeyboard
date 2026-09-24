@@ -8,13 +8,14 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
+import Shot from '@components/Shot.astro';
 
 WM Keyboard can write a small word above the key that would carry on what you are typing. With `hel` typed, `hello` sits over the <KeyCap>L</KeyCap> and `help` over the <KeyCap>P</KeyCap>. Flick up on that key and the whole word is written.
 
 The idea is the BlackBerry Z10's, which called it in-letter prediction; the Octopus keyboard later brought it to other phones. Nothing else on WM Keyboard's board tells you *where to go next*. The suggestion strip lists words, but you have to look away from the keys to read it.
 
 <PhoneFrame caption="Words floating over the keys that reach them: the typed part is faded, the part still to come is in the accent colour.">
-  {/* shot: typing/octopus-keys */}
+  <Shot id="typing/octopus-keys" alt="Words floating over the keys that reach them: the typed part is faded, the part still to come is in the accent colour." />
 </PhoneFrame>
 
 ## Turning it on

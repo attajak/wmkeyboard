@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 <SettingsPath path="Clipboard / Phone number formats" />
 
@@ -17,7 +18,7 @@ The list is not empty to begin with. It starts with one mask for your own countr
 The row that opens it sits on the Clipboard tool's own settings and only appears while **Detect codes, numbers and links** is on, since there would be nothing to filter otherwise. Its subtitle counts your saved masks, or reads "Keep only the numbers that look like the ones you copy. Every number becomes a chip now" once you have deleted them all. Settings search indexes the screen either way, so searching "phone number formats" reaches it even with the toggle off.
 
 <PhoneFrame caption="Phone number formats: the explanation, Add a format, the saved masks, and the Test a number field.">
-  {/* shot: reference/settings/phone-formats-screen */}
+  <Shot id="reference/settings/phone-formats-screen" alt="Phone number formats: the explanation, Add a format, the saved masks, and the Test a number field." />
 </PhoneFrame>
 
 ## Adding a format

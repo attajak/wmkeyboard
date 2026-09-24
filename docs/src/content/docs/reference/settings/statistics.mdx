@@ -7,13 +7,14 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 <SettingsPath path="About / Statistics" />
 
 **Statistics** is the running tally of how much you type: characters, words, backspaces, time spent typing, and a speed figure worked out from those. It's counted on the device and stored on the device. Nothing you actually typed is kept, only the totals.
 
 <PhoneFrame caption="Statistics: the all-time tiles, the history chart with its period and metric chips, and the hour-of-day chart.">
-  {/* shot: reference/settings/statistics-screen */}
+  <Shot id="reference/settings/statistics-screen" alt="Statistics: the all-time tiles, the history chart with its period and metric chips, and the hour-of-day chart." />
 </PhoneFrame>
 
 There's a second way in. <SettingsPath path="About / Storage / Typing statistics" /> is the storage row that owns these files, and **Open the settings for this** at the bottom of it lands you on the same screen.

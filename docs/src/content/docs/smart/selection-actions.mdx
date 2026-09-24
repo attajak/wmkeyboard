@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Selecting a phone number in a chat and then dialling it usually means copying it, leaving the app, opening the dialler and pasting. The keyboard already knows what you selected, so it can offer the things that shape of text is for, and a good deal more: the everyday edits, a find and replace, line tools, case and chat formatting, conversions, and a way to hand the text to your contacts, maps or calendar.
 
@@ -15,7 +16,7 @@ Select `01712345678` and the bar reads **Select all, Call, Message, WhatsApp, Co
 This is **off by default**. It adds a bar that appears out of a gesture you already make for other reasons, so you have to ask for it.
 
 <PhoneFrame caption="A selected phone number, and the bar the keyboard offers for it.">
-  {/* shot: smart/selection-actions-phone */}
+  <Shot id="smart/selection-actions-phone" alt="A selected phone number, and the bar the keyboard offers for it." />
 </PhoneFrame>
 
 ## Turning it on
@@ -100,7 +101,7 @@ The memory ends with the selection. Move it onto other text, clear it, or leave 
 **Replace** opens a panel above the keys with two fields: what to find, already holding the selection, and what to replace it with. Tap a field and type into it; the keys go to the panel, not to the app. The current match is selected in the field itself, where you can see it, and the panel says which one of how many. Enter in the find field goes to the next match; Enter in the replace field replaces the current one.
 
 <PhoneFrame caption="The Find and replace panel: two fields, the toggles, the buttons and the count.">
-  {/* shot: smart/selection-actions-replace */}
+  <Shot id="smart/selection-actions-replace" alt="The Find and replace panel: two fields, the toggles, the buttons and the count." />
 </PhoneFrame>
 
 Three toggles: **Aa** matches case, **[ab]** matches whole words only (in any script, so a Bengali word is a whole word too), and **.\*** reads the find field as a regular expression, with `$1` in the replacement standing for the first group. A pattern that is not valid says so under the toggles, and one that takes too long on the text is stopped rather than left to hang.
@@ -127,7 +128,7 @@ The Format chip is left off when the rewrite would change nothing. A number alre
 On ordinary text, Format opens a row of chips in place of the bar: **lower case**, **Title Case**, **UPPER CASE** and **Sentence case**, plus, when you switch them on under Actions, the programmer's cases **camelCase**, **snake_case**, **kebab-case** and **CONSTANT_CASE**. Those four read their input in any convention, so `Hello World`, `hello_world` and `helloWorld` all mean the same two words. The arrow on the left goes back to the actions.
 
 <PhoneFrame caption="Format on plain text: the case options, with the arrow back to the actions.">
-  {/* shot: smart/selection-actions-case */}
+  <Shot id="smart/selection-actions-case" alt="Format on plain text: the four case options, with the arrow back to the actions." />
 </PhoneFrame>
 
 Each one rewrites the selection and leaves the result selected, so you can try Title, then Sentence, then UPPER without reselecting between taps.

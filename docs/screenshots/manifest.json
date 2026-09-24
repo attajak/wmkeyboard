@@ -231,7 +231,7 @@
   {
     "id": "tools/ai-panel-idle",
     "page": "docs/src/content/docs/tools/ai.mdx",
-    "file": "src/assets/screens/tools/ai-panel-idle.webp",
+    "file": "src/assets/screens/tools/ai-panel-idle.light.webp",
     "caption": "The AI panel's action chips, ready to run against the text in the field.",
     "host": "harness-field",
     "setup": [
@@ -239,9 +239,11 @@
       "Configure at least one working AI provider first (otherwise the panel shows the need-setup state instead \u2014 see ai-need-setup).",
       "Tap into the field, open AI from the toolbar/toolbox, screenshot the action-chip row (Rewrite/Improve/Fix grammar/Summarize/Translate/Explain/Continue/Custom) before tapping any chip."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a configured provider (real key or downloaded local model) so the chips render enabled/colored rather than the empty state.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-panel-idle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ai-need-setup",
@@ -262,16 +264,18 @@
   {
     "id": "tools/ai-result-ready",
     "page": "docs/src/content/docs/tools/ai.mdx",
-    "file": "src/assets/screens/tools/ai-result-ready.webp",
+    "file": "src/assets/screens/tools/ai-result-ready.light.webp",
     "caption": "A streamed result with Replace, Insert, and the strip-markdown checkbox.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind multiline --es text 'quick draft text to rewrite'",
       "Configure a real working provider (cloud key or downloaded local model), tap the field, open AI, tap Rewrite, wait for the response to finish streaming, then screenshot with Replace/Insert and the strip-markdown checkbox visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a live provider response to populate real result text, so this can't be captured offline against a stub setup.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-result-ready.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/ai-settings-providers",
@@ -326,7 +330,7 @@
   {
     "id": "tools/calendar-day-events",
     "page": "docs/src/content/docs/tools/calendar.mdx",
-    "file": "src/assets/screens/tools/calendar-day-events.webp",
+    "file": "src/assets/screens/tools/calendar-day-events.light.webp",
     "caption": "A day with events: colored stripe per calendar, time, and location.",
     "host": "harness-field",
     "setup": [
@@ -335,9 +339,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Open the Calendar panel from the toolbar/toolbox and select the seeded day"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs real seeded calendar data \u2014 the panel has no demo/mock event mode. Coordinate seed data with whoever captures this.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/calendar-day-events.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/calendar-options",
@@ -440,22 +446,24 @@
   {
     "id": "tools/clipboard-info-popup",
     "page": "docs/src/content/docs/tools/clipboard.mdx",
-    "file": "src/assets/screens/tools/clipboard-info-popup.webp",
-    "caption": "Long-pressing a clip: the info popup shows when it was copied, its type, size, and source app.",
+    "file": "src/assets/screens/tools/clipboard-info-popup.light.webp",
+    "caption": "Long-pressing a clip: the info popup shows when it was copied, its type and its size.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "In WM Keyboard settings, turn on Tools > Clipboard > Show source app (grant Usage Access when prompted) so the popup's From row has something to show.",
       "Copy a text clip, open the Clipboard panel from the toolbar, then press and hold that clip's card until the info popup appears."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Turning on 'Show source app' first makes the popup's optional From row appear in the shot; without it the popup is one row shorter (Copied/Type/Size only).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/clipboard-info-popup.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/clipboard-rich-media",
     "page": "docs/src/content/docs/tools/clipboard.mdx",
-    "file": "src/assets/screens/tools/clipboard-rich-media.webp",
+    "file": "src/assets/screens/tools/clipboard-rich-media.light.webp",
     "caption": "A file, video, and folder clip side by side \u2014 each keeps only a reference to the source, not the bytes.",
     "host": "harness-field",
     "setup": [
@@ -463,9 +471,11 @@
       "From a file manager app, copy a document/PDF file, a short video file, and a folder in sequence onto the system clipboard.",
       "Open the Clipboard panel from the toolbar and scroll until a file card, a video card (with its extracted frame), and a folder card are all visible together, then crop/frame the shot around those three cards."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "May need to scroll the staggered grid to get all three kinds in one frame since they interleave with other history; consider a taller crop or capturing with minimal other history so these three are near the top.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/clipboard-rich-media.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/clipboard-entity-chips",
@@ -588,7 +598,7 @@
   {
     "id": "tools/voice-panel-listening",
     "page": "docs/src/content/docs/tools/voice.mdx",
-    "file": "src/assets/screens/tools/voice-panel-listening.webp",
+    "file": "src/assets/screens/tools/voice-panel-listening.light.webp",
     "caption": "The voice panel: a pulsing mic button on the left, the handwriting-style action rail on the right.",
     "host": "harness-field",
     "setup": [
@@ -596,9 +606,11 @@
       "Open the keyboard, tap the toolbar Voice typing tool (or toolbox if unpinned) to open the full panel",
       "Tap the mic and speak briefly so status is LISTENING (pulse ring visible) when capturing"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Compact-bar mode must be off (default) to get the full panel. Capture mid-listening so the pulse ring around the mic and a bit of partial/status text under it are visible. Rail shows Delete/Space/Enter(or search icon for a search field)/Back-to-keyboard.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/voice-panel-listening.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/voice-undo",
@@ -695,7 +707,7 @@
   {
     "id": "tools/media-now-playing",
     "page": "docs/src/content/docs/tools/media.mdx",
-    "file": "src/assets/screens/tools/media-now-playing.webp",
+    "file": "src/assets/screens/tools/media-now-playing.light.webp",
     "caption": "Media controls showing album art, track info, a seek bar, and the play/pause/skip transport.",
     "host": "harness-blank",
     "setup": [
@@ -704,9 +716,11 @@
       "Start audio playback in any media app with a session (e.g. YouTube Music, a podcast app) with album art available.",
       "Focus the DocsShotActivity field to raise the keyboard, then open Media controls from the toolbox (or leader key: double-tap Ctrl, then M)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a real active MediaSession with album art, a title/artist/album, and a nonzero duration so the seek bar renders. Pick a track with distinct art so the placeholder vs real-art states are visually obvious in other shots if needed.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/media-now-playing.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/media-access-prompt",
@@ -800,7 +814,7 @@
   {
     "id": "tools/web-search-results",
     "page": "docs/src/content/docs/tools/search.mdx",
-    "file": "src/assets/screens/tools/web-search-results.webp",
+    "file": "src/assets/screens/tools/web-search-results.light.webp",
     "caption": "Web search results \u2014 tap a row to insert its link, or tap the open icon to launch it in your browser.",
     "host": "harness-field",
     "setup": [
@@ -808,14 +822,16 @@
       "Focus the field, open the toolbox (WM Keyboard isn't pinned by default), tap Web search, type a short query into the panel's own header search bar, and press the keyboard's search/enter action to load results (it does not search live as you type).",
       "Needs a usable Brave API key configured (user key or a build-baked BuildConfig.BRAVE_API_KEY) or results will not load \u2014 see the search-needs-key entry for the no-key state instead."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture with at least 2-3 results visible so both the insert-by-tap row and the separate open-in-browser icon (top right of each row) are visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/web-search-results.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/image-search-grid",
     "page": "docs/src/content/docs/tools/search.mdx",
-    "file": "src/assets/screens/tools/image-search-grid.webp",
+    "file": "src/assets/screens/tools/image-search-grid.light.webp",
     "caption": "Image search \u2014 tap a thumbnail to insert the image itself; long-press to insert its link instead.",
     "host": "harness-field",
     "setup": [
@@ -823,9 +839,11 @@
       "Open the toolbox, tap Image search, type a query into the header search bar, press the search/enter action.",
       "Needs the same Brave key requirement as web search."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "3-column grid; capture with enough thumbnails to fill at least two rows.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/image-search-grid.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/search-needs-key",
@@ -847,7 +865,7 @@
   {
     "id": "tools/wikipedia-article",
     "page": "docs/src/content/docs/tools/search.mdx",
-    "file": "src/assets/screens/tools/wikipedia-article.webp",
+    "file": "src/assets/screens/tools/wikipedia-article.light.webp",
     "caption": "An open Wikipedia article, with its Summary, Links and Full article tabs.",
     "host": "harness-field",
     "setup": [
@@ -855,14 +873,16 @@
       "Open the toolbox, tap Wikipedia, type a well-known topic into the header search bar, press search/enter, tap a result to open its article.",
       "Capture on the Summary tab (default) with the Insert summary / Insert link / Insert title chip row and the three tab chips (Summary, Links, Full article) all visible in the header."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No API key needed \u2014 this tool works with no configuration at all.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/wikipedia-article.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/dictionary-entry",
     "page": "docs/src/content/docs/tools/search.mdx",
-    "file": "src/assets/screens/tools/dictionary-entry.webp",
+    "file": "src/assets/screens/tools/dictionary-entry.light.webp",
     "caption": "A dictionary entry \u2014 serif headword, pronunciation audio, numbered definitions and synonym chips.",
     "host": "harness-field",
     "setup": [
@@ -870,14 +890,16 @@
       "Place the cursor inside an English word (e.g. \"quick\"), open the toolbox, tap Dictionary \u2014 with auto-lookup on (the default) it should look up that word immediately.",
       "Pick a word whose entry has a pronunciation-audio icon and at least one synonym/antonym chip row for the fullest capture."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No API key needed. The headword renders in the Lora serif font \u2014 verify it actually downloaded before capturing, or the shot will show the system-serif fallback instead.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/dictionary-entry.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/snippets-panel",
     "page": "docs/src/content/docs/tools/snippets.mdx",
-    "file": "src/assets/screens/tools/snippets-panel.webp",
+    "file": "src/assets/screens/tools/snippets-panel.light.webp",
     "caption": "The snippets panel: saved snippets as two-column cards, ready to insert with a tap.",
     "host": "harness-field",
     "setup": [
@@ -886,9 +908,11 @@
       "Focus the field to bring up the keyboard.",
       "Snippets is not pinned to the toolbar by default (only Emoji, Clipboard, Settings are) -- open the toolbox and tap Snippets, or type the keyword 'snippets' and tap the resulting smart-chip suggestion."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Panel is a LazyVerticalGrid, columns=2, 8dp spacing. Each card shows snippet.label (bold, 1 line, ellipsized) and snippet.text (2 lines, ellipsized) -- the RAW template text, not the expanded preview, so a snippet containing {date} should show the literal token in the shot, not today's date. Header row above the grid reads 'Variables: {date} {time} {datetime} {clip}' with a gear icon.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/snippets-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/snippets-settings",
@@ -1010,7 +1034,7 @@
   {
     "id": "emoji/gif-panel-trending",
     "page": "docs/src/content/docs/emoji/gifs.mdx",
-    "file": "src/assets/screens/emoji/gif-panel-trending.webp",
+    "file": "src/assets/screens/emoji/gif-panel-trending.light.webp",
     "caption": "The GIF panel, showing trending results on open.",
     "host": "harness-chat",
     "setup": [
@@ -1019,14 +1043,16 @@
       "Open the toolbar (or toolbox) and tap the GIF tool \u2014 trending results load automatically with no query typed.",
       "Ensure a Klipy or GIPHY API key is configured first (Settings > Tools > GIFs) or the panel shows the NeedKey notice instead of a grid."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "3-column animated grid; header shows 'via Klipy \u00b7 GIPHY' attribution line above the grid depending on which keys are configured.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/gif-panel-trending.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/gif-no-rich-media",
     "page": "docs/src/content/docs/emoji/gifs.mdx",
-    "file": "src/assets/screens/emoji/gif-no-rich-media.webp",
+    "file": "src/assets/screens/emoji/gif-no-rich-media.light.webp",
     "caption": "A field that can't accept images \u2014 the panel dims and shows the standing notice.",
     "host": "harness-field",
     "setup": [
@@ -1035,14 +1061,16 @@
       "Open the GIF tool from the toolbar/toolbox so results still populate.",
       "Capture with the grid visible at ~45% opacity and the 'This field doesn't accept GIFs \u2014 try a chat or notes app' notice showing above it."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Notice only appears when the search box is not active/expanded (state.mediaSearchActive == false) \u2014 make sure the search field is collapsed before capturing.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/gif-no-rich-media.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/gif-long-press",
     "page": "docs/src/content/docs/emoji/gifs.mdx",
-    "file": "src/assets/screens/emoji/gif-long-press.webp",
+    "file": "src/assets/screens/emoji/gif-long-press.light.webp",
     "caption": "Long-press menu over a GIF result: Copy and Report.",
     "host": "harness-chat",
     "setup": [
@@ -1050,9 +1078,11 @@
       "Open the GIF tool, search or browse trending so a Klipy/GIPHY result tile is visible",
       "Long-press that tile to open the MediaActionSheet scrim/menu and capture with it open"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "The GIF version of the menu has no save-to-pack rows (a GIF can't become a sticker), so it should read as exactly two rows: Copy and Report.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/gif-long-press.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/kaomoji-tab",
@@ -1195,7 +1225,7 @@
   {
     "id": "emoji/sticker-panel-unsupported-field",
     "page": "docs/src/content/docs/emoji/stickers.mdx",
-    "file": "src/assets/screens/emoji/sticker-panel-unsupported-field.webp",
+    "file": "src/assets/screens/emoji/sticker-panel-unsupported-field.light.webp",
     "caption": "The standing notice a field that can't take images shows, with results dimmed underneath.",
     "host": "harness-field",
     "setup": [
@@ -1203,14 +1233,16 @@
       "Open the keyboard, open the Stickers tool with an active search so results are populated",
       "Confirm the 'This field doesn't accept stickers \u2014 try a chat or notes app' notice shows above the dimmed grid"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Plain text field's EditorInfo advertises no image content MIME types, so acceptsRichMedia is false \u2014 this is the default DocsShotActivity field kind, no extra flag needed beyond kind=text.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/sticker-panel-unsupported-field.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/sticker-long-press-save",
     "page": "docs/src/content/docs/emoji/stickers.mdx",
-    "file": "src/assets/screens/emoji/sticker-long-press-save.webp",
+    "file": "src/assets/screens/emoji/sticker-long-press-save.light.webp",
     "caption": "Long-press menu over a Klipy result: save to a pack, copy, or report.",
     "host": "harness-chat",
     "setup": [
@@ -1218,9 +1250,11 @@
       "Open the Stickers tool, search or browse trending so a Klipy/GIPHY result tile is visible",
       "Long-press that tile to open the MediaActionSheet scrim/menu and capture with it open (Save rows, then Copy and Report)"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture once with zero existing packs (menu shows 'Save to a new pack', Copy, Report) and optionally a second variant with 1-2 packs to show the 'Save to <pack name>' rows \u2014 page only needs one still, pick whichever reads clearer. A My-stickers tile shows a shorter menu (Manage packs, Copy) and is not this shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/emoji/sticker-long-press-save.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "emoji/sticker-pack-manage",
@@ -1326,16 +1360,18 @@
   {
     "id": "start/first-launch",
     "page": "docs/src/content/docs/start/installation.mdx",
-    "file": "src/assets/screens/start/first-launch.webp",
+    "file": "src/assets/screens/start/first-launch.light.webp",
     "caption": "First launch after install, before the setup wizard starts.",
     "host": "harness-blank",
     "setup": [
       "Install a debug APK (assembleFullDebug) on a clean profile / after clearing app data so onboardingDone is false",
       "Launch the app cold and capture the very first frame before the onboarding wizard's WelcomePage finishes composing, or capture WelcomePage itself if the pre-wizard frame is too transient to be a meaningful shot"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "This is mostly a placeholder for 'what a fresh install looks like on open' \u2014 if the true first frame is not a distinct visual from the onboarding WelcomePage (MainActivity.kt / Onboarding.kt), it's fine to just capture WelcomePage and adjust the caption to say so; don't invent a distinct pre-wizard screen if one doesn't exist.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/first-launch.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "start/migrating-suggestion-center",
@@ -1406,7 +1442,7 @@
   {
     "id": "start/wizard-gestures-page",
     "page": "docs/src/content/docs/start/setup.mdx",
-    "file": "src/assets/screens/start/wizard-gestures-page.webp",
+    "file": "src/assets/screens/start/wizard-gestures-page.light.webp",
     "caption": "The Spacebar & keys page \u2014 one choice sets both swipe directions at once.",
     "host": "settings",
     "setup": [
@@ -1415,9 +1451,11 @@
       "Tap through the wizard (Welcome \u2192 Your languages \u2192 Look & feel \u2192 [Emoji font, if shown] \u2192 Typing feedback) to reach the 'Spacebar & keys' page \u2014 not deep-link addressable, the onboarding route isn't in the settings URI allowlist",
       "Capture with the 'Cursor + language (recommended)' or default-selected radio option visible, plus the emoji-key and number-row toggles below it"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Onboarding page order is fixed but two pages are conditional (Emoji font only if the device's emoji font can't render the full catalog; Tool setup only if Calendar/Weather/Compass is enabled) \u2014 tap count to reach Gestures may vary by device/config. Clearing app data also resets enabled languages/tools back to factory defaults, which is fine for this shot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/start/wizard-gestures-page.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tour/anatomy-default",
@@ -1501,30 +1539,34 @@
   {
     "id": "languages/cjk-pinyin-candidate-strip",
     "page": "docs/src/content/docs/languages/cjk.mdx",
-    "file": "src/assets/screens/languages/cjk-pinyin-candidate-strip.webp",
+    "file": "src/assets/screens/languages/cjk-pinyin-candidate-strip.light.webp",
     "caption": "Chinese Pinyin: the candidate strip replaces the usual word-suggestion row while you're composing a reading.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Enable Chinese (Pinyin layout) in Languages, switch to it, type a multi-syllable reading like 'nihao' so the candidate strip is populated with several ranked candidates"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Pinyin dictionary pack must be downloaded first (Languages > Chinese > Chinese options) or the strip will be empty.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/cjk-pinyin-candidate-strip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/cjk-cangjie-keys",
     "page": "docs/src/content/docs/languages/cjk.mdx",
-    "file": "src/assets/screens/languages/cjk-cangjie-keys.webp",
+    "file": "src/assets/screens/languages/cjk-cangjie-keys.light.webp",
     "caption": "Cangjie: radical keys build a shape code; the strip fills in once the code is complete.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Switch to the Chinese Cangjie layout and type 2-3 radical keys so the composing region shows radical glyphs and the strip shows candidates"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Cangjie dictionary pack must be downloaded first.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/cjk-cangjie-keys.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/cjk-japanese-flick",
@@ -1545,16 +1587,18 @@
   {
     "id": "languages/cjk-candidate-grid-expanded",
     "page": "docs/src/content/docs/languages/cjk.mdx",
-    "file": "src/assets/screens/languages/cjk-candidate-grid-expanded.webp",
+    "file": "src/assets/screens/languages/cjk-candidate-grid-expanded.light.webp",
     "caption": "The expanded candidate grid: every ranked candidate, wrapped to fit, covering the key rows while it's open.",
     "host": "harness-field",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Type a Pinyin or Jyutping reading with many candidates, then tap the chevron at the end of the candidate strip to open the expanded FlowRow grid"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs the relevant conversion dictionary downloaded so the grid has enough candidates to show wrapping.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/cjk-candidate-grid-expanded.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/key-layouts-gallery",
@@ -1638,16 +1682,18 @@
   {
     "id": "languages/dictionary-download-progress",
     "page": "docs/src/content/docs/languages/dictionaries.mdx",
-    "file": "src/assets/screens/languages/dictionary-download-progress.webp",
+    "file": "src/assets/screens/languages/dictionary-download-progress.light.webp",
     "caption": "A dictionary mid-download, with the indeterminate progress bar and cancel action.",
     "host": "settings",
     "setup": [
       "am start -a android.intent.action.VIEW -d wmkeyboard://settings/languages",
       "Open the same language's Dictionary section, tap Download, and screenshot while the row shows the indeterminate LinearProgressIndicator and the close (cancel) icon, before it finishes."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Timing-sensitive \u2014 needs the screenshot taken during the Downloading state, which for a small-to-medium list may only last a couple seconds. A larger language (e.g. Thai or Arabic with Large tier) gives more time to capture it.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/dictionary-download-progress.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/fancy-text-bold-field",
@@ -1719,7 +1765,7 @@
   {
     "id": "languages/notation-morse-strip",
     "page": "docs/src/content/docs/languages/notation.mdx",
-    "file": "src/assets/screens/languages/notation-morse-strip.webp",
+    "file": "src/assets/screens/languages/notation-morse-strip.light.webp",
     "caption": "Typing morse: the strip shows the sequence so far and, live, the letter it currently spells.",
     "host": "harness-field",
     "setup": [
@@ -1727,9 +1773,11 @@
       "Enable Morse code via Settings > Languages > Add language > search 'morse', switch to it, tap the field.",
       "Tap the dot key twice (short of the 750ms commit pause) so the suggestion strip shows the live '\u00b7\u00b7   i' readout, then capture before it commits."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Timing-sensitive: capture must land inside the 750ms window after the last tap. A short screen recording trimmed to a frame is a safer fallback than a live single-shot screenshot.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/notation-morse-strip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/notation-add-language-search",
@@ -2335,7 +2383,7 @@
   {
     "id": "typing/hardware-typing-live",
     "page": "docs/src/content/docs/typing/hardware-keyboard.mdx",
-    "file": "src/assets/screens/typing/hardware-typing-live.webp",
+    "file": "src/assets/screens/typing/hardware-typing-live.light.webp",
     "caption": "Typing on a physical keyboard: a word underlined mid-correction in the field.",
     "host": "harness-field",
     "setup": [
@@ -2343,14 +2391,16 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Ensure Typing > Physical keyboard > 'Process hardware keys' is on and a phonetic/suggestion-generating language is active, then type on the physical keyboard until autocorrect underlines a word."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs an actual physical/emulated hardware keyboard input source, not just the on-screen IME; DocsShotActivity only sets up the focused field.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/hardware-typing-live.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/hardware-tool-picker",
     "page": "docs/src/content/docs/typing/hardware-keyboard.mdx",
-    "file": "src/assets/screens/typing/hardware-tool-picker.webp",
+    "file": "src/assets/screens/typing/hardware-tool-picker.light.webp",
     "caption": "The tool-picker overlay after double-tapping Ctrl, showing the bound letters.",
     "host": "harness-field",
     "setup": [
@@ -2358,9 +2408,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Double-tap the physical Ctrl key to arm the picker, then screenshot immediately (it auto-disarms after about 3 seconds)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Timing-sensitive capture; the overlay is drawn over the top strip, not a full panel.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/hardware-tool-picker.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/hardware-shortcuts-list",
@@ -2381,7 +2433,7 @@
   {
     "id": "typing/hardware-focus-ring",
     "page": "docs/src/content/docs/typing/hardware-keyboard.mdx",
-    "file": "src/assets/screens/typing/hardware-focus-ring.webp",
+    "file": "src/assets/screens/typing/hardware-focus-ring.light.webp",
     "caption": "The focus ring highlighting a result inside an open panel after an arrow-key press.",
     "host": "harness-field",
     "setup": [
@@ -2389,9 +2441,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Double-tap Ctrl, press E to open the Emoji tool, then press an arrow key to draw the focus ring on a result."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Ring is a 2dp accent outline plus 16%-alpha accent fill; only ever drawn after a key press, never in touch mode.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/hardware-focus-ring.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/symbols-page-open",
@@ -2413,7 +2467,7 @@
   {
     "id": "typing/symbol-row-picker",
     "page": "docs/src/content/docs/typing/modes.mdx",
-    "file": "src/assets/screens/typing/symbol-row-picker.webp",
+    "file": "src/assets/screens/typing/symbol-row-picker.light.webp",
     "caption": "The symbol row above the key grid, with its set picker open.",
     "host": "harness-field",
     "setup": [
@@ -2421,9 +2475,11 @@
       "In Settings, turn on Rows & bars > Symbol row (off by default) before this shot",
       "Tap the field, then tap the chip at the left edge of the symbol row to open the set dropdown"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "SymbolRowStrip, KeyboardScreen.kt:2394-2466. Dropdown only appears/is clickable when more than one symbol set is enabled (all 5 are enabled by default).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/symbol-row-picker.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/modes-tool-panel",
@@ -2459,17 +2515,19 @@
   {
     "id": "typing/power-saving-toolbar-toggle",
     "page": "docs/src/content/docs/typing/power-saving.mdx",
-    "file": "src/assets/screens/typing/power-saving-toolbar-toggle.webp",
-    "caption": "Tapping the Power saving toolbar tile \u2014 the toast confirms it switched on.",
+    "file": "src/assets/screens/typing/power-saving-toolbar-toggle.light.webp",
+    "caption": "The Power saving tile on the toolbar, lit after a tap.",
     "host": "harness-field",
     "setup": [
       "am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text",
       "Open the keyboard, tap the toolbox, and pin Power saving to the toolbar first if it isn't already there (it is not a default or recommended tool)",
       "Tap the Power saving toolbar tile once to trigger the 'Power saving on' toast, and capture while the toast is visible"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Power saving is not in DefaultToolbarTools or RecommendedTools, so it must be dragged into the toolbar from the toolbox before it can be tapped. The toast is transient (Toast.LENGTH_SHORT) so timing the capture matters.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/power-saving-toolbar-toggle.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/power-saving-settings-triggers",
@@ -2748,7 +2806,7 @@
   {
     "id": "smart/currency-chip",
     "page": "docs/src/content/docs/smart/chips.mdx",
-    "file": "src/assets/screens/smart/currency-chip.webp",
+    "file": "src/assets/screens/smart/currency-chip.light.webp",
     "caption": "A currency chip: amount and source on the left, the converted amount on the right, gear button to open the full converter.",
     "host": "harness-field",
     "setup": [
@@ -2756,9 +2814,11 @@
       "Type 150 usd. If rates haven't loaded yet the chip shows a brief spinner \u2014 wait a moment for it to resolve before shooting.",
       "Default currency pair is USD to BDT so the result should read as an amount in Taka."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs network access once for open.er-api.com (or frankfurter.app fallback) to fetch rates the first time.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/currency-chip.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/keyword-chip",
@@ -2829,7 +2889,7 @@
   {
     "id": "smart/contact-name-suggestion",
     "page": "docs/src/content/docs/smart/contacts.mdx",
-    "file": "src/assets/screens/smart/contact-name-suggestion.webp",
+    "file": "src/assets/screens/smart/contact-name-suggestion.light.webp",
     "caption": "A contact name completing in the suggestion strip, mid-word.",
     "host": "harness-field",
     "setup": [
@@ -2838,9 +2898,11 @@
       "Type the first few letters of a seeded contact's first name (e.g. 'Was' for 'Wasi') so the completion appears mid-word in the suggestion strip",
       "Capture before committing the word so the strip shows the live completion"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Needs a test-device contact seeded ahead of capture (e.g. via adb shell content insert into raw_contacts/data, or the emulator's Contacts app) since this can't be captured against an empty address book. Capture agent should pick a name that clearly demonstrates completion (a distinctive first name, not a common dictionary word) so the shot isn't ambiguous with an ordinary dictionary suggestion.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/contact-name-suggestion.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/grammar-panel-open",
@@ -3080,7 +3142,7 @@
   {
     "id": "smart/punctuation-chips",
     "page": "docs/src/content/docs/smart/suggestions.mdx",
-    "file": "src/assets/screens/smart/punctuation-chips.webp",
+    "file": "src/assets/screens/smart/punctuation-chips.light.webp",
     "caption": "Punctuation chips riding after the word candidates.",
     "host": "harness-field",
     "setup": [
@@ -3089,9 +3151,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode field --es kind text --es theme dark",
       "Type an ordinary word with no strong emoji association, e.g. \"hello\" (do not press space), so word candidates show with the punctuation tail (. , ? ! ') instead of an emoji tail."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Punctuation only shows when word candidates exist and no emoji prediction claimed the tail -- pick a word unlikely to trigger an emoji suggestion.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/punctuation-chips.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/suggestion-strip-shift-recase",
@@ -3146,21 +3210,23 @@
   {
     "id": "tools/flashlight-toggled-on",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/flashlight-toggled-on.webp",
+    "file": "src/assets/screens/tools/flashlight-toggled-on.light.webp",
     "caption": "Flashlight is a direct toggle \u2014 no panel opens; the toolbox tile lights up while the torch is on.",
     "host": "harness-blank",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open the keyboard, open the toolbox (grid button on the toolbar), tap Flashlight to turn the torch on. Needs a device with a flash."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture the toolbox tile itself lit with its accent color (#FFCA28), not a panel \u2014 Flashlight never opens one.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/flashlight-toggled-on.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/compass-panel-qibla",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/compass-panel-qibla.webp",
+    "file": "src/assets/screens/tools/compass-panel-qibla.light.webp",
     "caption": "The compass panel: rotating rose, degree readout, and the qibla marker pointing toward Mecca.",
     "host": "harness-blank",
     "setup": [
@@ -3168,23 +3234,27 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open the keyboard, open the toolbox, tap Compass. Orient the device so the rose and the \ud83d\udd4b marker are both clearly visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Without a saved location the panel shows 'Qibla needs a saved location (weather tool settings)' instead of the marker \u2014 set the location first.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/compass-panel-qibla.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/level-panel",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/level-panel.webp",
+    "file": "src/assets/screens/tools/level-panel.light.webp",
     "caption": "Bubble level: a bullseye bubble plus a vertical and horizontal tube vial, with an angle readout below.",
     "host": "harness-blank",
     "setup": [
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open the keyboard, open the toolbox, tap Bubble level. Tilt the device slightly off-flat so the bubble and vials are visibly off-center rather than all accent-colored."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/level-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/moon-phase-panel",
@@ -3205,7 +3275,7 @@
   {
     "id": "tools/weather-panel-ready",
     "page": "docs/src/content/docs/tools/instruments.mdx",
-    "file": "src/assets/screens/tools/weather-panel-ready.webp",
+    "file": "src/assets/screens/tools/weather-panel-ready.light.webp",
     "caption": "Weather: current conditions plus a stat grid \u2014 feels-like, humidity, wind, and whatever else Open-Meteo returns for that location.",
     "host": "harness-blank",
     "setup": [
@@ -3213,9 +3283,11 @@
       "adb shell am start -n com.wasimaster.wmkeyboard/.app.DocsShotActivity --es mode blank --es theme dark",
       "Focus the field, open the keyboard, open the toolbox, tap Weather, wait for the fetch to finish (Ready state, not Loading)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Prefer a location/time where Open-Meteo returns the optional stats (rain chance, cloud cover, pressure, UV, sunrise/sunset) so the full wrapping grid is visible.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/weather-panel-ready.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/weather-options-location",
@@ -3236,7 +3308,7 @@
   {
     "id": "languages/avro-lenient-spelling",
     "page": "docs/src/content/docs/languages/bengali.mdx",
-    "file": "src/assets/screens/languages/avro-lenient-spelling.webp",
+    "file": "src/assets/screens/languages/avro-lenient-spelling.light.webp",
     "caption": "Avro phonetic typing: \"ami valo asi\" commits as \u0986\u09ae\u09bf \u09ad\u09be\u09b2\u09cb \u0986\u099b\u09bf.",
     "host": "harness-field",
     "setup": [
@@ -3245,9 +3317,11 @@
       "Type \"ami valo asi\" and tap space so it commits, leaving \u0986\u09ae\u09bf \u09ad\u09be\u09b2\u09cb \u0986\u099b\u09bf in the field.",
       "Screenshot the field with the committed text (composing preview cleared)."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Avro is enabled by default on a fresh install but may not be the currently *active* layout \u2014 switch to it explicitly first.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/languages/avro-lenient-spelling.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "languages/probhat-key-grid",
@@ -3303,7 +3377,7 @@
   {
     "id": "typing/spacebar-cursor-swipe",
     "page": "docs/src/content/docs/typing/gestures.mdx",
-    "file": "src/assets/screens/typing/spacebar-cursor-swipe.webp",
+    "file": "src/assets/screens/typing/spacebar-cursor-swipe.light.webp",
     "caption": "Dragging the spacebar moves the text cursor a character at a time.",
     "host": "harness-field",
     "setup": [
@@ -3311,14 +3385,16 @@
       "In settings, set Typing / Gestures / Hold + swipe on spacebar to Cursor (it's the default)",
       "Drag the spacebar horizontally and hold mid-drag for the capture"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Show the cursor mid-field after a few character-steps of drag; a still frame is fine since the motion itself is generic left/right dragging.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/spacebar-cursor-swipe.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/backspace-word-swipe",
     "page": "docs/src/content/docs/typing/gestures.mdx",
-    "file": "src/assets/screens/typing/backspace-word-swipe.webp",
+    "file": "src/assets/screens/typing/backspace-word-swipe.light.webp",
     "caption": "Dragging backspace to the left deletes text a word at a time instead of a character at a time.",
     "host": "harness-field",
     "setup": [
@@ -3326,14 +3402,16 @@
       "Confirm Typing / Backspace / Swipe to delete words is on (default)",
       "Press backspace and drag left past the first word's threshold, hold mid-gesture for the capture"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture mid-drag so a word or two is visibly gone but the finger is still down on backspace, if the harness can hold a synthetic touch.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/backspace-word-swipe.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "typing/volume-cursor-control",
     "page": "docs/src/content/docs/typing/gestures.mdx",
-    "file": "src/assets/screens/typing/volume-cursor-control.webp",
+    "file": "src/assets/screens/typing/volume-cursor-control.light.webp",
     "caption": "With Volume cursor control on, the hardware volume keys move the text cursor instead of the volume.",
     "host": "harness-field",
     "setup": [
@@ -3341,9 +3419,11 @@
       "Turn on Typing / Volume keys / Volume cursor control",
       "adb shell input keyevent KEYCODE_VOLUME_DOWN (moves cursor left) or KEYCODE_VOLUME_UP, then capture the field with the cursor visibly moved"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "No dedicated on-screen UI changes for this feature \u2014 the shot just needs to show the text field with a moved cursor position; caption/context carries the explanation. Consider whether this shot is worth capturing at all vs. relying on the settings-screen shot alone; flagging for the capture-phase owner's judgement.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/typing/volume-cursor-control.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/calculator-panel",
@@ -3382,7 +3462,7 @@
   {
     "id": "tools/currency-converter-panel",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/currency-converter-panel.webp",
+    "file": "src/assets/screens/tools/currency-converter-panel.light.webp",
     "caption": "The Currency converter panel: a From/To currency pair, live converted amount, and the refresh icon.",
     "host": "harness-field",
     "setup": [
@@ -3390,9 +3470,11 @@
       "Ensure the device has network access so exchange rates load (open.er-api.com, falling back to frankfurter.app).",
       "Open the toolbar/toolbox and tap Currency converter; type an amount so the converted result and Insert chip are visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Default pair is USD to BDT. This is the one tool on the page that needs a live network fetch \u2014 capture after rates have loaded (CurrencyUi.Ready), not mid-spinner (CurrencyUi.Loading).",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/currency-converter-panel.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "tools/symbols-panel",
@@ -3464,16 +3546,18 @@
   {
     "id": "tools/typing-test-results",
     "page": "docs/src/content/docs/tools/utilities.mdx",
-    "file": "src/assets/screens/tools/typing-test-results.webp",
+    "file": "src/assets/screens/tools/typing-test-results.light.webp",
     "caption": "Typing test results: WPM, accuracy, consistency, and the Insert score chip.",
     "host": "harness-field",
     "setup": [
       "Continue directly from the tools/typing-test-panel session \u2014 let the timer run out (or finish the word/quote target) to reach the results screen.",
       "Capture with the WPM/accuracy/consistency figures and the Insert score chip all visible."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Insert score commits text in the form '83 WPM \u00b7 96% accuracy (30s)'. A personal-best banner is a nice-to-have if this isn't the first run at that config, but not required.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/tools/typing-test-results.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "privacy/tools-enabled-switches",
@@ -3573,16 +3657,18 @@
   {
     "id": "reference/addon-link-prefilled-repo",
     "page": "docs/src/content/docs/reference/deep-links.mdx",
-    "file": "src/assets/screens/reference/addon-link-prefilled-repo.webp",
+    "file": "src/assets/screens/reference/addon-link-prefilled-repo.light.webp",
     "caption": "Following a wmkeyboard://repo?url=\u2026 link pre-fills the add-repository dialog \u2014 nothing is fetched until you tap Add.",
     "host": "settings",
     "setup": [
       "adb shell am start -a android.intent.action.VIEW -d \"wmkeyboard://repo?url=github.com/wmkeyboard/sample-repo\"",
       "This host is BROWSABLE (declared in the manifest for addons|repo|addon), so a plain implicit VIEW intent works; substitute a real/reachable sample repo URL so AddonRepoCodec.resolveManifestUrl succeeds and the dialog actually opens pre-filled rather than falling back to the plain Addons screen."
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Capture the Addons screen with the add-repository dialog open and the URL field already populated from the link, before tapping Add.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/addon-link-prefilled-repo.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/file-import-dialog",
@@ -3638,7 +3724,7 @@
   {
     "id": "reference/shortcuts-cheat-sheet",
     "page": "docs/src/content/docs/reference/shortcuts.mdx",
-    "file": "src/assets/screens/reference/shortcuts-cheat-sheet.webp",
+    "file": "src/assets/screens/reference/shortcuts-cheat-sheet.light.webp",
     "caption": "The cheat sheet after pressing the shortcut key twice, then ?, showing every bound letter.",
     "host": "harness-field",
     "setup": [
@@ -3648,9 +3734,11 @@
       "Send a KEYCODE_SLASH (or shifted '/') key event to expand the picker into the full cheat sheet",
       "Capture while the cheat-sheet overlay is showing"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "Requires a physical/emulated hardware keyboard sending real KeyEvents (adb `input keyevent` against KEYCODE_CTRL_LEFT twice within the 400ms double-tap window, then KEYCODE_SLASH) since this is driven by WMKeyboardService.onKeyDown/onKeyUp, not touch. If DocsShotActivity/adb input cannot easily fake the double-tap timing, a fallback is to trigger it from a Bluetooth/USB test keyboard on the device.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/reference/shortcuts-cheat-sheet.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "reference/troubleshooting-empty-dictionary-state",
@@ -5206,7 +5294,7 @@
   {
     "id": "smart/selection-actions-phone",
     "page": "docs/src/content/docs/smart/selection-actions.mdx",
-    "file": "src/assets/screens/smart/selection-actions-phone.webp",
+    "file": "src/assets/screens/smart/selection-actions-phone.light.webp",
     "caption": "A selected phone number, and the bar the keyboard offers for it.",
     "host": "field",
     "setup": [
@@ -5215,14 +5303,16 @@
       "Type 01712345678, then long-press it and drag the handles so the whole number is selected",
       "Wait for the Selection actions row to finish its expand animation before capturing"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "SelectionMacroBar drawn on BarRow.MACROS. Chips should read Copy / Share / Format / Call / Message / WhatsApp. WhatsApp only appears when WhatsApp is installed on the capture device, so install it or accept a five-chip row and reword the caption.",
-    "kind": "still"
+    "kind": "still",
+    "dark": "src/assets/screens/smart/selection-actions-phone.dark.webp",
+    "source": "jvm"
   },
   {
     "id": "smart/selection-actions-case",
     "page": "docs/src/content/docs/smart/selection-actions.mdx",
-    "file": "src/assets/screens/smart/selection-actions-case.webp",
+    "file": "src/assets/screens/smart/selection-actions-case.light.webp",
     "caption": "Format on plain text: the four case options, with the arrow back to the actions.",
     "host": "field",
     "setup": [
@@ -5230,8 +5320,320 @@
       "Type a short sentence such as 'the quick brown fox', then select all of it",
       "Tap Format on the Selection actions row so the case ladder replaces the chips"
     ],
-    "status": "todo",
+    "status": "done",
     "notes": "The ladder is composition-local state in SelectionMacroBar.kt, reached only through Format on a SelectionKind.TEXT selection. Chips read lower case / Title Case / UPPER CASE / Sentence case, each written in the case it applies, with a back chevron at the left.",
+    "kind": "still",
+    "dark": "src/assets/screens/smart/selection-actions-case.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "addons/import-from-link-confirm",
+    "page": "docs/src/content/docs/addons/from-a-link.mdx",
+    "file": "src/assets/screens/addons/import-from-link-confirm.light.webp",
+    "caption": "Sharing a GitHub link into WM Keyboard. The dialog names the host it will ask before it asks anything.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/addons/import-from-link-confirm.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "languages/ambiguous-t9-field",
+    "page": "docs/src/content/docs/languages/ambiguous.mdx",
+    "file": "src/assets/screens/languages/ambiguous-t9-field.light.webp",
+    "caption": "The T9 keypad: eight letter keys, each carrying three or four letters.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/languages/ambiguous-t9-field.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "languages/download-language-data-prompt",
+    "page": "docs/src/content/docs/languages/downloads.mdx",
+    "file": "src/assets/screens/languages/download-language-data-prompt.light.webp",
+    "caption": "Download language data? The prompt shown as you add a language, with the rough size on it.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/languages/download-language-data-prompt.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "privacy/network-activity-screen",
+    "page": "docs/src/content/docs/privacy/network-activity.mdx",
+    "file": "src/assets/screens/privacy/network-activity-screen.light.webp",
+    "caption": "Network activity: the live line, today's totals with the chart split by feature, and the By feature and Servers contacted cards.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/privacy/network-activity-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/app-lock-screen",
+    "page": "docs/src/content/docs/reference/settings/app-lock.mdx",
+    "file": "src/assets/screens/reference/settings/app-lock-screen.light.webp",
+    "caption": "The Fingerprint lock screen: the master switch, then the screens, the delete buttons and the behaviour groups.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/app-lock-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/emoji-categories-screen",
+    "page": "docs/src/content/docs/reference/settings/emoji.mdx",
+    "file": "src/assets/screens/reference/settings/emoji-categories-screen.light.webp",
+    "caption": "The Emoji categories screen: drag to reorder a tab, press the eye to hide one.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/emoji-categories-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/permissions-screen",
+    "page": "docs/src/content/docs/reference/settings/permissions.mdx",
+    "file": "src/assets/screens/reference/settings/permissions-screen.light.webp",
+    "caption": "The Permissions screen: runtime permissions, special access, and the ones that come with the install.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/permissions-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/phone-formats-screen",
+    "page": "docs/src/content/docs/reference/settings/phone-formats.mdx",
+    "file": "src/assets/screens/reference/settings/phone-formats-screen.light.webp",
+    "caption": "Phone number formats: the explanation, Add a format, the saved masks, and the Test a number field.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/phone-formats-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/statistics-screen",
+    "page": "docs/src/content/docs/reference/settings/statistics.mdx",
+    "file": "src/assets/screens/reference/settings/statistics-screen.light.webp",
+    "caption": "Statistics: the all-time tiles, the history chart with its period and metric chips, and the hour-of-day chart.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/statistics-screen.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "reference/settings/themes-random-dark",
+    "page": "docs/src/content/docs/reference/settings/themes.mdx",
+    "file": "src/assets/screens/reference/settings/themes-random-dark.light.webp",
+    "caption": "The dark theme picker set to Random, with a family ticked whole.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/reference/settings/themes-random-dark.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "smart/language-detection-switch",
+    "page": "docs/src/content/docs/smart/mixed-language.mdx",
+    "file": "src/assets/screens/smart/language-detection-switch.light.webp",
+    "caption": "The suggestion strip following a message mid-switch: English words, then Banglish ones.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/smart/language-detection-switch.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "smart/otp-notification-chip",
+    "page": "docs/src/content/docs/smart/one-time-codes.mdx",
+    "file": "src/assets/screens/smart/otp-notification-chip.webp",
+    "caption": "A code chip above the keys: the code, the app that sent it, and an \u2715 to dismiss.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "todo",
+    "notes": "Rendered on the JVM (app/src/docShots).",
     "kind": "still"
+  },
+  {
+    "id": "smart/selection-actions-replace",
+    "page": "docs/src/content/docs/smart/selection-actions.mdx",
+    "file": "src/assets/screens/smart/selection-actions-replace.light.webp",
+    "caption": "The Find and replace panel: two fields, the toggles, the buttons and the count.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/smart/selection-actions-replace.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "themes/random-picker-light",
+    "page": "docs/src/content/docs/themes/overview.mdx",
+    "file": "src/assets/screens/themes/random-picker-light.light.webp",
+    "caption": "The light theme picker in Random mode, with four themes ticked.",
+    "host": "settings",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/themes/random-picker-light.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/ai-chat-conversation",
+    "page": "docs/src/content/docs/tools/ai-chat.mdx",
+    "file": "src/assets/screens/tools/ai-chat-conversation.light.webp",
+    "caption": "Model chips over a conversation, with an answer streaming in.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-chat-conversation.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/ai-chat-keyboard",
+    "page": "docs/src/content/docs/tools/ai-chat.mdx",
+    "file": "src/assets/screens/tools/ai-chat-keyboard.light.webp",
+    "caption": "Chat mode on the AI panel: the conversation, the newest answer's buttons, and the composer.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-chat-keyboard.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/ai-chat-list",
+    "page": "docs/src/content/docs/tools/ai-chat.mdx",
+    "file": "src/assets/screens/tools/ai-chat-list.light.webp",
+    "caption": "The conversation list, newest first, with the New chat button at the top.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-chat-list.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/ai-result-changes",
+    "page": "docs/src/content/docs/tools/ai.mdx",
+    "file": "src/assets/screens/tools/ai-result-changes.light.webp",
+    "caption": "A Fix grammar result in the Changes view, with the old spellings struck through.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/ai-result-changes.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/app-launcher-grid",
+    "page": "docs/src/content/docs/tools/app-launcher.mdx",
+    "file": "src/assets/screens/tools/app-launcher-grid.light.webp",
+    "caption": "The app grid with a pinned row on top and search in the header.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/app-launcher-grid.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/learn-from-text",
+    "page": "docs/src/content/docs/tools/learn-from-text.mdx",
+    "file": "src/assets/screens/tools/learn-from-text.light.webp",
+    "caption": "Learn from text listing the new words in a note, all checked, with Add 5 in the header.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/learn-from-text.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/resize-overlay",
+    "page": "docs/src/content/docs/tools/resize.mdx",
+    "file": "src/assets/screens/tools/resize-overlay.light.webp",
+    "caption": "Resize mode: the keyboard dimmed behind its outline, with drag handles on all four edges and the Reset / move / Done row in the middle.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/resize-overlay.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/trackpad-panel",
+    "page": "docs/src/content/docs/tools/trackpad.mdx",
+    "file": "src/assets/screens/tools/trackpad-panel.light.webp",
+    "caption": "The trackpad panel: the pointing surface over an abc / space / backspace row. The trail and crosshair follow your finger.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/trackpad-panel.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "tools/vocabulary-card",
+    "page": "docs/src/content/docs/tools/vocabulary.mdx",
+    "file": "src/assets/screens/tools/vocabulary-card.light.webp",
+    "caption": "The card for abhor: pronunciation, senses, synonyms and antonyms, the word family, and where the word came from.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/tools/vocabulary-card.dark.webp",
+    "source": "jvm"
+  },
+  {
+    "id": "typing/octopus-keys",
+    "page": "docs/src/content/docs/typing/words-on-the-keys.mdx",
+    "file": "src/assets/screens/typing/octopus-keys.light.webp",
+    "caption": "Words floating over the keys that reach them: the typed part is faded, the part still to come is in the accent colour.",
+    "host": "harness-field",
+    "setup": [],
+    "status": "done",
+    "notes": "Rendered on the JVM (app/src/docShots).",
+    "kind": "still",
+    "dark": "src/assets/screens/typing/octopus-keys.dark.webp",
+    "source": "jvm"
   }
 ]

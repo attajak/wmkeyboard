@@ -8,6 +8,7 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 The [AI tool](/tools/ai/) runs one-shot actions against the text in a field. Chat is the other half: a normal back-and-forth conversation with the same model, kept on your device.
 
@@ -18,7 +19,7 @@ You can chat in two places, and they're the same chats. The keyboard's AI panel 
 Open the AI tool from the toolbar. The panel's header has two chips, **Actions** and **Chat**. Tap **Chat**. The panel remembers which one you left it on, so if chat is what you use, the AI button opens chat from then on.
 
 <PhoneFrame caption="Chat mode on the AI panel: the conversation, the newest answer's buttons, and the composer.">
-  {/* shot: tools/ai-chat-keyboard */}
+  <Shot id="tools/ai-chat-keyboard" alt="Chat mode on the AI panel: the conversation, the newest answer's buttons, and the composer." />
 </PhoneFrame>
 
 Tap the message box and the keys come up underneath, with the last few messages still in view above it. The keyboard gets taller while you type so the conversation doesn't disappear. Tap the conversation, or press Back, and the keys step aside again so you can read. Your half-typed message stays where it was, even if you close the panel.
@@ -68,7 +69,7 @@ A chat started while [incognito](/privacy/incognito/) is on is never saved. You 
 It sits in a group headed **Chat** on the AI tool's settings screen, under the reasoning and panel options. There's a faster way in too: long-press the app icon on your launcher and pick **AI chat**, which lands you on the conversation list without going through Home.
 
 <PhoneFrame caption="The conversation list, newest first, with the New chat button at the top.">
-  {/* shot: tools/ai-chat-list */}
+  <Shot id="tools/ai-chat-list" alt="The conversation list, newest first, with the New chat button at the top." />
 </PhoneFrame>
 
 The list is your saved conversations, most recently updated first. Each row is the chat's title and how long ago you touched it, with a delete button on the right that asks first and names the chat it's about to remove. **New chat** is both a button at the top of the list and a plus in the top bar.
@@ -82,7 +83,7 @@ Titles aren't something you type. The first line of your first message becomes t
 A scrolling row of chips above the transcript lists everything you can talk to right now: models you've downloaded on-device first, then every provider you've configured. "Configured" means the thing it needs is filled in. That's an API key for the cloud services, an address for Ollama or LM Studio, and both an address and a model name for **Other service**. With fewer than two to choose from, the row doesn't appear at all.
 
 <PhoneFrame caption="Model chips over a conversation, with an answer streaming in.">
-  {/* shot: tools/ai-chat-conversation */}
+  <Shot id="tools/ai-chat-conversation" alt="Model chips over a conversation, with an answer streaming in." />
 </PhoneFrame>
 
 Two things worth knowing about that row:

@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 This page covers four separate tools, each with its own panel and its own settings screen: **Web search** and **Image search** (backed by Brave, or by a SearXNG server you name on the F-Droid build), a three-tab **Wikipedia** reader, and an **English dictionary**. Web search, Image search, and Wikipedia never read what's already in your field. You type a query into the panel's own search bar, and nothing out of the field you're typing in is sent anywhere. Dictionary is the one exception. With its auto-lookup setting on, which is the default, opening the tool reads your current selection or the word at the cursor and looks that up. See [Looking up definitions](#looking-up-definitions) below.
 
 <PhoneFrame caption="Web search results. Tap a row to insert its link, or tap the open icon to launch it in your browser.">
-{/* shot: tools/web-search-results */}
+<Shot id="tools/web-search-results" alt="Web search results — tap a row to insert its link, or tap the open icon to launch it in your browser." />
 </PhoneFrame>
 
 ## Web and image search
@@ -23,7 +23,7 @@ Open **Web search** or **Image search** from the toolbar, or from the toolbox if
 Both tools run on the Brave Search API by default, or on a SearXNG instance you name on the F-Droid build. Typing routes into the panel's own header search bar rather than your field, the same key-rerouting trick the GIF, sticker, and Wikipedia panels use. Unlike GIFs and stickers, neither search runs live as you type. Both wait for you to press the search action before firing a request.
 
 <PhoneFrame side caption="Image search: tap a thumbnail to insert the image itself, or long-press to insert its link instead.">
-{/* shot: tools/image-search-grid */}
+<Shot id="tools/image-search-grid" alt="Image search — tap a thumbnail to insert the image itself; long-press to insert its link instead." />
 </PhoneFrame>
 
 - **Web search**: tap a result to insert its URL at the cursor. A separate open-in-browser icon on each row launches the link in your browser instead, which leaves the keyboard entirely. They're two distinct actions. Each row shows the title, host, and an HTML-stripped snippet.
@@ -56,7 +56,7 @@ The settings page's own caption: "Web and image search share everything here. Th
 Open **Wikipedia** from the toolbar, or the toolbox if you haven't pinned it. It isn't pinned by default either. Unlike the other three tools on this page, Wikipedia has no [leader-key](/reference/shortcuts/) letter of its own out of the box. From a hardware keyboard the toolbox shortcut is the way in: double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>T</KeyCap>. You can also rebind a letter to it yourself. Search in the panel's header bar. Results list article titles with short descriptions, and tapping one opens the article.
 
 <PhoneFrame side caption="An open Wikipedia article, with its Summary, Links and Full article tabs.">
-{/* shot: tools/wikipedia-article */}
+<Shot id="tools/wikipedia-article" alt="An open Wikipedia article, with its Summary, Links and Full article tabs." />
 </PhoneFrame>
 
 An open article has three tabs:
@@ -84,7 +84,7 @@ The settings page's caption: "The searches and the article text come from the fr
 The dictionary looks up English words in a chain of sources you put in order (see [Dictionary sources](#dictionary-sources) below). None of them needs a key or an account. Open **Dictionary** with auto-lookup on, which is the default (see Options below), and it immediately looks up your current selection, or the word touching the cursor if nothing is selected.
 
 <PhoneFrame side caption="A dictionary entry, showing serif headword, pronunciation audio, numbered definitions and synonym chips.">
-{/* shot: tools/dictionary-entry */}
+<Shot id="tools/dictionary-entry" alt="A dictionary entry — serif headword, pronunciation audio, numbered definitions and synonym chips." />
 </PhoneFrame>
 
 - Auto-lookup only picks up **Latin-script words**. A word holding any character outside that range, Bengali script for instance, is skipped quietly rather than looked up and shown "not found." The word also has to be 40 characters or fewer and hold at least one letter. Surrounding quotes and hyphens are trimmed off first.

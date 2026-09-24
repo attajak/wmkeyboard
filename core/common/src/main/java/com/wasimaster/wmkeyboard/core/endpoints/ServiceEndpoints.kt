@@ -132,9 +132,17 @@ object ServiceEndpoints {
         current = Overrides(bases, repos)
     }
 
+    /**
+     * Honours the overrides on every build, not only the F-Droid one. Set by
+     * the JVM docs screenshots (app/src/docShots), which point the tools at a
+     * local stand-in server; nothing in the app sets it.
+     */
+    @Volatile
+    var overridesEverywhere: Boolean = false
+
     /** The base address to call for [endpoint], with no trailing slash. */
     fun base(endpoint: ServiceEndpoint): String =
-        resolveBase(endpoint, current.bases[endpoint.id], BuildConfig.ENABLE_FDROID)
+        resolveBase(endpoint, current.bases[endpoint.id], BuildConfig.ENABLE_FDROID || overridesEverywhere)
 
     /** [ServiceEndpoint.WIKIPEDIA] for one language. */
     fun wikipedia(lang: String): String = expandLang(base(ServiceEndpoint.WIKIPEDIA), lang)

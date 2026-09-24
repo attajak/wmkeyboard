@@ -373,15 +373,56 @@ val SHOTS: List<Shot> = listOf(
     backupImport,
     same("reference/settings/backup-import-confirm", backupImport),
     Shot(
-        "reference/addon-link-prefilled-repo", "",
+        "reference/addon-link-prefilled-repo", "", freezeClock = true,
         launch = { link("wmkeyboard://repo?url=github.com/wasi-master/wmkeyboard-addon-repository") },
     ),
     themeDelete,
     same("themes/editor-delete-confirm", themeDelete),
     Shot(
         "start/wizard-gestures-page", "", onboarding = true,
+        // The first page waits for the keyboard to be on, and the gestures page
+        // is only in the wizard for a balanced or power-user setup.
+        seed = { keyboardReady(); repo.setPersonaDepth(com.wasimaster.wmkeyboard.core.settings.PersonaDepth.BALANCED) },
         launch = { link("wmkeyboard://settings") },
         steps = { tapUntil("Next", "Spacebar and keys") },
+    ),
+    Shot("start/first-launch", "", onboarding = true, launch = { link("wmkeyboard://settings") }),
+    Shot("addons/import-from-link-confirm", "", launch = { sharedLink("https://github.com/wasi-master/wmkeyboard-addon-repository") }),
+    Shot(
+        "reference/settings/app-lock-screen", "applock",
+        seed = {
+            repo.setAppLockEnabled(true)
+            repo.setAppLockTargets(com.wasimaster.wmkeyboard.app.lock.AppLockTargets.defaultIds)
+            // Opened already, the way it is right after the fingerprint was accepted.
+            com.wasimaster.wmkeyboard.app.lock.AppLockSession.grantConfig()
+            com.wasimaster.wmkeyboard.app.lock.AppLockSession.grant(System.currentTimeMillis())
+        },
+    ),
+    Shot("reference/settings/emoji-categories-screen", "emojicategories", steps = { tapIcon("Hide the Smileys tab", substring = true) }),
+    Shot("reference/settings/permissions-screen", "permissions"),
+    Shot(
+        "reference/settings/phone-formats-screen", "phoneformats",
+        seed = { repo.addClipboardPhoneFormat("+880 XXXX-XXXXXX"); repo.addClipboardPhoneFormat("(XXX) XXX-XXXX") },
+    ),
+    Shot("reference/settings/statistics-screen", "statistics", seed = { typingStats() }),
+    Shot("privacy/network-activity-screen", "network_activity", seed = { networkLog() }),
+    Shot(
+        "themes/random-picker-light", "themes",
+        seed = { repo.setAutoThemeEnabled(true) },
+        steps = { tap("Light theme"); tap("Random"); tap("Forest"); tap("Sunset"); tap("Berry"); tap("Crimson") },
+    ),
+    Shot(
+        "reference/settings/themes-random-dark", "themes",
+        seed = { repo.setAutoThemeEnabled(true) },
+        steps = { tap("Dark theme"); tap("Random"); tapIcon("Select every look in this family", substring = true) },
+    ),
+    Shot("languages/download-language-data-prompt", "add_language", steps = { type("french"); tap("Français", substring = true) }),
+    Shot(
+        "languages/dictionary-download-progress", "language/fr", setting = "languages_dictionaries_title",
+        seed = {
+            repo.setEnabledLayoutIds(listOf("builtin_qwerty", "builtin_avro", "builtin_french"))
+            dictionaryDownloading("fr", 1_310_000L, 3_464_732L)
+        },
     ),
     Shot(
         "themes/font-picker-script", "fonts/DEVANAGARI",
@@ -416,3 +457,43 @@ val SHOTS: List<Shot> = listOf(
         steps = { tapIcon("Reset ", substring = true) },
     ),
 )
+
+/** The network log with a morning of requests in it, and one still under way. */
+private fun Seed.networkLog() {
+    val log = com.wasimaster.wmkeyboard.core.netlog.NetLog
+    log.attach(context)
+    log.clear()
+    log.enabled = true
+    listOf(
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.WEATHER, "api.open-meteo.com", "/v1/forecast"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.TRANSLATE, "translate.googleapis.com", "/translate_a/single"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.GIF, "api.klipy.com", "/api/v1/{key}/gifs/trending"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.GIF, "api.klipy.com", "/api/v1/{key}/gifs/search"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.DICTIONARY, "api.dictionaryapi.dev", "/api/v2/entries"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.CURRENCY, "open.er-api.com", "/v6/latest/USD"),
+        Triple(com.wasimaster.wmkeyboard.core.netlog.NetSource.WEB_SEARCH, "api.search.brave.com", "/res/v1/web/search"),
+    ).forEachIndexed { i, (source, host, route) ->
+        log.callTo(source, "GET", "https", host, route = route).apply {
+            status = 200
+            sent(420L + i * 30)
+            received(18_000L + i * 7_400)
+            end()
+        }
+    }
+    // Left open, so the live line reads as talking to it.
+    log.callTo(com.wasimaster.wmkeyboard.core.netlog.NetSource.AI, "POST", "https", "api.anthropic.com", route = "/v1/messages")
+}
+
+/** A dictionary download partway through, held there for the shot. */
+private fun Seed.dictionaryDownloading(id: String, bytes: Long, total: Long) {
+    val manager = com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager
+    val type = manager::class.java
+    // The manager keeps a download's status across a refresh only while its
+    // job runs; a job that never finishes holds this one in place.
+    type.getDeclaredField("activeId").apply { isAccessible = true }.set(manager, id)
+    type.getDeclaredField("activeJob").apply { isAccessible = true }.set(manager, kotlinx.coroutines.Job())
+    @Suppress("UNCHECKED_CAST")
+    val states = type.getDeclaredField("_states").apply { isAccessible = true }.get(manager)
+        as kotlinx.coroutines.flow.MutableStateFlow<Map<String, com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager.DownloadStatus>>
+    states.value = states.value + (id to com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager.DownloadStatus.Downloading(bytes, total))
+}

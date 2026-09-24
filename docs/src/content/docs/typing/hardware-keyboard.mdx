@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 Plug in a Bluetooth or USB keyboard and WM Keyboard keeps running underneath rather than getting out of the way. Autocorrect, suggestions and transliteration all work on physical keystrokes exactly as they do on the soft keys. A leader key opens any tool without your hand leaving the keys.
 
 <PhoneFrame caption="Typing on a physical keyboard: a word underlined mid-correction in the field.">
-  {/* shot: typing/hardware-typing-live */}
+  <Shot id="typing/hardware-typing-live" alt="Typing on a physical keyboard: a word underlined mid-correction in the field." />
 </PhoneFrame>
 
 ## Typing on a physical keyboard
@@ -36,7 +36,7 @@ Android composes a physical dead key (an accent key that combines with the next 
 <SettingsPath path="Typing / Physical keyboard / Tool shortcuts list" />
 
 <PhoneFrame side caption="Hotkey badges under the toolbar icons after double-tapping Ctrl.">
-  {/* shot: typing/hardware-tool-picker */}
+  <Shot id="typing/hardware-tool-picker" alt="The tool-picker overlay after double-tapping Ctrl, showing the bound letters." />
 </PhoneFrame>
 
 **Tool shortcuts** (on by default) let you open any tool without touching the screen at all. Double-tap <KeyCap>Ctrl</KeyCap>, a combination nothing else uses, and every button on the keyboard sprouts a small badge under its icon showing the key that operates it. Press that key and the button fires. Press nothing and the badges disappear on their own.
@@ -139,7 +139,7 @@ One thing to know: some apps want <KeyCap>Ctrl</KeyCap>+<KeyCap>Space</KeyCap> f
 <SettingsPath path="Typing / Physical keyboard / Arrow keys move a highlight" />
 
 <PhoneFrame side caption="The focus ring highlighting a result inside an open panel after an arrow-key press.">
-  {/* shot: typing/hardware-focus-ring */}
+  <Shot id="typing/hardware-focus-ring" alt="The focus ring highlighting a result inside an open panel after an arrow-key press." />
 </PhoneFrame>
 
 Once a tool is open, **Arrow keys move a highlight** (on by default) lets you drive it without touching the screen. The arrow keys move a highlighted outline over the panel's results, chips or search box. <KeyCap>Enter</KeyCap> activates whatever's highlighted. <KeyCap>Tab</KeyCap> jumps between the panel's sections (search, category chips, then results) once the highlight exists. <KeyCap>Home</KeyCap> and <KeyCap>End</KeyCap> jump to a section's first and last item, and <KeyCap>PageUp</KeyCap>/<KeyCap>PageDown</KeyCap> move four rows at a time through a long grid. The highlight is a filled, outlined ring in your theme's accent color, and it only ever appears after you press a key. It never shows up while you're using the keyboard by touch.

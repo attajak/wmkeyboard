@@ -32,6 +32,11 @@ data class Shot(
     val launch: (suspend Seed.() -> android.content.Intent)? = null,
     /** Leaves setup unfinished, so the app opens on the setup wizard. */
     val onboarding: Boolean = false,
+    /**
+     * Stops the clock as soon as the screen opens: for a screen that opens on a
+     * focused field, whose cursor blinks forever and never lets it read idle.
+     */
+    val freezeClock: Boolean = false,
 )
 
 /** The receiver of [Shot.seed]. */
@@ -79,6 +84,54 @@ class Seed(val repo: SettingsRepository, val context: android.content.Context) {
     fun openFile(file: java.io.File): android.content.Intent =
         android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.fromFile(file))
             .setClassName(context, "com.wasimaster.wmkeyboard.app.ImportFileActivity")
+
+    /** What a share sheet hands WM Keyboard when a link is shared into it. */
+    fun sharedLink(text: String): android.content.Intent =
+        android.content.Intent(android.content.Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(android.content.Intent.EXTRA_TEXT, text)
+            .setClassName(context, "com.wasimaster.wmkeyboard.app.ImportLinkActivity")
+
+    /**
+     * WM Keyboard enabled and picked as the keyboard, the way the setup
+     * wizard's first page waits for. Robolectric has no input methods of its own.
+     */
+    fun keyboardReady() {
+        val imm = context.getSystemService(android.view.inputmethod.InputMethodManager::class.java)
+        val service = "com.wasimaster.wmkeyboard.ime.WMKeyboardService"
+        val info = android.view.inputmethod.InputMethodInfo(context.packageName, service, "WM Keyboard", null)
+        org.robolectric.Shadows.shadowOf(imm).setEnabledInputMethodInfoList(listOf(info))
+        android.provider.Settings.Secure.putString(
+            context.contentResolver, android.provider.Settings.Secure.DEFAULT_INPUT_METHOD, "${context.packageName}/$service",
+        )
+    }
+
+    /** Two weeks of typing statistics, so every tile and chart has something to draw. */
+    fun typingStats() {
+        val file = java.io.File(context.filesDir, com.wasimaster.wmkeyboard.core.tools.TypingStats.FILE_PATH)
+        file.delete()
+        file.parentFile?.mkdirs()
+        val today = com.wasimaster.wmkeyboard.core.tools.TypingStatsMath
+            .localEpochDay(System.currentTimeMillis(), java.util.TimeZone.getDefault())
+        val perDay = listOf(3100, 2400, 4200, 1800, 3600, 900, 2700, 3900, 2200, 4600, 3300, 1500, 2800, 3700)
+        var chars = 0L
+        var words = 0L
+        var backspaces = 0L
+        var active = 0L
+        val days = perDay.mapIndexed { back, c ->
+            val w = c / 5L
+            val b = c / 18L
+            val ms = c * 190L
+            chars += c; words += w; backspaces += b; active += ms
+            "\"${today - back}\":{\"chars\":$c,\"words\":$w,\"backspaces\":$b,\"activeMs\":$ms}"
+        }
+        // A day's typing, heaviest in the evening.
+        val hours = listOf(40, 10, 0, 0, 0, 5, 60, 320, 540, 610, 480, 430, 520, 470, 390, 410, 450, 520, 640, 780, 910, 860, 520, 190)
+        file.writeText(
+            "{\"days\":{${days.joinToString(",")}},\"totalChars\":${chars * 6},\"totalWords\":${words * 6}," +
+                "\"totalBackspaces\":${backspaces * 6},\"totalActiveMs\":${active * 6},\"hourHistogram\":[${hours.joinToString(",") { (it * 12).toString() }}]}",
+        )
+    }
 
     /** A `wmkeyboard://` link, followed the way the browser follows it. */
     fun link(uri: String): android.content.Intent =

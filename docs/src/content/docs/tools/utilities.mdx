@@ -53,7 +53,7 @@ The custom keypad (`7 8 9 ÷ ⌫`, `4 5 6 × (`, `1 2 3 − )`, `0 . % + =`, or 
 **Currency converter** needs live exchange rates. It fetches from `open.er-api.com` (roughly 160 currencies, updated daily) and falls back to `frankfurter.dev` (European Central Bank, roughly 30 currencies) if that fails. The F-Droid edition starts from the jsDelivr `currency-api` instead (about 340 codes, coins included, published as open data), with Frankfurter behind it, so a fresh install there reaches only sources that are free software. The others stay one setting away. None of them needs a key. Rates are quoted against USD and cross-converted locally, so one fetch covers every pair. A refresh icon on the panel forces a new fetch. Otherwise it only refetches once the cached rates are older than the refresh interval set below, and that cache doesn't survive the keyboard process restarting, so the first open after a while can show a brief "Downloading the exchange rates…" message.
 
 <PhoneFrame side caption="The Currency converter panel: a From/To currency pair, live converted amount, and the refresh icon.">
-  {/* shot: tools/currency-converter-panel */}
+  <Shot id="tools/currency-converter-panel" alt="The Currency converter panel: a From/To currency pair, live converted amount, and the refresh icon." />
 </PhoneFrame>
 
 The currency picker pins 15 common codes to the front of the list: USD, EUR, BDT, GBP, INR, JPY, CNY, AUD, CAD, SGD, AED, SAR, MYR, TRY, PKR. Everything else the current rate table has follows, sorted alphabetically.
@@ -180,7 +180,7 @@ Two more chips on the strip, **Glide** and **Suggestions**, let the keyboard's o
 Both switches also live under <SettingsPath path="Tools / Typing speed test / Typing aids" />.
 
 <PhoneFrame side caption="Typing test results: WPM, accuracy, consistency, and the Insert score chip.">
-  {/* shot: tools/typing-test-results */}
+  <Shot id="tools/typing-test-results" alt="Typing test results: WPM, accuracy, consistency, and the Insert score chip." />
 </PhoneFrame>
 
 Results show four numbers. Words per minute is correct characters ÷ 5 ÷ minutes, the usual "5 characters = 1 word" convention. Raw speed counts every character you typed whether or not it matched. Accuracy is keystroke-level, so it still counts a mistake after you correct it. Consistency scores how even your pace stayed through the run. **Insert score** types the result straight into your field as `"83 WPM · 96% accuracy (30s)"`, with your own numbers and config in place of that example. Personal bests are tracked per configuration, so a 15-second sprint and a 2-minute run don't share a record, alongside a rolling history of your last 24 runs and a running count of tests completed. There are also four achievement badges to chase, listed with their conditions on [Easter eggs](/reference/easter-eggs/#earn-typing-test-achievements).

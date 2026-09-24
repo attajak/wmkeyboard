@@ -7,6 +7,7 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Most things you can import are published as a *page* rather than as a file you
 already have: a theme in somebody's repository, an asset on a release, a gist,
@@ -26,7 +27,7 @@ There are three ways in:
   reply can write for you.
 
 <PhoneFrame caption="Sharing a GitHub link into WM Keyboard. The dialog names the host it will ask before it asks anything.">
-  {/* shot: addons/import-from-link-confirm */}
+  <Shot id="addons/import-from-link-confirm" alt="Sharing a GitHub link into WM Keyboard. The dialog names the host it will ask before it asks anything." />
 </PhoneFrame>
 
 ## What a link can point at

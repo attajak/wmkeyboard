@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 Chinese and Japanese aren't typed directly: you type a *reading* (pinyin, bopomofo, a radical code, romaji) and pick the character it means from a candidate bar. Korean is different: Hangul jamo assemble into syllable blocks on their own, so it types and suggests like any other language. This page covers both.
 
 <PhoneFrame caption="Chinese Pinyin: the candidate strip replaces the usual word-suggestion row while you're composing a reading.">
-  {/* shot: languages/cjk-pinyin-candidate-strip */}
+  <Shot id="languages/cjk-pinyin-candidate-strip" alt="Chinese Pinyin: the candidate strip replaces the usual word-suggestion row while you're composing a reading." />
 </PhoneFrame>
 
 ## Two different input flows
@@ -27,7 +27,7 @@ Chinese and Japanese aren't typed directly: you type a *reading* (pinyin, bopomo
 Chinese carries six layouts. Adding it from the language catalogue turns on Pinyin alone, and the other five are a tap away on Chinese's own screen:
 
 <PhoneFrame side caption="Cangjie: radical keys build a shape code; the strip fills in once the code is complete.">
-  {/* shot: languages/cjk-cangjie-keys */}
+  <Shot id="languages/cjk-cangjie-keys" alt="Cangjie: radical keys build a shape code; the strip fills in once the code is complete." />
 </PhoneFrame>
 
 | Layout | Reading unit | Buffer commits |
@@ -99,7 +99,7 @@ Japanese and Chinese text is spaced with the ideographic space (U+3000, 「　�
 ## The candidate bar
 
 <PhoneFrame side caption="The expanded candidate grid: every ranked candidate, wrapped to fit, covering the key rows while it's open.">
-  {/* shot: languages/cjk-candidate-grid-expanded */}
+  <Shot id="languages/cjk-candidate-grid-expanded" alt="The expanded candidate grid: every ranked candidate, wrapped to fit, covering the key rows while it's open." />
 </PhoneFrame>
 
 Whenever a conversion composer has a non-empty buffer, the usual word-suggestion strip is replaced by a horizontally-scrolling row of ranked candidates. They're sized to their text and packed from the left rather than spaced evenly, so the best candidate stays in a consistent spot instead of jumping around as the list changes length. A chevron at the end opens an expanded view, and it sits outside the scrolling area so it never scrolls off. That expanded view is a wrapping grid, and it covers the key rows while it's open, the same way Sogou, Baidu, and QQ handle it. By then you're choosing a character rather than typing one. Neither view pages. Both scroll.

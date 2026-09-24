@@ -7,13 +7,14 @@ sidebar:
 
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
+import Shot from '@components/Shot.astro';
 
 Plenty of people type two languages into the same box, on the same keyboard, in the same message. Banglish is the obvious case: "ami tomake" and "how are you" are both typed on a Latin keyboard, and both are ordinary sentences to the person writing them. Left alone, the suggestion engine treats one of those languages as the real one and the other as a stream of typos.
 
 **Detect the language you type** fixes that by reading the words already in the field. Type "ami tomake" on the English keyboard and it starts behaving like the Banglish one. Type "how are you" and it swings straight back, usually within two or three words.
 
 <PhoneFrame caption="The suggestion strip following a message mid-switch: English words, then Banglish ones.">
-  {/* shot: smart/language-detection-switch */}
+  <Shot id="smart/language-detection-switch" alt="The suggestion strip following a message mid-switch: English words, then Banglish ones." />
 </PhoneFrame>
 
 ## What it needs to work at all

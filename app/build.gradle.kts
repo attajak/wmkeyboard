@@ -956,6 +956,8 @@ if (docShots) {
         systemProperty("wmkb.docShots.out", layout.buildDirectory.dir("docshots").get().asFile.absolutePath)
         // `-Pwmkb.docShots.only=<regex>` renders just the ids it matches.
         systemProperty("wmkb.docShots.only", providers.gradleProperty("wmkb.docShots.only").getOrElse(""))
+        // `-Pwmkb.docShots.modes=light` (or dark) renders one of the two, for a quick look.
+        systemProperty("wmkb.docShots.modes", providers.gradleProperty("wmkb.docShots.modes").getOrElse(""))
         // Every shot is a separate test; the report shows which ones failed.
         outputs.upToDateWhen { false }
     }

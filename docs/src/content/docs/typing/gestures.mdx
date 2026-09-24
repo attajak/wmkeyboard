@@ -9,6 +9,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 import GestureDemo from '@components/GestureDemo.astro';
+import Shot from '@components/Shot.astro';
 
 Past tapping and long-pressing single keys, WM Keyboard has a few drag gestures that move across or along a key. The spacebar, backspace and the volume rocker each do something different when you swipe instead of tap. This page covers what those drags do once they're moving. Where a gesture belongs to another page, it links there rather than repeating it.
 
@@ -27,7 +28,7 @@ Setting **Press and hold, then swipe** to Cursor or Numpad costs one thing: hold
 ## Moving the cursor with a spacebar swipe
 
 <PhoneFrame side caption="Dragging the spacebar moves the text cursor a character at a time.">
-  {/* shot: typing/spacebar-cursor-swipe */}
+  <Shot id="typing/spacebar-cursor-swipe" alt="Dragging the spacebar moves the text cursor a character at a time." />
 </PhoneFrame>
 
 Set a slot to **Cursor** and the drag moves the text cursor instead of typing. The caret steps one character for every 16&nbsp;dp of horizontal travel, in whichever direction you drag. That distance is a slider of its own, **Cursor speed**, which sits under the two swipe pickers and runs 8–32&nbsp;dp. Shorter moves the caret faster. Any composing text in progress (a word mid-transliteration, say) commits first, without autocorrect, so the cursor lands where you can see it rather than jumping past a word that was still being corrected.
@@ -121,7 +122,7 @@ A layout can carry its own set instead. Open a layout in the [layout editor](/la
 <SettingsPath path="Key press / Delete keys" />
 
 <PhoneFrame side caption="Dragging backspace to the left deletes text a word at a time instead of a character at a time.">
-  {/* shot: typing/backspace-word-swipe */}
+  <Shot id="typing/backspace-word-swipe" alt="Dragging backspace to the left deletes text a word at a time instead of a character at a time." />
 </PhoneFrame>
 
 **Swipe to delete** (on by default) lets a leftward drag on <KeyCap>⌫</KeyCap> take out more than the one character a press does. Backspace treats tap, hold-to-repeat and this swipe as one gesture. A press that stays still starts the normal hold-to-repeat once **Time before a key repeats** has elapsed, exactly as described on [Keys & typing basics](/typing/basics/#multi-touch-and-key-repeat). Moving left past a small slop cancels that repeat and switches to the swipe. Backspace owns the whole stroke: glide typing, handwriting and the floating-word flick never start from it, even though the key sits right beside the bottom letter row, so neither a swipe nor a held, repeating backspace that drifts onto the letters types a word on top of what it deletes. That holds with **Swipe to delete** off too, and the same goes for <KeyCap>⌦</KeyCap>.
@@ -218,7 +219,7 @@ A few rules keep the drag from firing when you didn't mean it:
 **Volume keys move the cursor** (off by default) repurposes the hardware volume rocker while the keyboard is on screen: volume down moves the cursor one character left, volume up moves it one character right. Holding a volume key repeats for free, riding Android's own hardware key-repeat rather than a separate timer. Both the press and the release are swallowed, so the app underneath never sees a stray volume keypress. It applies only while the keyboard is actually shown. Once it closes, the volume keys go back to controlling volume. With [Selection mode](/tools/text-editing/#selection-mode) on, or with a Shift you pressed yourself still up, each press selects a character instead of stepping past it, so the rocker drags a selection out.
 
 <PhoneFrame caption="With Volume keys move the cursor on, the hardware volume keys move the text cursor instead of the volume.">
-  {/* shot: typing/volume-cursor-control */}
+  <Shot id="typing/volume-cursor-control" alt="With Volume cursor control on, the hardware volume keys move the text cursor instead of the volume." />
 </PhoneFrame>
 
 **Release the keys while audio plays** (on by default) hands the volume keys back to ordinary volume control the instant something is playing: music, a video, a podcast. Typing a reply never costs you the ability to turn the sound down. The keys return to the cursor the moment playback stops. This is re-checked on every key press rather than latched once, so starting or stopping playback mid-typing takes effect immediately. Turn it off if you'd rather the volume keys always moved the cursor while the keyboard is open, playback or not.

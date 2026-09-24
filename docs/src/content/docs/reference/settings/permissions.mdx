@@ -8,13 +8,14 @@ sidebar:
 import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
+import Shot from '@components/Shot.astro';
 
 The Permissions screen is an inventory, not a setup wizard. Every feature that needs a permission still asks for it where the feature lives, so nothing funnels you through here. What this screen answers is "what can this keyboard reach, and what does it hold right now?", without you having to read a manifest. It's also the one place you can grant something ahead of the feature that wants it.
 
 This page is the field reference. For what each permission is actually used for, and what refusing costs you, see [Permissions](/privacy/permissions/).
 
 <PhoneFrame caption="The Permissions screen: runtime permissions, special access, and the ones that come with the install.">
-  {/* shot: reference/settings/permissions-screen */}
+  <Shot id="reference/settings/permissions-screen" alt="The Permissions screen: runtime permissions, special access, and the ones that come with the install." />
 </PhoneFrame>
 
 ## Options

@@ -8,6 +8,7 @@ sidebar:
 import KeyCap from '@components/KeyCap.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import PhoneFrame from '@components/PhoneFrame.astro';
+import Shot from '@components/Shot.astro';
 
 Most keyboards give every letter its own key. Twenty-six keys across a phone screen means each one is about a fingertip wide, and that's the size everything else has to fit around.
 
@@ -16,7 +17,7 @@ Two of the shipped layouts don't do that. **T9** puts the alphabet on eight keys
 Neither one starts enabled. Turn them on under <SettingsPath path="Languages & layouts / English" />, where they sit with English's other layouts alongside Dvorak and Colemak. T9 also comes in 315 more languages, each listed under its own language: see [T9 in other languages](#t9-in-other-languages).
 
 <PhoneFrame caption="The T9 keypad: eight letter keys, each carrying three or four letters.">
-  {/* shot: languages/ambiguous-t9-field */}
+  <Shot id="languages/ambiguous-t9-field" alt="The T9 keypad: eight letter keys, each carrying three or four letters." />
 </PhoneFrame>
 
 ## Why other keyboards can't do this
