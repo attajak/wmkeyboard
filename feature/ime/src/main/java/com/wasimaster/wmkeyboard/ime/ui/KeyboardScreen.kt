@@ -208,6 +208,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -349,6 +350,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.GlideCase
 import com.wasimaster.wmkeyboard.core.gesture.GlideShiftDetour
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.luminance
 import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.core.theme.KeyShapeKind
@@ -12457,6 +12459,9 @@ internal class ChordDrag {
  * grid owns: a layer peek (issue #108) or a chord drag (issue #345). The rect is
  * read inside the draw lambda, so a finger crossing keys repaints this one
  * overlay and never recomposes the grid.
+ *
+ * The overlay sits above the keys, so a plain fill would paint over the label
+ * of the very key it points at. It blends instead ([pressHighlightBlend]).
  */
 @Composable
 internal fun BoxScope.GridPressHighlight(pressRect: State<Rect?>, settings: KeyboardSettings) {
@@ -12464,6 +12469,10 @@ internal fun BoxScope.GridPressHighlight(pressRect: State<Rect?>, settings: Keyb
     val gapH = keyGapH(settings)
     val gapV = keyGapV(settings)
     val faceShape = kbTheme.keyShape(bleedDp = gapH.value)
+    val blend = remember(kbTheme.key, kbTheme.keyText, kbTheme.pressedKey) {
+        pressHighlightBlend(kbTheme.key, kbTheme.keyText, kbTheme.pressedKey)
+    }
+    val fill = if (blend == BlendMode.SrcOver) kbTheme.pressedKey.copy(alpha = kbTheme.pressedKey.alpha * 0.5f) else kbTheme.pressedKey
     Canvas(modifier = Modifier.matchParentSize()) {
         val cell = pressRect.value ?: return@Canvas
         // The drawn face rather than the touch cell: the gap is padding
@@ -12476,8 +12485,26 @@ internal fun BoxScope.GridPressHighlight(pressRect: State<Rect?>, settings: Keyb
         if (face.width <= 0f || face.height <= 0f) return@Canvas
         val outline = faceShape.createOutline(face, layoutDirection, this)
         translate(cell.left + gapH.toPx(), cell.top + gapV.toPx()) {
-            drawOutline(outline, kbTheme.pressedKey)
+            drawOutline(outline, fill, blendMode = blend)
         }
+    }
+}
+
+/**
+ * How [GridPressHighlight] lays the pressed colour over a key without hiding
+ * its label. When the pressed colour moves the face toward the label's side
+ * (lighter under light text, darker under dark text), Lighten or Darken tints
+ * the face and leaves the label as it was, since the label is already the
+ * extreme on that side. A theme whose press moves the other way would lose the
+ * label to either, so it gets a half-strength plain fill instead.
+ */
+internal fun pressHighlightBlend(key: Color, keyText: Color, pressed: Color): BlendMode {
+    val lightText = keyText.luminance() > key.luminance()
+    val pressedLighter = pressed.luminance() > key.luminance()
+    return when {
+        pressedLighter != lightText -> BlendMode.SrcOver
+        lightText -> BlendMode.Lighten
+        else -> BlendMode.Darken
     }
 }
 
