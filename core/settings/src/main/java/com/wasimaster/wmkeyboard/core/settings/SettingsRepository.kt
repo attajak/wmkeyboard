@@ -1587,6 +1587,29 @@ sealed interface ToolHoldAction {
  */
 enum class ToolbarPlacement { STRIP, ON_DEMAND_ROW, ALWAYS_ROW }
 
+/**
+ * The bottom padding the keyboard uses while [KeyboardSettings.bottomPaddingDp]
+ * is unset.
+ *
+ * From Android 15 the IME window runs edge to edge and the keys stand on
+ * `navigationBarsPadding`. Above a gesture bar that inset is only the thin
+ * handle strip, and a bottom row that close to the edge starts the home
+ * gesture by mistake, so the default adds 32dp. Above three-button navigation
+ * the inset is the whole button bar, which is tappable and starts nothing, and
+ * the same 32dp left an empty band between the space bar and the buttons
+ * (#343). There, and anywhere below 15 where the window stops above the bar,
+ * it is 8dp.
+ *
+ * @param gestureBar true when a gesture handle, not a row of buttons, is what
+ *   sits along the bottom edge.
+ */
+fun autoBottomPaddingDp(gestureBar: Boolean): Int =
+    if (gestureBar && Build.VERSION.SDK_INT >= 35) 32 else 8
+
+/** [KeyboardSettings.bottomPaddingDp], or [autoBottomPaddingDp] while it is unset. */
+fun KeyboardSettings.bottomPaddingOr(gestureBar: Boolean): Int =
+    bottomPaddingDp ?: autoBottomPaddingDp(gestureBar)
+
 /** True while the tools have a row of their own rather than sharing the strip. */
 val ToolbarPlacement.isOwnRow: Boolean get() = this != ToolbarPlacement.STRIP
 
@@ -2474,9 +2497,13 @@ data class KeyboardSettings(
     val photoBackground: PhotoBackgroundSettings = PhotoBackgroundSettings(),
     val keyHeightDp: Int = 48,
     val numberRowHeightDp: Int = 42,
-    // Edge-to-edge IME windows (enforced on Android 15+) draw behind the
-    // gesture bar; a larger default keeps the bottom row comfortably above it.
-    val bottomPaddingDp: Int = if (Build.VERSION.SDK_INT >= 35) 32 else 8,
+    /**
+     * Room under the bottom key row, above the system navigation bar, or null
+     * for the automatic amount, [autoBottomPaddingDp], which depends on what
+     * kind of bar is there and so can only be decided where the window insets
+     * are known.
+     */
+    val bottomPaddingDp: Int? = null,
     val splitKeyboard: Boolean = false,
     val splitGapPercent: Int = 12,
     val floatingKeyboard: Boolean = false,
@@ -8290,7 +8317,7 @@ class SettingsRepository(private val context: Context) {
             ),
             keyHeightDp = p[KEY_HEIGHT] ?: defaults.keyHeightDp,
             numberRowHeightDp = p[NUMBER_ROW_HEIGHT] ?: p[KEY_HEIGHT] ?: defaults.numberRowHeightDp,
-            bottomPaddingDp = p[BOTTOM_PADDING] ?: defaults.bottomPaddingDp,
+            bottomPaddingDp = p[BOTTOM_PADDING],
             splitKeyboard = p[SPLIT_KEYBOARD] ?: defaults.splitKeyboard,
             splitGapPercent = p[SPLIT_GAP_PERCENT] ?: defaults.splitGapPercent,
             floatingKeyboard = p[FLOATING_KEYBOARD] ?: defaults.floatingKeyboard,

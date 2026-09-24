@@ -364,7 +364,7 @@ internal fun BoxScope.ResizeOverlay(
             .matchParentSize()
             .onSizeChanged { metrics.widthPx = it.width }
             .navigationBarsPadding()
-            .padding(bottom = state.settings.bottomPaddingDp.dp),
+            .padding(bottom = bottomPaddingDp(state.settings).dp),
     ) {
         if (arrangement.leftSlack > 0.001f) {
             Spacer(modifier = Modifier.weight(arrangement.leftSlack))

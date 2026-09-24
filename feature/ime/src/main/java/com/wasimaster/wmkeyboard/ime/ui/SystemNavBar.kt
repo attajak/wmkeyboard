@@ -1,5 +1,8 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.tappableElement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -7,6 +10,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalDensity
+import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.bottomPaddingOr
 
 /**
  * How the keyboard asks the window it lives in to colour the system
@@ -88,3 +94,22 @@ fun SystemNavigationBarColor(kb: KbTheme) {
         painter.paint(color)
     }
 }
+
+/**
+ * True when the window's bottom edge carries a gesture handle rather than a
+ * row of navigation buttons: the navigation bar has height there, and none of
+ * it is tappable. False below Android 15 inside the keyboard, whose window
+ * stops above the bar and sees no inset at all, and for a three-button bar
+ * turned into a side rail in landscape.
+ */
+@Composable
+fun gestureBarAtBottom(): Boolean {
+    val density = LocalDensity.current
+    return WindowInsets.navigationBars.getBottom(density) > 0 &&
+        WindowInsets.tappableElement.getBottom(density) == 0
+}
+
+/** The bottom padding [settings] asks for here, the automatic one while unset (#343). */
+@Composable
+fun bottomPaddingDp(settings: KeyboardSettings): Int =
+    settings.bottomPaddingOr(gestureBarAtBottom())

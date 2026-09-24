@@ -35,6 +35,8 @@ import com.wasimaster.wmkeyboard.core.icons.IconPackStore
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.ime.ui.KeyboardFonts
+import com.wasimaster.wmkeyboard.ime.ui.gestureBarAtBottom
+import com.wasimaster.wmkeyboard.core.settings.autoBottomPaddingDp
 import com.wasimaster.wmkeyboard.core.settings.KeyboardAlignment
 import com.wasimaster.wmkeyboard.core.script.NumeralCommitScope
 import com.wasimaster.wmkeyboard.core.settings.DefaultToolbarTools
@@ -1016,6 +1018,9 @@ internal fun LayoutSizeSettings(
     val percentFormat = stringResource(R.string.typing_value_percent)
     val multiplierFormat = stringResource(R.string.keypress_value_multiplier)
     var expandedVariant by remember { mutableStateOf<ScreenVariant?>(null) }
+    // What the keyboard uses while bottom padding is unset (#343). Read off
+    // this screen's own insets, which carry the same kind of navigation bar.
+    val autoBottomPadding = autoBottomPaddingDp(gestureBarAtBottom())
     SettingsGroup(stringResource(R.string.layout_size_position_title)) {
         item {
             val pinned = themePinSubtitle(settings) { it.keyHeightDp }
@@ -1087,11 +1092,11 @@ internal fun LayoutSizeSettings(
             SliderSetting(
                 R.string.layout_bottom_padding_title,
                 subtitle = stringResource(R.string.layout_bottom_padding_subtitle),
-                value = settings.bottomPaddingDp.toFloat(),
+                value = (settings.bottomPaddingDp ?: autoBottomPadding).toFloat(),
                 range = 0f..SettingsRepository.MAX_BOTTOM_PADDING_DP.toFloat(),
                 display = { dpFormat.format(it.toInt()) },
                 info = stringResource(R.string.layout_bottom_padding_info),
-                default = SettingsDefaults.bottomPaddingDp.toFloat(),
+                default = autoBottomPadding.toFloat(),
             ) { scope.launch { repository.setBottomPaddingDp(it.toInt()) } }
         }
         item {
@@ -1157,7 +1162,7 @@ internal fun LayoutSizeSettings(
         // that does nothing.
         val sizingMoved = settings.keyHeightDp != SettingsDefaults.keyHeightDp ||
             settings.numberRowHeightDp != SettingsDefaults.numberRowHeightDp ||
-            settings.bottomPaddingDp != SettingsDefaults.bottomPaddingDp ||
+            settings.bottomPaddingDp != null ||
             settings.keyboardWidthPercent != SettingsDefaults.keyboardWidthPercent ||
             settings.keyboardAlignment != SettingsDefaults.keyboardAlignment ||
             settings.keyGapScale != SettingsDefaults.keyGapScale ||
@@ -1238,7 +1243,8 @@ internal fun LayoutSizeSettings(
                 item {
                     SliderSetting(
                         R.string.layout_bottom_padding_title,
-                        value = (values.bottomPaddingDp ?: settings.bottomPaddingDp).toFloat(),
+                        value = (values.bottomPaddingDp ?: settings.bottomPaddingDp ?: autoBottomPadding)
+                            .toFloat(),
                         range = 0f..SettingsRepository.MAX_BOTTOM_PADDING_DP.toFloat(),
                         display = { dpFormat.format(it.toInt()) },
                     ) { scope.launch { repository.setVariantBottomPaddingDp(variant, it.toInt()) } }

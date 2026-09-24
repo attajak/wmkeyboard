@@ -42,7 +42,7 @@ Two sliders rather than one so the margins don't have to match. Set them equal f
 
 Each padding is claimed at its own edge before **Keyboard position** gets a say, so a margin you asked for is there whichever edge the keyboard hugs. Position then distributes whatever space the width slider left over on top of it. On Centre, equal paddings give exactly the even margin they always did.
 
-**Bottom padding** raises the whole keyboard away from the bottom edge and the gesture navigation bar, from 0dp to 160dp. The default depends on your Android version: **32dp** on Android 15 and up, where the IME window can draw behind the gesture bar, and **8dp** on older versions. Raise it if the bottom row feels cramped against the screen edge, or if you keep triggering system navigation by mistake. The slider runs so high because the inline **Resize** tool moves the same value, and that can push the keyboard a long way up the screen.
+**Bottom padding** raises the whole keyboard away from the bottom edge and the gesture navigation bar, from 0dp to 160dp. Until you move it, the keyboard picks the amount itself: **32dp** on Android 15 and up with gesture navigation, where the keyboard reaches down to the thin gesture handle, and **8dp** with three-button navigation or on older versions, where the bar below is already tall enough to keep your thumb off the edge. Raise it if the bottom row feels cramped against the screen edge, or if you keep triggering system navigation by mistake. The slider runs so high because the inline **Resize** tool moves the same value, and that can push the keyboard a long way up the screen.
 
 **Round top corners** and **Round bottom corners** cut rounded corners out of the docked keyboard, from square (the default) up to 40dp, and the app shows through the cut. The top and bottom are set apart, and **Which corners**, shown once either one is round, picks which of the four corners they apply to. All four by default, so rounding only the top two means leaving the bottom at Square. Round bottom corners suit gesture navigation and a phone whose screen corners are round too. With the older three-button navigation bar, the bar sits below the keyboard and the bottom corners open onto the app above it. The floating keyboard and the television card have round corners of their own and ignore these.
 
@@ -195,7 +195,7 @@ Pin the **Keep on screen** tool to your toolbar to toggle this directly. That to
 | Left padding | 0% |
 | Right padding | 0% |
 | Key spacing | 100% |
-| Bottom padding | 32 dp (Android 15+) / 8 dp (older) |
+| Bottom padding | 32 dp (Android 15+ with gesture navigation) / 8 dp (three-button navigation, or older) |
 | Round top corners | Square (0 dp) |
 | Round bottom corners | Square (0 dp) |
 | Which corners | All four |

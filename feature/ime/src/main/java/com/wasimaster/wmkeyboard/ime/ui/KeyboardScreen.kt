@@ -414,6 +414,7 @@ import com.wasimaster.wmkeyboard.core.settings.ToolHoldAction
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isOwnRow
 import com.wasimaster.wmkeyboard.core.settings.stripHidden
+import com.wasimaster.wmkeyboard.core.settings.autoBottomPaddingDp
 import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
 import com.wasimaster.wmkeyboard.core.settings.ToolboxLayout
 import com.wasimaster.wmkeyboard.core.settings.ToolboxPageSizeRange
@@ -1292,15 +1293,17 @@ fun KeyboardScreen(
         )
     }
     val state = remember(rawState, shown) { rawState.copy(settings = shown) }
+    val autoBottomPadding = autoBottomPaddingDp(gestureBarAtBottom())
     val resizeSession = if (!rawState.resize) null else {
-        remember(rawState.settings, variant, resizePreview) {
+        remember(rawState.settings, variant, resizePreview, autoBottomPadding) {
             val values = rawState.settings.sizingValuesFor(variant)
             val scale = values.keyboardScale ?: 1f
             val entry = ResizeValues(
                 keyHeightDp = values.keyHeightDp ?: rawState.settings.keyHeightDp,
                 numberRowHeightDp = values.numberRowHeightDp
                     ?: rawState.settings.numberRowHeightDp,
-                bottomPaddingDp = values.bottomPaddingDp ?: rawState.settings.bottomPaddingDp,
+                bottomPaddingDp = values.bottomPaddingDp ?: rawState.settings.bottomPaddingDp
+                    ?: autoBottomPadding,
                 sidePadLeft = values.sidePadLeftScale
                     ?: rawState.settings.layoutBehavior.sidePadLeftScale,
                 sidePadRight = values.sidePadRightScale
@@ -1847,7 +1850,7 @@ private fun DockedKeyboardFrame(
                 // the screen's edge.
                 val bottomRoom = Modifier
                     .navigationBarsPadding()
-                    .padding(bottom = state.settings.bottomPaddingDp.dp)
+                    .padding(bottom = bottomPaddingDp(state.settings).dp)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -9454,7 +9457,7 @@ internal fun toolPanelHeight(state: KeyboardUiState, wanted: Dp, floor: Dp): Dp 
         (state.panel == PanelMode.EMOJI && state.emojiSearchActive)
     val around = (if (rowsStandIn) 0.dp else fullBleedHiddenRows(state)) +
         (if (keyRowsUnderPanel(state)) keyRowsHeight(state) + captureStripHeight(state) else 0.dp) +
-        state.settings.bottomPaddingDp.dp
+        bottomPaddingDp(state.settings).dp
     return fitToolPanelHeight(wanted, floor, LocalConfiguration.current.screenHeightDp.dp, around)
 }
 
