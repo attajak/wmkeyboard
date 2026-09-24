@@ -4786,6 +4786,14 @@ data class AppUiSettings(
      * Only the settings app reads it; the keyboard's own icons are untouched.
      */
     val rowIcons: Boolean = true,
+    /**
+     * Whether a row's icon and name fly into the heading of the screen it
+     * opens. Off takes the flights out *and* the shared-transition layout
+     * that hosts them: that layout measures the whole settings tree twice on
+     * every pass, flights or not, which is most of the lag a slow phone
+     * shows opening a screen. The plain slide between screens stays.
+     */
+    val screenTransitions: Boolean = true,
 )
 
 /** What the symbol row's height slider offers, matching the number row's. */
@@ -7441,6 +7449,7 @@ class SettingsRepository(private val context: Context) {
         private val DEFAULT_WORDLIST_SIZE = stringPreferencesKey("default_wordlist_size")
         private val DICTIONARY_SORT = stringPreferencesKey("dictionary_sort")
         private val SETTINGS_ROW_ICONS = booleanPreferencesKey("settings_row_icons")
+        private val SETTINGS_SCREEN_TRANSITIONS = booleanPreferencesKey("settings_screen_transitions")
         private val SYMBOL_ROW_HEIGHT = intPreferencesKey("symbol_row_height")
         private val SYMBOL_ROW_LINES = intPreferencesKey("symbol_row_lines")
         private val SYMBOL_ROW_SCROLL = stringPreferencesKey("symbol_row_scroll")
@@ -8623,6 +8632,8 @@ class SettingsRepository(private val context: Context) {
                     ?.let { runCatching { DictionarySort.valueOf(it) }.getOrNull() }
                     ?: defaults.appUi.dictionarySort,
                 rowIcons = p[SETTINGS_ROW_ICONS] ?: defaults.appUi.rowIcons,
+                screenTransitions = p[SETTINGS_SCREEN_TRANSITIONS]
+                    ?: defaults.appUi.screenTransitions,
             ),
             toolLimits = ToolLimitSettings(
                 weatherRefreshMinutes = p[WEATHER_REFRESH_MINUTES]
@@ -13934,6 +13945,10 @@ class SettingsRepository(private val context: Context) {
     /** See [AppUiSettings.rowIcons]. */
     suspend fun setSettingsRowIcons(value: Boolean) =
         editPrefs { it[SETTINGS_ROW_ICONS] = value }
+
+    /** See [AppUiSettings.screenTransitions]. */
+    suspend fun setSettingsScreenTransitions(value: Boolean) =
+        editPrefs { it[SETTINGS_SCREEN_TRANSITIONS] = value }
 
     suspend fun setWeatherRefreshMinutes(value: Int) =
         editPrefs { it[WEATHER_REFRESH_MINUTES] = value.coerceIn(1, 180) }

@@ -61,6 +61,9 @@
 
     <string name="accessibility_row_icons_title">Icons in settings</string>
     <string name="accessibility_row_icons_subtitle">A coloured icon beside every setting and screen name</string>
+    <string name="accessibility_screen_transitions_title">Screen transitions</string>
+    <string name="accessibility_screen_transitions_subtitle">A setting\'s icon and name move into the screen it opens</string>
+    <string name="accessibility_screen_transitions_info">Turn this off if these settings screens are slow to open on your phone. Moving a setting\'s icon and name into the screen it opens makes each screen take more work to draw, and some slower phones show that as a stutter. With this off, a screen opens with the plain slide, and it draws faster.\n\nThis changes only these settings screens. It does nothing to the keyboard. When Reduce motion is on, these transitions are already off.</string>
     <string name="accessibility_row_icons_info">Turn this off for plain rows that show only words, as in earlier versions of the app. Some people find a list of words easier to read than a column of coloured icons.\n\nThis changes only these settings screens. The icons of the keyboard and of its tools stay as they are.</string>
 
     <!-- Accessibility settings screen, "Screen reader" group. TalkBack is the

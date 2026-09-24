@@ -48,6 +48,10 @@ If letters themselves are landing late rather than the strip just being slow to 
 
 To confirm it really is the suggestion pass before you start changing things, turn **Suggestions** off under <SettingsPath path="Typing / Suggestions" /> and type a line. If the lag goes away, it's the pass, and one of the levers above will help. If it doesn't, it's something else and worth [filing](#filing-a-useful-bug-report) with a diagnostics report attached.
 
+## The settings app is slow to open screens
+
+On a slower phone, turn off <SettingsPath path="Accessibility / Settings app / Screen transitions" />. Screens then open with a plain slide instead of moving the setting's icon and name into the new screen's heading, and each one skips a second layout pass. The keyboard isn't affected. See [Faster settings screens](/accessibility/overview/#faster-settings-screens).
+
 ## The keyboard uses a lot of memory
 
 The keyboard and the settings app run in one process, so the number Android shows you covers both, and it's higher while the settings app is open. With only the keyboard running, this is what it keeps in memory for as long as it's up:

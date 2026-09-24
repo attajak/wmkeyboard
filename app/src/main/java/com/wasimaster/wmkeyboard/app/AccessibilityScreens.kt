@@ -144,6 +144,15 @@ internal fun AccessibilitySettings(
                 default = SettingsDefaults.appUi.rowIcons,
             ) { scope.launch { repository.setSettingsRowIcons(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.accessibility_screen_transitions_title,
+                stringResource(R.string.accessibility_screen_transitions_subtitle),
+                settings.appUi.screenTransitions,
+                info = stringResource(R.string.accessibility_screen_transitions_info),
+                default = SettingsDefaults.appUi.screenTransitions,
+            ) { scope.launch { repository.setSettingsScreenTransitions(it) } }
+        }
     }
 
     SettingsGroup(stringResource(R.string.accessibility_screen_reader_title)) {

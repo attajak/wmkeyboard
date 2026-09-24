@@ -65,10 +65,13 @@ The Accessibility screen collects every vision, motion, screen-reader, and touch
 | Setting | Control | Options / range | Default |
 |---|---|---|---|
 | Icons in settings | Toggle | On / Off | On |
+| Screen transitions | Toggle | On / Off | On |
 
 **Icons in settings** draws the coloured icon beside every settings row, on the home list, beside search results and in each screen's heading. Turn it off for plain rows with words only, the way the settings looked in earlier versions. The icons on the screen you are on shrink away as the words slide over; with **Reduce motion** on they go at once.
 
 It affects this settings app only. The keyboard and its toolbar keep their icons, and so do lists whose icon *is* the content: the Tools list, a tool's own page heading, addons and modes.
+
+**Screen transitions** moves a row's icon and name into the heading of the screen it opens. Turn it off if settings screens stutter on your phone: the screens then open with the plain sideways slide and skip a second layout pass, because the layer that runs those transitions lays everything out twice even when nothing is moving. Reduce motion turns these transitions off too, and so does the two-pane layout on a wide screen.
 
 ### Screen reader
 
@@ -123,7 +126,7 @@ Tap the row and a disclosure appears first, explaining what the service reads (n
 - **Text size here and the key-preview popup's font scale are two different settings.** Both scale text, but changing one doesn't change the other.
 - **Ignore repeated presses only filters a repeat of the same key.** It cannot slow down typing in general by blocking different keys pressed close together.
 - **The gesture pass-through service needs Android 11 (API 30).** WM Keyboard's minimum supported version is Android 7.0 (API 24). Anywhere from Android 7 through Android 10 you can still grant the "WM Keyboard gestures" service, but the system call it depends on is unavailable, so the service does nothing. Gestures mode quietly behaves like Explore even with the service on.
-- **Icons in settings is a settings-app preference, not a keyboard one.** Nothing you see while typing changes with it.
+- **Icons in settings and Screen transitions are settings-app preferences, not keyboard ones.** Nothing you see while typing changes with them.
 - **No edition differences.** Every setting on this screen, and the pass-through service behind it, works the same on both the full and lite builds.
 
 ## Related pages

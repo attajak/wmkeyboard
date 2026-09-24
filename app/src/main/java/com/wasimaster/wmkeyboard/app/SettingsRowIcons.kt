@@ -350,6 +350,7 @@ internal object SettingsRowIcons {
         put(R.string.accessibility_keyboard_font_title) { Icons.Outlined.TextFields }
         put(R.string.accessibility_reduce_motion_title) { Icons.Outlined.MotionPhotosOff }
         put(R.string.accessibility_row_icons_title) { Icons.Outlined.Interests }
+        put(R.string.accessibility_screen_transitions_title) { Icons.Outlined.Animation }
         put(R.string.accessibility_talkback_title) { Icons.Outlined.RecordVoiceOver }
         put(R.string.accessibility_passthrough_service_title) { Icons.Outlined.Accessibility }
         put(R.string.accessibility_debounce_title) { Icons.Outlined.FilterAlt }

@@ -19,6 +19,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -109,6 +110,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
@@ -588,15 +591,23 @@ private fun SettingsNavHost(
     // tool's own page and not the row that opened it.
     var openedFrom by rememberSaveable { mutableStateOf<String?>(null) }
     val topRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    SharedTransitionLayout(modifier = Modifier.fillMaxSize()) {
+    // A shared element is a motion and has no still version, so reduced
+    // motion switches the flights off at the source. Two panes switch them off
+    // as well, and for a different reason: a flight needs one end visible and
+    // the other not, and here the home row a screen flew from is still on
+    // screen beside it. And the user can switch them off outright
+    // (Accessibility › Settings app › Screen transitions), for a slow phone.
+    //
+    // Off, for any of the three, takes the SharedTransitionLayout away as
+    // well rather than only the flights: the layout is a lookahead scope, and
+    // it measures the whole tree twice on every pass whether anything flies
+    // or not. The screens are movable content so that flipping the switch, or
+    // unfolding into two panes, moves them rather than rebuilding them: the
+    // back stack, the scroll and every field keep their place.
+    val flights = settings.appUi.screenTransitions && !settings.reduceMotion && !twoPane
+    val currentScreens by rememberUpdatedState<@Composable (SharedTransitionScope?) -> Unit> { shared ->
         CompositionLocalProvider(
-            // A shared element is a motion and has no still version, so
-            // reduced motion switches it off at the source. Two panes switch it
-            // off as well, and for a different reason: a flight needs one end
-            // visible and the other not, and here the home row a screen flew
-            // from is still on screen beside it.
-            LocalSharedTransition provides
-                if (settings.reduceMotion || twoPane) null else this,
+            LocalSharedTransition provides shared,
             LocalSettingsCrumbTrail provides crumbs,
             LocalAdvancedFolds provides folds,
             LocalTwoPane provides twoPane,
@@ -645,6 +656,14 @@ private fun SettingsNavHost(
                 SettingsNavGraph(navController, repository, settings, pending, onPendingHandled)
             }
         }
+    }
+    val screens = remember {
+        movableContentOf<SharedTransitionScope?> { shared -> currentScreens(shared) }
+    }
+    if (flights) {
+        SharedTransitionLayout(modifier = Modifier.fillMaxSize()) { screens(this) }
+    } else {
+        Box(modifier = Modifier.fillMaxSize()) { screens(null) }
     }
 }
 

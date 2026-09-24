@@ -59,6 +59,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.accessibility_debounce_title, R.string.search_kw_accessibility_debounce)
     put(R.string.accessibility_readable_font_title, R.string.search_kw_accessibility_readable_font)
     put(R.string.accessibility_row_icons_title, R.string.search_kw_accessibility_row_icons)
+    put(R.string.accessibility_screen_transitions_title, R.string.search_kw_accessibility_screen_transitions)
     put(R.string.accessibility_talkback_title, R.string.search_kw_accessibility_talkback)
     put(R.string.appearance_key_corner_radius_title, R.string.search_kw_appearance_key_corner_radius)
     put(R.string.appearance_themes_title, R.string.search_kw_appearance_themes)
