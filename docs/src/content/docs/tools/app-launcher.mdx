@@ -36,7 +36,7 @@ Open **Apps** from the [toolbar, or the toolbox](/tools/overview/) if you haven'
 Hold any app, in the grid or in the shortcut row, and a small menu opens over the panel. Tap outside it to close it.
 
 - **Open**: a normal, full-screen launch.
-- **Open in a floating window**: asks Android for a window about 70% of the screen, centred. See [floating windows](#floating-windows-and-split-screen) for when you actually get one.
+- **Open in a floating window**: asks Android for a window about 70% of the screen, centred (on ColorOS, its own floating window). See [floating windows](#floating-windows-and-split-screen) for when you actually get one.
 - **Open in split screen**: puts the app beside the one you are typing in.
 - **Pair in split screen with…**: starts a [pair](#split-screen-pairs). A banner asks for the second app, and your next tap picks it. Tap **Cancel**, or the first app again, to back out.
 - **Pin app** or **Unpin app**.
@@ -56,7 +56,7 @@ This works without any special permission. The keyboard sees the same launcher l
 
 **Split screen** needs Android 12L (API 32) or later. From that version the system's split screen accepts a "launch next to" request from a keyboard: the app you picked lands in one half and the app you were typing in moves to the other. On older versions a keyboard can't start split screen, so the option is left out of the menu and the settings. If you're already in split screen, the app replaces the other half. Opening the app you're typing in opens a second copy of it beside the first, if the app allows more than one window.
 
-**Floating windows** depend on the device more than on the Android version. Android only honours a window size from another app when the screen is already in a desktop or freeform window mode: many tablets and foldables with desktop windowing, Chromebooks, and external desktop displays. On an ordinary phone screen the app just opens full screen. The menu says so under the item when the device reports no freeform support at all. The keyboard doesn't use hidden Android APIs to force a floating window.
+**Floating windows** depend on the device more than on the Android version. Android only honours a window size from another app when the screen is already in a desktop or freeform window mode: many tablets and foldables with desktop windowing, Chromebooks, and external desktop displays. On an ordinary phone screen the app just opens full screen. The exception is ColorOS (OPPO, OnePlus and realme phones): there the app opens in ColorOS's own floating window, the same one the Smart Sidebar opens, sized and placed by ColorOS. The menu says so under the item when the device has neither. The keyboard doesn't use hidden Android APIs to force a floating window.
 
 Some phone makers change how both work. If an option does nothing useful on your phone, set **Open apps** back to **Normally**.
 

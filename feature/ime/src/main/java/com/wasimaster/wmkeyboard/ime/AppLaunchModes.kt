@@ -35,7 +35,15 @@ import com.wasimaster.wmkeyboard.core.settings.LauncherOpenMode
  * windowing, a Chromebook, an external desktop display. On a phone the bounds
  * are dropped and the app opens full screen. Forcing the freeform windowing
  * mode would need `ActivityOptions.setLaunchWindowingMode`, a blocked hidden
- * API, so it is not attempted.
+ * API, so it is not called.
+ *
+ * **ColorOS** (OPPO, OnePlus, realme) has no freeform feature but floats apps
+ * in its own "flexible window", windowing mode 100, which is what its smart
+ * sidebar opens. That mode rides in the options bundle under the platform's
+ * own key ([WINDOWING_MODE_KEY]), a plain bundle entry the window manager
+ * reads on every start, so no hidden method is involved. Measured on a
+ * CPH2481 (ColorOS 15): a start carrying it opens as a floating window. The
+ * device is recognised by its framework class ([colorOsFlexibleWindow]).
  *
  * A keyboard is exempt from the background-activity-start rules while it is
  * the current input method (its window, shown or hidden, belongs to the IME),
@@ -51,6 +59,12 @@ object AppLaunchModes {
      * about 350 ms on stock animation scales.
      */
     const val COMBO_SECOND_LAUNCH_DELAY_MS = 650L
+
+    /** The platform's options-bundle key for the launch windowing mode. */
+    private const val WINDOWING_MODE_KEY = "android.activity.windowingMode"
+
+    /** ColorOS's flexible (floating) window windowing mode. */
+    private const val COLOROS_FLEXIBLE_WINDOWING_MODE = 100
 
     /** Share of the screen a floating window asks for, centred. */
     private const val FLOATING_FRACTION = 0.7f
@@ -74,7 +88,8 @@ object AppLaunchModes {
      * set still opens full screen unless its display is in desktop mode.
      */
     fun freeformSupported(context: Context): Boolean =
-        context.packageManager.hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT) ||
+        colorOsFlexibleWindow ||
+            context.packageManager.hasSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT) ||
             runCatching {
                 Settings.Global.getInt(context.contentResolver, "enable_freeform_support", 0) != 0
             }.getOrDefault(false)
@@ -101,9 +116,22 @@ object AppLaunchModes {
                 }
                 null
             }
-            LauncherOpenMode.FLOATING ->
+            LauncherOpenMode.FLOATING -> if (colorOsFlexibleWindow) {
+                // ColorOS sizes and places its own window; bounds would only
+                // fight its default.
+                ActivityOptions.makeBasic().toBundle().apply {
+                    putInt(WINDOWING_MODE_KEY, COLOROS_FLEXIBLE_WINDOWING_MODE)
+                }
+            } else {
                 ActivityOptions.makeBasic().setLaunchBounds(floatingBounds(context)).toBundle()
+            }
         }
+    }
+
+    /** ColorOS's flexible window manager is on this device (see the class doc). */
+    private val colorOsFlexibleWindow: Boolean by lazy {
+        runCatching { Class.forName("com.oplus.flexiblewindow.FlexibleWindowManager") }.isSuccess ||
+            runCatching { Class.forName("com.oplus.zoomwindow.OplusZoomWindowManager") }.isSuccess
     }
 
     /** A centred window [FLOATING_FRACTION] of the screen in each direction. */
