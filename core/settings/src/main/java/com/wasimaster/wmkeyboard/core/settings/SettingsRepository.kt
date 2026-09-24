@@ -6024,6 +6024,20 @@ data class LayoutBehaviorSettings(
      */
     val symbolsLongPressNumpad: Boolean = true,
     /**
+     * Holding the enter key offers the emoji panel, the way SwiftKey's enter
+     * key does, for a layout whose bottom row has no emoji key of its own.
+     *
+     * It is an entry in the key's press and hold popup rather than a hold that
+     * jumps straight to the panel, because the hold is already shared: a field
+     * that declares Send/Go/Search puts the line break it displaces there. Both
+     * stay reachable that way. The emoji entry goes first, so with hold to
+     * select on a plain hold and release opens the panel — that is what
+     * turning this on asks for — and the line break is one slide along.
+     *
+     * Off by default: it changes what an existing hold on enter does.
+     */
+    val enterLongPressEmoji: Boolean = false,
+    /**
      * Swiping straight down on the spacebar dismisses the keyboard, the way a
      * downward flick on the toolbar can. Off by default so a stray vertical
      * drag never closes the keyboard mid-type.
@@ -7453,6 +7467,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACEBAR_LANGUAGE_ARROWS = booleanPreferencesKey("spacebar_language_arrows")
         private val SPACEBAR_LABEL = stringPreferencesKey("spacebar_label")
         private val SYMBOLS_LONGPRESS_NUMPAD = booleanPreferencesKey("symbols_longpress_numpad")
+        private val ENTER_LONGPRESS_EMOJI = booleanPreferencesKey("enter_longpress_emoji")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
         private val GLOBE_IN_ONE_PLACE = booleanPreferencesKey("globe_in_one_place")
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
@@ -9109,6 +9124,8 @@ class SettingsRepository(private val context: Context) {
             layoutBehavior = LayoutBehaviorSettings(
                 symbolsLongPressNumpad =
                     p[SYMBOLS_LONGPRESS_NUMPAD] ?: defaults.layoutBehavior.symbolsLongPressNumpad,
+                enterLongPressEmoji =
+                    p[ENTER_LONGPRESS_EMOJI] ?: defaults.layoutBehavior.enterLongPressEmoji,
                 spaceSwipeDownHide =
                     p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
                 globeInOnePlace = p[GLOBE_IN_ONE_PLACE] ?: defaults.layoutBehavior.globeInOnePlace,
@@ -13791,6 +13808,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSymbolsLongPressNumpad(value: Boolean) =
         editPrefs { it[SYMBOLS_LONGPRESS_NUMPAD] = value }
+
+    suspend fun setEnterLongPressEmoji(value: Boolean) =
+        editPrefs { it[ENTER_LONGPRESS_EMOJI] = value }
 
     suspend fun setSpaceSwipeDownHide(value: Boolean) =
         editPrefs { it[SPACE_SWIPE_DOWN_HIDE] = value }

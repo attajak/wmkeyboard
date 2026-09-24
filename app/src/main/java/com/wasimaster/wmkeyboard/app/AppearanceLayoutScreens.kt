@@ -907,6 +907,18 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.commaAsEmoji,
             ) { scope.launch { repository.setCommaAsEmoji(it) } }
         }
+        // The same switch as the one under Key press → Press and hold
+        // shortcuts, here too because this is where the ways onto the emoji
+        // panel from the bottom row are.
+        item {
+            ToggleSetting(
+                R.string.keypress_enter_emoji_title,
+                stringResource(R.string.keypress_enter_emoji_subtitle),
+                settings.layoutBehavior.enterLongPressEmoji,
+                info = stringResource(R.string.keypress_enter_emoji_info),
+                default = SettingsDefaults.layoutBehavior.enterLongPressEmoji,
+            ) { scope.launch { repository.setEnterLongPressEmoji(it) } }
+        }
         item {
             ToggleSetting(
                 R.string.layout_show_globe_title,

@@ -227,6 +227,39 @@ class CurrentLayoutTest {
         assertTrue(enterKeyOf(s).longPress.isEmpty())
     }
 
+    private fun withEnterEmoji(base: KeyboardSettings): KeyboardSettings =
+        base.copy(layoutBehavior = base.layoutBehavior.copy(enterLongPressEmoji = true))
+
+    /** Off by default: a hold on enter keeps doing what it did. */
+    @Test
+    fun `the enter key offers no emoji until asked`() {
+        val s = state(settings = plain()).copy(enterAction = EnterAction.SEND)
+        assertTrue(enterKeyOf(s).actionAlternates.none { it.action == KeyAction.Emoji })
+    }
+
+    /** On an ordinary field the emoji entry is the whole popup. */
+    @Test
+    fun `the setting puts emoji on the enter key's long press`() {
+        val s = state(settings = withEnterEmoji(plain())).copy(enterAction = EnterAction.DEFAULT)
+        val enter = enterKeyOf(s)
+        assertEquals(listOf(KeyAction.Emoji), enter.actionAlternates.map { it.action })
+        assertTrue(enter.opensAlternatesPopup())
+    }
+
+    /**
+     * A send field keeps its line break in the popup, but behind the emoji:
+     * the first entry is what a plain hold and release commits, and that is
+     * what the setting was turned on for.
+     */
+    @Test
+    fun `emoji goes ahead of the newline on a send field`() {
+        val s = state(settings = withEnterEmoji(plain())).copy(enterAction = EnterAction.SEND)
+        assertEquals(
+            listOf(KeyAction.Emoji, KeyAction.Newline),
+            enterKeyOf(s).actionAlternates.map { it.action },
+        )
+    }
+
     private fun spaceKeyOf(s: KeyboardUiState): Key =
         currentLayout(s).keys().single { it.action == KeyAction.Space }
 

@@ -590,6 +590,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Space hold-to-repeat `uncommon` — Its own interval, separate from delete's, because a runaway spacebar costs more than a runaway backspace
   - Symbols layer springs back `uncommon` — Typing one of a configurable char set (default !?.,;:) on ?123 returns to the letters; digits deliberately excluded
   - Long-press ?123 for the numpad `uncommon` — Opens the numeric keypad panel on any field instead of the long press acting as a tap
+  - Long-press enter for emoji `uncommon` — Opt-in; prepends an emoji entry to the enter key's popup, so hold-and-release opens the panel; a Send/Search field's newline alternate stays behind it. Toggle lives in Key press and Bottom row keys
   - Number row behaviours `uncommon`
     - Shift swaps digits for symbols — Holding shift on the letters layer turns the digit row into the =\<>[]{}|~ fill row
     - In-symbols toggle — The digit row can be kept on letters but dropped from ?123

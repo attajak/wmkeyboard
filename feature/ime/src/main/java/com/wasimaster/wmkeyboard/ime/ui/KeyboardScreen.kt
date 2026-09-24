@@ -16572,14 +16572,17 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // folds in the live shift: reading that here would rebuild the whole grid on
     // every shift press, and the entry belongs in the popup either way.
     val newlineAlternate = state.enterAction != EnterAction.DEFAULT
+    // Opt-in: the emoji panel under a hold on enter, for a bottom row with no
+    // emoji key. See [LayoutBehaviorSettings.enterLongPressEmoji].
+    val emojiAlternate = state.settings.layoutBehavior.enterLongPressEmoji
     // Issue #340: the keys that stand in for 小゛゜ while the reading ends in a
     // kana that has one of those forms.
     val kanaVariantKeys = state.kanaVariantReady
     if (!commaAsEmoji && !globeAsEmoji && !swapCommaGlobe && !stripDigits &&
         clipboardKeys.isEmpty() && fieldKey == null && domainAlternates.isEmpty() &&
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
-        !newlineAlternate && spaceHoldKeys.isEmpty() && punctuationAlternates.isEmpty() &&
-        !kanaVariantKeys
+        !newlineAlternate && !emojiAlternate && spaceHoldKeys.isEmpty() &&
+        punctuationAlternates.isEmpty() && !kanaVariantKeys
     ) {
         return base
     }
@@ -16713,6 +16716,17 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                 mapped = mapped.copy(
                     actionAlternates = mapped.actionAlternates +
                         KeyAlternate(action = KeyAction.Newline, icon = "enter"),
+                )
+            }
+            // Prepended, unlike the line break above: the user switched this on
+            // to get emoji from a plain hold, and with hold to select that is the
+            // first entry. Everything else the popup offered stays, one slide on.
+            if (emojiAlternate && mapped.action == KeyAction.Enter &&
+                mapped.actionAlternates.none { it.action == KeyAction.Emoji }
+            ) {
+                mapped = mapped.copy(
+                    actionAlternates = listOf(KeyAlternate(action = KeyAction.Emoji, icon = "emoji")) +
+                        mapped.actionAlternates,
                 )
             }
             // Last, so it covers whatever the passes above made of the key: a

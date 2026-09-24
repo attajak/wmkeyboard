@@ -1305,6 +1305,15 @@ internal fun KeyPressShortcutsSettings(
             ) { scope.launch { repository.setSymbolsLongPressNumpad(it) } }
         }
         item {
+            ToggleSetting(
+                R.string.keypress_enter_emoji_title,
+                stringResource(R.string.keypress_enter_emoji_subtitle),
+                settings.layoutBehavior.enterLongPressEmoji,
+                info = stringResource(R.string.keypress_enter_emoji_info),
+                default = SettingsDefaults.layoutBehavior.enterLongPressEmoji,
+            ) { scope.launch { repository.setEnterLongPressEmoji(it) } }
+        }
+        item {
             // A44: the $ key's long-press currency glyphs, space-separated. Blank
             // restores the built-in set. Mirrors the layout editor's alternates field.
             var currencyText by remember(settings.layoutBehavior.currencyKeys) {
