@@ -110,12 +110,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -592,22 +592,39 @@ private fun SettingsNavHost(
     var openedFrom by rememberSaveable { mutableStateOf<String?>(null) }
     val topRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     // A shared element is a motion and has no still version, so reduced
-    // motion switches the flights off at the source. Two panes switch them off
-    // as well, and for a different reason: a flight needs one end visible and
-    // the other not, and here the home row a screen flew from is still on
-    // screen beside it. And the user can switch them off outright
+    // motion switches the flights off at the source, and so can the user
     // (Accessibility › Settings app › Screen transitions), for a slow phone.
+    // Either takes the SharedTransitionLayout away as well rather than only
+    // the flights: the layout is a lookahead scope, and it lays the whole tree
+    // out twice on every pass whether anything flies or not.
     //
-    // Off, for any of the three, takes the SharedTransitionLayout away as
-    // well rather than only the flights: the layout is a lookahead scope, and
-    // it measures the whole tree twice on every pass whether anything flies
-    // or not. The screens are movable content so that flipping the switch, or
-    // unfolding into two panes, moves them rather than rebuilding them: the
-    // back stack, the scroll and every field keep their place.
-    val flights = settings.appUi.screenTransitions && !settings.reduceMotion && !twoPane
-    val currentScreens by rememberUpdatedState<@Composable (SharedTransitionScope?) -> Unit> { shared ->
+    // Two panes switch the flights off too, for a different reason (a flight
+    // needs one end visible and the other not, and here the home row a screen
+    // flew from is still on screen beside it), but keep the layout: the window
+    // changes width on a fold or a rotation, and that must not rebuild the
+    // screens.
+    val layoutWanted = settings.appUi.screenTransitions && !settings.reduceMotion
+    // The screens cannot be moved into or out of the layout while composed:
+    // Compose crashes measuring a node taken out of a lookahead scope
+    // (LookaheadDelegate.getAlignmentLinesOwner). So a flip takes the old tree
+    // down for one frame, which saves its state into [screenState], and builds
+    // the new one on the next, which restores it: the back stack, the scroll
+    // and the fields keep their place. Null is that one empty frame.
+    var layoutShown by remember { mutableStateOf<Boolean?>(layoutWanted) }
+    LaunchedEffect(layoutWanted) {
+        if (layoutShown == layoutWanted) return@LaunchedEffect
+        layoutShown = null
+        // The first frame applies the null (the old tree goes and saves);
+        // the second composes the new tree against the saved state.
+        withFrameNanos {}
+        withFrameNanos {}
+        layoutShown = layoutWanted
+    }
+    val screenState = rememberSaveableStateHolder()
+    val screens: @Composable (SharedTransitionScope?) -> Unit = { shared ->
+        screenState.SaveableStateProvider(SettingsScreensStateKey) {
         CompositionLocalProvider(
-            LocalSharedTransition provides shared,
+            LocalSharedTransition provides if (twoPane) null else shared,
             LocalSettingsCrumbTrail provides crumbs,
             LocalAdvancedFolds provides folds,
             LocalTwoPane provides twoPane,
@@ -656,16 +673,17 @@ private fun SettingsNavHost(
                 SettingsNavGraph(navController, repository, settings, pending, onPendingHandled)
             }
         }
+        }
     }
-    val screens = remember {
-        movableContentOf<SharedTransitionScope?> { shared -> currentScreens(shared) }
-    }
-    if (flights) {
-        SharedTransitionLayout(modifier = Modifier.fillMaxSize()) { screens(this) }
-    } else {
-        Box(modifier = Modifier.fillMaxSize()) { screens(null) }
+    when (layoutShown) {
+        true -> SharedTransitionLayout(modifier = Modifier.fillMaxSize()) { screens(this) }
+        false -> Box(modifier = Modifier.fillMaxSize()) { screens(null) }
+        null -> Box(modifier = Modifier.fillMaxSize())
     }
 }
+
+/** The one key the settings screens save their state under across a layout flip. */
+private const val SettingsScreensStateKey = "settings-screens"
 
 /**
  * Whether this window is wide enough to hold two settings screens at once.
