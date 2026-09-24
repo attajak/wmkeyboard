@@ -3,7 +3,6 @@ package com.wasimaster.wmkeyboard.ime.ui
 import android.content.Intent
 import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +21,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -63,13 +61,15 @@ private enum class WikiTab(@StringRes val labelRes: Int) {
 }
 
 /**
- * Wikipedia in the tool viewbox: search (the query types on the key rows,
- * like the other search panels), then an article with summary, its
- * outgoing links and the full text — each insertable at the cursor.
+ * Wikipedia as a full-bleed tool: the search bar in the header next to the
+ * way back, and the rows above the keys handed to the article. The query
+ * types on the key rows like the other search panels; while it does, the
+ * panel collapses to the header.
  */
 @Composable
-internal fun WikipediaPanel(
+internal fun WikipediaPanelHost(
     state: KeyboardUiState,
+    onClose: () -> Unit,
     onQueryTap: () -> Unit,
     onRetry: () -> Unit,
     onOpen: (String) -> Unit,
@@ -78,60 +78,62 @@ internal fun WikipediaPanel(
     onLoadFull: () -> Unit,
     onInsert: (String) -> Unit,
 ) {
-    val kb = LocalKbTheme.current
     // An open article can grow the panel up the screen to read in (#348).
     // Panel-local: it resets with the panel, and search results never grow.
     var expanded by rememberSaveable { mutableStateOf(false) }
     val reading = state.wiki is WikiUi.Article && !state.mediaSearchActive
-    // Search mode: only the query bar shows, keys underneath type into it.
-    val height = when {
-        state.mediaSearchActive -> 56.dp
-        // As tall as the screen allows, the same fit the AI panel's extra
-        // height gets: never below the board it stands in for.
-        expanded && reading -> keyRowsHeight(state).let { board ->
-            toolPanelHeight(state, wanted = board + LocalConfiguration.current.screenHeightDp.dp, floor = board)
-        }
-        else -> keyRowsHeight(state)
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height),
+    FullBleedTool(
+        state, title = "",
+        onClose = onClose,
+        // As tall as the screen allows: the FullBleedTool fit cuts it down to
+        // the share of the screen a panel may take.
+        extraHeight = if (expanded && reading) LocalConfiguration.current.screenHeightDp.dp else 0.dp,
+        compact = state.mediaSearchActive,
+        compactHeight = FullBleedHeaderHeight,
+        headerActions = {
+            MediaHeaderSearchBar(
+                state = state,
+                placeholder = stringResource(R.string.ime_wiki_search_hint),
+                activePlaceholder = stringResource(R.string.ime_wiki_search_active_hint),
+                onQueryTap = onQueryTap,
+            )
+        },
     ) {
-        val fieldShape = kb.cardShape()
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp)
-                .clip(fieldShape)
-                .background(kb.chip)
-                .chipBorder(kb, fieldShape)
-                .clickable { onQueryTap() }
-                .padding(start = 12.dp, end = 12.dp, top = 6.dp, bottom = 6.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                Icons.Outlined.Search,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                tint = kb.toolbarIcon,
-            )
-            Spacer(Modifier.width(8.dp))
-            SearchQueryText(
-                query = state.mediaQuery,
-                placeholder = if (state.mediaSearchActive) {
-                    stringResource(R.string.ime_wiki_search_active_hint)
-                } else {
-                    stringResource(R.string.ime_wiki_search_hint)
-                },
-                active = state.mediaSearchActive,
-                textColor = kb.chipText,
-                placeholderColor = kb.toolbarIcon,
-                fontSize = 14.sp,
-                modifier = Modifier.weight(1f),
-            )
-        }
+        WikipediaPanel(
+            state = state,
+            expanded = expanded,
+            onExpand = { expanded = !expanded },
+            onRetry = onRetry,
+            onOpen = onOpen,
+            onBack = onBack,
+            onLoadLinks = onLoadLinks,
+            onLoadFull = onLoadFull,
+            onInsert = onInsert,
+        )
+    }
+}
+
+/**
+ * Wikipedia in the tool viewbox: search results, then an article with
+ * summary, its outgoing links and the full text — each insertable at the
+ * cursor.
+ */
+@Composable
+private fun WikipediaPanel(
+    state: KeyboardUiState,
+    /** The panel grown up the screen for reading (#348). */
+    expanded: Boolean,
+    onExpand: () -> Unit,
+    onRetry: () -> Unit,
+    onOpen: (String) -> Unit,
+    onBack: () -> Unit,
+    onLoadLinks: () -> Unit,
+    onLoadFull: () -> Unit,
+    onInsert: (String) -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Search mode: only the header's query bar shows, keys underneath type into it.
         if (state.mediaSearchActive) return@Column
 
         when (val wiki = state.wiki) {
@@ -211,7 +213,7 @@ internal fun WikipediaPanel(
             is WikiUi.Article -> WikiArticle(
                 focusedLink = state.focusedIndex(),
                 expanded = expanded,
-                onExpand = { expanded = !expanded },
+                onExpand = onExpand,
                 wiki = wiki,
                 markdownLinks = state.settings.webSearch.wikiLinksMarkdown,
                 lang = state.settings.webSearch.wikiLanguage,

@@ -22,59 +22,48 @@ import android.widget.FrameLayout
  * or three times per keystroke, with the whole tree measured twice in each
  * because its root constraints changed between the passes.
  *
- * So both passes are handed one height: the smaller of what is offered and
- * what the frame was last laid out in. The keyboard's content is shorter than
- * either, so it measures to exactly what it did before — only now Compose sees
- * one set of constraints and keeps a key press to the nodes it touched.
+ * So both passes are handed one height: the largest room offered in this
+ * traversal. The first pass offers the whole screen and the second what is
+ * left, so the second is measured against the first's room too, and Compose
+ * sees one set of constraints and keeps a key press to the nodes it touched.
  *
- * A real change of room — rotation, the extract view, a floating panel — shows
- * up as a different final offer, which the next [onLayout] adopts. If content
- * that wants all the room it can get was held to the old, smaller height, it
- * asks for one more layout so it is measured against the new one. Exact specs
- * are passed through untouched: they cannot differ between passes in a way
- * this could smooth over.
+ * It used to be the smaller of what was offered and the height the frame was
+ * last laid out in. That also held the room to the window's old height, so
+ * the window could never grow: a panel that asked for more room (the AI chat's
+ * composer, Translate, Wikipedia's expanded article) opened into the height
+ * the last panel left and squeezed its own content to fit. The first pass of
+ * each traversal starts the room afresh, so a rotation or the extract view
+ * that really does shrink the room is picked up at once.
+ *
+ * Exact specs are passed through untouched: they cannot differ between passes
+ * in a way this could smooth over.
  */
 internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
 
-    /** The height spec the frame was last laid out under; 0 before the first layout. */
-    private var settledHeightSpec = 0
+    /** The largest `AT_MOST` height offered since the last layout. */
+    private var roomSize = 0
 
-    /** The spec of the latest measure pass, which the coming layout is under. */
-    private var offeredHeightSpec = 0
-
-    /** The spec the content was actually measured against in that pass. */
-    private var usedHeightSpec = 0
+    /** No measure pass has run since the last layout, so the next one starts the room afresh. */
+    private var freshTraversal = true
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        offeredHeightSpec = heightMeasureSpec
-        val used = stableHeightSpec(heightMeasureSpec)
-        usedHeightSpec = used
-        super.onMeasure(widthMeasureSpec, used)
-        // Never report more than was offered: the content is measured against
-        // at most that much, so this only matters for a pass that offered
-        // less than the settled height, which then gets what it offered.
+        super.onMeasure(widthMeasureSpec, stableHeightSpec(heightMeasureSpec))
+        // Never report more than was offered. The content may have been
+        // measured against the traversal's larger room; the window takes its
+        // size from the first pass, which offered that room.
         setMeasuredDimension(measuredWidth, View.resolveSize(measuredHeight, heightMeasureSpec))
     }
 
     private fun stableHeightSpec(offered: Int): Int {
-        val settled = settledHeightSpec
-        if (settled == 0) return offered
         if (MeasureSpec.getMode(offered) != MeasureSpec.AT_MOST) return offered
-        if (MeasureSpec.getMode(settled) != MeasureSpec.AT_MOST) return offered
-        val size = minOf(MeasureSpec.getSize(offered), MeasureSpec.getSize(settled))
-        return MeasureSpec.makeMeasureSpec(size, MeasureSpec.AT_MOST)
+        val size = MeasureSpec.getSize(offered)
+        roomSize = if (freshTraversal) size else maxOf(roomSize, size)
+        freshTraversal = false
+        return MeasureSpec.makeMeasureSpec(roomSize, MeasureSpec.AT_MOST)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        val offered = offeredHeightSpec
-        if (offered == settledHeightSpec) return
-        settledHeightSpec = offered
-        // Held below the room it was given, and it filled what it was held
-        // to: it may want more. Measure again against the new height.
-        val usedSize = MeasureSpec.getSize(usedHeightSpec)
-        val cappedLow = usedSize < MeasureSpec.getSize(offered)
-        val content = if (childCount > 0) getChildAt(0) else null
-        if (cappedLow && content != null && content.measuredHeight >= usedSize) post { requestLayout() }
+        freshTraversal = true
     }
 }

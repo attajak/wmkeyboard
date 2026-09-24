@@ -81,6 +81,12 @@ data class TranslateCallbacks(
     val onInsert: () -> Unit = {},
 )
 
+/** How tall the panel stands while its text is typed into, keys underneath. */
+internal val TranslateCompactHeight = 260.dp
+
+/** The most the text box grows before it scrolls. */
+private val TranslateQueryMaxHeight = 96.dp
+
 /** Which of the header's menus is open. One at a time: they share the ring's RESULTS region. */
 private enum class TranslateMenu { SOURCE, TARGET, ENGINE }
 
@@ -125,6 +131,8 @@ private val TranslateEngine.icon: ImageVector
 internal fun TranslatePanel(
     state: KeyboardUiState,
     callbacks: TranslateCallbacks,
+    /** Starts typing into the text box: the media-search key reroute. */
+    onQueryTap: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
     val translate = state.translate
@@ -165,6 +173,13 @@ internal fun TranslatePanel(
     }
     PanelFocusTarget(
         panel = PanelMode.TRANSLATE,
+        region = FocusRegion.SEARCH,
+        count = 1,
+        columns = 1,
+        onActivate = { onQueryTap() },
+    )
+    PanelFocusTarget(
+        panel = PanelMode.TRANSLATE,
         region = FocusRegion.CHIPS,
         count = headerChips.size,
         columns = headerChips.size,
@@ -201,15 +216,20 @@ internal fun TranslatePanel(
 
     val focusedChip = state.focusedIndex(FocusRegion.CHIPS)
     val focusedRow = state.focusedIndex(FocusRegion.RESULTS)
-    // The panel is its own translation window: the query types into the
-    // header search bar (field text is never read). The FullBleedTool
-    // wrapper collapses the panel while typing — the keys sit right below
-    // and the live result still fits above them.
+    // The panel is its own translation window: the text types into the box
+    // at its top (field text is never read). The FullBleedTool wrapper
+    // collapses the panel while typing — the keys sit right below and the
+    // live result still fits above them.
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 8.dp),
     ) {
+        TranslateQueryBox(
+            state = state,
+            focused = state.focusedIndex(FocusRegion.SEARCH) == 0,
+            onQueryTap = onQueryTap,
+        )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.weight(1f, fill = false)) {
                 TranslateChip(
@@ -364,6 +384,51 @@ internal fun TranslatePanel(
                         .focusRing(focusedAction == 1, kb.chipShape()),
                 ) { callbacks.onInsert() }
             }
+        }
+    }
+}
+
+/**
+ * The text being translated: a box of several lines, where the header's search
+ * bar held one. While it has the keys it is an editor of the capture ladder's
+ * buffer, caret and all, the same as the AI chat's composer; otherwise a tap
+ * gives it the keys.
+ */
+@Composable
+private fun TranslateQueryBox(state: KeyboardUiState, focused: Boolean, onQueryTap: () -> Unit) {
+    val kb = LocalKbTheme.current
+    val shape = kb.cardShape()
+    val hint = stringResource(R.string.ime_translate_hint)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 2.dp, bottom = 6.dp)
+            .clip(shape)
+            .background(kb.chip)
+            .chipBorder(kb, shape)
+            .focusRing(focused, shape)
+            .clickable(enabled = !state.mediaSearchActive) { onQueryTap() }
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+    ) {
+        if (state.mediaSearchActive) {
+            ClipEditText(
+                text = state.mediaQuery,
+                placeholder = hint,
+                textColor = kb.chipText,
+                placeholderColor = kb.secondaryText,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 20.dp, max = TranslateQueryMaxHeight),
+            )
+        } else {
+            Text(
+                state.mediaQuery.ifEmpty { hint },
+                color = if (state.mediaQuery.isEmpty()) kb.secondaryText else kb.chipText,
+                fontSize = 14.sp,
+                lineHeight = 19.sp,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }

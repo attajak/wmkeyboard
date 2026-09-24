@@ -7237,8 +7237,14 @@ open class WMKeyboardService : InputMethodService() {
             CaptureTarget.MEDIA_SEARCH ->
                 // QR builds its content as you type, so Enter adds a newline
                 // to the buffer (WiFi/vCard payloads span lines) rather than
-                // searching. Every other media box runs the search.
-                if (state.panel == PanelMode.QR_GEN) captureTyped("\n") else runMediaSearch()
+                // searching. Translate follows the text live and its box holds
+                // several lines, so Enter is a line break there too. Every
+                // other media box runs the search.
+                if (state.panel == PanelMode.QR_GEN || state.panel == PanelMode.TRANSLATE) {
+                    captureTyped("\n")
+                } else {
+                    runMediaSearch()
+                }
             CaptureTarget.EMOJI_SEARCH, CaptureTarget.CLIPBOARD_SEARCH -> Unit
             // A clip is free text, so Enter is a line break in it; saving is
             // the editor's own button.

@@ -9462,7 +9462,7 @@ private val FullBleedPanels = setOf(
     PanelMode.TRANSLATE, PanelMode.WEB_SEARCH, PanelMode.IMAGE_SEARCH,
     PanelMode.DICTIONARY, PanelMode.SYMBOLS, PanelMode.MEDIA_CONTROL, PanelMode.KDE_CONNECT,
     PanelMode.VOCABULARY, PanelMode.LEARN_FROM_TEXT,
-    PanelMode.APP_LAUNCHER, PanelMode.THEMES, PanelMode.SNIPPETS,
+    PanelMode.APP_LAUNCHER, PanelMode.THEMES, PanelMode.SNIPPETS, PanelMode.WIKIPEDIA,
 )
 
 /**
@@ -10551,30 +10551,15 @@ private fun KeyboardBody(
                     onOpenRoute = onOpenRoute,
                 )
                 PanelMode.TRANSLATE -> FullBleedTool(
-                    state, title = "",
+                    state, stringResource(R.string.ime_tool_translate),
                     onClose = { onPanelChange(PanelMode.TRANSLATE) },
                     compact = state.mediaSearchActive,
-                    // Translations run long; give the result more room to breathe
-                    // than the media panels' default compact height.
-                    compactHeight = 180.dp,
-                    headerActions = {
-                        PanelFocusTarget(
-                            panel = PanelMode.TRANSLATE,
-                            region = FocusRegion.SEARCH,
-                            count = 1,
-                            columns = 1,
-                            onActivate = { onMediaQueryTap() },
-                        )
-                        MediaHeaderSearchBar(
-                            state = state,
-                            placeholder = stringResource(R.string.ime_translate_hint),
-                            activePlaceholder = stringResource(R.string.ime_translate_hint),
-                            onQueryTap = onMediaQueryTap,
-                            focused = state.focusedIndex(FocusRegion.SEARCH) == 0,
-                        )
-                    },
+                    // Translations run long, and the text being translated is a
+                    // box of several lines in the panel itself rather than the
+                    // header's one-line search bar: room for both over the keys.
+                    compactHeight = TranslateCompactHeight,
                 ) {
-                    TranslatePanel(state = state, callbacks = translateCallbacks)
+                    TranslatePanel(state = state, callbacks = translateCallbacks, onQueryTap = onMediaQueryTap)
                 }
                 PanelMode.GRAMMAR -> if (BuildConfig.ENABLE_GRAMMAR) {
                     GrammarPanel(state = state, callbacks = grammarCallbacks)
@@ -10683,8 +10668,9 @@ private fun KeyboardBody(
                         onOpenToolSettings = onOpenToolSettings,
                     )
                 }
-                PanelMode.WIKIPEDIA -> WikipediaPanel(
+                PanelMode.WIKIPEDIA -> WikipediaPanelHost(
                     state = state,
+                    onClose = { onPanelChange(PanelMode.WIKIPEDIA) },
                     onQueryTap = onMediaQueryTap,
                     onRetry = onMediaRetry,
                     onOpen = onWikiOpen,
