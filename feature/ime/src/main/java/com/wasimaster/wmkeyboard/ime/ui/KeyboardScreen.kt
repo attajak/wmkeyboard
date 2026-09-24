@@ -144,6 +144,7 @@ import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -22915,6 +22916,8 @@ internal fun ClipInfoPopup(
     onSendSticker: (() -> Unit)? = null,
     /** Opens the clip in the panel's editor; null for a clip that has no text to edit. */
     onEdit: (() -> Unit)? = null,
+    /** Deletes the clip; null while a swipe does that instead (#344). */
+    onDelete: (() -> Unit)? = null,
     onDismiss: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -22998,6 +23001,19 @@ internal fun ClipInfoPopup(
                         Text(stringResource(R.string.ime_clip_send_as_sticker))
                     }
                 }
+                if (onDelete != null) {
+                    TextButton(
+                        onClick = onDelete,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.error,
+                        ),
+                    ) {
+                        Icon(Icons.Outlined.Delete, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(CommonR.string.common_delete))
+                    }
+                }
                 if (item.sensitive) {
                     ClipInfoRow(
                         stringResource(R.string.ime_clip_info_private),
@@ -23034,14 +23050,20 @@ private fun ClipInfoRow(label: String, value: String, textColor: Color) {
  * Horizontal swipe-to-dismiss for a grid card: the card follows the finger,
  * fades as it travels, and a release past 40% of its width deletes it —
  * otherwise it springs back. Vertical scrolling is untouched (only
- * horizontal drags are claimed).
+ * horizontal drags are claimed). With [enabled] false the card claims no
+ * drag at all and simply holds [content].
  */
 @Composable
 internal fun SwipeToDeleteCard(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+    if (!enabled) {
+        Box(modifier = modifier) { content() }
+        return
+    }
     val offset = remember { Animatable(0f) }
     val scope = rememberCoroutineScope()
     var width by remember { mutableIntStateOf(0) }

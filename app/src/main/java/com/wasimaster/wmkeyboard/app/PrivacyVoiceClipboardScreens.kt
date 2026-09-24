@@ -813,6 +813,15 @@ internal fun ClipboardSettings(
         }
         item {
             ToggleSetting(
+                R.string.clipboard_swipe_delete_title,
+                stringResource(R.string.clipboard_swipe_delete_subtitle),
+                settings.clipboard.swipeToDelete,
+                info = stringResource(R.string.clipboard_swipe_delete_info),
+                default = SettingsDefaults.clipboard.swipeToDelete,
+            ) { scope.launch { repository.setClipboardSwipeToDelete(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.clipboard_undo_delete_title,
                 stringResource(R.string.clipboard_undo_delete_subtitle),
                 settings.clipboard.undoDelete,

@@ -370,6 +370,8 @@ private fun ClipboardHistory(
     // The clock the time labels read. Ticks only while they are shown, and
     // only twice a minute: they count in minutes.
     val timeLabel = clipboard.timeLabel
+    // With the swipe off (#344), the hold popup carries the delete instead.
+    val swipe = clipboard.swipeToDelete
     val now by produceState(System.currentTimeMillis(), timeLabel) {
         if (timeLabel == ClipTimeLabel.OFF) return@produceState
         while (true) {
@@ -427,6 +429,7 @@ private fun ClipboardHistory(
             // Under Reduce motion the list simply redraws in its new order.
             SwipeToDeleteCard(
                 onDelete = { callbacks.onDelete(item) },
+                enabled = swipe,
                 modifier = if (state.settings.reduceMotion) {
                     Modifier
                 } else {
@@ -443,9 +446,9 @@ private fun ClipboardHistory(
                 val number = session.numbers[item.id]
                 val time = clipTimeText(item, timeLabel, clipboard, now)
                 if (session.list) {
-                    ClipRow(item, number, lines, time, focused = index == focused, callbacks)
+                    ClipRow(item, number, lines, time, focused = index == focused, holdDelete = !swipe, callbacks)
                 } else {
-                    ClipCard(item, number, lines, time, focused = index == focused, callbacks)
+                    ClipCard(item, number, lines, time, focused = index == focused, holdDelete = !swipe, callbacks)
                 }
             }
         }
@@ -537,9 +540,17 @@ private fun Modifier.clipSurface(
         }
 }
 
-/** The press-and-hold popup for a clip, with the actions its kind allows. */
+/**
+ * The press-and-hold popup for a clip, with the actions its kind allows, and a
+ * Delete when [holdDelete] (the swipe that would otherwise delete is off).
+ */
 @Composable
-private fun ClipHoldPopup(item: ClipItem, callbacks: ClipboardFieldCallbacks, onDismiss: () -> Unit) {
+private fun ClipHoldPopup(
+    item: ClipItem,
+    holdDelete: Boolean,
+    callbacks: ClipboardFieldCallbacks,
+    onDismiss: () -> Unit,
+) {
     ClipInfoPopup(
         item,
         onSendSticker = if (item.kind == ClipKind.IMAGE) {
@@ -547,6 +558,9 @@ private fun ClipHoldPopup(item: ClipItem, callbacks: ClipboardFieldCallbacks, on
         } else null,
         onEdit = if (item.clipEditable) {
             { onDismiss(); callbacks.actions.onEdit(item) }
+        } else null,
+        onDelete = if (holdDelete) {
+            { onDismiss(); callbacks.onDelete(item) }
         } else null,
         onDismiss = onDismiss,
     )
@@ -630,6 +644,7 @@ private fun ClipCard(
     lines: Int,
     time: String?,
     focused: Boolean,
+    holdDelete: Boolean,
     callbacks: ClipboardFieldCallbacks,
 ) {
     var showInfo by remember { mutableStateOf(false) }
@@ -639,7 +654,7 @@ private fun ClipCard(
             // An image card insets less: the picture is the content.
             .padding(if (item.kind == ClipKind.IMAGE || item.kind == ClipKind.VIDEO) 5.dp else 10.dp),
     ) {
-        if (showInfo) ClipHoldPopup(item, callbacks) { showInfo = false }
+        if (showInfo) ClipHoldPopup(item, holdDelete, callbacks) { showInfo = false }
         ClipBody(item, maxLines = lines)
         Row(
             modifier = Modifier
@@ -679,6 +694,7 @@ private fun ClipRow(
     lines: Int,
     time: String?,
     focused: Boolean,
+    holdDelete: Boolean,
     callbacks: ClipboardFieldCallbacks,
 ) {
     var showInfo by remember { mutableStateOf(false) }
@@ -691,7 +707,7 @@ private fun ClipRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        if (showInfo) ClipHoldPopup(item, callbacks) { showInfo = false }
+        if (showInfo) ClipHoldPopup(item, holdDelete, callbacks) { showInfo = false }
         if (number != null) ClipNumberBadge(number)
         if (visual) {
             // Width-bound, so the picture keeps its own shape at thumbnail

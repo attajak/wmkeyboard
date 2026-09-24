@@ -527,6 +527,7 @@
   {"title":"Lines per clip","name":"clipboard_lines_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Time on each clip","name":"clipboard_time_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Number the clips","name":"clipboard_numbers_title","route":"clipboard","screens":["Clipboard"],"screen":false},
+  {"title":"Swipe to delete","name":"clipboard_swipe_delete_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Undo a deleted clip","name":"clipboard_undo_delete_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Pinned entries last","name":"clipboard_pinned_last_title","route":"clipboard","screens":["Clipboard"],"screen":false},
   {"title":"Search bar","name":"clipboard_search_title","route":"clipboard","screens":["Clipboard"],"screen":false},

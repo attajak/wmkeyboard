@@ -56,6 +56,9 @@
     <string name="clipboard_numbers_title">Number the clips</string>
     <string name="clipboard_numbers_subtitle">Show a number beside each clip, so you tap the one you mean</string>
     <string name="clipboard_numbers_info">Each clip keeps its own number while you search. The results show the numbers the clips had, and the count does not start again from 1. The numbers follow the order of the panel, from the top. This setting is off by default.</string>
+    <string name="clipboard_swipe_delete_title">Swipe to delete</string>
+    <string name="clipboard_swipe_delete_subtitle">Swipe a clip sideways to delete it</string>
+    <string name="clipboard_swipe_delete_info">With this setting off, a sideways swipe on a clip does nothing, so a clip can\'t be lost to a swipe made while you scroll. Press and hold a clip instead and tap Delete in its popup. The bin on each clip still deletes it either way. This setting is on by default.</string>
     <string name="clipboard_undo_delete_title">Undo a deleted clip</string>
     <string name="clipboard_undo_delete_subtitle">After you delete a clip, show an Undo button for a few seconds</string>
     <string name="clipboard_undo_delete_info">A swipe across a card deletes the clip with no question first, and a swipe is easy to make by accident while you scroll. With this setting on, a bar at the bottom of the panel offers the clip back. Delete more clips while the bar is up and one Undo brings them all back, each to the place it had. The bar stays for five seconds, or longer if you have set a longer time to take action in Android\'s accessibility settings. This setting is on by default.</string>

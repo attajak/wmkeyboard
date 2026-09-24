@@ -969,6 +969,7 @@ private fun SearchStrings.clipboardRows(): List<SettingsSearchEntry> {
         row(R.string.clipboard_lines_title, R.string.clipboard_lines_subtitle),
         row(R.string.clipboard_time_title, R.string.clipboard_time_subtitle),
         row(R.string.clipboard_numbers_title, R.string.clipboard_numbers_subtitle),
+        row(R.string.clipboard_swipe_delete_title, R.string.clipboard_swipe_delete_subtitle),
         row(R.string.clipboard_undo_delete_title, R.string.clipboard_undo_delete_subtitle),
         row(R.string.clipboard_pinned_last_title, R.string.clipboard_pinned_last_subtitle),
         row(R.string.clipboard_search_title, R.string.clipboard_search_subtitle),
