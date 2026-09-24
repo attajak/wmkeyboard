@@ -472,6 +472,7 @@ import com.wasimaster.wmkeyboard.ime.ModifierState
 import com.wasimaster.wmkeyboard.ime.authoredNumberRow
 import com.wasimaster.wmkeyboard.ime.LayoutMode
 import com.wasimaster.wmkeyboard.ime.CaptureTarget
+import com.wasimaster.wmkeyboard.ime.CaptureVoiceAction
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.core.tools.SmartSuggest
 import com.wasimaster.wmkeyboard.core.tools.SymbolCatalog
@@ -479,6 +480,7 @@ import com.wasimaster.wmkeyboard.core.tools.ToolApiKeys
 import com.wasimaster.wmkeyboard.ime.PwSettingAction
 import com.wasimaster.wmkeyboard.ime.TypingTestAction
 import com.wasimaster.wmkeyboard.ime.VoiceBarAction
+import com.wasimaster.wmkeyboard.ime.fieldVoiceSpeaks
 import com.wasimaster.wmkeyboard.ime.voiceChipOnly
 import com.wasimaster.wmkeyboard.ime.SizingAction
 import com.wasimaster.wmkeyboard.ime.SoundHapticAction
@@ -736,8 +738,6 @@ internal val LocalLanguageSwitchEcho = staticCompositionLocalOf { LanguageSwitch
 private const val LanguageSwitchEchoMs = 700L
 
 /**
- * Whether TalkBack (or another explore-by-touch service) is currently
-/**
  * A language the swipe preview showed for this long before the lift has been
  * seen: the finger was moving slowly enough to read it, so no echo follows.
  */
@@ -753,6 +753,8 @@ private const val LanguageSeenMs = 250L
 internal fun languageEchoMs(seenMs: Long): Long =
     if (seenMs >= LanguageSeenMs) 0L else LanguageSwitchEchoMs - seenMs.coerceAtLeast(0L)
 
+/**
+ * Whether TalkBack (or another explore-by-touch service) is currently
  * driving the screen. Resolved once at the root rather than per key —
  * every key would otherwise register its own listener.
  */
@@ -9651,13 +9653,24 @@ internal fun captureStripHeight(state: KeyboardUiState): Dp =
  * must never reach the app behind the panel.
  */
 @Composable
-private fun CaptureStrip(state: KeyboardUiState, onSuggestion: (String) -> Unit) {
+private fun CaptureStrip(state: KeyboardUiState, capture: CaptureCallbacks) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(state.settings.toolbarHeightDp.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Dictation into this field (#353): a microphone at the start of its
+        // strip, and while the phrase is being said the strip says so.
+        if (state.captureTarget()?.takesDictation == true) {
+            FieldVoiceMic(state.voice, mine = state.voice.field == state.captureKey()) {
+                capture.onVoice(CaptureVoiceAction.TOGGLE)
+            }
+            if (state.fieldVoiceSpeaks()) {
+                FieldVoiceStatus(state.voice, capture.onVoice)
+                return@Row
+            }
+        }
         LatinSuggestionChips(
             candidates = state.captureSuggestions,
             enabled = true,
@@ -9668,7 +9681,7 @@ private fun CaptureStrip(state: KeyboardUiState, onSuggestion: (String) -> Unit)
             textPadding = state.settings.suggestionStrip.chipPadding.dp,
             centerPrimaryEnabled = state.settings.suggestionStrip.suggestionPrimaryCenter,
             shiftState = state.shiftState,
-            onSuggestion = onSuggestion,
+            onSuggestion = capture.onSuggestion,
             overflow = state.settings.suggestionStrip.overflow,
         )
     }
@@ -10920,7 +10933,7 @@ private fun KeyboardBody(
                 if (state.typingTestActive && state.settings.typingTest.suggestions) {
                     TypingTestStrip(state, onTypingTestAction)
                 } else if (captureStripShown(state)) {
-                    CaptureStrip(state, capture.onSuggestion)
+                    CaptureStrip(state, capture)
                 }
                 KeyRows(
                     state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
@@ -20321,6 +20334,7 @@ private fun Modifier.pointerInputKey(
                     // long the preview has shown the language at the lift, which
                     // sizes the echo after it (see [languageEchoMs]).
                     var lastStepAt = 0L
+                    var liftAt = 0L
                     // With language switching on the short-swipe slot, holding
                     // the spacebar just past a normal tap shows the language
                     // picker without needing any initial swipe. The action is
@@ -20334,7 +20348,6 @@ private fun Modifier.pointerInputKey(
                     // down through the list, sideways along the carousel — and
                     // release commits the highlighted layout; a hold that never
                     // moves leaves the popup up for tapping, and release types
-                    var liftAt = 0L
                     // nothing either way.
                     var pickerOpened = false
                     var pickerIndex = langIndex
@@ -20579,6 +20592,7 @@ private fun Modifier.pointerInputKey(
                                         if (!runSwitched) {
                                             langIndex = 1 - langIndex
                                             runSwitched = true
+                                            lastStepAt = change.uptimeMillis
                                             setLanguagePreview(enabledLayoutIds[langIndex])
                                             onKeyPress()
                                         }
@@ -20592,7 +20606,6 @@ private fun Modifier.pointerInputKey(
                                 // One step per event at most, and a same-way
                                 // step only once the last one has settled: a flick
                                 // lands on the next language, never two over, and
-                                            lastStepAt = change.uptimeMillis
                                 // the list ends wrap only on a deliberate pull.
                                 val step = stepLanguageRing(
                                     index = langIndex,

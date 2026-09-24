@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -63,6 +65,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
+import com.wasimaster.wmkeyboard.ime.CaptureVoiceAction
 import com.wasimaster.wmkeyboard.ime.EnterAction
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
@@ -72,6 +75,7 @@ import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.VoiceBarAction
 import com.wasimaster.wmkeyboard.ime.VoiceModelState
 import com.wasimaster.wmkeyboard.ime.VoiceStatus
+import com.wasimaster.wmkeyboard.ime.VoiceUi
 import com.wasimaster.wmkeyboard.ime.clipBased
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
@@ -940,6 +944,153 @@ internal fun VoiceMicChip(
             }
         }
     }
+}
+
+/**
+ * The microphone at the start of a keyboard-owned field's strip (#353): a tap
+ * dictates into that field, and while it listens a tap finishes the phrase.
+ *
+ * [mine] says the session in [voice] is this field's. Only then does the button
+ * pulse or spin, so a dictation that was typing into the app when the panel
+ * came up is never drawn as this field listening.
+ */
+@Composable
+internal fun FieldVoiceMic(voice: VoiceUi, mine: Boolean, onToggle: () -> Unit) {
+    val kb = LocalKbTheme.current
+    val listening = mine && voice.status == VoiceStatus.LISTENING
+    val busy = mine && (voice.status == VoiceStatus.FINISHING || voice.status == VoiceStatus.TRANSCRIBING)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.padding(start = 4.dp, end = 2.dp),
+    ) {
+        // Static under reduce motion, like every other mic ring here.
+        val ringScale by animateFloatAsState(
+            targetValue = when {
+                !listening -> 0f
+                kb.reduceMotion -> 1.15f
+                else -> 1f + voice.level * 0.5f
+            },
+            animationSpec = if (kb.reduceMotion) snap() else spring(stiffness = 220f),
+            label = "fieldVoicePulse",
+        )
+        if (listening) {
+            Box(
+                modifier = Modifier
+                    .size(30.dp)
+                    .scale(ringScale)
+                    .background(kb.accent.copy(alpha = 0.25f), CircleShape),
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(if (listening) kb.toolCircleActive else kb.chip)
+                // The service buzzes for this press itself.
+                .clickable(enabled = !busy) { onToggle() },
+            contentAlignment = Alignment.Center,
+        ) {
+            if (busy) {
+                CircularProgressIndicator(
+                    color = kb.accent,
+                    modifier = Modifier.size(15.dp),
+                    strokeWidth = 2.dp,
+                )
+            } else {
+                Icon(
+                    Icons.Outlined.Mic,
+                    contentDescription = if (listening) {
+                        stringResource(R.string.ime_voice_stop_desc)
+                    } else {
+                        stringResource(R.string.ime_voice_start_desc)
+                    },
+                    modifier = Modifier.size(17.dp),
+                    tint = if (listening) kb.toolCircleActiveIcon else kb.secondaryText,
+                )
+            }
+        }
+    }
+}
+
+/**
+ * The line a keyboard-owned field's strip shows while a dictation into it
+ * runs or has something to say (#353, see `fieldVoiceSpeaks`): the compact
+ * bar's own wording, its one action where there is one, and a close button.
+ * While it listens, a tap anywhere on the line that is not a button finishes
+ * the phrase, as on the bar.
+ */
+@Composable
+internal fun RowScope.FieldVoiceStatus(voice: VoiceUi, onAction: (CaptureVoiceAction) -> Unit) {
+    val kb = LocalKbTheme.current
+    val feedback = LocalKeyPressFeedback.current
+    val listening = voice.status == VoiceStatus.LISTENING
+    val stopAnywhere by rememberUpdatedState(listening)
+    val act by rememberUpdatedState(onAction)
+    val listeningLabel = stringResource(R.string.ime_voice_status_listening)
+    val statusText = when {
+        voice.status == VoiceStatus.NEED_PERMISSION -> stringResource(R.string.ime_voice_strip_permission)
+        voice.status == VoiceStatus.UNAVAILABLE -> stringResource(R.string.ime_voice_strip_unavailable)
+        voice.status == VoiceStatus.MIC_BLOCKED -> stringResource(R.string.ime_voice_strip_mic_blocked)
+        voice.whisperNeedsModel -> stringResource(R.string.ime_voice_strip_no_model)
+        voice.serverNeedsSetup -> stringResource(R.string.ime_voice_strip_no_server)
+        listening && voice.clipBased && voice.secondsLeft > 0 ->
+            pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
+        listening && voice.clipBased -> stringResource(R.string.ime_voice_strip_listening_hint)
+        listening -> voice.partial.ifEmpty { listeningLabel }
+        voice.status == VoiceStatus.TRANSCRIBING -> stringResource(R.string.ime_voice_status_transcribing)
+        voice.status == VoiceStatus.FINISHING -> voice.partial.ifEmpty { "…" }
+        voice.status == VoiceStatus.ERROR -> voice.errorMessage ?: stringResource(R.string.ime_voice_status_error)
+        else -> ""
+    }
+    Text(
+        statusText,
+        color = if (voice.partial.isNotEmpty()) kb.toolbarIcon else kb.secondaryText,
+        fontSize = 13.sp,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = { if (stopAnywhere) act(CaptureVoiceAction.TOGGLE) })
+            }
+            .wrapContentHeight(Alignment.CenterVertically)
+            .padding(horizontal = 8.dp),
+    )
+    val action = when {
+        voice.status == VoiceStatus.NEED_PERMISSION ->
+            stringResource(R.string.ime_voice_strip_allow_action) to CaptureVoiceAction.PERMISSION
+        voice.whisperNeedsModel || voice.serverNeedsSetup ->
+            stringResource(R.string.ime_voice_strip_settings_action) to CaptureVoiceAction.SETTINGS
+        else -> null
+    }
+    if (action != null) {
+        Text(
+            action.first,
+            color = kb.toolCircleActiveIcon,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier
+                .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
+                .background(kb.toolCircleActive)
+                .clickable {
+                    feedback()
+                    onAction(action.second)
+                }
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+        )
+    }
+    Icon(
+        Icons.Outlined.Close,
+        contentDescription = stringResource(R.string.ime_voice_strip_close_desc),
+        tint = kb.toolbarIcon,
+        modifier = Modifier
+            .padding(end = 4.dp)
+            .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
+            .clickable { onAction(CaptureVoiceAction.CLOSE) }
+            .padding(6.dp)
+            .size(20.dp),
+    )
 }
 
 @Composable

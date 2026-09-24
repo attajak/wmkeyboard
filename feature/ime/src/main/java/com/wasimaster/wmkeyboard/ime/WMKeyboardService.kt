@@ -2870,6 +2870,7 @@ open class WMKeyboardService : InputMethodService() {
         startGesturePreviewConsumer()
         startGlideReadinessWatcher()
         startCaptureSuggestionWatcher()
+        startFieldVoiceWatcher()
         // A process that started on the lock screen never ran ML Kit's init
         // provider, and every ML Kit tool in it — handwriting, OCR, QR, doc
         // scan — stays broken until it is initialized by hand.
@@ -18088,7 +18089,11 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.QR_SCAN -> onPanelChange(PanelMode.QR_SCAN)
             // Not a panel: the scanner is a full-screen Google activity.
             ToolbarTool.DOC_SCAN -> onDocScanStart()
-            ToolbarTool.VOICE -> if (!endVoiceFromTool()) onPanelChange(PanelMode.VOICE)
+            ToolbarTool.VOICE -> when {
+                // A keyboard-owned field has the keys: the tool dictates into it (#353).
+                _uiState.value.captureTarget()?.takesDictation == true -> onCaptureVoice(CaptureVoiceAction.TOGGLE)
+                !endVoiceFromTool() -> onPanelChange(PanelMode.VOICE)
+            }
             ToolbarTool.GRAMMAR -> onPanelChange(PanelMode.GRAMMAR)
             ToolbarTool.WIKIPEDIA -> onPanelChange(PanelMode.WIKIPEDIA)
             ToolbarTool.SYMBOLS -> onPanelChange(PanelMode.SYMBOLS)
@@ -19036,6 +19041,7 @@ open class WMKeyboardService : InputMethodService() {
     private fun startVoice() {
         cancelVoice()
         voiceStopRequested = false
+        voiceSessionForField = fieldVoice()
         val tag = voiceLanguageTag()
         fun fail(status: VoiceStatus, message: String? = null) {
             _uiState.update {
@@ -19047,8 +19053,10 @@ open class WMKeyboardService : InputMethodService() {
                 )
             }
         }
-        if (_uiState.value.secureField) {
-            // The panel shows its own notice; never open the mic here.
+        if (_uiState.value.secureField && !fieldVoice()) {
+            // The panel shows its own notice; never open the mic here. A
+            // keyboard-owned field is not the password field, so dictating
+            // into one is not refused (#353).
             fail(VoiceStatus.IDLE)
             return
         }
@@ -19120,10 +19128,12 @@ open class WMKeyboardService : InputMethodService() {
             fail(VoiceStatus.ERROR, getString(VoiceR.string.core_voice_whisper_module_downloading))
             return
         }
-        val ic = currentInputConnection ?: return
-        // Flush the half-typed word so dictation appends after it.
-        commitComposing(ic, autocorrect = false)
-        refreshVoiceContext()
+        if (!voiceSessionForField) {
+            val ic = currentInputConnection ?: return
+            // Flush the half-typed word so dictation appends after it.
+            commitComposing(ic, autocorrect = false)
+            refreshVoiceContext()
+        }
         val generation = ++voiceGeneration
         // Offline-model chip: check once per language, not per utterance
         // (continuous mode restarts sessions constantly).
@@ -19195,7 +19205,9 @@ open class WMKeyboardService : InputMethodService() {
                     // exactly what stops the keys being used at the same time.
                     // The phrase lands whole at the next pause; until then it
                     // is only in the status line.
-                    if (!interactiveVoice()) {
+                    // Nor does a dictation into one of the keyboard's own
+                    // fields (#353): its words were never going to the app.
+                    if (!interactiveVoice() && !voiceSessionForField) {
                         currentInputConnection
                             ?.setComposingText(spacedVoiceText(casedVoiceText(text)), 1)
                     }
@@ -19222,7 +19234,7 @@ open class WMKeyboardService : InputMethodService() {
                         _uiState.update {
                             it.copy(
                                 voice = it.voice.copy(
-                                    status = VoiceStatus.IDLE, partial = "", level = 0f, canUndo = true,
+                                    status = VoiceStatus.IDLE, partial = "", level = 0f, canUndo = !voiceSessionForField,
                                 ),
                             )
                         }
@@ -19238,7 +19250,7 @@ open class WMKeyboardService : InputMethodService() {
                     // Interactive voice typing owns no composing region, and
                     // the one in the field may be a word the user is typing
                     // right now — leave it alone.
-                    if (!interactiveVoice()) currentInputConnection?.finishComposingText()
+                    if (!interactiveVoice() && !voiceSessionForField) currentInputConnection?.finishComposingText()
                     // Silence in continuous mode restarts quietly — but not
                     // forever, so an abandoned open mic winds down.
                     if (kind == VoiceInputEngine.ErrorKind.NO_SPEECH &&
@@ -19647,7 +19659,9 @@ open class WMKeyboardService : InputMethodService() {
             serviceScope.launch(Dispatchers.Main) { startVoice() }
         } else {
             _uiState.update {
-                it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f, canUndo = true))
+                it.copy(
+                    voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f, canUndo = !voiceSessionForField),
+                )
             }
             settleVoiceToolEnding()
         }
@@ -19670,9 +19684,13 @@ open class WMKeyboardService : InputMethodService() {
      * microphone. Interactive voice typing always chains: a session that ended
      * at the first pause would leave the user typing into a closed microphone,
      * which is the one thing the mode exists to avoid.
+     *
+     * A dictation into one of the keyboard's own fields never chains (#353):
+     * a search is one phrase, and a microphone left open under a panel would
+     * go on typing into it while the user reads the results.
      */
     private fun voiceChains(): Boolean =
-        _uiState.value.settings.voiceContinuous || interactiveVoice()
+        !voiceSessionForField && (_uiState.value.settings.voiceContinuous || interactiveVoice())
 
     /** See [VOICE_SILENT_RETRIES]. */
     private fun voiceSilentRetryLimit(): Int =
@@ -19703,6 +19721,10 @@ open class WMKeyboardService : InputMethodService() {
             VoicePunctuation.apply(text, tag)
         } else {
             text
+        }
+        if (voiceSessionForField) {
+            commitFieldVoice(processed)
+            return
         }
         val ic = currentInputConnection ?: return
         // A word still being composed — typed under the microphone, or resumed
@@ -19833,7 +19855,7 @@ open class WMKeyboardService : InputMethodService() {
             serviceScope.launch(Dispatchers.IO) { runCatching { rec.stop() } }
         }
         voiceEngine.cancel()
-        if (!interactiveVoice()) currentInputConnection?.finishComposingText()
+        if (!interactiveVoice() && !voiceSessionForField) currentInputConnection?.finishComposingText()
         _uiState.update {
             it.copy(
                 voice = it.voice.copy(
@@ -19870,10 +19892,142 @@ open class WMKeyboardService : InputMethodService() {
         // whatever word the user is typing this second, and finishing it here
         // would strand the keyboard's own buffer against a field that is no
         // longer composing.
-        if (!interactiveVoice()) currentInputConnection?.finishComposingText()
+        if (!interactiveVoice() && !voiceSessionForField) currentInputConnection?.finishComposingText()
         _uiState.update {
             it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f))
         }
+    }
+
+    // ---- dictation into the keyboard's own fields (#353) ----
+
+    /**
+     * The last session [startVoice] began was for a keyboard-owned field. What
+     * [endFieldVoice] asks before it cancels anything, since by then the field
+     * has usually gone and [fieldVoice] can no longer say.
+     */
+    private var voiceSessionForField = false
+
+    /**
+     * The dictation, running or resting, belongs to a keyboard-owned field
+     * rather than the app's. Asked of the field that has the keys *now*, not
+     * only of [VoiceUi.field], so a mark left behind for a moment by a field
+     * that has just closed can never send an app-field session's words to a
+     * box that is no longer there ([startFieldVoiceWatcher] clears it).
+     */
+    private fun fieldVoice(): Boolean {
+        val state = _uiState.value
+        val field = state.voice.field ?: return false
+        return field == state.captureKey()
+    }
+
+    /**
+     * The microphone on a keyboard-owned field's strip (#353), and the Voice
+     * tool pressed while one of those fields has the keys.
+     *
+     * Every other voice surface types into the app: the panel would take the
+     * place of the panel this field is on, and the strip and the bar write
+     * through the input connection. So this is a session of its own, marked by
+     * [VoiceUi.field]. It runs the same engine with the same language, puts
+     * nothing in the app while it listens, ends at the first pause, and lands
+     * the phrase at the field's caret ([commitFieldVoice]).
+     */
+    fun onCaptureVoice(action: CaptureVoiceAction) {
+        when (action) {
+            CaptureVoiceAction.TOGGLE -> {
+                val state = _uiState.value
+                val key = state.captureKey() ?: return
+                if (state.captureTarget()?.takesDictation != true) return
+                if (state.voice.field != key) {
+                    // One microphone, one destination: whatever was listening
+                    // for the app's field stops first.
+                    cancelVoice()
+                    _uiState.update { it.copy(voice = it.voice.copy(field = key, canUndo = false)) }
+                }
+                onVoiceToggle()
+            }
+            CaptureVoiceAction.CLOSE -> {
+                vibrate()
+                endFieldVoice()
+            }
+            CaptureVoiceAction.PERMISSION -> onVoicePermissionRequest()
+            CaptureVoiceAction.SETTINGS -> onOpenVoiceSettings()
+        }
+    }
+
+    /**
+     * The field's dictation put away: the microphone released, a phrase still
+     * being transcribed dropped, and the strip given its words back.
+     */
+    private fun endFieldVoice() {
+        if (_uiState.value.voice.field == null) return
+        if (!voiceSessionForField) {
+            // The session running now was started for the app's field: only
+            // the mark goes, and that session carries on untouched.
+            _uiState.update { it.copy(voice = it.voice.copy(field = null)) }
+            return
+        }
+        cancelVoice()
+        voiceSessionForField = false
+        _uiState.update {
+            it.copy(
+                voice = it.voice.copy(
+                    field = null, status = VoiceStatus.IDLE, partial = "", level = 0f, errorMessage = null,
+                    whisperNeedsModel = false, serverNeedsSetup = false, canUndo = false,
+                ),
+            )
+        }
+    }
+
+    /**
+     * A field's dictation ends with the field (#353): the panel closing, the
+     * chat composer handing the keys back, another box taking them. Whatever
+     * was still to come of the phrase would otherwise land in the wrong place.
+     */
+    private fun startFieldVoiceWatcher() {
+        serviceScope.launch {
+            _uiState
+                .map { it.voice.field to it.captureKey() }
+                .distinctUntilChanged()
+                .collect { (field, key) -> if (field != null && field != key) endFieldVoice() }
+        }
+    }
+
+    /**
+     * One finished phrase put in at the field's caret (#353), in place of the
+     * selection if there is one, through the same path a paste takes, so each
+     * field filters it as it filters keys.
+     *
+     * Spaced and capitalised by the rules a dictation into the app's field
+     * follows, read off the field's own text either side of the caret rather
+     * than through the input connection. Nothing is learned, as nothing typed
+     * into these fields is. A search box loses the full stop a recognizer ends
+     * a phrase with, which would otherwise be searched for.
+     */
+    private fun commitFieldVoice(text: String) {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return
+        if (state.voice.field != state.captureKey()) return
+        val before = state.captureCaretText() ?: return
+        val words = text.trim().let { if (target.isSearch) it.removeSuffix(".") else it }
+        if (words.isEmpty()) return
+        val head = before.text.substring(0, before.selectionStart)
+        val tail = before.text.substring(before.selectionEnd)
+        val cased = VoiceCasing.apply(
+            words,
+            sentenceStart = VoiceCasing.startsSentence(head.takeLast(VoiceCasing.CONTEXT_CHARS)),
+        )
+        val spaced = if (plainVoice()) {
+            cased
+        } else {
+            val beforeChar = head.lastOrNull()
+            val afterChar = tail.firstOrNull()
+            VoiceSpacing.format(
+                cased,
+                VoiceSpacing.needsLeadingSpace(beforeChar, afterChar),
+                VoiceSpacing.needsTrailingSpace(beforeChar, afterChar),
+            )
+        }
+        captureTyped(spaced)
     }
 
     /**
@@ -19893,8 +20047,10 @@ open class WMKeyboardService : InputMethodService() {
         // suggestions and layout switches, because nothing of the utterance
         // is in the field to be corrupted. Spacing is read again when the
         // phrase lands ([commitVoiceUtterance]), not now — this runs before
-        // the key that called it has been applied.
-        if (interactiveVoice()) return
+        // the key that called it has been applied. A dictation into one of the
+        // keyboard's own fields is the same case (#353): nothing of it is
+        // anywhere until the phrase lands, at the field's caret.
+        if (interactiveVoice() || voiceSessionForField) return
         val status = _uiState.value.voice.status
         // A Whisper clip already off the mic and inside the decoder is not
         // something a keystroke should throw away: the audio is captured, the mic
@@ -21566,6 +21722,7 @@ open class WMKeyboardService : InputMethodService() {
             onKde = ::onKdeAction,
             onKdeKey = ::onKdeSpecialKey,
             onKdeSend = ::kdeSendComposed,
+            onVoice = ::onCaptureVoice,
         )
     }
 

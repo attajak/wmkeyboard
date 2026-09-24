@@ -339,6 +339,23 @@ enum class CaptureTarget(
      * Only the word card, whose [WordSpell] carries anchor and cursor for #204.
      */
     val ownsCaret: Boolean get() = this == WORD_SPELL
+
+    /**
+     * Whether the field's own strip carries a microphone that dictates into it
+     * (#353). Every field that holds words, less three: the typing test scores
+     * keystrokes, and the word card's spelling and the Learn speller each hold
+     * a single word, which a spoken phrase is not.
+     */
+    val takesDictation: Boolean
+        get() = takesWords && this != TYPING_TEST && this != WORD_SPELL && this != LEARN_EDIT
+
+    /**
+     * A search box rather than a place for prose: the full stop a recognizer
+     * puts at the end of every phrase would become part of what is searched for.
+     */
+    val isSearch: Boolean
+        get() = this == EMOJI_SEARCH || this == MEDIA_SEARCH || this == DICTIONARY_SEARCH ||
+            this == CLIPBOARD_SEARCH || this == FIND_QUERY
 }
 
 /**
@@ -361,3 +378,18 @@ data class CaptureCaret(val key: String, val at: Int, val text: String, val anch
 
 /** What the selection bar over a keyboard-owned field can do with its text (#352). */
 enum class CaptureSelectionAction { CUT, COPY, PASTE, SELECT_ALL }
+
+/** What the microphone on a keyboard-owned field's strip was asked to do (#353). */
+enum class CaptureVoiceAction {
+    /** Start dictating into the field, or finish the phrase being said. */
+    TOGGLE,
+
+    /** Put the dictation away: the session ends and the strip has its words back. */
+    CLOSE,
+
+    /** Ask for the microphone, which an input method cannot do itself. */
+    PERMISSION,
+
+    /** Open the voice settings: a missing Whisper model or server address. */
+    SETTINGS,
+}

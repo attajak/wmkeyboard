@@ -976,6 +976,14 @@ data class VoiceUi(
      * said past it is lost, so the surfaces count it down (#315).
      */
     val secondsLeft: Int = 0,
+    /**
+     * The keyboard-owned field this dictation types into (#353), as its
+     * [KeyboardUiState.captureKey], or null when it types into the app's field.
+     * Set by the microphone on that field's strip and kept until the field
+     * gives the keys back or the strip's close button puts it away, so an
+     * error has somewhere to be said.
+     */
+    val field: String? = null,
 )
 
 /** The session records a whole clip and transcribes it after the stop tap. */
@@ -1002,6 +1010,18 @@ fun KeyboardUiState.voiceChipOnly(): Boolean =
         voice.status != VoiceStatus.MIC_BLOCKED &&
         voice.status != VoiceStatus.UNAVAILABLE &&
         voice.status != VoiceStatus.ERROR
+
+/**
+ * A dictation into the focused keyboard-owned field (#353) is running, or has
+ * something to say, so that field's strip gives its chips' room to the line
+ * that says it: listening, the words heard so far, transcribing, or what went
+ * wrong and what to do about it. Idle and fine, the strip is its chips again.
+ */
+fun KeyboardUiState.fieldVoiceSpeaks(): Boolean {
+    val field = voice.field ?: return false
+    if (field != captureKey()) return false
+    return voice.status != VoiceStatus.IDLE || voice.whisperNeedsModel || voice.serverNeedsSetup
+}
 
 /**
  * The keys are drawing what the transliterator is about to write with them:

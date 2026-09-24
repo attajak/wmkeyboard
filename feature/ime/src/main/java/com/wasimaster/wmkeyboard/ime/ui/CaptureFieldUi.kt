@@ -75,4 +75,6 @@ data class CaptureCallbacks(
     ) -> Unit = { _, _ -> },
     /** Compose mode's Send: the line as one piece of text, with Enter after it or without. */
     val onKdeSend: (Boolean) -> Unit = {},
+    /** The microphone on the field's strip, and the line it shows while dictating (#353). */
+    val onVoice: (com.wasimaster.wmkeyboard.ime.CaptureVoiceAction) -> Unit = {},
 )
