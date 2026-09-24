@@ -2355,24 +2355,25 @@ private fun FloatingKeyboardFrame(
         // of layout passes does not drag the keyboard through a recomposition
         // for each one.
         val panelSize = remember { mutableStateOf(IntSize.Zero) }
-        // Settled drag position in px; null = follow the persisted fractions.
-        // Reset when the window size changes (rotation) so the fractions
-        // re-anchor the panel.
-        val dragOffset = remember(boxWidthPx, boxHeightPx) { mutableStateOf<Offset?>(null) }
+        // Settled position in px, tagged with the window width it was pinned
+        // in; null (or pinned in another width) = follow the persisted
+        // fractions. A rotation changes the width, so the fractions re-anchor
+        // the panel there.
+        //
+        // One state object for the frame's whole life, never re-keyed on the
+        // box size (issue #342). The IME window measures its input view twice
+        // per traversal against two different heights, so a height key minted
+        // a fresh object on nearly every window layout — and the gesture
+        // callbacks, which outlive a recomposition, went on writing the old
+        // one. The placement then fell back to the fractions, still a DataStore
+        // round trip behind: a release flashed the panel at its old spot for a
+        // couple of frames, and a resize lost its pin and let the panel drift.
+        val dragOffset = remember { mutableStateOf<FloatingPin?>(null) }
         // How far the finger has carried the panel away from [dragOffset] in
         // the gesture running right now, folded back into it when the gesture
         // ends. Read from the draw phase (the layer below), never from
         // placement, so following the finger costs a redraw per frame and no
-        // window layout pass at all.
-        //
-        // Issue #6: driven from placement, every drag after the first left the
-        // panel sitting at its old spot for the whole gesture and then
-        // teleported it to where the finger had ended up. A placement-phase
-        // move needs the IME window to run a layout pass per frame, and an IME
-        // window can be left with its layout requests swallowed — after which
-        // the panel only catches up when something forces a pass by hand,
-        // which is exactly what publishing the settled bounds below does. The
-        // draw phase has no such dependency.
+        // window layout pass at all (issue #6).
         val dragShift = remember { mutableStateOf(Offset.Zero) }
         // Width is a layout input only, so it too is read from a measure
         // lambda rather than from composition: dragging the grip re-measures
@@ -2396,15 +2397,44 @@ private fun FloatingKeyboardFrame(
 
         fun slackX() = (boxWidthPx - panelSize.value.width).coerceAtLeast(0).toFloat()
         fun slackY() = (boxHeightPx - panelSize.value.height).coerceAtLeast(0).toFloat()
+        fun pinned(): Offset? = dragOffset.value?.takeIf { it.boxWidthPx == boxWidthPx }?.offset
+        fun pin(offset: Offset) {
+            dragOffset.value = FloatingPin(offset, boxWidthPx)
+        }
         fun currentOffset(): Offset {
-            val live = dragOffset.value
-            val raw = live ?: Offset(
+            val raw = pinned() ?: Offset(
                 state.settings.floatingXFraction * slackX(),
                 state.settings.floatingYFraction * slackY(),
             )
             return Offset(raw.x.coerceIn(0f, slackX()), raw.y.coerceIn(0f, slackY()))
         }
         fun publishBounds() = gesture.bounds?.let(onBounds)
+        // Persists [end] as fractions of the free space. The pin keeps the
+        // panel where it is until the write comes back; see the effect below.
+        fun persistPosition(end: Offset) {
+            val moved = Offset(
+                if (slackX() > 0f) end.x / slackX() else 0.5f,
+                if (slackY() > 0f) end.y / slackY() else 0.5f,
+            )
+            val stored = Offset(state.settings.floatingXFraction, state.settings.floatingYFraction)
+            // An unchanged value is never written back, so it must not be
+            // waited for either.
+            if (moved != stored) gesture.pendingPosition = moved
+            onMoved(moved.x, moved.y)
+        }
+
+        // The pin outlives its own write, so a position stored from anywhere
+        // else (the Layout screen's reset) has to drop it. Our own echoes are
+        // skipped until the latest one arrives, including an older one landing
+        // after a second drag has already written again.
+        val storedPosition = Offset(state.settings.floatingXFraction, state.settings.floatingYFraction)
+        LaunchedEffect(storedPosition) {
+            val pending = gesture.pendingPosition
+            when {
+                pending == storedPosition -> gesture.pendingPosition = null
+                pending == null && !gesture.active -> dragOffset.value = null
+            }
+        }
 
         // The panel fades up once it has been measured, rather than appearing
         // at full strength the frame after it was invisible. Opacity only: a
@@ -2482,11 +2512,11 @@ private fun FloatingKeyboardFrame(
                             // measured from it, and the fractions it would
                             // otherwise fall back to are a DataStore round trip
                             // behind the finger.
-                            dragOffset.value = currentOffset()
+                            pin(currentOffset())
                             dragShift.value = Offset.Zero
                         },
                         onDragBy = { delta ->
-                            val base = dragOffset.value ?: return@FloatingHandleBar
+                            val base = pinned() ?: return@FloatingHandleBar
                             val shift = dragShift.value
                             // Clamped as a whole position, then stored back as a
                             // shift, so the panel stops at the window edge
@@ -2498,7 +2528,7 @@ private fun FloatingKeyboardFrame(
                         },
                         onDragEnd = {
                             gesture.active = false
-                            val base = dragOffset.value ?: return@FloatingHandleBar
+                            val base = pinned() ?: return@FloatingHandleBar
                             val shift = dragShift.value
                             val end = Offset(
                                 (base.x + shift.x).coerceIn(0f, slackX()),
@@ -2508,7 +2538,7 @@ private fun FloatingKeyboardFrame(
                             // offset takes the panel's new home and the shift
                             // returns to zero together, so both phases land in
                             // the same frame and the panel never blinks back.
-                            dragOffset.value = end
+                            pin(end)
                             dragShift.value = Offset.Zero
                             // The panel was never re-placed during the drag, so
                             // the measured rectangle is a whole gesture behind:
@@ -2519,10 +2549,7 @@ private fun FloatingKeyboardFrame(
                                 (end.y - base.y).roundToInt(),
                             )
                             publishBounds()
-                            onMoved(
-                                if (slackX() > 0f) end.x / slackX() else 0.5f,
-                                if (slackY() > 0f) end.y / slackY() else 0.5f,
-                            )
+                            persistPosition(end)
                         },
                         onResizeStart = {
                             gesture.active = true
@@ -2531,7 +2558,7 @@ private fun FloatingKeyboardFrame(
                             // the slack shrank under it — the panel wandering
                             // away from the finger, which read as the resize
                             // being broken rather than as re-anchoring.
-                            dragOffset.value = currentOffset()
+                            pin(currentOffset())
                             gesture.widthDp = liveWidthDp.floatValue
                             gesture.heightScale = liveHeightScale
                             // The unscaled height is measured once, here. Read
@@ -2570,11 +2597,8 @@ private fun FloatingKeyboardFrame(
                             // The pin above is in px, so persist it too or the
                             // panel jumps back to the old fractions the next
                             // time they are applied.
-                            val end = dragOffset.value ?: return@FloatingHandleBar
-                            onMoved(
-                                if (slackX() > 0f) end.x / slackX() else 0.5f,
-                                if (slackY() > 0f) end.y / slackY() else 0.5f,
-                            )
+                            val end = pinned() ?: return@FloatingHandleBar
+                            persistPosition(end)
                         },
                     )
                     content(liveHeightScale)
@@ -2611,7 +2635,12 @@ private class FloatingGesture {
     var widthDp = 0f
     /** Unsnapped height scale the finger has travelled to. */
     var heightScale = 1f
+    /** Fractions last handed to the store and not yet read back from it. */
+    var pendingPosition: Offset? = null
 }
+
+/** The floating panel's settled top-left in px, valid only in the window width it was set in. */
+private data class FloatingPin(val offset: Offset, val boxWidthPx: Int)
 
 private fun quantize(value: Float, step: Float): Float = (value / step).roundToInt() * step
 
@@ -2648,6 +2677,15 @@ private fun FloatingHandleBar(
     onResizeBy: (Offset) -> Unit,
     onResizeEnd: () -> Unit,
 ) {
+    // The drag detectors below are started once and outlive every
+    // recomposition, so they call through to the latest callbacks. Holding the
+    // first ones, they wrote to state the frame had since replaced (#342).
+    val dragStart by rememberUpdatedState(onDragStart)
+    val dragBy by rememberUpdatedState(onDragBy)
+    val dragEnd by rememberUpdatedState(onDragEnd)
+    val resizeStart by rememberUpdatedState(onResizeStart)
+    val resizeBy by rememberUpdatedState(onResizeBy)
+    val resizeEnd by rememberUpdatedState(onResizeEnd)
     val kb = LocalKbTheme.current
     val shape = kb.toolShape()
     val buttonFill = if (kb.toolRadiusDp > 0) kb.toolCircle else Color.Transparent
@@ -2689,13 +2727,13 @@ private fun FloatingHandleBar(
                 .fillMaxHeight()
                 .pointerInput(Unit) {
                     detectDragGestures(
-                        onDragStart = { onDragStart() },
+                        onDragStart = { dragStart() },
                         onDrag = { change, amount ->
                             change.consume()
-                            onDragBy(amount)
+                            dragBy(amount)
                         },
-                        onDragEnd = onDragEnd,
-                        onDragCancel = onDragEnd,
+                        onDragEnd = { dragEnd() },
+                        onDragCancel = { dragEnd() },
                     )
                 },
             contentAlignment = Alignment.Center,
@@ -2714,13 +2752,13 @@ private fun FloatingHandleBar(
                 .then(buttonOutline)
                 .pointerInput(Unit) {
                     detectDragGestures(
-                        onDragStart = { onResizeStart() },
+                        onDragStart = { resizeStart() },
                         onDrag = { change, amount ->
                             change.consume()
-                            onResizeBy(amount)
+                            resizeBy(amount)
                         },
-                        onDragEnd = onResizeEnd,
-                        onDragCancel = onResizeEnd,
+                        onDragEnd = { resizeEnd() },
+                        onDragCancel = { resizeEnd() },
                     )
                 },
             contentAlignment = Alignment.Center,
