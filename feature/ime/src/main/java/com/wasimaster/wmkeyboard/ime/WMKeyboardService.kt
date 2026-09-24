@@ -17,6 +17,7 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
@@ -56,6 +57,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import android.content.ClipData
 import android.content.ClipDescription
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -272,6 +274,9 @@ import com.wasimaster.wmkeyboard.core.settings.DevicePowerState
 import com.wasimaster.wmkeyboard.core.settings.DeviceNetworkState
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.MeteredFeature
+import com.wasimaster.wmkeyboard.core.settings.CameraSettings
+import com.wasimaster.wmkeyboard.core.settings.PhotoSearchEngine
+import com.wasimaster.wmkeyboard.core.settings.PhotoSearchTarget
 import com.wasimaster.wmkeyboard.core.settings.onMeteredNetwork
 import com.wasimaster.wmkeyboard.core.power.PowerSaver
 import com.wasimaster.wmkeyboard.core.net.NetworkWatcher
@@ -374,6 +379,7 @@ import com.wasimaster.wmkeyboard.core.tools.DeepLClient
 import com.wasimaster.wmkeyboard.core.tools.LibreTranslateClient
 import com.wasimaster.wmkeyboard.core.tools.GiphyClient
 import com.wasimaster.wmkeyboard.core.tools.SearxClient
+import com.wasimaster.wmkeyboard.core.tools.ReverseImageClient
 import com.wasimaster.wmkeyboard.core.tools.ImageResult
 import com.wasimaster.wmkeyboard.core.tools.KlipyClient
 import com.wasimaster.wmkeyboard.core.tools.MediaCategories
@@ -18289,6 +18295,9 @@ open class WMKeyboardService : InputMethodService() {
                 // The drill-down never outlives the panel: reopening the tool
                 // lands on the grid, not on whatever app was open last time.
                 launcherDetail = if (next == PanelMode.APP_LAUNCHER) it.launcherDetail else null,
+                // Only the image search panel's camera button opens the
+                // camera for searching (#349); every other way in is for sending.
+                cameraSearchOnly = next == PanelMode.CAMERA && it.panel == PanelMode.IMAGE_SEARCH,
             )
         }
         // Leaving the panel ends the plugin session outright. Not paused, not
@@ -24042,19 +24051,190 @@ open class WMKeyboardService : InputMethodService() {
         ic.commitText(word, 1)
     }
 
-    /** Camera tool captured a photo: send it into the editor as an image. */
-    fun onCameraSend(file: File) {
+    /**
+     * Camera tool captured a photo: send it into the editor as an image, or,
+     * with [search], search by it (#349).
+     */
+    fun onCameraSend(file: File, search: Boolean) {
+        if (search) {
+            searchByPhoto(file)
+            return
+        }
         vibrate()
-        saveToGalleryIfEnabled(
-            file,
-            MediaMime.JPEG,
-            _uiState.value.settings.camera.saveToGallery,
-            "IMG",
-        )
+        saveCaptureToGallery(file)
         commitImageFile(file, MediaMime.JPEG)
         // The photo is on its way (or on the clipboard) — the tool's job is
         // done, give the keys back.
         _uiState.update { it.copy(panel = PanelMode.NONE) }
+    }
+
+    /**
+     * The last capture copied into the gallery. Search and then Send on the
+     * same photo is one photo, and the gallery should get it once.
+     */
+    private var captureInGallery: File? = null
+
+    private fun saveCaptureToGallery(file: File) {
+        if (file == captureInGallery) return
+        captureInGallery = file
+        saveToGalleryIfEnabled(file, MediaMime.JPEG, _uiState.value.settings.camera.saveToGallery, "IMG")
+    }
+
+    // ---- search by photo (#349) ----
+
+    private var photoSearchJob: Job? = null
+
+    /**
+     * The photo a data saver question is waiting on. The camera has no notice
+     * to ask in, so the question goes in a toast, and pressing Search again on
+     * the same photo is the yes.
+     */
+    private var photoSearchAsked: File? = null
+
+    /**
+     * Search on the camera's confirm step. Lens and the share sheet hand the
+     * photo to another app and need no network of ours; the web route uploads
+     * it and opens the site's results in the browser.
+     *
+     * The panel closes only once the search is on its way, so a search that
+     * could not start leaves the photo up to try again, or to send instead.
+     */
+    private fun searchByPhoto(file: File) {
+        vibrate()
+        val camera = _uiState.value.settings.camera
+        val started = when (camera.searchWith) {
+            PhotoSearchTarget.LENS -> openPhotoInLens(file) || sharePhoto(file)
+            PhotoSearchTarget.SHARE -> sharePhoto(file)
+            PhotoSearchTarget.WEB -> {
+                uploadPhotoForSearch(file, camera)
+                return
+            }
+        }
+        if (started) photoSearchStarted(file) else toast(R.string.ime_service_photo_search_no_app)
+    }
+
+    private fun photoSearchStarted(file: File) {
+        photoSearchAsked = null
+        saveCaptureToGallery(file)
+        _uiState.update { it.copy(panel = PanelMode.NONE) }
+    }
+
+    /** An image share of [file], readable by whichever app takes it. */
+    private fun photoShareIntent(file: File): Intent? {
+        val uri = runCatching {
+            FileProvider.getUriForFile(this, clipboardFileProviderAuthority, file)
+        }.getOrNull() ?: return null
+        return Intent(Intent.ACTION_SEND)
+            .setType(MediaMime.JPEG)
+            .putExtra(Intent.EXTRA_STREAM, uri)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            // The grant travels on the clip, and a chooser copies it across.
+            .apply { clipData = ClipData.newRawUri(null, uri) }
+    }
+
+    /**
+     * Straight into Lens, through the Google app's own "search image" share
+     * target. False when the Google app is not installed or takes no images,
+     * which is every phone without Google's apps.
+     */
+    private fun openPhotoInLens(file: File): Boolean {
+        val intent = photoShareIntent(file)?.setPackage(GOOGLE_APP_PACKAGE) ?: return false
+        @Suppress("DEPRECATION")
+        val targets = runCatching { packageManager.queryIntentActivities(intent, 0) }.getOrNull().orEmpty()
+        // The Google app may list more than one image share; Lens is the one
+        // that searches.
+        val lens = targets.firstOrNull { it.activityInfo.name.contains("lens", ignoreCase = true) }
+            ?: targets.firstOrNull()
+            ?: return false
+        intent.setClassName(lens.activityInfo.packageName, lens.activityInfo.name)
+        return runCatching { startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }.isSuccess
+    }
+
+    /** The Android share sheet, for any app that searches with a photo. */
+    private fun sharePhoto(file: File): Boolean {
+        val intent = photoShareIntent(file) ?: return false
+        return startMacroActivity(intent, chooser = true)
+    }
+
+    private fun uploadPhotoForSearch(file: File, camera: CameraSettings) {
+        if (photoSearchJob?.isActive == true) return
+        when (dataSaverStatus.decide(MeteredFeature.WEB_SEARCH)) {
+            MeteredDecision.ALLOWED -> Unit
+            MeteredDecision.ASK -> {
+                if (photoSearchAsked != file) {
+                    photoSearchAsked = file
+                    toast(R.string.ime_service_photo_search_metered_ask)
+                    return
+                }
+                grantMetered(MeteredFeature.WEB_SEARCH)
+            }
+            MeteredDecision.BLOCKED -> {
+                toast(R.string.ime_service_photo_search_blocked)
+                return
+            }
+        }
+        photoSearchAsked = null
+        toast(R.string.ime_service_photo_search_sending)
+        photoSearchJob = serviceScope.launch {
+            val page = withContext(Dispatchers.IO) {
+                runCatching {
+                    val jpeg = photoSearchJpeg(file)
+                    when (camera.searchEngine) {
+                        PhotoSearchEngine.GOOGLE_LENS ->
+                            ReverseImageClient.googleLens(jpeg, Locale.getDefault().toLanguageTag())
+                        PhotoSearchEngine.BING -> ReverseImageClient.bing(jpeg)
+                        PhotoSearchEngine.YANDEX -> ReverseImageClient.yandex(jpeg)
+                        PhotoSearchEngine.TINEYE -> ReverseImageClient.tinEye(jpeg)
+                        PhotoSearchEngine.CUSTOM ->
+                            ReverseImageClient.custom(jpeg, camera.searchCustomUrl, camera.searchCustomField)
+                    }
+                }
+            }
+            page.fold(
+                onSuccess = { url ->
+                    val opened = runCatching {
+                        startActivity(
+                            Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                        )
+                    }.isSuccess
+                    if (opened) photoSearchStarted(file) else toast(R.string.ime_service_photo_search_no_browser)
+                },
+                onFailure = { e ->
+                    Toast.makeText(
+                        this@WMKeyboardService,
+                        ToolHttp.friendlyMessage(this@WMKeyboardService, e),
+                        Toast.LENGTH_LONG,
+                    ).show()
+                },
+            )
+        }
+    }
+
+    /**
+     * The photo to upload: at most 1280 px on its longest side. The sites
+     * shrink a photo to about that before they search it, so anything larger
+     * is upload that buys nothing, on what may be mobile data.
+     */
+    private fun photoSearchJpeg(file: File): ByteArray {
+        val edge = 1280
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.path, bounds)
+        val longest = maxOf(bounds.outWidth, bounds.outHeight)
+        if (longest <= edge) return file.readBytes()
+        val bitmap = BitmapFactory.decodeFile(file.path) ?: return file.readBytes()
+        val scale = edge.toFloat() / longest
+        val scaled = Bitmap.createScaledBitmap(
+            bitmap,
+            (bitmap.width * scale).toInt().coerceAtLeast(1),
+            (bitmap.height * scale).toInt().coerceAtLeast(1),
+            true,
+        )
+        if (scaled != bitmap) bitmap.recycle()
+        return java.io.ByteArrayOutputStream().use { out ->
+            scaled.compress(Bitmap.CompressFormat.JPEG, 88, out)
+            scaled.recycle()
+            out.toByteArray()
+        }
     }
 
     /** IMEs cannot show permission dialogs; bounce through the trampoline. */
@@ -32301,6 +32481,9 @@ private class GlideRetryOffer(
  * Copy is what somebody selecting that much text is reaching for anyway.
  */
 private const val MAX_MACRO_SELECTION = 4000
+
+/** The Google app, whose image share target is Lens (#349). Declared in the manifest's queries. */
+private const val GOOGLE_APP_PACKAGE = "com.google.android.googlequicksearchbox"
 
 /** A selection longer than this is not a calendar event title anybody wants. */
 private const val MAX_EVENT_TITLE = 100

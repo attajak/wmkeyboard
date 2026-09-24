@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountTree
+import androidx.compose.material.icons.outlined.CenterFocusStrong
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Lan
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.HourglassBottom
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.SignalCellularAlt
 import androidx.compose.material.icons.outlined.SignalCellularAlt1Bar
 import androidx.compose.material.icons.outlined.SignalCellularAlt2Bar
@@ -135,6 +137,7 @@ import com.wasimaster.wmkeyboard.core.settings.ManualModeDuration
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
 import com.wasimaster.wmkeyboard.core.settings.OneHandedSide
+import com.wasimaster.wmkeyboard.core.settings.PhotoSearchTarget
 import com.wasimaster.wmkeyboard.core.settings.PowerSavingTrigger
 import com.wasimaster.wmkeyboard.core.settings.RotationInterval
 import com.wasimaster.wmkeyboard.core.settings.ScreenReaderMode
@@ -403,6 +406,11 @@ internal object ChoiceOptionIcons {
 
         put(MediaSendMode.IMAGE) { Icons.Outlined.Image }
         put(MediaSendMode.STICKER) { Icons.Outlined.Style }
+
+        // The search sites are left out: four globes would say nothing.
+        put(PhotoSearchTarget.LENS) { Icons.Outlined.CenterFocusStrong }
+        put(PhotoSearchTarget.WEB) { Icons.Outlined.Public }
+        put(PhotoSearchTarget.SHARE) { Icons.Outlined.Share }
 
         put(AppSortOrder.ALPHABETICAL) { Icons.Outlined.SortByAlpha }
         put(AppSortOrder.RECENT_FIRST) { Icons.Outlined.History }

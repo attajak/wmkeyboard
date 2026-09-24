@@ -3099,6 +3099,14 @@ data class KeyboardUiState(
     val learnFromText: LearnFromTextUi? = null,
     val webSearch: WebSearchUi = WebSearchUi.Idle,
     val imageSearch: ImageSearchUi = ImageSearchUi.Idle,
+    /**
+     * The camera was opened from the image search panel's camera button
+     * (#349): its confirm step offers Search in place of Send, and its back
+     * button returns to image search. Set by [WMKeyboardService.onPanelChange]
+     * on every panel change, so it only ever means anything while the camera
+     * panel is open.
+     */
+    val cameraSearchOnly: Boolean = false,
     val translate: TranslateUi = TranslateUi(),
     val grammar: GrammarUi = GrammarUi(),
     val wiki: WikiUi = WikiUi.Idle,

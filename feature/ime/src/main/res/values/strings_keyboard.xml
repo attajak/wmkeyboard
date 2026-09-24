@@ -498,6 +498,8 @@
     <string name="ime_translate_hint">Type the text to translate…</string>
     <string name="ime_web_search_hint">Search the web</string>
     <string name="ime_image_search_hint">Search images</string>
+    <!-- Camera button beside the image search box: opens the camera to search with a photo (#349). -->
+    <string name="ime_image_search_by_photo_desc">Search with a photo</string>
     <!-- Names the search service. Brave is a brand name: keep it as it is. -->
     <string name="ime_search_attribution_brave">via Brave</string>
     <string name="ime_unit_convert_title">Unit converter</string>

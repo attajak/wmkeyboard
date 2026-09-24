@@ -145,6 +145,7 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.tooldetail_crypto_enable_title, R.string.search_kw_tooldetail_crypto_enable)
     put(R.string.tooldetail_currency_auto_fetch_title, R.string.search_kw_tooldetail_currency_auto_fetch)
     put(R.string.tooldetail_weather_auto_fetch_title, R.string.search_kw_tooldetail_weather_auto_fetch)
+    put(R.string.tooldetail_camera_search_button_title, R.string.search_kw_tooldetail_camera_search_button)
     put(R.string.typing_auto_capitalize_title, R.string.search_kw_typing_auto_capitalize)
     put(R.string.typing_autocorrect_confidence_title, R.string.search_kw_typing_autocorrect_confidence)
     put(R.string.typing_autocorrect_title, R.string.search_kw_typing_autocorrect)

@@ -158,6 +158,9 @@
              services reads as a phone that does not. Narrow entries by design;
              the app asks for no broad package query permission. -->
         <package android:name="com.google.android.gms" />
+        <!-- The Google app, so the camera tool's Search button can find Lens
+             and fall back to the share sheet on a phone without it (#349). -->
+        <package android:name="com.google.android.googlequicksearchbox" />
         <provider android:authorities="com.google.android.gms.fonts" />
     </queries>
 

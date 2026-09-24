@@ -168,6 +168,12 @@
 
     <!-- Tools: search, articles, exchange rates, QR codes. -->
     <string name="ime_service_search_error">The search did not work</string>
+    <!-- Search by photo (#349): the camera tool's Search button. -->
+    <string name="ime_service_photo_search_no_app">No app on this phone can search with a photo</string>
+    <string name="ime_service_photo_search_no_browser">No browser on this phone can open the results</string>
+    <string name="ime_service_photo_search_sending">Sending the photo to the search site</string>
+    <string name="ime_service_photo_search_metered_ask">This connection is metered. To send the photo, press Search again.</string>
+    <string name="ime_service_photo_search_blocked">Data saver does not let web searches use this connection</string>
     <string name="ime_service_wiki_article_error">The keyboard cannot load the article</string>
     <string name="ime_service_currency_error">The keyboard cannot get the exchange rates. Check your connection.</string>
     <string name="ime_service_translate_error">The translation did not work</string>

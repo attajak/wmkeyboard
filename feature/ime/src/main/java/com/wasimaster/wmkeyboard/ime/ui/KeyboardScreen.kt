@@ -1130,7 +1130,7 @@ fun KeyboardScreen(
     toolHold: ToolHoldCallbacks = ToolHoldCallbacks(),
     onToolboxHintDismiss: () -> Unit = {},
     onWeatherRefresh: () -> Unit = {},
-    onCameraSend: (java.io.File) -> Unit = {},
+    onCameraSend: (java.io.File, Boolean) -> Unit = { _, _ -> },
     onCameraPermissionRequest: () -> Unit = {},
     onCalendarPermissionRequest: () -> Unit = {},
     onScannedInsert: (String) -> Unit = {},
@@ -9826,7 +9826,7 @@ private fun KeyboardBody(
     toolHold: ToolHoldCallbacks,
     onToolboxHintDismiss: () -> Unit,
     onWeatherRefresh: () -> Unit,
-    onCameraSend: (java.io.File) -> Unit,
+    onCameraSend: (java.io.File, Boolean) -> Unit,
     onCameraPermissionRequest: () -> Unit,
     onCalendarPermissionRequest: () -> Unit,
     onScannedInsert: (String) -> Unit,
@@ -10395,8 +10395,11 @@ private fun KeyboardBody(
                     state = state,
                     onSend = onCameraSend,
                     onRequestPermission = onCameraPermissionRequest,
-                    // Toggling the open panel closes it.
-                    onClose = { onPanelChange(PanelMode.CAMERA) },
+                    // Toggling the open panel closes it; opened from image
+                    // search, back goes back there.
+                    onClose = {
+                        onPanelChange(if (state.cameraSearchOnly) PanelMode.IMAGE_SEARCH else PanelMode.CAMERA)
+                    },
                 )
                 PanelMode.OCR -> if (BuildConfig.ENABLE_ML_KIT_SCANNERS) {
                     OcrPanel(
@@ -10667,6 +10670,7 @@ private fun KeyboardBody(
                             attribution = stringResource(R.string.ime_search_attribution_brave)
                                 .takeIf { ToolApiKeys.hasSearchProvider(state.settings) },
                         )
+                        SearchByPhotoButton { onPanelChange(PanelMode.CAMERA) }
                     },
                 ) {
                     ImageSearchPanel(

@@ -47,6 +47,7 @@ After the shutter fires, the frozen photo is drawn at the exact spot and size th
 
 - **Retake** discards the file and goes straight back to a live viewfinder.
 - **Send** hands the photo off (see [Where the photo goes](#where-the-photo-goes) below) and closes the panel back to your keys.
+- **Search** is a third button, off by default. Turn on **Search button** under [Search by photo](#search-by-photo-options) and it sits after Send. It looks up what is in the photo instead of sending it. See [Searching with a photo](#searching-with-a-photo) below.
 
 If you took the photo with the front camera and [Mirror selfies](#options) is on, the saved file is flipped horizontally to match what you saw while framing. Camera sensors record selfies un-mirrored by default: text reads the right way round, but the shot looks flipped against the live preview. Shutter sound and haptic feedback on the controls, timer ticks, and shutter are each their own setting. See [Options](#options).
 
@@ -58,7 +59,33 @@ Tapping **Send** inserts the photo the same way clipboard images, GIFs, and stic
 
 Either way, the send closes the panel and hands you back the keys.
 
-By default that's the *only* copy that persists anywhere. The private file used to hand the image off is scratch storage, not a saved photo. On each panel open, anything beyond the four most recent capture files is deleted, which only matters if the app was killed mid-confirm. Want a permanent copy? Turn on **Save to the gallery**, off by default, and every capture is also written to `Pictures/WM Keyboard` in your device's shared gallery. See [your data on device](/privacy/data/) for how WM Keyboard's on-device storage is organized more generally. The camera tool never touches the network in any of this: capture, crop, save, and send are all local. [Network policy](/privacy/network/) has the wider picture.
+## Searching with a photo
+
+Saw a plant or an insect and want to know what it is? **Search** looks up what's in the photo: similar pictures, the name of the thing, and pages about it. There are two ways to get the button:
+
+- **From image search.** The [Image search](/tools/search/#web-and-image-search) panel has a camera button beside its search bar. It opens this camera, and after the shutter the confirm step offers **Retake** and **Search**, with no Send. Back returns you to image search. This works whatever the setting below says.
+- **On the camera itself.** Turn on **Search button** under [Search by photo](#search-by-photo-options), and every photo you take gets Search next to Retake and Send.
+
+Where Search takes the photo is up to **Search with**:
+
+- **Google Lens**, the default. The photo opens in Lens, inside the Google app, which shows its matches right away. If the Google app isn't installed, which is the case on most phones without Google's apps, the share sheet opens instead.
+- **Web**. The keyboard sends the photo to the search site you pick under **Search site** and opens that site's results page in your browser. You don't need the Google app for this. The sites are **Google Lens** (on the web), **Bing**, **Yandex**, **TinEye**, and **Custom**. Before the upload, the photo is scaled down to at most 1280 px on its longest side, which is about what the sites work at anyway. The keyboard shows "Sending the photo to the search site" while it uploads.
+- **Share sheet**. Android's own share sheet opens every time, so you pick the app: Lens, a plant identifier, a shopping app, anything that takes an image.
+
+The panel closes once the search is on its way. If it can't start, the photo stays on screen so you can try again or send it after all. That covers a failed upload, no app to take it, and a data saver block.
+
+None of the search sites has a public way to upload a photo. **Web** does what each site's own "search by image" button does, so a site can stop working when it changes how that works. You'll then see "The search site did not send a results page", and picking a different site is the fix.
+
+**Custom** is for a server of your own, or any service you'd rather use. Two more fields appear when you pick it:
+
+- **Upload address**: where the keyboard posts the photo, as multipart form data.
+- **Photo field name**: the form field the photo goes in. `image` by default.
+
+The server answers with a redirect to its results page, with the results address as the whole reply, or with JSON like `{"url": "…"}`. A relative address counts from the upload address. The keyboard opens only `http` and `https` addresses, whatever the server sends back.
+
+Only **Web** uses the keyboard's own network connection, so it's the only route that answers to [Data saver](/privacy/data-saver/): it counts as a web search. On a connection where data saver asks first, the first press of Search shows "This connection is metered. To send the photo, press Search again." and the second press sends it. Each upload appears in the [network activity log](/privacy/network-activity/) as **Search by photo**. Lens and the share sheet give the photo to another app, and the keyboard itself sends nothing.
+
+By default that's the *only* copy that persists anywhere. The private file used to hand the image off is scratch storage, not a saved photo. On each panel open, anything beyond the four most recent capture files is deleted, which only matters if the app was killed mid-confirm. Want a permanent copy? Turn on **Save to the gallery**, off by default, and every photo you send or search with is also written to `Pictures/WM Keyboard` in your device's shared gallery, once, even if you search with it and then send it. See [your data on device](/privacy/data/) for how WM Keyboard's on-device storage is organized more generally. Capture, crop, save, and send are all local. The only time the camera tool uses the network is a search with **Search with** set to **Web** (see [Searching with a photo](#searching-with-a-photo)). [Network policy](/privacy/network/) has the wider picture.
 
 ## Granting camera access
 
@@ -106,6 +133,12 @@ The tool's own settings, split into two groups:
 - **Send the whole photo**: off by default. It skips the crop described in [What you see is what you get](#what-you-see-is-what-you-get) and sends the full 4:3 frame, including the strips that ran off the top and bottom of the screen. The live viewfinder is unchanged, so this is the one case where the photo holds more than you framed. The confirm step fits the whole picture inside the panel so you can see what you're about to send.
 - **Save to the gallery**: off by default. Also copies every capture into `Pictures/WM Keyboard`, on top of sending it.
 
+<a id="search-by-photo-options"></a>**Search by photo**
+- **Search button**: off by default. Adds **Search** after Retake and Send on the confirm step. The camera button in image search offers Search whatever this says.
+- **Search with**: **Google Lens** by default, then **Web** and **Share sheet**. See [Searching with a photo](#searching-with-a-photo) for what each does.
+- **Search site**: shown only while Search with is **Web**. **Google Lens** by default, then **Bing**, **Yandex**, **TinEye** and **Custom**.
+- **Upload address** and **Photo field name**: shown only for **Custom**. Where your server takes the photo, and the form field it reads.
+
 **Feedback**
 - **Shutter sound**: on by default. Plays the camera click when a photo is taken.
 - **Haptics**: on by default. Vibrates on the shutter, the controls, and the timer countdown. It only gates feedback inside the panel itself. The final vibration when you tap Send is the keyboard's regular key-press haptic, controlled separately under [Typing → Feedback](/typing/feedback/).
@@ -113,6 +146,7 @@ The tool's own settings, split into two groups:
 ## Details & edge cases
 
 - **No manual crop, no filters, no multi-shot.** One photo per open of the panel. Retaking replaces rather than appends.
+- **Search isn't an in-keyboard result list.** Every search route ends in another app or in your browser, which is where the results are worth reading. Nothing comes back into the field you're typing in.
 - **Not pinned or recommended by default.** Camera ships enabled, but it isn't in the toolbar's default pinned set and isn't part of the onboarding wizard's "Recommended" starter selection either. If you went through setup and picked "Recommended" rather than "Everything" on the tools page, you'll need to turn Camera on yourself under Settings → Tools.
 - **No direct-boot support.** Camera doesn't work on the lock screen before you've unlocked your device once after a restart, since it depends on the app's private storage, which isn't available that early.
 - **Both editions, no gating.** The OCR, QR, document-scan, and handwriting tools are full-edition-only, because they depend on Google ML Kit. Camera has no edition restriction anywhere in its code path.

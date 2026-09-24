@@ -132,6 +132,30 @@
     <string name="tooldetail_camera_gallery_title">Save to the gallery</string>
     <string name="tooldetail_camera_gallery_subtitle">Also keep photos in Pictures/WM Keyboard</string>
     <string name="tooldetail_camera_gallery_info">This setting is off by default, because photos that you take here are normally one-time sends and not photos to keep. On: the keyboard copies every photo into the gallery and also sends it.</string>
+    <!-- Search by photo (#349): the camera tool's Search button. -->
+    <string name="tooldetail_camera_search_group">Search by photo</string>
+    <string name="tooldetail_camera_search_info">Search finds pages about what is in a photo: a plant, an insect, a landmark, a product. The image search tool has a camera button that always offers Search. The switch below adds Search to the camera tool too.</string>
+    <string name="tooldetail_camera_search_button_title">Search button</string>
+    <string name="tooldetail_camera_search_button_subtitle">Add Search next to Retake and Send</string>
+    <string name="tooldetail_camera_search_with_title">Search with</string>
+    <string name="tooldetail_camera_search_with_info">Google Lens and the share sheet give the photo to another app, and the keyboard sends nothing itself. Web sends the photo to the search site that you pick and opens the results in your browser.</string>
+    <string name="tooldetail_camera_search_with_lens">Google Lens</string>
+    <string name="tooldetail_camera_search_with_lens_desc">Opens Lens in the Google app. If the Google app is not installed, the share sheet opens.</string>
+    <string name="tooldetail_camera_search_with_web">Web</string>
+    <string name="tooldetail_camera_search_with_web_desc">Sends the photo to a search site and opens its results in your browser. No Google app necessary.</string>
+    <string name="tooldetail_camera_search_with_share">Share sheet</string>
+    <string name="tooldetail_camera_search_with_share_desc">Lets you pick an app that searches with a photo, each time.</string>
+    <string name="tooldetail_camera_search_engine_title">Search site</string>
+    <string name="tooldetail_camera_search_engine_info">None of these sites has a public way to send photos. The keyboard does what the site\'s own upload button does, so a site can stop working when it changes. If that happens, pick a different site. Custom sends the photo to your own server.</string>
+    <string name="tooldetail_camera_search_engine_lens" translatable="false">Google Lens</string>
+    <string name="tooldetail_camera_search_engine_bing" translatable="false">Bing</string>
+    <string name="tooldetail_camera_search_engine_yandex" translatable="false">Yandex</string>
+    <string name="tooldetail_camera_search_engine_tineye" translatable="false">TinEye</string>
+    <string name="tooldetail_camera_search_engine_custom">Custom</string>
+    <string name="tooldetail_camera_search_custom_url_label">Upload address</string>
+    <string name="tooldetail_camera_search_custom_url_hint">The keyboard sends the photo here as form data. The server answers with a redirect to the results, or with the results address.</string>
+    <string name="tooldetail_camera_search_custom_field_label">Photo field name</string>
+    <string name="tooldetail_camera_search_custom_field_hint">The form field that holds the photo</string>
     <string name="tooldetail_camera_fullframe_title">Send the whole photo</string>
     <string name="tooldetail_camera_fullframe_subtitle">Keep the full 4:3 picture instead of the part in the viewfinder</string>
     <string name="tooldetail_camera_fullframe_info">The viewfinder is as wide as the keyboard, so the top and the bottom of the picture go off the screen. The keyboard usually cuts those parts away, and you send what you saw. On: you send the full 4:3 photo, which holds more than the viewfinder showed you. The preview does not change.</string>

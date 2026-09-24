@@ -32,6 +32,9 @@ enum class NetSource(
     STICKER("sticker", ToolbarTool.STICKER),
     WEB_SEARCH("web_search", ToolbarTool.WEB_SEARCH),
     IMAGE_SEARCH("image_search", ToolbarTool.IMAGE_SEARCH),
+
+    /** A camera photo uploaded to a reverse image search site (#349). */
+    PHOTO_SEARCH("photo_search", ToolbarTool.CAMERA),
     AI("ai", ToolbarTool.AI),
     AI_CHAT("ai_chat", ToolbarTool.AI),
     TRANSCRIPTION("transcription", ToolbarTool.VOICE),

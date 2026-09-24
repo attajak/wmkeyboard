@@ -45,6 +45,7 @@ it.
 | Reporting a GIF or sticker result | none of the app's own | nothing: it builds a mail draft naming the provider, your search term, and the result's id and URL | only when you tap Report in the long-press menu, and only your mail app sends it |
 | Web search | `api.search.brave.com` | your search query | only when you submit a search, never as you type |
 | Image search | `api.search.brave.com` | your search query | same (submit only) |
+| Camera, search by photo | `lens.google.com`, `www.bing.com`, `yandex.com` or `tineye.com`, whichever Tools / Camera / Search site names, or your own server for Custom | the photo, scaled to at most 1280 px | only when you press Search on a photo with Search with set to Web. The default, Google Lens, and the share sheet hand the photo to another app and send nothing from the keyboard |
 | Dictionary | `kaikki.org`, `en.wiktionary.org`, `api.dictionaryapi.dev`, in the order set under Tools / Dictionary / Dictionary sources | one English word: your selection, or the word at the cursor | on panel open, if "Look up the word at the cursor" is on (the default); also on manual search. A source is asked only when the ones before it had no entry or could not be reached. Installed vocabulary packs are read on the device first, and send nothing |
 | Synonyms | `api.datamuse.com`, `kaikki.org`, `api.dictionaryapi.dev`, in the order set under Typing / Suggestions / Synonym sources | one English word: the word you held on the suggestion strip | only when you tap Synonyms in the word menu, and a source is asked only when the ones before it had nothing. Installed vocabulary packs are read on the phone first, and send nothing |
 | Wikipedia | `wikipedia.org` | your search text or an article title | only when you search or open an article, never on panel open |
@@ -98,7 +99,7 @@ Everything else in the toolbox is offline by design: OCR (apart from the
 one-time download of a language's Tesseract data, below), QR/barcode
 scanning, document scanning, the calculator, unit converter, symbols picker,
 password generator, QR code generation, grammar and spell-check, the camera
-tool, and every calendar/alt-calendar/qibla/moon-phase/solar-time feature.
+tool (apart from searching with a photo on the Web setting, above), and every calendar/alt-calendar/qibla/moon-phase/solar-time feature.
 See [Scanner](/tools/scanner/#options) and
 [Utility tools](/tools/utilities/#details--edge-cases) for their own
 confirmations of that.

@@ -44,6 +44,7 @@ import androidx.compose.material.icons.outlined.Cameraswitch
 import androidx.compose.material.icons.outlined.FlashAuto
 import androidx.compose.material.icons.outlined.FlashOff
 import androidx.compose.material.icons.outlined.FlashOn
+import androidx.compose.material.icons.outlined.ImageSearch
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.TimerOff
@@ -140,13 +141,15 @@ private class PanelGeometry(
  * viewfinder frames is what gets sent, unless the full-frame setting says
  * to send the whole 4:3 picture. Controls: shutter, front/back
  * switch, flash mode, self-timer; after a capture, retake or send (via
- * commitContent, like clipboard images). Shutter sound and haptics are
- * per-tool settings.
+ * commitContent, like clipboard images), or search by the photo when the
+ * Search button is on (#349). Shutter sound and haptics are per-tool settings.
+ *
+ * [onSend] takes the photo and whether it is a search rather than a send.
  */
 @Composable
 internal fun CameraPanel(
     state: KeyboardUiState,
-    onSend: (File) -> Unit,
+    onSend: (File, Boolean) -> Unit,
     onRequestPermission: () -> Unit,
     onClose: () -> Unit,
 ) {
@@ -234,7 +237,7 @@ internal fun CameraPanel(
 @Composable
 private fun CameraContent(
     state: KeyboardUiState,
-    onSend: (File) -> Unit,
+    onSend: (File, Boolean) -> Unit,
     onClose: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -456,50 +459,67 @@ private fun CameraContent(
                 feedback = feedback,
                 onClose = onClose,
             )
+            // Opened from image search, the photo is for searching and Send
+            // would be a surprise; otherwise Search is there when the setting
+            // adds it. Retake is always first.
+            val actions = buildList {
+                add(CaptureAction.RETAKE)
+                if (!state.cameraSearchOnly) add(CaptureAction.SEND)
+                if (state.cameraSearchOnly || state.settings.camera.searchButton) add(CaptureAction.SEARCH)
+            }
+            val act = { action: CaptureAction ->
+                when (action) {
+                    CaptureAction.RETAKE -> {
+                        feedback()
+                        scope.launch(Dispatchers.IO) { captured.file.delete() }
+                        pending = null
+                    }
+                    // Send's vibration comes from the service handler.
+                    CaptureAction.SEND -> {
+                        pending = null
+                        onSend(captured.file, false)
+                    }
+                    // The photo stays up: the service closes the panel once
+                    // the search is on its way, and a search that could not
+                    // start (data saver, a failed upload) leaves it to retry.
+                    CaptureAction.SEARCH -> onSend(captured.file, true)
+                }
+            }
             // The ring exists only on this frozen still — the live viewfinder
             // below publishes nothing, so the count drops to zero on Retake.
             PanelFocusTarget(
                 panel = PanelMode.CAMERA,
                 region = FocusRegion.ACTIONS,
-                count = 2,
-                columns = 2,
-            ) { index ->
-                if (index == 0) {
-                    feedback()
-                    scope.launch(Dispatchers.IO) { captured.file.delete() }
-                    pending = null
-                } else {
-                    pending = null
-                    onSend(captured.file)
-                }
-            }
+                count = actions.size,
+                columns = actions.size,
+            ) { index -> actions.getOrNull(index)?.let(act) }
             val focusedAction = state.focusedIndex(FocusRegion.ACTIONS)
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                horizontalArrangement = Arrangement.spacedBy(if (actions.size > 2) 10.dp else 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                CaptureActionButton(
-                    icon = Icons.Outlined.Refresh,
-                    label = stringResource(R.string.ime_camera_retake_action),
-                    accent = false,
-                    focused = focusedAction == 0,
-                ) {
-                    feedback()
-                    scope.launch(Dispatchers.IO) { captured.file.delete() }
-                    pending = null
-                }
-                CaptureActionButton(
-                    icon = Icons.AutoMirrored.Outlined.Send,
-                    label = stringResource(R.string.ime_camera_send_action),
-                    accent = true,
-                    focused = focusedAction == 1,
-                ) {
-                    // Send's vibration comes from the service handler.
-                    pending = null
-                    onSend(captured.file)
+                actions.forEachIndexed { index, action ->
+                    CaptureActionButton(
+                        icon = when (action) {
+                            CaptureAction.RETAKE -> Icons.Outlined.Refresh
+                            CaptureAction.SEND -> Icons.AutoMirrored.Outlined.Send
+                            CaptureAction.SEARCH -> Icons.Outlined.ImageSearch
+                        },
+                        label = stringResource(
+                            when (action) {
+                                CaptureAction.RETAKE -> R.string.ime_camera_retake_action
+                                CaptureAction.SEND -> R.string.ime_camera_send_action
+                                CaptureAction.SEARCH -> R.string.ime_camera_search_action
+                            },
+                        ),
+                        // Send stays the main action while it is there.
+                        accent = action == CaptureAction.SEND ||
+                            (action == CaptureAction.SEARCH && CaptureAction.SEND !in actions),
+                        focused = focusedAction == index,
+                    ) { act(action) }
                 }
             }
             return@Box
@@ -664,6 +684,9 @@ private fun CameraContent(
         }
     }
 }
+
+/** What the confirm step can do with a photo. */
+private enum class CaptureAction { RETAKE, SEND, SEARCH }
 
 /** Back-to-keys chip pinned to the top-left of the visible viewfinder. */
 @Composable

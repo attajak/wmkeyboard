@@ -191,13 +191,58 @@ object ToolHttp {
         }
     }
 
+    /** What [postMultipartUnfollowed] got back. */
+    class RawResponse(val status: Int, val location: String?, val body: String)
+
+    /**
+     * [postMultipart] that neither follows a redirect nor throws on a status
+     * outside 200..299, and whose [file] may be left out to send the text
+     * [fields] alone.
+     *
+     * For the reverse image search sites (#349): they answer an upload with a
+     * redirect to the results page, and that address is the whole answer. The
+     * page is for the user's browser to open, not for this client to fetch.
+     */
+    fun postMultipartUnfollowed(
+        url: String,
+        fields: List<Pair<String, String>>,
+        file: FilePart?,
+        timeoutMs: Int = 30_000,
+        source: NetSource? = null,
+        route: String? = null,
+    ): RawResponse {
+        val boundary = "----wmkb" + java.util.UUID.randomUUID().toString().replace("-", "")
+        val body = multipartBody(boundary, fields, file)
+        return metered(url, "POST", source, route) { connection, call ->
+            connection.connectTimeout = 10_000
+            connection.readTimeout = timeoutMs
+            connection.instanceFollowRedirects = false
+            connection.setRequestProperty("User-Agent", USER_AGENT)
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setFixedLengthStreamingMode(body.size)
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=$boundary")
+            connection.send(body, call)
+            val status = connection.responseCode
+            call.status = status
+            val text = if (status >= 400) {
+                connection.readError(call).orEmpty()
+            } else {
+                // A redirect often has no body at all, and some servers
+                // answer the read with an error rather than an empty stream.
+                runCatching { connection.readBody(call) }.getOrDefault("")
+            }
+            RawResponse(status, connection.getHeaderField("Location"), text)
+        }
+    }
+
     /** The bytes [postMultipart] sends; separate so a test can read them. */
     internal fun multipartBody(
         boundary: String,
         fields: List<Pair<String, String>>,
-        file: FilePart,
+        file: FilePart?,
     ): ByteArray {
-        val out = java.io.ByteArrayOutputStream(file.bytes.size + 1024)
+        val out = java.io.ByteArrayOutputStream((file?.bytes?.size ?: 0) + 1024)
         fun line(text: String) = out.write("$text\r\n".toByteArray(Charsets.UTF_8))
         for ((name, value) in fields) {
             line("--$boundary")
@@ -205,12 +250,14 @@ object ToolHttp {
             line("")
             line(value)
         }
-        line("--$boundary")
-        line("Content-Disposition: form-data; name=\"${file.field}\"; filename=\"${file.fileName}\"")
-        line("Content-Type: ${file.mimeType}")
-        line("")
-        out.write(file.bytes)
-        line("")
+        if (file != null) {
+            line("--$boundary")
+            line("Content-Disposition: form-data; name=\"${file.field}\"; filename=\"${file.fileName}\"")
+            line("Content-Type: ${file.mimeType}")
+            line("")
+            out.write(file.bytes)
+            line("")
+        }
         line("--$boundary--")
         return out.toByteArray()
     }

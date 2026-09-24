@@ -89,6 +89,7 @@ import coil3.gif.GifDecoder
 import coil3.memory.MemoryCache
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.settings.GifSourceMode
+import com.wasimaster.wmkeyboard.core.icons.IconSlots
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.tools.GifItem
 import com.wasimaster.wmkeyboard.core.tools.GifSource
@@ -1561,6 +1562,20 @@ internal fun WebSearchPanel(
 }
 
 // ---- image search panel ----
+
+/**
+ * Camera button beside the image search box (#349): opens the camera tool
+ * with Search in place of Send, to search by a photo instead of by words.
+ */
+@Composable
+internal fun SearchByPhotoButton(onClick: () -> Unit) {
+    ToolCircle(
+        slot = IconSlots.forTool(ToolbarTool.CAMERA),
+        description = stringResource(R.string.ime_image_search_by_photo_desc),
+        active = false,
+        onClick = onClick,
+    )
+}
 
 /**
  * Image search: grid of thumbnails; tap inserts the image itself (via

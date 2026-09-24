@@ -4237,6 +4237,38 @@ data class CjkSettings(
     val hanRegion: HanVariant.HanRegion = HanVariant.HanRegion.GENERIC,
 )
 
+/**
+ * Where the camera tool's Search button sends a photo (#349). Stored by name.
+ */
+enum class PhotoSearchTarget {
+    /**
+     * The Google app's Lens, when it is installed; the Android share sheet
+     * when it is not, so the button never dead-ends on a phone without it.
+     */
+    LENS,
+
+    /** Upload to the [PhotoSearchEngine] and open its results in the browser. */
+    WEB,
+
+    /** The Android share sheet: any app that takes an image. */
+    SHARE,
+}
+
+/**
+ * The reverse image search site for [PhotoSearchTarget.WEB]. Stored by name.
+ * None of them has a documented upload API; each is the request the site's
+ * own upload button makes, so any one of them can break without notice.
+ */
+enum class PhotoSearchEngine {
+    GOOGLE_LENS,
+    BING,
+    YANDEX,
+    TINEYE,
+
+    /** The user's own server: [CameraSettings.searchCustomUrl]. */
+    CUSTOM,
+}
+
 data class CameraSettings(
     /** Camera tool opens on the selfie camera. */
     val preferFront: Boolean = false,
@@ -4268,6 +4300,24 @@ data class CameraSettings(
      * send; this keeps the slivers that ran off the top and the bottom too.
      */
     val fullFrame: Boolean = false,
+    /**
+     * A Search button beside Retake and Send on the confirm step (#349). Off
+     * by default: most photos taken here are for sending. The image search
+     * tool's own camera button shows it whatever this says.
+     */
+    val searchButton: Boolean = false,
+    /** Where Search sends the photo. */
+    val searchWith: PhotoSearchTarget = PhotoSearchTarget.LENS,
+    /** The site [PhotoSearchTarget.WEB] uploads to. */
+    val searchEngine: PhotoSearchEngine = PhotoSearchEngine.GOOGLE_LENS,
+    /**
+     * Upload address for [PhotoSearchEngine.CUSTOM]. The keyboard posts the
+     * photo there as multipart form data and opens the page the server
+     * answers with: a redirect, a bare URL, or JSON with a `url` field.
+     */
+    val searchCustomUrl: String = "",
+    /** Form field the photo goes in, for [PhotoSearchEngine.CUSTOM]. */
+    val searchCustomField: String = "image",
 )
 
 /**
@@ -7781,6 +7831,11 @@ class SettingsRepository(private val context: Context) {
         private val CAMERA_HAPTICS = booleanPreferencesKey("camera_haptics")
         private val CAMERA_SAVE_TO_GALLERY = booleanPreferencesKey("camera_save_to_gallery")
         private val CAMERA_FULL_FRAME = booleanPreferencesKey("camera_full_frame")
+        private val CAMERA_SEARCH_BUTTON = booleanPreferencesKey("camera_search_button")
+        private val CAMERA_SEARCH_WITH = stringPreferencesKey("camera_search_with")
+        private val CAMERA_SEARCH_ENGINE = stringPreferencesKey("camera_search_engine")
+        private val CAMERA_SEARCH_CUSTOM_URL = stringPreferencesKey("camera_search_custom_url")
+        private val CAMERA_SEARCH_CUSTOM_FIELD = stringPreferencesKey("camera_search_custom_field")
         private val DOC_SCAN_SAVE_TO_GALLERY = booleanPreferencesKey("doc_scan_save_to_gallery")
         private val QR_SAVE_TO_GALLERY = booleanPreferencesKey("qr_save_to_gallery")
         private val STICKER_SEND_MODE = stringPreferencesKey("sticker_send_mode")
@@ -9276,6 +9331,16 @@ class SettingsRepository(private val context: Context) {
                 haptics = p[CAMERA_HAPTICS] ?: defaults.camera.haptics,
                 saveToGallery = p[CAMERA_SAVE_TO_GALLERY] ?: defaults.camera.saveToGallery,
                 fullFrame = p[CAMERA_FULL_FRAME] ?: defaults.camera.fullFrame,
+                searchButton = p[CAMERA_SEARCH_BUTTON] ?: defaults.camera.searchButton,
+                searchWith = p[CAMERA_SEARCH_WITH]
+                    ?.let { runCatching { PhotoSearchTarget.valueOf(it) }.getOrNull() }
+                    ?: defaults.camera.searchWith,
+                searchEngine = p[CAMERA_SEARCH_ENGINE]
+                    ?.let { runCatching { PhotoSearchEngine.valueOf(it) }.getOrNull() }
+                    ?: defaults.camera.searchEngine,
+                searchCustomUrl = p[CAMERA_SEARCH_CUSTOM_URL] ?: defaults.camera.searchCustomUrl,
+                searchCustomField = p[CAMERA_SEARCH_CUSTOM_FIELD]
+                    ?.takeIf { it.isNotBlank() } ?: defaults.camera.searchCustomField,
             ),
             stickerSendMode = p[STICKER_SEND_MODE]
                 ?.let { runCatching { MediaSendMode.valueOf(it) }.getOrNull() }
@@ -10276,6 +10341,21 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setCameraFullFrame(value: Boolean) =
         editPrefs { it[CAMERA_FULL_FRAME] = value }
+
+    suspend fun setCameraSearchButton(value: Boolean) =
+        editPrefs { it[CAMERA_SEARCH_BUTTON] = value }
+
+    suspend fun setCameraSearchWith(value: PhotoSearchTarget) =
+        editPrefs { it[CAMERA_SEARCH_WITH] = value.name }
+
+    suspend fun setCameraSearchEngine(value: PhotoSearchEngine) =
+        editPrefs { it[CAMERA_SEARCH_ENGINE] = value.name }
+
+    suspend fun setCameraSearchCustomUrl(value: String) =
+        editPrefs { it[CAMERA_SEARCH_CUSTOM_URL] = value.trim() }
+
+    suspend fun setCameraSearchCustomField(value: String) =
+        editPrefs { it[CAMERA_SEARCH_CUSTOM_FIELD] = value.trim() }
 
     suspend fun setDocScanSaveToGallery(value: Boolean) =
         editPrefs { it[DOC_SCAN_SAVE_TO_GALLERY] = value }

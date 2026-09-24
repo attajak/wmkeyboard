@@ -133,6 +133,8 @@
     <string name="ime_camera_permission_action">Allow camera</string>
     <string name="ime_camera_retake_action">Retake</string>
     <string name="ime_camera_send_action">Send</string>
+    <!-- Confirm step: search the web with this photo instead of sending it (#349). -->
+    <string name="ime_camera_search_action">Search</string>
     <!-- Screen reader labels for the controls over the viewfinder. -->
     <string name="ime_camera_close_desc">Close the camera</string>
     <string name="ime_camera_captured_photo_desc">The photo you took</string>

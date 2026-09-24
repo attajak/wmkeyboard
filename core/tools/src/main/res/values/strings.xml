@@ -207,6 +207,11 @@
     <string name="core_tools_error_deepl_write_key">DeepL did not accept the key for DeepL Write. Write needs a DeepL API Pro key.</string>
     <string name="core_tools_error_deepl_write_language">DeepL Write cannot improve text in this language</string>
     <string name="core_tools_error_deepl_empty">DeepL sent back no text</string>
+    <!-- Search by photo (#349). The site answered, but not with a results page the keyboard knows how to read. -->
+    <string name="core_tools_error_photo_search_no_page">The search site did not send a results page. It may have changed how it takes photos. Try a different site.</string>
+    <!-- %1$d is the HTTP status code. -->
+    <string name="core_tools_error_photo_search_refused">The search site did not accept the photo (HTTP <xliff:g id="status" example="429">%1$d</xliff:g>)</string>
+    <string name="core_tools_error_photo_search_no_server">Enter the address of your search server in the camera tool settings</string>
 
     <!-- ================================================================== -->
     <!-- Calendar tool: events read from the device calendar.               -->

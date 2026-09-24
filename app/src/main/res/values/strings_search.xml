@@ -144,6 +144,7 @@
     <string name="search_kw_tooldetail_crypto_enable">bitcoin crypto ethereum</string>
     <string name="search_kw_tooldetail_currency_auto_fetch">offline automatic download exchange</string>
     <string name="search_kw_tooldetail_weather_auto_fetch">offline automatic download</string>
+    <string name="search_kw_tooldetail_camera_search_button">reverse image lens visual identify plant insect tineye yandex bing</string>
     <string name="search_kw_typing_auto_capitalize">autocaps autocapitalize autocapitalisation</string>
     <string name="search_kw_typing_autocorrect_confidence">threshold aggressive aggressiveness modest</string>
     <string name="search_kw_typing_autocorrect">auto replace changing</string>

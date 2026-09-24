@@ -30,6 +30,8 @@ import com.wasimaster.wmkeyboard.core.notify.DownloadKeys
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.settings.AppSortOrder
 import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
+import com.wasimaster.wmkeyboard.core.settings.PhotoSearchEngine
+import com.wasimaster.wmkeyboard.core.settings.PhotoSearchTarget
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.tools.CryptoCatalog
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
@@ -893,6 +895,76 @@ internal fun ToolDetailSettings(
                         info = stringResource(R.string.tooldetail_camera_gallery_info),
                         default = SettingsDefaults.camera.saveToGallery,
                     ) { scope.launch { repository.setCameraSaveToGallery(it) } }
+                }
+            }
+            SettingsGroup(
+                stringResource(R.string.tooldetail_camera_search_group),
+                info = stringResource(R.string.tooldetail_camera_search_info),
+            ) {
+                val camera = settings.camera
+                val onWeb = camera.searchWith == PhotoSearchTarget.WEB
+                item {
+                    ToggleSetting(
+                        R.string.tooldetail_camera_search_button_title,
+                        stringResource(R.string.tooldetail_camera_search_button_subtitle),
+                        camera.searchButton,
+                        default = SettingsDefaults.camera.searchButton,
+                    ) { scope.launch { repository.setCameraSearchButton(it) } }
+                }
+                item {
+                    ChoiceSetting(
+                        R.string.tooldetail_camera_search_with_title,
+                        info = stringResource(R.string.tooldetail_camera_search_with_info),
+                        options = listOf(
+                            PhotoSearchTarget.LENS to stringResource(R.string.tooldetail_camera_search_with_lens),
+                            PhotoSearchTarget.WEB to stringResource(R.string.tooldetail_camera_search_with_web),
+                            PhotoSearchTarget.SHARE to stringResource(R.string.tooldetail_camera_search_with_share),
+                        ),
+                        selected = camera.searchWith,
+                        default = SettingsDefaults.camera.searchWith,
+                        detail = { target ->
+                            ChoiceDetail(
+                                stringResource(
+                                    when (target) {
+                                        PhotoSearchTarget.LENS -> R.string.tooldetail_camera_search_with_lens_desc
+                                        PhotoSearchTarget.WEB -> R.string.tooldetail_camera_search_with_web_desc
+                                        PhotoSearchTarget.SHARE -> R.string.tooldetail_camera_search_with_share_desc
+                                    },
+                                ),
+                            )
+                        },
+                    ) { scope.launch { repository.setCameraSearchWith(it) } }
+                }
+                item(visible = onWeb) {
+                    ChoiceSetting(
+                        R.string.tooldetail_camera_search_engine_title,
+                        info = stringResource(R.string.tooldetail_camera_search_engine_info),
+                        options = listOf(
+                            PhotoSearchEngine.GOOGLE_LENS to stringResource(R.string.tooldetail_camera_search_engine_lens),
+                            PhotoSearchEngine.BING to stringResource(R.string.tooldetail_camera_search_engine_bing),
+                            PhotoSearchEngine.YANDEX to stringResource(R.string.tooldetail_camera_search_engine_yandex),
+                            PhotoSearchEngine.TINEYE to stringResource(R.string.tooldetail_camera_search_engine_tineye),
+                            PhotoSearchEngine.CUSTOM to stringResource(R.string.tooldetail_camera_search_engine_custom),
+                        ),
+                        selected = camera.searchEngine,
+                        default = SettingsDefaults.camera.searchEngine,
+                    ) { scope.launch { repository.setCameraSearchEngine(it) } }
+                }
+                item(visible = onWeb && camera.searchEngine == PhotoSearchEngine.CUSTOM) {
+                    TextFieldSetting(
+                        label = stringResource(R.string.tooldetail_camera_search_custom_url_label),
+                        value = camera.searchCustomUrl,
+                        hint = stringResource(R.string.tooldetail_camera_search_custom_url_hint),
+                        default = SettingsDefaults.camera.searchCustomUrl,
+                    ) { repository.setCameraSearchCustomUrl(it) }
+                }
+                item(visible = onWeb && camera.searchEngine == PhotoSearchEngine.CUSTOM) {
+                    TextFieldSetting(
+                        label = stringResource(R.string.tooldetail_camera_search_custom_field_label),
+                        value = camera.searchCustomField,
+                        hint = stringResource(R.string.tooldetail_camera_search_custom_field_hint),
+                        default = SettingsDefaults.camera.searchCustomField,
+                    ) { repository.setCameraSearchCustomField(it) }
                 }
             }
             SettingsGroup(
