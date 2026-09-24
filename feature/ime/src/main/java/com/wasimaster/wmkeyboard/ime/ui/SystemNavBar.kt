@@ -1,15 +1,20 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import android.annotation.SuppressLint
+import android.content.res.Resources
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.tappableElement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.bottomPaddingOr
@@ -97,17 +102,44 @@ fun SystemNavigationBarColor(kb: KbTheme) {
 
 /**
  * True when the window's bottom edge carries a gesture handle rather than a
- * row of navigation buttons: the navigation bar has height there, and none of
- * it is tappable. False below Android 15 inside the keyboard, whose window
- * stops above the bar and sees no inset at all, and for a three-button bar
- * turned into a side rail in landscape.
+ * row of navigation buttons. False below Android 15 inside the keyboard, whose
+ * window stops above the bar and sees no inset at all, and for a three-button
+ * bar turned into a side rail in landscape.
+ *
+ * The kind of bar comes from the system's navigation mode, not from the
+ * insets: in gesture mode the system draws its own hide-keyboard and
+ * switch-keyboard buttons into the keyboard's bar, and on ColorOS 15 those
+ * made the bar count as tappable, so the keyboard took it for three-button
+ * navigation and dropped its padding onto the buttons. Tappable insets are
+ * only the fallback for a build that does not publish the mode.
  */
 @Composable
 fun gestureBarAtBottom(): Boolean {
     val density = LocalDensity.current
-    return WindowInsets.navigationBars.getBottom(density) > 0 &&
+    if (WindowInsets.navigationBars.getBottom(density) == 0) return false
+    val resources = LocalContext.current.resources
+    // Switching the navigation mode swaps a framework overlay, which arrives
+    // as a configuration change.
+    val mode = remember(resources, LocalConfiguration.current) { navigationMode(resources) }
+    return if (mode != null) {
+        mode == NAV_MODE_GESTURAL
+    } else {
         WindowInsets.tappableElement.getBottom(density) == 0
+    }
 }
+
+/** `config_navBarInteractionMode` for fully gestural navigation. */
+private const val NAV_MODE_GESTURAL = 2
+
+/**
+ * The system's navigation mode — 0 three buttons, 1 two buttons, 2 gestures —
+ * or null when this build does not publish it.
+ */
+@SuppressLint("DiscouragedApi")
+private fun navigationMode(resources: Resources): Int? = runCatching {
+    val id = resources.getIdentifier("config_navBarInteractionMode", "integer", "android")
+    if (id == 0) null else resources.getInteger(id)
+}.getOrNull()
 
 /** The bottom padding [settings] asks for here, the automatic one while unset (#343). */
 @Composable

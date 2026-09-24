@@ -196,7 +196,7 @@ See [Switching languages](/languages/switching/#using-the-globe-key) and [Openin
 - **Per-screen sizing has no "folded" shape.** Portrait itself is the base folded size. "Unfolded" is decided live by screen width rather than a fold sensor, so it can flip mid-session on a foldable device.
 - **"Type native digits in" is not the digit-glyph picker.** Which glyphs a language's digits use (Latin, Arabic-Indic, Bengali, Devanagari and so on) is set per language under [Languages](/languages/overview/). This screen only controls where the resulting glyphs get committed.
 - **Bottom row height's 0 value reads as "Follow keys," not "0 dp."** It's the default, and it means the space/enter row matches the letter-key height exactly.
-- **Bottom padding's default depends on your Android version.** It's 32 dp on Android 15 and up, where the IME window can draw behind the gesture bar, and 8 dp on older versions.
+- **Bottom padding's default depends on your Android version and navigation mode.** It's 32 dp on Android 15 and up with gesture navigation, where the IME window draws behind the gesture bar and the system's hide-keyboard and switch-keyboard buttons, and 8 dp with three-button navigation or on older versions.
 - **Per-screen overrides don't reset one field at a time.** **Follow portrait again** clears a whole shape instead. **Characters that go back** has no restore button either, since it's a plain text field: empty it and the built-in `!?.,;:` comes back. Everything else on this screen has the usual [per-setting restore button](/reference/settings/#putting-one-setting-back).
 - **No edition differences.** Every control on this screen behaves the same on the full and lite builds.
 
