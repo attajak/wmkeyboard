@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.wasimaster.wmkeyboard.common.R
 
@@ -151,68 +151,50 @@ object PermissionDisclosures {
 }
 
 /**
- * Where a permission stands, from the point of view of asking for it again.
+ * Tells a refusal the user made apart from one Android made on their behalf.
  *
- * The distinction that matters is [BLOCKED]: after two refusals Android stops
- * showing the dialog at all and `requestPermissions` returns "denied" without
- * anything appearing on screen. A button that silently does nothing is worse
- * than no button, so that case sends the user to the app's permission settings
- * instead of firing a request that cannot be seen.
- */
-enum class PermissionState {
-    /** Already held; nothing to ask for. */
-    GRANTED,
-
-    /** Never asked, or refused once — the system dialog will still appear. */
-    ASKABLE,
-
-    /** Refused for good (or restricted by policy): only Settings can grant it now. */
-    BLOCKED,
-}
-
-/**
- * Remembers which permissions have been asked for at least once.
+ * After two refusals Android stops drawing the permission dialog, and
+ * `requestPermissions` comes straight back "denied" with nothing on screen. A
+ * button that silently does nothing is worse than no button, so that case has
+ * to end at the app's page in Settings instead.
  *
- * `shouldShowRequestPermissionRationale` cannot tell "never asked" from
- * "permanently denied" — both answer false — so the ask has to be recorded
- * somewhere to distinguish them. Device-protected storage, so this works in
- * the same direct-boot window the keyboard itself runs in; the contents are one
- * boolean per permission and nothing private.
+ * Nothing an app can read *before* asking separates that case from one where
+ * the dialog will still appear. `shouldShowRequestPermissionRationale` answers
+ * false for "denied for good", but also for "never asked" and — the case that
+ * matters most — for every permission set to **Ask every time** (issue #351):
+ * both that Settings choice and the expiry of an "Only this time" grant clear
+ * the platform's USER_SET flag, which is all the rationale call reads. A guess
+ * made up front would send one-time users to a Settings page that has no
+ * one-time option, forever.
+ *
+ * So the request always goes out first, and only its answer decides: a denial
+ * that arrives faster than anyone could read and answer a dialog, for a
+ * permission Android no longer wants a rationale for, was never shown.
  */
-private object PermissionAsks {
+internal class PermissionProbe {
 
-    private const val PREFS = "permission_asks"
+    private var launchedAt = 0L
 
-    private fun prefs(context: Context) =
-        context.createDeviceProtectedStorageContext()
-            .getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-
-    fun mark(context: Context, permission: String) {
-        runCatching { prefs(context).edit { putBoolean(permission, true) } }
+    /** Call right before `launch()`. */
+    fun launched() {
+        launchedAt = SystemClock.elapsedRealtime()
     }
 
-    fun asked(context: Context, permission: String): Boolean =
-        runCatching { prefs(context).getBoolean(permission, false) }.getOrDefault(false)
-}
+    /** Whether a denial for [permission] was Android's answer, not the user's. */
+    fun silentlyRefused(activity: Activity, permission: String): Boolean =
+        launchedAt != 0L &&
+            SystemClock.elapsedRealtime() - launchedAt < SILENT_REFUSAL_MS &&
+            !activity.shouldShowRequestPermissionRationale(permission)
 
-/**
- * Whether [permission] can still be asked for, or only granted from Settings.
- *
- * One known imprecision: revoking a granted permission from Settings (or
- * Android's auto-reset for unused apps) clears the platform's own "don't ask
- * again" flag while the ask is still recorded here, so the next attempt routes
- * to Settings even though the prompt would have worked. That errs toward a
- * screen that always works rather than one that may silently do nothing, which
- * is the right way round.
- */
-fun permissionState(activity: Activity, permission: String): PermissionState = when {
-    activity.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED ->
-        PermissionState.GRANTED
-    // Refused once: Android still shows the dialog, and wants a reason first.
-    activity.shouldShowRequestPermissionRationale(permission) -> PermissionState.ASKABLE
-    // Never asked: the first request always reaches the user.
-    !PermissionAsks.asked(activity, permission) -> PermissionState.ASKABLE
-    else -> PermissionState.BLOCKED
+    private companion object {
+        /**
+         * The auto-denial is a same-process activity round trip, well under
+         * this; a person reading the dialog and pressing a button is well over.
+         * Erring long only means a very fast "Don't allow" also gets the
+         * Settings offer, which the user can wave off with "Not now".
+         */
+        const val SILENT_REFUSAL_MS = 500L
+    }
 }
 
 /** The app's own page in system Settings, where a blocked permission can still be granted. */
@@ -302,16 +284,26 @@ fun rememberDisclosedPermissionRequest(
     onGranted: () -> Unit,
 ): () -> Unit {
     val context = LocalContext.current
+    val probe = remember { PermissionProbe() }
+    var showing by remember { mutableStateOf(false) }
+    // Only ever set by the answer to a request: see [PermissionProbe].
+    var blocked by remember { mutableStateOf(false) }
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
-    ) { granted -> if (granted) onGranted() }
-    var showing by remember { mutableStateOf(false) }
-    if (showing && disclosure != null) {
-        // Read at show time, not at composition time: the user may have changed
-        // the permission in Settings since this screen was drawn.
+    ) { granted ->
         val activity = context.findActivity()
-        val blocked = activity != null &&
-            permissionState(activity, disclosure.permission) == PermissionState.BLOCKED
+        when {
+            granted -> onGranted()
+            disclosure != null && activity != null &&
+                probe.silentlyRefused(activity, disclosure.permission) -> {
+                // Android refused without drawing anything; bring the
+                // disclosure back, now pointing at Settings.
+                blocked = true
+                showing = true
+            }
+        }
+    }
+    if (showing && disclosure != null) {
         PermissionDisclosureDialog(
             disclosure = disclosure,
             blocked = blocked,
@@ -320,14 +312,21 @@ fun rememberDisclosedPermissionRequest(
                 if (blocked) {
                     runCatching { context.startActivity(appSettingsIntent(context)) }
                 } else {
-                    PermissionAsks.mark(context, disclosure.permission)
+                    probe.launched()
                     launcher.launch(disclosure.permission)
                 }
             },
             onDismiss = { showing = false },
         )
     }
-    return { if (disclosure == null) onGranted() else showing = true }
+    return {
+        if (disclosure == null) {
+            onGranted()
+        } else {
+            blocked = false
+            showing = true
+        }
+    }
 }
 
 /** The Activity behind a Compose context, for the calls that only Activity has. */
@@ -356,18 +355,33 @@ abstract class PermissionRequestActivity : ComponentActivity() {
     /** The permission to ask for, or null when this build/API needs none. */
     protected abstract val disclosure: PermissionDisclosure?
 
+    private val probe = PermissionProbe()
+
+    // Only ever set by the answer to a request: see [PermissionProbe].
+    private var blocked by mutableStateOf(false)
+
     private val request =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { finish() }
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            val permission = disclosure?.permission
+            if (!granted && permission != null && probe.silentlyRefused(this, permission)) {
+                // Android refused without drawing anything. The disclosure is
+                // still on screen behind where the dialog would have been;
+                // it now says so and offers Settings instead.
+                blocked = true
+            } else {
+                finish()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val disclosure = disclosure
-        val state = disclosure?.let { permissionState(this, it.permission) }
-        if (disclosure == null || state == PermissionState.GRANTED) {
+        if (disclosure == null ||
+            checkSelfPermission(disclosure.permission) == PackageManager.PERMISSION_GRANTED
+        ) {
             finish()
             return
         }
-        val blocked = state == PermissionState.BLOCKED
         setContent {
             DisclosureTheme {
                 PermissionDisclosureDialog(
@@ -375,16 +389,12 @@ abstract class PermissionRequestActivity : ComponentActivity() {
                     blocked = blocked,
                     onContinue = {
                         if (blocked) {
-                            // The system dialog would never appear; the app's
+                            // The system dialog will not appear; the app's
                             // settings page is the only place left to grant it.
                             runCatching { startActivity(appSettingsIntent(this)) }
                             finish()
                         } else {
-                            // Marked before the launch, not in the result callback:
-                            // these trampolines are android:noHistory, so the
-                            // callback may never arrive once the system dialog
-                            // covers them.
-                            PermissionAsks.mark(this, disclosure.permission)
+                            probe.launched()
                             request.launch(disclosure.permission)
                         }
                     },

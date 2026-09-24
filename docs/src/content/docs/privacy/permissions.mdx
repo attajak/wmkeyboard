@@ -39,9 +39,9 @@ A build downloaded from the project's GitHub releases declares two more that no 
 
 Refuse the same permission twice and Android stops showing that prompt entirely. It tells neither the app nor you. The next tap just returns "denied" with nothing on screen, which normally leaves you pressing a button that appears to do nothing.
 
-The keyboard checks for that case and changes what the button does. You get the same explanation as before, plus a line saying Android has stopped asking. The button becomes **Open system settings** and drops you on the app's own permission page, where the choice still lives. Grant it there and the feature works the next time you open it.
+The keyboard notices when that happens. Tap the button, Android answers "denied" before any prompt could have been read, and the explanation comes back with a line saying Android has stopped asking. The button becomes **Open system settings** and drops you on the app's own permission page, where the choice still lives. Grant it there and the feature works the next time you open it.
 
-One rough edge is worth knowing about. If you granted a permission and later revoked it from that same settings page, the keyboard sends you back to Settings rather than showing the prompt, even though the prompt would have worked. It errs toward the screen that always works over the one that might silently do nothing.
+The keyboard always asks first and only sends you to Settings once Android has refused on its own, because nothing it can check beforehand tells those two cases apart. That's what keeps **Ask every time** working. Set the camera or the microphone to it in Android's settings, and the grant button on the camera or voice panel brings up the system prompt with its **Only this time** choice. Android takes that grant back soon after you stop using the keyboard, and the panel asks again next time. This is standard Android 11 behaviour, so custom ROMs built on it work the same way.
 
 ## The three that aren't permissions
 
