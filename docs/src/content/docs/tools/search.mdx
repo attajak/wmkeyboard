@@ -65,7 +65,17 @@ An open article has three tabs:
 - **Links**: the article's outgoing links, namespace 0 only, so no Talk: or File: noise. The list is capped by **Links per article** in the tool's options: 50 to 500, defaulting to 200. 500 is as many as Wikipedia returns at once. The tab loads the first time you open it, and each link gets its own **Insert** chip.
 - **Full article**: the complete plain-text extract, split into paragraphs. Tap any paragraph to insert just that paragraph. Also loaded on first visit rather than up front.
 
+Two buttons beside the article's title are for reading it in more room. The expand button grows the panel up the screen, to as much as 80% of its height, and tapping it again brings it back to the keyboard's height; search results always stay at the normal height. The other opens the article's page on wikipedia.org in your browser.
+
+Under the title, next to the tabs, **Copy** copies the article's text (the full article once you've opened that tab, otherwise the summary) with its address after it.
+
 Once you've opened an article from a results list, a back arrow appears and returns you to those results instead of a blank search. The idle screen puts it simply, with `en` swapped for whichever language you've set below: "Search for a subject on en.wikipedia.org. Read the summary, open the links, and insert text or the address of the article."
+
+### Asking the AI about an article
+
+With the [AI tool](/tools/ai/) on, an **Ask AI** chip sits next to the tabs, beside **Copy**. It opens the AI panel's [chat](/tools/ai-chat/) on a new conversation with the article attached: the full article when you've opened that tab, otherwise the summary, along with its title, description and address. The keys come up under the message box so you can type your question straight away, or pick **Explain simply**, **Summarise** or **Hard words** to start one for you. Nothing is sent until you send it.
+
+To ask about one part, long-press a word in the summary or in a paragraph of the full article. The word is selected, with a handle at each end to drag it wider, and a bar over it offers **Ask AI**, **Copy**, **Insert**, **Quote** and **Select all**. **Ask AI** sends the passage along with the paragraph it came from, so the model reads it in context. **Quote** inserts the passage in quotation marks followed by the article it came from: `"…" (from [Wikipedia: Cat](https://en.wikipedia.org/wiki/Cat))` when **Markdown links** is on in the tool's options, `"…" (Wikipedia: Cat, https://en.wikipedia.org/wiki/Cat)` when it's off. Tap anywhere else to let the selection go. A selection stays inside one paragraph. **Copy** and **Quote** work without the AI tool.
 
 ### Options
 
@@ -93,6 +103,7 @@ The dictionary looks up English words in a chain of sources you put in order (se
 - Each entry shows the word and, when the source has them, its IPA phonetic transcription and a pronunciation-audio play button. The **Wiktionary definitions** source carries neither. An **Insert** chip types the headword itself at the cursor, not a definition.
 - Each meaning lists its part of speech, numbered definitions with optional italic example sentences, and up to 12 tappable **synonym**/**antonym** chips per row. Tapping a chip looks that word up in turn.
 - A line under the last entry names the source that answered, for example "From Wiktionary".
+- A **Copy** chip beside the search bar copies everything the look-up found as text. With the [AI tool](/tools/ai/) on, an **Ask AI** chip beside it opens a [chat](/tools/ai-chat/) about the same text, and a long press on a definition or an example selects it, with **Ask AI**, **Copy** and **Insert** on a bar over it. See [Asking the AI about an article](#asking-the-ai-about-an-article), which works the same way.
 - "The app cannot reach the dictionary" means no source could be reached: you're offline, or every online source you left on is down. A word that every reachable source answered for, without an entry, shows "No entry for" instead.
 
 ### Dictionary sources

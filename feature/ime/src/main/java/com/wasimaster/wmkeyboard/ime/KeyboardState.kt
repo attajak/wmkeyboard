@@ -1460,7 +1460,16 @@ data class AiChatUi(
  * when the user asked for it: while the composer has the keys nothing can type
  * into the field, so it cannot go stale under them.
  */
-data class AiChatAttachment(val text: String, val fromSelection: Boolean)
+data class AiChatAttachment(
+    val text: String,
+    val fromSelection: Boolean,
+    /**
+     * Where a tool's text came from, as the composer names it ("Wikipedia:
+     * Cat"), when a tool handed it over with Ask AI (#352); blank for the
+     * field's own text.
+     */
+    val label: String = "",
+)
 
 /**
  * Everything the chat mode can ask of the service, as one type.
@@ -1494,6 +1503,14 @@ sealed interface AiChatAction {
     data class OpenInApp(val list: Boolean = false) : AiChatAction
     /** The answer at [index] of the conversation, reported (Play builds). */
     data class Report(val index: Int) : AiChatAction
+
+    /**
+     * Ask AI from another tool (#352): the AI panel opens on a new chat with
+     * [text] attached and the composer taking the keys. [label] names where the
+     * text came from, for the composer; [fromSelection] is a passage rather
+     * than the whole.
+     */
+    data class AskAbout(val text: String, val label: String, val fromSelection: Boolean) : AiChatAction
 }
 
 /** The KDE Connect panel's tabs, in rail order. */
@@ -3456,12 +3473,16 @@ data class KeyboardUiState(
         // The word card runs its own caret and selection (#204); reporting a
         // second one here would let two of them disagree about the draft.
         if (captureTarget()?.ownsCaret == true) return CaretText(text, wordSpell?.cursor ?: text.length)
-        val at = captureCaret?.takeIf { it.key == key && it.text == text }?.at ?: text.length
-        return CaretText(text, at)
+        val caret = captureCaret?.takeIf { it.key == key && it.text == text }
+            ?: return CaretText(text, text.length)
+        return CaretText(text, caret.at, caret.anchor)
     }
 
     /** Where the caret is drawn in the focused buffer, for the panels' fields. */
     fun captureCaretIndex(): Int = captureCaretText()?.at ?: 0
+
+    /** The other end of the focused buffer's selection; [captureCaretIndex] when none (#352). */
+    fun captureAnchorIndex(): Int = captureCaretText()?.anchorAt ?: 0
 
     /**
      * The item a panel should ring in [region], or null when the ring is

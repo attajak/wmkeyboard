@@ -64,6 +64,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -1001,14 +1003,21 @@ internal fun ClipEditText(
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val density = LocalDensity.current
     val fontSize = 14.sp
+    // A selection in the draft (#352), as the one-line fields have it.
+    val overlay = LocalSelectionOverlay.current
+    val owner = remember { SelectionAnchor() }
+    val selecting = handle.hasSelection && handle.selectionEnd <= text.length
+    val latestHandle by rememberUpdatedState(handle)
     Box(modifier = modifier.verticalScroll(scroll)) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .pointerInput(text) {
-                    detectTapGestures { position ->
+                    detectTapGestures(
+                        onLongPress = { position -> fieldLongPress(text, layout, position, latestHandle) },
+                    ) { position ->
                         layout?.takeIf { it.layoutInput.text.text == text }
-                            ?.let { handle.onCaretTap(it.getOffsetForPosition(position)) }
+                            ?.let { latestHandle.onCaretTap(it.getOffsetForPosition(position)) }
                     }
                 },
         ) {
@@ -1016,8 +1025,30 @@ internal fun ClipEditText(
                 text = text,
                 color = textColor,
                 fontSize = fontSize,
-                onTextLayout = { layout = it },
-                modifier = Modifier.fillMaxWidth(),
+                onTextLayout = {
+                    layout = it
+                    overlay?.moved(owner)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned {
+                        owner.coordinates = it
+                        overlay?.moved(owner)
+                    }
+                    .selectionHighlight(
+                        text,
+                        if (selecting) handle.selectionStart else 0,
+                        if (selecting) handle.selectionEnd else 0,
+                        LocalKbTheme.current.accent.copy(alpha = HighlightAlpha),
+                    ) { layout },
+            )
+            PublishFieldSelection(
+                owner = owner,
+                text = text,
+                active = true,
+                handle = handle,
+                coordinates = { owner.coordinates },
+                layout = { layout?.takeIf { it.layoutInput.text.text == text } },
             )
             if (text.isEmpty()) {
                 Text(
@@ -1030,7 +1061,8 @@ internal fun ClipEditText(
                 )
             }
             val result = layout?.takeIf { it.layoutInput.text.text == text }
-            if (result != null) {
+            // No caret while a span is selected: the highlight marks where typing lands.
+            if (result != null && !selecting) {
                 val rect = result.getCursorRect(caret.coerceIn(0, result.layoutInput.text.length))
                 Box(
                     Modifier.offset { IntOffset(rect.left.roundToInt(), rect.top.roundToInt()) },

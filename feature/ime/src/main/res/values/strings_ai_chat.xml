@@ -55,4 +55,25 @@
     <string name="ime_ai_chat_starter_explain_prompt">Explain this text in simple words.</string>
     <string name="ime_ai_chat_starter_write">Help me write</string>
     <string name="ime_ai_chat_starter_write_prompt">Help me write </string>
+    <!-- Ask AI from another tool (#352): a long press on a tool's text, or its Ask AI chip, opens a chat about it. -->
+    <string name="ime_selection_ask_ai">Ask AI</string>
+    <!-- On the bar over a selected Wikipedia passage: insert it as a quote that names the article (#348). -->
+    <string name="ime_selection_quote">Quote</string>
+    <!-- %1$s names the tool's text as in ime_ask_ai_label_*: "About Wikipedia: Cat". -->
+    <string name="ime_ai_chat_attached_tool">About %1$s</string>
+    <string name="ime_ai_chat_attached_tool_selection">About a passage from %1$s</string>
+    <!-- How the chat names the text a tool handed over. %1$s is the article title or the word. -->
+    <string name="ime_ask_ai_label_wiki">Wikipedia: %1$s</string>
+    <string name="ime_ask_ai_label_dict">Dictionary: %1$s</string>
+    <string name="ime_ask_ai_label_vocab">Vocabulary: %1$s</string>
+    <string name="ime_ask_ai_label_grammar">Grammar check</string>
+    <string name="ime_grammar_ask_ai_desc">Ask AI about this issue</string>
+    <string name="ime_ai_chat_ask_hint">Ask a question about the text, or start with one of these.</string>
+    <!-- Suggested questions about a tool's text. The label is on the chip; the prompt goes into the composer. -->
+    <string name="ime_ai_chat_ask_explain">Explain simply</string>
+    <string name="ime_ai_chat_ask_explain_prompt">Explain this in simple words.</string>
+    <string name="ime_ai_chat_ask_summary">Summarise</string>
+    <string name="ime_ai_chat_ask_summary_prompt">Give me a short summary of this.</string>
+    <string name="ime_ai_chat_ask_words">Hard words</string>
+    <string name="ime_ai_chat_ask_words_prompt">Explain the difficult words and ideas in this.</string>
 </resources>

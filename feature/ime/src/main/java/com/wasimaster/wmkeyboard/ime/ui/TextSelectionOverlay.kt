@@ -1,0 +1,670 @@
+package com.wasimaster.wmkeyboard.ime.ui
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.ResolvedTextDirection
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.ime.AiChatAction
+import com.wasimaster.wmkeyboard.ime.CaptureSelectionAction
+import com.wasimaster.wmkeyboard.ime.CaretText
+import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.aichat.AskAiContext
+import kotlin.math.roundToInt
+
+/*
+ * Text selection on the keyboard (#352): a long press picks a word, two
+ * handles stretch it, and a small bar offers what can be done with it.
+ *
+ * Why this is not a SelectionContainer or a BasicTextField. Compose draws
+ * their handles as popup windows and their Copy/Paste bar as a platform
+ * ActionMode. An IME has no activity for an ActionMode, and a popup window
+ * over the keyboard is the untrusted-touch trap (see KeyPreviewOverlay's
+ * history): on Android 12 and 13 it swallows the taps meant for the app. So
+ * every piece here is drawn inside the keyboard's own window instead.
+ * [SelectionOverlay] sits last in the keyboard body's box and draws the
+ * handles and the bar for whichever text has a selection up, in that box's
+ * own space; the text itself only draws its highlight and says where it is.
+ *
+ * Two kinds of text publish selections here. Read-only text in the tools
+ * (a Wikipedia article, a dictionary entry) keeps its selection itself, and
+ * a tap anywhere else lets it go. The keyboard's own fields keep theirs in
+ * the service, next to the caret, so typing replaces it; their selection
+ * only ends when the text or the caret says so.
+ *
+ * Every offset handed to a text layout is clamped to *that layout's* own
+ * text length, and every layout is checked to be of the text in hand, the
+ * rule #252 was written in blood for.
+ */
+
+/**
+ * Where a tool's text came from, twice over: [framing] is how the Ask AI
+ * message names it to the model, "the Wikipedia article "Cat"", and [label]
+ * how the composer names it to the user, "Wikipedia: Cat".
+ */
+internal data class AskAiSource(val framing: String, val label: String)
+
+/** One action on the selection bar. */
+@Stable
+internal class SelectionBarAction(val label: String, val primary: Boolean = false, val onClick: () -> Unit)
+
+/** A piece of text with a selection up, as the overlay needs it to draw the handles and the bar. */
+@Stable
+internal class SelectionSession(
+    /** Who published it; only the owner can take it down. */
+    val owner: Any,
+    /** The text's own box, or null before it is placed. */
+    val coordinates: () -> LayoutCoordinates?,
+    /** The text's layout, or null before one exists. */
+    val layout: () -> TextLayoutResult?,
+    val start: Int,
+    val end: Int,
+    val actions: List<SelectionBarAction>,
+    /** A tap anywhere outside the text, its handles and the bar lets the selection go. */
+    val dismissOnOutsideTap: Boolean,
+    /** A handle moved: the new span, and whether it was the start that moved. */
+    val onChange: (start: Int, end: Int, movedStart: Boolean) -> Unit,
+    val onDismiss: () -> Unit,
+)
+
+/** The one selection on the keyboard, and what the overlay last drew for it. */
+@Stable
+internal class SelectionOverlayState {
+    var session by mutableStateOf<SelectionSession?>(null)
+        private set
+
+    /**
+     * Bumped whenever the text with the selection moves or lays out again —
+     * a list scrolling under it — so the handles are placed again with it.
+     * Read in the overlay's placement block only, so a bump re-places and
+     * never recomposes.
+     */
+    internal var moves by mutableIntStateOf(0)
+
+    /** What the overlay last drew, in its own space: the handles, the bar and the text. */
+    internal var chrome: List<Rect> = emptyList()
+    internal var textBounds: Rect? = null
+
+    fun show(session: SelectionSession) {
+        this.session = session
+    }
+
+    fun clear(owner: Any) {
+        if (session?.owner === owner) session = null
+    }
+
+    fun moved(owner: Any) {
+        if (session?.owner === owner) moves++
+    }
+
+    /** Whether [point], in the overlay's space, is on something the selection owns. */
+    fun hits(point: Offset): Boolean =
+        chrome.any { it.contains(point) } || textBounds?.contains(point) == true
+}
+
+/** Null outside the keyboard body, where selections draw their highlight and nothing else. */
+internal val LocalSelectionOverlay = staticCompositionLocalOf<SelectionOverlayState?> { null }
+
+/**
+ * What the read-only text's bar calls into: the AI chat's own action type,
+ * which already carries Copy and Insert, plus whether Ask AI is on offer.
+ */
+@Stable
+internal class SelectionTools(val onAiChat: (AiChatAction) -> Unit, val askAi: Boolean)
+
+internal val LocalSelectionTools = compositionLocalOf { SelectionTools({}, askAi = false) }
+
+/**
+ * Lets a read-only selection go when a finger lands anywhere else in the
+ * keyboard body. Watches the Initial pass and consumes nothing, so the tap
+ * still does whatever it was going to do. Only attached while such a
+ * selection is up: every key press goes through this box.
+ */
+internal fun Modifier.selectionDismissObserver(overlay: SelectionOverlayState, active: Boolean): Modifier =
+    if (!active) {
+        this
+    } else {
+        pointerInput(overlay) {
+            awaitEachGesture {
+                val down = awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+                val session = overlay.session ?: return@awaitEachGesture
+                if (session.dismissOnOutsideTap && !overlay.hits(down.position)) session.onDismiss()
+            }
+        }
+    }
+
+/**
+ * The handles and the bar for the one selection up, drawn over the keyboard
+ * body. Placed with [Modifier.matchParentSize] as the body box's last child;
+ * the layout itself takes no touches, so everything under it still gets them.
+ */
+@Composable
+internal fun SelectionOverlay(overlay: SelectionOverlayState, modifier: Modifier = Modifier) {
+    val session = overlay.session ?: return
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val handleBox = with(density) { HandleTouch.roundToPx() }
+    val gap = with(density) { BarGap.roundToPx() }
+    Layout(
+        modifier = modifier,
+        content = {
+            SelectionHandle(session, start = true)
+            SelectionHandle(session, start = false)
+            SelectionBar(session)
+        },
+    ) { measurables, constraints ->
+        val loose = constraints.copy(minWidth = 0, minHeight = 0)
+        val placeables = measurables.map { it.measure(loose) }
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+        layout(width, height) {
+            // Read here, not in composition: a scroll re-places, it never recomposes.
+            overlay.moves
+            val own = coordinates
+            val geometry = own?.let { selectionGeometry(it, session) }
+            if (geometry == null) {
+                overlay.chrome = emptyList()
+                overlay.textBounds = null
+                return@layout
+            }
+            val rects = ArrayList<Rect>(3)
+            val visible = geometry.visible
+            fun inView(point: Offset) = point.y >= visible.top - 1f && point.y <= visible.bottom + 1f &&
+                point.x >= visible.left - 1f && point.x <= visible.right + 1f
+            // Each handle hangs from its end of the selection, the point of the
+            // drop on the line's foot. A handle whose end is scrolled out of the
+            // text's own view is not drawn: it would float over something else.
+            listOf(geometry.startFoot, geometry.endFoot).forEachIndexed { index, foot ->
+                if (!inView(Offset(foot.x, foot.y - 1f))) return@forEachIndexed
+                val x = (foot.x - handleBox / 2f).roundToInt()
+                val y = foot.y.roundToInt()
+                placeables[index].place(x, y)
+                rects += Rect(x.toFloat(), y.toFloat(), (x + handleBox).toFloat(), (y + handleBox).toFloat())
+            }
+            // The bar over the selection's first line, or under its handles
+            // when there is no room above, and always inside the body.
+            val bar = placeables[2]
+            val mid = (geometry.startFoot.x + geometry.endFoot.x) / 2f
+            val barX = (mid - bar.width / 2f).roundToInt().coerceIn(0, (width - bar.width).coerceAtLeast(0))
+            val above = (geometry.top - bar.height - gap).roundToInt()
+            val below = (geometry.endFoot.y + handleBox + gap).roundToInt()
+            val barY = when {
+                above >= 0 -> above
+                below + bar.height <= height -> below
+                else -> (height - bar.height).coerceAtLeast(0)
+            }
+            bar.place(barX, barY)
+            rects += Rect(barX.toFloat(), barY.toFloat(), (barX + bar.width).toFloat(), (barY + bar.height).toFloat())
+            overlay.chrome = rects
+            overlay.textBounds = visible
+        }
+    }
+}
+
+/** Where a selection's handles and bar go, in the overlay's space. */
+private class SelectionGeometry(
+    /** The foot of the selection's first character's line, at its leading edge. */
+    val startFoot: Offset,
+    /** The foot of the last character's line, at its trailing edge. */
+    val endFoot: Offset,
+    /** The top of the first selected line. */
+    val top: Float,
+    /** The part of the text that is on screen. */
+    val visible: Rect,
+)
+
+private fun selectionGeometry(own: LayoutCoordinates, session: SelectionSession): SelectionGeometry? {
+    val text = session.coordinates() ?: return null
+    // A detached box cannot be asked where it is; the text left the screen
+    // and its DisposableEffect has not run yet.
+    if (!own.isAttached || !text.isAttached) return null
+    val layout = session.layout() ?: return null
+    val length = layout.layoutInput.text.length
+    val start = session.start.coerceIn(0, length)
+    val end = session.end.coerceIn(0, length)
+    if (start >= end) return null
+    val startLine = layout.getLineForOffset(start)
+    val endLine = layout.getLineForOffset(end - 1)
+    val startBox = layout.getBoundingBox(start)
+    val endBox = layout.getBoundingBox(end - 1)
+    val startX = if (layout.getBidiRunDirection(start) == ResolvedTextDirection.Rtl) startBox.right else startBox.left
+    val endX = if (layout.getBidiRunDirection(end - 1) == ResolvedTextDirection.Rtl) endBox.left else endBox.right
+    return SelectionGeometry(
+        startFoot = own.localPositionOf(text, Offset(startX, layout.getLineBottom(startLine))),
+        endFoot = own.localPositionOf(text, Offset(endX, layout.getLineBottom(endLine))),
+        top = own.localPositionOf(text, Offset(0f, layout.getLineTop(startLine))).y,
+        visible = own.localBoundingBoxOf(text, clipBounds = true),
+    )
+}
+
+/**
+ * One drop-shaped handle. The drop's point sits on the selection's end and a
+ * drag moves that end to the character under the point, not under the finger:
+ * the finger is below the line, where it does not hide the text.
+ */
+@Composable
+private fun SelectionHandle(session: SelectionSession, start: Boolean) {
+    val kb = LocalKbTheme.current
+    val current by rememberUpdatedState(session)
+    val holder = remember { SelectionAnchor() }
+    Box(
+        modifier = Modifier
+            .size(HandleTouch)
+            .onPlaced { holder.coordinates = it }
+            .pointerInput(start) {
+                // Where the point was when the drag began, and how far from it
+                // the finger landed, both in the text's own space.
+                var grab = Offset.Zero
+                var lastOffset = -1
+                detectDragGestures(
+                    onDragStart = { finger ->
+                        val handle = holder.coordinates
+                        val text = current.coordinates()
+                        if (handle != null && text != null && handle.isAttached && text.isAttached) {
+                            val point = text.localPositionOf(handle, Offset(size.width / 2f, 0f))
+                            grab = text.localPositionOf(handle, finger) - point
+                        }
+                        lastOffset = -1
+                    },
+                ) { change, _ ->
+                    change.consume()
+                    val s = current
+                    val handle = holder.coordinates ?: return@detectDragGestures
+                    val text = s.coordinates() ?: return@detectDragGestures
+                    if (!handle.isAttached || !text.isAttached) return@detectDragGestures
+                    val layout = s.layout() ?: return@detectDragGestures
+                    val length = layout.layoutInput.text.length
+                    if (length == 0) return@detectDragGestures
+                    // Converted fresh on every event: the handle moves under
+                    // the finger, so its own space is not a fixed frame.
+                    val point = text.localPositionOf(handle, change.position) - grab
+                    val line = layout.getLineForVerticalPosition(point.y - 1f)
+                    val probe = Offset(point.x, (layout.getLineTop(line) + layout.getLineBottom(line)) / 2f)
+                    val offset = layout.getOffsetForPosition(probe).coerceIn(0, length)
+                    if (offset == lastOffset) return@detectDragGestures
+                    lastOffset = offset
+                    // A handle never crosses the other one: at least one
+                    // character stays selected.
+                    if (start) {
+                        val next = offset.coerceAtMost(s.end - 1).coerceAtLeast(0)
+                        if (next != s.start) s.onChange(next, s.end, true)
+                    } else {
+                        val next = offset.coerceAtLeast(s.start + 1).coerceAtMost(length)
+                        if (next != s.end) s.onChange(s.start, next, false)
+                    }
+                }
+            },
+    ) {
+        val color = kb.accent
+        Canvas(Modifier.size(HandleTouch)) {
+            val r = HandleDrop.toPx() / 2f
+            val cx = size.width / 2f
+            // The drop hangs to the outside of the selection: left of the
+            // start, right of the end, its square corner on the point.
+            val centre = Offset(if (start) cx - r else cx + r, r)
+            drawCircle(color, radius = r, center = centre)
+            val corner = Path().apply {
+                if (start) {
+                    moveTo(cx - r, 0f); lineTo(cx, 0f); lineTo(cx, r); lineTo(cx - r, r)
+                } else {
+                    moveTo(cx, 0f); lineTo(cx + r, 0f); lineTo(cx + r, r); lineTo(cx, r)
+                }
+                close()
+            }
+            drawPath(corner, color)
+        }
+    }
+}
+
+/**
+ * Where one piece of selectable text last was, and the identity it publishes
+ * its selection under. A plain field, not state: the overlay re-reads it when
+ * [SelectionOverlayState.moved] says to.
+ */
+internal class SelectionAnchor {
+    var coordinates: LayoutCoordinates? = null
+}
+
+/** The bar of actions over the selection, in the theme's popup colours. */
+@Composable
+private fun SelectionBar(session: SelectionSession) {
+    val kb = LocalKbTheme.current
+    val shape = kb.chipShape()
+    Row(
+        modifier = Modifier
+            .shadow(kb.popupElevation.coerceAtLeast(2.dp), shape)
+            .clip(shape)
+            .background(kb.popup)
+            .padding(horizontal = 2.dp),
+    ) {
+        for (action in session.actions) {
+            Text(
+                action.label,
+                color = if (action.primary) kb.accent else kb.popupText,
+                fontSize = 13.sp,
+                lineHeight = 16.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+                modifier = Modifier
+                    .clip(shape)
+                    .clickable(onClick = action.onClick)
+                    .padding(horizontal = 11.dp, vertical = 9.dp),
+            )
+        }
+    }
+}
+
+/**
+ * Hands [start]..[end] of one text to the overlay while [shown], and takes it
+ * back when not, or when the text leaves the screen.
+ */
+@Composable
+internal fun PublishSelection(
+    owner: Any,
+    shown: Boolean,
+    start: Int,
+    end: Int,
+    coordinates: () -> LayoutCoordinates?,
+    layout: () -> TextLayoutResult?,
+    actions: List<SelectionBarAction>,
+    dismissOnOutsideTap: Boolean,
+    onChange: (Int, Int, Boolean) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val overlay = LocalSelectionOverlay.current ?: return
+    SideEffect {
+        if (shown) {
+            overlay.show(
+                SelectionSession(owner, coordinates, layout, start, end, actions, dismissOnOutsideTap, onChange, onDismiss),
+            )
+        } else {
+            overlay.clear(owner)
+        }
+    }
+    DisposableEffect(overlay, owner) { onDispose { overlay.clear(owner) } }
+}
+
+/** The highlight under [start]..[end], drawn from [layout] only when it is a layout of [text]. */
+internal fun Modifier.selectionHighlight(
+    text: String,
+    start: Int,
+    end: Int,
+    color: Color,
+    layout: () -> TextLayoutResult?,
+): Modifier = if (start == end) {
+    this
+} else {
+    drawBehind {
+        val result = layout()?.takeIf { it.layoutInput.text.text == text } ?: return@drawBehind
+        val length = result.layoutInput.text.length
+        val from = minOf(start, end).coerceIn(0, length)
+        val to = maxOf(start, end).coerceIn(0, length)
+        if (from < to) drawPath(result.getPathForRange(from, to), color)
+    }
+}
+
+/**
+ * Read-only text a long press can select from (#352): Wikipedia's article,
+ * a dictionary's definitions, a vocabulary card's senses. The bar offers
+ * Ask AI (when the AI tool is on), Copy and Insert.
+ *
+ * [ask] names where the text came from for Ask AI, which is offered only
+ * with one, and the whole of [text] travels with the selection as its
+ * paragraph. [onTap] is the text's own tap, which a selection being up takes
+ * instead, to let go of it.
+ */
+@Composable
+internal fun SelectableText(
+    text: String,
+    color: Color,
+    fontSize: TextUnit,
+    modifier: Modifier = Modifier,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    fontWeight: FontWeight? = null,
+    fontStyle: FontStyle? = null,
+    fontFamily: FontFamily? = null,
+    ask: AskAiSource? = null,
+    /**
+     * Turns the selected passage into a quote naming its source (#348); with
+     * one, the bar offers Quote, which inserts that at the cursor.
+     */
+    quote: ((String) -> String)? = null,
+    onTap: (() -> Unit)? = null,
+) {
+    val kb = LocalKbTheme.current
+    val tools = LocalSelectionTools.current
+    val overlay = LocalSelectionOverlay.current
+    val haptic = LocalHapticFeedback.current
+    val owner = remember { SelectionAnchor() }
+    val layoutState = remember { mutableStateOf<TextLayoutResult?>(null) }
+    // Start and end, or null. Forgotten with the text: a new article is not
+    // the one the selection was made in.
+    var selection by remember(text) { mutableStateOf<IntRange?>(null) }
+    val tapAction by rememberUpdatedState(onTap)
+    val layoutOf = remember(text) { { layoutState.value?.takeIf { it.layoutInput.text.text == text } } }
+    val current = selection
+    val start = current?.first ?: 0
+    val end = current?.let { it.last + 1 } ?: 0
+    Text(
+        text = text,
+        color = color,
+        fontSize = fontSize,
+        lineHeight = lineHeight,
+        fontWeight = fontWeight,
+        fontStyle = fontStyle,
+        fontFamily = fontFamily,
+        onTextLayout = {
+            layoutState.value = it
+            overlay?.moved(owner)
+        },
+        modifier = modifier
+            .onGloballyPositioned {
+                owner.coordinates = it
+                overlay?.moved(owner)
+            }
+            .selectionHighlight(text, start, end, kb.accent.copy(alpha = HighlightAlpha)) { layoutState.value }
+            .pointerInput(text) {
+                detectTapGestures(
+                    onLongPress = { position ->
+                        val layout = layoutState.value?.takeIf { it.layoutInput.text.text == text }
+                            ?: return@detectTapGestures
+                        val offset = layout.getOffsetForPosition(position).coerceIn(0, layout.layoutInput.text.length)
+                        val span = CaretText.wordSpanAt(text, offset) ?: return@detectTapGestures
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        selection = span
+                    },
+                    onTap = {
+                        if (selection != null) selection = null else tapAction?.invoke()
+                    },
+                )
+            },
+    )
+    val selected = text.substring(start.coerceIn(0, text.length), end.coerceIn(0, text.length))
+    val askLabel = stringResource(R.string.ime_selection_ask_ai)
+    val copyLabel = stringResource(CommonR.string.common_copy)
+    val insertLabel = stringResource(R.string.ime_ai_insert)
+    val allLabel = stringResource(CommonR.string.common_select_all)
+    val quoteLabel = stringResource(R.string.ime_selection_quote)
+    val actions = remember(selected, tools, ask, text, quote) {
+        if (selected.isEmpty()) return@remember emptyList()
+        buildList {
+            if (tools.askAi && ask != null) {
+                add(
+                    SelectionBarAction(askLabel, primary = true) {
+                        selection = null
+                        tools.onAiChat(
+                            AiChatAction.AskAbout(
+                                text = AskAiContext.selection(selected, ask.framing, text),
+                                label = ask.label,
+                                fromSelection = true,
+                            ),
+                        )
+                    },
+                )
+            }
+            add(SelectionBarAction(copyLabel) { selection = null; tools.onAiChat(AiChatAction.Copy(selected)) })
+            add(SelectionBarAction(insertLabel) { selection = null; tools.onAiChat(AiChatAction.Insert(selected, raw = true)) })
+            if (quote != null) {
+                add(SelectionBarAction(quoteLabel) { selection = null; tools.onAiChat(AiChatAction.Insert(quote(selected), raw = true)) })
+            }
+            if (selected.length < text.length) {
+                add(SelectionBarAction(allLabel) { selection = text.indices })
+            }
+        }
+    }
+    PublishSelection(
+        owner = owner,
+        shown = current != null,
+        start = start,
+        end = end,
+        coordinates = { owner.coordinates },
+        layout = layoutOf,
+        actions = actions,
+        dismissOnOutsideTap = true,
+        onChange = { s, e, _ -> selection = s until e },
+        onDismiss = { selection = null },
+    )
+}
+
+/**
+ * The bar and handles for a keyboard-owned field's selection: publishes the
+ * service's selection of [text], and turns the bar's taps and the handles'
+ * drags back into the field's own callbacks.
+ */
+@Composable
+internal fun PublishFieldSelection(
+    owner: Any,
+    text: String,
+    active: Boolean,
+    handle: CaptureCaretHandle,
+    coordinates: () -> LayoutCoordinates?,
+    layout: () -> TextLayoutResult?,
+) {
+    val shown = active && handle.hasSelection && handle.selectionEnd <= text.length
+    val cut = stringResource(CommonR.string.common_cut)
+    val copy = stringResource(CommonR.string.common_copy)
+    val paste = stringResource(CommonR.string.common_paste)
+    val all = stringResource(CommonR.string.common_select_all)
+    val onAction = handle.onSelectionAction
+    val actions = remember(onAction, cut, copy, paste, all, handle.selectionEnd - handle.selectionStart == text.length) {
+        buildList {
+            add(SelectionBarAction(cut) { onAction(CaptureSelectionAction.CUT) })
+            add(SelectionBarAction(copy) { onAction(CaptureSelectionAction.COPY) })
+            add(SelectionBarAction(paste) { onAction(CaptureSelectionAction.PASTE) })
+            if (handle.selectionEnd - handle.selectionStart < text.length) {
+                add(SelectionBarAction(all) { onAction(CaptureSelectionAction.SELECT_ALL) })
+            }
+        }
+    }
+    val select = handle.onSelect
+    PublishSelection(
+        owner = owner,
+        shown = shown,
+        start = handle.selectionStart,
+        end = handle.selectionEnd,
+        coordinates = coordinates,
+        layout = layout,
+        actions = actions,
+        // The field's selection lives in the service next to its caret; a
+        // key press is meant to replace it, not to end it first.
+        dismissOnOutsideTap = false,
+        // The moving end becomes the caret, so the strip follows the handle.
+        onChange = { s, e, movedStart -> if (movedStart) select(e, s) else select(s, e) },
+        onDismiss = {},
+    )
+}
+
+/**
+ * The long press every keyboard-owned field shares: the word under the
+ * finger selected, or the caret put there when it is on no word.
+ */
+internal fun fieldLongPress(text: String, layout: TextLayoutResult?, position: Offset, handle: CaptureCaretHandle): Boolean {
+    val result = layout?.takeIf { it.layoutInput.text.text == text } ?: return false
+    val offset = result.getOffsetForPosition(position).coerceIn(0, result.layoutInput.text.length)
+    val span = CaretText.wordSpanAt(text, offset)
+    if (span == null) {
+        handle.onCaretTap(offset)
+    } else {
+        handle.onSelect(span.first, span.last + 1)
+    }
+    return span != null
+}
+
+/** Touch box around one handle; the drop drawn in it is [HandleDrop] across. */
+private val HandleTouch: Dp = 36.dp
+private val HandleDrop: Dp = 20.dp
+private val BarGap: Dp = 6.dp
+
+/** The selection's wash over the text, in the theme's accent. */
+internal const val HighlightAlpha = 0.32f
+
+/**
+ * The Ask AI chip a tool keeps on screen for its whole text (#352), drawn
+ * only while the AI tool is on. [text] is built on tap, not before: an
+ * article's full text is long, and most opens never ask.
+ */
+@Composable
+internal fun AskAiChip(label: String, modifier: Modifier = Modifier, text: () -> String) {
+    val tools = LocalSelectionTools.current
+    if (!tools.askAi) return
+    ToolPanelChip(stringResource(R.string.ime_selection_ask_ai), selected = true, modifier = modifier) {
+        tools.onAiChat(AiChatAction.AskAbout(text(), label, fromSelection = false))
+    }
+}
+
+/**
+ * The Copy chip beside a tool's Ask AI (#348): the same text, to the
+ * clipboard. Offered whether or not the AI tool is on.
+ */
+@Composable
+internal fun CopyTextChip(modifier: Modifier = Modifier, text: () -> String) {
+    val tools = LocalSelectionTools.current
+    ToolPanelChip(stringResource(CommonR.string.common_copy), modifier = modifier) {
+        tools.onAiChat(AiChatAction.Copy(text()))
+    }
+}

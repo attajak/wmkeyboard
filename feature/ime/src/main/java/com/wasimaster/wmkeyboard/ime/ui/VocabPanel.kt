@@ -74,6 +74,8 @@ import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.VocabBrowseFilter
 import com.wasimaster.wmkeyboard.ime.VocabCardUi
 import com.wasimaster.wmkeyboard.ime.VocabTab
+import com.wasimaster.wmkeyboard.ime.AiChatAction
+import com.wasimaster.wmkeyboard.ime.aichat.AskAiContext
 
 /**
  * The vocabulary panel's service callbacks, bundled into one value for the
@@ -229,8 +231,28 @@ private fun VocabCard(
     val serif = remember { KeyboardFonts.googleFamily("Lora") }
     val fields = remember(settings.cardFields) { VocabCardFields.resolve(settings.cardFields) }
     fun shown(field: VocabCardField) = fields[field] == FieldVisibility.KEYBOARD
+    // Ask AI (#352): about the card from its chip, about a passage from a
+    // long press on a definition.
+    val tools = LocalSelectionTools.current
+    val askLabel = stringResource(R.string.ime_ask_ai_label_vocab, word.word)
+    val ask = remember(word.word, askLabel) { AskAiSource(AskAiContext.vocabularySource(word.word), askLabel) }
+    val askAction = if (tools.askAi) {
+        listOf(
+            stringResource(R.string.ime_selection_ask_ai) to {
+                val text = AskAiContext.vocabulary(word, word.ipaFor(settings.accent))
+                tools.onAiChat(AiChatAction.AskAbout(text, askLabel, fromSelection = false))
+            },
+        )
+    } else {
+        emptyList()
+    }
+    // The card as text, to the clipboard (#348).
+    val copyAction = stringResource(com.wasimaster.wmkeyboard.common.R.string.common_copy) to {
+        tools.onAiChat(AiChatAction.Copy(AskAiContext.vocabulary(word, word.ipaFor(settings.accent))))
+    }
     val actions = listOf(
         stringResource(R.string.ime_vocab_insert_action) to { callbacks.onInsert(word.word) },
+    ) + askAction + listOf(copyAction) + listOf(
         (if (card.inMyList) stringResource(R.string.ime_vocab_in_list_label) else stringResource(R.string.ime_vocab_add_list_action)) to
             { if (!card.inMyList) callbacks.onAddToList(word.word) },
         (if (card.learnt) stringResource(R.string.ime_vocab_unlearnt_action) else stringResource(R.string.ime_vocab_learnt_action)) to
@@ -335,7 +357,7 @@ private fun VocabCard(
             }
         }
         itemsIndexed(word.senses) { index, sense ->
-            VocabSenseRow(index, sense, serif, ::shown)
+            VocabSenseRow(index, sense, serif, ::shown, ask)
         }
         val related = buildList {
             if (shown(VocabCardField.SYNONYMS) && word.synonyms.isNotEmpty()) {
@@ -453,6 +475,7 @@ private fun VocabSenseRow(
     sense: VocabSense,
     serif: FontFamily,
     shown: (VocabCardField) -> Boolean,
+    ask: AskAiSource,
 ) {
     val kb = LocalKbTheme.current
     Row(modifier = Modifier.padding(top = if (index == 0) 8.dp else 5.dp)) {
@@ -481,9 +504,10 @@ private fun VocabSenseRow(
                     }
                 }
             }
-            Text(sense.definition, color = kb.modifierKeyText, fontSize = 13.sp, lineHeight = 17.sp)
+            // A long press selects: Ask AI, Copy or Insert (#352).
+            SelectableText(sense.definition, color = kb.modifierKeyText, fontSize = 13.sp, lineHeight = 17.sp, ask = ask)
             if (shown(VocabCardField.EXAMPLES) && sense.example != null) {
-                Text(
+                SelectableText(
                     "“${sense.example}”",
                     color = kb.toolbarIcon,
                     fontSize = 12.sp,
@@ -491,6 +515,7 @@ private fun VocabSenseRow(
                     fontStyle = FontStyle.Italic,
                     fontFamily = serif,
                     modifier = Modifier.padding(top = 1.dp),
+                    ask = ask,
                 )
             }
             if (shown(VocabCardField.QUOTATIONS)) {

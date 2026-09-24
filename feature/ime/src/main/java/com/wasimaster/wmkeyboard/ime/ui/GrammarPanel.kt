@@ -24,6 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Done
@@ -57,7 +59,10 @@ import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
 import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
 import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
+import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.ime.AiChatAction
 import com.wasimaster.wmkeyboard.ime.DeepLWriteUi
+import com.wasimaster.wmkeyboard.ime.aichat.AskAiContext
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
@@ -402,6 +407,7 @@ internal fun GrammarPanel(
                         GrammarLintCard(
                             lint, onFix, onDismiss, onFocus,
                             focused = index == focusedLint,
+                            sourceText = grammar.sourceText,
                         )
                     }
                 }
@@ -512,8 +518,11 @@ private fun GrammarLintCard(
     onDismiss: (GrammarLint) -> Unit,
     onFocus: (GrammarLint) -> Unit,
     focused: Boolean = false,
+    /** The field text the lint is about, for Ask AI's sentence (#352). */
+    sourceText: String = "",
 ) {
     val kb = LocalKbTheme.current
+    val tools = LocalSelectionTools.current
     val category = categoryFor(lint.kind)
     val catColor = category.color(kb.dark)
     val cardShape = kb.cardShape()
@@ -553,6 +562,42 @@ private fun GrammarLintCard(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
+            if (tools.askAi) {
+                // Ask AI why (#352): the checker's note, its fixes and the
+                // sentence, so the answer can say whether the checker is right.
+                val askLabel = stringResource(R.string.ime_ask_ai_label_grammar)
+                val fixes = lint.suggestions.mapNotNull { fix -> fix.labelText?.takeIf { it.isNotBlank() } }
+                val kindName = if (kind.isEmpty()) categoryLabel else kind
+                Icon(
+                    Icons.Outlined.AutoAwesome,
+                    contentDescription = stringResource(R.string.ime_grammar_ask_ai_desc),
+                    modifier = Modifier
+                        .size(16.dp)
+                        .clickable {
+                            tools.onAiChat(
+                                AiChatAction.AskAbout(
+                                    AskAiContext.grammar(lint, fixes, sourceText, kindName),
+                                    askLabel,
+                                    fromSelection = false,
+                                ),
+                            )
+                        },
+                    tint = kb.accent,
+                )
+                Spacer(Modifier.width(10.dp))
+            }
+            // Harper's explanation, to the clipboard (#348).
+            if (lint.message.isNotBlank()) {
+                Icon(
+                    Icons.Outlined.ContentCopy,
+                    contentDescription = stringResource(CommonR.string.common_copy),
+                    modifier = Modifier
+                        .size(16.dp)
+                        .clickable { tools.onAiChat(AiChatAction.Copy(lint.message)) },
+                    tint = kb.secondaryText,
+                )
+                Spacer(Modifier.width(10.dp))
+            }
             Icon(
                 Icons.Outlined.Close,
                 contentDescription = stringResource(R.string.ime_grammar_dismiss_desc),

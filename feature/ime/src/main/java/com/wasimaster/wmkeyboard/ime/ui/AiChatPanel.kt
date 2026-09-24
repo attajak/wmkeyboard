@@ -92,8 +92,16 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
  * a whole answer, or one code block, is copied by a button instead.
  */
 
-/** How tall the panel stands while the composer has the keys under it. */
-internal val AiChatCompactHeight = 260.dp
+/**
+ * How tall the panel asks to stand while the composer has the keys under it.
+ * More than the other panels ask for: a conversation is read, not glanced at
+ * (#352). What the screen cannot spare comes off the panel, never off the
+ * keys: the body clamps it to the room left above them.
+ */
+internal val AiChatCompactHeight = 320.dp
+
+/** How far the chat grows the keyboard while nothing is being typed; was 120dp before #352. */
+internal val AiChatExtraHeight = 200.dp
 
 /** The header's mode switch. [base] indices 0 and 1 of the ACTIONS region are these two. */
 @Composable
@@ -638,16 +646,39 @@ private fun EmptyChat(state: KeyboardUiState, onChat: (AiChatAction) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
+        // Text handed over by another tool (#352) is what this chat is about.
+        val fromTool = state.aiChat.attachment?.label?.isNotEmpty() == true
         Text(
-            stringResource(R.string.ime_ai_chat_empty_hint),
+            stringResource(if (fromTool) R.string.ime_ai_chat_ask_hint else R.string.ime_ai_chat_empty_hint),
             color = kb.secondaryText,
             fontSize = 12.sp,
             lineHeight = 16.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(horizontal = 24.dp),
         )
-        // Openings, for the blank page. Not while typing: the user has begun.
-        if (!state.aiChat.composing) {
+        if (fromTool) {
+            // Offered while typing too: the composer takes the keys the moment
+            // the text arrives, and these are the questions most asked of it.
+            val explain = stringResource(R.string.ime_ai_chat_ask_explain_prompt)
+            val summary = stringResource(R.string.ime_ai_chat_ask_summary_prompt)
+            val words = stringResource(R.string.ime_ai_chat_ask_words_prompt)
+            FlowRow(
+                modifier = Modifier.padding(top = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                ToolPanelChip(stringResource(R.string.ime_ai_chat_ask_explain)) {
+                    onChat(AiChatAction.Starter(explain, attach = false))
+                }
+                ToolPanelChip(stringResource(R.string.ime_ai_chat_ask_summary)) {
+                    onChat(AiChatAction.Starter(summary, attach = false))
+                }
+                ToolPanelChip(stringResource(R.string.ime_ai_chat_ask_words)) {
+                    onChat(AiChatAction.Starter(words, attach = false))
+                }
+            }
+        } else if (!state.aiChat.composing) {
+            // Openings, for the blank page. Not while typing: the user has begun.
             val reply = stringResource(R.string.ime_ai_chat_starter_reply_prompt)
             val explain = stringResource(R.string.ime_ai_chat_starter_explain_prompt)
             val write = stringResource(R.string.ime_ai_chat_starter_write_prompt)
@@ -735,15 +766,26 @@ private fun Composer(
         ) {
             chat.attachment?.let { attachment ->
                 Text(
-                    pluralStringResource(
-                        if (attachment.fromSelection) {
-                            R.plurals.ime_ai_chat_attached_selection
-                        } else {
-                            R.plurals.ime_ai_chat_attached_field
-                        },
-                        attachment.text.length,
-                        attachment.text.length,
-                    ),
+                    when {
+                        // A tool's text is named by the tool it came from (#352).
+                        attachment.label.isNotEmpty() -> stringResource(
+                            if (attachment.fromSelection) {
+                                R.string.ime_ai_chat_attached_tool_selection
+                            } else {
+                                R.string.ime_ai_chat_attached_tool
+                            },
+                            attachment.label,
+                        )
+                        else -> pluralStringResource(
+                            if (attachment.fromSelection) {
+                                R.plurals.ime_ai_chat_attached_selection
+                            } else {
+                                R.plurals.ime_ai_chat_attached_field
+                            },
+                            attachment.text.length,
+                            attachment.text.length,
+                        )
+                    },
                     color = kb.accent,
                     fontSize = 10.sp,
                     lineHeight = 13.sp,

@@ -60,6 +60,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -192,7 +193,7 @@ internal fun SearchQueryText(
                 caret = caret,
                 textColor = textColor,
                 fontSize = fontSize,
-                onCaretTap = handle.onCaretTap,
+                handle = handle,
                 modifier = Modifier.weight(1f, fill = false),
             )
         }
@@ -215,19 +216,30 @@ private fun CaretQueryText(
     caret: Int,
     textColor: Color,
     fontSize: TextUnit,
-    onCaretTap: (Int) -> Unit,
+    handle: CaptureCaretHandle,
     modifier: Modifier = Modifier,
 ) {
     val scroll = rememberScrollState()
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val density = LocalDensity.current
+    // A selection in this field (#352): drawn here, its handles and bar by the
+    // body's overlay, which needs to know where this text is as it scrolls.
+    val overlay = LocalSelectionOverlay.current
+    val owner = remember { SelectionAnchor() }
+    val active = caret >= 0
+    val selecting = active && handle.hasSelection
+    val latestHandle by androidx.compose.runtime.rememberUpdatedState(handle)
     Box(
         modifier = modifier
             .horizontalScroll(scroll)
-            .pointerInput(query, caret < 0) {
-                if (caret < 0) return@pointerInput
-                detectTapGestures { position ->
-                    layout?.let { onCaretTap(it.getOffsetForPosition(position)) }
+            .pointerInput(query, active) {
+                if (!active) return@pointerInput
+                detectTapGestures(
+                    onLongPress = { position -> fieldLongPress(query, layout, position, latestHandle) },
+                ) { position ->
+                    layout?.takeIf { it.layoutInput.text.text == query }?.let {
+                        latestHandle.onCaretTap(it.getOffsetForPosition(position))
+                    }
                 }
             },
     ) {
@@ -238,7 +250,29 @@ private fun CaretQueryText(
             maxLines = 1,
             softWrap = false,
             overflow = TextOverflow.Clip,
-            onTextLayout = { layout = it },
+            onTextLayout = {
+                layout = it
+                overlay?.moved(owner)
+            },
+            modifier = Modifier
+                .onGloballyPositioned {
+                    owner.coordinates = it
+                    overlay?.moved(owner)
+                }
+                .selectionHighlight(
+                    query,
+                    if (selecting) handle.selectionStart else 0,
+                    if (selecting) handle.selectionEnd else 0,
+                    LocalKbTheme.current.accent.copy(alpha = HighlightAlpha),
+                ) { layout },
+        )
+        PublishFieldSelection(
+            owner = owner,
+            text = query,
+            active = active,
+            handle = handle,
+            coordinates = { owner.coordinates },
+            layout = { layout?.takeIf { it.layoutInput.text.text == query } },
         )
         // Only a layout of *this* text can say where the caret goes. `Text`
         // reports its layout during the layout phase, which runs after the
@@ -249,7 +283,8 @@ private fun CaretQueryText(
         // caret waits the one frame instead: writing `layout` in `onTextLayout`
         // schedules the recomposition that draws it.
         val result = layout?.takeIf { it.layoutInput.text.text == query }
-        if (caret >= 0 && result != null) {
+        // No caret while a span is selected: the highlight marks where typing lands.
+        if (caret >= 0 && result != null && !selecting) {
             // Clamped against the layout's own text and not against [query]:
             // they are the same string here, and it is the layout that defines
             // the legal range.

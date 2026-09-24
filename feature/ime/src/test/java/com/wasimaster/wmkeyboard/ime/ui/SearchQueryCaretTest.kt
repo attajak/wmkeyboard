@@ -76,7 +76,7 @@ class SearchQueryCaretTest {
         compose.setContent {
             CompositionLocalProvider(
                 LocalKbTheme provides theme,
-                LocalCaptureCaret provides CaptureCaretHandle(caret) { taps += it },
+                LocalCaptureCaret provides CaptureCaretHandle(caret, onCaretTap = { taps += it }),
             ) {
                 SearchQueryText(
                     query = query,

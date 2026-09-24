@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import androidx.compose.runtime.compositionLocalOf
+import com.wasimaster.wmkeyboard.ime.CaptureSelectionAction
 
 /**
  * The keyboard's own text fields, as the UI sees them (#161).
@@ -20,10 +21,23 @@ import androidx.compose.runtime.compositionLocalOf
  * UTF-16 index into that field's text; [onCaretTap] is the service's
  * `onCaptureCaretTap`.
  */
-data class CaptureCaretHandle(val at: Int, val onCaretTap: (Int) -> Unit)
+data class CaptureCaretHandle(
+    val at: Int,
+    val onCaretTap: (Int) -> Unit,
+    /** The selection's fixed end; [at] when nothing is selected (#352). */
+    val anchor: Int = at,
+    /** A long press or a handle drag: the service's `onCaptureSelect(anchor, caret)`. */
+    val onSelect: (Int, Int) -> Unit = { _, _ -> },
+    /** The selection bar's Cut, Copy, Paste and Select all. */
+    val onSelectionAction: (CaptureSelectionAction) -> Unit = {},
+) {
+    val selectionStart: Int get() = minOf(at, anchor)
+    val selectionEnd: Int get() = maxOf(at, anchor)
+    val hasSelection: Boolean get() = at != anchor
+}
 
 /** The default: no field has the keys, so no caret and nothing to tap. */
-val LocalCaptureCaret = compositionLocalOf { CaptureCaretHandle(0) {} }
+val LocalCaptureCaret = compositionLocalOf { CaptureCaretHandle(0, {}) }
 
 /**
  * What a keyboard-owned field's own controls call back into.
@@ -36,6 +50,10 @@ val LocalCaptureCaret = compositionLocalOf { CaptureCaretHandle(0) {} }
 data class CaptureCallbacks(
     /** A tap landed at this UTF-16 index in the focused field's text. */
     val onCaretTap: (Int) -> Unit = {},
+    /** A selection made on the field: anchor, then caret (#352). */
+    val onSelect: (Int, Int) -> Unit = { _, _ -> },
+    /** Cut, Copy, Paste or Select all from the field's selection bar (#352). */
+    val onSelectionAction: (CaptureSelectionAction) -> Unit = {},
     /** A word was picked off the field's own suggestion strip. */
     val onSuggestion: (String) -> Unit = {},
     /**

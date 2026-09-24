@@ -21,9 +21,10 @@ package com.wasimaster.wmkeyboard.ime
  * arithmetic once, and the service keeps one caret for whichever buffer is
  * focused. The old per-buffer branches become one `captureEdit { }`.
  *
- * The caret is a caret and not a selection. The word card's [WordSpell] already
- * carries anchor+cursor for #204 and keeps its own richer editor; everything
- * here is the plain case.
+ * The caret can hold a selection (#352): [CaretText.anchor] is the fixed end,
+ * [CaretText.caret] the end that moves, and every edit below replaces the
+ * selected span first, the way a real field does. The word card's [WordSpell]
+ * keeps its own editor with its own anchor, from #204.
  */
 
 /**
@@ -33,44 +34,101 @@ package com.wasimaster.wmkeyboard.ime
  * handed to `captureEdit` and applied without the caller knowing which buffer
  * it is about to land in.
  */
-data class CaretText(val text: String, val caret: Int = text.length) {
+data class CaretText(
+    val text: String,
+    val caret: Int = text.length,
+    /**
+     * The fixed end of the selection, or the caret itself when nothing is
+     * selected. Either side of [caret]: a handle dragged backwards puts the
+     * moving end in front of the fixed one.
+     */
+    val anchor: Int = caret,
+) {
 
     /** [caret] guaranteed inside [text] and never splitting a surrogate pair. */
     val at: Int get() = clamp(caret)
 
-    /** [text] typed at the caret. */
+    /** [anchor], held inside [text] the same way. */
+    val anchorAt: Int get() = clamp(anchor)
+
+    /** Where the selection starts and ends; equal when nothing is selected. */
+    val selectionStart: Int get() = minOf(at, anchorAt)
+    val selectionEnd: Int get() = maxOf(at, anchorAt)
+    val hasSelection: Boolean get() = selectionStart != selectionEnd
+
+    /** The selected text, empty when nothing is selected. */
+    val selectedText: String get() = text.substring(selectionStart, selectionEnd)
+
+    /**
+     * The selected span taken out, the caret where it began. What every edit
+     * does first when there is a selection, and what Cut leaves behind.
+     */
+    fun withoutSelection(): CaretText {
+        if (!hasSelection) return collapsed()
+        val start = selectionStart
+        return CaretText(text.substring(0, start) + text.substring(selectionEnd), start)
+    }
+
+    /** The same caret with nothing selected. */
+    fun collapsed(): CaretText = CaretText(text, at)
+
+    /** [start] to [end] selected, the caret at [end]. */
+    fun selected(start: Int, end: Int): CaretText = CaretText(text, clamp(end), clamp(start))
+
+    /** The whole buffer selected. */
+    fun selectedAll(): CaretText = CaretText(text, text.length, 0)
+
+    /** The word under [index] selected, or just the caret there when it is on no word. */
+    fun selectedWordAt(index: Int): CaretText {
+        val span = wordSpanAt(text, clamp(index)) ?: return caretAt(index)
+        return CaretText(text, span.last + 1, span.first)
+    }
+
+    /** [text] typed at the caret, in place of the selection if there is one. */
     fun typed(insert: String): CaretText {
+        if (hasSelection) return withoutSelection().typed(insert)
         if (insert.isEmpty()) return this
         val i = at
         return CaretText(text.substring(0, i) + insert + text.substring(i), i + insert.length)
     }
 
-    /** Backspace: the character before the caret, whole emoji included. */
+    /** Backspace: the selection, or else the character before the caret, whole emoji included. */
     fun deletedBackward(length: Int = 1): CaretText {
+        if (hasSelection) return withoutSelection()
         val i = at
         if (i <= 0) return this
         val from = (i - length.coerceAtLeast(1)).coerceAtLeast(0).let { safeBack(it) }
         return CaretText(text.substring(0, from) + text.substring(i), from)
     }
 
-    /** Forward delete: the character after the caret. */
+    /** Forward delete: the selection, or else the character after the caret. */
     fun deletedForward(): CaretText {
+        if (hasSelection) return withoutSelection()
         val i = at
         if (i >= text.length) return this
         return CaretText(text.substring(0, i) + text.substring(stepForward(text, i)), i)
     }
 
-    /** The caret moved [delta] characters, clamped to the buffer's ends. */
-    fun caretMoved(delta: Int): CaretText {
+    /**
+     * The caret moved [delta] characters, clamped to the buffer's ends. With
+     * [extend] the anchor stays put and the selection grows or shrinks; without
+     * it a selection collapses to the end the arrow points at, as in any field.
+     */
+    fun caretMoved(delta: Int, extend: Boolean = false): CaretText {
+        if (hasSelection && !extend && delta != 0) {
+            val edge = if (delta < 0) selectionStart else selectionEnd
+            return CaretText(text, edge)
+        }
         var i = at
         repeat(kotlin.math.abs(delta)) {
             i = if (delta < 0) stepBack(text, i) else stepForward(text, i)
         }
-        return copy(caret = i)
+        return if (extend) CaretText(text, i, anchorAt) else CaretText(text, i)
     }
 
     /** The caret put at [index] — what a tap in the middle of the text asks for. */
-    fun caretAt(index: Int): CaretText = copy(caret = clamp(index))
+    fun caretAt(index: Int, extend: Boolean = false): CaretText =
+        if (extend) CaretText(text, clamp(index), anchorAt) else CaretText(text, clamp(index))
 
     /**
      * The word the caret is inside or at the end of, and where it starts.
@@ -117,6 +175,8 @@ data class CaretText(val text: String, val caret: Int = text.length) {
      * belongs, and what the field's own strip does.
      */
     fun replacedWordAtCaret(word: String, spaceAfter: Boolean): CaretText {
+        // A pick with text selected replaces the selection, as typing would.
+        if (hasSelection) return withoutSelection().typed(if (spaceAfter) "$word " else word)
         val span = wordAtCaret()
         val tail = text.substring(span.end)
         val head = text.substring(0, span.start) + word
@@ -139,6 +199,7 @@ data class CaretText(val text: String, val caret: Int = text.length) {
      * end nothing trails: the next stroke brings its own space.
      */
     fun glided(word: String): CaretText {
+        if (hasSelection) return withoutSelection().glided(word)
         val i = at
         val head = text.substring(0, i)
         val tail = text.substring(i)
@@ -184,6 +245,31 @@ data class CaretText(val text: String, val caret: Int = text.length) {
          */
         fun isWordChar(c: Char): Boolean =
             c.isLetterOrDigit() || c == '\'' || c == '’' || c == '-'
+
+        /**
+         * The word [index] is on or just after, as a range of [text], or null
+         * when it touches no word. What a long press selects, here and on the
+         * tools' read-only text.
+         */
+        fun wordSpanAt(text: String, index: Int): IntRange? {
+            if (text.isEmpty()) return null
+            val i = index.coerceIn(0, text.length)
+            // On a word, or at the end of one: a press just past the last letter
+            // still means that word.
+            val probe = when {
+                i < text.length && isWordChar(text[i]) -> i
+                i > 0 && isWordChar(text[i - 1]) -> i - 1
+                else -> return null
+            }
+            var start = probe
+            while (start > 0 && isWordChar(text[start - 1])) start--
+            var end = probe + 1
+            while (end < text.length && isWordChar(text[end])) end++
+            // Trim the hyphens and apostrophes a word does not start or end with.
+            while (start < end && !text[start].isLetterOrDigit()) start++
+            while (end > start && !text[end - 1].isLetterOrDigit()) end--
+            return if (start < end) start until end else null
+        }
     }
 }
 
@@ -271,4 +357,7 @@ enum class CaptureTarget(
  * path that sets a buffer directly cannot leave a caret pointing into text
  * that is no longer there.
  */
-data class CaptureCaret(val key: String, val at: Int, val text: String)
+data class CaptureCaret(val key: String, val at: Int, val text: String, val anchor: Int = at)
+
+/** What the selection bar over a keyboard-owned field can do with its text (#352). */
+enum class CaptureSelectionAction { CUT, COPY, PASTE, SELECT_ALL }

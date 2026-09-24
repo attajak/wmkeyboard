@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +32,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.CloseFullscreen
+import androidx.compose.material.icons.outlined.OpenInFull
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +53,7 @@ import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.WikiUi
+import com.wasimaster.wmkeyboard.ime.aichat.AskAiContext
 
 /** Tabs on an open Wikipedia article. */
 private enum class WikiTab(@StringRes val labelRes: Int) {
@@ -69,8 +79,20 @@ internal fun WikipediaPanel(
     onInsert: (String) -> Unit,
 ) {
     val kb = LocalKbTheme.current
+    // An open article can grow the panel up the screen to read in (#348).
+    // Panel-local: it resets with the panel, and search results never grow.
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val reading = state.wiki is WikiUi.Article && !state.mediaSearchActive
     // Search mode: only the query bar shows, keys underneath type into it.
-    val height = if (state.mediaSearchActive) 56.dp else keyRowsHeight(state)
+    val height = when {
+        state.mediaSearchActive -> 56.dp
+        // As tall as the screen allows, the same fit the AI panel's extra
+        // height gets: never below the board it stands in for.
+        expanded && reading -> keyRowsHeight(state).let { board ->
+            toolPanelHeight(state, wanted = board + LocalConfiguration.current.screenHeightDp.dp, floor = board)
+        }
+        else -> keyRowsHeight(state)
+    }
 
     Column(
         modifier = Modifier
@@ -188,6 +210,8 @@ internal fun WikipediaPanel(
             }
             is WikiUi.Article -> WikiArticle(
                 focusedLink = state.focusedIndex(),
+                expanded = expanded,
+                onExpand = { expanded = !expanded },
                 wiki = wiki,
                 markdownLinks = state.settings.webSearch.wikiLinksMarkdown,
                 lang = state.settings.webSearch.wikiLanguage,
@@ -206,6 +230,9 @@ private fun WikiArticle(
     wiki: WikiUi.Article,
     /** The link the hardware focus ring is on, or null in touch mode. */
     focusedLink: Int?,
+    /** The panel grown up the screen for reading (#348). */
+    expanded: Boolean,
+    onExpand: () -> Unit,
     markdownLinks: Boolean,
     lang: String,
     onBack: () -> Unit,
@@ -219,6 +246,27 @@ private fun WikiArticle(
     val linkText = remember(wiki.summary, markdownLinks) {
         if (markdownLinks) "[${wiki.summary.title}](${wiki.summary.url})" else wiki.summary.url
     }
+    // Ask AI (#352): about a passage, from a long press on the text, or about
+    // the whole article from the header chip.
+    val askLabel = stringResource(R.string.ime_ask_ai_label_wiki, wiki.summary.title)
+    val ask = remember(wiki.summary.title, askLabel) {
+        AskAiSource(AskAiContext.wikipediaSource(wiki.summary.title), askLabel)
+    }
+    // Quote (#348): a selected passage with the article it came from, as a
+    // link when links are inserted as markdown, else with the bare address.
+    val quoteMarkdown = stringResource(R.string.ime_wiki_quote_markdown)
+    val quotePlain = stringResource(R.string.ime_wiki_quote_plain)
+    val quote = remember(wiki.summary, markdownLinks, quoteMarkdown, quotePlain) {
+        { passage: String ->
+            String.format(
+                if (markdownLinks) quoteMarkdown else quotePlain,
+                passage.trim(),
+                wiki.summary.title,
+                wiki.summary.url,
+            )
+        }
+    }
+    val context = LocalContext.current
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -246,8 +294,50 @@ private fun WikiArticle(
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
+            // Read it bigger, here or in the browser (#348).
+            IconButton(onClick = onExpand, modifier = Modifier.size(30.dp)) {
+                Icon(
+                    if (expanded) Icons.Outlined.CloseFullscreen else Icons.Outlined.OpenInFull,
+                    contentDescription = stringResource(
+                        if (expanded) R.string.ime_wiki_shrink_desc else R.string.ime_wiki_expand_desc,
+                    ),
+                    tint = kb.toolbarIcon,
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+            if (wiki.summary.url.isNotBlank()) {
+                IconButton(
+                    onClick = {
+                        runCatching {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse(wiki.summary.url))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                            )
+                        }
+                    },
+                    modifier = Modifier.size(30.dp),
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Outlined.OpenInNew,
+                        contentDescription = stringResource(R.string.ime_wiki_open_browser_desc),
+                        tint = kb.toolbarIcon,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+        }
+        // The tabs, then what can be done with the whole article: Ask AI
+        // (#352) and Copy (#348). A row of their own, since the title's row
+        // has no room left for five chips on a phone.
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 10.dp, vertical = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             for (wikiTab in WikiTab.entries) {
-                Spacer(Modifier.width(4.dp))
                 ToolPanelChip(stringResource(wikiTab.labelRes), selected = tab == wikiTab) {
                     tab = wikiTab
                     when (wikiTab) {
@@ -256,6 +346,11 @@ private fun WikiArticle(
                         WikiTab.SUMMARY -> {}
                     }
                 }
+            }
+            Spacer(Modifier.width(8.dp))
+            AskAiChip(askLabel) { AskAiContext.wikipedia(wiki.summary, wiki.fullText) }
+            CopyTextChip {
+                (wiki.fullText?.takeIf { it.isNotBlank() } ?: wiki.summary.extract).trim() + "\n\n" + wiki.summary.url
             }
         }
         when (tab) {
@@ -287,15 +382,26 @@ private fun WikiArticle(
                     }
                 }
                 item {
-                    Text(
-                        wiki.summary.extract.ifBlank {
-                            stringResource(R.string.ime_wiki_no_summary_empty)
-                        },
-                        color = kb.modifierKeyText,
-                        fontSize = 13.sp,
-                        lineHeight = 18.sp,
-                        modifier = Modifier.padding(top = 4.dp),
-                    )
+                    if (wiki.summary.extract.isBlank()) {
+                        Text(
+                            stringResource(R.string.ime_wiki_no_summary_empty),
+                            color = kb.modifierKeyText,
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    } else {
+                        // A long press selects: Ask AI, Copy or Insert (#352).
+                        SelectableText(
+                            wiki.summary.extract,
+                            color = kb.modifierKeyText,
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp,
+                            modifier = Modifier.padding(top = 4.dp),
+                            ask = ask,
+                            quote = quote,
+                        )
+                    }
                 }
             }
             WikiTab.LINKS -> when {
@@ -357,24 +463,23 @@ private fun WikiArticle(
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
                 ) {
                     // Paragraph-per-item keeps huge articles scrollable; each
-                    // paragraph is insertable on its own.
+                    // paragraph is insertable on its own with a tap, and a
+                    // long press selects out of it (#352).
                     val paragraphs = wiki.fullText.split("\n\n").filter { it.isNotBlank() }
                     items(paragraphs.size) { index ->
                         val paragraph = paragraphs[index]
-                        Column(
+                        SelectableText(
+                            paragraph,
+                            color = if (paragraph.startsWith("==")) kb.accent else kb.modifierKeyText,
+                            fontSize = 13.sp,
+                            lineHeight = 18.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable { onInsert(paragraph) }
                                 .padding(vertical = 4.dp),
-                        ) {
-                            Text(
-                                paragraph,
-                                color = if (paragraph.startsWith("==")) kb.accent else kb.modifierKeyText,
-                                fontSize = 13.sp,
-                                lineHeight = 18.sp,
-                            )
-                        }
+                            ask = ask,
+                            quote = quote,
+                            onTap = { onInsert(paragraph) },
+                        )
                     }
                 }
             }

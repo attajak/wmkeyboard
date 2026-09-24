@@ -1259,7 +1259,14 @@ fun KeyboardScreen(
             LocalCaptureCaret provides CaptureCaretHandle(
                 bodyState.captureCaretIndex(),
                 capture.onCaretTap,
+                anchor = bodyState.captureAnchorIndex(),
+                onSelect = capture.onSelect,
+                onSelectionAction = capture.onSelectionAction,
             ),
+            // Text selection over the tools' text and the keyboard's own
+            // fields (#352): the one selection up, and what its bar calls.
+            LocalSelectionOverlay provides remember { SelectionOverlayState() },
+            LocalSelectionTools provides selectionTools(bodyState, capture.onAiChat),
             LocalOctopusPick provides onOctopusPick,
             LocalPossessiveFlick provides onPossessiveFlick,
             LocalOctopusWords provides rememberUpdatedState(bodyState.octopus),
@@ -9851,6 +9858,11 @@ private fun KeyboardBody(
     // the bottom of the keyboard when the toolbar end is where the finger is.
     var bodyHeightPx by remember { mutableIntStateOf(0) }
 
+    // The one text selection up (#352), and whether a tap elsewhere should end it.
+    val selectionOverlay = LocalSelectionOverlay.current
+    val selectionDismissable by remember(selectionOverlay) {
+        androidx.compose.runtime.derivedStateOf { selectionOverlay?.session?.dismissOnOutsideTap == true }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -9858,7 +9870,14 @@ private fun KeyboardBody(
                 bodyOrigin = it.positionInRoot()
                 bodyHeightPx = it.size.height
                 drag.bodyCoords = it
-            },
+            }
+            .then(
+                if (selectionOverlay == null) {
+                    Modifier
+                } else {
+                    Modifier.selectionDismissObserver(selectionOverlay, selectionDismissable)
+                },
+            ),
     ) {
         Column {
             // The dedicated always-on emoji row (Gboard style) sits between
@@ -10197,7 +10216,7 @@ private fun KeyboardBody(
             )
         }
         val shownPanel = if (lockHidden && state.panel == PanelMode.CLIPBOARD) PanelMode.NONE else state.panel
-        PanelEnterFade(shownPanel, state.settings.reduceMotion) {
+        PanelEnterFade(shownPanel, state.settings.reduceMotion, roomBelow = panelRoomBelow(state, shownPanel)) {
         when (shownPanel) {
                 PanelMode.EMOJI -> EmojiPanelHost(state, panelCallbacks)
                 PanelMode.CLIPBOARD -> ClipboardPanelHost(state, panelCallbacks)
@@ -10749,7 +10768,7 @@ private fun KeyboardBody(
                     // glanced at (#280); otherwise the panel stays at the
                     // normal keyboard height.
                     extraHeight = when {
-                        state.aiChatShown -> 120.dp
+                        state.aiChatShown -> AiChatExtraHeight
                         state.settings.ai.showThinking -> 160.dp
                         else -> 0.dp
                     },
@@ -11021,6 +11040,9 @@ private fun KeyboardBody(
         // first toolbar buttons and hid the very badges the arming had just put
         // there. The bottom-right of the key grid is the emptiest corner.
         PickerHelpPill(state, modifier = Modifier.align(Alignment.BottomEnd))
+        // Last of all: a selection's handles and bar ride over everything,
+        // the key rows included, since a field's handle can hang over them.
+        selectionOverlay?.let { SelectionOverlay(it, Modifier.matchParentSize()) }
     }
 }
 
@@ -11045,6 +11067,7 @@ private fun KeyboardBody(
 private fun PanelEnterFade(
     panel: PanelMode,
     reduceMotion: Boolean,
+    roomBelow: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     key(panel) {
@@ -11057,14 +11080,69 @@ private fun PanelEnterFade(
             modifier = if (panel == PanelMode.NONE) {
                 Modifier
             } else {
-                Modifier.graphicsLayer {
-                    alpha = fade.value
-                    compositingStrategy = CompositingStrategy.ModulateAlpha
-                }
+                Modifier
+                    .leaveRoomBelow(roomBelow)
+                    .graphicsLayer {
+                        alpha = fade.value
+                        compositingStrategy = CompositingStrategy.ModulateAlpha
+                    }
             },
             content = content,
         )
     }
+}
+
+/**
+ * What the key rows under an open panel need below it: the rows, and the
+ * strip over them. Zero when the panel has no keys under it.
+ */
+private fun panelRoomBelow(state: KeyboardUiState, panel: PanelMode): Dp {
+    if (panel == PanelMode.NONE) return 0.dp
+    if (!keyRowsUnderPanel(state) && state.panel != PanelMode.GRAMMAR) return 0.dp
+    val strip = when {
+        state.typingTestActive && state.settings.typingTest.suggestions -> state.settings.toolbarHeightDp.dp
+        else -> captureStripHeight(state)
+    }
+    return keyRowsHeight(state) + strip
+}
+
+/**
+ * Measures the panel against what is left of the window once [below] is
+ * paid for, so a panel that asked for more than the screen has comes up
+ * short, never the key rows under it (#352).
+ *
+ * The panels ask in fixed dp, fitted beforehand by [fitToolPanelHeight]
+ * against a share of the screen. That guess cannot see everything the window
+ * really has to hold — the key preview's band, the navigation bar, a big
+ * font — and the column hands its children what is left in order: the panel
+ * came first and took its height whole, so the keys were measured into
+ * whatever remained. On the AI chat, which asks for the most, that was the
+ * bottom rows squashed too thin to type on. The column already tells the
+ * panel how much room remains; taking the rows off that is the whole fix.
+ */
+private fun Modifier.leaveRoomBelow(below: Dp): Modifier =
+    if (below <= 0.dp) {
+        this
+    } else {
+        layout { measurable, constraints ->
+            val room = if (constraints.hasBoundedHeight) {
+                (constraints.maxHeight - below.roundToPx()).coerceAtLeast(0)
+            } else {
+                constraints.maxHeight
+            }
+            val placeable = measurable.measure(
+                constraints.copy(minHeight = constraints.minHeight.coerceAtMost(room), maxHeight = room),
+            )
+            layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+        }
+    }
+
+/** What a selection's bar can reach (#352): the AI chat's actions, and whether Ask AI is on offer. */
+@Composable
+private fun selectionTools(state: KeyboardUiState, onAiChat: (AiChatAction) -> Unit): SelectionTools {
+    // Not on the lock screen, where the chat is not offered either.
+    val askAi = !state.deviceLocked && ToolbarTool.AI in usableTools(state.settings)
+    return remember(onAiChat, askAi) { SelectionTools(onAiChat, askAi) }
 }
 
 /** How long a panel takes to fade in over the board. */

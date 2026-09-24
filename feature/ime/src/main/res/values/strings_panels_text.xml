@@ -17,6 +17,13 @@
     <string name="ime_wiki_links_progress">Loading links…</string>
     <string name="ime_wiki_full_progress">Loading the full article…</string>
     <string name="ime_wiki_back_desc">Back to the results</string>
+    <!-- #348: the article panel grown up the screen, and back. -->
+    <string name="ime_wiki_expand_desc">Make the article taller</string>
+    <string name="ime_wiki_shrink_desc">Make the article the keyboard\'s height again</string>
+    <string name="ime_wiki_open_browser_desc">Open the article in the browser</string>
+    <!-- A selected passage inserted as a quote. %1$s is the passage, %2$s the article title, %3$s its address. The markdown form is used when Wikipedia links are inserted as markdown. -->
+    <string name="ime_wiki_quote_markdown">\"%1$s\" (from [Wikipedia: %2$s](%3$s))</string>
+    <string name="ime_wiki_quote_plain">\"%1$s\" (Wikipedia: %2$s, %3$s)</string>
     <string name="ime_wiki_insert_summary_action">Insert summary</string>
     <string name="ime_wiki_insert_link_action">Insert link</string>
     <string name="ime_wiki_insert_title_action">Insert title</string>

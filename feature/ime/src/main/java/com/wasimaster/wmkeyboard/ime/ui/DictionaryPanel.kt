@@ -48,6 +48,7 @@ import com.wasimaster.wmkeyboard.ime.DictionaryUi
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
+import com.wasimaster.wmkeyboard.ime.aichat.AskAiContext
 
 /**
  * English dictionary lookup in the tool viewbox. Opening the tool
@@ -111,6 +112,18 @@ internal fun RowScope.DictionaryHeaderSearchBar(
                 )
             }
         }
+    }
+    // Ask AI about everything the lookup found (#352), or copy it (#348); a
+    // long press on a definition does either for just that.
+    val ready = state.dictionary as? DictionaryUi.Ready
+    if (ready != null && !state.dictionarySearchActive && ready.entries.isNotEmpty()) {
+        val word = ready.entries.first().word
+        AskAiChip(
+            stringResource(R.string.ime_ask_ai_label_dict, word),
+            modifier = Modifier.padding(end = 4.dp),
+        ) { AskAiContext.dictionary(ready.entries) }
+        // The same text, to the clipboard (#348).
+        CopyTextChip(Modifier.padding(end = 6.dp)) { AskAiContext.dictionary(ready.entries) }
     }
 }
 
@@ -255,7 +268,7 @@ private fun DictionaryEntries(
             }
             entry.meanings.forEachIndexed { meaningIndex, meaning ->
                 item(key = "meaning$entryIndex-$meaningIndex") {
-                    DictionaryMeaning(meaning, serif, onLookup)
+                    DictionaryMeaning(meaning, serif, onLookup, entry.word)
                 }
             }
         }
@@ -277,8 +290,11 @@ private fun DictionaryMeaning(
     meaning: DictMeaning,
     serif: FontFamily,
     onLookup: (String) -> Unit,
+    word: String,
 ) {
     val kb = LocalKbTheme.current
+    val askLabel = stringResource(R.string.ime_ask_ai_label_dict, word)
+    val ask = remember(word, askLabel) { AskAiSource(AskAiContext.dictionarySource(word), askLabel) }
     Column(modifier = Modifier.padding(top = 6.dp)) {
         if (meaning.partOfSpeech.isNotEmpty()) {
             Text(
@@ -299,14 +315,16 @@ private fun DictionaryMeaning(
                     modifier = Modifier.width(20.dp),
                 )
                 Column {
-                    Text(
+                    // A long press selects: Ask AI, Copy or Insert (#352).
+                    SelectableText(
                         definition.text,
                         color = kb.modifierKeyText,
                         fontSize = 13.sp,
                         lineHeight = 17.sp,
+                        ask = ask,
                     )
                     if (definition.example != null) {
-                        Text(
+                        SelectableText(
                             "“${definition.example}”",
                             color = kb.toolbarIcon,
                             fontSize = 12.sp,
@@ -314,6 +332,7 @@ private fun DictionaryMeaning(
                             fontStyle = FontStyle.Italic,
                             fontFamily = serif,
                             modifier = Modifier.padding(top = 1.dp),
+                            ask = ask,
                         )
                     }
                 }

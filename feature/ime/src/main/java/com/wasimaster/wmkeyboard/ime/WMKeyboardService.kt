@@ -7125,7 +7125,7 @@ open class WMKeyboardService : InputMethodService() {
             else -> Unit
         }
         val before = state.captureCaretText() ?: return false
-        if (before.at <= 0) {
+        if (!before.hasSelection && before.at <= 0) {
             // Nothing left of this line to take back, but the computer's field
             // may well hold more: the key goes there as itself.
             if (target == CaptureTarget.KDE_REMOTE) kdeSendSpecial(KdeSpecialKey.BACKSPACE)
@@ -7264,7 +7264,7 @@ open class WMKeyboardService : InputMethodService() {
             return true
         }
         val before = state.captureCaretText() ?: return false
-        captureCaretTo(before.caretMoved(delta).at)
+        captureCaretTo(before.caretMoved(delta, extend))
         return true
     }
 
@@ -7281,14 +7281,14 @@ open class WMKeyboardService : InputMethodService() {
             return true
         }
         val before = state.captureCaretText() ?: return false
-        captureCaretTo(if (end) before.text.length else 0)
+        captureCaretTo(before.caretAt(if (end) before.text.length else 0, extend))
         return true
     }
 
     /**
      * A hardware arrow, Home or End while a keyboard-owned field has the keys:
      * that field's caret moves, not the app's. Shift extends in the one buffer
-     * that has a selection to extend (#204); the rest simply move.
+     * that has a selection to extend (#204, and the shared caret since #352).
      */
     private fun captureCaretKey(event: KeyEvent): Boolean {
         if (_uiState.value.captureTarget() == null) return false
@@ -7316,14 +7316,64 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val before = state.captureCaretText() ?: return
-        captureCaretTo(before.caretAt(index).at)
+        captureCaretTo(before.caretAt(index))
     }
 
-    /** Moves the shared caret without touching the text. */
-    private fun captureCaretTo(at: Int) {
+    /**
+     * A selection made on the field itself (#352): a long press on a word, or
+     * one of its handles dragged. [anchor] is the end that stays, [caret] the
+     * one that moves; equal, it is just the caret.
+     */
+    fun onCaptureSelect(anchor: Int, caret: Int) {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return
+        if (!target.movableCaret) return
+        if (target == CaptureTarget.WORD_SPELL) {
+            wordSpellEdit { it.caretAt(anchor, extend = false).caretAt(caret, extend = true) }
+            return
+        }
+        val before = state.captureCaretText() ?: return
+        captureCaretTo(before.selected(anchor, caret))
+    }
+
+    /** Cut, Copy, Paste or Select all on the focused keyboard-owned field (#352). */
+    fun onCaptureSelectionAction(action: CaptureSelectionAction) {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return
+        // The word card and the typing test run editors of their own.
+        if (target == CaptureTarget.WORD_SPELL || !target.movableCaret) return
+        val before = state.captureCaretText() ?: return
+        vibrate()
+        when (action) {
+            CaptureSelectionAction.SELECT_ALL -> captureCaretTo(before.selectedAll())
+            CaptureSelectionAction.COPY, CaptureSelectionAction.CUT -> {
+                if (!before.hasSelection) return
+                runCatching {
+                    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                        .setPrimaryClip(android.content.ClipData.newPlainText("", before.selectedText))
+                }
+                if (action == CaptureSelectionAction.CUT) {
+                    captureWrite(target, before, before.withoutSelection())
+                } else {
+                    captureCaretTo(before.collapsed().caretAt(before.selectionEnd))
+                }
+            }
+            CaptureSelectionAction.PASTE -> {
+                if (!isClipboardAccessible()) return
+                val clip = clipboardStore.latestText().orEmpty()
+                // Through the ladder, so each field filters it as it filters keys.
+                if (clip.isNotEmpty()) captureTyped(clip)
+            }
+        }
+    }
+
+    /** Moves the shared caret, and its selection, without touching the text. */
+    private fun captureCaretTo(caret: CaretText) {
         val state = _uiState.value
         val key = state.captureKey() ?: return
-        _uiState.update { it.copy(captureCaret = CaptureCaret(key, at, state.captureBuffer())) }
+        _uiState.update {
+            it.copy(captureCaret = CaptureCaret(key, caret.at, state.captureBuffer(), caret.anchorAt))
+        }
     }
 
     /**
@@ -7370,7 +7420,8 @@ open class WMKeyboardService : InputMethodService() {
         }
         val written = _uiState.value.captureBuffer()
         val at = if (written == after.text) after.at else written.length
-        _uiState.update { it.copy(captureCaret = key?.let { k -> CaptureCaret(k, at, written) }) }
+        val anchor = if (written == after.text) after.anchorAt else at
+        _uiState.update { it.copy(captureCaret = key?.let { k -> CaptureCaret(k, at, written, anchor) }) }
     }
 
     /**
@@ -9143,7 +9194,7 @@ open class WMKeyboardService : InputMethodService() {
         state.captureTarget()?.let { target ->
             if (!target.movableCaret) return false
             val caret = state.captureCaretText() ?: return false
-            return caret.at < caret.text.length
+            return caret.hasSelection || caret.at < caret.text.length
         }
         val ic = currentInputConnection ?: return false
         if (hasSelection(ic)) return true
@@ -21488,6 +21539,8 @@ open class WMKeyboardService : InputMethodService() {
     private val captureCallbacks by lazy {
         com.wasimaster.wmkeyboard.ime.ui.CaptureCallbacks(
             onCaretTap = ::onCaptureCaretTap,
+            onSelect = ::onCaptureSelect,
+            onSelectionAction = ::onCaptureSelectionAction,
             onSuggestion = ::onCaptureSuggestion,
             onAiChat = ::onAiChatAction,
             onKde = ::onKdeAction,
@@ -22666,7 +22719,13 @@ open class WMKeyboardService : InputMethodService() {
     fun onAiChatAction(action: AiChatAction) {
         val state = _uiState.value
         val chat = state.aiChat
-        if (!chat.available) return
+        // The tools' selection bars copy and insert through here too (#352),
+        // and neither needs the chat; Ask AI checks for itself.
+        when (action) {
+            is AiChatAction.AskAbout -> { askAiAbout(action); return }
+            is AiChatAction.Copy, is AiChatAction.Insert -> Unit
+            else -> if (!chat.available) return
+        }
         // openRoute buzzes on its own.
         if (action !is AiChatAction.OpenInApp) vibrate()
         when (action) {
@@ -22767,6 +22826,41 @@ open class WMKeyboardService : InputMethodService() {
                     if (action.list || chat.conversationId < 0) "ai_chat" else "ai_chat/${chat.conversationId}",
                 )
             is AiChatAction.Report -> aiChatReport(action.index)
+            is AiChatAction.AskAbout -> Unit
+        }
+    }
+
+    /**
+     * Ask AI from a tool (#352): the AI panel, in chat mode, on a new chat,
+     * with the tool's text attached and the composer taking the keys, so the
+     * question is the next thing typed.
+     */
+    private fun askAiAbout(action: AiChatAction.AskAbout) {
+        // The chats are in credential-encrypted storage; the panel says so on
+        // the lock screen, and the tools do not offer this there.
+        if (!userUnlocked || isDeviceLocked()) return
+        val text = action.text.trim()
+        if (text.isEmpty()) return
+        vibrate()
+        if (_uiState.value.panel != PanelMode.AI) onPanelChange(PanelMode.AI, haptic = false)
+        if (_uiState.value.panel != PanelMode.AI || !_uiState.value.aiChat.available) return
+        _uiState.update {
+            it.copy(
+                // One field with the keys at a time, as the mode switch has it.
+                ai = if (it.ai is AiUi.CustomInput) AiUi.Idle else it.ai,
+                aiChat = it.aiChat.copy(
+                    open = true,
+                    conversationId = -1L,
+                    showSessions = false,
+                    draft = "",
+                    attachment = AiChatAttachment(
+                        text.take(AiChatStore.MAX_TEXT),
+                        fromSelection = action.fromSelection,
+                        label = action.label,
+                    ),
+                    composing = true,
+                ),
+            )
         }
     }
 
@@ -27754,7 +27848,7 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (target == CaptureTarget.TYPING_TEST) return state.typingTest.current.isNotEmpty()
         val caret = state.captureCaretText() ?: return false
-        return caret.at > 0
+        return caret.hasSelection || caret.at > 0
     }
 
     /** [canDelete] scoped to the real field only, for field-direct controls. */
