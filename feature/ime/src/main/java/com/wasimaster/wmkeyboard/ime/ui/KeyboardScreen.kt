@@ -715,12 +715,14 @@ internal val LocalHideKeyboard = staticCompositionLocalOf<() -> Unit> { {} }
  * spacebar that ran the swipe may not be the one composed afterwards.
  */
 internal class LanguageSwitchEcho {
-    /** The switched-to layout and a serial, so a repeat switch restarts the timer. */
-    var shown by mutableStateOf<Pair<String, Int>?>(null)
+    /** One echo: the switched-to layout, how long it stays up, and a serial so a repeat switch restarts the timer. */
+    data class Shown(val layoutId: String, val ms: Long, val serial: Int)
+
+    var shown by mutableStateOf<Shown?>(null)
     private var serial = 0
 
-    fun show(layoutId: String) {
-        shown = layoutId to ++serial
+    fun show(layoutId: String, ms: Long) {
+        if (ms > 0) shown = Shown(layoutId, ms, ++serial)
     }
 
     fun clear() {
@@ -730,11 +732,27 @@ internal class LanguageSwitchEcho {
 
 internal val LocalLanguageSwitchEcho = staticCompositionLocalOf { LanguageSwitchEcho() }
 
-/** How long [LanguageSwitchEcho] keeps a switched-to language up after the lift. */
+/** How long a switched-to language is on screen in all, swipe preview plus [LanguageSwitchEcho]. */
 private const val LanguageSwitchEchoMs = 700L
 
 /**
  * Whether TalkBack (or another explore-by-touch service) is currently
+/**
+ * A language the swipe preview showed for this long before the lift has been
+ * seen: the finger was moving slowly enough to read it, so no echo follows.
+ */
+private const val LanguageSeenMs = 250L
+
+/**
+ * How long the echo keeps the committed language up after the lift, given how
+ * long the swipe preview had already shown it. A flick lifts before the
+ * preview has drawn and gets nearly the whole [LanguageSwitchEchoMs]; a slow
+ * swipe that sat on the language past [LanguageSeenMs] gets none, since the
+ * user watched it land.
+ */
+internal fun languageEchoMs(seenMs: Long): Long =
+    if (seenMs >= LanguageSeenMs) 0L else LanguageSwitchEchoMs - seenMs.coerceAtLeast(0L)
+
  * driving the screen. Resolved once at the root rather than per key —
  * every key would otherwise register its own listener.
  */
@@ -1513,7 +1531,7 @@ private fun KeyboardScreenFrame(
     val movableBody = body
     LaunchedEffect(languageSwitchEcho.shown) {
         val shown = languageSwitchEcho.shown ?: return@LaunchedEffect
-        delay(LanguageSwitchEchoMs)
+        delay(shown.ms)
         if (languageSwitchEcho.shown == shown) languageSwitchEcho.clear()
     }
     val rawState by stateHolder
@@ -17605,7 +17623,7 @@ internal fun KeyButton(
     // spacebar draws it, and the live swipe preview takes over while one runs.
     val languageSwitchEcho = LocalLanguageSwitchEcho.current
     val shownLanguage = languagePreview
-        ?: languageSwitchEcho.shown?.first?.takeIf { key.action == KeyAction.Space }
+        ?: languageSwitchEcho.shown?.layoutId?.takeIf { key.action == KeyAction.Space }
     val scope = rememberCoroutineScope()
     // The role-carrying locals, because this is the key grid: a sound pack may
     // have recorded the spacebar separately from the letters.
@@ -20226,7 +20244,7 @@ private fun Modifier.pointerInputKey(
     pickerForLongRing: Boolean = true,
     setLanguagePreview: (String?) -> Unit,
     /** Keeps a just-switched-to language on screen briefly after the lift. */
-    echoLanguageSwitch: (String) -> Unit = {},
+    echoLanguageSwitch: (String, Long) -> Unit = { _, _ -> },
     canDelete: () -> Boolean,
     canForwardDelete: () -> Boolean,
     deleteSwipe: DeleteSwipeCallbacks,
@@ -20299,7 +20317,9 @@ private fun Modifier.pointerInputKey(
                     // When the swipe last stepped the language ring. A step in the
                     // same direction waits LanguageStepDwellMs after it, so a flick
                     // moves one language however far it travels and only a swipe
-                    // that keeps going walks on (see [stepLanguageRing]).
+                    // that keeps going walks on (see [stepLanguageRing]). Also how
+                    // long the preview has shown the language at the lift, which
+                    // sizes the echo after it (see [languageEchoMs]).
                     var lastStepAt = 0L
                     // With language switching on the short-swipe slot, holding
                     // the spacebar just past a normal tap shows the language
@@ -20314,6 +20334,7 @@ private fun Modifier.pointerInputKey(
                     // down through the list, sideways along the carousel — and
                     // release commits the highlighted layout; a hold that never
                     // moves leaves the popup up for tapping, and release types
+                    var liftAt = 0L
                     // nothing either way.
                     var pickerOpened = false
                     var pickerIndex = langIndex
@@ -20371,7 +20392,10 @@ private fun Modifier.pointerInputKey(
                     while (true) {
                         val event = awaitPointerEvent()
                         val change = event.changes.firstOrNull { it.id == down.id } ?: break
-                        if (!change.pressed) break
+                        if (!change.pressed) {
+                            liftAt = change.uptimeMillis
+                            break
+                        }
                         // The alternates popup owns the gesture from here (issue
                         // #57): the finger is choosing inside it, and none of the
                         // swipes may also run under it. Swallowed so the release
@@ -20568,6 +20592,7 @@ private fun Modifier.pointerInputKey(
                                 // One step per event at most, and a same-way
                                 // step only once the last one has settled: a flick
                                 // lands on the next language, never two over, and
+                                            lastStepAt = change.uptimeMillis
                                 // the list ends wrap only on a deliberate pull.
                                 val step = stepLanguageRing(
                                     index = langIndex,
@@ -20634,7 +20659,10 @@ private fun Modifier.pointerInputKey(
                         action == SpaceSwipeAction.LANGUAGE -> {
                             val selected = enabledLayoutIds[langIndex]
                             if (selected != currentLayoutId) {
-                                echoLanguageSwitch(selected)
+                                // A lift with no up event (the pointer was cancelled)
+                                // counts as unseen: echo in full.
+                                val seenMs = if (liftAt > 0L) liftAt - lastStepAt else 0L
+                                echoLanguageSwitch(selected, languageEchoMs(seenMs))
                                 onLayoutSelect(selected)
                             }
                         }
