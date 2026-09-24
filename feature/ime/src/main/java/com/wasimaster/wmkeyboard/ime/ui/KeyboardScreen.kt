@@ -911,7 +911,7 @@ private fun spokenLabel(key: Key, state: KeyboardUiState): SpokenLabel = when (k
         },
     )
     KeyAction.LanguageSwitch -> SpokenLabel(R.string.ime_key_language_switch)
-    KeyAction.InputMethodPicker -> SpokenLabel(R.string.ime_key_input_method_picker)
+    KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> SpokenLabel(R.string.ime_key_input_method_picker)
     KeyAction.Emoji -> SpokenLabel(R.string.ime_key_emoji)
     is KeyAction.Mod -> {
         val nameRes = when ((key.action as KeyAction.Mod).key) {
@@ -18964,7 +18964,7 @@ private fun AlternateAction(
         KeyAction.ForwardDelete -> IconSlots.KEY_FORWARD_DELETE
         KeyAction.Enter, KeyAction.Newline -> IconSlots.KEY_ENTER
         KeyAction.LanguageSwitch -> IconSlots.KEY_GLOBE
-        KeyAction.InputMethodPicker -> IconSlots.KEY_INPUT_METHOD_PICKER
+        KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> IconSlots.KEY_INPUT_METHOD_PICKER
         KeyAction.Emoji -> IconSlots.KEY_EMOJI
         is KeyAction.Tool -> IconSlots.forTool(action.tool)
         else -> null
@@ -19031,7 +19031,7 @@ private fun alternateActionSpoken(action: KeyAction): Int? = when (action) {
     KeyAction.Enter -> R.string.ime_enter_default
     KeyAction.Newline -> R.string.ime_key_newline
     KeyAction.LanguageSwitch -> R.string.ime_key_language_switch
-    KeyAction.InputMethodPicker -> R.string.ime_key_input_method_picker
+    KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> R.string.ime_key_input_method_picker
     KeyAction.Emoji -> R.string.ime_key_emoji
     KeyAction.Space -> R.string.ime_key_space
     else -> null
@@ -19576,7 +19576,7 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             contentDescription = stringResource(R.string.ime_key_language_switch),
             tint = contentColor,
         )
-        KeyAction.InputMethodPicker -> ActionKeyIcon(
+        KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> ActionKeyIcon(
             namedIcon,
             IconSlots.KEY_INPUT_METHOD_PICKER,
             contentDescription = stringResource(R.string.ime_key_input_method_picker),

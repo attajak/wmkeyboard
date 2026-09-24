@@ -6284,6 +6284,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             KeyAction.LanguageSwitch -> switchLanguage()
             KeyAction.InputMethodPicker -> showInputMethodPicker()
+            is KeyAction.SwitchInputMethod -> switchToInputMethod((key.action as KeyAction.SwitchInputMethod).id)
             KeyAction.Emoji -> onPanelChange(PanelMode.EMOJI, haptic = false)
             // Produced only by a long-press on ?123 when the opt-in is set.
             KeyAction.Numpad -> onPanelChange(PanelMode.NUMPAD, haptic = false)
@@ -10503,6 +10504,27 @@ open class WMKeyboardService : InputMethodService() {
      * keyboard down with it, and the input-method settings screen reaches the
      * same place in two more presses.
      */
+    /**
+     * Switches straight to the keyboard whose input-method id is [id] (issue
+     * #354), committing the buffer first for the reason [showInputMethodPicker]
+     * gives.
+     *
+     * Anything that stops the switch — a blank id, a keyboard that has since
+     * been disabled or uninstalled, a platform that refuses — ends at the
+     * system picker instead, so the key still gets the user to another
+     * keyboard. `switchInputMethod` is API 28; below that the picker is the
+     * only way, which is also what an unset key does.
+     */
+    private fun switchToInputMethod(id: String) {
+        val enabled = getSystemService(InputMethodManager::class.java)
+            ?.enabledInputMethodList.orEmpty().any { it.id == id }
+        if (id.isNotBlank() && enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+            if (runCatching { switchInputMethod(id) }.isSuccess) return
+        }
+        showInputMethodPicker()
+    }
+
     private fun showInputMethodPicker() {
         currentInputConnection?.let { commitComposing(it, autocorrect = false) }
         val imm = getSystemService(InputMethodManager::class.java)

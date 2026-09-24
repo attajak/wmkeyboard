@@ -30,6 +30,7 @@ fun Key.keySoundRole(): KeySoundRole = when (action) {
     KeyAction.Letters,
     KeyAction.LanguageSwitch,
     KeyAction.InputMethodPicker,
+    is KeyAction.SwitchInputMethod,
     KeyAction.Emoji,
     KeyAction.Numpad,
     KeyAction.Fn,

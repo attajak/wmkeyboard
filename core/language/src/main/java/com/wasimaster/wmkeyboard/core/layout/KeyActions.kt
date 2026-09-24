@@ -117,6 +117,24 @@ sealed interface KeyAction {
      */
     @Serializable @SerialName("input_method_picker") data object InputMethodPicker : KeyAction
 
+    /**
+     * Hands the field straight to one named keyboard app, with no list in
+     * between — the one-tap version of [InputMethodPicker] for someone who
+     * always goes back and forth between the same two keyboards (issue #354).
+     *
+     * [id] is the other keyboard's input-method id, the
+     * `package/.ServiceClass` string the platform files it under. Carrying the
+     * id rather than a position in the enabled list is what keeps the key
+     * pointing at the same app when another keyboard is installed or turned
+     * off. A blank [id] is the editor's placeholder while its picker is open,
+     * and what a file with the field missing coerces to; a key naming a
+     * keyboard that is no longer enabled falls back to the system picker
+     * rather than doing nothing, so the user is never stranded on a dead key.
+     */
+    @Serializable @SerialName("switch_input_method") data class SwitchInputMethod(
+        val id: String = "",
+    ) : KeyAction
+
     @Serializable @SerialName("emoji") data object Emoji : KeyAction
 
     /**
@@ -433,6 +451,7 @@ fun KeyAction.fallbackLabel(): String = when (this) {
     // The editor writes the layout's name onto the key when it is picked; this
     // is the grid glyph a hand-written layout that left the label blank gets.
     is KeyAction.Layout -> "▦"
+    is KeyAction.SwitchInputMethod -> "⌨"
     // A field is not a key: the cell draws its component, and the editor draws
     // the component's name from a string resource.
     is KeyAction.Field -> ""
@@ -589,6 +608,7 @@ fun KeyAction.canRepeatOnHold(): Boolean = when (this) {
     KeyAction.Shift, KeyAction.CapsLock, KeyAction.Fn -> false
     KeyAction.Symbols, KeyAction.Letters, KeyAction.Numpad, KeyAction.Emoji -> false
     KeyAction.LanguageSwitch, KeyAction.InputMethodPicker -> false
+    is KeyAction.SwitchInputMethod -> false
     is KeyAction.Mod, is KeyAction.Layout, is KeyAction.Tool -> false
     is KeyAction.Unknown -> false
     else -> !holdIsSpokenFor()

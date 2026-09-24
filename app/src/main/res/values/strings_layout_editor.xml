@@ -455,6 +455,13 @@
     <string name="layout_editor_action_morse_dash_title">Morse dash</string>
     <string name="layout_editor_action_morse_dash_detail">Adds a long signal. The letter commits after a pause</string>
 
+    <string name="layout_editor_action_switch_ime_title">Switch to a specific keyboard</string>
+    <string name="layout_editor_action_switch_ime_detail">Goes straight to one other keyboard app on your device, with no list. Pick the keyboard below</string>
+    <string name="layout_editor_ime_row_title">Keyboard</string>
+    <string name="layout_editor_ime_row_subtitle">The keyboard app this key switches to</string>
+    <string name="layout_editor_ime_row_unset">Not set</string>
+    <string name="layout_editor_ime_picker_title">Which keyboard</string>
+    <string name="layout_editor_ime_picker_empty">No other keyboards are turned on. Enable one in your device\'s keyboard settings first.</string>
     <string name="layout_editor_action_layout_title">Open a layout</string>
     <string name="layout_editor_action_layout_detail">Shows one of your secondary layouts over the letters. Press the key again, or an ABC key, to go back. Pick the layout below</string>
     <string name="layout_editor_action_tool_title">Open a tool</string>

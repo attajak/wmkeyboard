@@ -3446,7 +3446,7 @@ private const val EditorLetterSp = 16f
  */
 internal fun actionIconName(action: KeyAction): String? = when (action) {
     KeyAction.LanguageSwitch -> "language"
-    KeyAction.InputMethodPicker -> "keyboard"
+    KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> "keyboard"
     KeyAction.Emoji -> "emoji"
     else -> null
 }
@@ -3581,6 +3581,14 @@ internal val KeyActionCatalog: List<KeyActionOption> = listOf(
         R.string.layout_editor_action_group_layers,
         R.string.layout_editor_action_input_method_picker_detail,
         { KeyAction.InputMethodPicker }, { it == KeyAction.InputMethodPicker },
+    ),
+    // The id is a placeholder: the sheet opens the keyboard picker the moment
+    // this is chosen, the way the layout entry does.
+    KeyActionOption(
+        R.string.layout_editor_action_switch_ime_title,
+        R.string.layout_editor_action_group_layers,
+        R.string.layout_editor_action_switch_ime_detail,
+        { KeyAction.SwitchInputMethod() }, { it is KeyAction.SwitchInputMethod },
     ),
     KeyActionOption(
         R.string.layout_editor_action_fn_title,
@@ -3763,6 +3771,8 @@ internal fun KeyEditSheet(
     var pickingTool by remember { mutableStateOf(false) }
     // Which secondary layout it shows, when the picker put a layout action on it.
     var pickingLayout by remember { mutableStateOf(false) }
+    // Which other keyboard app it switches to, for a switch-keyboard action.
+    var pickingIme by remember { mutableStateOf(false) }
     // Which operation an edit key runs, and which component a field cell hosts.
     var pickingEdit by remember { mutableStateOf(false) }
     var pickingField by remember { mutableStateOf(false) }
@@ -3872,6 +3882,18 @@ internal fun KeyEditSheet(
                     value = secondaryLayouts.firstOrNull { it.id == layoutAction.id }?.name
                         ?: stringResource(R.string.layout_editor_layout_row_unset),
                 ) { pickingLayout = true }
+            }
+
+            // A switch-keyboard key carries which keyboard app it goes to.
+            (key.action as? KeyAction.SwitchInputMethod)?.let { imeAction ->
+                val context = LocalContext.current
+                NavRow(
+                    title = R.string.layout_editor_ime_row_title,
+                    subtitle = stringResource(R.string.layout_editor_ime_row_subtitle),
+                    value = enabledOtherInputMethods(context).firstOrNull { it.id == imeAction.id }
+                        ?.loadLabel(context.packageManager)?.toString()
+                        ?: stringResource(R.string.layout_editor_ime_row_unset),
+                ) { pickingIme = true }
             }
 
             // An edit key carries which operation it runs.
@@ -4108,6 +4130,7 @@ internal fun KeyEditSheet(
                 // whichever one the catalog entry had to name as its default.
                 if (action is KeyAction.Tool) pickingTool = true
                 if (action is KeyAction.Layout) pickingLayout = true
+                if (action is KeyAction.SwitchInputMethod) pickingIme = true
                 if (action is KeyAction.Edit) pickingEdit = true
                 if (action is KeyAction.Field) pickingField = true
             },
@@ -4131,6 +4154,17 @@ internal fun KeyEditSheet(
                         label = it.label.ifBlank { picked.name },
                     )
                 }
+            },
+        )
+    }
+
+    if (pickingIme) {
+        InputMethodPickerDialog(
+            current = (key.action as? KeyAction.SwitchInputMethod)?.id,
+            onDismiss = { pickingIme = false },
+            onPick = { picked, name ->
+                pickingIme = false
+                onChange { it.copy(action = KeyAction.SwitchInputMethod(picked), label = it.label.ifBlank { name }) }
             },
         )
     }
@@ -5038,6 +5072,7 @@ private fun drawsScalableLabel(key: Key): Boolean = when (key.action) {
     KeyAction.Shift, KeyAction.CapsLock, KeyAction.Delete, KeyAction.ForwardDelete,
     KeyAction.Enter, KeyAction.Newline, KeyAction.LanguageSwitch,
     KeyAction.InputMethodPicker, KeyAction.Emoji, KeyAction.Space,
+    is KeyAction.SwitchInputMethod,
     -> false
     // A component draws no label at all; an edit key draws its icon.
     is KeyAction.Field -> false
@@ -5307,6 +5342,53 @@ private fun SecondaryLayoutPickerDialog(
                             )
                         },
                         onClick = { onPick(option) },
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_close)) }
+        },
+    )
+}
+
+/** The other keyboard apps turned on for this device: what a switch-keyboard key can name. */
+private fun enabledOtherInputMethods(context: android.content.Context): List<android.view.inputmethod.InputMethodInfo> =
+    context.getSystemService(android.view.inputmethod.InputMethodManager::class.java)
+        ?.enabledInputMethodList.orEmpty()
+        .filter { it.packageName != context.packageName }
+
+/**
+ * Lists the other keyboards the device has turned on, for a switch-keyboard
+ * key (issue #354). Read live from the platform each time the dialog opens, so
+ * a keyboard enabled a moment ago is there; ours is left out, since a key that
+ * switches to the keyboard already showing would do nothing.
+ */
+@Composable
+private fun InputMethodPickerDialog(
+    current: String?,
+    onDismiss: () -> Unit,
+    onPick: (id: String, name: String) -> Unit,
+) {
+    val context = LocalContext.current
+    val options = remember { enabledOtherInputMethods(context) }
+    val rail = rememberScrollRailState()
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.layout_editor_ime_picker_title)) },
+        text = {
+            ScrollRail(state = rail, modifier = Modifier.heightIn(max = 380.dp)) {
+                if (options.isEmpty()) {
+                    Text(stringResource(R.string.layout_editor_ime_picker_empty))
+                }
+                for (option in options) {
+                    val name = option.loadLabel(context.packageManager).toString()
+                    WmRow(
+                        title = name,
+                        leading = {
+                            RadioButton(selected = option.id == current, onClick = { onPick(option.id, name) })
+                        },
+                        onClick = { onPick(option.id, name) },
                     )
                 }
             }

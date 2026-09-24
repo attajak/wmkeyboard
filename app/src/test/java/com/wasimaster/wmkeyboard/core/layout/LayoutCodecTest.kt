@@ -555,6 +555,7 @@ class LayoutCodecTest {
             KeyAction.LanguageSwitch,
             KeyAction.None,
             KeyAction.Layout("custom_1"),
+            KeyAction.SwitchInputMethod("com.example.ime/.Service"),
         )) {
             assertTrue(action.toString(), action.commitsNoText())
         }

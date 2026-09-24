@@ -266,7 +266,7 @@ object LayoutJsonSchema {
             layoutJson.encodeToJsonElement(PanelLayoutSpec.serializer(), PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(emptyList()))),
         )
         val samples = listOf(
-            KeyAction.Tool(), KeyAction.Layout(), KeyAction.SendKey(keyCode = 0), KeyAction.BrailleDot(dot = 1),
+            KeyAction.Tool(), KeyAction.Layout(), KeyAction.SwitchInputMethod(), KeyAction.SendKey(keyCode = 0), KeyAction.BrailleDot(dot = 1),
             KeyAction.KeymanKey(vkey = 0), KeyAction.Field(),
         )
         for (sample in samples) {
