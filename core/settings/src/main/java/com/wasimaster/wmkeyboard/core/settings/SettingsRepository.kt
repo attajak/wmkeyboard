@@ -6834,6 +6834,13 @@ data class SuggestionStripSettings(
      */
     val spellingMapOffLangs: Set<String> = emptySet(),
     /**
+     * Phonetic languages whose space bar commits the letter-for-letter reading
+     * instead of a dictionary word that sounds like it ("asi" → আসি rather
+     * than আছি). The sound-alikes stay in the strip. Stored as the switched-off
+     * set, so a language nobody has touched keeps them on, as it always had.
+     */
+    val phoneticSiblingsOffLangs: Set<String> = emptySet(),
+    /**
      * Languages whose suggestions come from the user's own imported word lists
      * alone: the bundled list and any downloaded one are dropped for them
      * (issue #28).
@@ -6940,6 +6947,9 @@ data class SuggestionStripSettings(
 ) {
     /** Whether the fixed-spelling map applies to [langId]. */
     fun spellingMapEnabledFor(langId: String): Boolean = langId !in spellingMapOffLangs
+
+    /** Whether a space on [langId]'s phonetic layout may commit a sound-alike dictionary word. */
+    fun phoneticSiblingsEnabledFor(langId: String): Boolean = langId !in phoneticSiblingsOffLangs
 
     /** Whether [langId]'s phonetic layout commits English words as English; null is no phonetic layout. */
     fun phoneticEnglishFor(langId: String?): Boolean = langId != null && langId in phoneticEnglishLangs
@@ -7392,6 +7402,7 @@ class SettingsRepository(private val context: Context) {
             return out ?: emptyMap()
         }
         private val SPELLING_MAP_OFF_LANGS = stringSetPreferencesKey("spelling_map_off_langs")
+        private val PHONETIC_SIBLINGS_OFF_LANGS = stringSetPreferencesKey("phonetic_siblings_off_langs")
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
         private val WORD_PAIRS_OFF_LANGS = stringSetPreferencesKey("word_pairs_off_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
@@ -9051,6 +9062,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.suggestionStrip.autocorrectSplits,
                 spellingMapOffLangs = p[SPELLING_MAP_OFF_LANGS]
                     ?: defaults.suggestionStrip.spellingMapOffLangs,
+                phoneticSiblingsOffLangs = p[PHONETIC_SIBLINGS_OFF_LANGS]
+                    ?: defaults.suggestionStrip.phoneticSiblingsOffLangs,
                 importedOnlyLangs = p[IMPORTED_ONLY_LANGS]
                     ?: defaults.suggestionStrip.importedOnlyLangs,
                 wordPairsOffLangs = p[WORD_PAIRS_OFF_LANGS]
@@ -13461,6 +13474,17 @@ class SettingsRepository(private val context: Context) {
         editPrefs {
             val off = it[SPELLING_MAP_OFF_LANGS].orEmpty()
             it[SPELLING_MAP_OFF_LANGS] = if (enabled) off - langId else off + langId
+        }
+
+    /**
+     * Let one phonetic language's space bar commit a sound-alike dictionary
+     * word, or keep it to the letter-for-letter reading. Only the switched-off
+     * languages are stored.
+     */
+    suspend fun setPhoneticSiblingsEnabled(langId: String, enabled: Boolean) =
+        editPrefs {
+            val off = it[PHONETIC_SIBLINGS_OFF_LANGS].orEmpty()
+            it[PHONETIC_SIBLINGS_OFF_LANGS] = if (enabled) off - langId else off + langId
         }
 
     /**

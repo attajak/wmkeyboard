@@ -123,6 +123,9 @@
     <string name="languages_spelling_map_row_subtitle">Type "tmr" to get তোমার, and "table" to get টেবিল</string>
     <!-- %1$s is the English name of the language, for example "Bengali". -->
     <string name="languages_spelling_map_info">Some words are not spelled the way they sound. "Table" is written টেবিল, not তাবলে, and people type "tmr" for তোমার with no vowels at all. This setting uses a list of those spellings while you type <xliff:g id="language" example="Bengali">%1$s</xliff:g>, so you get the word people write. Turn it off to get the letter-for-letter reading instead. Other languages keep their own setting.</string>
+    <string name="languages_phonetic_siblings_row_title">Correct to dictionary words</string>
+    <string name="languages_phonetic_siblings_row_subtitle">Type "asi" to get আছি instead of আসি</string>
+    <string name="languages_phonetic_siblings_info">Romanized typing is loose, so when you press space the keyboard can replace what you typed with a dictionary word that sounds the same. "asi" becomes আছি, the word people usually mean. This happens even with autocorrect off, because it is part of how <xliff:g id="language" example="Bengali">%1$s</xliff:g> is typed. Turn it off to always get exactly what the typing rules spell. The dictionary words still show in the suggestion strip, so you can tap one. Known spellings have their own setting above.</string>
 
     <!-- Phonetic layouts (Avro): the corner hints that show what each roman key types. -->
     <string name="languages_translit_hints_title">Key hints</string>

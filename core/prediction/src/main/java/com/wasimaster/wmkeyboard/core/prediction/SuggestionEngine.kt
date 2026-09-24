@@ -389,6 +389,22 @@ class SuggestionEngine(
             generation.incrementAndGet()
         }
 
+    /**
+     * Phonetic languages whose space bar commits the letter-for-letter reading
+     * rather than a dictionary word that sounds like it. Siblings still fill
+     * the strip behind the literal, so "asi" commits আসি and offers আছি; the
+     * fixed-spelling map has its own switch and is not affected.
+     */
+    @Volatile
+    private var phoneticSiblingsOffField: Set<String> = emptySet()
+    var phoneticSiblingsOff: Set<String>
+        get() = phoneticSiblingsOffField
+        set(value) {
+            if (value == phoneticSiblingsOffField) return
+            phoneticSiblingsOffField = value
+            generation.incrementAndGet()
+        }
+
     /** The spellings the user has overruled the script of; see [recordScriptChoice]. */
     @Volatile
     var scriptChoices: PhoneticScriptChoices = PhoneticScriptChoices()
@@ -2513,10 +2529,14 @@ class SuggestionEngine(
         // a near-tie sibling silently replacing it reads as a bug (হলো
         // becoming হল). A literal that isn't a dictionary word at all always
         // yields to siblings.
+        // Switched off for the language, the literal always leads and the
+        // siblings are only offered.
         val siblings = index.lookup(composing)
         val literalFreq = index.frequencyOf(phonetic)
         val topSiblingFreq = siblings.firstOrNull()?.let { index.frequencyOf(it) } ?: 0
-        if (literalFreq > 0 && topSiblingFreq < literalFreq * SIBLING_CONFIDENCE) {
+        if (backend.scheme.languageId in phoneticSiblingsOff ||
+            (literalFreq > 0 && topSiblingFreq < literalFreq * SIBLING_CONFIDENCE)
+        ) {
             ordered.add(phonetic)
         }
         ordered.addAll(siblings)

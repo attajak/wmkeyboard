@@ -3923,6 +3923,7 @@ open class WMKeyboardService : InputMethodService() {
                 phoneticAutoEnglish = _uiState.value.let {
                     it.settings.suggestionStrip.phoneticEnglishFor(it.composer.phoneticLanguage)
                 }
+                phoneticSiblingsOff = _uiState.value.settings.suggestionStrip.phoneticSiblingsOffLangs
                 scriptChoices = this@WMKeyboardService.scriptChoices
                 fieldDetectionShift = fieldDetectionShift(_uiState.value.settings)
                 tuneGlide(_uiState.value.settings.gesture.glideTuning())
@@ -9031,14 +9032,17 @@ open class WMKeyboardService : InputMethodService() {
      *
      * The switch is per language, so it is read for the layout now on screen
      * ([spec]) — here rather than in [bindEngineToLayout], which would set the
-     * flag quietly and leave this nothing to notice.
+     * flag quietly and leave this nothing to notice. The sound-alike switch
+     * rides along for the same reason: it changes what a space commits.
      */
     private fun syncPhoneticAutoEnglish(settings: KeyboardSettings, spec: LayoutSpec) {
         val engine = suggestionEngine ?: return
         val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage
         val next = settings.suggestionStrip.phoneticEnglishFor(language)
-        if (engine.phoneticAutoEnglish == next) return
+        val siblingsOff = settings.suggestionStrip.phoneticSiblingsOffLangs
+        if (engine.phoneticAutoEnglish == next && engine.phoneticSiblingsOff == siblingsOff) return
         engine.phoneticAutoEnglish = next
+        engine.phoneticSiblingsOff = siblingsOff
         commitResolution = null
         if (composing.isEmpty() || _uiState.value.composer.phoneticLanguage == null) return
         currentInputConnection?.let { updateComposingText(it) }

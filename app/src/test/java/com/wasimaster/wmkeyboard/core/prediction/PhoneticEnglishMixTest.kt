@@ -102,6 +102,19 @@ class PhoneticEnglishMixTest {
         assertEquals("asi", engine(autoEnglish = false).avro("asi", slots = 4).getOrNull(2))
     }
 
+    @Test fun dictionaryWordsSwitchedOffCommitTheLiteral() {
+        val e = engine(mixing = false).apply { phoneticSiblingsOff = setOf("bn") }
+        // "asi" is আসি by the rules and আছি by the dictionary; off, space
+        // commits the rules' reading and the sibling is only offered.
+        assertEquals(listOf("আসি", "আছি"), e.avro("asi").take(2))
+        assertEquals("আসি", e.phoneticCommit("bn", "asi")!!.output)
+        // The fixed-spelling map has its own switch and still wins.
+        assertEquals("কেমন", e.phoneticCommit("bn", "kemon")!!.output)
+        // Another language's switch says nothing about Bangla.
+        e.phoneticSiblingsOff = setOf("hi")
+        assertEquals("আছি", e.phoneticCommit("bn", "asi")!!.output)
+    }
+
     @Test fun withTheToggleOffEnglishIsOnlyEverOffered() {
         val e = engine(autoEnglish = false)
         for (buffer in listOf("hello", "because", "the")) {

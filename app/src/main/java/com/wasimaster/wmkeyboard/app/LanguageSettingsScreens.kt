@@ -985,6 +985,20 @@ internal fun LanguageDetailScreen(
                     default = SettingsDefaults.suggestionStrip.spellingMapEnabledFor(langId),
                 ) { scope.launch { repository.setSpellingMapEnabled(langId, it) } }
             }
+            // Sound-alike words from the dictionary: "asi" commits আছি. Off
+            // commits exactly what the rules spell and leaves them in the strip.
+            item {
+                ToggleSetting(
+                    R.string.languages_phonetic_siblings_row_title,
+                    stringResource(R.string.languages_phonetic_siblings_row_subtitle),
+                    settings.suggestionStrip.phoneticSiblingsEnabledFor(langId),
+                    info = stringResource(
+                        R.string.languages_phonetic_siblings_info,
+                        lang.englishName,
+                    ),
+                    default = SettingsDefaults.suggestionStrip.phoneticSiblingsEnabledFor(langId),
+                ) { scope.launch { repository.setPhoneticSiblingsEnabled(langId, it) } }
+            }
         }
     }
 
