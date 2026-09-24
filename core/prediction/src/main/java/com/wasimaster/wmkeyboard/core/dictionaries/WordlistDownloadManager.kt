@@ -94,6 +94,9 @@ object WordlistDownloadManager {
     /** Frequencies below this are subtitle/scrape noise, not vocabulary. */
     private const val MIN_FREQUENCY = 2
 
+    /** Smallest array a flat list grows to, for a cap that clamped to almost nothing. */
+    private const val MIN_GROWTH = 1024
+
     /** Guards against pathological lines masquerading as words. */
     private const val MAX_WORD_LENGTH = 48
 
@@ -263,7 +266,8 @@ object WordlistDownloadManager {
 
     /**
      * Streams the remote gzip list and returns its first [wordCap] usable
-     * entries, aborting the transfer once the cap is hit.
+     * entries, aborting the transfer once the cap is hit. A flat list, one
+     * with no frequencies to be sorted by, comes back whole.
      */
     private suspend fun fetchEntries(
         entry: DictionaryEntry,
@@ -295,10 +299,10 @@ object WordlistDownloadManager {
             }
             val total = connection.contentLengthLong.takeIf { it > 0 } ?: entry.approxGzBytes
 
-            // wordCap is already clamped to the list's length, and the loop
-            // stops at it, so the arrays never need to grow.
-            val words = arrayOfNulls<String>(wordCap)
-            val frequencies = IntArray(wordCap)
+            // wordCap is already clamped to the list's length, and a sorted
+            // list stops at it, so only a flat one (below) ever grows these.
+            var words = arrayOfNulls<String>(wordCap)
+            var frequencies = IntArray(wordCap)
             var count = 0
             val counting = CountingInputStream(netCall.countIn(connection.inputStream))
             var lastUpdate = 0L
@@ -312,6 +316,12 @@ object WordlistDownloadManager {
             //
             // An AOSP list has no noise tail to cut either: it is curated, and
             // its bottom is real words AOSP rated rare, down to 0.
+            //
+            // A flat list has no order for the word cap to choose by either.
+            // Bengali's is alphabetical, so its first 300k lines stopped at
+            // বিশ্ব… and every word from ভ to হ was missing — সরাসরি among
+            // them, which then lost to a sibling from the kept half. A flat
+            // list is taken whole, whatever size was asked for.
             val aosp = entry.source == WordlistSource.AOSP
             var ranked: Boolean? = if (aosp) false else null
             GZIPInputStream(counting, 32 * 1024).bufferedReader().useLines { lines ->
@@ -331,7 +341,11 @@ object WordlistDownloadManager {
                     words[count] = word
                     frequencies[count] = frequency
                     count++
-                    if (count >= wordCap) break
+                    if (count >= words.size) {
+                        if (ranked == true || aosp) break
+                        words = words.copyOf(maxOf(words.size * 2, MIN_GROWTH))
+                        frequencies = frequencies.copyOf(words.size)
+                    }
                     val now = System.currentTimeMillis()
                     if (now - lastUpdate >= PROGRESS_INTERVAL_MS) {
                         lastUpdate = now

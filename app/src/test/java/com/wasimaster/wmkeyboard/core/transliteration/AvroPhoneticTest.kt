@@ -235,6 +235,15 @@ class AvroPhoneticTest {
         assertEquals("আ্য", t("aZ"))
     }
 
+    @Test fun qIsKa() {
+        // Bangla has no q; it types ক like k, capital or not, and "qq" is
+        // still the chandrabindu.
+        assertEquals("কলম", t("qolom"))
+        assertEquals("কলম", t("Qolom"))
+        assertEquals("বাক্য", t("baqyo"))
+        assertEquals("চাঁদ", t("caqqd"))
+    }
+
     @Test fun mixedTextPassesThrough() {
         assertEquals("ওকে!", t("OkE!"))
     }

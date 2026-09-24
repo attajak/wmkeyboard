@@ -130,6 +130,10 @@ object AvroPhonetic {
 
         // Single consonants.
         add(Rule("k", "ক"))
+        // Bangla has no q of its own. Ridmik reads it as ক, and a Latin q
+        // left in the buffer mid-word looks like the word was committed out
+        // from under the typist; "qq" (ঁ) is longer and still matches first.
+        add(Rule("q", "ক"))
         add(Rule("g", "গ"))
         add(Rule("c", "চ"))
         add(Rule("j", "জ"))

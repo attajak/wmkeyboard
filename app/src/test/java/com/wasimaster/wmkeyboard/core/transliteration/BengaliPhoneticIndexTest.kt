@@ -88,6 +88,34 @@ class BengaliPhoneticIndexTest {
         assertEquals("ভারত", top("bharot"))
     }
 
+    @Test fun qReadsAsK() {
+        assertEquals(BengaliPhoneticIndex.foldRoman("kobor"), BengaliPhoneticIndex.foldRoman("qobor"))
+        assertEquals("কবর", top("qobor"))
+        // "qq" is ঁ, which folds away rather than doubling a ক.
+        assertEquals(BengaliPhoneticIndex.foldRoman("cad"), BengaliPhoneticIndex.foldRoman("caqqd"))
+    }
+
+    @Test fun aFlatListTakesTheBundledRanking() {
+        // The downloaded Bangla list says 1 for every word, in trie order, so
+        // a rare sibling came ahead of the far commoner সরাসরি on the shared key.
+        val downloaded = listOf("\u099B\u09A1\u09BC\u09BE\u099B\u09A1\u09BC\u09BF" to 1, "সরাসরি" to 1, "স্বরলিপি" to 1)
+        val bundled = listOf("সরাসরি" to 1252, "\u099B\u09DC\u09BE\u099B\u09DC\u09BF" to 40)
+        val merged = BengaliPhoneticIndex.withBundledRanking(downloaded) { bundled }
+        assertEquals("সরাসরি", BengaliPhoneticIndex(merged).lookup("sorasori").first())
+        // The download keeps its own words, and one spelled with a decomposed
+        // nukta is still recognised as the bundled word, not listed twice.
+        assertEquals(setOf("সরাসরি", "\u099B\u09DC\u09BE\u099B\u09DC\u09BF", "স্বরলিপি"), merged.map { it.first.replace("\u09A1\u09BC", "\u09DC") }.toSet())
+        assertEquals(3, merged.size)
+    }
+
+    @Test fun aRankedListKeepsItsOwnFrequencies() {
+        val ranked = listOf("সরাসরি" to 9000, "\u099B\u09DC\u09BE\u099B\u09DC\u09BF" to 30)
+        var opened = false
+        val merged = BengaliPhoneticIndex.withBundledRanking(ranked) { opened = true; emptyList() }
+        assertEquals(ranked, merged)
+        assertEquals(false, opened)
+    }
+
     @Test fun unknownInputHasNoSiblings() {
         assertEquals(null, top("zzzq"))
     }

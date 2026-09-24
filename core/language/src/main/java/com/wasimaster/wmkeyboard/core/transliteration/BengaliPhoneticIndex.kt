@@ -349,6 +349,48 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
          */
         class Folded(val key: String, val aspiration: String)
 
+        /**
+         * [word] with its decomposed nukta pairs as precomposed code points,
+         * and the corrupt U+0985 U+09BE pair (seen in scraped word lists) as
+         * U+0986. NFC leaves the nukta pairs alone, since U+09DC, U+09DD and
+         * U+09DF are composition exclusions, so the downloaded list and the
+         * bundled one can spell the same word two ways.
+         */
+        private fun precomposed(word: String): String = word
+            .replace("\u09A1\u09BC", "\u09DC")
+            .replace("\u09A2\u09BC", "\u09DD")
+            .replace("\u09AF\u09BC", "\u09DF")
+            .replace("\u0985\u09BE", "\u0986")
+
+        /**
+         * [listed] with [bundled]'s frequencies put back over it, when
+         * [listed] has none of its own.
+         *
+         * A downloaded Bangla list replaces the bundled one, and the repo's
+         * list is a bare wordlist: all 451k words say frequency 1. Siblings
+         * then tie, the literal-over-sibling guard in the suggestion engine
+         * has nothing to weigh, and a tie falls to trie order, which is ছ
+         * before স. So the hand-ranked frequencies the bundled list carries
+         * come back for the words it has, and [listed] keeps the rest. That
+         * also restores the common words a download from before flat lists
+         * were taken whole is missing: it kept the first lines of an
+         * alphabetical list, which stop part way through the alphabet. A list
+         * with real frequencies is returned as it is, since the two would not
+         * be on the same scale; [bundled] is only opened when it is needed.
+         */
+        fun withBundledRanking(
+            listed: List<Pair<String, Int>>,
+            bundled: () -> List<Pair<String, Int>>,
+        ): List<Pair<String, Int>> {
+            if (listed.isEmpty()) return listed
+            val flat = listed[0].second
+            if (listed.any { it.second != flat }) return listed
+            val ranked = bundled()
+            if (ranked.isEmpty()) return listed
+            val known = ranked.mapTo(HashSet(ranked.size * 2)) { precomposed(it.first) }
+            return ranked + listed.filter { precomposed(it.first) !in known }
+        }
+
         /** Folds a Bengali word to its canonical phonetic key. */
         fun foldBengali(word: String): String = foldBengaliFull(word).key
 
@@ -362,11 +404,7 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
             // and the corrupt U+0985 U+09BE pair (seen in scraped word lists)
             // to U+0986: the pair folds to "oa" and would hijack keys like
             // "oasi"/"wasi".
-            val normalized = word
-                .replace("\u09A1\u09BC", "\u09DC")
-                .replace("\u09A2\u09BC", "\u09DD")
-                .replace("\u09AF\u09BC", "\u09DF")
-                .replace("\u0985\u09BE", "\u0986")
+            val normalized = precomposed(word)
             val out = StringBuilder()
             val marks = StringBuilder()
             for (ch in normalized) {
@@ -414,6 +452,10 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
                     ch == 'w' -> out.append('o').also { marks.append(PLAIN) }
                     ch == 'z' -> out.append('j').also { marks.append(PLAIN) }
                     ch == 'f' -> out.append('p').also { marks.append(PLAIN) }
+                    // "qq" is ঁ, which the Bengali side folds away; a lone
+                    // q is ক, the same as on the Avro layout.
+                    ch == 'q' && next == 'q' -> i++
+                    ch == 'q' -> out.append('k').also { marks.append(PLAIN) }
                     ch == 'x' -> {
                         out.append('k').append('s')
                         marks.append(PLAIN).append(PLAIN)

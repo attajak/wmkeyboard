@@ -31380,13 +31380,17 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * Bengali index over the bundled list plus any imported Bengali list, so
+     * Bengali index over the primary list plus any imported Bengali list, so
      * imported words are reachable by transliteration and not only by prefix.
+     * A downloaded list with no frequencies of its own gets the bundled list's
+     * ranking put back over it (see [BengaliPhoneticIndex.withBundledRanking]).
      */
     private fun buildBengaliIndex(): BengaliPhoneticIndex {
-        val bundled = bengaliDictionary?.entries().orEmpty()
+        val primary = BengaliPhoneticIndex.withBundledRanking(bengaliDictionary?.entries().orEmpty()) {
+            DictionaryStore.ensureBundled(dictionaryContext, "bn")?.let { MappedTrie.open(it) }?.entries().orEmpty()
+        }
         return BengaliPhoneticIndex(
-            if (userUnlocked) bundled + CustomDictionaries.entries(filesDir, "bn") else bundled,
+            if (userUnlocked) primary + CustomDictionaries.entries(filesDir, "bn") else primary,
         )
     }
 

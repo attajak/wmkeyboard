@@ -66,7 +66,7 @@ object PhoneticKeyMaps {
             v("OU", text = "ঔ", sign = "ৌ"),
         ),
         consonants = listOf(
-            e("k", text = "ক"), e("kh", text = "খ"), e("g", text = "গ"), e("gh", text = "ঘ"), e("Ng", text = "ঙ"),
+            e("k", "q", text = "ক"), e("kh", text = "খ"), e("g", text = "গ"), e("gh", text = "ঘ"), e("Ng", text = "ঙ"),
             e("c", text = "চ"), e("ch", text = "ছ"), e("j", text = "জ"), e("jh", text = "ঝ"), e("NG", text = "ঞ"),
             e("T", text = "ট"), e("Th", text = "ঠ"), e("D", text = "ড"), e("Dh", text = "ঢ"), e("N", text = "ণ"),
             e("t", text = "ত"), e("th", text = "থ"), e("d", text = "দ"), e("dh", text = "ধ"), e("n", text = "ন"),
