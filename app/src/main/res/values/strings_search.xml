@@ -106,7 +106,7 @@
     <string name="search_kw_keypress_long_press_hints">secondary labels marks</string>
     <string name="search_kw_keypress_popup">preview flyout magnifier</string>
     <string name="search_kw_keypress_symbols_numpad">numpad keypad dialpad</string>
-    <string name="search_kw_keypress_enter_emoji">return smiley emoticon long press</string>
+    <string name="search_kw_keypress_enter_emoji">return smiley emoticon longpress</string>
     <string name="search_kw_langemoji_emoji_animated">gif live</string>
     <string name="search_kw_langemoji_emoji_font">noto twemoji blob style</string>
     <string name="search_kw_langemoji_emoji_hide_unrenderable">tofu missing broken glyph</string>
