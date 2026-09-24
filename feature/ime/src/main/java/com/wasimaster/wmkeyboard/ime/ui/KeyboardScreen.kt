@@ -12168,12 +12168,46 @@ internal suspend fun PointerInputScope.detectLayerPeek(
 @Composable
 internal fun BoxScope.LayerPeekHighlight(peek: LayerPeek, settings: KeyboardSettings) {
     if (peek.mode == null) return
+    GridPressHighlight(peek.pressRect, settings)
+}
+
+/**
+ * What a chord drag (issue #67) has on screen while its finger is down
+ * (issue #345): whether one is under way, whether it came off shift, and the
+ * cell a lift would fire on. Written by the chord loop in [KeyRows] and read
+ * by the grid, which draws its letters shifted and lights that cell — the same
+ * two things an armed shift and a key's own press would have shown, neither of
+ * which runs while the grid owns the finger.
+ */
+internal class ChordDrag {
+    /** A drag is under way; the highlight is composed only while it is. */
+    var active by mutableStateOf(false)
+
+    /**
+     * The drag came off shift, so the letters draw as capitals. Display only:
+     * the board's own [KeyboardUiState.shiftState] is never touched, for the
+     * reasons [shiftChordKey] gives.
+     */
+    var shifted by mutableStateOf(false)
+
+    /** The cell a lift would fire on, in the grid's space; read in a draw lambda. */
+    val pressRect = mutableStateOf<Rect?>(null)
+}
+
+/**
+ * Lights the cell in [pressRect] the way a press lights a key, for a gesture the
+ * grid owns: a layer peek (issue #108) or a chord drag (issue #345). The rect is
+ * read inside the draw lambda, so a finger crossing keys repaints this one
+ * overlay and never recomposes the grid.
+ */
+@Composable
+internal fun BoxScope.GridPressHighlight(pressRect: State<Rect?>, settings: KeyboardSettings) {
     val kbTheme = LocalKbTheme.current
     val gapH = keyGapH(settings)
     val gapV = keyGapV(settings)
     val faceShape = kbTheme.keyShape(bleedDp = gapH.value)
     Canvas(modifier = Modifier.matchParentSize()) {
-        val cell = peek.pressRect.value ?: return@Canvas
+        val cell = pressRect.value ?: return@Canvas
         // The drawn face rather than the touch cell: the gap is padding
         // inside the cell, so lighting the whole of it would spill into
         // the keys either side.
@@ -13256,6 +13290,16 @@ private fun KeyRows(
     val layout = rememberCurrentLayout(
         if (peeked == null) state else state.copy(layoutMode = peeked),
     )
+    // Issue #345: a drag off shift draws the letters as the capitals a lift
+    // would type, and lights the key under the finger. Like the peek, this is
+    // the drawn grid only — the board's shift latch never moves, and the layout
+    // is not rebuilt, so the cells under the finger stay exactly where they are.
+    val chordDrag = remember { ChordDrag() }
+    val gridState = if (chordDrag.shifted && state.shiftState == ShiftState.OFF) {
+        state.copy(shiftState = ShiftState.ON)
+    } else {
+        state
+    }
     // Letter-area swipes are drawing handwriting rather than gliding a word
     // (full builds only). Capture arms whenever the mode is selected; the
     // service decides whether the drawn ink recognizes or prompts a download.
@@ -13741,58 +13785,87 @@ private fun KeyRows(
                     // it lifts on is the one it is actually over, and not the
                     // last one a hit test happened to land in.
                     var over: Key? = null
-                    while (true) {
-                        val event = awaitPointerEvent(PointerEventPass.Initial)
-                        val change = event.changes.firstOrNull { it.id == down.id } ?: break
-                        if (!change.pressed) {
-                            if (dragging) change.consume()
-                            break
-                        }
-                        if (!dragging &&
-                            (change.position - down.position).getDistance() > slop
-                        ) {
-                            // A 🌐 held still long enough has opened the
-                            // language picker, and a drag from there is the
-                            // picker's: the key's own press is left as it is.
-                            if (globe && change.uptimeMillis - down.uptimeMillis >= globeHoldMs.value) {
-                                return@awaitEachGesture
-                            }
-                            dragging = true
-                            trail.beginLine(anchor.x, anchor.y)
-                        }
-                        if (dragging) {
-                            change.consume()
-                            trail.add(
-                                change.position.x,
-                                change.position.y,
-                                change.uptimeMillis,
-                                trailMs,
-                            )
-                            over = liveRects.value.keyAt(change.position + boxOrigin)
-                        }
+                    val mod = source.modifierKey()
+                    // What a lift on [target] fires, or null for nothing. Asked
+                    // per key crossed as well as at the lift, so the key lit
+                    // under the finger is always one the lift would act on.
+                    fun fires(target: Key): Boolean = when {
+                        target === source -> true
+                        globe -> globeDragAction(target, letterActionsLive.value) != null
+                        mod != null -> chordKey(target, mod) != null
+                        else -> shiftChordKey(target) != null
                     }
-                    // Never travelled: an ordinary press the modifier key owns,
-                    // still unconsumed, and it latches exactly as it always has.
-                    if (!dragging) return@awaitEachGesture
-                    trail.release()
-                    val target = over
-                    when {
-                        // Lifted off the grid: the slide-away cancel every other
-                        // key already has, and nothing fires.
-                        target == null -> Unit
-                        // Wandered off and came back. The press was cancelled on
-                        // the way out, so the tap it would have been is fired
-                        // here rather than swallowed.
-                        target === source -> stampedOnKey(target)
-                        // Onto a key with no shortcut: nothing, like a chord
-                        // onto a key no hardware keyboard could send.
-                        globe -> globeDragAction(target, letterActionsLive.value)?.let(onGlobeShortcut)
-                        else -> {
-                            val mod = source.modifierKey()
-                            val fired =
-                                if (mod != null) chordKey(target, mod) else shiftChordKey(target)
-                            fired?.let(stampedOnKey)
+                    // Everything the drag puts on screen is undone here, and
+                    // only here, the way the layer peek's is: a loop cancelled
+                    // mid-drag would otherwise leave the letters drawn as
+                    // capitals with no finger on shift.
+                    try {
+                        while (true) {
+                            val event = awaitPointerEvent(PointerEventPass.Initial)
+                            val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                            if (!change.pressed) {
+                                if (dragging) change.consume()
+                                break
+                            }
+                            if (!dragging &&
+                                (change.position - down.position).getDistance() > slop
+                            ) {
+                                // A 🌐 held still long enough has opened the
+                                // language picker, and a drag from there is the
+                                // picker's: the key's own press is left as it is.
+                                if (globe && change.uptimeMillis - down.uptimeMillis >= globeHoldMs.value) {
+                                    return@awaitEachGesture
+                                }
+                                dragging = true
+                                trail.beginLine(anchor.x, anchor.y)
+                                chordDrag.active = true
+                                chordDrag.shifted = source?.action == KeyAction.Shift
+                            }
+                            if (dragging) {
+                                change.consume()
+                                trail.add(
+                                    change.position.x,
+                                    change.position.y,
+                                    change.uptimeMillis,
+                                    trailMs,
+                                )
+                                val rects = liveRects.value
+                                val now = rects.keyAt(change.position + boxOrigin)
+                                if (now !== over) {
+                                    over = now
+                                    chordDrag.pressRect.value = now
+                                        ?.takeIf(::fires)
+                                        ?.let { rects.cellAt(change.position + boxOrigin) }
+                                        ?.translate(-boxOrigin)
+                                }
+                            }
                         }
+                        // Never travelled: an ordinary press the modifier key owns,
+                        // still unconsumed, and it latches exactly as it always has.
+                        if (!dragging) return@awaitEachGesture
+                        trail.release()
+                        val target = over
+                        when {
+                            // Lifted off the grid: the slide-away cancel every other
+                            // key already has, and nothing fires.
+                            target == null -> Unit
+                            // Wandered off and came back. The press was cancelled on
+                            // the way out, so the tap it would have been is fired
+                            // here rather than swallowed.
+                            target === source -> stampedOnKey(target)
+                            // Onto a key with no shortcut: nothing, like a chord
+                            // onto a key no hardware keyboard could send.
+                            globe -> globeDragAction(target, letterActionsLive.value)?.let(onGlobeShortcut)
+                            else -> {
+                                val fired =
+                                    if (mod != null) chordKey(target, mod) else shiftChordKey(target)
+                                fired?.let(stampedOnKey)
+                            }
+                        }
+                    } finally {
+                        chordDrag.active = false
+                        chordDrag.shifted = false
+                        chordDrag.pressRect.value = null
                     }
                 }
             }
@@ -14885,7 +14958,7 @@ private fun KeyRows(
                 null
             }
             val (numberRowVisual, bodyBlocks) =
-                rememberKeyGrid(state, layout, bodyRows, extraRow, palette, gridWeight)
+                rememberKeyGrid(gridState, layout, bodyRows, extraRow, palette, gridWeight)
             if (numberRowVisual != null) {
                 KeyRow(
                     row = numberRowVisual,
@@ -14980,6 +15053,8 @@ private fun KeyRows(
         // while a peek is up — the rect inside it is read in the draw lambda,
         // so the finger crossing keys repaints and never recomposes.
         LayerPeekHighlight(layerPeek, state.settings)
+        // The key a chord drag would fire on, lit for the same reason (#345).
+        if (chordDrag.active) GridPressHighlight(chordDrag.pressRect, state.settings)
 
         // Autopilot, made visible: the letters the dictionary expects next drawn
         // at the size their touch area has grown to, and the boundary each one
