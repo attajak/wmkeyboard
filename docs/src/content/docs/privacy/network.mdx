@@ -94,7 +94,8 @@ that entirely while the device is locked, under power saving, on mobile data
 unless you allow it, and when High contrast keys is on. See
 [Online photos and rotation](/themes/online-photos/).
 
-Everything else in the toolbox is offline by design: OCR, QR/barcode
+Everything else in the toolbox is offline by design: OCR (apart from the
+one-time download of a language's Tesseract data, below), QR/barcode
 scanning, document scanning, the calculator, unit converter, symbols picker,
 password generator, QR code generation, grammar and spell-check, the camera
 tool, and every calendar/alt-calendar/qibla/moon-phase/solar-time feature.
@@ -156,6 +157,11 @@ what's already in the table above:
 - **`raw.githubusercontent.com/wasi-master/wmkeyboard-monkeytype-sounds`** is
   the second pre-added addon repository, a set of key-sound packs. Like the
   one above it is removable, and removing it is permanent.
+- **`raw.githubusercontent.com/tesseract-ocr/tessdata_fast`** <Flavor edition="full" />
+  is the Tesseract project's own language data, pinned to its 4.1.0 release.
+  The [text scanner](/tools/scanner/#which-languages-it-reads) fetches one
+  file per language, 0.4 MB to 12 MB, only when you press **Download** for
+  it. The request names the language and nothing else.
 - **`huggingface.co`** is the source for offline Whisper speech models and
   on-device AI models. Most are public. A couple of gated on-device models
   need your own Hugging Face account token.
@@ -247,6 +253,7 @@ some are.
 | CJK conversion tables (pinyin, kana, stroke, cangjie, jyutping) | same data repository | **SHA-256 verified** before the file is used | No |
 | [Keyman typing rules](/languages/keyman/#typing-rules) | `downloads.keyman.com`, or the same data repository's copy when keyman.com can't serve them | the file must parse as a keyboard before it's kept, and the data repository's copy is also **SHA-256 verified** against the checksum listed beside it | No |
 | Offline Whisper speech models | Hugging Face | no checksum, a file-size floor only | Yes, around 150 MB. See [Offline voice (Whisper)](/tools/whisper/#downloading-and-managing-models) |
+| Text scanner languages (Tesseract) <Flavor edition="full" /> | the Tesseract project's `tessdata_fast` 4.1.0 on GitHub | none beyond the file arriving at the length the server announced; a file Tesseract can't load is not read | Yes, from the scanner's button and from the settings page. See [Scanner](/tools/scanner/#which-languages-it-reads) |
 | On-device AI models | Hugging Face, per model | no checksum, a file-size floor only | Yes, at 500 MB. See [AI tools](/tools/ai/#local-models) |
 | Addons (themes, icon packs, plugins, sounds, layouts, sticker packs) | whichever repository you added | **SHA-256 verified when the manifest supplies one**, and mandatory for plugins specifically, since they run code | No |
 | [Signal sticker packs](/emoji/stickers/#signal-sticker-packs) | Signal's sticker storage, `cdn-ca.signal.org`. No Signal account is involved, and the request names the pack and nothing about you. The signalstickers.org gallery that the same screen links to opens in your browser, and the keyboard itself never contacts it | every file is checked against the key in the pack link (HMAC-SHA256) before it is opened, so a file that was changed on the way is refused | Yes. The pack preview asks before its first request while [Data saver](/privacy/data-saver/) is on and its **Downloads** row is set to *Ask each time* (the default) |

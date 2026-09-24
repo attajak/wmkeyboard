@@ -604,6 +604,18 @@ enum class LocalLlmBackend(@StringRes val labelRes: Int) {
 enum class QrEccLevel { L, M, Q, H }
 
 /**
+ * What reads the text in the scan text tool (full builds). ML Kit reads only
+ * Latin script; Tesseract reads most scripts but needs each language's data
+ * downloaded first.
+ */
+enum class OcrEngine {
+    /** ML Kit for Latin-script languages, Tesseract for every other script. */
+    AUTO,
+    ML_KIT,
+    TESSERACT,
+}
+
+/**
  * Where the translate tool gets its translations.
  *
  * Stored by name. [ONLINE] is first, what the tool has always done, and the
@@ -2348,6 +2360,8 @@ data class ScannerSettings(
     val qrSendMode: MediaSendMode = MediaSendMode.IMAGE,
     /** Text scanner results start with every word selected (deselect to trim). */
     val ocrAutoSelectWords: Boolean = true,
+    /** Which engine the text scanner reads with; see [OcrEngine]. */
+    val ocrEngine: OcrEngine = OcrEngine.AUTO,
     /** Vibrate when the QR scanner spots a code. */
     val qrScanHaptics: Boolean = true,
     /** Insert a scanned code into the field the moment it is spotted. */
@@ -7832,6 +7846,7 @@ class SettingsRepository(private val context: Context) {
         private val INCOGNITO_PAUSES_LEARNING = booleanPreferencesKey("incognito_pauses_learning")
         private val AUTO_INCOGNITO = booleanPreferencesKey("auto_incognito")
         private val OCR_AUTO_SELECT_WORDS = booleanPreferencesKey("ocr_auto_select_words")
+        private val OCR_ENGINE = stringPreferencesKey("ocr_engine")
         private val QR_SCAN_HAPTICS = booleanPreferencesKey("qr_scan_haptics")
         private val QR_SCAN_AUTO_INSERT = booleanPreferencesKey("qr_scan_auto_insert")
         private val QR_SCAN_LINK_PREVIEWS = booleanPreferencesKey("qr_scan_link_previews")
@@ -9274,6 +9289,8 @@ class SettingsRepository(private val context: Context) {
                     ?: defaults.scanner.qrSendMode,
                 ocrAutoSelectWords = p[OCR_AUTO_SELECT_WORDS]
                     ?: defaults.scanner.ocrAutoSelectWords,
+                ocrEngine = p[OCR_ENGINE]?.let { runCatching { OcrEngine.valueOf(it) }.getOrNull() }
+                    ?: defaults.scanner.ocrEngine,
                 qrScanHaptics = p[QR_SCAN_HAPTICS] ?: defaults.scanner.qrScanHaptics,
                 qrScanAutoInsert = p[QR_SCAN_AUTO_INSERT] ?: defaults.scanner.qrScanAutoInsert,
                 qrScanLinkPreviews = p[QR_SCAN_LINK_PREVIEWS]
@@ -10412,6 +10429,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setOcrAutoSelectWords(value: Boolean) =
         editPrefs { it[OCR_AUTO_SELECT_WORDS] = value }
+
+    suspend fun setOcrEngine(value: OcrEngine) =
+        editPrefs { it[OCR_ENGINE] = value.name }
 
     suspend fun setQrScanHaptics(value: Boolean) =
         editPrefs { it[QR_SCAN_HAPTICS] = value }

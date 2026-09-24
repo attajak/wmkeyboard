@@ -163,6 +163,7 @@
     <string name="netlog_source_download_vocab">Vocabulary downloads</string>
     <string name="netlog_source_download_font">Font downloads</string>
     <string name="netlog_source_download_cutout">Background remover download</string>
+    <string name="netlog_source_download_ocr">Text scanner language downloads</string>
     <string name="netlog_source_addons">Add-ons</string>
     <string name="netlog_source_keyman">Keyman keyboards</string>
     <string name="netlog_source_signal_stickers">Signal sticker packs</string>

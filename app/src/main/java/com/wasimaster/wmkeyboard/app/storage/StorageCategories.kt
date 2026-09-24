@@ -18,6 +18,7 @@ import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cached
 import androidx.compose.material.icons.outlined.CloudDownload
 import androidx.compose.material.icons.outlined.ContentPaste
+import androidx.compose.material.icons.outlined.DocumentScanner
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Gif
@@ -53,6 +54,8 @@ import com.wasimaster.wmkeyboard.core.input.composer.CjkLearning
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmCatalog
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmDownloadManager
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmStore
+import com.wasimaster.wmkeyboard.core.ocr.OcrLanguages
+import com.wasimaster.wmkeyboard.core.ocr.OcrPacks
 import com.wasimaster.wmkeyboard.core.plugins.PluginStore
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
@@ -423,6 +426,35 @@ internal object StorageCategories {
                 env.repository.setAiLocalModelId("")
                 emptyOut(LocalLlmStore.modelsDir(env.roots.files))
                 LocalLlmDownloadManager.refresh(env.roots.files)
+            },
+        ),
+        StorageCategory(
+            id = "ocr_packs",
+            title = R.string.storage_ocr_packs_title,
+            subtitle = R.string.storage_ocr_packs_subtitle,
+            icon = Icons.Outlined.DocumentScanner,
+            accent = Color(0xFF5C6BC0),
+            group = StorageGroup.DOWNLOADS,
+            danger = Danger.REDOWNLOAD,
+            manageRoute = "tool/OCR",
+            pathsOf = { listOf(OcrPacks.dataDir(it.files)) },
+            itemsOf = { env ->
+                val dir = OcrPacks.dataDir(env.roots.files)
+                sweepLeftovers(dir)
+                childrenOf(dir).map { file ->
+                    val pack = file.name.removeSuffix(".traineddata")
+                    StorageItem(
+                        id = pack,
+                        label = OcrLanguages.nameOf(pack),
+                        detail = file.name,
+                        bytes = diskUsage(file, env.roots.blockSize),
+                        files = listOf(file),
+                    )
+                }
+            },
+            deleteOne = { env, item -> OcrPacks.delete(env.roots.files, item.id) },
+            clearOf = { env ->
+                OcrPacks.downloaded(env.roots.files).forEach { OcrPacks.delete(env.roots.files, it) }
             },
         ),
         StorageCategory(

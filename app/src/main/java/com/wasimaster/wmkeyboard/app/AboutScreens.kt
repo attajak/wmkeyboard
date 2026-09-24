@@ -223,6 +223,28 @@ private val bundledAttributions: List<Attribution> = buildList {
             ),
         )
     }
+    if (BuildConfig.ENABLE_ML_KIT_SCANNERS) {
+        // Compiled into one native library for the text scanner; see
+        // native/tesseract-jni.
+        add(
+            Attribution(
+                "Tesseract",
+                R.string.about_bundled_tesseract_used,
+                "Copyright Hewlett-Packard, Google and Tesseract contributors",
+                "Apache-2.0", "apache-2.0.txt",
+                "https://github.com/tesseract-ocr/tesseract",
+            ),
+        )
+        add(
+            Attribution(
+                "Leptonica",
+                R.string.about_bundled_leptonica_used,
+                "Copyright (C) 2001-2020 Leptonica",
+                "BSD-2-Clause", "bsd-2-clause-leptonica.txt",
+                "http://www.leptonica.org",
+            ),
+        )
+    }
     if (BuildConfig.ENABLE_ML_KIT_HANDWRITING || BuildConfig.ENABLE_ML_KIT_SCANNERS) {
         add(
             Attribution(

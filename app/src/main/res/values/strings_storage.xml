@@ -52,6 +52,8 @@
     <string name="storage_voice_models_subtitle">Speech recognition that runs on your device</string>
     <string name="storage_ai_models_title">AI models</string>
     <string name="storage_ai_models_subtitle">Language models that run on your device</string>
+    <string name="storage_ocr_packs_title">Text scanner languages</string>
+    <string name="storage_ocr_packs_subtitle">Tesseract data that the text scanner reads each language with</string>
     <string name="storage_addon_index_title">Add-on sources</string>
     <string name="storage_addon_index_subtitle">The list of add-on sources, and what you installed from them</string>
 

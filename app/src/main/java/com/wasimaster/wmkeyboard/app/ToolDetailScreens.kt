@@ -111,6 +111,10 @@ import com.wasimaster.wmkeyboard.core.tools.TypingTestMode
 import com.wasimaster.wmkeyboard.core.tools.TranslateClient
 import com.wasimaster.wmkeyboard.core.translate.OnDeviceTranslator
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
+import com.wasimaster.wmkeyboard.core.settings.OcrEngine
+import com.wasimaster.wmkeyboard.core.ocr.OcrLanguages
+import com.wasimaster.wmkeyboard.core.ocr.OcrPacks
+import androidx.compose.runtime.collectAsState
 import com.wasimaster.wmkeyboard.core.settings.TranslateEngine
 import com.wasimaster.wmkeyboard.core.settings.DeepLWriteStyle
 import com.wasimaster.wmkeyboard.core.tools.WeatherClient
@@ -2033,6 +2037,26 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.scanner.ocrAutoSelectWords,
                     ) { scope.launch { repository.setOcrAutoSelectWords(it) } }
                 }
+                item {
+                    ChoiceSetting(
+                        R.string.tooldetail_ocr_engine_title,
+                        info = stringResource(R.string.tooldetail_ocr_engine_info),
+                        options = listOf(
+                            OcrEngine.AUTO to stringResource(R.string.tooldetail_ocr_engine_auto),
+                            OcrEngine.ML_KIT to stringResource(R.string.tooldetail_ocr_engine_mlkit),
+                            OcrEngine.TESSERACT to stringResource(R.string.tooldetail_ocr_engine_tesseract),
+                        ),
+                        selected = settings.scanner.ocrEngine,
+                        default = SettingsDefaults.scanner.ocrEngine,
+                    ) { scope.launch { repository.setOcrEngine(it) } }
+                }
+            }
+            if (settings.scanner.ocrEngine != OcrEngine.ML_KIT) {
+                SectionHeader(
+                    stringResource(R.string.tooldetail_ocr_packs_header),
+                    info = stringResource(R.string.tooldetail_ocr_packs_info),
+                )
+                OcrPackManager(settings)
             }
         }
         ToolbarTool.QR_SCAN -> {
@@ -3578,6 +3602,123 @@ private fun HandwritingModelManager(settings: KeyboardSettings) {
             ),
         )
     }
+}
+
+/**
+ * Download/delete for the Tesseract data of every language the user types in.
+ * Several languages can share one pack (both Norwegians, or a language that
+ * borrows its script's main pack), so a row is a pack and names them all.
+ * Progress comes from [OcrPacks], which the keyboard's own download button
+ * feeds too.
+ */
+@Composable
+private fun OcrPackManager(settings: KeyboardSettings) {
+    val context = LocalContext.current
+    val filesDir = context.filesDir
+    val packs = remember(settings.enabledLanguages) { OcrLanguages.packsFor(settings.enabledLanguages) }
+    val states by OcrPacks.states.collectAsState()
+    LaunchedEffect(packs) { OcrPacks.refresh(filesDir, packs.map { it.first }) }
+    val decide = rememberDownloadDecision(settings)
+    var askFor by remember { mutableStateOf<String?>(null) }
+    var blocked by remember { mutableStateOf(false) }
+    val reduceMotion = LocalReduceMotion.current
+
+    if (packs.isEmpty()) {
+        StateBanner(stringResource(R.string.tooldetail_ocr_packs_none_info))
+        return
+    }
+    SettingsGroup {
+        for ((pack, languages) in packs) {
+            item {
+                val status = states[pack] ?: OcrPacks.Status.NotDownloaded
+                val names = languages.joinToString(", ") { it.displayName }
+                WmRow(
+                    title = names,
+                    subtitle = when (status) {
+                        OcrPacks.Status.Downloaded ->
+                            stringResource(R.string.privacy_handwriting_status_downloaded)
+                        is OcrPacks.Status.Downloading -> stringResource(
+                            R.string.privacy_handwriting_status_downloading_of_total,
+                            Formatter.formatShortFileSize(context, status.bytes),
+                            Formatter.formatShortFileSize(context, status.total),
+                        )
+                        is OcrPacks.Status.Failed ->
+                            if (status.messageArg.isEmpty()) stringResource(status.messageRes)
+                            else stringResource(status.messageRes, status.messageArg)
+                        OcrPacks.Status.NotDownloaded -> stringResource(
+                            R.string.privacy_handwriting_status_missing_sized,
+                            Formatter.formatShortFileSize(context, OcrLanguages.sizeOf(pack)),
+                        )
+                    },
+                    trailing = {
+                        key(pack) {
+                            AnimatedContent(
+                                targetState = status,
+                                contentKey = {
+                                    when (it) {
+                                        is OcrPacks.Status.Downloading -> 0
+                                        OcrPacks.Status.Downloaded -> 1
+                                        else -> 2
+                                    }
+                                },
+                                contentAlignment = Alignment.CenterEnd,
+                                transitionSpec = { stateSwapTransform(reduceMotion) },
+                                label = "ocrPackAction",
+                            ) { shown ->
+                                when (shown) {
+                                    is OcrPacks.Status.Downloading -> IconButton(onClick = { OcrPacks.cancel(pack) }) {
+                                        CircularProgressIndicator(
+                                            progress = {
+                                                if (shown.total > 0L) (shown.bytes.toFloat() / shown.total).coerceIn(0f, 1f)
+                                                else 0f
+                                            },
+                                            modifier = Modifier.size(24.dp),
+                                            strokeWidth = 2.dp,
+                                        )
+                                    }
+                                    OcrPacks.Status.Downloaded -> IconButton(onClick = { OcrPacks.delete(filesDir, pack) }) {
+                                        Icon(
+                                            Icons.Outlined.Delete,
+                                            contentDescription = stringResource(R.string.privacy_handwriting_delete_desc, names),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                    }
+                                    else -> TextButton(onClick = {
+                                        when (decide()) {
+                                            MeteredDecision.ALLOWED -> OcrPacks.start(filesDir, pack)
+                                            MeteredDecision.ASK -> askFor = pack
+                                            MeteredDecision.BLOCKED -> blocked = true
+                                        }
+                                    }) {
+                                        Text(
+                                            stringResource(
+                                                if (shown is OcrPacks.Status.Failed) CommonR.string.common_retry
+                                                else CommonR.string.common_download,
+                                            ),
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    },
+                )
+            }
+        }
+    }
+    askFor?.let { pack ->
+        MeteredDownloadDialog(
+            detail = stringResource(
+                R.string.languages_metered_confirm_body,
+                Formatter.formatShortFileSize(context, OcrLanguages.sizeOf(pack)),
+            ),
+            onConfirm = {
+                askFor = null
+                OcrPacks.start(filesDir, pack)
+            },
+            onDismiss = { askFor = null },
+        )
+    }
+    if (blocked) MeteredBlockedDialog(onDismiss = { blocked = false })
 }
 /**
  * Weather location: place label plus coordinates, edited in a dialog. Shared

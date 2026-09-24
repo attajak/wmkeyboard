@@ -1148,6 +1148,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_search_safe_title) { Icons.Outlined.Shield }
         put(R.string.tooldetail_search_count_title) { Icons.Outlined.Numbers }
         put(R.string.tooldetail_ocr_select_all_title) { Icons.Outlined.SelectAll }
+        put(R.string.tooldetail_ocr_engine_title) { Icons.Outlined.TextFields }
         put(R.string.tooldetail_qr_scan_auto_title) { Icons.Outlined.Bolt }
         put(R.string.tooldetail_qr_scan_haptics_title) { Icons.Outlined.Vibration }
         put(R.string.tooldetail_qr_scan_preview_title) { Icons.Outlined.Link }

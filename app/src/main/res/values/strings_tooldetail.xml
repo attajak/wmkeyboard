@@ -456,7 +456,15 @@
     <!-- Text scan (OCR) tool. -->
     <string name="tooldetail_ocr_select_all_title">Start with everything selected</string>
     <string name="tooldetail_ocr_select_all_subtitle">Deselect words to cut the capture down. Off starts empty, and you select the words one by one</string>
-    <string name="tooldetail_ocr_info">Recognition runs on your device with ML Kit. No photo and no text leaves your device, and it works offline. It reads Latin script text, for example English. The text recognizer of ML Kit does not support Bengali yet. After a capture, press words to select exactly what the keyboard types or copies.</string>
+    <string name="tooldetail_ocr_info">Recognition runs on your device. No photo and no text leaves your device, and it works offline. After a capture, press words to select exactly what the keyboard types or copies.</string>
+    <string name="tooldetail_ocr_engine_title">Text recognition</string>
+    <string name="tooldetail_ocr_engine_info">ML Kit reads only Latin script text, for example English or French. Tesseract reads more than 100 languages in most scripts, for example Bangla, Arabic, Russian and Chinese, but each language needs a one-time download. Automatic reads Latin script with ML Kit and every other script with Tesseract.</string>
+    <string name="tooldetail_ocr_engine_auto">Automatic</string>
+    <string name="tooldetail_ocr_engine_mlkit" translatable="false">ML Kit</string>
+    <string name="tooldetail_ocr_engine_tesseract" translatable="false">Tesseract</string>
+    <string name="tooldetail_ocr_packs_header">Tesseract languages</string>
+    <string name="tooldetail_ocr_packs_info">Tesseract reads a language only after the data for that language is on your device. There is one download for each language that you type in, from 0.4 MB to 12 MB. The data comes from the tessdata_fast set of the Tesseract project on GitHub. You can also download a language from the scanner itself.</string>
+    <string name="tooldetail_ocr_packs_none_info">None of the languages you turned on has Tesseract data. Add a language on the Languages screen. Its data then shows here.</string>
 
     <!-- QR and barcode scanner tool. -->
     <string name="tooldetail_qr_scan_auto_title">Insert automatically</string>

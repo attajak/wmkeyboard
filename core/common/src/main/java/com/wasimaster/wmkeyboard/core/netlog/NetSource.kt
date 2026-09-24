@@ -58,6 +58,9 @@ enum class NetSource(
     DOWNLOAD_VOCAB("download_vocab", ToolbarTool.VOCABULARY),
     DOWNLOAD_FONT("download_font"),
     DOWNLOAD_CUTOUT("download_cutout", ToolbarTool.STICKER),
+
+    /** Tesseract language data for the scan text tool. */
+    DOWNLOAD_OCR("download_ocr", ToolbarTool.OCR),
     ADDONS("addons"),
     KEYMAN("keyman"),
     SIGNAL_STICKERS("signal_stickers", ToolbarTool.STICKER),

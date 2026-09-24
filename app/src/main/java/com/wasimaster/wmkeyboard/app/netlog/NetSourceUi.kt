@@ -129,6 +129,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.DOWNLOAD_VOCAB -> R.string.netlog_source_download_vocab to R.string.netlog_sent_download
     NetSource.DOWNLOAD_FONT -> R.string.netlog_source_download_font to R.string.netlog_sent_download
     NetSource.DOWNLOAD_CUTOUT -> R.string.netlog_source_download_cutout to R.string.netlog_sent_download
+    NetSource.DOWNLOAD_OCR -> R.string.netlog_source_download_ocr to R.string.netlog_sent_download
     NetSource.ADDONS -> R.string.netlog_source_addons to R.string.netlog_sent_addons
     NetSource.KEYMAN -> R.string.netlog_source_keyman to R.string.netlog_sent_keyman
     NetSource.SIGNAL_STICKERS -> R.string.netlog_source_signal_stickers to R.string.netlog_sent_signal_stickers

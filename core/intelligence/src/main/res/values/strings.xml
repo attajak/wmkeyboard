@@ -73,4 +73,12 @@
     <string name="core_intel_llm_module_downloading">The AI part of the keyboard is downloading from Google Play. Try again in a moment.</string>
     <string name="core_intel_llm_module_restart">The AI part just finished installing. Close and reopen the keyboard to use it.</string>
 
+    <!-- Scan text tool: downloading the language data Tesseract reads with. -->
+    <!-- %1$s is how many megabytes the user must free. -->
+    <string name="core_intel_ocr_download_error_no_space">There is not enough storage on your device. You must free about <xliff:g id="megabytes" example="12">%1$s</xliff:g> MB first.</string>
+    <!-- %1$s is the HTTP status code the server sent. GitHub is the name of
+         the site the language data comes from. -->
+    <string name="core_intel_ocr_download_error_http">The GitHub server did not send the file. The error code is HTTP <xliff:g id="status_code" example="404">%1$s</xliff:g>.</string>
+    <string name="core_intel_ocr_download_error_interrupted">The connection stopped during the download. Try again.</string>
+
 </resources>

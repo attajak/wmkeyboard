@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Text scanner (OCR) panel: camera viewfinder, capture, recognized words. -->
     <string name="ime_scanner_ocr_hint">Put the text in the frame, then press the shutter</string>
@@ -22,6 +22,15 @@
     <!-- Companion of common_select_all on the same button. -->
     <string name="ime_scanner_ocr_deselect_all_desc">Deselect all</string>
     <string name="ime_scanner_ocr_empty">The scanner found no text. Hold the camera closer, add more light, then try again.</string>
+    <!-- Language chip on the viewfinder. %1$s is the name of a language. -->
+    <string name="ime_scanner_ocr_language_desc">Text language: <xliff:g id="language" example="Bangla">%1$s</xliff:g>. Tap to change.</string>
+    <!-- Tesseract reads a language only after its data is on the phone.
+         %1$s is the name of a language, %2$s the download size, for example "2.4 MB". -->
+    <string name="ime_scanner_ocr_need_pack_body">To read <xliff:g id="language" example="Bangla">%1$s</xliff:g> text, the scanner needs a one-time download of <xliff:g id="size" example="0.9 MB">%2$s</xliff:g>.</string>
+    <!-- %1$s is the name of a language. -->
+    <string name="ime_scanner_ocr_downloading_progress">Downloading the <xliff:g id="language" example="Bangla">%1$s</xliff:g> text data…</string>
+    <!-- %1$s is how much has arrived, %2$s the whole size, for example "1.2 MB of 2.4 MB". -->
+    <string name="ime_scanner_ocr_download_of_total_progress"><xliff:g id="downloaded" example="1.2 MB">%1$s</xliff:g> of <xliff:g id="total" example="2.4 MB">%2$s</xliff:g></string>
 
     <!-- QR code and barcode scanner panel. -->
     <string name="ime_scanner_qr_hint">Point the camera at a QR code or a barcode</string>

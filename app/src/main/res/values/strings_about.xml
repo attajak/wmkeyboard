@@ -142,6 +142,8 @@
     <string name="about_bundled_luaj_used">The Lua interpreter that runs the plugins in their sandbox</string>
     <string name="about_bundled_harper_used">Checks the grammar and the style offline (native library)</string>
     <string name="about_bundled_rust_crates_used">The libraries that the grammar library depends on</string>
+    <string name="about_bundled_tesseract_used">Reads text in most scripts for the text scanner (native library)</string>
+    <string name="about_bundled_leptonica_used">Prepares the photo for the text scanner (native library)</string>
     <string name="about_bundled_mlkit_used">Reads handwriting, scans text and barcodes, scans documents, and removes the background from a sticker</string>
     <string name="about_bundled_play_update_used">Offers the new version of this app, and downloads it (Play Store builds only)</string>
     <string name="about_bundled_litert_lm_used">Runs the language models on your device</string>

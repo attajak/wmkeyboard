@@ -1,0 +1,39 @@
+name: Tesseract native build
+
+# Rebuilds libwmtess.so (native/tesseract-jni) for every ABI and uploads it.
+# Run by hand after changing native/tesseract-jni, then commit the artifact's
+# files into core/intelligence/src/full/jniLibs/.
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: NDK r29 and Ninja
+        run: |
+          ndk=$ANDROID_SDK_ROOT/ndk/29.0.14206865
+          if [ ! -d "$ndk" ]; then
+            yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "ndk;29.0.14206865" > /dev/null
+          fi
+          echo "ANDROID_NDK=$ndk" >> "$GITHUB_ENV"
+          sudo apt-get install -y -qq ninja-build > /dev/null
+
+      - name: Build
+        run: native/tesseract-jni/build.sh
+
+      - name: Exports
+        run: |
+          nm=$(ls "$ANDROID_NDK"/toolchains/llvm/prebuilt/*/bin/llvm-nm)
+          for so in core/intelligence/src/full/jniLibs/*/libwmtess.so; do
+            echo "$so"
+            "$nm" -D --defined-only "$so" | grep ' T '
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wmtess-jniLibs
+          path: core/intelligence/src/full/jniLibs/*/libwmtess.so

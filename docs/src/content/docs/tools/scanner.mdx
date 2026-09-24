@@ -12,7 +12,7 @@ import PhoneFrame from '@components/PhoneFrame.astro';
 import SettingsPath from '@components/SettingsPath.astro';
 import Flavor from '@components/Flavor.astro';
 
-Three camera-driven tools live under one Scanners group. **Text scan (OCR)** reads printed words into your field. **QR and barcode scanner** decodes a code and inserts or opens its value. **Document scanner** captures a paper document as a cropped, cleaned-up image. <Flavor edition="full" />: all three run on Google ML Kit and only ship in the full build.
+Three camera-driven tools live under one Scanners group. **Text scan (OCR)** reads printed words into your field. **QR and barcode scanner** decodes a code and inserts or opens its value. **Document scanner** captures a paper document as a cropped, cleaned-up image. <Flavor edition="full" />: all three only ship in the full build. The QR and document scanners run on Google ML Kit; text scan reads with ML Kit or with Tesseract, depending on the language.
 
 <PhoneFrame caption="Text scan (OCR): a full-bleed camera view with recognized words ready to tap.">
   {/* shot: tools/ocr-viewfinder */}
@@ -20,7 +20,20 @@ Three camera-driven tools live under one Scanners group. **Text scan (OCR)** rea
 
 ## Scanning text (OCR)
 
-Open **Text scan (OCR)** from the toolbar or toolbox to replace the keyboard with a full-bleed camera view. It covers the toolbar row too, not only the key area. Point it at printed text and it recognizes words on-device. A torch toggle appears if your device has a flash. Recognition reads Latin-script text, so English and similar scripts. ML Kit's on-device text recognizer doesn't support Bengali yet.
+Open **Text scan (OCR)** from the toolbar or toolbox to replace the keyboard with a full-bleed camera view. It covers the toolbar row too, not only the key area. Point it at printed text and it recognizes words on-device. A torch toggle appears if your device has a flash.
+
+### Which languages it reads
+
+Two engines read the text, both on your device:
+
+- **ML Kit** reads Latin-script text only: English, French, Spanish and the like. It needs no download.
+- **Tesseract** reads more than 100 languages in most scripts, for example Bangla, Hindi, Arabic, Russian, Greek, Thai, Chinese, Japanese and Korean. Each language needs a one-time download of its data, from 0.4 MB to 12 MB.
+
+With **Text recognition** on **Automatic** (the default), Latin-script languages read with ML Kit and every other script reads with Tesseract. The scanner reads in the language you're typing in when you open it. If you've turned on more than one language, a chip at the bottom left of the viewfinder names the text's language, and tapping it steps to the next one without switching your keyboard. On Automatic, all your Latin-script languages share one stop on the chip, since ML Kit reads them the same way.
+
+A language without Tesseract data of its own reads with the main one for its script: Maithili and other Devanagari languages read with Hindi's, and a Latin-script language with no data of its own reads with English's.
+
+The first time you scan in a language that needs Tesseract data, the viewfinder is replaced by a **Download** button that says how big the data is. The download shows its progress in the panel and can be cancelled there. With [data saver](/privacy/data-saver/) set to ask, the first press explains that it uses mobile data and a second press starts it. Set to block, the button says why it can't. The data comes from the `tessdata_fast` 4.1.0 set of the Tesseract project on GitHub and stays in the app's private storage; you can also download or delete each language on the tool's settings page, and delete it under [Storage](/privacy/data/).
 
 After a capture, the recognized words appear as tappable chips grouped by line:
 
@@ -60,11 +73,16 @@ All three scanners have their own settings screen, and all three start with the 
 - **Vibrate on detection**: on by default. A short buzz when a code is spotted.
 - **Load link details**: off by default. When a scanned value is a web link, it fetches the page's title and description to show above the result. That needs a network connection. [Power Saving mode](/typing/power-saving/) force-disables this row while its background-network toggle is on.
 
-Decoding for both OCR and the QR/barcode scanner runs entirely on-device with ML Kit, so nothing is uploaded and both work offline. Link previews are the one exception, since fetching a page's title needs the network. See [network policy](/privacy/network/) for what else does and doesn't touch the network.
+Recognition for both OCR and the QR/barcode scanner runs entirely on-device, so no photo is uploaded and both work offline once any Tesseract language data they need is downloaded. Link previews are the one exception, since fetching a page's title needs the network. See [network policy](/privacy/network/) for what else does and doesn't touch the network.
 
 <SettingsPath path="Tools / Text scan (OCR) / Options" />
 
 - **Start with everything selected**: on by default, described above.
+- **Text recognition**: **Automatic** (the default), **ML Kit** or **Tesseract**. See [which languages it reads](#which-languages-it-reads). ML Kit ignores the text's language, so the viewfinder shows no language chip with it. Tesseract reads Latin script too, usually slower than ML Kit.
+
+<SettingsPath path="Tools / Text scan (OCR) / Tesseract languages" />
+
+One row for each Tesseract language the languages you type in need, with its size, a **Download** button, its progress, or a delete button once it's on your device. Two languages that read with the same data share one row, for example Norwegian Bokmål and Nynorsk. The list is hidden while **Text recognition** is on ML Kit.
 
 ## Scanning a document
 
@@ -89,4 +107,4 @@ Once you're back in your app, each captured page is inserted exactly like a Came
 
 ## Why full only
 
-OCR and QR/barcode scanning depend on ML Kit's text-recognition and barcode-scanning libraries. Document scanning depends on Google Play services' document scanner module. All three are compiled into the full build and left out of lite entirely, rather than hidden behind a toggle, so the Scanners group doesn't appear in the lite toolbox or toolbar at all. See [Full vs Lite](/start/editions/) if you're deciding between builds.
+OCR depends on ML Kit's text-recognition library and on a Tesseract library built into the app, about 1.7 MB on a 64-bit phone. QR/barcode scanning depends on ML Kit's barcode-scanning library. Document scanning depends on Google Play services' document scanner module. All three are compiled into the full build and left out of lite entirely, rather than hidden behind a toggle, so the Scanners group doesn't appear in the lite toolbox or toolbar at all. See [Full vs Lite](/start/editions/) if you're deciding between builds.

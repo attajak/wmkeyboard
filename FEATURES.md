@@ -1690,7 +1690,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - No QUERY_ALL_PACKAGES — Reads the same launcher list the home screen sees
     - Sort A–Z or most recent — Labels under icons can be hidden
 - **Scanners** `uncommon` — 3 camera-driven tools, all ML Kit, full edition only
-  - Text scan (OCR) `uncommon` — Full-bleed viewfinder, on-device Latin-script recognition
+  - Text scan (OCR) `uncommon` — Full-bleed viewfinder, on-device recognition: ML Kit for Latin script, Tesseract (per-language download) for 100+ languages in most other scripts
     - Words as tappable chips grouped by line — Trim the capture down before inserting
     - Start with everything selected — On by default; off makes chips opt-in instead
     - Select-all/deselect-all toggle — Copy and Insert act on the current selection
@@ -1960,7 +1960,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Feature | Needs |
 |---|---|
 | Handwriting tool and handwrite-with-swipes | full flavour only (ML Kit digital ink); each language model is an 8-26MB download |
-| Text scan (OCR) | full flavour only (ML Kit text recognition); needs CAMERA permission |
+| Text scan (OCR) | full flavour only (ML Kit text recognition + bundled Tesseract library); needs CAMERA permission |
 | QR & barcode scanner | full flavour only (ML Kit barcode); needs CAMERA permission; link details need network |
 | Document scanner | full flavour only, and hidden entirely when Google Play services is unavailable |
 | Grammar tool | full flavour only (BuildConfig.ENABLE_GRAMMAR, Harper Rust JNI) |
@@ -2462,6 +2462,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Sentence-start capitalisation only for en-US, never in a secure field
 - **Scanners** `uncommon` — Three camera tools: text OCR, QR/barcode, and document scan
   - Text scan (OCR) `RARE` — ML Kit Latin text recognition inside the keyboard, full-bleed over the toolbar
+    - Tesseract for other scripts (#306) `RARE` — engine setting Automatic / ML Kit / Tesseract; language chip on the viewfinder; tessdata_fast packs downloaded per enabled language from the panel or the tool page; slim 1.7 MB native library (native/tesseract-jni)
     - Recognised words become tappable chips grouped by line
     - Start-with-everything-selected toggle — on by default: tap to deselect and trim the capture down
     - Select-all / deselect-all toggle, Copy and Insert act on the selection

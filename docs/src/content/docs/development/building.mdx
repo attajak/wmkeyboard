@@ -42,7 +42,7 @@ The auto-provisioned JDK 21 toolchain is not the project's bytecode target. Ever
 
 WM Keyboard ships as two build flavors on the same `capabilities` flavor dimension, declared identically in `:app` and all 20 `:core:*`/`:feature:*` modules. Two more, `:feature:llm` and `:feature:translate`, declare the same dimension but only join the build for Play-channel releases. The standalone `:tools:dictc` compiler is a plain JVM module and carries no flavors at all.
 
-- **`full`** builds every feature: ML Kit handwriting recognition, ML Kit OCR/QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
+- **`full`** builds every feature: ML Kit handwriting recognition, OCR (ML Kit and Tesseract), ML Kit QR/document scanning, the Harper grammar checker (and the Harper spell-checker service it registers with Android), the local LLM tool, offline Whisper dictation, and one-tap background removal in the sticker editor.
 - **`lite`** switches all of those off. That drops roughly 100 MB of ML Kit models and the Harper native library from the install, which is what makes it useful on a low-storage device.
 
 Both flavors exist on every module so the project builds uniformly across variants. Four modules actually carry different Kotlin per flavor: `core/voice`, `core/content`, `core/intelligence` and `feature/ime` each have a real `src/full/` and `src/lite/` split. `:app` has a `src/full/` as well, holding the spell-checker service's manifest entry and its strings, with nothing on the lite side. Everywhere else the flavor dimension is structural, and the sources compiling under `full` and `lite` are identical. `core/config` mirrors five `ENABLE_*` flags as `BuildConfig` booleans so library modules can read them without depending on `:app`. The sticker cutout has no flag of its own: `core/content` declares the segmentation library as `fullImplementation` and its lite stub reports `supported = false`.
@@ -96,6 +96,19 @@ cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 --platform 24 \
 The same command is in `native/harper-jni/README.md`, along with the JNI contract the Kotlin side depends on.
 
 `--platform 24` matches the app's `minSdk` exactly. Release builds package all three supported ABIs (`arm64-v8a`, `armeabi-v7a` and `x86_64`) through `ndk.abiFilters` in `app/build.gradle.kts`. Debug builds restrict to `arm64-v8a` so local compiles finish sooner. Generic 32-bit `x86` is not supported.
+
+## Rebuilding the text scanner's Tesseract library
+
+<Flavor edition="full" />: like the grammar engine, it only ships in full builds.
+
+The text scanner reads most non-Latin scripts with [Tesseract](https://github.com/tesseract-ocr/tesseract), compiled with Leptonica into one small library, `libwmtess.so`, from `native/tesseract-jni/`. `core/intelligence/src/full/java/com/wasimaster/wmkeyboard/core/ocr/TesseractOcr.kt` is the Kotlin entry point, and the prebuilt `.so` files sit beside Harper's under `core/intelligence/src/full/jniLibs/<abi>/`, so a normal build needs no NDK here either. Rebuild them only after you edit `native/tesseract-jni/`:
+
+```sh
+# Needs NDK r29, CMake 3.22+ and Ninja
+ANDROID_NDK=/opt/homebrew/share/android-ndk native/tesseract-jni/build.sh
+```
+
+The script fetches the pinned Tesseract4Android sources, builds all three ABIs and copies the stripped libraries into place. The **Tesseract native build** workflow on GitHub does the same and uploads the result. `native/tesseract-jni/README.md` has the JNI contract and the size measurements behind each build flag.
 
 ## Running static analysis
 
