@@ -720,6 +720,8 @@
   {"title":"Results for each search","name":"tooldetail_search_count_title","route":"tool/WEB_SEARCH","screens":["Tools","Web search"],"screen":false},
   {"title":"Results for each search","name":"tooldetail_search_count_title","route":"tool/IMAGE_SEARCH","screens":["Tools","Image search"],"screen":false},
   {"title":"Start with everything selected","name":"tooldetail_ocr_select_all_title","route":"tool/OCR","screens":["Tools","Text scan (OCR)"],"screen":false},
+  {"title":"Text recognition","name":"tooldetail_ocr_engine_title","route":"tool/OCR","screens":["Tools","Text scan (OCR)"],"screen":false},
+  {"title":"Tesseract languages","name":"tooldetail_ocr_packs_header","route":"tool/OCR","screens":["Tools","Text scan (OCR)"],"screen":false},
   {"title":"Insert automatically","name":"tooldetail_qr_scan_auto_title","route":"tool/QR_SCAN","screens":["Tools","QR and barcode scanner"],"screen":false},
   {"title":"Vibrate on detection","name":"tooldetail_qr_scan_haptics_title","route":"tool/QR_SCAN","screens":["Tools","QR and barcode scanner"],"screen":false},
   {"title":"Load link details","name":"tooldetail_qr_scan_preview_title","route":"tool/QR_SCAN","screens":["Tools","QR and barcode scanner"],"screen":false},
