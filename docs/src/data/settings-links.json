@@ -447,7 +447,6 @@
   {"title":"Bottom padding","name":"layout_bottom_padding_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
   {"title":"Round top corners","name":"layout_board_corner_top_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
   {"title":"Round bottom corners","name":"layout_board_corner_bottom_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
-  {"title":"Which corners","name":"layout_board_corners_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
   {"title":"Keyboard width","name":"layout_keyboard_width_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
   {"title":"Keyboard position","name":"layout_keyboard_position_title","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
   {"title":"Follows portrait","name":"layout_variant_follows_portrait_label","route":"layout/size","screens":["Layout & size","Size and position"],"screen":false},
