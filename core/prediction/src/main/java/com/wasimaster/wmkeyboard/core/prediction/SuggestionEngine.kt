@@ -1754,6 +1754,15 @@ class SuggestionEngine(
         private const val CONTRACTION_LEAD = 7.0
 
         /**
+         * The furthest behind the typed word an ambiguous contraction (`ill`
+         * as *I'll*) sits on the strip, as a factor; see [declaredReading].
+         */
+        private const val DECLARED_TRAIL = 2.0
+
+        /** How far short of the typed word that reading stops, in log units. */
+        private const val DECLARED_BEHIND = 1e-3
+
+        /**
          * Share of the silent-replacement margin a candidate has to clear to
          * be *offered* instead.
          *
@@ -3388,9 +3397,34 @@ class SuggestionEngine(
      */
     private fun contractionReading(lower: String, langId: String): ElisionReading? {
         if (!Apostrophes.servesLanguage(langId)) return null
-        val fixed = Apostrophes.fix(lower) ?: return null
+        val fixed = Apostrophes.fix(lower) ?: return declaredReading(lower)
         val scored = maxOf(finiteScore(fixed.lowercase()), finiteScore(lower))
         return ElisionReading(fixed, scored + CONTRACTION_LEAD, shadowed = true)
+    }
+
+    /**
+     * [lower] read as the contraction it spells when it is also a word of its
+     * own: `ill` is *I'll* as often as it is ill (#384).
+     *
+     * Offered, never committed, and never ahead of what was typed: the
+     * contraction takes its own count, or [DECLARED_TRAIL] behind the typed
+     * word's where the list has it lower (the downloadable list, tokenised at
+     * the apostrophe, barely has it at all), and stops just short of the typed
+     * word either way. That keeps it on the strip above the long tail of
+     * completions without the strip preferring a reading the space bar will
+     * not make.
+     */
+    private fun declaredReading(lower: String): ElisionReading? {
+        val fixed = Apostrophes.offer(lower) ?: return null
+        val typed = dictionaryScore(lower)
+        val own = dictionaryScore(fixed.lowercase())
+        val score = if (typed == Double.NEGATIVE_INFINITY) {
+            own
+        } else {
+            minOf(maxOf(own, typed - ln(DECLARED_TRAIL)), typed - DECLARED_BEHIND)
+        }
+        if (score == Double.NEGATIVE_INFINITY) return null
+        return ElisionReading(fixed, score, shadowed = false)
     }
 
     /** [dictionaryScore] with an unknown word's negative infinity read as zero. */

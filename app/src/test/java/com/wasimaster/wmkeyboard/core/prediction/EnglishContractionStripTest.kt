@@ -35,6 +35,8 @@ class EnglishContractionStripTest {
                     "its" to 900_000, "it's" to 2_697,
                     "im" to 2_000, "i'm" to 4_386_306,
                     "were" to 800_000, "we're" to 300_000,
+                    "ill" to 1_530, "i'll" to 5_200, "illness" to 900, "illegal" to 1_000,
+                    "id" to 1_003,
                 ),
             ),
             BengaliPhoneticIndex(emptyList()),
@@ -65,13 +67,36 @@ class EnglishContractionStripTest {
 
     @Test fun anAmbiguousFormIsLeftAlone() {
         // `its`, `were` and the rest are words in their own right, so the
-        // table refuses them and so does the strip. Only a glide drawn
-        // through the apostrophe key says otherwise; see [Apostrophes].
+        // table refuses to commit them and the strip keeps them first. Only a
+        // glide drawn through the apostrophe key says otherwise; see
+        // [Apostrophes].
         val e = english()
         for (word in listOf("its", "were")) {
             assertNull(word, e.elide(word))
             assertEquals(word, word, e.suggest(word, previousWord = null).first())
         }
+    }
+
+    @Test fun anAmbiguousFormOffersItsContractionBehindTheTypedWord() {
+        // "ill" is I'll far more often than it is ill, but it is both, so the
+        // strip offers the contraction and the space bar keeps what was typed
+        // (#384). The list has i'll commoner than ill; it still sits second.
+        val e = english()
+        val strip = e.suggest("ill", previousWord = null)
+        assertEquals("ill", strip.first())
+        assertEquals("I'll", strip[1])
+        assertNull(e.elide("ill"))
+        // A contraction the list does not hold at all still reaches the strip.
+        assertTrue("I'd" in e.suggest("id", previousWord = null))
+        assertNull(e.elide("id"))
+        // Common enough either way to be worth a slot.
+        assertTrue("we're" in e.suggest("were", previousWord = null))
+    }
+
+    @Test fun anAmbiguousFormOffersNothingWithTheSettingOff() {
+        val e = english()
+        e.apostropheFixes = false
+        assertTrue("I'll" !in e.suggest("ill", previousWord = null))
     }
 
     @Test fun theTypedCaseIsKept() {
