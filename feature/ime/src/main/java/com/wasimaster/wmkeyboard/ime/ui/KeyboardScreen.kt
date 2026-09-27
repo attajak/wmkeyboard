@@ -2192,6 +2192,15 @@ internal val LocalKeyboardPreviewHost = staticCompositionLocalOf { false }
 internal val LocalKeyPreviewBand = staticCompositionLocalOf { KeyPreviewBandMode.WINDOW }
 
 /**
+ * Told where every key's visible face was laid out, for a host that needs the
+ * board's geometry rather than its touches: the theme editor's image-size guide
+ * (issue #397), which measures the real board so its templates match any
+ * layout and sizing. Null everywhere else, which is every real keyboard, so the
+ * keys pay one null check per layout pass and nothing per keystroke.
+ */
+internal val LocalKeyFaceProbe = staticCompositionLocalOf<((KeyVisual, LayoutCoordinates) -> Unit)?> { null }
+
+/**
  * Holds up to [px] of empty space above the frame's content: the band a top-row
  * bubble is drawn in. Window height, not keyboard height — the service
  * subtracts it from the app's insets (see [keyPreviewHeadroomPx]).
@@ -18008,6 +18017,7 @@ internal fun KeyButton(
 
     // The popups' own colours; the key's face is already resolved in [visual].
     val kb = LocalKbTheme.current
+    val faceProbe = LocalKeyFaceProbe.current
     // The theme's key textures. A static local, changing only on a theme
     // switch — reading it here adds nothing to the press path.
     val textures = LocalKeyTextures.current
@@ -18356,7 +18366,10 @@ internal fun KeyButton(
                     }
                 }
             )
-            .onGloballyPositioned { keyBounds.value = it.boundsInRoot() },
+            .onGloballyPositioned {
+                keyBounds.value = it.boundsInRoot()
+                faceProbe?.invoke(visual, it)
+            },
         contentAlignment = Alignment.Center,
     ) {
         KeyLabel(visual, settings, pressed)
