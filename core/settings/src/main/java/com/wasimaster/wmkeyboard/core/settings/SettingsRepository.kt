@@ -1518,6 +1518,12 @@ data class ToolbarBehavior(
      */
     val toolWidthDp: Int = 38,
     /**
+     * Side of the glyph inside each tool button on the bar and in the toolbox
+     * grid, in dp. The button stays 38 dp either way, so this only changes how
+     * much of the circle the icon fills, never how many tools fit.
+     */
+    val iconSizeDp: Int = 22,
+    /**
      * Space above the toolbar's content, in dp, added to the strip's height.
      * 4 by default (#208): with none, the tool pills sat almost against the
      * keyboard's top edge, closer than any two key rows sit to each other.
@@ -7990,6 +7996,7 @@ class SettingsRepository(private val context: Context) {
         private val EMOJI_INSERT_MODE = stringPreferencesKey("emoji_insert_mode")
         private val EMOJI_DEFAULT_SKIN_TONE = stringPreferencesKey("emoji_default_skin_tone")
         private val EMOJI_TONE_OVERRIDE_LAST_USED =
+        private val TOOLBAR_ICON_SIZE = intPreferencesKey("toolbar_icon_size")
             booleanPreferencesKey("emoji_tone_override_last_used")
         private val EMOJI_CLOSE_AFTER_INSERT = booleanPreferencesKey("emoji_close_after_insert")
         private val EMOJI_HIDE_UNRENDERABLE = booleanPreferencesKey("emoji_hide_unrenderable")
@@ -9703,6 +9710,7 @@ class SettingsRepository(private val context: Context) {
             barCount = p[EMOJI_BAR_COUNT]?.coerceIn(EmojiBarCountRange)
                 ?: defaults.emoji.barCount,
             gridCellSize = p[EMOJI_GRID_CELL_SIZE]?.coerceIn(EmojiGridCellSizeRange)
+            iconSizeDp = p[TOOLBAR_ICON_SIZE] ?: defaults.toolbarBehavior.iconSizeDp,
                 ?: defaults.emoji.gridCellSize,
             gridEmojiSize = p[EMOJI_GRID_EMOJI_SIZE]?.coerceIn(EmojiGridEmojiSizeRange)
                 ?: defaults.emoji.gridEmojiSize,
@@ -11271,6 +11279,9 @@ class SettingsRepository(private val context: Context) {
             val current = ToolHoldActions.decode(prefs[TOOLBAR_HOLD_ACTIONS]).toMutableMap()
             val selfBound = action is ToolHoldAction.Run && action.tool == tool
             if (action == null || selfBound) current.remove(tool) else current[tool] = action
+    suspend fun setToolbarIconSizeDp(value: Int) =
+        editPrefs { it[TOOLBAR_ICON_SIZE] = value.coerceIn(14, 30) }
+
             prefs[TOOLBAR_HOLD_ACTIONS] = ToolHoldActions.encode(current)
         }
 
@@ -13827,6 +13838,7 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setShiftCapsLockMs(value: Int) =
         editPrefs { it[SHIFT_CAPS_LOCK_MS] = value.coerceIn(ShiftCapsLockMsRange.first, ShiftCapsLockMsRange.last) }
+        it.remove(TOOLBAR_ICON_SIZE)
 
     suspend fun setShowAllPopupKeys(value: Boolean) =
         editPrefs { it[SHOW_ALL_POPUP_KEYS] = value }

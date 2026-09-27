@@ -8192,12 +8192,13 @@ internal fun ToolCircle(
                     slot,
                     contentDescription = description,
                     modifier = Modifier
-                        // Not [ToolIconSize]: this box is 30 dp, not 38, because
-                        // the name underneath has to fit in the same toolbar
-                        // height. A 22 dp glyph lifted clear of the hint badge
-                        // would leave the box through the top. The name grew
-                        // instead — which is what is read here anyway.
-                        .size(20.dp)
+                        // Two under the Tool icon size setting and capped at 26:
+                        // this box is 30 dp, not 38, because the name underneath
+                        // has to fit in the same toolbar height. A bigger glyph
+                        // lifted clear of the hint badge would leave the box
+                        // through the top. The name grew instead — which is
+                        // what is read here anyway.
+                        .size((kb.toolIconSizeDp - 2).coerceAtMost(26).dp)
                         // Lifted, not shrunk, so the badge below has room inside
                         // a box whose size must not change (see [HintBadge]).
                         .offset(y = if (hint != null) -(HintBadgeHeight / 2) else 0.dp),
@@ -8237,7 +8238,7 @@ internal fun ToolCircle(
             slot,
             contentDescription = description,
             modifier = Modifier
-                .size(if (compact) CompactToolIconSize else ToolIconSize)
+                .size(if (compact) CompactToolIconSize else kb.toolIconSizeDp.dp)
                 // The icon steps up by half the badge's height so the badge sits
                 // under it rather than across it. The button's own 38 dp box is
                 // untouched, so nothing on the bar moves.
@@ -8299,14 +8300,15 @@ private fun GhostToolCircle(
         SlotIcon(
             IconSlots.forTool(tool),
             contentDescription = null,
-            modifier = Modifier.size(ToolIconSize),
+            modifier = Modifier.size(kb.toolIconSizeDp.dp),
             tint = kb.toolbarIcon.copy(alpha = 0.45f),
         )
     }
 }
 
 /**
- * The glyph inside a tool button, on the bar and in the toolbox alike.
+ * The glyph inside a toolbox pill, and the default of the Tool icon size
+ * setting ([KbTheme.toolIconSizeDp]) that sizes it inside a tool button.
  *
  * It was 20 dp in a 38 dp button, which left the icon floating in a lot of
  * empty circle: at a glance a toolbox page read as a field of identical
@@ -11142,17 +11144,17 @@ private fun KeyboardBody(
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
-                        // The icon sits (GhostSize - ToolIconSize) / 2 from the
+                        // The icon sits (GhostSize - icon) / 2 from the
                         // start, which is dead centre once the box is a circle —
                         // so the icon holds still and the pill grows out from
                         // behind it rather than sliding under the finger.
-                        .padding(start = (GhostSize - ToolIconSize) / 2),
+                        .padding(start = (GhostSize - kb.toolIconSizeDp.dp) / 2),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     SlotIcon(
                         IconSlots.forTool(tool),
                         contentDescription = null,
-                        modifier = Modifier.size(ToolIconSize),
+                        modifier = Modifier.size(kb.toolIconSizeDp.dp),
                         tint = kb.toolCircleActiveIcon,
                     )
                     if (labelAlpha > 0.01f) {

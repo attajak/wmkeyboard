@@ -394,6 +394,7 @@
   {"title":"Tool circle radius","name":"appearance_tool_circle_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Tool background shape","name":"appearance_tool_shape_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Tool background width","name":"appearance_tool_width_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
+  {"title":"Tool icon size","name":"appearance_tool_icon_size_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Reset toolbar","name":"appearance_toolbar_reset_title","route":"appearance/toolbar","screens":["Appearance","Toolbar"],"screen":false},
   {"title":"Toolbox layout","name":"appearance_toolbox_layout_title","route":"appearance/toolbox","screens":["Appearance","Toolbox"],"screen":false},
   {"title":"Toolbox grid size","name":"appearance_toolbox_columns_title","route":"appearance/toolbox","screens":["Appearance","Toolbox"],"screen":false},
