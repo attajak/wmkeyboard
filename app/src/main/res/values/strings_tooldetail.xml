@@ -419,6 +419,8 @@
     <!-- One line under each option in the "After you send one" picker. -->
     <string name="tooldetail_sticker_suggest_trigger_delete_desc">The sticker replaces the title, keyword or emoji that you typed</string>
     <string name="tooldetail_sticker_suggest_trigger_keep_desc">The sticker is sent and your text stays in the field</string>
+    <string name="tooldetail_sticker_suggest_magnify_title">Hold to see them bigger</string>
+    <string name="tooldetail_sticker_suggest_magnify_subtitle">Hold a sticker in the tray to see it large, and slide to see the others</string>
     <string name="tooldetail_media_layout_group">Layout</string>
     <string name="tooldetail_media_full_bleed_title">Full-screen picker</string>
     <string name="tooldetail_media_full_bleed_subtitle">Hide the toolbar and move the search up next to a back button</string>

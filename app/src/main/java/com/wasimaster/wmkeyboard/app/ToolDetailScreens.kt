@@ -1985,6 +1985,14 @@ internal fun ToolDetailSettings(
                                 },
                             ) { scope.launch { repository.setStickerSuggestTrigger(it) } }
                         }
+                        item {
+                            ToggleSetting(
+                                R.string.tooldetail_sticker_suggest_magnify_title,
+                                stringResource(R.string.tooldetail_sticker_suggest_magnify_subtitle),
+                                settings.watch { it.gif.stickerSuggestMagnify },
+                                default = SettingsDefaults.gif.stickerSuggestMagnify,
+                            ) { scope.launch { repository.setStickerSuggestMagnify(it) } }
+                        }
                     }
                 }
             }

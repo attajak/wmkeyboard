@@ -2414,6 +2414,12 @@ data class GifSettings(
     val stickerSuggestStyle: StickerSuggestStyle = StickerSuggestStyle.TRAY,
     /** What sending one does to the text that asked for it; see [StickerTriggerAction]. */
     val stickerSuggestTrigger: StickerTriggerAction = StickerTriggerAction.DELETE,
+    /**
+     * Holding a sticker in the offer's tray shows it large above the keyboard,
+     * and sliding along the tray shows the next ones the same way (#404).
+     * Off, a hold does nothing and a slide scrolls the tray.
+     */
+    val stickerSuggestMagnify: Boolean = true,
 )
 
 /**
@@ -8283,6 +8289,7 @@ class SettingsRepository(private val context: Context) {
         private val STICKER_SUGGEST = booleanPreferencesKey("sticker_suggest")
         private val STICKER_SUGGEST_STYLE = stringPreferencesKey("sticker_suggest_style")
         private val STICKER_SUGGEST_TRIGGER = stringPreferencesKey("sticker_suggest_trigger")
+        private val STICKER_SUGGEST_MAGNIFY = booleanPreferencesKey("sticker_suggest_magnify")
         private val SEARCH_SAFE = booleanPreferencesKey("search_safe")
         private val SEARCH_RESULT_COUNT = intPreferencesKey("search_result_count")
         private val WIKI_LANGUAGE = stringPreferencesKey("wiki_language")
@@ -9939,6 +9946,7 @@ class SettingsRepository(private val context: Context) {
             stickerSuggestTrigger = p[STICKER_SUGGEST_TRIGGER]
                 ?.let { runCatching { StickerTriggerAction.valueOf(it) }.getOrNull() }
                 ?: defaults.gif.stickerSuggestTrigger,
+            stickerSuggestMagnify = p[STICKER_SUGGEST_MAGNIFY] ?: defaults.gif.stickerSuggestMagnify,
         )
 
     private fun readTextEditing(p: Preferences, defaults: KeyboardSettings) =
@@ -15521,6 +15529,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setStickerSuggestTrigger(value: StickerTriggerAction) =
         editPrefs { it[STICKER_SUGGEST_TRIGGER] = value.name }
+
+    suspend fun setStickerSuggestMagnify(value: Boolean) =
+        editPrefs { it[STICKER_SUGGEST_MAGNIFY] = value }
 
     suspend fun setGifContentFilter(value: GifContentFilter) =
         editPrefs { it[GIF_CONTENT_FILTER] = value.name }
