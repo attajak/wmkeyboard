@@ -2075,6 +2075,29 @@ internal fun TypingGesturesSettings(
                     default = SettingsDefaults.textEditing.spaceCursorStepDp.toFloat(),
                 ) { scope.launch { repository.setSpaceCursorStepDp(it.toInt()) } }
             }
+            // Issue #385: the drag speeds up the further it goes.
+            item {
+                ToggleSetting(
+                    R.string.typing_space_cursor_accelerate_title,
+                    stringResource(R.string.typing_space_cursor_accelerate_subtitle),
+                    settings.watch { it.textEditing.spaceCursorAccelerate },
+                    info = stringResource(R.string.typing_space_cursor_accelerate_info),
+                    default = SettingsDefaults.textEditing.spaceCursorAccelerate,
+                ) { scope.launch { repository.setSpaceCursorAccelerate(it) } }
+            }
+            item {
+                val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
+                SliderSetting(
+                    R.string.typing_space_cursor_top_speed_title,
+                    subtitle = stringResource(R.string.typing_space_cursor_top_speed_subtitle),
+                    value = settings.watch { it.textEditing.spaceCursorTopSpeed }.toFloat(),
+                    range = 2f..8f,
+                    display = { valueFormat.format(it.roundToInt().toString()) },
+                    info = stringResource(R.string.typing_space_cursor_top_speed_info),
+                    enabled = settings.watch { it.textEditing.spaceCursorAccelerate },
+                    default = SettingsDefaults.textEditing.spaceCursorTopSpeed.toFloat(),
+                ) { scope.launch { repository.setSpaceCursorTopSpeed(it.roundToInt()) } }
+            }
             item {
                 ToggleSetting(
                     R.string.typing_space_cursor_magnifier_title,

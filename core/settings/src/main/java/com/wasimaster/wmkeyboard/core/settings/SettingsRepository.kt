@@ -4740,6 +4740,23 @@ data class TextEditingSettings(
      */
     val spaceCursorStepDp: Int = 16,
     /**
+     * A spacebar cursor drag speeds up the further it goes (issue #385): past
+     * a short stretch at [spaceCursorStepDp], each character costs less
+     * travel, up to [spaceCursorTopSpeed] times as fast, and the drag keeps
+     * that pace while the finger goes the same way. Turning back starts slow
+     * again, so an overshoot is corrected at the exact speed. The 2-D pad's
+     * line steps ramp the same way on their own axis.
+     *
+     * Off by default: a flat step is what every keyboard does, and a caret
+     * that runs away from a finger nobody told it would is a surprise.
+     */
+    val spaceCursorAccelerate: Boolean = false,
+    /**
+     * How many times faster than [spaceCursorStepDp] an accelerating spacebar
+     * cursor drag ends up going, once it has gone far enough to reach it.
+     */
+    val spaceCursorTopSpeed: Int = 4,
+    /**
      * A magnifier over the caret while a spacebar cursor swipe moves it
      * (discussion #303): the line around the caret, enlarged, in a bubble over
      * the text. The trackpad has its own switch, [TrackpadSettings.magnifier].
@@ -8191,6 +8208,8 @@ class SettingsRepository(private val context: Context) {
         private val DOUBLE_SPACE_WINDOW_MS = intPreferencesKey("double_space_window_ms")
         private val SPACE_CURSOR_STEP_DP = intPreferencesKey("space_cursor_step_dp")
         private val SPACE_CURSOR_MAGNIFIER = booleanPreferencesKey("space_cursor_magnifier")
+        private val SPACE_CURSOR_ACCELERATE = booleanPreferencesKey("space_cursor_accelerate")
+        private val SPACE_CURSOR_TOP_SPEED = intPreferencesKey("space_cursor_top_speed")
         private val BACKSPACE_WORD_STEP_DP = intPreferencesKey("backspace_word_step_dp")
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
         private val BACKSPACE_SWIPE_PREVIEW = booleanPreferencesKey("backspace_swipe_preview")
@@ -9976,6 +9995,10 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.textEditing.spaceCursorStepDp,
             spaceCursorMagnifier = p[SPACE_CURSOR_MAGNIFIER]
                 ?: defaults.textEditing.spaceCursorMagnifier,
+            spaceCursorAccelerate = p[SPACE_CURSOR_ACCELERATE]
+                ?: defaults.textEditing.spaceCursorAccelerate,
+            spaceCursorTopSpeed = p[SPACE_CURSOR_TOP_SPEED]
+                ?: defaults.textEditing.spaceCursorTopSpeed,
             backspaceWordStepDp = p[BACKSPACE_WORD_STEP_DP]
                 ?: defaults.textEditing.backspaceWordStepDp,
             backspaceSwipeUnit = p[BACKSPACE_SWIPE_UNIT]
@@ -10998,6 +11021,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceCursorMagnifier(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_MAGNIFIER] = value }
+
+    suspend fun setSpaceCursorAccelerate(value: Boolean) =
+        editPrefs { it[SPACE_CURSOR_ACCELERATE] = value }
+
+    suspend fun setSpaceCursorTopSpeed(value: Int) =
+        editPrefs { it[SPACE_CURSOR_TOP_SPEED] = value.coerceIn(2, 8) }
 
     suspend fun setBackspaceWordStepDp(value: Int) =
         editPrefs { it[BACKSPACE_WORD_STEP_DP] = value.coerceIn(32, 120) }

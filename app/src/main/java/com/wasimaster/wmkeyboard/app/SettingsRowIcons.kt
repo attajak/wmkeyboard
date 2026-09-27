@@ -949,6 +949,8 @@ internal object SettingsRowIcons {
         put(R.string.typing_space_hold_picker_long_ring_title) { Icons.Outlined.ViewAgenda }
         put(R.string.typing_space_cursor_2d_title) { Icons.Outlined.Mouse }
         put(R.string.typing_space_cursor_step_title) { Icons.Outlined.Speed }
+        put(R.string.typing_space_cursor_accelerate_title) { Icons.Outlined.FastForward }
+        put(R.string.typing_space_cursor_top_speed_title) { Icons.Outlined.Speed }
         put(R.string.typing_space_cursor_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.typing_space_swipe_down_hide_title) { Icons.Outlined.SwipeDown }
         put(R.string.typing_hint_flick_title) { Icons.Outlined.SwipeDownAlt }

@@ -20750,6 +20750,66 @@ internal fun walkPicker(index: Int, travel: Float, stepPx: Float, last: Int): Pi
     return PickerWalk(at, left)
 }
 
+/**
+ * Travel a spacebar cursor drag covers at its set speed before it starts to
+ * speed up (issue #385), so a short nudge of a few characters stays exact.
+ */
+internal const val SpaceCursorRampStartDp = 48
+
+/** Travel at which an accelerating spacebar cursor drag reaches its top speed. */
+internal const val SpaceCursorRampEndDp = 240
+
+/**
+ * The finger travel one step costs partway through an accelerating spacebar
+ * cursor drag (issue #385). [travelPx] is how far the finger has gone one way
+ * on this axis (see [SpaceCursorRamp]): the speed climbs from [basePx] per
+ * step to [topSpeed] times that between [rampStartPx] and [rampEndPx] of
+ * travel, then holds there as long as the finger keeps going, the way a
+ * mouse's middle-button scroll keeps its pace.
+ */
+internal fun spaceCursorStepPx(
+    basePx: Float,
+    travelPx: Float,
+    rampStartPx: Float,
+    rampEndPx: Float,
+    topSpeed: Float,
+): Float {
+    if (topSpeed <= 1f || travelPx <= rampStartPx) return basePx
+    val t = ((travelPx - rampStartPx) / (rampEndPx - rampStartPx)).coerceIn(0f, 1f)
+    return basePx / (1f + (topSpeed - 1f) * t)
+}
+
+/**
+ * The distance one axis of an accelerating spacebar cursor drag has run in
+ * one direction (issue #385), which is what [spaceCursorStepPx] climbs on.
+ * Turning back past [reversePx] starts a new run from the travel made since
+ * the turn, so correcting an overshoot is slow and exact again. A smaller
+ * wobble the other way is jitter and keeps the speed.
+ */
+internal class SpaceCursorRamp(private val reversePx: Float) {
+    var travel = 0f
+        private set
+    private var dir = 0
+    private var back = 0f
+
+    fun add(delta: Float) {
+        if (delta == 0f) return
+        val sign = if (delta > 0f) 1 else -1
+        if (dir == 0 || sign == dir) {
+            dir = sign
+            back = 0f
+            travel += abs(delta)
+            return
+        }
+        back += abs(delta)
+        if (back > reversePx) {
+            dir = sign
+            travel = back
+            back = 0f
+        }
+    }
+}
+
 /** The up half of a braille dot press: the same key with its release flag set. */
 private fun brailleRelease(key: Key): Key {
     val action = key.action as KeyAction.BrailleDot
@@ -20931,6 +20991,15 @@ private fun Modifier.pointerInputKey(
             val reachPx = AlternatesReachDp.toPx()
             val steerPx = AlternatesSteerDp.toPx()
             val cursorStepPx = textEditing.spaceCursorStepDp.dp.toPx()
+            // Issue #385: with acceleration on, the step shrinks as the drag
+            // runs on; a top speed of 1 is the flat step it always was.
+            val cursorTopSpeed = if (textEditing.spaceCursorAccelerate) {
+                textEditing.spaceCursorTopSpeed.toFloat()
+            } else {
+                1f
+            }
+            val cursorRampStartPx = SpaceCursorRampStartDp.dp.toPx()
+            val cursorRampEndPx = SpaceCursorRampEndDp.dp.toPx()
             val langStepPx = 44.dp.toPx()
             // One picker row of vertical travel moves the hold-drag selection
             // one row; must match the fixed row height LanguagePickerPopup lays
@@ -20956,6 +21025,10 @@ private fun Modifier.pointerInputKey(
                     // then (and forever for a plain tap).
                     var action: SpaceSwipeAction? = null
                     var accumulated = 0f
+                    // How far a cursor drag has run one way on each axis,
+                    // which is what its acceleration climbs on.
+                    val cursorRampX = SpaceCursorRamp(slopPx)
+                    val cursorRampY = SpaceCursorRamp(slopPx)
                     var lastX = down.position.x
                     // Vertical accumulator for the 2-D cursor pad, and a latch set
                     // once a swipe-down has dismissed the keyboard (so release does
@@ -21195,27 +21268,37 @@ private fun Modifier.pointerInputKey(
                         // steps the caret up and down as well. Runs alongside the
                         // horizontal step below, so a diagonal drag moves both axes.
                         if (spaceCursor2d && action == SpaceSwipeAction.CURSOR) {
-                            accumulatedY += change.position.y - lastY
+                            val dy = change.position.y - lastY
+                            accumulatedY += dy
                             lastY = change.position.y
+                            cursorRampY.add(dy)
+                            val stepYPx = spaceCursorStepPx(
+                                cursorStepPx, cursorRampY.travel, cursorRampStartPx, cursorRampEndPx, cursorTopSpeed,
+                            )
                             var movedV = false
-                            while (accumulatedY > cursorStepPx) {
-                                onCursorMoveVertical(1); accumulatedY -= cursorStepPx; movedV = true
+                            while (accumulatedY > stepYPx) {
+                                onCursorMoveVertical(1); accumulatedY -= stepYPx; movedV = true
                             }
-                            while (accumulatedY < -cursorStepPx) {
-                                onCursorMoveVertical(-1); accumulatedY += cursorStepPx; movedV = true
+                            while (accumulatedY < -stepYPx) {
+                                onCursorMoveVertical(-1); accumulatedY += stepYPx; movedV = true
                             }
                             if (movedV) change.consume()
                         }
-                        accumulated += change.position.x - lastX
+                        val dx = change.position.x - lastX
+                        accumulated += dx
                         lastX = change.position.x
                         when (action) {
                             SpaceSwipeAction.CURSOR -> {
+                                cursorRampX.add(dx)
+                                val stepPx = spaceCursorStepPx(
+                                    cursorStepPx, cursorRampX.travel, cursorRampStartPx, cursorRampEndPx, cursorTopSpeed,
+                                )
                                 var moved = false
-                                while (accumulated > cursorStepPx) {
-                                    onCursorMove(1); accumulated -= cursorStepPx; moved = true
+                                while (accumulated > stepPx) {
+                                    onCursorMove(1); accumulated -= stepPx; moved = true
                                 }
-                                while (accumulated < -cursorStepPx) {
-                                    onCursorMove(-1); accumulated += cursorStepPx; moved = true
+                                while (accumulated < -stepPx) {
+                                    onCursorMove(-1); accumulated += stepPx; moved = true
                                 }
                                 if (moved) change.consume()
                             }
