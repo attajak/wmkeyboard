@@ -1,29 +1,28 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
-import android.icu.util.LocaleData
-import android.icu.util.ULocale
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * The letters a language writes with, lowercased: ICU's main exemplar set for
- * its locale, which is CLDR's answer to "what does this alphabet contain".
- * German is a-z plus ä ö ü ß; English is a-z and nothing else, which is what
+ * The letters a Latin-script language writes with beyond a-z, lowercased, from
+ * [NativeLetterTable] (CLDR's exemplar sets, baked in because Android hides
+ * ICU's own accessor). German is ä ö ü ß; English has no entry, which is what
  * keeps [nativeLettersFirst] a no-op there.
  *
+ * Looked up by the full locale tag, then by any tag sharing its primary
+ * subtag, so a language registered as "de-AT" still finds German's letters.
  * Cached per tag because [currentLayout] asks on every rebuild of the grid.
- * Empty when ICU has nothing for the tag, and in plain JVM tests, where
- * android.icu is a stub that throws: an empty set leaves every key untouched.
  */
 internal object NativeLetters {
     private val cache = ConcurrentHashMap<String, Set<String>>()
 
     fun of(localeTag: String): Set<String> = cache.getOrPut(localeTag) {
-        runCatching {
-            LocaleData.getExemplarSet(ULocale.forLanguageTag(localeTag), 0)
-                .mapTo(HashSet()) { it.lowercase() }
-        }.getOrDefault(emptySet())
+        val primary = localeTag.substringBefore('-')
+        val letters = NativeLetterTable[localeTag]
+            ?: NativeLetterTable.entries.firstOrNull { it.key.substringBefore('-') == primary }?.value
+            ?: ""
+        letters.map { it.toString() }.toSet()
     }
 }
 

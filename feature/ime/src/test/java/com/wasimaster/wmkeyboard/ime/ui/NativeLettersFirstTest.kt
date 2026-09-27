@@ -10,13 +10,12 @@ import org.junit.Test
 
 /**
  * Discussion #382: on German, a hold on u typed 7, because the digit led the
- * popup and the umlaut sat one slide along. The exemplar sets here are CLDR's,
- * written out, since android.icu is a stub on the plain JVM.
+ * popup and the umlaut sat one slide along.
  */
 class NativeLettersFirstTest {
 
-    private val german = ('a'..'z').map { it.toString() }.toSet() + setOf("ä", "ö", "ü", "ß")
-    private val english = ('a'..'z').map { it.toString() }.toSet()
+    private val german = NativeLetters.of("de-DE")
+    private val english = NativeLetters.of("en-US")
 
     private fun qwertz(label: String): Key =
         BuiltInLayouts.GERMAN.compile(LayoutLayer.LETTERS).rows.flatten().first { it.label == label }
@@ -61,5 +60,13 @@ class NativeLettersFirstTest {
     fun `the keys of an ambiguous grid keep their keypad digit first`() {
         val key = Key("ABC", output = "a", letters = "abcä", longPress = listOf("2", "a", "b", "c", "ä"))
         assertSame(key, nativeLettersFirst(key, german))
+    }
+
+    @Test
+    fun `the table knows german and leaves english empty`() {
+        assertEquals(setOf("ä", "ö", "ü", "ß"), german)
+        assertEquals(emptySet<String>(), english)
+        // A regional tag the table does not list finds its language by subtag.
+        assertEquals(german, NativeLetters.of("de-CH"))
     }
 }
