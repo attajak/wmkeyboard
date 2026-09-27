@@ -149,6 +149,8 @@ import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -10519,7 +10521,8 @@ private fun KeyboardBody(
                         state = state,
                         onInsert = onScannedInsert,
                         onRequestPermission = onCameraPermissionRequest,
-                        onClose = { onPanelChange(PanelMode.OCR) },
+                        // Opened on a clip's picture (#371), back goes back to the clipboard.
+                        onClose = { onPanelChange(if (state.ocrImage != null) PanelMode.CLIPBOARD else PanelMode.OCR) },
                     )
                 } else {
                     onPanelChange(PanelMode.SNIPPETS)
@@ -23646,6 +23649,12 @@ internal fun ClipInfoPopup(
     onEdit: (() -> Unit)? = null,
     /** Deletes the clip; null while a swipe does that instead (#344). */
     onDelete: (() -> Unit)? = null,
+    /** Opens a bare-address clip in the browser; null for any other clip (#371). */
+    onOpenLink: (() -> Unit)? = null,
+    /** Shows an image clip full screen; null for any other clip (#371). */
+    onView: (() -> Unit)? = null,
+    /** Reads the text in an image clip; null for any other, or with the OCR tool off (#371). */
+    onExtractText: (() -> Unit)? = null,
     onDismiss: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -23717,6 +23726,36 @@ internal fun ClipInfoPopup(
                         Icon(Icons.Outlined.Edit, contentDescription = null)
                         Spacer(Modifier.width(6.dp))
                         Text(stringResource(R.string.ime_clip_edit))
+                    }
+                }
+                if (onOpenLink != null) {
+                    TextButton(
+                        onClick = onOpenLink,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.AutoMirrored.Outlined.OpenInNew, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.ime_clip_open_link))
+                    }
+                }
+                if (onView != null) {
+                    TextButton(
+                        onClick = onView,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.Outlined.Visibility, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.ime_clip_view_image))
+                    }
+                }
+                if (onExtractText != null) {
+                    TextButton(
+                        onClick = onExtractText,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.Outlined.TextFields, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.ime_clip_extract_text))
                     }
                 }
                 if (onSendSticker != null) {

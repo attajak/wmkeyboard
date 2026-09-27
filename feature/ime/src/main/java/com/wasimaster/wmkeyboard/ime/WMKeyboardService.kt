@@ -3823,7 +3823,7 @@ open class WMKeyboardService : InputMethodService() {
         store(VocabProgress.FILE_PATH)?.let { vocabProgress.attach(it) }
         clipboardStore = ClipboardStore(
             store("clipboard/history.json"),
-            imagesDir = store("clipboard/images"),
+            imagesDir = store(ClipImageViewer.IMAGES_DIR),
         )
         // The swapped-in store starts on the defaults; carry the user's limits
         // across, or a bigger history and a longer expiry than asked for hold
@@ -18744,6 +18744,8 @@ open class WMKeyboardService : InputMethodService() {
                 // Only the image search panel's camera button opens the
                 // camera for searching (#349); every other way in is for sending.
                 cameraSearchOnly = next == PanelMode.CAMERA && it.panel == PanelMode.IMAGE_SEARCH,
+                // Only a clip's Extract text sets this, after the change (#371).
+                ocrImage = null,
             )
         }
         // Leaving the panel ends the plugin session outright. Not paused, not
@@ -30098,6 +30100,33 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val removed = clipboardStore.detach(item.id) ?: return
+        offerClipUndo(listOf(removed))
+    }
+
+    /**
+     * The panel's clear button, after its question (#371): every unpinned clip
+     * goes, the pinned ones stay. With `undoDelete` on it is one delete of
+     * many clips, and the same Undo bar offers them all back.
+     */
+    fun onClipboardClearUnpinned() {
+        if (!isClipboardAccessible()) return
+        vibrate()
+        if (!_uiState.value.settings.clipboard.undoDelete) {
+            clipboardStore.clearUnpinned()
+            saveClipboardSoon()
+            _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
+            return
+        }
+        val removed = clipboardStore.detachUnpinned()
+        if (removed.isEmpty()) return
+        offerClipUndo(removed)
+    }
+
+    /**
+     * Saves the history without the [removed] clips and puts them on the Undo
+     * bar, joining any the bar already holds, for a few seconds.
+     */
+    private fun offerClipUndo(removed: List<com.wasimaster.wmkeyboard.core.clipboard.ClipItem>) {
         saveClipboardSoon()
         _uiState.update { state ->
             state.copy(
@@ -30112,6 +30141,13 @@ open class WMKeyboardService : InputMethodService() {
             clipUndoJob = null
             endClipUndo()
         }
+    }
+
+    /** The Undo bar swiped away (#371): its clips are gone for good now, not at the timeout. */
+    fun onClipboardUndoDismiss() {
+        clipUndoJob?.cancel()
+        clipUndoJob = null
+        endClipUndo()
     }
 
     /** The Undo bar's button: every clip it holds goes back where it was. */
@@ -30160,7 +30196,59 @@ open class WMKeyboardService : InputMethodService() {
         onEditCancel = ::onClipEditCancel,
         onViewToggle = ::onClipboardViewToggle,
         onUndoDelete = ::onClipboardUndoDelete,
+        onUndoDismiss = ::onClipboardUndoDismiss,
+        onClearUnpinned = ::onClipboardClearUnpinned,
+        onOpenLink = ::onClipboardOpenLink,
+        onViewImage = ::onClipboardViewImage,
+        onExtractText = ::onClipboardExtractText,
     )
+
+    /**
+     * Opens a link clip in the browser, from its press-and-hold popup (#371).
+     * Only a clip that is one bare web address: [ClipLinks.asUrl] takes nothing
+     * but http, https and www, so a copied `intent:` or `file:` never opens.
+     */
+    fun onClipboardOpenLink(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
+        if (!isClipboardAccessible() || !item.kind.isTextual || item.sensitive) return
+        val url = ClipLinks.asUrl(item.text) ?: return
+        vibrate()
+        val opened = runCatching {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }.isSuccess
+        if (!opened) toast(R.string.ime_selection_macro_no_app_toast)
+    }
+
+    /**
+     * Shows an image clip full screen, from its press-and-hold popup (#371).
+     * The viewer is the app's own, in the settings app's module, so it is
+     * started by name; it reads the file straight out of the history's folder.
+     */
+    fun onClipboardViewImage(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
+        if (!isClipboardAccessible() || item.kind != ClipKind.IMAGE) return
+        val path = item.imagePath?.takeIf { File(it).exists() } ?: return
+        vibrate()
+        runCatching {
+            startActivity(
+                Intent()
+                    .setClassName(packageName, ClipImageViewer.ACTIVITY)
+                    .putExtra(ClipImageViewer.EXTRA_PATH, path)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            )
+        }
+    }
+
+    /**
+     * Reads the text in an image clip (#371): the OCR panel opens on the
+     * picture instead of the camera, with its word chips, Copy and Insert as
+     * for a photo. Only while the OCR tool is on and this build has one.
+     */
+    fun onClipboardExtractText(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
+        if (!isClipboardAccessible() || item.kind != ClipKind.IMAGE) return
+        if (!clipOcrAvailable(_uiState.value.settings)) return
+        val path = item.imagePath?.takeIf { File(it).exists() } ?: return
+        onPanelChange(PanelMode.OCR)
+        _uiState.update { it.copy(ocrImage = path) }
+    }
 
     /** The panel's grid / list switch: the same setting the settings screen writes. */
     fun onClipboardViewToggle() {

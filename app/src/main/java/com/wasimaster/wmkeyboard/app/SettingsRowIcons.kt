@@ -232,6 +232,7 @@ import androidx.compose.material.icons.outlined.SwipeDown
 import androidx.compose.material.icons.outlined.SwipeDownAlt
 import androidx.compose.material.icons.outlined.SwipeUp
 import androidx.compose.material.icons.outlined.SystemUpdate
+import androidx.compose.material.icons.outlined.Tab
 import androidx.compose.material.icons.outlined.TabletAndroid
 import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.Terminal
@@ -1010,6 +1011,9 @@ internal object SettingsRowIcons {
         put(R.string.clipboard_undo_delete_title) { Icons.AutoMirrored.Outlined.Undo }
         put(R.string.clipboard_pinned_last_title) { Icons.Outlined.PushPin }
         put(R.string.clipboard_search_title) { Icons.Outlined.Search }
+        put(R.string.clipboard_clear_button_title) { Icons.Outlined.DeleteSweep }
+        put(R.string.clipboard_pinned_tabs_title) { Icons.Outlined.Tab }
+        put(R.string.clipboard_outline_pinned_title) { Icons.Outlined.BorderStyle }
         put(R.string.clipboard_password_paste_title) { Icons.Outlined.Password }
         put(R.string.clipboard_link_previews_title) { Icons.Outlined.Link }
         put(R.string.clipboard_entities_title) { Icons.Outlined.Tag }

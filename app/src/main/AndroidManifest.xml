@@ -817,6 +817,18 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <!-- An image clip, full screen: the clipboard panel's View (#371). The
+             keyboard starts it by name with FLAG_ACTIVITY_NEW_TASK, so it
+             carries taskAffinity="" for the reason the trampolines above do,
+             and back returns to the field rather than to the settings app. -->
+        <activity
+            android:name="com.wasimaster.wmkeyboard.app.ClipImageViewerActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- Invisible trampoline that runs ML Kit's full-screen document
              scanner for the doc-scan tool; the IME commits the scanned
              pages once the target app gets focus back. No noHistory here —

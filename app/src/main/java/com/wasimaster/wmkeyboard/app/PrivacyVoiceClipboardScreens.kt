@@ -611,10 +611,13 @@ internal fun ClipboardSettings(
             ) { scope.launch { repository.setClipboardMaxTextChars(steps[it.roundToInt().coerceIn(steps.indices)]) } }
         }
         item {
+            // The tabs put pinned clips on a tab of their own, where there is
+            // no end of the list left for them to go to.
             ToggleSetting(
                 R.string.clipboard_pinned_last_title,
                 stringResource(R.string.clipboard_pinned_last_subtitle),
                 settings.watch { it.clipboard.pinnedLast },
+                enabled = !settings.watch { it.clipboard.pinnedTabs },
                 default = SettingsDefaults.clipboard.pinnedLast,
             ) { scope.launch { repository.setClipboardPinnedLast(it) } }
         }
@@ -838,6 +841,23 @@ internal fun ClipboardSettings(
         }
         item {
             ToggleSetting(
+                R.string.clipboard_pinned_tabs_title,
+                stringResource(R.string.clipboard_pinned_tabs_subtitle),
+                settings.watch { it.clipboard.pinnedTabs },
+                info = stringResource(R.string.clipboard_pinned_tabs_info),
+                default = SettingsDefaults.clipboard.pinnedTabs,
+            ) { scope.launch { repository.setClipboardPinnedTabs(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.clipboard_outline_pinned_title,
+                stringResource(R.string.clipboard_outline_pinned_subtitle),
+                settings.watch { it.clipboard.outlinePinned },
+                default = SettingsDefaults.clipboard.outlinePinned,
+            ) { scope.launch { repository.setClipboardOutlinePinned(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.clipboard_swipe_delete_title,
                 stringResource(R.string.clipboard_swipe_delete_subtitle),
                 settings.watch { it.clipboard.swipeToDelete },
@@ -861,6 +881,15 @@ internal fun ClipboardSettings(
                 settings.watch { it.clipboard.search },
                 default = SettingsDefaults.clipboard.search,
             ) { scope.launch { repository.setClipboardSearch(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.clipboard_clear_button_title,
+                stringResource(R.string.clipboard_clear_button_subtitle),
+                settings.watch { it.clipboard.clearButton },
+                info = stringResource(R.string.clipboard_clear_button_info),
+                default = SettingsDefaults.clipboard.clearButton,
+            ) { scope.launch { repository.setClipboardClearButton(it) } }
         }
         item {
             ToggleSetting(

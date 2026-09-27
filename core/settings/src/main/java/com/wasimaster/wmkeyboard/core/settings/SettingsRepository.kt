@@ -5375,6 +5375,25 @@ data class ClipboardSettings(
      * pastes something other than what was copied. See [ClipMaxTextCharsSteps].
      */
     val maxTextChars: Int = 0,
+    /**
+     * A bin beside the panel's search bar that deletes every unpinned clip,
+     * after asking (#371). Pinned clips stay. Off by default: the panel has a
+     * bin on every clip, and one that empties the history is for the few who
+     * clear it often.
+     */
+    val clearButton: Boolean = false,
+    /**
+     * Split the history into two tabs, unpinned clips and pinned ones (#371),
+     * so the clips kept for good are not scrolled past on the way to a fresh
+     * copy. Off by default. A search looks through both tabs.
+     */
+    val pinnedTabs: Boolean = false,
+    /**
+     * Draw a thin accent border around every pinned clip (#371), so a pinned
+     * clip reads as one from the whole card and not only from its pin. Off by
+     * default.
+     */
+    val outlinePinned: Boolean = false,
 )
 
 /**
@@ -7883,6 +7902,9 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_GRID_COLUMNS = intPreferencesKey("clipboard_grid_columns")
         private val CLIPBOARD_TIME_LABEL = stringPreferencesKey("clipboard_time_label")
         private val CLIPBOARD_MAX_TEXT_CHARS = intPreferencesKey("clipboard_max_text_chars")
+        private val CLIPBOARD_CLEAR_BUTTON = booleanPreferencesKey("clipboard_clear_button")
+        private val CLIPBOARD_PINNED_TABS = booleanPreferencesKey("clipboard_pinned_tabs")
+        private val CLIPBOARD_OUTLINE_PINNED = booleanPreferencesKey("clipboard_outline_pinned")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
         // field" to "code box", but a user who turned it on meant the same
@@ -9308,6 +9330,9 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.clipboard.timeLabel,
             maxTextChars = p[CLIPBOARD_MAX_TEXT_CHARS]?.coerceAtLeast(0)
                 ?: defaults.clipboard.maxTextChars,
+            clearButton = p[CLIPBOARD_CLEAR_BUTTON] ?: defaults.clipboard.clearButton,
+            pinnedTabs = p[CLIPBOARD_PINNED_TABS] ?: defaults.clipboard.pinnedTabs,
+            outlinePinned = p[CLIPBOARD_OUTLINE_PINNED] ?: defaults.clipboard.outlinePinned,
         )
 
     private fun readOtp(p: Preferences, defaults: KeyboardSettings) =
@@ -14938,6 +14963,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardMaxTextChars(value: Int) =
         editPrefs { it[CLIPBOARD_MAX_TEXT_CHARS] = value.coerceAtLeast(0) }
+
+    suspend fun setClipboardClearButton(value: Boolean) =
+        editPrefs { it[CLIPBOARD_CLEAR_BUTTON] = value }
+
+    suspend fun setClipboardPinnedTabs(value: Boolean) =
+        editPrefs { it[CLIPBOARD_PINNED_TABS] = value }
+
+    suspend fun setClipboardOutlinePinned(value: Boolean) =
+        editPrefs { it[CLIPBOARD_OUTLINE_PINNED] = value }
 
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }
