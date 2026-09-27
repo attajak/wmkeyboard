@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
+    id("wmkeyboard.compose-metrics")
     alias(libs.plugins.kotlin.serialization)
     // Applied at the root with their versions; see build.gradle.kts there.
     id("org.jetbrains.kotlinx.kover")

@@ -9,6 +9,7 @@ import java.util.zip.ZipFile
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("wmkeyboard.compose-metrics")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
     alias(libs.plugins.licensee)

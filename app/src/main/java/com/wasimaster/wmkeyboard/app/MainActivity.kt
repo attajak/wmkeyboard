@@ -137,6 +137,7 @@ import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -168,6 +169,7 @@ import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.debug.DebugLog
+import com.wasimaster.wmkeyboard.core.perf.JankMonitor
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.ThemeMode
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
@@ -230,6 +232,9 @@ class MainActivity : FragmentActivity() {
     }
 
     private lateinit var repository: SettingsRepository
+
+    /** Per-frame jank logging, off unless `log.tag.WMJank` asks for it; see [JankMonitor]. */
+    private val jankMonitor = JankMonitor("settings")
 
     /**
      * The fingerprint gate. Built in [onCreate] and not lazily: the library
@@ -373,6 +378,16 @@ class MainActivity : FragmentActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         missingLink.value?.save(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        jankMonitor.start(window)
+    }
+
+    override fun onPause() {
+        jankMonitor.stop()
+        super.onPause()
     }
 
     /**
@@ -615,6 +630,10 @@ private fun SettingsNavHost(
     // tool's own page and not the row that opened it.
     var openedFrom by rememberSaveable { mutableStateOf<String?>(null) }
     val topRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    // Which screen a janky frame belongs to, for JankMonitor's log. A no-op
+    // unless a developer has switched that log on.
+    val rootView = LocalView.current
+    LaunchedEffect(topRoute) { JankMonitor.screen(rootView, topRoute.orEmpty()) }
     // A shared element is a motion and has no still version, so reduced
     // motion switches the flights off at the source, and so can the user
     // (Accessibility › Settings app › Screen transitions), for a slow phone.

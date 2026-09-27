@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
+    id("wmkeyboard.compose-metrics")
     alias(libs.plugins.kotlin.serialization)
     // Applied at the root with their versions; see build.gradle.kts there.
     id("org.jetbrains.kotlinx.kover")
@@ -69,17 +70,6 @@ android {
     // PublishFieldSelection, which reads :core:common's cut/copy/paste labels.
     // Costs an AAPT2 link per test run of this module; :app keeps it off.
     testOptions.unitTests.isIncludeAndroidResources = true
-}
-
-// Compose compiler skippability/stability report, on demand:
-//   ./gradlew :feature:ime:assembleFullDebug -PcomposeMetrics=true
-// then read build/compose/reports/*-composables.txt. Inert without the flag, so
-// ordinary builds neither slow down nor write the reports.
-if (providers.gradleProperty("composeMetrics").isPresent) {
-    composeCompiler {
-        metricsDestination.set(layout.buildDirectory.dir("compose/metrics"))
-        reportsDestination.set(layout.buildDirectory.dir("compose/reports"))
-    }
 }
 
 kotlin {

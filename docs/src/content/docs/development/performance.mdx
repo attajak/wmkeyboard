@@ -13,6 +13,18 @@ Everything here works on a release-like build. Release builds carry `<profileabl
 
 `adb shell dumpsys gfxinfo com.wasimaster.wmkeyboard framestats` prints the last 120 frames as CSV. Subtract `IntendedVsync` from `FrameCompleted` for a frame's own cost, and compare consecutive `IntendedVsync` values: a gap much wider than one refresh interval is dropped frames, which is what a stutter actually is. Run `reset` before the interaction and read the stats straight after.
 
+### Logging janky frames as they happen
+
+The keyboard window and the settings app both carry a JankStats monitor that stays detached until you ask for it. It works on any build:
+
+```sh
+adb shell setprop log.tag.WMJank DEBUG     # a summary each time the window goes away
+adb shell setprop log.tag.WMJank VERBOSE   # plus one line per janky frame
+adb logcat -s WMJank
+```
+
+The property is read each time the window comes back, so hide and show the keyboard (or leave and reopen the settings app) after setting it. A summary names the window, counts its frames and janky frames, and gives the worst one. Every janky frame is tagged with the screen that was showing: the keyboard's open panel, or the settings route. A stutter that only happens in the emoji panel says so. A frame counts as janky by JankStats' own measure, twice the display's refresh interval. `adb shell setprop log.tag.WMJank ""` turns it off again.
+
 ## Where did a frame go?
 
 ```sh
@@ -41,6 +53,23 @@ from slice where name like 'WM:%' group by name order by max_ms desc;
 ```
 
 Compose runs its measure and layout pass from `AndroidComposeView.dispatchDraw`. A screen that is slow to compose therefore shows up as one enormous `Record View#draw()`, not under measure or layout, which is the opposite of where you would look first.
+
+## Why does a composable recompose?
+
+```sh
+scripts/compose-reports.sh                     # feature/ime
+scripts/compose-reports.sh feature/ime app     # several modules
+```
+
+The script recompiles the modules you name with the Compose compiler's reports on. It then prints the compiler's counts and lists every composable that takes an *unstable* parameter, naming those parameters. The raw reports land in each module's `build/compose/reports` and `build/compose/metrics`. The switch behind the script works for any module that applies the Compose plugin:
+
+```sh
+./gradlew :feature:ime:compileFullDebugKotlin --rerun -PcomposeMetrics=true
+```
+
+`--rerun` is not optional. The report destinations are not task inputs, so an up-to-date or cached compile writes nothing.
+
+Read the parameter lists, not the `skippable` flag. Under strong skipping every restartable composable is reported skippable. What actually decides whether one skips is an unstable parameter, which is compared by instance, arriving as a new object on every recomposition. The keyboard service publishes a fresh `KeyboardUiState` for every keystroke. That is why the key composables take a resolved `KeyVisual` instead of the state, and the [architecture tests](/development/testing/#architecture-rules) fail if one of them starts taking it again.
 
 ## Macrobenchmarks and the baseline profile
 

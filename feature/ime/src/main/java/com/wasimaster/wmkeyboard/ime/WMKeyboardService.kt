@@ -329,6 +329,7 @@ import com.wasimaster.wmkeyboard.core.settings.HAND_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.settings.LEARNED_CORRECTIONS_FILE
 import com.wasimaster.wmkeyboard.core.settings.PHONETIC_SCRIPT_CHOICES_FILE
 import com.wasimaster.wmkeyboard.core.settings.TAP_MODEL_FILE
+import com.wasimaster.wmkeyboard.core.perf.JankMonitor
 import com.wasimaster.wmkeyboard.core.text.EmojiGraphemes
 import com.wasimaster.wmkeyboard.core.text.WordDelete
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
@@ -630,6 +631,9 @@ open class WMKeyboardService : InputMethodService() {
 
     /** The bubble over the caret while a drag moves it (discussion #303). */
     private val caretMagnifier = CaretMagnifierController(serviceScope)
+
+    /** Per-frame jank logging, off unless `log.tag.WMJank` asks for it; see [JankMonitor]. */
+    private val jankMonitor = JankMonitor("keyboard")
 
     /**
      * The one thread a [SuggestionEngine] pass may run on (issue #313).
@@ -2990,7 +2994,10 @@ open class WMKeyboardService : InputMethodService() {
         // scope is Main.immediate and every update comes from the main thread,
         // so this resumes inside the update rather than a frame later.
         serviceScope.launch {
-            _uiState.collect { if (windowOnScreen) _shownState.value = it }
+            _uiState.collect {
+                if (windowOnScreen) _shownState.value = it
+                jankMonitor.screen(it.panel.name)
+            }
         }
         // Marks the network activity log's rows made while incognito is on,
         // whether the switch or the field turned it on.
@@ -5916,6 +5923,7 @@ open class WMKeyboardService : InputMethodService() {
         super.onWindowShown()
         onScreenAgain()
         lifecycleOwner.onResume()
+        jankMonitor.start(window.window)
     }
 
     /**
@@ -5930,6 +5938,7 @@ open class WMKeyboardService : InputMethodService() {
         // composition stops being handed new state — see [_shownState].
         windowOnScreen = false
         lifecycleOwner.onStop()
+        jankMonitor.stop()
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {

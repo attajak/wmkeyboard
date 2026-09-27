@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
+    id("wmkeyboard.compose-metrics")
     alias(libs.plugins.kotlin.serialization)
     // Applied at the root with their versions; see build.gradle.kts there.
     id("org.jetbrains.kotlinx.kover")
@@ -61,6 +62,9 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
     implementation(libs.androidx.activity.compose)
+    // JankStats, behind a log property (JankMonitor): nothing attaches unless
+    // a developer turns it on.
+    implementation(libs.androidx.metrics.performance)
 
     testImplementation(libs.junit)
     // Compose's test rule on an Android runtime, so WmSlider can be driven with
