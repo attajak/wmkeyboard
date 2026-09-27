@@ -16846,6 +16846,32 @@ internal fun shiftedAlternate(key: Key): String? {
     return shifted.takeIf { it != base && it !in key.longPress }
 }
 
+/**
+ * Issue #408: [mark] when this letters grid has no question mark within one
+ * press or hold, so the period key should lead its popup with it; null when
+ * the grid already has one to hand.
+ *
+ * The built-in Latin grids hold ? under m. Most shipped layouts carried it
+ * only somewhere in the period key's popup behind … and the script's own
+ * punctuation — a hold, then a slide, for a mark every other sentence ends
+ * with. Persian had ؟ second there, behind the ellipsis.
+ *
+ * "To hand" is a key that types it, or a key whose first alternate it is:
+ * that entry is the corner hint and what a plain hold commits. The ASCII ? is
+ * only lifted when the layout offers it somewhere already, so a grid with no
+ * question mark at all (a kana pad, braille, Morse) is left as its author
+ * made it. A script with a mark of its own gets it regardless.
+ */
+private fun KeyboardLayout.questionMarkToLift(mark: String): String? {
+    val keys = rows.asSequence().flatten()
+    if (mark == "?" && keys.none { mark in it.longPress }) return null
+    val toHand = keys.any { key ->
+        (key.action == KeyAction.Text && (key.output ?: key.label) == mark) ||
+            key.longPress.firstOrNull() == mark
+    }
+    return mark.takeUnless { toHand }
+}
+
 internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     if (numericPadActive(state)) {
         state.layouts.numeric?.let { return it }
@@ -16934,6 +16960,9 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // nearest ASCII mark: Bengali's ঃ on the colon. Every layer, since that key
     // is on the symbols one.
     val punctuationAlternates = state.script.punctuationAlternates
+    // Issue #408: the question mark at the front of the period key's popup,
+    // on a letters grid that offers none within one hold.
+    val questionMark = if (lettersLayer) base.questionMarkToLift(state.script.questionMark) else null
     // Both emoji-key preferences exist because a phone's bottom row has no spare
     // slot, so one of the keys already there has to give it up. An expanded
     // tablet grid has a real emoji key of its own, and applying either here would
@@ -17029,7 +17058,8 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         clipboardKeys.isEmpty() && fieldKey == null && domainAlternates.isEmpty() &&
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
         !newlineAlternate && !emojiAlternate && spaceHoldKeys.isEmpty() &&
-        punctuationAlternates.isEmpty() && !kanaVariantKeys && nativeLetters.isEmpty()
+        punctuationAlternates.isEmpty() && !kanaVariantKeys && nativeLetters.isEmpty() &&
+        questionMark == null
     ) {
         return base
     }
@@ -17043,7 +17073,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             // period key outright or hang domain endings off it — the script's
             // own mark and the "." it displaces travel together either way. A
             // layout that already types the mark is left alone.
-            val key = if (
+            val stopped = if (
                 fullStop != null && role == KeyRole.Period &&
                 (rowKey.output ?: rowKey.label) == "."
             ) {
@@ -17054,6 +17084,15 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                 )
             } else {
                 rowKey
+            }
+            // Ahead of the "." the swap above moved there too: a question is
+            // asked far more often than a decimal or a file name is typed.
+            val key = if (questionMark != null && role == KeyRole.Period) {
+                stopped.copy(
+                    longPress = listOf(questionMark) + stopped.longPress.filterNot { it == questionMark },
+                )
+            } else {
+                stopped
             }
             var mapped = when {
                 // Field adaptation outranks the emoji-key preference: an
