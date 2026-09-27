@@ -432,6 +432,16 @@ private fun VoiceServerSettings(repository: SettingsRepository, settings: LiveSe
             ) { repository.setVoiceServerUrl(it) }
         }
         item {
+            // For a server on a route of its own (#388); blank keeps the
+            // endpoint the address implies.
+            TextFieldSetting(
+                label = stringResource(R.string.voice_server_path_label),
+                value = settings.watch { it.whisper.serverPath },
+                hint = stringResource(R.string.voice_server_path_hint),
+                default = SettingsDefaults.whisper.serverPath,
+            ) { repository.setVoiceServerPath(it) }
+        }
+        item {
             // No default model: speaches wants a model id, whisper.cpp ignores
             // the field, and a blank one lets each server pick its own.
             TextFieldSetting(
@@ -467,6 +477,7 @@ private fun VoiceServerSettings(repository: SettingsRepository, settings: LiveSe
         }
         item { VoiceServerTestRow(settings) }
     }
+    VoiceServerLanguages(repository, settings)
 }
 
 /**
@@ -499,7 +510,7 @@ private fun VoiceServerTestRow(settings: LiveSettings) {
                         FloatArray(com.wasimaster.wmkeyboard.core.voice.whisper.WhisperMel.SAMPLE_RATE),
                     )
                     com.wasimaster.wmkeyboard.core.tools.TranscriptionClient.transcribe(
-                        w.serverUrl, w.serverKey, w.serverModel, null, silence,
+                        w.serverUrl, w.serverKey, w.serverModel, null, silence, path = w.serverPath,
                     )
                 }
             }.fold(

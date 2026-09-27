@@ -264,6 +264,7 @@ import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
 import com.wasimaster.wmkeyboard.core.settings.interactiveTyping
 import com.wasimaster.wmkeyboard.core.settings.plainTyping
+import com.wasimaster.wmkeyboard.core.settings.serverFor
 import com.wasimaster.wmkeyboard.core.settings.restrictedToDirectBoot
 import com.wasimaster.wmkeyboard.core.settings.withoutModes
 import com.wasimaster.wmkeyboard.core.settings.PowerSavingSettings
@@ -19420,7 +19421,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val server = serverVoiceSelected()
-        if (server && _uiState.value.settings.whisper.serverUrl.isBlank()) {
+        if (server && _uiState.value.settings.whisper.serverFor(_uiState.value.language.id).url.isBlank()) {
             // The server engine is chosen but has no address: say so, with the
             // same way out the missing Whisper model gets.
             _uiState.update {
@@ -19958,13 +19959,16 @@ open class WMKeyboardService : InputMethodService() {
                         personal,
                         VoiceBias.PROMPT_WORD_LIMIT,
                     )
+                    // The language's own model or server, if it has one (#389).
+                    val target = server.serverFor(languageId)
                     TranscriptionClient.transcribe(
-                        server.serverUrl,
-                        server.serverKey,
-                        server.serverModel,
+                        target.url,
+                        target.key,
+                        target.model,
                         language,
                         WavEncoder.encode(pcm),
                         prompt = VoiceBias.serverPrompt(words, server.serverPrompt),
+                        path = target.path,
                     )
                 }
             }

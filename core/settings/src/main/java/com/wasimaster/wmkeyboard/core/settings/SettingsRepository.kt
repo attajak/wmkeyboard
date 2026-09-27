@@ -4491,6 +4491,35 @@ data class VoiceBarSettings(
     }
 }
 
+/**
+ * One language's own transcription settings (#389). With [url] blank it is the
+ * main server with a different [model]. With [url] filled in it is a server of
+ * its own, and nothing is borrowed from the main one: its key belongs to the
+ * main server and must not travel to another, and a model id means nothing to
+ * a server it was not named for.
+ */
+data class VoiceServerOverride(
+    val url: String = "",
+    val path: String = "",
+    val model: String = "",
+    val key: String = "",
+) {
+    fun isEmpty(): Boolean = url.isBlank() && path.isBlank() && model.isBlank() && key.isBlank()
+}
+
+/** Where one clip goes and what it asks for: the main server, or a language's own. */
+data class VoiceServerTarget(val url: String, val path: String, val model: String, val key: String)
+
+/** The server, route, model and key that dictation in [languageId] uses (#389). */
+fun WhisperSettings.serverFor(languageId: String): VoiceServerTarget {
+    val own = serverByLang[languageId]
+    return when {
+        own == null || own.isEmpty() -> VoiceServerTarget(serverUrl, serverPath, serverModel, serverKey)
+        own.url.isNotBlank() -> VoiceServerTarget(own.url, own.path, own.model, own.key)
+        else -> VoiceServerTarget(serverUrl, serverPath, own.model.ifBlank { serverModel }, serverKey)
+    }
+}
+
 /** The microphone survives typing: [VoiceBarSettings.TYPING_INTERACTIVE] or [VoiceBarSettings.TYPING_PLAIN]. */
 fun VoiceBarSettings.interactiveTyping(): Boolean =
     typingMode == VoiceBarSettings.TYPING_INTERACTIVE || typingMode == VoiceBarSettings.TYPING_PLAIN
@@ -4534,6 +4563,18 @@ data class WhisperSettings(
     val serverKey: String = "",
     /** The `model` field; blank leaves it out so the server uses its default. */
     val serverModel: String = "",
+    /**
+     * The server's own route, for one that does not answer on
+     * `/audio/transcriptions` (#388). Blank works the endpoint out from
+     * [serverUrl]; see `TranscriptionClient.endpoint`.
+     */
+    val serverPath: String = "",
+    /**
+     * Language id → a model or a whole other server for that language (#389).
+     * A language without an entry, or with an empty one, uses the fields
+     * above; [serverFor] says how the two combine.
+     */
+    val serverByLang: Map<String, VoiceServerOverride> = emptyMap(),
     /**
      * Send the active layout's language with each clip. Off lets the server
      * detect it, which suits people who dictate two languages on one layout.
@@ -7038,6 +7079,42 @@ private fun decodePerAppLayouts(raw: String): Map<String, String> =
         }
         .toMap()
 
+private val voiceServerMapSerializer =
+    MapSerializer(String.serializer(), MapSerializer(String.serializer(), String.serializer()))
+private val voiceServerKeySerializer = MapSerializer(String.serializer(), String.serializer())
+
+/** The per-language servers without their keys, as `{"lang": {"url": …, "path": …, "model": …}}`. */
+private fun encodeVoiceServerByLang(map: Map<String, VoiceServerOverride>): String =
+    Json.encodeToString(
+        voiceServerMapSerializer,
+        map.mapValues { (_, o) ->
+            buildMap {
+                if (o.url.isNotEmpty()) put("url", o.url)
+                if (o.path.isNotEmpty()) put("path", o.path)
+                if (o.model.isNotEmpty()) put("model", o.model)
+            }
+        },
+    )
+
+/** Only the per-language keys, as `{"lang": "key"}`; see VOICE_SERVER_KEY_BY_LANG. */
+private fun encodeVoiceServerKeyByLang(map: Map<String, VoiceServerOverride>): String =
+    Json.encodeToString(voiceServerKeySerializer, map.filterValues { it.key.isNotEmpty() }.mapValues { it.value.key })
+
+/** Null when neither half was ever written, so the default applies. */
+private fun decodeVoiceServerByLang(raw: String?, keysRaw: String?): Map<String, VoiceServerOverride>? {
+    if (raw == null && keysRaw == null) return null
+    val fields = raw?.let {
+        runCatching { Json.decodeFromString(voiceServerMapSerializer, it) }.getOrNull()
+    }.orEmpty()
+    val keys = keysRaw?.let {
+        runCatching { Json.decodeFromString(voiceServerKeySerializer, it) }.getOrNull()
+    }.orEmpty()
+    return (fields.keys + keys.keys).associateWith { lang ->
+        val f = fields[lang].orEmpty()
+        VoiceServerOverride(f["url"].orEmpty(), f["path"].orEmpty(), f["model"].orEmpty(), keys[lang].orEmpty())
+    }.filterValues { !it.isEmpty() }
+}
+
 /** Serializes the per-language Whisper model map to a compact `lang=modelId;...` string. */
 private fun encodeWhisperModelByLang(map: Map<String, String>): String =
     map.entries
@@ -7957,6 +8034,11 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_SERVER_URL = stringPreferencesKey("voice_server_url")
         private val VOICE_SERVER_KEY = stringPreferencesKey("voice_server_key")
         private val VOICE_SERVER_MODEL = stringPreferencesKey("voice_server_model")
+        private val VOICE_SERVER_PATH = stringPreferencesKey("voice_server_path")
+        private val VOICE_SERVER_BY_LANG = stringPreferencesKey("voice_server_by_lang")
+        // Kept apart from the map above so backups can leave the keys out
+        // (SettingsBackup.SECRET_KEYS) and still carry the rest.
+        private val VOICE_SERVER_KEY_BY_LANG = stringPreferencesKey("voice_server_key_by_lang")
         private val VOICE_SERVER_SEND_LANGUAGE = booleanPreferencesKey("voice_server_send_language")
         private val VOICE_BIAS_PERSONAL_WORDS = booleanPreferencesKey("voice_bias_personal_words")
         private val VOICE_BIAS_WORDS = stringPreferencesKey("voice_bias_words")
@@ -9682,6 +9764,9 @@ class SettingsRepository(private val context: Context) {
             serverUrl = p[VOICE_SERVER_URL] ?: defaults.whisper.serverUrl,
             serverKey = p[VOICE_SERVER_KEY] ?: defaults.whisper.serverKey,
             serverModel = p[VOICE_SERVER_MODEL] ?: defaults.whisper.serverModel,
+            serverPath = p[VOICE_SERVER_PATH] ?: defaults.whisper.serverPath,
+            serverByLang = decodeVoiceServerByLang(p[VOICE_SERVER_BY_LANG], p[VOICE_SERVER_KEY_BY_LANG])
+                ?: defaults.whisper.serverByLang,
             serverSendLanguage = p[VOICE_SERVER_SEND_LANGUAGE]
                 ?: defaults.whisper.serverSendLanguage,
             biasPersonalWords = p[VOICE_BIAS_PERSONAL_WORDS] ?: defaults.whisper.biasPersonalWords,
@@ -10689,6 +10774,28 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceServerModel(value: String) =
         editPrefs { it[VOICE_SERVER_MODEL] = value.trim() }
+
+    suspend fun setVoiceServerPath(value: String) =
+        editPrefs { it[VOICE_SERVER_PATH] = value.trim() }
+
+    /**
+     * Gives [languageId] its own model or server (#389), or drops the entry
+     * when [value] is empty so the language goes back to the main server.
+     */
+    suspend fun setVoiceServerForLanguage(languageId: String, value: VoiceServerOverride) =
+        editPrefs { prefs ->
+            val current = decodeVoiceServerByLang(prefs[VOICE_SERVER_BY_LANG], prefs[VOICE_SERVER_KEY_BY_LANG])
+                .orEmpty()
+            val clean = VoiceServerOverride(
+                url = value.url.trim().trimEnd('/'),
+                path = value.path.trim(),
+                model = value.model.trim(),
+                key = value.key.trim(),
+            )
+            val next = if (clean.isEmpty()) current - languageId else current + (languageId to clean)
+            prefs[VOICE_SERVER_BY_LANG] = encodeVoiceServerByLang(next)
+            prefs[VOICE_SERVER_KEY_BY_LANG] = encodeVoiceServerKeyByLang(next)
+        }
 
     suspend fun setVoiceServerSendLanguage(value: Boolean) =
         editPrefs { it[VOICE_SERVER_SEND_LANGUAGE] = value }
