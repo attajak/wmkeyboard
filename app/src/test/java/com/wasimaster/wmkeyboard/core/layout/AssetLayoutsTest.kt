@@ -244,6 +244,22 @@ class AssetLayoutsTest {
         assertTrue("u should not offer ó", keys["u"]?.longPress?.contains("ó") != true)
     }
 
+    /**
+     * #407: Persian is uncased, so shift carried nothing and the harakat were
+     * nowhere on the layout. It now carries the ISIRI 9147 shift plane.
+     */
+    @Test
+    fun `the persian layout puts the harakat and shadda on shift`() {
+        val file = layoutFiles.first { it.name == "fa_standard.${LayoutFile.FILE_EXTENSION}" }
+        val shifted = LayoutFile.decode(file.readText())!!.layout
+            .layers.getValue(LayoutLayer.LETTERS.key).rows.flatten()
+            .mapNotNull { it.shiftLabel }
+            .toSet()
+        for (mark in listOf("ْ", "ٌ", "ٍ", "ً", "ُ", "ِ", "َ", "ّ", "ٔ", "ٰ")) {
+            assertTrue("shift should reach U+%04X".format(mark[0].code), mark in shifted)
+        }
+    }
+
     @Test
     fun `asset layout ids are unique and never shadow a built-in`() {
         val builtInIds = BuiltInLayouts.all.mapTo(HashSet()) { it.id }
