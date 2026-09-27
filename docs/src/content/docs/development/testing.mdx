@@ -36,6 +36,16 @@ Almost all of it lives in one place:
 
 345 of 482 test files (about 7 in 10) sit in `app/src/test/`, and 12 of the 21 `core/*`/`feature/*` modules have no test source set at all. That's a leftover of how the codebase was split into modules rather than a rule anyone enforces. Tests mostly stayed where they were written. It also means `./gradlew unitTests` is the command you want almost all the time, since scoping to a single module rarely saves you much.
 
+## Coverage
+
+```sh
+./gradlew koverHtmlReportUnit     # build/reports/kover/htmlUnit/index.html
+./gradlew koverXmlReportUnit      # build/reports/kover/reportUnit.xml
+```
+
+[Kover](https://github.com/Kotlin/kotlinx-kover) runs the full-flavor debug unit tests of every module and merges them into one report. The merge is the point. Most tests live in `:app` and exercise `core/*` classes, so a single module's own report would say a library is barely tested when `:app` covers it thoroughly. Generated code (resource ids, `BuildConfig`, serializers, Compose's singletons) and `@Preview` functions are left out. Use the `Unit` tasks rather than the plain `koverHtmlReport`, which runs every variant's tests (lite, release, fast) over the same classes.
+
+
 ## Instrumented and Compose UI tests
 
 Some things can't be checked without a device or emulator: real Compose layout, and anything that leans on the platform's actual implementation of an API rather than the desktop JVM's. Those live under `src/androidTest/`, and only `app` has any, 14 files in total. Run them from Android Studio with a device or emulator attached (right-click the test class or the `androidTest` source set, then choose Run), or through Gradle's connected-device test task for the flavor you're building.

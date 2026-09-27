@@ -5,6 +5,17 @@ plugins {
     id("wmkeyboard.detekt")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    // Applied at the root with their versions; see build.gradle.kts there.
+    id("org.jetbrains.kotlinx.kover")
+    id("com.autonomousapps.dependency-analysis")
+}
+
+// Coverage for the root's merged report (`./gradlew koverHtmlReportUnit`):
+// this module's full-flavour debug unit tests.
+kover {
+    currentProject {
+        createVariant("unit") { add("fullDebug") }
+    }
 }
 
 // Same channel flag :app reads. It decides where the LiteRT-LM runtime lives:

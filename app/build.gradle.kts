@@ -11,6 +11,63 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.licensee)
+    // Applied at the root with their versions; see build.gradle.kts there.
+    id("org.jetbrains.kotlinx.kover")
+    id("com.autonomousapps.dependency-analysis")
+}
+
+// Coverage for the root's merged report (`./gradlew koverHtmlReportUnit`):
+// :app's own full-flavour unit tests, which are most of the project's.
+kover {
+    currentProject {
+        createVariant("unit") { add("fullIntlDebug") }
+    }
+}
+
+// Every library the APK ships, checked against the licences this project can
+// carry. A new dependency under anything else fails the build until someone
+// has read its licence and added it here, with the reason.
+//
+//   ./gradlew :app:licenseeAndroidFullIntlRelease   (and any other variant)
+//
+// Reports, including a JSON inventory of every artifact and its licence, are
+// written to build/reports/licensee/android<Variant>/.
+licensee {
+    allow("Apache-2.0")
+    allow("MIT")
+    allow("BSD-2-Clause")
+    allow("BSD-3-Clause")
+    allow("ISC")
+
+    // Licences their POMs name by URL rather than by SPDX id. Each read and
+    // found to be a permissive licence in the list above.
+    allowDependency("com.github.mwiede", "jsch", libs.versions.jsch.get()) {
+        because("BSD-3-Clause for JSch itself; JZlib is BSD-3-Clause and jBCrypt ISC (LICENSE*.txt in the repo)")
+    }
+    allowDependency("org.bouncycastle", "bcprov-jdk18on", libs.versions.bouncycastle.get()) {
+        because("the Bouncy Castle licence is the MIT licence, word for word")
+    }
+    allowDependency("org.luaj", "luaj-jse", libs.versions.luaj.get()) {
+        because("MIT, per luaj.sourceforge.net/license.txt")
+    }
+
+    // Google's own terms: ML Kit, Play services and Play Core. Allowed only
+    // outside the F-Droid channel, which must not ship them at all; there the
+    // allow list is the free one above and nothing else, so a Google binary
+    // that slipped into an F-Droid build fails it here, before F-Droid's
+    // scanner finds it.
+    if (!fdroidChannel) {
+        allowUrl("https://developers.google.com/ml-kit/terms") {
+            because("ML Kit, full flavour; bundled or through Play services")
+        }
+        allowUrl("https://developer.android.com/studio/terms.html") {
+            because("Play services (Drive sign-in, ML Kit's unbundled models) outside F-Droid")
+        }
+        allowUrl("https://developer.android.com/guide/playcore/license") {
+            because("Play Core (in-app updates, feature delivery), Play builds only")
+        }
+    }
 }
 
 // API keys for the network tools (GIF/sticker via KLIPY/GIPHY, web/image search via
