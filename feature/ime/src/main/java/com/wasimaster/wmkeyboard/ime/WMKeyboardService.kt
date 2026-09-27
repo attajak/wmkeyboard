@@ -536,6 +536,7 @@ import com.wasimaster.wmkeyboard.core.input.composer.CjkLearning
 import com.wasimaster.wmkeyboard.core.input.composer.CjkUserHistory
 import com.wasimaster.wmkeyboard.core.input.composer.JyutpingSyllables
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinSyllables
+import com.wasimaster.wmkeyboard.core.input.composer.Jianpin
 import com.wasimaster.wmkeyboard.core.input.composer.T9Pinyin
 import com.wasimaster.wmkeyboard.core.input.composer.ZhuyinSyllables
 import com.wasimaster.wmkeyboard.core.input.composer.CodeTableDictionary
@@ -3577,6 +3578,7 @@ open class WMKeyboardService : InputMethodService() {
                 pushRegister(settings)
                 // Chinese Pinyin options the composer reads at call time (it stays a
                 // parameter-less singleton). Pushed from the same block, like above.
+                CjkConfig.jianpin = settings.cjk.pinyinJianpin
                 CjkConfig.fuzzyPinyin = settings.cjk.pinyinFuzzy
                 CjkConfig.fuzzyPinyinPairs = settings.cjk.pinyinFuzzyPairs
                 CjkConfig.doublePinyin = settings.cjk.pinyinDoublePinyin
@@ -12724,6 +12726,9 @@ open class WMKeyboardService : InputMethodService() {
             }
             T9Pinyin.index = T9Pinyin.buildIndex(PinyinSyllables.valid)
             ZhuyinSyllables.table = ZhuyinSyllables.buildTable(PinyinSyllables.valid)
+            // Jianpin's initials are derived from the same inventory: `h` stands
+            // for every syllable the inventory starts with h.
+            Jianpin.index = Jianpin.build(PinyinSyllables.valid)
             loadedCjkPackToken = token
         }
     }

@@ -1536,6 +1536,19 @@ private fun CjkDictPackManager(
             stringResource(R.string.languages_cjk_pinyin_group_title),
             info = stringResource(R.string.languages_cjk_double_pinyin_info),
         ) {
+            // Jianpin (简拼): the first letter of each syllable is enough, so
+            // `wm` finds 我们. Every shipping Chinese IME does this by default
+            // (#405). Under a Double Pinyin scheme a syllable is always two
+            // keys, so the switch has nothing to abbreviate there.
+            item {
+                ToggleSetting(
+                    R.string.languages_cjk_jianpin_title,
+                    stringResource(R.string.languages_cjk_jianpin_subtitle),
+                    settings.watch { it.cjk.pinyinJianpin },
+                    info = stringResource(R.string.languages_cjk_jianpin_info),
+                    default = SettingsDefaults.cjk.pinyinJianpin,
+                ) { on -> scope.launch { repository.setPinyinJianpin(on) } }
+            }
             item {
                 ToggleSetting(
                     R.string.languages_cjk_fuzzy_title,

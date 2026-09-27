@@ -115,6 +115,7 @@
     <string name="search_kw_langemoji_emoji_skin_tone">fitzpatrick diversity complexion</string>
     <string name="search_kw_langemoji_emoji_sticker">sticker png</string>
     <string name="search_kw_langemoji_lang_os_switcher">ime subtype</string>
+    <string name="search_kw_languages_cjk_jianpin">mandarin abbreviated pinyin initials shorthand 简拼</string>
     <string name="search_kw_languages_cjk_fuzzy">mandarin putonghua</string>
     <string name="search_kw_languages_cjk_lazy">cantonese jyutping</string>
     <string name="search_kw_languages_cjk_full_width_space">japanese chinese zenkaku ideographic double wide u3000</string>

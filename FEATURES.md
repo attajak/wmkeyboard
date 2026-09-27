@@ -886,6 +886,9 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Double Pinyin — 5 schemes: Microsoft, Sogou, Xiaohe (小鹤), Ziranma, Pinyin++
     - Validity-filtered translation — An ambiguous final key resolves to whichever combination forms a real syllable
     - Apostrophes skipped, not paired — Otherwise one stray apostrophe desyncs the parity of every syllable after it
+  - Jianpin 简拼 — a bare initial is a syllable unit: `wm` → 我们, `zgrm` → 中国人民, mixed `haod` → 好的; z/c/s cover zh/ch/sh, a typed digraph reads both as one initial and as two (`sh` → 是 and 上海)
+    - No second index — Initials are per-unit option lists resolved against the sorted pinyin table by prefix range, the same path T9 and fuzzy use
+    - Exact over abbreviated — A syllable typed in full is never widened; a/e/o rank their exact reading first; a phrase covering the buffer beats a stitch
   - Fuzzy Pinyin — zh/z, ch/c, sh/s, n/l, r/l, f/h initials and an/ang, en/eng, in/ing, ian/iang, uan/uang finals
     - Ranking signal, not a filter — Two variants per syllable behind an ln(0.15) penalty, so an exact match only loses to a much likelier fuzzy word
     - Validity-filtered expansion — Only real syllables are ever generated

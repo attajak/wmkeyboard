@@ -4275,6 +4275,12 @@ data class RateSourceSettings(
 )
 
 data class CjkSettings(
+    /**
+     * Chinese: Jianpin (简拼), a bare initial standing for any syllable that
+     * starts with it, so `wm` finds 我们. On by default, as in every shipping
+     * Chinese IME; it widens matching rather than triggering anything.
+     */
+    val pinyinJianpin: Boolean = true,
     /** Chinese: treat confusable pinyin initials/finals as equivalent (zh↔z, an↔ang…). */
     val pinyinFuzzy: Boolean = false,
     /**
@@ -7830,6 +7836,7 @@ class SettingsRepository(private val context: Context) {
          * in. Never written again.
          */
         private val CONJUNCT_BACKSPACE = booleanPreferencesKey("conjunct_backspace")
+        private val PINYIN_JIANPIN = booleanPreferencesKey("pinyin_jianpin")
         private val PINYIN_FUZZY = booleanPreferencesKey("pinyin_fuzzy")
         private val PINYIN_FUZZY_PAIRS = stringSetPreferencesKey("pinyin_fuzzy_pairs")
         private val PINYIN_DOUBLE_PINYIN = stringPreferencesKey("pinyin_double_pinyin")
@@ -9260,6 +9267,7 @@ class SettingsRepository(private val context: Context) {
 
     private fun readCjk(p: Preferences, defaults: KeyboardSettings) =
         CjkSettings(
+            pinyinJianpin = p[PINYIN_JIANPIN] ?: defaults.cjk.pinyinJianpin,
             pinyinFuzzy = p[PINYIN_FUZZY] ?: defaults.cjk.pinyinFuzzy,
             // Unknown ids are dropped rather than kept: a pair removed in
             // a later build must not sit in the set forever, and the
@@ -14759,6 +14767,9 @@ class SettingsRepository(private val context: Context) {
             .filter { ScriptRegistry[it.script].composer == ComposerType.INDIC_CLUSTER }
             .mapTo(mutableSetOf()) { it.id }
     }
+
+    suspend fun setPinyinJianpin(value: Boolean) =
+        editPrefs { it[PINYIN_JIANPIN] = value }
 
     suspend fun setPinyinFuzzy(value: Boolean) =
         editPrefs { it[PINYIN_FUZZY] = value }

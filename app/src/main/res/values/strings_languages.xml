@@ -369,6 +369,12 @@
          as it is. -->
     <string name="languages_cjk_full_width_space_subtitle">The space bar types a full-width space [　]</string>
     <string name="languages_cjk_full_width_space_info">Japanese and Chinese text is spaced with the ideographic space (U+3000), which is as wide as one character. With this on, the space bar types it instead of the narrow space used between words in other languages. A space pressed while you are still typing a reading picks a candidate as before, and only a press with nothing waiting to convert types a space.</string>
+    <!-- Jianpin (简拼) is the standard name for abbreviated Pinyin, where a
+         syllable is typed as its first letter only. Keep the Chinese in the
+         title. The examples in the subtitle are Pinyin and stay as they are. -->
+    <string name="languages_cjk_jianpin_title">Jianpin (简拼)</string>
+    <string name="languages_cjk_jianpin_subtitle">Type only the first letter of a syllable: wm finds 我们, zg finds 中国</string>
+    <string name="languages_cjk_jianpin_info">A letter that is not a whole syllable stands for every syllable that starts with it, so wm finds 我们 and haod finds 好的. Each letter is one syllable: hd means h… plus d…. A syllable that you type in full is matched exactly and ranks first. The letters z, c and s also cover zh, ch and sh. A Double Pinyin scheme does not use this, because every syllable is exactly two keys there.</string>
     <string name="languages_cjk_fuzzy_title">Fuzzy Pinyin</string>
     <!-- Only "Match confusable sounds" needs translation. The rest is Pinyin
          spelling and stays as it is. -->
