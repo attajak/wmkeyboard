@@ -16644,6 +16644,8 @@ internal fun rememberCurrentLayout(state: KeyboardUiState): KeyboardLayout = rem
     // Issue #340: only ever true on a board with a key that becomes 小゛゜, so
     // no other board rebuilds on it.
     state.kanaVariantReady,
+    // Discussion #382: whose letters lead the long-press popups.
+    state.language.localeTag,
 ) {
     currentLayout(state)
 }
@@ -16789,6 +16791,17 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // A43: merge the full accent set into each Latin letter's long-press popup.
     val allAccents = state.settings.layoutBehavior.showAllPopupKeys &&
         state.layoutMode == LayoutMode.LETTERS && !state.composer.isClusterShaping
+    // Discussion #382: the language's own letters ahead of the digit or symbol
+    // hint, so a hold on u types ü on German. Empty — and so a no-op — for a
+    // language whose alphabet is a-z, and off the letters layer.
+    val nativeLetters =
+        if (state.settings.layoutBehavior.nativeLettersFirst && lettersLayer &&
+            !state.composer.isClusterShaping
+        ) {
+            NativeLetters.of(state.language.localeTag)
+        } else {
+            emptySet()
+        }
     // Issue #108: each letter key's shifted form joins its popup, so a capital
     // can be typed from a hold — including from the hold a layer peek opens,
     // where the shift key is on the layer the finger has left behind. Every
@@ -16841,7 +16854,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         clipboardKeys.isEmpty() && fieldKey == null && domainAlternates.isEmpty() &&
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
         !newlineAlternate && !emojiAlternate && spaceHoldKeys.isEmpty() &&
-        punctuationAlternates.isEmpty() && !kanaVariantKeys
+        punctuationAlternates.isEmpty() && !kanaVariantKeys && nativeLetters.isEmpty()
     ) {
         return base
     }
@@ -16932,6 +16945,9 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                     }
                 }
             }
+            // After the accent merge, so an umlaut that pass added moves up too,
+            // and before the capital below, which belongs at the end.
+            mapped = nativeLettersFirst(mapped, nativeLetters)
             // Issue #108: the shifted form last of all, so it sits after the
             // accents and after whatever the layout itself listed — the first
             // entry is what a plain hold-and-release commits, and that has

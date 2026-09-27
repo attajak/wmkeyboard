@@ -6350,6 +6350,15 @@ data class LayoutBehaviorSettings(
      */
     val showAllPopupKeys: Boolean = false,
     /**
+     * Lift the letters of the typing language ahead of the digit or symbol that
+     * leads a key's long-press popup: on German QWERTZ a hold on `u` gives `ü`
+     * rather than `7`, and `ü` is the corner hint (discussion #382). Which
+     * letters count comes from the language's CLDR exemplar set, so English,
+     * whose alphabet is a-z, keeps its digits exactly as before. On by default:
+     * the umlaut is the character a German speaker holds `u` for.
+     */
+    val nativeLettersFirst: Boolean = true,
+    /**
      * Add each letter key's shifted form to its long-press popup — `A` under
      * `a` — so a capital can be typed without arming shift.
      *
@@ -7653,6 +7662,7 @@ class SettingsRepository(private val context: Context) {
         private val SPLIT_ONLY_LARGE = booleanPreferencesKey("split_only_large_screens")
         private val SHIFT_CAPS_LOCK_MS = intPreferencesKey("shift_caps_lock_ms")
         private val SHOW_ALL_POPUP_KEYS = booleanPreferencesKey("show_all_popup_keys")
+        private val NATIVE_LETTERS_FIRST = booleanPreferencesKey("native_letters_first")
         private val SHIFTED_POPUP_KEYS = booleanPreferencesKey("shifted_popup_keys")
         private val CURRENCY_KEYS = stringPreferencesKey("currency_keys")
         private val SPACE_HOLD_KEYS = stringPreferencesKey("space_hold_keys")
@@ -9611,6 +9621,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.layoutBehavior.splitOnlyOnLargeScreens,
             shiftCapsLockMs = p[SHIFT_CAPS_LOCK_MS] ?: defaults.layoutBehavior.shiftCapsLockMs,
             showAllPopupKeys = p[SHOW_ALL_POPUP_KEYS] ?: defaults.layoutBehavior.showAllPopupKeys,
+            nativeLettersFirst = p[NATIVE_LETTERS_FIRST]
+                ?: defaults.layoutBehavior.nativeLettersFirst,
             shiftedPopupKeys = p[SHIFTED_POPUP_KEYS]
                 ?: defaults.layoutBehavior.shiftedPopupKeys,
             currencyKeys = p[CURRENCY_KEYS]
@@ -13818,6 +13830,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setShowAllPopupKeys(value: Boolean) =
         editPrefs { it[SHOW_ALL_POPUP_KEYS] = value }
+
+    suspend fun setNativeLettersFirst(value: Boolean) =
+        editPrefs { it[NATIVE_LETTERS_FIRST] = value }
 
     suspend fun setShiftedPopupKeys(value: Boolean) =
         editPrefs { it[SHIFTED_POPUP_KEYS] = value }

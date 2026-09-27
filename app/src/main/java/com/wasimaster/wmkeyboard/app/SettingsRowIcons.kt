@@ -553,6 +553,7 @@ internal object SettingsRowIcons {
         put(R.string.keypress_caps_lock_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.keypress_long_press_hints_title) { Icons.Outlined.Lightbulb }
         put(R.string.keypress_all_accents_title) { Icons.Outlined.Translate }
+        put(R.string.keypress_native_letters_title) { Icons.Outlined.Abc }
         put(R.string.keypress_shifted_popup_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.keypress_symbols_numpad_title) { Icons.Outlined.Dialpad }
         put(R.string.keypress_enter_emoji_title) { Icons.Outlined.EmojiEmotions }
