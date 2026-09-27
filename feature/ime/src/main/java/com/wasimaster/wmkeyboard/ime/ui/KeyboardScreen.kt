@@ -405,6 +405,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyPopupSettings
 import com.wasimaster.wmkeyboard.core.settings.KeyRepeatSettings
 import com.wasimaster.wmkeyboard.core.settings.TextEditingSettings
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
+import com.wasimaster.wmkeyboard.core.settings.ArrowKey
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.OctopusPlacement
 import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
@@ -15482,6 +15483,20 @@ private fun KeyRows(
                     )
                 }
             }
+            if (arrowRowShown(state)) {
+                ArrowKeyRow(
+                    state = gridState,
+                    layout = layout,
+                    palette = palette,
+                    keyPreview = keyPreview,
+                    onKey = keyTapOnKey,
+                    onText = stampedOnText,
+                    onCursorMove = onCursorMove,
+                    onLayoutSelect = onLayoutSelect,
+                    onKeyPositioned = onKeyPositioned,
+                    onBurst = onBurst,
+                )
+            }
         }
 
         // The theme's stickers, laid over the keys and under the transient
@@ -15768,6 +15783,63 @@ private fun rememberExtraRow(state: KeyboardUiState, fillRow: List<Key>): List<K
         }.withOtherNumerals(otherDigits)
         if (tabletRow) base.expandNumberRowForTablet() else base
     }
+}
+
+/**
+ * The arrow row under the body (issue #369): the four caret keys, in the
+ * order the user set, each a `SendKey(DPAD_*)` that repeats while held.
+ *
+ * Laid out against its own key count the way the digit row is, so the four
+ * keys share the full width whatever the grid's pitch. Its own function for
+ * the same ART reason as [rememberExtraRow]: [KeyRows] sits near the size
+ * above which ART compiles nothing.
+ */
+@Composable
+private fun ArrowKeyRow(
+    state: KeyboardUiState,
+    layout: KeyboardLayout,
+    palette: KeyPalette,
+    keyPreview: KeyPreviewState,
+    onKey: (Key) -> Unit,
+    onText: (String) -> Unit,
+    onCursorMove: (Int) -> Unit,
+    onLayoutSelect: (String) -> Unit,
+    onKeyPositioned: (Key, LayoutCoordinates) -> Unit,
+    onBurst: ((Rect, String?) -> Unit)?,
+) {
+    val settings = state.settings
+    val split = settings.splitKeyboard
+    val order = settings.layoutBehavior.arrowRowOrder
+    val row = remember(order, layout, palette, settings, state.shiftState, state.modifiers) {
+        val keys = order.map(::arrowRowKey)
+        keyRowVisual(
+            keys, split, settings.splitGapPercent, settings.layoutBehavior.splitSpacebar,
+            keys.size.toFloat(), settings.numberRowHeightDp, state, palette,
+            layout.appearance.drawnFontScale(),
+        )
+    }
+    KeyRow(
+        row = row,
+        settings = settings,
+        split = split,
+        numericField = state.fieldKind.isNumericPad,
+        layoutId = state.layoutId,
+        keyPreview = keyPreview,
+        onKey = onKey,
+        onText = onText,
+        onCursorMove = onCursorMove,
+        onLayoutSelect = onLayoutSelect,
+        onKeyPositioned = onKeyPositioned,
+        onBurst = onBurst,
+    )
+}
+
+/** The key [arrow] stands for on the arrow row. */
+fun arrowRowKey(arrow: ArrowKey): Key = when (arrow) {
+    ArrowKey.LEFT -> Key("←", action = KeyAction.SendKey(KeyEvent.KEYCODE_DPAD_LEFT), repeatOnHold = true)
+    ArrowKey.UP -> Key("↑", action = KeyAction.SendKey(KeyEvent.KEYCODE_DPAD_UP), repeatOnHold = true)
+    ArrowKey.DOWN -> Key("↓", action = KeyAction.SendKey(KeyEvent.KEYCODE_DPAD_DOWN), repeatOnHold = true)
+    ArrowKey.RIGHT -> Key("→", action = KeyAction.SendKey(KeyEvent.KEYCODE_DPAD_RIGHT), repeatOnHold = true)
 }
 
 /**
@@ -17690,6 +17762,14 @@ internal fun numberRowShown(state: KeyboardUiState): Boolean =
             (state.layoutMode != LayoutMode.SYMBOLS &&
                 state.layoutMode != LayoutMode.SYMBOLS_SHIFTED))
 
+/**
+ * Whether the arrow row (issue #369) is drawn under the current layer. Shared
+ * by the render loop and [keyRowsHeight] for the same reason as
+ * [numberRowShown]. A secondary layout is left exactly as its author built it.
+ */
+internal fun arrowRowShown(state: KeyboardUiState): Boolean =
+    state.settings.layoutBehavior.arrowRow && state.layoutMode != LayoutMode.SECONDARY
+
 // ---- what is on screen: one answer, read by the renderer and the service ----
 //
 // The physical keyboard's hint badges pair a key with the button under it, and
@@ -17948,6 +18028,10 @@ internal fun keyRowsHeight(state: KeyboardUiState): Dp {
     }
     height += KeyRowsPadVertical * 2
     if (numberRowShown(state)) {
+        height += settings.numberRowHeightDp.dp + keyGapV(settings) * 2
+    }
+    // The arrow row borrows the digit row's height, see [ArrowKeyRow].
+    if (arrowRowShown(state)) {
         height += settings.numberRowHeightDp.dp + keyGapV(settings) * 2
     }
     // One lane per reserved row, which is what the render loop draws: a lane

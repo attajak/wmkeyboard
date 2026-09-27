@@ -6309,6 +6309,15 @@ data class LayoutBehaviorSettings(
      */
     val numberRowInSymbols: Boolean = true,
     /**
+     * A row of the four arrow keys under the keyboard (issue #369), for moving
+     * the caret without a toolbar tool or a spacebar drag. Off by default. The
+     * row takes the number row's height, so the resize handle and one-handed
+     * mode scale it with everything else.
+     */
+    val arrowRow: Boolean = false,
+    /** The order [arrowRow] draws its keys in, left to right. */
+    val arrowRowOrder: List<ArrowKey> = DefaultArrowRowOrder,
+    /**
      * Height of the bottom row (space / enter), in dp, independent of the other
      * keys' [KeyboardSettings.keyHeightDp]. 0 means "follow the key height" — the
      * default, so the row is unchanged until asked. Raise it for a fatter,
@@ -7659,6 +7668,8 @@ class SettingsRepository(private val context: Context) {
         private val CUSTOM_LAYOUT_TOOL = stringPreferencesKey("custom_layout_tool")
         private val NUMBER_ROW_SHIFT_SYMBOLS = booleanPreferencesKey("number_row_shift_symbols")
         private val NUMBER_ROW_IN_SYMBOLS = booleanPreferencesKey("number_row_in_symbols")
+        private val ARROW_ROW = booleanPreferencesKey("arrow_row")
+        private val ARROW_ROW_ORDER = stringPreferencesKey("arrow_row_order")
         private val BOTTOM_ROW_HEIGHT = intPreferencesKey("bottom_row_height")
         // Legacy, read-only (issue #41): the one symmetric pad. Still read so an
         // upgrade keeps the padding it had; never written again.
@@ -9618,6 +9629,9 @@ class SettingsRepository(private val context: Context) {
                 p[SHIFT_ENTER_NEWLINE] ?: defaults.layoutBehavior.shiftEnterNewline,
             numberRowInSymbols =
                 p[NUMBER_ROW_IN_SYMBOLS] ?: defaults.layoutBehavior.numberRowInSymbols,
+            arrowRow = p[ARROW_ROW] ?: defaults.layoutBehavior.arrowRow,
+            arrowRowOrder = p[ARROW_ROW_ORDER]?.let(::decodeArrowRowOrder)
+                ?: defaults.layoutBehavior.arrowRowOrder,
             bottomRowHeightDp =
                 p[BOTTOM_ROW_HEIGHT] ?: defaults.layoutBehavior.bottomRowHeightDp,
             sidePadLeftScale = p[SIDE_PAD_LEFT_SCALE] ?: p[SIDE_PAD_SCALE]
@@ -13713,6 +13727,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setNumberRowInSymbols(value: Boolean) =
         editPrefs { it[NUMBER_ROW_IN_SYMBOLS] = value }
+
+    suspend fun setArrowRow(value: Boolean) =
+        editPrefs { it[ARROW_ROW] = value }
+
+    suspend fun setArrowRowOrder(value: List<ArrowKey>) =
+        editPrefs { it[ARROW_ROW_ORDER] = encodeArrowRowOrder(value) }
 
     suspend fun setBottomRowHeightDp(value: Int) =
         editPrefs { it[BOTTOM_ROW_HEIGHT] = value.coerceIn(0, BottomRowHeightRange.last) }
