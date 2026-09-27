@@ -54,7 +54,7 @@ Tap, hold-to-repeat, and the delete swipe are one state machine on <KeyCap>⌫</
 | Lift after dragging left | Backspace | Deletes everything the swipe highlighted | (same) |
 | Drag right mid-swipe | Backspace | Re-anchors instead of undeleting, so the next leftward word costs full travel again | Show what you will delete (Off) |
 | Hold still | Either delete key | Repeats a whole word per tick instead of a character, at the word interval | Holding delete clears words · Word delete interval (Off · 140 ms) |
-| Tap | Forward delete | Deletes one character after the cursor | None |
+| Tap | Forward delete | Deletes the character after the cursor, with its marks and any emoji parts | None |
 | Drag right past a small slop | Forward delete | Cancels the repeat and takes a word or a character after the cursor per step | Swipe on forward delete · Swipe deletes (On · Words) |
 | Drag left mid-swipe | Forward delete | Gives back one step of the highlight per step of travel | Show what you will delete (On) |
 | Lift after dragging right | Forward delete | Deletes everything the swipe highlighted | (same) |

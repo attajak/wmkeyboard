@@ -331,6 +331,7 @@ import com.wasimaster.wmkeyboard.core.settings.PHONETIC_SCRIPT_CHOICES_FILE
 import com.wasimaster.wmkeyboard.core.settings.TAP_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.perf.JankMonitor
 import com.wasimaster.wmkeyboard.core.text.EmojiGraphemes
+import com.wasimaster.wmkeyboard.core.text.Graphemes
 import com.wasimaster.wmkeyboard.core.text.WordDelete
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
 import com.wasimaster.wmkeyboard.core.tools.BraveSearchClient
@@ -8882,9 +8883,11 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * How much of [before] one character-sized delete takes: a whole
      * multi-code-point emoji (☠️, 👍🏽, 👨‍👩‍👧) rather than a piece of one, a
-     * whole Bengali-style conjunct where the language asks for it, a surrogate
-     * pair rather than half of one, and otherwise a single code unit. 0 for
-     * empty text.
+     * whole Bengali-style conjunct where the language asks for it, and
+     * otherwise [Graphemes.backspaceLength] — one code point, so a surrogate
+     * pair is never halved and a typed accent or harakah comes off on its own,
+     * but an invisible part (a variation selector, the LF of CR LF, a Hangul
+     * jamo) together with what it belongs to. 0 for empty text.
      *
      * Shared by the backspace key and the character-mode backspace swipe, so
      * the two cannot disagree about what one character is.
@@ -8897,9 +8900,7 @@ open class WMKeyboardService : InputMethodService() {
             emojiLength > 0 -> emojiLength
             state.language.id in state.settings.conjunctBackspaceLanguages ->
                 state.composer.deleteLength(before).coerceAtLeast(1)
-            before.length >= 2 &&
-                Character.isSurrogatePair(before[before.length - 2], before[before.length - 1]) -> 2
-            else -> 1
+            else -> Graphemes.backspaceLength(before)
         }
     }
 
@@ -9357,7 +9358,7 @@ open class WMKeyboardService : InputMethodService() {
         // same way backspace's lookback does.
         val after = ic.getTextAfterCursor(64, 0)
         if (after.isNullOrEmpty()) return
-        val forward = EmojiGraphemes.forwardDeleteLength(after).coerceAtLeast(1)
+        val forward = Graphemes.firstLength(after).coerceAtLeast(1)
         // Mirrored for the same reason backspace mirrors its own deletions:
         // a caret parked inside a word is being followed, and an edit the
         // mirror never heard about leaves it a character behind the field.
@@ -10088,7 +10089,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             val step = when {
                 deleteSwipeForward && byWord -> WordDelete.lengthAfter(rest)
-                deleteSwipeForward -> EmojiGraphemes.forwardDeleteLength(rest).coerceAtLeast(1)
+                deleteSwipeForward -> Graphemes.firstLength(rest).coerceAtLeast(1)
                 byWord -> WordDelete.lengthBefore(rest)
                 else -> charDeleteLength(rest)
             }
