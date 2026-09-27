@@ -440,7 +440,8 @@ private fun ClipboardListField(
             }
         }
         ClipClearQuestion(
-            count = if (session.confirmingClear) session.unpinnedCount else null,
+            // Not over the search's few rows: the bin that asked is not drawn there.
+            count = if (session.confirmingClear && !state.clipboardSearchActive) session.unpinnedCount else null,
             reduceMotion = state.settings.reduceMotion,
             onCancel = { session.clearAsking.value = false },
             onDelete = {
