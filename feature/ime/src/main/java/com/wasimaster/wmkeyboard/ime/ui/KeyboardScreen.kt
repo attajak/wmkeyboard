@@ -12584,6 +12584,69 @@ internal class ChordDrag {
 }
 
 /**
+ * A shift key held down while other fingers type (issue #367): every letter
+ * tapped under it comes out a capital, and letting go puts the board back the
+ * way it was, the way a hardware shift and Gboard's both behave.
+ *
+ * Written by the chord loop in [KeyRows], which sees the shift finger go down
+ * and come up, and read by [route], which every key the grid draws commits
+ * through. Plain fields rather than snapshot state: nothing draws from them,
+ * and the chord loop and the key handlers run on the same thread.
+ *
+ * The board's [KeyboardUiState.shiftState] is never armed for this, for the
+ * reasons [shiftChordKey] gives; a letter takes its capital as its own output,
+ * so it keeps its composing buffer, its suggestions and its learning.
+ */
+internal class ShiftHold {
+    /** A finger is on shift, so a letter tapped now types as a capital. */
+    var held = false
+        private set
+
+    /** Something was typed under the held shift, which spends its own press. */
+    var typed = false
+        private set
+
+    /**
+     * The shift press the held key's long press fired, kept back until the
+     * lift says whether it was a hold to type under or a slow tap of shift.
+     */
+    var deferred: Key? = null
+        private set
+
+    fun begin() {
+        held = true
+        typed = false
+        deferred = null
+    }
+
+    fun end() {
+        held = false
+        typed = false
+        deferred = null
+    }
+
+    /**
+     * What a key tapped now commits: [key] itself while no shift is held, its
+     * capital while one is, and null — nothing yet — for the held shift's own
+     * long press, which the lift fires later if nothing was typed under it.
+     *
+     * Only text keys change. Space, backspace and enter under a held shift are
+     * the keys themselves, as they are on the stock keyboards: a Shift+Enter
+     * chord is the drag off shift's job, and a held shift that turned a space
+     * into a key event would lose the word it ends.
+     */
+    fun route(key: Key): Key? {
+        if (!held) return key
+        if (key.action == KeyAction.Shift) {
+            deferred = key
+            return null
+        }
+        typed = true
+        return if (key.action == KeyAction.Text) shiftChordKey(key) else key
+    }
+}
+
+/**
  * Lights the cell in [pressRect] the way a press lights a key, for a gesture the
  * grid owns: a layer peek (issue #108) or a chord drag (issue #345). The rect is
  * read inside the draw lambda, so a finger crossing keys repaints this one
@@ -13734,6 +13797,10 @@ private fun KeyRows(
     // the drawn grid only — the board's shift latch never moves, and the layout
     // is not rebuilt, so the cells under the finger stay exactly where they are.
     val chordDrag = remember { ChordDrag() }
+    // Issue #367: shift held down while other fingers type capitals. Read by
+    // the chord loop through [liveShift], which it outlives a composition of.
+    val shiftHold = remember { ShiftHold() }
+    val liveShift = rememberUpdatedState(state.shiftState)
     val gridState = if (chordDrag.shifted && state.shiftState == ShiftState.OFF) {
         state.withShift(ShiftState.ON)
     } else {
@@ -14077,6 +14144,12 @@ private fun KeyRows(
     val stampedOnText = remember(onText) {
         { t: String -> lastKeyPressTime.longValue = SystemClock.uptimeMillis(); onText(t) }
     }
+    // What the drawn keys commit through: a letter tapped under a held shift
+    // comes out a capital (issue #367). The grid's own gestures keep calling
+    // [stampedOnKey] directly; a chord drag has already decided its key.
+    val keyTapOnKey = remember(stampedOnKey) {
+        { k: Key -> shiftHold.route(k)?.let(stampedOnKey); Unit }
+    }
     // The D-pad ring (a television remote, or a hardware keyboard whose owner
     // asked for it): the service moves it, so the grid hands up the cell table
     // it is already keeping and the lambda that types a key. Published in a
@@ -14177,6 +14250,12 @@ private fun KeyRows(
                     val source = liveRects.value.keyAt(down.position + boxOrigin)
                     val globe = source.startsGlobeDrag(globeDragLive.value)
                     if (!source.startsChordDrag() && !globe) return@awaitEachGesture
+                    // Issue #367: a held shift types capitals under the other
+                    // fingers until it lifts. Not under caps lock, where every
+                    // letter is a capital already and the tap that ends caps
+                    // lock must stay a plain tap.
+                    val holdsShift = source?.action == KeyAction.Shift &&
+                        liveShift.value != ShiftState.CAPS_LOCK
                     // The band is anchored on the key rather than on the
                     // fingertip: a chord is "from this key to that one", and
                     // the cell's centre says so however the press landed in it.
@@ -14204,14 +14283,26 @@ private fun KeyRows(
                     // mid-drag would otherwise leave the letters drawn as
                     // capitals with no finger on shift.
                     try {
+                        if (holdsShift) {
+                            shiftHold.begin()
+                            // Capitals on the keys the moment shift is down, as
+                            // an armed shift shows them.
+                            chordDrag.shifted = true
+                        }
                         while (true) {
                             val event = awaitPointerEvent(PointerEventPass.Initial)
                             val change = event.changes.firstOrNull { it.id == down.id } ?: break
                             if (!change.pressed) {
-                                if (dragging) change.consume()
+                                // Consumed after typing under it too: the shift
+                                // key drops its press, so the lift does not also
+                                // arm shift for the letter after.
+                                if (dragging || shiftHold.typed) change.consume()
                                 break
                             }
-                            if (!dragging &&
+                            // Once something was typed under the held shift, the
+                            // shift finger drifting is a hand at work, not a
+                            // chord drag towards the key it ends on.
+                            if (!dragging && !shiftHold.typed &&
                                 (change.position - down.position).getDistance() > slop
                             ) {
                                 // A 🌐 held still long enough has opened the
@@ -14246,7 +14337,13 @@ private fun KeyRows(
                         }
                         // Never travelled: an ordinary press the modifier key owns,
                         // still unconsumed, and it latches exactly as it always has.
-                        if (!dragging) return@awaitEachGesture
+                        // A shift held past the long press with nothing typed
+                        // under it was a slow tap, and fires the press it held
+                        // back.
+                        if (!dragging) {
+                            if (!shiftHold.typed) shiftHold.deferred?.let(stampedOnKey)
+                            return@awaitEachGesture
+                        }
                         trail.release()
                         val target = over
                         when {
@@ -14270,6 +14367,7 @@ private fun KeyRows(
                         chordDrag.active = false
                         chordDrag.shifted = false
                         chordDrag.pressRect.value = null
+                        if (holdsShift) shiftHold.end()
                     }
                 }
             }
@@ -15311,7 +15409,7 @@ private fun KeyRows(
                     numericField = numericField,
                     layoutId = state.layoutId,
                     keyPreview = keyPreview,
-                    onKey = stampedOnKey,
+                    onKey = keyTapOnKey,
                     onText = stampedOnText,
                     onCursorMove = onCursorMove,
                     onLayoutSelect = onLayoutSelect,
@@ -15355,7 +15453,7 @@ private fun KeyRows(
                         numericField = numericField,
                         layoutId = state.layoutId,
                         keyPreview = keyPreview,
-                        onKey = stampedOnKey,
+                        onKey = keyTapOnKey,
                         onText = stampedOnText,
                         onCursorMove = onCursorMove,
                         onLayoutSelect = onLayoutSelect,
@@ -15371,7 +15469,7 @@ private fun KeyRows(
                         numericField = numericField,
                         layoutId = state.layoutId,
                         keyPreview = keyPreview,
-                        onKey = stampedOnKey,
+                        onKey = keyTapOnKey,
                         onText = stampedOnText,
                         onCursorMove = onCursorMove,
                         onLayoutSelect = onLayoutSelect,
