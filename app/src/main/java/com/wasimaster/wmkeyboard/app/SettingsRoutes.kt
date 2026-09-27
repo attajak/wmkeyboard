@@ -117,6 +117,7 @@ internal object SettingsRoutes {
         "keymaps",
         "sticker_packs",
         "signal_stickers",
+        "whatsapp_stickers",
         "vocab/packs",
         "vocab/lists",
         "vocab/list/{packId}",

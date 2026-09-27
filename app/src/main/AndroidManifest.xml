@@ -405,7 +405,8 @@
 
         <!--
              Where an opened .wmtheme.json / .wmlayout.json / .wmsettings.json /
-             .wmconfig.json / .wmsnippets.json / .wmstickers / .wmicons lands:
+             .wmconfig.json / .wmsnippets.json / .wmstickers / .wmicons lands, and
+             the foreign ones (.flex, .kmp, .wastickers) beside them:
              one confirm dialog, the import, a result. Deliberately not
              MainActivity — tapping a theme in a file manager should not drop
              anyone into the settings app.
@@ -496,6 +497,10 @@
                 <data android:pathPattern=".*\\..*\\.kmp" />
                 <data android:pathPattern=".*\\..*\\..*\\.kmp" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.kmp" />
+                <data android:pathPattern=".*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\..*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.wastickers" />
             </intent-filter>
 
             <intent-filter android:label="@string/import_file_label">
@@ -555,6 +560,10 @@
                 <data android:pathPattern=".*\\..*\\.kmp" />
                 <data android:pathPattern=".*\\..*\\..*\\.kmp" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.kmp" />
+                <data android:pathPattern=".*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\..*\\.wastickers" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.wastickers" />
             </intent-filter>
 
             <!--

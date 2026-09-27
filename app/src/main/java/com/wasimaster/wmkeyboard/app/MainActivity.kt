@@ -1474,6 +1474,15 @@ private fun SettingsNavGraph(
                 SignalStickersScreen { route -> navController.navigate(route) }
             }
         }
+        composable(WHATSAPP_STICKERS_ROUTE) {
+            SettingsScreen(
+                stringResource(R.string.import_whatsapp_row_title),
+                { navController.popBackStack() },
+                route = WHATSAPP_STICKERS_ROUTE,
+            ) {
+                WhatsAppStickersScreen { route -> navController.navigate(route) }
+            }
+        }
         composable("signal_pack/{packId}/{packKey}") { backStackEntry ->
             val packId = backStackEntry.arguments?.getString("packId").orEmpty()
             val packKey = backStackEntry.arguments?.getString("packKey").orEmpty()

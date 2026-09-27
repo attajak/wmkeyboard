@@ -1660,6 +1660,7 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         stickerPack(R.string.import_sticker_pack_new_title, 0),
         stickerPack(R.string.import_sticker_pack_import_title, R.string.import_sticker_pack_import_subtitle),
         stickerPack(R.string.import_signal_row_title, R.string.import_signal_row_subtitle),
+        stickerPack(R.string.import_whatsapp_row_title, R.string.import_whatsapp_row_subtitle),
         // Lands on the pack list: the editor itself cannot open without an
         // image to edit, so there is nothing to deep-link to.
         stickerPack(R.string.import_sticker_editor_title, R.string.import_sticker_editor_subtitle),

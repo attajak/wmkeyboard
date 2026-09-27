@@ -1470,6 +1470,14 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Also an addon type — "stickers" is one of the addon-repository types, installable from a repo URL
   - WhatsApp-spec encoding `RARE` — Stills become 512×512 WebP under 100 KB via a 90/80/70/60/50 quality ladder.
     - Conforming files left alone — An already-spec 512 WebP is stored as-is rather than losing a lossy generation
+  - Signal pack import `RARE` — A signal.art / sgnl:// pack link fetches the manifest and stickers from Signal's CDN, decrypts them under the pack key, previews, then adopts them as a pack (#291).
+    - No directory of packs — signalstickers.org opens in the browser; its "Add to Signal" comes back through the chooser
+    - APNG becomes animated WebP — Frame for frame, with the emoji per sticker kept as a keyword
+  - WhatsApp sticker import `RARE` — Three ways in, none of them WhatsApp's own API, which no other app may read (#368).
+    - .wastickers files — The Sticker Maker export (title.txt, author.txt, tray PNG, WebP stickers): opened from a file manager, the share sheet or the Import row; the tray is dropped by name or as the lone PNG among WebPs
+    - WhatsApp's saved-sticker folder — Android/media/com.whatsapp/WhatsApp/Media/WhatsApp Stickers picked with the folder picker (it carries a .nomedia, so the photo picker never sees it); every WebP becomes one pack, newest 200
+    - Hand-picked files — The document picker opened in that folder, multi-select, into an existing or new pack
+    - No emoji arrive — Neither source carries any; the packs read no network and keep no folder access
     - Animated sources stored byte-for-byte — Android has no animated-WebP encoder; those are capped at 2 MB instead of 100 KB
     - 12 MB source ceiling — Anything larger is refused before decoding starts
   - Pack management `RARE` — Create, rename, delete, export, reorder packs; per sticker: search words, reorder, move, delete.
@@ -3159,6 +3167,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Sticker pack .wmstickers `uncommon` — ZIP: pack.json + stickers/; 500 entries / 64 MB, 50 packs installed
     - Entry names never used as paths — Every image is written under a freshly minted sticker id
     - Source photos stay behind — The archive carries the finished sticker only, not the original it was cut from
+  - WhatsApp pack .wastickers `RARE` — Foreign format, read only: flat ZIP with title.txt / author.txt beside the pictures; recognised by those two names since it has no manifest; same 500-entry / 64 MB guards and staging as .wmstickers
   - Icon pack .wmicons `RARE` — ZIP: pack.json + icons/<slotId>.svg; 400 entries / 8 MB, 20 packs installed
     - 97 replaceable icon slots — 64 tool icons (derived from the toolbar enum), 14 key icons, 6 toolbar-chrome, 13 emoji-tab
     - Slot ids are the file names — manifest slots[] is advisory; the importer keeps every entry whose name matches a known slot and drops the rest
