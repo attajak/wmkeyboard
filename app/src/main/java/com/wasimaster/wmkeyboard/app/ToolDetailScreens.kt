@@ -1354,6 +1354,15 @@ internal fun ToolDetailSettings(
                     ) { scope.launch { repository.setIncognitoPausesClipboard(it) } }
                 }
                 item {
+                    ToggleSetting(
+                        R.string.tooldetail_incognito_private_clipboard_title,
+                        stringResource(R.string.tooldetail_incognito_private_clipboard_subtitle),
+                        settings.watch { it.incognitoPrivateClipboard },
+                        info = stringResource(R.string.tooldetail_incognito_private_clipboard_info),
+                        default = SettingsDefaults.incognitoPrivateClipboard,
+                    ) { scope.launch { repository.setIncognitoPrivateClipboard(it) } }
+                }
+                item {
                     NavRow(
                         R.string.tooldetail_incognito_auto_nav_title,
                         stringResource(R.string.tooldetail_incognito_auto_nav_subtitle),

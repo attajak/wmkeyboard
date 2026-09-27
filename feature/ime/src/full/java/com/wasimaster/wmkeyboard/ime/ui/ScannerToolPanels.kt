@@ -1,7 +1,5 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.text.format.Formatter
@@ -111,6 +109,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import com.wasimaster.wmkeyboard.ime.FocusRegion
+import com.wasimaster.wmkeyboard.ime.KeyboardClipboard
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
@@ -1374,8 +1373,7 @@ private fun backOrFrontSelector(provider: ProcessCameraProvider): CameraSelector
 }
 
 private fun copyPlainText(context: Context, text: String) {
-    (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-        .setPrimaryClip(ClipData.newPlainText("scanned text", text))
+    KeyboardClipboard.copy(context, text, "scanned text")
 }
 
 @StringRes

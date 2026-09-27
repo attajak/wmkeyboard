@@ -2991,6 +2991,13 @@ open class WMKeyboardService : InputMethodService() {
         serviceScope.launch {
             _uiState.map { it.incognitoOn }.distinctUntilChanged().collect { NetLog.incognito = it }
         }
+        // Whether the keyboard's copies stay inside it (#392). Off again the
+        // moment incognito is, which also forgets the private clip.
+        serviceScope.launch {
+            _uiState.map { it.incognitoOn && it.settings.incognitoPrivateClipboard }
+                .distinctUntilChanged()
+                .collect { KeyboardClipboard.isPrivate = it }
+        }
         // Parks on an empty channel until the first glide; costs nothing until
         // then, and saves a job launch per preview once a finger is down.
         startGesturePreviewConsumer()
@@ -6046,6 +6053,7 @@ open class WMKeyboardService : InputMethodService() {
         networkWatcher.stop()
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
             .removePrimaryClipChangedListener(clipboardListener)
+        KeyboardClipboard.isPrivate = false
         if (unlockReceiverRegistered) {
             runCatching { unregisterReceiver(unlockReceiver) }
             unlockReceiverRegistered = false
@@ -7497,10 +7505,7 @@ open class WMKeyboardService : InputMethodService() {
             CaptureSelectionAction.SELECT_ALL -> captureCaretTo(before.selectedAll())
             CaptureSelectionAction.COPY, CaptureSelectionAction.CUT -> {
                 if (!before.hasSelection) return
-                runCatching {
-                    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                        .setPrimaryClip(android.content.ClipData.newPlainText("", before.selectedText))
-                }
+                KeyboardClipboard.copy(this, before.selectedText)
                 if (action == CaptureSelectionAction.CUT) {
                     captureWrite(target, before, before.withoutSelection())
                 } else {
@@ -7509,7 +7514,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             CaptureSelectionAction.PASTE -> {
                 if (!isClipboardAccessible()) return
-                val clip = clipboardStore.latestText().orEmpty()
+                val clip = KeyboardClipboard.held ?: clipboardStore.latestText().orEmpty()
                 // Through the ladder, so each field filters it as it filters keys.
                 if (clip.isNotEmpty()) captureTyped(clip)
             }
@@ -18980,8 +18985,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             is KdeAction.Insert -> commitToField(action.text)
             is KdeAction.Copy -> {
-                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                    .setPrimaryClip(android.content.ClipData.newPlainText("", action.text))
+                KeyboardClipboard.copy(this, action.text)
                 maybeToastCopied()
             }
             is KdeAction.Open -> runCatching {
@@ -22409,7 +22413,7 @@ open class WMKeyboardService : InputMethodService() {
     fun onPluginPaste(inputId: String) {
         if (!isClipboardAccessible()) return
         vibrate()
-        val clip = clipboardStore.latestText().orEmpty()
+        val clip = KeyboardClipboard.held ?: clipboardStore.latestText().orEmpty()
         if (clip.isEmpty()) return
         pluginInputSet(inputId, clip.take(PLUGIN_INPUT_MAX))
     }
@@ -22418,10 +22422,7 @@ open class WMKeyboardService : InputMethodService() {
     fun onPluginCopy(text: String) {
         vibrate()
         if (text.isEmpty()) return
-        runCatching {
-            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                .setPrimaryClip(android.content.ClipData.newPlainText("", text))
-        }
+        KeyboardClipboard.copy(this, text)
     }
 
     /**
@@ -23404,7 +23405,7 @@ open class WMKeyboardService : InputMethodService() {
             }
             AiChatAction.Paste -> {
                 if (!isClipboardAccessible()) return
-                val clip = clipboardStore.latestText().orEmpty()
+                val clip = KeyboardClipboard.held ?: clipboardStore.latestText().orEmpty()
                 if (clip.isEmpty()) return
                 // Through the ladder, so it lands at the caret like typed text.
                 _uiState.update { it.copy(aiChat = it.aiChat.copy(composing = true)) }
@@ -23413,10 +23414,7 @@ open class WMKeyboardService : InputMethodService() {
             is AiChatAction.Insert -> commitToField(
                 if (action.raw) action.text else AiMarkdown.strip(action.text).ifBlank { action.text },
             )
-            is AiChatAction.Copy -> runCatching {
-                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                    .setPrimaryClip(android.content.ClipData.newPlainText("", action.text))
-            }
+            is AiChatAction.Copy -> KeyboardClipboard.copy(this, action.text)
             is AiChatAction.Starter -> {
                 // Read outside the update: it flushes the composing word, and
                 // an update's block can run more than once.
@@ -26977,6 +26975,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun clipboardHasText(): Boolean {
         if (!isClipboardAccessible()) return false
+        if (KeyboardClipboard.held != null) return true
         val manager = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return false
         return runCatching {
             manager.hasPrimaryClip() && manager.primaryClipDescription?.let {
@@ -27761,12 +27760,13 @@ open class WMKeyboardService : InputMethodService() {
             // that the user then had to find and switch off (#40).
             TextEditAction.SELECT_ALL -> ic.performContextMenuAction(android.R.id.selectAll)
             TextEditAction.COPY -> {
-                ic.performContextMenuAction(android.R.id.copy)
+                if (!privateCopy(ic, cut = false)) ic.performContextMenuAction(android.R.id.copy)
                 maybeToastCopied()
                 _uiState.update { it.copy(textEditSelecting = false) }
             }
             TextEditAction.PASTE -> {
                 if (!isClipboardAccessible()) return
+                if (privatePaste(ic)) return
                 ic.performContextMenuAction(android.R.id.paste)
                 purgeAfterPasswordPaste()
             }
@@ -27781,10 +27781,41 @@ open class WMKeyboardService : InputMethodService() {
                 sendEditorKey(KeyEvent.KEYCODE_MOVE_END, selecting, ctrl = true)
             // Like copy, it ends the panel's select mode: the selection is gone.
             TextEditAction.CUT -> {
-                ic.performContextMenuAction(android.R.id.cut)
+                if (!privateCopy(ic, cut = true)) ic.performContextMenuAction(android.R.id.cut)
                 _uiState.update { it.copy(textEditSelecting = false) }
             }
         }
+    }
+
+    /**
+     * Copy or cut the selection by hand, for while incognito keeps the
+     * keyboard's clipboard private (#392). The editor's own copy action would
+     * put the text on the system clipboard for every app to read, so the
+     * selection is read and kept in [KeyboardClipboard] instead, and a cut
+     * deletes it by committing nothing over it. False when that mode is off,
+     * and the caller asks the editor as usual.
+     */
+    private fun privateCopy(ic: InputConnection, cut: Boolean): Boolean {
+        if (!KeyboardClipboard.isPrivate) return false
+        // An editor that cannot report its selection gets nothing copied,
+        // rather than a fallback to its own copy that would leak it.
+        val selected = ic.getSelectedText(0)
+        if (!selected.isNullOrEmpty()) {
+            KeyboardClipboard.copy(this, selected)
+            if (cut) ic.commitText("", 1)
+        }
+        return true
+    }
+
+    /**
+     * Pastes the private clip (#392). False when there is none, and the
+     * editor pastes from the system clipboard as usual: the keyboard reads
+     * nothing there itself, the app does.
+     */
+    private fun privatePaste(ic: InputConnection): Boolean {
+        val held = KeyboardClipboard.held ?: return false
+        ic.commitText(held, 1)
+        return true
     }
 
     /**
@@ -27892,17 +27923,18 @@ open class WMKeyboardService : InputMethodService() {
             }
             ClipboardKeyAction.COPY -> {
                 if (!hasSelection && selectAllIfEmpty) ic.performContextMenuAction(android.R.id.selectAll)
-                ic.performContextMenuAction(android.R.id.copy)
+                if (!privateCopy(ic, cut = false)) ic.performContextMenuAction(android.R.id.copy)
                 maybeToastCopied()
                 _uiState.update { it.copy(textEditSelecting = false) }
             }
             ClipboardKeyAction.CUT -> {
                 if (!hasSelection && selectAllIfEmpty) ic.performContextMenuAction(android.R.id.selectAll)
-                ic.performContextMenuAction(android.R.id.cut)
+                if (!privateCopy(ic, cut = true)) ic.performContextMenuAction(android.R.id.cut)
                 _uiState.update { it.copy(textEditSelecting = false) }
             }
             ClipboardKeyAction.PASTE -> {
                 if (!isClipboardAccessible()) return
+                if (privatePaste(ic)) return
                 ic.performContextMenuAction(android.R.id.paste)
                 purgeAfterPasswordPaste()
             }

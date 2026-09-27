@@ -2046,6 +2046,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Capture gating `uncommon`
     - Blocked before first unlock and while the device is locked — History lives in credential-encrypted storage
     - Incognito pauses capture — Separate incognitoPausesClipboard setting, on by default
+    - Incognito private clipboard (#392) — incognitoPrivateClipboard, off by default; keyboard copy/cut kept in memory (KeyboardClipboard), keyboard paste pastes it, forgotten when incognito ends
     - Copies made from a password field never reach history
 - **Sensitive clips and password hygiene** `RARE` — Two independent passes: at copy time and at paste time
   - Copy-time classification `RARE`

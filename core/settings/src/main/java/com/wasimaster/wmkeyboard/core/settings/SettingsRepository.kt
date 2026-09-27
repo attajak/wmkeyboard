@@ -2968,6 +2968,12 @@ data class KeyboardSettings(
     val numpadCalculatorLayout: Boolean = false,
     /** Incognito stops the clipboard tool from capturing copies. */
     val incognitoPausesClipboard: Boolean = true,
+    /**
+     * Incognito keeps the keyboard's own copies off the system clipboard
+     * (#392): copy and cut keep the text inside the keyboard, paste pastes it
+     * back, and leaving incognito forgets it. Off by default.
+     */
+    val incognitoPrivateClipboard: Boolean = false,
     /** Incognito stops word and emoji learning. */
     val incognitoPausesLearning: Boolean = true,
     /**
@@ -8120,6 +8126,7 @@ class SettingsRepository(private val context: Context) {
          */
         private val NUMPAD_PHONE_LAYOUT = booleanPreferencesKey("numpad_phone_layout")
         private val INCOGNITO_PAUSES_CLIPBOARD = booleanPreferencesKey("incognito_pauses_clipboard")
+        private val INCOGNITO_PRIVATE_CLIPBOARD = booleanPreferencesKey("incognito_private_clipboard")
         private val INCOGNITO_PAUSES_LEARNING = booleanPreferencesKey("incognito_pauses_learning")
         private val AUTO_INCOGNITO = booleanPreferencesKey("auto_incognito")
         private val OCR_AUTO_SELECT_WORDS = booleanPreferencesKey("ocr_auto_select_words")
@@ -8739,6 +8746,7 @@ class SettingsRepository(private val context: Context) {
                 ?: p[NUMPAD_PHONE_LAYOUT]?.not()
                 ?: defaults.numpadCalculatorLayout,
             incognitoPausesClipboard = p[INCOGNITO_PAUSES_CLIPBOARD] ?: defaults.incognitoPausesClipboard,
+            incognitoPrivateClipboard = p[INCOGNITO_PRIVATE_CLIPBOARD] ?: defaults.incognitoPrivateClipboard,
             incognitoPausesLearning = p[INCOGNITO_PAUSES_LEARNING] ?: defaults.incognitoPausesLearning,
             autoIncognito = p[AUTO_INCOGNITO] ?: defaults.autoIncognito,
             cloudBackup = p[CloudBackup.KEY] ?: defaults.cloudBackup,
@@ -10982,6 +10990,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setIncognitoPausesClipboard(value: Boolean) =
         editPrefs { it[INCOGNITO_PAUSES_CLIPBOARD] = value }
+
+    suspend fun setIncognitoPrivateClipboard(value: Boolean) =
+        editPrefs { it[INCOGNITO_PRIVATE_CLIPBOARD] = value }
 
     suspend fun setIncognitoPausesLearning(value: Boolean) =
         editPrefs { it[INCOGNITO_PAUSES_LEARNING] = value }
