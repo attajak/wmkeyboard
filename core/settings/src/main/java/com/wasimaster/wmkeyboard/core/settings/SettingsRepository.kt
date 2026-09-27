@@ -6430,6 +6430,15 @@ data class LayoutBehaviorSettings(
      */
     val symbolsReturnChars: String = "",
     /**
+     * Go back to the letters after a space typed on the symbols layer (#359):
+     * "at 5 pm" is a number and then a word. Its own switch rather than a
+     * character in [symbolsReturnChars], which drops whitespace and would
+     * show an invisible entry anyway, and independent of
+     * [symbolsReturnToLetters] so either can be on alone. Off by default: a
+     * phone number or a time typed with spaces stays on ?123 the whole way.
+     */
+    val symbolsReturnOnSpace: Boolean = false,
+    /**
      * The user has never touched the number-row toggle, so [applyDeviceForm] is
      * free to pick a default for the screen they are on.
      *
@@ -7650,6 +7659,7 @@ class SettingsRepository(private val context: Context) {
         private val SYMBOLS_RETURN_TO_LETTERS =
             booleanPreferencesKey("symbols_return_to_letters")
         private val SYMBOLS_RETURN_CHARS = stringPreferencesKey("symbols_return_chars")
+        private val SYMBOLS_RETURN_ON_SPACE = booleanPreferencesKey("symbols_return_on_space")
         private val AUTO_SPACE_AFTER_SUGGESTION = booleanPreferencesKey("auto_space_after_suggestion")
         private val SKIP_TYPED_WORD = booleanPreferencesKey("skip_typed_word")
         private val EXPAND_USER_DICT_SHORTCUTS = booleanPreferencesKey("expand_user_dict_shortcuts")
@@ -9610,6 +9620,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.layoutBehavior.symbolsReturnToLetters,
             symbolsReturnChars = p[SYMBOLS_RETURN_CHARS]
                 ?: defaults.layoutBehavior.symbolsReturnChars,
+            symbolsReturnOnSpace = p[SYMBOLS_RETURN_ON_SPACE]
+                ?: defaults.layoutBehavior.symbolsReturnOnSpace,
             // Derived from whether the key is *there*, not from its value —
             // see the fields' own docs. This is the only place that
             // information survives; every other read collapses it with `?:`.
@@ -13812,6 +13824,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSymbolsReturnToLetters(value: Boolean) =
         editPrefs { it[SYMBOLS_RETURN_TO_LETTERS] = value }
+
+    suspend fun setSymbolsReturnOnSpace(value: Boolean) =
+        editPrefs { it[SYMBOLS_RETURN_ON_SPACE] = value }
 
     /**
      * Persist the characters that send ?123 back to the letters. Whitespace and

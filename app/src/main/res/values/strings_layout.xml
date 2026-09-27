@@ -26,6 +26,9 @@
     <string name="layout_symbols_return_subtitle">Leave ?123 after you type one of these characters</string>
     <string name="layout_symbols_return_info">You change to ?123 for one full stop or one question mark, and the keyboard changes back to the letters after it. Turn this off to stay on the symbols layer until you press ABC. The emoji panel has the same setting.</string>
     <string name="layout_symbols_return_chars_title">Characters that go back</string>
+    <string name="layout_symbols_return_space_title">Go back after a space</string>
+    <string name="layout_symbols_return_space_subtitle">Leave ?123 when you press the spacebar</string>
+    <string name="layout_symbols_return_space_info">You type a number or a symbol on ?123, press space, and the keyboard changes back to the letters for the next word. Turn this off to stay on the symbols layer, for example to type a phone number with spaces in it. This works on its own, with or without Go back to the letters.</string>
     <string name="layout_symbols_return_chars_info">Type the characters that send the keyboard back to the letters. Spaces between them are optional. An empty box uses the default characters ! ? . , ; and :. Digits are not in the default set, because you usually type more than one digit at a time.</string>
 
     <!-- Layout screen: where the keyboard types the digits of a non-Latin

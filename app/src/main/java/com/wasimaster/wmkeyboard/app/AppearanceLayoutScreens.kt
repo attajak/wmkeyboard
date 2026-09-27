@@ -881,6 +881,15 @@ internal fun LayoutSettings(
                 )
             }
         }
+        item {
+            ToggleSetting(
+                R.string.layout_symbols_return_space_title,
+                stringResource(R.string.layout_symbols_return_space_subtitle),
+                settings.watch { it.layoutBehavior.symbolsReturnOnSpace },
+                info = stringResource(R.string.layout_symbols_return_space_info),
+                default = SettingsDefaults.layoutBehavior.symbolsReturnOnSpace,
+            ) { scope.launch { repository.setSymbolsReturnOnSpace(it) } }
+        }
     }
 
     SettingsGroup(

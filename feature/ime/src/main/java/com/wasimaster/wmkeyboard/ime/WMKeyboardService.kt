@@ -6410,7 +6410,10 @@ open class WMKeyboardService : InputMethodService() {
             KeyAction.CapsLock -> onCapsLock()
             KeyAction.Delete -> onDelete()
             KeyAction.ForwardDelete -> onForwardDelete()
-            KeyAction.Space -> onSpace()
+            KeyAction.Space -> {
+                onSpace()
+                returnFromSymbolsAfterSpace()
+            }
             KeyAction.Enter -> onEnter()
             // The enter key's long-press alternate, and any layout that binds a
             // newline key of its own: a line break, never the field's action.
@@ -7117,6 +7120,23 @@ open class WMKeyboardService : InputMethodService() {
         val behavior = state.settings.layoutBehavior
         if (!behavior.symbolsReturnToLetters) return
         if (output[0] !in behavior.symbolsReturnCharSet()) return
+        _uiState.update { it.copy(layoutMode = LayoutMode.LETTERS) }
+    }
+
+    /**
+     * The spacebar's twin of [returnFromSymbolsAfter] (#359): the number is
+     * done and a word comes next. After [onSpace] rather than inside it,
+     * because every one of its early returns — a space confirmed rather than
+     * typed, a double-space full stop — still ends the number.
+     */
+    private fun returnFromSymbolsAfterSpace() {
+        val state = _uiState.value
+        if (state.layoutMode != LayoutMode.SYMBOLS &&
+            state.layoutMode != LayoutMode.SYMBOLS_SHIFTED
+        ) {
+            return
+        }
+        if (!state.settings.layoutBehavior.symbolsReturnOnSpace) return
         _uiState.update { it.copy(layoutMode = LayoutMode.LETTERS) }
     }
 

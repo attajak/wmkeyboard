@@ -620,6 +620,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_number_row_in_symbols_title) { Icons.Outlined.Numbers }
         put(R.string.layout_number_row_shift_symbols_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.layout_symbols_return_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
+        put(R.string.layout_symbols_return_space_title) { Icons.Outlined.SpaceBar }
         put(R.string.layout_numeral_scope_title) { Icons.Outlined.Numbers }
         put(R.string.layout_key_height_title) { Icons.Outlined.Height }
         put(R.string.layout_bottom_row_height_title) { Icons.Outlined.Height }
