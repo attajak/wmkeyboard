@@ -102,6 +102,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -225,6 +226,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
@@ -19507,6 +19509,11 @@ private fun LanguagePickerPopup(
     val scrollState = rememberScrollState()
     val layoutRail = rememberScrollRailState(scrollState)
     val density = LocalDensity.current
+    // Rows are a fixed 40 dp, so whether the list scrolls is a count, known
+    // before the first measure. A short list keeps no rail gutter, which left
+    // the highlight stopping 14 dp short of the menu's right edge (#363).
+    val overflows = enabledLayoutIds.size * PickerRowHeightDp > PickerListMaxDp - 2 * PickerListPadDp
+    val rowShape = pickerRowShape(kb)
     LaunchedEffect(highlightIndex) {
         if (highlightIndex != null) {
             val rowPx = with(density) { PickerRowHeightDp.dp.toPx() }
@@ -19530,10 +19537,11 @@ private fun LanguagePickerPopup(
                 ScrollRail(
                     state = layoutRail,
                     modifier = Modifier
-                        .heightIn(max = 240.dp)
-                        .padding(vertical = 4.dp),
+                        .heightIn(max = PickerListMaxDp.dp)
+                        .padding(vertical = PickerListPadDp.dp),
                     fadeColor = kb.popup,
                     colors = kbRailColors(kb),
+                    reserveGutter = overflows,
                 ) {
                     for ((index, layoutId) in enabledLayoutIds.withIndex()) {
                         val selected = layoutId == currentLayoutId
@@ -19550,6 +19558,11 @@ private fun LanguagePickerPopup(
                                 // Fixed row height — the hold-drag gesture steps its
                                 // highlight by this exact amount of finger travel.
                                 .height(PickerRowHeightDp.dp)
+                                // Inset from the menu's sides and cut to a shape
+                                // concentric with its corners, so the highlight
+                                // never meets the outline and gets clipped by it.
+                                .padding(horizontal = PickerRowInsetDp.dp)
+                                .clip(rowShape)
                                 .background(
                                     if (dragged || (selected && highlightIndex == null)) {
                                         kb.popupSelected
@@ -19558,7 +19571,7 @@ private fun LanguagePickerPopup(
                                     },
                                 )
                                 .clickable { onPick(layoutId) }
-                                .padding(horizontal = 16.dp)
+                                .padding(horizontal = (16 - PickerRowInsetDp).dp)
                                 .wrapContentHeight(Alignment.CenterVertically),
                         )
                     }
@@ -19572,9 +19585,12 @@ private fun LanguagePickerPopup(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(bottom = PickerListPadDp.dp)
                         .height(PickerRowHeightDp.dp)
+                        .padding(horizontal = PickerRowInsetDp.dp)
+                        .clip(rowShape)
                         .clickable { onOtherKeyboards() }
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = (16 - PickerRowInsetDp).dp)
                         .wrapContentHeight(Alignment.CenterVertically),
                 )
             }
@@ -20392,6 +20408,28 @@ private const val SpaceHoldPickerMs = 250
  * agree or the finger and the highlight drift apart.
  */
 private const val PickerRowHeightDp = 40
+
+/** Tallest the list picker's scroller gets before it scrolls. */
+private const val PickerListMaxDp = 240
+
+/** Space above and below the list picker's rows. */
+private const val PickerListPadDp = 4
+
+/** How far a list picker row's highlight sits in from the menu's sides. */
+private const val PickerRowInsetDp = 6
+
+/**
+ * The list picker's row highlight: the menu's own outline shrunk by the inset,
+ * so the two corners run concentric. Shapes that do not scale down to a 40 dp
+ * row (squircle, pill, the decorative ones) fall back to a rounded rectangle.
+ */
+private fun pickerRowShape(kb: KbTheme): Shape = when (kb.menuShapeKind) {
+    KeyShapeKind.SHARP -> RectangleShape
+    KeyShapeKind.CUT -> CutCornerShape((kb.popupRadiusDp - PickerRowInsetDp).coerceIn(2, 8).dp)
+    else -> RoundedCornerShape(
+        (kb.popupRadiusDp - PickerRowInsetDp).coerceIn(4, PickerRowHeightDp / 2).dp,
+    )
+}
 
 /**
  * Widest the language carousel's scrolling strip gets before its chips scroll
