@@ -742,9 +742,6 @@ internal class LanguageSwitchEcho {
 
 internal val LocalLanguageSwitchEcho = staticCompositionLocalOf { LanguageSwitchEcho() }
 
-/** How long a switched-to language is on screen in all, swipe preview plus [LanguageSwitchEcho]. */
-private const val LanguageSwitchEchoMs = 500L
-
 /**
  * A language the swipe preview showed for this long before the lift has been
  * seen: the finger was moving slowly enough to read it, so no echo follows.
@@ -753,13 +750,14 @@ private const val LanguageSeenMs = 250L
 
 /**
  * How long the echo keeps the committed language up after the lift, given how
- * long the swipe preview had already shown it. A flick lifts before the
- * preview has drawn and gets nearly the whole [LanguageSwitchEchoMs]; a slow
- * swipe that sat on the language past [LanguageSeenMs] gets none, since the
- * user watched it land.
+ * long the swipe preview had already shown it. [totalMs] is the whole time a
+ * switched-to language is on screen, swipe preview plus [LanguageSwitchEcho]
+ * (the user's setting, issue #376; 0 turns the echo off). A flick lifts before
+ * the preview has drawn and gets nearly all of it; a slow swipe that sat on the
+ * language past [LanguageSeenMs] gets none, since the user watched it land.
  */
-internal fun languageEchoMs(seenMs: Long): Long =
-    if (seenMs >= LanguageSeenMs) 0L else LanguageSwitchEchoMs - seenMs.coerceAtLeast(0L)
+internal fun languageEchoMs(seenMs: Long, totalMs: Long = 500L): Long =
+    if (seenMs >= LanguageSeenMs) 0L else (totalMs - seenMs.coerceAtLeast(0L)).coerceAtLeast(0L)
 
 /**
  * Whether TalkBack (or another explore-by-touch service) is currently
@@ -18275,6 +18273,7 @@ internal fun KeyButton(
                         languagePreview = it
                     },
                     echoLanguageSwitch = languageSwitchEcho::show,
+                    languageEchoTotalMs = settings.layoutBehavior.languageEchoMs,
                     canDelete = canDelete,
                     canForwardDelete = canForwardDelete,
                     deleteSwipe = deleteSwipe,
@@ -20622,6 +20621,8 @@ private fun Modifier.pointerInputKey(
     setLanguagePreview: (String?) -> Unit,
     /** Keeps a just-switched-to language on screen briefly after the lift. */
     echoLanguageSwitch: (String, Long) -> Unit = { _, _ -> },
+    /** Total time a switched-to language stays up, preview included; 0 skips the echo. */
+    languageEchoTotalMs: Int = 500,
     canDelete: () -> Boolean,
     canForwardDelete: () -> Boolean,
     deleteSwipe: DeleteSwipeCallbacks,
@@ -20643,6 +20644,7 @@ private fun Modifier.pointerInputKey(
             key, spaceShortSwipe, spaceLongSwipe, enabledLayoutIds, currentLayoutId, longPressDelayMs,
             hapticOnLongPress, hapticOnLongPressRelease, vibrateOnSpace, spaceCursor2d,
             spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel, pickerForLongRing,
+            languageEchoTotalMs,
         ) {
             val slopPx = 12.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
@@ -21039,7 +21041,7 @@ private fun Modifier.pointerInputKey(
                                 // A lift with no up event (the pointer was cancelled)
                                 // counts as unseen: echo in full.
                                 val seenMs = if (liftAt > 0L) liftAt - lastStepAt else 0L
-                                echoLanguageSwitch(selected, languageEchoMs(seenMs))
+                                echoLanguageSwitch(selected, languageEchoMs(seenMs, languageEchoTotalMs.toLong()))
                                 onLayoutSelect(selected)
                             }
                         }

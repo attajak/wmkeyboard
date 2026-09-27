@@ -4898,6 +4898,9 @@ val BoardCornerRadiusRange = 0..40
 /** Bounds for [LayoutBehaviorSettings.globeTypingGuardMs]; 0 is off. The slider shares them. */
 val GlobeTypingGuardMsRange = 0..1000
 
+/** Bounds for [LayoutBehaviorSettings.languageEchoMs]; 0 is off. The slider shares them. */
+val LanguageEchoMsRange = 0..1000
+
 /** How many languages the user said they type in during onboarding. */
 enum class PersonaLanguages { UNSET, ONE, MANY }
 
@@ -6172,6 +6175,14 @@ data class LayoutBehaviorSettings(
      * and windows itself, so a long ring stays reachable from it.
      */
     val spaceHoldPickerForLongRing: Boolean = true,
+    /**
+     * How long, in ms, a spacebar language switch keeps the language it landed
+     * on up after the finger lifts, counting the time the swipe preview already
+     * showed it (issue #376). A flick lifts before the preview draws, so this
+     * is how it shows where it went. 0 turns the echo off; a slow swipe that
+     * rested on its language gets none either way.
+     */
+    val languageEchoMs: Int = 500,
     /**
      * Size multiplier for the small corner hint character on each key (the
      * first long-press alternate, shown when [KeyboardSettings.longPressHints]
@@ -7665,6 +7676,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACEBAR_DISPLAY = stringPreferencesKey("spacebar_display")
         private val LANGUAGE_PICKER_STYLE = stringPreferencesKey("language_picker_style")
         private val SPACE_HOLD_PICKER_FOR_LONG_RING = booleanPreferencesKey("space_hold_picker_for_long_ring")
+        private val LANGUAGE_ECHO_MS = intPreferencesKey("language_echo_ms")
         private val NUMERAL_SYSTEM_BY_LANG = stringPreferencesKey("numeral_system_by_lang")
         private val NUMERAL_COMMIT_SCOPE = stringPreferencesKey("numeral_commit_scope")
         private val SHIFT_ENTER_NEWLINE = booleanPreferencesKey("shift_enter_newline")
@@ -9567,6 +9579,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.layoutBehavior.languagePickerStyle,
             spaceHoldPickerForLongRing = p[SPACE_HOLD_PICKER_FOR_LONG_RING]
                 ?: defaults.layoutBehavior.spaceHoldPickerForLongRing,
+            languageEchoMs = p[LANGUAGE_ECHO_MS]?.coerceIn(LanguageEchoMsRange)
+                ?: defaults.layoutBehavior.languageEchoMs,
             numeralSystemByLang = p[NUMERAL_SYSTEM_BY_LANG]
                 ?.let { decodeNumeralSystems(it) }
                 ?: defaults.layoutBehavior.numeralSystemByLang,
@@ -14444,6 +14458,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceHoldPickerForLongRing(value: Boolean) =
         editPrefs { it[SPACE_HOLD_PICKER_FOR_LONG_RING] = value }
+
+    suspend fun setLanguageEchoMs(value: Int) =
+        editPrefs { it[LANGUAGE_ECHO_MS] = value.coerceIn(LanguageEchoMsRange) }
 
     suspend fun setNumeralCommitScope(value: NumeralCommitScope) =
         editPrefs { it[NUMERAL_COMMIT_SCOPE] = value.name }

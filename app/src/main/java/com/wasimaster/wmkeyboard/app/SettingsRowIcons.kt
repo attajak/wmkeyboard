@@ -936,6 +936,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_glide_preview_text_color_title) { Icons.Outlined.Colorize }
         put(R.string.typing_glide_strip_preview_title) { Icons.Outlined.Lightbulb }
         put(R.string.typing_spacebar_language_arrows_title) { Icons.Outlined.SwapHoriz }
+        put(R.string.typing_language_echo_title) { Icons.Outlined.Timer }
         put(R.string.typing_spacebar_display_title) { Icons.Outlined.SpaceBar }
         put(R.string.typing_language_picker_style_title) { Icons.Outlined.ViewCarousel }
         put(R.string.typing_space_hold_picker_long_ring_title) { Icons.Outlined.ViewAgenda }

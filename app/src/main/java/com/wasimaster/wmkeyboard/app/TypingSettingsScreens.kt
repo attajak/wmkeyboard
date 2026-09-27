@@ -77,6 +77,7 @@ import com.wasimaster.wmkeyboard.core.settings.GlideApostropheKey
 import com.wasimaster.wmkeyboard.core.settings.ShiftGlideMode
 import com.wasimaster.wmkeyboard.core.settings.GlidePickerChoicesRange
 import com.wasimaster.wmkeyboard.core.settings.GlideRadiusRange
+import com.wasimaster.wmkeyboard.core.settings.LanguageEchoMsRange
 import com.wasimaster.wmkeyboard.core.settings.GlideDwellFullRange
 import com.wasimaster.wmkeyboard.core.settings.GlideLoopMinArcRange
 import com.wasimaster.wmkeyboard.core.settings.GlideLoopExtentRange
@@ -2158,6 +2159,24 @@ internal fun TypingGesturesSettings(
                     info = stringResource(R.string.typing_spacebar_language_arrows_info),
                     default = SettingsDefaults.spacebarLanguageArrows,
                 ) { scope.launch { repository.setSpacebarLanguageArrows(it) } }
+            }
+            item {
+                // Issue #376: how long a switch keeps its language up after the
+                // lift. Steps of 50 ms, like the globe typing guard.
+                val offLabel = stringResource(CommonR.string.common_off)
+                val msFormat = stringResource(R.string.typing_value_milliseconds)
+                SliderSetting(
+                    R.string.typing_language_echo_title,
+                    subtitle = stringResource(R.string.typing_language_echo_subtitle),
+                    value = settings.watch { it.layoutBehavior.languageEchoMs }.toFloat(),
+                    range = LanguageEchoMsRange.first.toFloat()..LanguageEchoMsRange.last.toFloat(),
+                    display = {
+                        val ms = (it / 50f).roundToInt() * 50
+                        if (ms == 0) offLabel else msFormat.format(ms)
+                    },
+                    info = stringResource(R.string.typing_language_echo_info),
+                    default = SettingsDefaults.layoutBehavior.languageEchoMs.toFloat(),
+                ) { scope.launch { repository.setLanguageEchoMs((it / 50f).roundToInt() * 50) } }
             }
         }
         item {

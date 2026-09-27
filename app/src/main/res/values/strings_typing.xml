@@ -661,6 +661,9 @@
     <string name="typing_spacebar_display_language_label">Language</string>
     <string name="typing_spacebar_display_layout_label">Layout</string>
     <string name="typing_spacebar_display_both_label">Both</string>
+    <string name="typing_language_echo_title">Keep the new language on screen</string>
+    <string name="typing_language_echo_subtitle">How long a spacebar swipe shows the language it switched to</string>
+    <string name="typing_language_echo_info">A quick flick on the spacebar is over before its preview can draw, so the keyboard keeps the language it landed on up for a moment after you lift, to show where you went. This is how long it stays, counting the time the preview was already up. Slide to Off to have it go the instant you lift. A slow swipe that rested on its language for a quarter of a second has already shown it, so it goes at once whatever this is set to.</string>
     <string name="typing_language_picker_style_title">Language picker shape</string>
     <string name="typing_language_picker_style_subtitle">A list to drag through, or a carousel that keeps the swipe sideways</string>
     <string name="typing_language_picker_style_info">This is the chooser that opens when you hold the spacebar with more than four layouts on, or press and hold the 🌐 key. List shows your layouts top to bottom, and a hold on the spacebar walks it up and down. Carousel shows them side by side, centred on the one you are typing in, and the same hold walks it left and right, the way the spacebar swipe already moves. Both let you tap a layout, and both keep Other keyboards… at the end.</string>
