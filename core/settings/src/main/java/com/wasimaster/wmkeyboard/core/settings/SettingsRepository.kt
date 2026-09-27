@@ -5585,6 +5585,20 @@ data class EmojiSettings(
      * replayed move list does.
      */
     val categoryEmojiOrder: Map<String, List<String>> = emptyMap(),
+    /**
+     * Where the emoji, GIF and sticker panels draw the switch between the
+     * three (issue #366). On in the bottom row by default, the place most
+     * keyboards put it. It reaches the shipped emoji panel and the GIF and
+     * sticker panels; an emoji panel the user laid out draws the switch
+     * wherever its own layout puts one.
+     */
+    val mediaSwitcher: MediaSwitcher = MediaSwitcher.BOTTOM,
+    /**
+     * The emoji key, and the emoji tool, open whichever of emoji, GIFs and
+     * stickers was open last, so the three behave as one panel (issue #366).
+     * Off by default: the emoji key opens emoji.
+     */
+    val rememberMediaTab: Boolean = false,
 )
 
 /** Bounds for [EmojiSettings.barCount]; the settings slider shares them. */
@@ -8082,6 +8096,8 @@ class SettingsRepository(private val context: Context) {
         // stay glued. JSON is the encoding already trusted with layout specs.
         private val EMOJI_CATEGORY_EMOJI_ORDER =
             stringPreferencesKey("emoji_category_emoji_order")
+        private val EMOJI_MEDIA_SWITCHER = stringPreferencesKey("emoji_media_switcher")
+        private val EMOJI_REMEMBER_MEDIA_TAB = booleanPreferencesKey("emoji_remember_media_tab")
         private val EMOJI_AUTO_DOWNLOAD_KEYWORDS =
             booleanPreferencesKey("emoji_auto_download_keywords")
         // Stored as the DISABLED set so tools added in future versions
@@ -9811,6 +9827,10 @@ class SettingsRepository(private val context: Context) {
             hiddenCategories = p[EMOJI_HIDDEN_CATEGORIES] ?: defaults.emoji.hiddenCategories,
             categoryEmojiOrder = decodeEmojiOrder(p[EMOJI_CATEGORY_EMOJI_ORDER])
                 .ifEmpty { defaults.emoji.categoryEmojiOrder },
+            mediaSwitcher = p[EMOJI_MEDIA_SWITCHER]
+                ?.let { runCatching { MediaSwitcher.valueOf(it) }.getOrNull() }
+                ?: defaults.emoji.mediaSwitcher,
+            rememberMediaTab = p[EMOJI_REMEMBER_MEDIA_TAB] ?: defaults.emoji.rememberMediaTab,
         )
 
     private fun readToolbox(p: Preferences, defaults: KeyboardSettings) =
@@ -13343,6 +13363,14 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSendEmojiAsSticker(value: Boolean) =
         editPrefs { it[EMOJI_SEND_AS_STICKER] = value }
+
+    /** See [EmojiSettings.mediaSwitcher]. */
+    suspend fun setEmojiMediaSwitcher(value: MediaSwitcher) =
+        editPrefs { it[EMOJI_MEDIA_SWITCHER] = value.name }
+
+    /** See [EmojiSettings.rememberMediaTab]. */
+    suspend fun setEmojiRememberMediaTab(value: Boolean) =
+        editPrefs { it[EMOJI_REMEMBER_MEDIA_TAB] = value }
 
     /**
      * Rewrites the category tab order; see [EmojiSettings.categoryOrder]. The

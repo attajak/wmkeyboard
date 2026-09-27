@@ -587,6 +587,8 @@ internal object SettingsRowIcons {
         put(R.string.langemoji_emoji_skin_tone_title) { Icons.Outlined.Colorize }
         put(R.string.langemoji_emoji_tone_override_title) { Icons.Outlined.Colorize }
         put(R.string.langemoji_emoji_close_after_insert_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
+        put(R.string.langemoji_media_switcher_title) { Icons.Outlined.SwapHoriz }
+        put(R.string.langemoji_media_remember_title) { Icons.Outlined.History }
         put(R.string.langemoji_emoji_hide_unrenderable_title) { Icons.Outlined.VisibilityOff }
         put(R.string.langemoji_emoji_categories_title) { Icons.AutoMirrored.Outlined.Sort }
         put(R.string.langemoji_emoji_keywords_title) { Icons.Outlined.EmojiEmotions }

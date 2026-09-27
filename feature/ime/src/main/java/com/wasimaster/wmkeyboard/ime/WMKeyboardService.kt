@@ -572,7 +572,9 @@ import com.wasimaster.wmkeyboard.ime.ui.InlineChipPaletteReporter
 import com.wasimaster.wmkeyboard.ime.ui.LocalInlineChipPaletteReporter
 import com.wasimaster.wmkeyboard.ime.ui.LocalSystemNavBarPainter
 import com.wasimaster.wmkeyboard.ime.ui.SystemNavBarPainter
+import com.wasimaster.wmkeyboard.ime.ui.MediaTabPanels
 import com.wasimaster.wmkeyboard.ime.ui.macroOpenIntents
+import com.wasimaster.wmkeyboard.ime.ui.mediaOpenerTarget
 import com.wasimaster.wmkeyboard.ime.ui.navigationBarWantsDarkIcons
 import android.inputmethodservice.InputMethodService
 import java.io.ByteArrayOutputStream
@@ -6442,7 +6444,7 @@ open class WMKeyboardService : InputMethodService() {
             KeyAction.LanguageSwitch -> switchLanguage()
             KeyAction.InputMethodPicker -> showInputMethodPicker()
             is KeyAction.SwitchInputMethod -> switchToInputMethod((key.action as KeyAction.SwitchInputMethod).id)
-            KeyAction.Emoji -> onPanelChange(PanelMode.EMOJI, haptic = false)
+            KeyAction.Emoji -> onPanelChange(emojiOpenerTarget(), haptic = false)
             // Produced only by a long-press on ?123 when the opt-in is set.
             KeyAction.Numpad -> onPanelChange(PanelMode.NUMPAD, haptic = false)
             // A key — or a long-press alternate — bound to a tool: voice, the
@@ -18515,6 +18517,18 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Which of emoji, GIFs and stickers was open last, for the emoji key to
+     * reopen when that setting is on (issue #366). The session's memory only:
+     * a keyboard that restarts opens on emoji, as a fresh one does.
+     */
+    private var lastMediaPanel: PanelMode = PanelMode.EMOJI
+
+    /** The panel the emoji key and the emoji tool open; see [mediaOpenerTarget]. */
+    private fun emojiOpenerTarget(): PanelMode = _uiState.value.let {
+        mediaOpenerTarget(it.panel, lastMediaPanel, it.settings)
+    }
+
+    /**
      * The dispatch itself, once the caller's own gating has passed, plus the two
      * tests every caller shares: a lite build ships fewer tools than the enum
      * lists, and a search tool loses its key the moment it is cleared.
@@ -18524,7 +18538,7 @@ open class WMKeyboardService : InputMethodService() {
         val settings = _uiState.value.settings
         if (!isUsableTool(tool, settings)) return
         when (tool) {
-            ToolbarTool.EMOJI -> onPanelChange(PanelMode.EMOJI)
+            ToolbarTool.EMOJI -> onPanelChange(emojiOpenerTarget())
             ToolbarTool.CLIPBOARD -> {
                 if (isClipboardAccessible()) onPanelChange(PanelMode.CLIPBOARD)
             }
@@ -18786,6 +18800,9 @@ open class WMKeyboardService : InputMethodService() {
                 ocrImage = null,
             )
         }
+        // Whichever of emoji, GIFs and stickers is now up is the one the
+        // emoji key reopens next time, when that setting is on (#366).
+        _uiState.value.panel.takeIf { it in MediaTabPanels }?.let { lastMediaPanel = it }
         // Leaving the panel ends the plugin session outright. Not paused, not
         // backgrounded: the Globals are dropped and the thread is shut down, so
         // after this there is no plugin left in the process to receive

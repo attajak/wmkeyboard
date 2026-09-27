@@ -7069,7 +7069,13 @@ internal fun toolLabelRes(tool: ToolbarTool): Int = when (tool) {
 internal fun toolLabel(tool: ToolbarTool): String = stringResource(toolLabelRes(tool))
 
 private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = when (tool) {
-    ToolbarTool.EMOJI -> state.panel == PanelMode.EMOJI
+    // With "open the last used" on, the emoji tool opens and closes all three
+    // of emoji, GIFs and stickers (#366), so it is lit for any of them.
+    ToolbarTool.EMOJI -> if (state.settings.emoji.rememberMediaTab) {
+        state.panel in MediaTabPanels
+    } else {
+        state.panel == PanelMode.EMOJI
+    }
     ToolbarTool.CLIPBOARD -> state.panel == PanelMode.CLIPBOARD
     ToolbarTool.SNIPPETS -> state.panel == PanelMode.SNIPPETS
     ToolbarTool.TEXT_EDIT -> state.panel == PanelMode.TEXT_EDIT
@@ -10678,6 +10684,8 @@ private fun KeyboardBody(
                 }
                 PanelMode.GIF, PanelMode.STICKER -> {
                     val stickers = state.panel == PanelMode.STICKER
+                    // The switch to emoji and the other of the two (#366).
+                    val switch = mediaSwitchSlots(state, panelCallbacks)
                     if (state.settings.mediaFullBleed) {
                         // Search moves up into the reclaimed toolbar row, next
                         // to the back button — same shape as the dictionary.
@@ -10690,6 +10698,7 @@ private fun KeyboardBody(
                             compact = state.mediaSearchActive,
                             headerActions = {
                                 GifHeaderSearchBar(state, stickers, onMediaQueryTap)
+                                switch.top?.invoke()
                             },
                         ) {
                             GifPanel(
@@ -10709,6 +10718,7 @@ private fun KeyboardBody(
                                 onReport = onMediaReport,
                                 onDismissAction = onMediaActionDismiss,
                                 onOpenRoute = onOpenRoute,
+                                bottomBar = switch.bottom,
                             )
                         }
                     } else {
@@ -10728,6 +10738,8 @@ private fun KeyboardBody(
                             onReport = onMediaReport,
                             onDismissAction = onMediaActionDismiss,
                             onOpenRoute = onOpenRoute,
+                            switcher = switch.top,
+                            bottomBar = switch.bottom,
                         )
                     }
                 }

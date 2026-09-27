@@ -93,6 +93,9 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
         }
         return BuiltInPanelLayouts.numpad(calculator = settings.numpadCalculatorLayout)
     }
+    // The shipped emoji panel with the switch to GIFs and stickers where the
+    // setting puts it (issue #366), or left out while there is nowhere to switch.
+    if (kind == PanelKind.EMOJI) return BuiltInPanelLayouts.emoji(mediaSwitcherPlacement(settings))
     return shared ?: BuiltInPanelLayouts.default(kind)
 }
 
@@ -137,7 +140,8 @@ private fun PanelLayoutSpec.withoutLeadingRow(): PanelLayoutSpec = copy(
 )
 
 /** The emoji components a full-bleed header can carry. */
-private val EmojiHeaderFields = setOf(PanelFieldKind.EMOJI_TABS, PanelFieldKind.EMOJI_SEARCH)
+private val EmojiHeaderFields =
+    setOf(PanelFieldKind.EMOJI_TABS, PanelFieldKind.EMOJI_SEARCH, PanelFieldKind.MEDIA_TABS)
 
 /** The clipboard components a full-bleed header can carry. */
 private val ClipboardHeaderFields = setOf(PanelFieldKind.CLIPBOARD_SEARCH, PanelFieldKind.CLIPBOARD_VIEW)
@@ -157,7 +161,13 @@ internal fun EmojiPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCallba
     } else {
         val spec = state.panelLayout(PanelKind.EMOJI)
         val fields: @Composable (PanelFieldKind) -> Unit = { kind ->
-            EmojiField(kind, state, session, callbacks.emoji)
+            // The switch to GIFs and stickers changes panels, which is this
+            // host's business rather than the emoji components'.
+            if (kind == PanelFieldKind.MEDIA_TABS) {
+                MediaTabsField(state, callbacks.onPanelChange)
+            } else {
+                EmojiField(kind, state, session, callbacks.emoji)
+            }
         }
         if (state.settings.emojiFullBleed) {
             // Full-bleed spends the reclaimed toolbar row on the panel's own
