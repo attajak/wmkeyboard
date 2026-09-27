@@ -6375,6 +6375,13 @@ data class LayoutBehaviorSettings(
      */
     val splitOnlyOnLargeScreens: Boolean = false,
     /**
+     * Whether split mode cuts the spacebar too (issue #399). On, a spacebar
+     * that meets the cut is divided between the halves, which is how split has
+     * always drawn it. Off, it stays one key and reaches across the centre gap,
+     * so both thumbs land on it where they meet. On by default.
+     */
+    val splitSpacebar: Boolean = true,
+    /**
      * How long, in ms, a second shift tap still counts as the double-tap that
      * turns on caps lock. Lower makes caps lock quicker but easier to trigger by
      * accident; higher makes a deliberate double-tap more forgiving. Default 350.
@@ -6430,13 +6437,6 @@ data class LayoutBehaviorSettings(
     /**
      * The style the Fancy tool turns on with (a FancyStyles id), or null to
      * start from whatever style is already picked. Only the session is
-    /**
-     * Whether split mode cuts the spacebar too (issue #399). On, a spacebar
-     * that meets the cut is divided between the halves, which is how split has
-     * always drawn it. Off, it stays one key and reaches across the centre gap,
-     * so both thumbs land on it where they meet. On by default.
-     */
-    val splitSpacebar: Boolean = true,
      * restyled: the tool never overwrites the style the strip persisted, so
      * a pinned style is a way in rather than a new default.
      */
@@ -7702,6 +7702,7 @@ class SettingsRepository(private val context: Context) {
         private val SIDE_PAD_LEFT_SCALE = floatPreferencesKey("side_pad_left_scale")
         private val SIDE_PAD_RIGHT_SCALE = floatPreferencesKey("side_pad_right_scale")
         private val SPLIT_ONLY_LARGE = booleanPreferencesKey("split_only_large_screens")
+        private val SPLIT_SPACEBAR = booleanPreferencesKey("split_spacebar")
         private val SHIFT_CAPS_LOCK_MS = intPreferencesKey("shift_caps_lock_ms")
         private val SHOW_ALL_POPUP_KEYS = booleanPreferencesKey("show_all_popup_keys")
         private val NATIVE_LETTERS_FIRST = booleanPreferencesKey("native_letters_first")
@@ -7788,7 +7789,6 @@ class SettingsRepository(private val context: Context) {
         private val HW_ESC_CLOSES_PANEL = booleanPreferencesKey("hw_esc_closes_panel")
         private val HW_SUGGESTION_HOTKEYS = stringPreferencesKey("hw_suggestion_hotkeys")
         private val HW_SUGGESTION_HINTS_ALWAYS =
-        private val SPLIT_SPACEBAR = booleanPreferencesKey("split_spacebar")
             booleanPreferencesKey("hw_suggestion_hints_always")
         private val HW_TOOLBAR_DIGIT_CHORD = booleanPreferencesKey("hw_toolbar_digit_chord")
         private val HW_MAC_SHORTCUTS = booleanPreferencesKey("hw_mac_shortcuts")
@@ -8018,6 +8018,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOL_CIRCLE_RADIUS = intPreferencesKey("tool_circle_radius")
         private val TOOL_SHAPE = stringPreferencesKey("tool_circle_shape")
         private val TOOLBAR_TOOL_WIDTH = intPreferencesKey("toolbar_tool_width")
+        private val TOOLBAR_ICON_SIZE = intPreferencesKey("toolbar_icon_size")
         private val TOOLBAR_PADDING_TOP = intPreferencesKey("toolbar_padding_top")
         private val TOOLBAR_PADDING_BOTTOM = intPreferencesKey("toolbar_padding_bottom")
         private val TOOLBAR_PLACEMENT = stringPreferencesKey("toolbar_placement")
@@ -8036,7 +8037,6 @@ class SettingsRepository(private val context: Context) {
         private val EMOJI_INSERT_MODE = stringPreferencesKey("emoji_insert_mode")
         private val EMOJI_DEFAULT_SKIN_TONE = stringPreferencesKey("emoji_default_skin_tone")
         private val EMOJI_TONE_OVERRIDE_LAST_USED =
-        private val TOOLBAR_ICON_SIZE = intPreferencesKey("toolbar_icon_size")
             booleanPreferencesKey("emoji_tone_override_last_used")
         private val EMOJI_CLOSE_AFTER_INSERT = booleanPreferencesKey("emoji_close_after_insert")
         private val EMOJI_HIDE_UNRENDERABLE = booleanPreferencesKey("emoji_hide_unrenderable")
@@ -9673,6 +9673,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.layoutBehavior.sidePadRightScale,
             splitOnlyOnLargeScreens = p[SPLIT_ONLY_LARGE]
                 ?: defaults.layoutBehavior.splitOnlyOnLargeScreens,
+            splitSpacebar = p[SPLIT_SPACEBAR] ?: defaults.layoutBehavior.splitSpacebar,
             shiftCapsLockMs = p[SHIFT_CAPS_LOCK_MS] ?: defaults.layoutBehavior.shiftCapsLockMs,
             showAllPopupKeys = p[SHOW_ALL_POPUP_KEYS] ?: defaults.layoutBehavior.showAllPopupKeys,
             nativeLettersFirst = p[NATIVE_LETTERS_FIRST]
@@ -9734,6 +9735,7 @@ class SettingsRepository(private val context: Context) {
             scrollable = p[TOOLBAR_SCROLLABLE] ?: defaults.toolbarBehavior.scrollable,
             hideWhenLocked = p[TOOLBAR_HIDE_WHEN_LOCKED] ?: defaults.toolbarBehavior.hideWhenLocked,
             toolWidthDp = p[TOOLBAR_TOOL_WIDTH] ?: defaults.toolbarBehavior.toolWidthDp,
+            iconSizeDp = p[TOOLBAR_ICON_SIZE] ?: defaults.toolbarBehavior.iconSizeDp,
             paddingTopDp = p[TOOLBAR_PADDING_TOP] ?: defaults.toolbarBehavior.paddingTopDp,
             paddingBottomDp = p[TOOLBAR_PADDING_BOTTOM] ?: defaults.toolbarBehavior.paddingBottomDp,
             themesPanelBuiltIns = p[THEMES_PANEL_BUILTINS],
@@ -9757,7 +9759,6 @@ class SettingsRepository(private val context: Context) {
             barCount = p[EMOJI_BAR_COUNT]?.coerceIn(EmojiBarCountRange)
                 ?: defaults.emoji.barCount,
             gridCellSize = p[EMOJI_GRID_CELL_SIZE]?.coerceIn(EmojiGridCellSizeRange)
-            iconSizeDp = p[TOOLBAR_ICON_SIZE] ?: defaults.toolbarBehavior.iconSizeDp,
                 ?: defaults.emoji.gridCellSize,
             gridEmojiSize = p[EMOJI_GRID_EMOJI_SIZE]?.coerceIn(EmojiGridEmojiSizeRange)
                 ?: defaults.emoji.gridEmojiSize,
@@ -9768,7 +9769,6 @@ class SettingsRepository(private val context: Context) {
             kaomojiTabs = p[EMOJI_KAOMOJI_TABS] ?: defaults.emoji.kaomojiTabs,
             keywordPackVersion = p[EMOJI_KEYWORD_PACK_VERSION]
                 ?: defaults.emoji.keywordPackVersion,
-            splitSpacebar = p[SPLIT_SPACEBAR] ?: defaults.layoutBehavior.splitSpacebar,
             autoDownloadKeywords = p[EMOJI_AUTO_DOWNLOAD_KEYWORDS]
                 ?: defaults.emoji.autoDownloadKeywords,
             disabledKeywordLangs = p[EMOJI_DISABLED_KEYWORD_LANGS]
@@ -11304,6 +11304,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setToolbarToolWidthDp(value: Int) =
         editPrefs { it[TOOLBAR_TOOL_WIDTH] = value.coerceIn(38, 64) }
 
+    suspend fun setToolbarIconSizeDp(value: Int) =
+        editPrefs { it[TOOLBAR_ICON_SIZE] = value.coerceIn(14, 30) }
+
     suspend fun setToolbarPaddingTopDp(value: Int) =
         editPrefs { it[TOOLBAR_PADDING_TOP] = value.coerceIn(0, 24) }
 
@@ -11326,9 +11329,6 @@ class SettingsRepository(private val context: Context) {
             val current = ToolHoldActions.decode(prefs[TOOLBAR_HOLD_ACTIONS]).toMutableMap()
             val selfBound = action is ToolHoldAction.Run && action.tool == tool
             if (action == null || selfBound) current.remove(tool) else current[tool] = action
-    suspend fun setToolbarIconSizeDp(value: Int) =
-        editPrefs { it[TOOLBAR_ICON_SIZE] = value.coerceIn(14, 30) }
-
             prefs[TOOLBAR_HOLD_ACTIONS] = ToolHoldActions.encode(current)
         }
 
@@ -13785,6 +13785,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setSplitOnlyOnLargeScreens(value: Boolean) =
         editPrefs { it[SPLIT_ONLY_LARGE] = value }
 
+    suspend fun setSplitSpacebar(value: Boolean) =
+        editPrefs { it[SPLIT_SPACEBAR] = value }
+
     /**
      * Puts the floating panel back where it starts: centred, 320 dp wide, at
      * full key height. Its position and size are only ever written by drags,
@@ -13860,6 +13863,7 @@ class SettingsRepository(private val context: Context) {
         it.remove(TOOL_CIRCLE_RADIUS)
         it.remove(TOOL_SHAPE)
         it.remove(TOOLBAR_TOOL_WIDTH)
+        it.remove(TOOLBAR_ICON_SIZE)
         it.remove(TOOLBAR_PADDING_TOP)
         it.remove(TOOLBAR_PADDING_BOTTOM)
     }
@@ -13891,7 +13895,6 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setShiftCapsLockMs(value: Int) =
         editPrefs { it[SHIFT_CAPS_LOCK_MS] = value.coerceIn(ShiftCapsLockMsRange.first, ShiftCapsLockMsRange.last) }
-        it.remove(TOOLBAR_ICON_SIZE)
 
     suspend fun setShowAllPopupKeys(value: Boolean) =
         editPrefs { it[SHOW_ALL_POPUP_KEYS] = value }
@@ -13910,9 +13913,6 @@ class SettingsRepository(private val context: Context) {
 
     /**
      * Persist the characters that send ?123 back to the letters. Whitespace and
-    suspend fun setSplitSpacebar(value: Boolean) =
-        editPrefs { it[SPLIT_SPACEBAR] = value }
-
      * duplicates are dropped, so "! ? ." and "!?." store the same thing; empty
      * falls back to [DefaultSymbolsReturnChars].
      */

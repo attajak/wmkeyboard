@@ -572,8 +572,6 @@ internal fun AppearanceToolbarSettings(
                 default = SettingsDefaults.toolbarBehavior.toolWidthDp.toFloat(),
             ) { scope.launch { repository.setToolbarToolWidthDp(it.roundToInt()) } }
         }
-        // Drawn only once something has actually moved, like the group reset on
-        // Layout & size. Which tools are pinned is not a slider and stays.
         // Not gated on the toolbar: the toolbox grid draws the same buttons,
         // and it is still one tap away from the keyboard with the bar off.
         item {
@@ -587,6 +585,8 @@ internal fun AppearanceToolbarSettings(
                 default = SettingsDefaults.toolbarBehavior.iconSizeDp.toFloat(),
             ) { scope.launch { repository.setToolbarIconSizeDp(it.roundToInt()) } }
         }
+        // Drawn only once something has actually moved, like the group reset on
+        // Layout & size. Which tools are pinned is not a slider and stays.
         item(visible = toolbarMoved) {
             ActionRow(
                 title = R.string.appearance_toolbar_reset_title,

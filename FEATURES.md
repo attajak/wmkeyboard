@@ -1568,10 +1568,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Tool labels under icons — toolbarLabels off; toolbarLabelSize default 10sp
     - Tool background radius and shape — toolCircleRadiusDp default 20, toolShape shares the key shapes; 0 removes it
     - Tool button width 38dp default — toolWidthDp stretches the circle into a pill
+    - Tool icon size 22dp default (14–30) — toolbarBehavior.iconSizeDp, glyph only, button stays 38dp; toolbar + toolbox grid
   - Per-tool settings screen `RARE` — Every one of the 71 tools has its own screen under Settings → Tools
     - Eight groups plus an Other catch-all — Panels, Scanners, Online, Create & convert, Modes, Cursor, Quick actions, Utilities
     - Tune icon marks tools with real options — toolHasOptions; toggle-only tools show just the switch
-    - Tool icon size 22dp default (14–30) — toolbarBehavior.iconSizeDp, glyph only, button stays 38dp; toolbar + toolbox grid
     - One switch controls bar, toolbox and leader key — setToolEnabled hides the tool everywhere at once
     - Unusable tools grey out with a reason — Search tools show 'Needs an API key' instead of the description
   - Colourful tool icons `uncommon` — coloredToolIcons on by default, per-tool accent

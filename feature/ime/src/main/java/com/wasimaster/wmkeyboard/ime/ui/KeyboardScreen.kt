@@ -13266,6 +13266,7 @@ private fun rememberKeyGrid(
     val settings = state.settings
     val split = settings.splitKeyboard
     val splitGapPercent = settings.splitGapPercent
+    val splitSpacebar = settings.layoutBehavior.splitSpacebar
     // Optional taller (or shorter) bottom row — space / enter — set independently
     // of the other keys. Ignored when the layout carries its own per-row heights,
     // so a custom layout's bottom row wins and the height is never applied twice.
@@ -13275,7 +13276,6 @@ private fun rememberKeyGrid(
         bodyRows, extraRow, layout, palette, settings, gridWeight,
         state.shiftState, state.modifiers, state.effectiveEnterAction,
         // The field's own action as well as the live one: the Enter key's
-    val splitSpacebar = settings.layoutBehavior.splitSpacebar
         // corner draws whichever of the two its face is not (see
         // [enterHintSlot]), so a board keyed on the live one alone kept a
         // stale corner through the shift press that swapped them.
@@ -13740,12 +13740,18 @@ private fun keyRowVisual(
     row: List<Key>,
     split: Boolean,
     splitGapPercent: Int,
+    splitSpacebar: Boolean,
     gridWeight: Float,
     heightDp: Int,
     state: KeyboardUiState,
     palette: KeyPalette,
     fontScale: Float,
 ): KeyRowVisual {
+    val gapWeight = gridWeight * splitGapPercent / 100f
+    // Issue #399: a spacebar kept whole is drawn as one unsplit row whose
+    // spacebar has swallowed the gap, so every other key of it still lands
+    // exactly where the split row would have put it.
+    val bridged = if (split && !splitSpacebar) bridgeSpaceAcrossGap(row, gapWeight) else null
     // Split before resolving: the cut rewrites a straddling spacebar's width and
     // blanks the left half's label, so the halves are the keys to resolve.
     val (left, right) = when {
@@ -13753,18 +13759,12 @@ private fun keyRowVisual(
         split -> splitKeys(row)
         else -> row to emptyList()
     }
-    splitSpacebar: Boolean,
     return KeyRowVisual(
         left = left.map { keyVisual(it, state, palette, fontScale) },
         right = right.map { keyVisual(it, state, palette, fontScale) },
         sidePad = sidePadFor(row, gridWeight),
         splitGapWeight = if (bridged != null) 0f else gapWeight,
         heightDp = heightDp,
-    val gapWeight = gridWeight * splitGapPercent / 100f
-    // Issue #399: a spacebar kept whole is drawn as one unsplit row whose
-    // spacebar has swallowed the gap, so every other key of it still lands
-    // exactly where the split row would have put it.
-    val bridged = if (split && !splitSpacebar) bridgeSpaceAcrossGap(row, gapWeight) else null
     )
 }
 
@@ -16635,15 +16635,6 @@ internal fun splitKeys(keys: List<Key>): Pair<List<Key>, List<Key>> {
 }
 
 /**
- * The punctuation keys that report a centre alongside the letters, for the
- * apostrophe-in-a-glide setting to find. Kept out of everything that means
- * "letter key" — the engine's touch model and [nearLetterKey] — so tracking them
- * cannot change where a tap lands or what starts a glide.
- */
-private val GlidePunctuationCodePoints = setOf(','.code, '.'.code, '\''.code)
-
-/** The character this key contributes to the centres map if it is punctuation. */
-/**
  * The row [splitKeys] would cut, joined back up across a spacebar that meets the
  * cut (issue #399): that spacebar is widened by [gapWeight] to fill the centre
  * gap, and nothing else moves. Null when no spacebar touches the cut, so the row
@@ -16668,6 +16659,15 @@ internal fun bridgeSpaceAcrossGap(keys: List<Key>, gapWeight: Float): List<Key>?
     }
 }
 
+/**
+ * The punctuation keys that report a centre alongside the letters, for the
+ * apostrophe-in-a-glide setting to find. Kept out of everything that means
+ * "letter key" — the engine's touch model and [nearLetterKey] — so tracking them
+ * cannot change where a tap lands or what starts a glide.
+ */
+private val GlidePunctuationCodePoints = setOf(','.code, '.'.code, '\''.code)
+
+/** The character this key contributes to the centres map if it is punctuation. */
 private fun Key.glidePunctuationCodePoint(): Int? =
     if (action == KeyAction.Text) {
         (output ?: label).singleOrNull()?.code?.takeIf { it in GlidePunctuationCodePoints }
