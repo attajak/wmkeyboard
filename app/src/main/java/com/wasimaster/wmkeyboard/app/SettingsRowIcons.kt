@@ -639,6 +639,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_one_handed_title) { Icons.Outlined.PanTool }
         put(R.string.layout_split_title) { Icons.Outlined.VerticalSplit }
         put(R.string.layout_split_gap_title) { Icons.Outlined.SpaceBar }
+        put(R.string.layout_split_spacebar_title) { Icons.Outlined.SpaceBar }
         put(R.string.layout_split_large_only_title) { Icons.Outlined.TabletAndroid }
         put(R.string.layout_floating_title) { Icons.Outlined.PictureInPicture }
         put(R.string.layout_floating_width_title) { Icons.Outlined.Straighten }

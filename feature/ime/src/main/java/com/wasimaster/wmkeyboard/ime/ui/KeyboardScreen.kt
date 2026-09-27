@@ -13194,6 +13194,7 @@ private fun rememberKeyGrid(
         bodyRows, extraRow, layout, palette, settings, gridWeight,
         state.shiftState, state.modifiers, state.effectiveEnterAction,
         // The field's own action as well as the live one: the Enter key's
+    val splitSpacebar = settings.layoutBehavior.splitSpacebar
         // corner draws whichever of the two its face is not (see
         // [enterHintSlot]), so a board keyed on the live one alone kept a
         // stale corner through the shift press that swapped them.
@@ -13219,7 +13220,7 @@ private fun rememberKeyGrid(
         val fontScale = layout.appearance.drawnFontScale()
         val digits = extraRow?.let { row ->
             keyRowVisual(
-                row, split, splitGapPercent, row.size.toFloat(),
+                row, split, splitGapPercent, splitSpacebar, row.size.toFloat(),
                 settings.numberRowHeightDp, state, palette, fontScale,
             )
         }
@@ -13244,7 +13245,7 @@ private fun rememberKeyGrid(
             if (band.first == band.last) {
                 KeyGridBlock.Row(
                     keyRowVisual(
-                        bodyRows[band.first], split, splitGapPercent, gridWeight,
+                        bodyRows[band.first], split, splitGapPercent, splitSpacebar, gridWeight,
                         heights[band.first], state, palette, fontScale,
                     ),
                 )
@@ -13666,13 +13667,23 @@ private fun keyRowVisual(
 ): KeyRowVisual {
     // Split before resolving: the cut rewrites a straddling spacebar's width and
     // blanks the left half's label, so the halves are the keys to resolve.
-    val (left, right) = if (split) splitKeys(row) else row to emptyList()
+    val (left, right) = when {
+        bridged != null -> bridged to emptyList()
+        split -> splitKeys(row)
+        else -> row to emptyList()
+    }
+    splitSpacebar: Boolean,
     return KeyRowVisual(
         left = left.map { keyVisual(it, state, palette, fontScale) },
         right = right.map { keyVisual(it, state, palette, fontScale) },
         sidePad = sidePadFor(row, gridWeight),
-        splitGapWeight = gridWeight * splitGapPercent / 100f,
+        splitGapWeight = if (bridged != null) 0f else gapWeight,
         heightDp = heightDp,
+    val gapWeight = gridWeight * splitGapPercent / 100f
+    // Issue #399: a spacebar kept whole is drawn as one unsplit row whose
+    // spacebar has swallowed the gap, so every other key of it still lands
+    // exactly where the split row would have put it.
+    val bridged = if (split && !splitSpacebar) bridgeSpaceAcrossGap(row, gapWeight) else null
     )
 }
 
@@ -15209,7 +15220,8 @@ private fun KeyRows(
             // rather than a value, so two grids that compare equal still count
             // as two (see [KeyRects.record]).
             val gridToken = remember(
-                layout, boxOrigin, boxSize, split, mode, numberRow, symbolsGiveUpDigits,
+                layout, boxOrigin, boxSize, split, settings.layoutBehavior.splitSpacebar,
+                mode, numberRow, symbolsGiveUpDigits,
             ) { Any() }
             // Read live rather than captured, so a grid that moves does not also
             // hand every key a new lambda and cost the whole board a skip.
@@ -16237,7 +16249,9 @@ private fun KeyRow(
         }
         // Split mode only: the halves are cut where the row was resolved, so an
         // unsplit row has nothing on the right and needs no gap.
-        if (split) {
+        // A row whose spacebar bridges the gap (#399) is drawn whole, gap and all
+        // inside the spacebar, so it has no spacer — and a zero weight throws.
+        if (split && row.splitGapWeight > 0f) {
             Spacer(modifier = Modifier.weight(row.splitGapWeight))
             for (visual in row.right) {
                 KeyCell(
@@ -16442,6 +16456,31 @@ internal fun splitKeys(keys: List<Key>): Pair<List<Key>, List<Key>> {
 private val GlidePunctuationCodePoints = setOf(','.code, '.'.code, '\''.code)
 
 /** The character this key contributes to the centres map if it is punctuation. */
+/**
+ * The row [splitKeys] would cut, joined back up across a spacebar that meets the
+ * cut (issue #399): that spacebar is widened by [gapWeight] to fill the centre
+ * gap, and nothing else moves. Null when no spacebar touches the cut, so the row
+ * splits as usual — a row without one has nothing to bridge the gap with.
+ *
+ * "Meets the cut" covers a spacebar straddling the midpoint, which [splitKeys]
+ * would divide, and one that merely ends or starts a half, which it would leave
+ * whole at the gap's edge.
+ */
+internal fun bridgeSpaceAcrossGap(keys: List<Key>, gapWeight: Float): List<Key>? {
+    val (left, right) = splitKeys(keys)
+    if (left.isEmpty() || right.isEmpty()) return null
+    val index = when {
+        // Straddling or ending the left half: either way it is the key at the
+        // left half's last index in the original row.
+        left.last().action == KeyAction.Space -> left.lastIndex
+        right.first().action == KeyAction.Space -> left.size
+        else -> return null
+    }
+    return keys.mapIndexed { i, key ->
+        if (i == index) key.copy(width = key.width + gapWeight) else key
+    }
+}
+
 private fun Key.glidePunctuationCodePoint(): Int? =
     if (action == KeyAction.Text) {
         (output ?: label).singleOrNull()?.code?.takeIf { it in GlidePunctuationCodePoints }

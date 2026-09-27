@@ -839,6 +839,7 @@ private fun SearchStrings.layoutOnehandedRows(): List<SettingsSearchEntry> {
         row(R.string.layout_one_handed_title, R.string.layout_one_handed_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.layout_split_title, R.string.layout_split_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.layout_split_gap_title, R.string.layout_split_gap_subtitle),
+        row(R.string.layout_split_spacebar_title, R.string.layout_split_spacebar_subtitle),
         row(R.string.layout_floating_title, R.string.layout_floating_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.layout_floating_width_title, R.string.layout_floating_width_subtitle),
         row(R.string.layout_persistent_title, R.string.layout_persistent_subtitle, weight = EntryWeight.PRIMARY),

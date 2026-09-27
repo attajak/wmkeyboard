@@ -129,7 +129,7 @@
     <string name="layout_one_handed_side_subtitle">The edge that the keyboard docks to in <xliff:g id="orientation" example="Portrait">%1$s</xliff:g></string>
     <string name="layout_split_title">Split keyboard</string>
     <string name="layout_split_subtitle">Divide the keys into a left half and a right half</string>
-    <string name="layout_split_info">The keyboard divides each row in the middle and puts a gap between the halves, so your thumbs move less on wide screens. This helps most on tablets, foldable devices and phones in landscape. The keyboard divides the spacebar between the two halves.</string>
+    <string name="layout_split_info">The keyboard divides each row in the middle and puts a gap between the halves, so your thumbs move less on wide screens. This helps most on tablets, foldable devices and phones in landscape. By default the keyboard also divides the spacebar between the two halves.</string>
     <string name="layout_split_gap_title">Split gap</string>
     <string name="layout_split_gap_subtitle">The width of the gap between the halves</string>
     <string name="layout_split_gap_info">This is the gap in the centre, as a percentage of the keyboard width. A larger gap moves the halves toward the edges, but each key becomes narrower.</string>
@@ -179,6 +179,9 @@
     <string name="layout_globe_hidden_subtitle">No effect while the 🌐 key is hidden</string>
     <string name="layout_split_large_only_title">Split only on wide screens</string>
     <string name="layout_split_large_only_subtitle">Stay whole on a portrait phone, split when there is room</string>
+    <string name="layout_split_spacebar_title">Split the spacebar</string>
+    <string name="layout_split_spacebar_subtitle">Divide the spacebar too, or keep it as one key across the gap</string>
+    <string name="layout_split_spacebar_info">When this is on, the spacebar is divided between the two halves like every other row, and the centre of the bottom row is empty. When this is off, the spacebar stays as one key and fills the gap, so both thumbs can press it where they meet. The other keys on the bottom row stay in their halves. This setting is on by default.</string>
     <string name="layout_split_large_only_info">Split is one setting for every screen shape, so turning it on in landscape leaves the keyboard split after you rotate back, where a split layout is hard to use. Turn this on to split only in landscape or on an unfolded screen. This setting is off by default.</string>
 
     <string name="layout_floating_height_title">Floating keyboard height</string>

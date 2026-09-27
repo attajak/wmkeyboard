@@ -6323,6 +6323,13 @@ data class LayoutBehaviorSettings(
     /**
      * The style the Fancy tool turns on with (a FancyStyles id), or null to
      * start from whatever style is already picked. Only the session is
+    /**
+     * Whether split mode cuts the spacebar too (issue #399). On, a spacebar
+     * that meets the cut is divided between the halves, which is how split has
+     * always drawn it. Off, it stays one key and reaches across the centre gap,
+     * so both thumbs land on it where they meet. On by default.
+     */
+    val splitSpacebar: Boolean = true,
      * restyled: the tool never overwrites the style the strip persisted, so
      * a pinned style is a way in rather than a new default.
      */
@@ -7624,6 +7631,7 @@ class SettingsRepository(private val context: Context) {
         private val HW_ESC_CLOSES_PANEL = booleanPreferencesKey("hw_esc_closes_panel")
         private val HW_SUGGESTION_HOTKEYS = stringPreferencesKey("hw_suggestion_hotkeys")
         private val HW_SUGGESTION_HINTS_ALWAYS =
+        private val SPLIT_SPACEBAR = booleanPreferencesKey("split_spacebar")
             booleanPreferencesKey("hw_suggestion_hints_always")
         private val HW_TOOLBAR_DIGIT_CHORD = booleanPreferencesKey("hw_toolbar_digit_chord")
         private val HW_MAC_SHORTCUTS = booleanPreferencesKey("hw_mac_shortcuts")
@@ -9577,6 +9585,7 @@ class SettingsRepository(private val context: Context) {
             kaomojiTabs = p[EMOJI_KAOMOJI_TABS] ?: defaults.emoji.kaomojiTabs,
             keywordPackVersion = p[EMOJI_KEYWORD_PACK_VERSION]
                 ?: defaults.emoji.keywordPackVersion,
+            splitSpacebar = p[SPLIT_SPACEBAR] ?: defaults.layoutBehavior.splitSpacebar,
             autoDownloadKeywords = p[EMOJI_AUTO_DOWNLOAD_KEYWORDS]
                 ?: defaults.emoji.autoDownloadKeywords,
             disabledKeywordLangs = p[EMOJI_DISABLED_KEYWORD_LANGS]
@@ -13674,6 +13683,9 @@ class SettingsRepository(private val context: Context) {
 
     /**
      * Persist the characters that send ?123 back to the letters. Whitespace and
+    suspend fun setSplitSpacebar(value: Boolean) =
+        editPrefs { it[SPLIT_SPACEBAR] = value }
+
      * duplicates are dropped, so "! ? ." and "!?." store the same thing; empty
      * falls back to [DefaultSymbolsReturnChars].
      */

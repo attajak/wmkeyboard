@@ -1540,6 +1540,15 @@ internal fun LayoutOneHandedSettings(
                 default = SettingsDefaults.splitGapPercent.toFloat(),
             ) { scope.launch { repository.setSplitGapPercent(it.toInt()) } }
         }
+        item(visible = split) {
+            ToggleSetting(
+                R.string.layout_split_spacebar_title,
+                stringResource(R.string.layout_split_spacebar_subtitle),
+                settings.watch { it.layoutBehavior.splitSpacebar },
+                info = stringResource(R.string.layout_split_spacebar_info),
+                default = SettingsDefaults.layoutBehavior.splitSpacebar,
+            ) { scope.launch { repository.setSplitSpacebar(it) } }
+        }
         item {
             ToggleSetting(
                 R.string.layout_floating_title,
