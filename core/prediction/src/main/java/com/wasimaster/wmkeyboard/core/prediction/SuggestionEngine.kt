@@ -3530,6 +3530,12 @@ class SuggestionEngine(
         if (known && !accentShadowed(lower, touch) && !typoShadowed(lower, touch, keys)) {
             return NO_CORRECTION
         }
+        // A verb form (-s, -ed, -ing) the list left out while keeping the verb (#395).
+        if (!known && (englishSources || englishAsSecondary) &&
+            Inflections.isVerbForm(lower) { inDictionaries(it) }
+        ) {
+            return NO_CORRECTION
+        }
         if (knownCompound(lower)) return NO_CORRECTION
         // Contact and app names are known words too — never "corrected" away.
         if (contacts.contains(lower) || apps.contains(lower)) return NO_CORRECTION
