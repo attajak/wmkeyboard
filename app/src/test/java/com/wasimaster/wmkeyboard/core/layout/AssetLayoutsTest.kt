@@ -5,6 +5,7 @@ import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.ime.keySpelling
 import java.io.File
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -272,5 +273,13 @@ class AssetLayoutsTest {
                 id !in builtInIds,
             )
         }
+    }
+
+    @Test
+    fun `Thai layout script has no letter case`() {
+        val file = layoutFiles.first { it.name == "th_kedmanee.${LayoutFile.FILE_EXTENSION}" }
+        val layout = LayoutFile.decode(file.readText())!!.layout
+        assertEquals(ScriptId.THAI, layout.script().id)
+        assertFalse(layout.script().hasLetterCase)
     }
 }
