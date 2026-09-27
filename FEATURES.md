@@ -19,11 +19,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Toolbar and the tool set | 10 | 85 | 311 |
 | Clipboard, snippets, text expansion | 7 | 37 | 191 |
 | AI, voice, handwriting, scanning | 11 | 70 | 162 |
-| Privacy, backup, storage, statistics | 14 | 65 | 163 |
+| Privacy, backup, storage, statistics | 14 | 69 | 173 |
 | Accessibility, form factors, platform integration | 13 | 61 | 111 |
 | Extensibility: addons, plugins, imports, formats | 5 | 35 | 164 |
 | Modes, rows, field adaptation, runtime | 12 | 97 | 203 |
-| **Total** | **133** | **803** | **2219** |
+| **Total** | **133** | **807** | **2229** |
 
 ## Typing core: prediction, autocorrect, learning, spell check
 
@@ -1519,7 +1519,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 
 ## Toolbar and the tool set
 
-- **Toolbar & toolbox mechanics** `uncommon` — 74 tools in ToolbarTool enum; 3 pinned by default (Emoji, Clipboard, Settings)
+- **Toolbar & toolbox mechanics** `uncommon` — 77 tools in ToolbarTool enum; 3 pinned by default (Emoji, Clipboard, Settings)
   - Pinned bar vs toolbox — A tool is on the bar or in the toolbox grid, never both
     - Default pinned row — Emoji, Clipboard, Settings (DefaultToolbarTools)
     - Tablet-aware default pin set — 5 pinned on small tablets, 7 on large, applied only if user never rearranged
@@ -1574,7 +1574,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Per-tool colour override — toolColorOverrides map, reset-all button when any override exists
     - Two-colour gradient icons — toolIconGradients off by default, with its own end-colour override map
     - Icon-pack glyph substitution — IconSlots.forTool resolves an installed icon pack's glyph
-  - Direct-boot tool filter `RARE` — 46 of 74 tools work before the first unlock after reboot
+  - Direct-boot tool filter `RARE` — 47 of 77 tools work before the first unlock after reboot
     - Rule is what the tool reads — Arithmetic, sensors and keyboard-own state stay; disk, credentials, providers, activities go
     - All 14 cursor tools stay usable — They only touch the input connection
     - Not a user toggle — isDirectBootSafeTool is automatic and only applies pre-first-unlock
@@ -1982,8 +1982,8 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
 | Clipboard source-app attribution | needs Usage Access; best-effort foreground-app guess |
 | Voice typing | needs microphone permission; audio may reach the OS recognizer service unless the on-device language model is installed |
 | Clipboard link previews and QR link details and dictionary auto-lookup | network, and force-disabled by power saving's background-network toggle |
-| 28 tools of 74 are unavailable before the first unlock after reboot | direct-boot filter; the other 46 (arithmetic, sensors, keyboard-own state, all 14 cursor tools) stay usable |
-| Lite edition tool count | 69 of 74 tools; the 5 ML Kit / Harper tools are compiled out, not just hidden |
+| 30 tools of 77 are unavailable before the first unlock after reboot | direct-boot filter; the other 47 (arithmetic, sensors, keyboard-own state, all 14 cursor tools) stay usable |
+| Lite edition tool count | 72 of 77 tools; the 5 ML Kit / Harper tools are compiled out, not just hidden |
 
 ## Clipboard, snippets, text expansion
 
@@ -2731,6 +2731,20 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Delete with confirmation, then version bump — statsVersion tells the running IME to re-read instead of writing old numbers back.
     - Stored in stats/, not learning/ — "Delete learned words" must not take the statistics with it.
     - Direct boot means memory-only — A null storage file: counters run but nothing is written.
+  - Levels `uncommon` — XP from the lifetime counts; each level costs 500 XP more than the last; ten names from Beginner to Legend (#390).
+    - XP rule — 1 per word, 1 more per predicted, completed or glided word, 100 per achievement step.
+    - Computed, never stored — TypingProgress derives it on open, so a delete resets it and a backup restores it.
+  - Achievements `uncommon` — Six SwiftKey-style tiered counters with a progress ring each (#390).
+    - The six — Words typed, keystrokes saved, words predicted, words completed, glided words, glide distance (metres, last step 42,195).
+    - Pick classification — Nothing typed is a prediction, longer than typed is a completion; a pick over a glide or the caret word is a word only.
+    - Keystrokes saved — A pick saves its letters plus the auto space, less what was typed and the chip tap; a glide saves all letters but one.
+    - Glide distance in physical millimetres — Stroke length over xdpi/ydpi, so a bigger screen does not count faster.
+  - Tap heatmap `RARE` — Per layout, key downs counted per quarter-key cell and drawn over that layout's letter keys (#390).
+    - Rows down, not key widths — Portrait and landscape taps share cells.
+    - Letters layer only — Symbols, secondary layouts and open panels are left out; space and backspace count.
+    - Eight boards kept — The least tapped makes room; chips pick among the four most tapped.
+    - Most tapped letters in words — The screen-reader version of the hidden map.
+  - Statistics tool `uncommon` — ToolbarTool.STATISTICS opens the screen from the keyboard; not direct-boot safe (#390).
   - Typing-test achievements `RARE` — 4 badges stored as one comma-list preference; unlocks only accumulate.
     - The four — 100 WPM, a flawless run of 30+ chars, a pangram quote, 50 completed tests.
     - Unknown ids dropped on decode — Encoding is order-stable against the ALL list.

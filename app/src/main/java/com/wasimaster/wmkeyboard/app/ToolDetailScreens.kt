@@ -397,6 +397,16 @@ internal fun ToolDetailSettings(
     when (tool) {
         ToolbarTool.KDE_CONNECT ->
             com.wasimaster.wmkeyboard.app.kdeconnect.KdeConnectToolSettings(repository, settings, onNavigate)
+        // The tool is a shortcut to a screen, and its page leads to it too (#390).
+        ToolbarTool.STATISTICS -> SettingsGroup {
+            item {
+                NavRow(
+                    R.string.statistics_title,
+                    stringResource(R.string.statistics_subtitle),
+                    route = "statistics",
+                ) { onNavigate("statistics") }
+            }
+        }
         ToolbarTool.MEDIA_CONTROL -> {
             // Re-read whenever this screen comes back to the foreground: the
             // grant is made on a system screen, so the user leaves, ticks the

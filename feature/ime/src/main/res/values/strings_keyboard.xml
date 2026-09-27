@@ -455,6 +455,7 @@
     <string name="ime_tool_qr_gen">QR code</string>
     <string name="ime_tool_password_gen">Password</string>
     <string name="ime_tool_typing_test">Typing speed</string>
+    <string name="ime_tool_statistics">Statistics</string>
     <string name="ime_tool_media_control">Media</string>
     <string name="ime_tool_kde_connect" translatable="false">KDE Connect</string>
     <string name="ime_tool_plugins">Plugins</string>

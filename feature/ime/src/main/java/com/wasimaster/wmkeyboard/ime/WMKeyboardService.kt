@@ -421,6 +421,7 @@ import com.wasimaster.wmkeyboard.core.tools.QrCodeGen
 import com.wasimaster.wmkeyboard.core.tools.CalcEngine
 import com.wasimaster.wmkeyboard.core.tools.ToolApiKeys
 import com.wasimaster.wmkeyboard.core.tools.ToolPrefill
+import com.wasimaster.wmkeyboard.core.tools.TypingHeatmapMath
 import com.wasimaster.wmkeyboard.core.tools.TypingStatsMath
 import com.wasimaster.wmkeyboard.core.vocab.ReviewGrade
 import com.wasimaster.wmkeyboard.core.vocab.VocabAudioSource
@@ -787,6 +788,15 @@ open class WMKeyboardService : InputMethodService() {
 
     /** The letter-key centres the layout last reported, as drawn. */
     private var rawTouchKeys: List<KeyCenter> = emptyList()
+
+    /**
+     * [rawTouchKeys] as the tap heatmap stores them (rows down rather than key
+     * widths), the list they were made from, and the row pitch that converts
+     * one to the other. Rebuilt only when the layout reports new centres.
+     */
+    private var heatKeys: List<TypingStats.HeatKey> = emptyList()
+    private var heatKeysFrom: List<KeyCenter>? = null
+    private var heatRowPitch = 1f
 
     /** The tap-model version the engine's touch model was last built from, -1 for none. */
     private var appliedTapVersion = -1
@@ -1242,6 +1252,48 @@ open class WMKeyboardService : InputMethodService() {
     /** KeyboardScreen: the down position of the tap committing a letter. */
     private fun onKeyTouch(x: Float, y: Float) {
         pendingTouch = TouchPoint(x, y)
+        recordHeatTap(x, y)
+    }
+
+    /**
+     * Counts a key's down on the statistics tap heatmap (issue #390). Every
+     * key on the letters layer counts, space and backspace included, since the
+     * heatmap is about where the thumb lands rather than what it typed. The
+     * symbols, a secondary layout and a named layer put other keys under the
+     * same spots, so they are left out rather than smeared into the letters.
+     *
+     * [x] and [y] arrive in key widths. Down is stored in rows instead, which
+     * is what lets portrait and landscape taps share cells: a landscape row is
+     * far shorter than a portrait one when measured in key widths.
+     */
+    private fun recordHeatTap(x: Float, y: Float) {
+        val state = _uiState.value
+        if (state.layoutMode != LayoutMode.LETTERS || state.namedLayer != null) return
+        if (state.panel != PanelMode.NONE) return
+        val keys = rawTouchKeys
+        if (keys !== heatKeysFrom) {
+            heatKeysFrom = keys
+            heatRowPitch = TypingHeatmapMath.rowPitch(keys.map { it.y })
+            heatKeys = keys.map { key ->
+                TypingStats.HeatKey(String(Character.toChars(key.codePoint)).lowercase(), key.x, key.y / heatRowPitch)
+            }
+        }
+        if (heatKeys.isEmpty()) return
+        recordStat { onKeyTap(state.layoutId, state.layoutName, x, y / heatRowPitch, heatKeys) }
+    }
+
+    /** How far the finger travelled drawing [points], in millimetres of glass. */
+    private fun glideDistanceMm(points: List<GesturePoint>): Double {
+        val metrics = resources.displayMetrics
+        val xdpi = metrics.xdpi.takeIf { it > 0f } ?: metrics.densityDpi.toFloat()
+        val ydpi = metrics.ydpi.takeIf { it > 0f } ?: metrics.densityDpi.toFloat()
+        var inches = 0.0
+        for (i in 1 until points.size) {
+            val dx = ((points[i].x - points[i - 1].x) / xdpi).toDouble()
+            val dy = ((points[i].y - points[i - 1].y) / ydpi).toDouble()
+            inches += kotlin.math.sqrt(dx * dx + dy * dy)
+        }
+        return inches * MM_PER_INCH
     }
 
     /**
@@ -16203,8 +16255,18 @@ open class WMKeyboardService : InputMethodService() {
             armRevertGuard()
         }
         // Whole words landed without being typed out; this also disarms the
-        // half-typed word so the next separator cannot count it again.
-        recordStat { onWordsCommitted(suggestion.split(' ').size, System.currentTimeMillis()) }
+        // half-typed word so the next separator cannot count it again. A pick
+        // over a glided word is fixing the glide, not predicting or finishing
+        // anything, so it counts as a word and nothing more.
+        recordStat {
+            val words = suggestion.split(' ').size
+            val now = System.currentTimeMillis()
+            if (replacedWord == null) {
+                onWordsPicked(words, composing.length, committed.length, tail.isNotEmpty(), now)
+            } else {
+                onWordsCommitted(words, now)
+            }
+        }
         // A one-shot shift is spent by the pick, the same as by a typed letter.
         consumeShift()
         // A reading the glide that wrote this word had offered and lost with:
@@ -16303,7 +16365,12 @@ open class WMKeyboardService : InputMethodService() {
             pendingWordSpace = true
             armRevertGuard()
         }
-        recordStat { onWordsCommitted(word.split(' ').size, System.currentTimeMillis()) }
+        recordStat {
+            onWordsPicked(
+                word.split(' ').size, composing.length, committed.length, tail.isNotEmpty(),
+                System.currentTimeMillis(),
+            )
+        }
         consumeShift()
         // Deliberately chosen, so it carries a pick's weight. The base word, not
         // the shift-cased form, and a capital that auto-capitalize put there is
@@ -17800,7 +17867,7 @@ open class WMKeyboardService : InputMethodService() {
             stripReplacesGestureWord = true
             commitGestureSpace(ic, state)
             armRevertGuard()
-            recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
+            recordStat { onGlideWord(word.length, glideDistanceMm(points), System.currentTimeMillis()) }
             learn(
                 word,
                 caseTrusted = glideCaseTrusted(shiftAtGesture, state, verdict.caseAt(0)),
@@ -18281,7 +18348,7 @@ open class WMKeyboardService : InputMethodService() {
                 lastGestureWord = word
                 stripReplacesGestureWord = true
                 armRevertGuard()
-                recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
+                recordStat { onGlideWord(word.length, glideDistanceMm(segment), System.currentTimeMillis()) }
                 learn(
                     word,
                     // Only the first word of the stroke could have been shifted
@@ -18450,6 +18517,9 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.QR_GEN -> onPanelChange(PanelMode.QR_GEN)
             ToolbarTool.PASSWORD_GEN -> onPanelChange(PanelMode.PASSWORD_GEN)
             ToolbarTool.TYPING_TEST -> onPanelChange(PanelMode.TYPING_TEST)
+            // Not a panel: the levels, achievements and heatmap live on the
+            // settings app's Statistics screen, and this is a shortcut to it (#390).
+            ToolbarTool.STATISTICS -> openRoute(STATISTICS_ROUTE)
             ToolbarTool.LEARN_FROM_TEXT -> onPanelChange(PanelMode.LEARN_FROM_TEXT)
             ToolbarTool.MEDIA_CONTROL -> onPanelChange(PanelMode.MEDIA_CONTROL)
             ToolbarTool.KDE_CONNECT -> onPanelChange(PanelMode.KDE_CONNECT)
@@ -32305,6 +32375,11 @@ open class WMKeyboardService : InputMethodService() {
 
         /** The typing test's suggestion row: how long a keystroke burst is left to settle. */
         private const val TYPING_TEST_SUGGEST_DEBOUNCE_MS = 24L
+
+        /** The settings app's Statistics screen, as its NavHost names it. */
+        private const val STATISTICS_ROUTE = "statistics"
+
+        private const val MM_PER_INCH = 25.4
 
         /** The same, for a keyboard-owned field's own suggestion row (#161). */
         private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
