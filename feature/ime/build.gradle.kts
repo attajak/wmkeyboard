@@ -102,6 +102,9 @@ dependencies {
     api(project(":feature:tools"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.android)
+    // Named sections in system traces (ImeTrace). A native flag check when
+    // nobody is tracing, so it stays in release builds.
+    implementation(libs.androidx.tracing)
     implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

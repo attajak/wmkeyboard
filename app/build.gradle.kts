@@ -112,6 +112,15 @@ val translatedLocales: String = run {
 // splits as conflicting ways of saying the same thing.
 val splitApks = flag("wmkb.splitApks", "WMKB_SPLIT_APKS")
 
+// Macrobenchmarks and baseline profile generation (:benchmark). Off by default,
+// for the reasons settings.gradle.kts gives; the flag has to match there.
+val benchmarkBuild = flag("wmkb.benchmark", "WMKB_BENCHMARK")
+
+
+// Where the generated baseline profile lives: AGP's own default directory for
+// the one variant that generates it (see the benchmark block near the end).
+val generatedProfileDir = "src/fullIntlRelease/baselineProfiles"
+
 android {
     // The unit-test worker dies with an EOFException on the default 512m: the
     // settings tests parse every strings*.xml in the app to check the search
@@ -1151,6 +1160,59 @@ if (providers.gradleProperty("wmkb.skipBenchmarks").map(String::toBoolean).getOr
         filter {
             excludeTestsMatching("*LatencyBench")
             excludeTestsMatching("*NoiseSweepTest")
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Baseline profile generation: `-Pwmkb.benchmark=true`
+//
+//   ./gradlew :app:generateFullIntlReleaseBaselineProfile -Pwmkb.benchmark=true
+//
+// Runs :benchmark's BaselineProfileGenerator on the connected device against a
+// non-minified fullIntl release build and writes what it recorded to
+// src/fullIntlRelease/baselineProfiles/. Commit the result. Every variant
+// packages it (the block below this one), flag or not, next to the
+// hand-written src/main/baseline-prof.txt.
+//
+// One variant and not the plugin's merged `generateBaselineProfile`: the plugin
+// gives every release-like build type a profiling twin, `fast` included, in all
+// four flavour pairs, and merging means running the journey on the device once
+// for each of the eight to produce one file. The code a journey reaches is the
+// same in all of them.
+//
+// The plugin also adds the `nonMinifiedRelease` and `benchmarkRelease` build
+// types it installs, which is why the whole block sits behind the flag.
+// ---------------------------------------------------------------------------
+if (benchmarkBuild) {
+    apply(plugin = "androidx.baselineprofile")
+
+    configure<androidx.baselineprofile.gradle.consumer.BaselineProfileConsumerExtension> {
+        mergeIntoMain = false
+        // AGP's own default source directory for the variant, so a build
+        // without the plugin (every ordinary one) still finds the file.
+        baselineProfileOutputDir = "baselineProfiles"
+        // Only on request: generation needs a device and several minutes.
+        automaticGenerationDuringBuild = false
+        filter {
+            // The app's own code. Libraries ship profiles of their own, and
+            // the subsystems no journey reaches stay out as they always have.
+            include("com.wasimaster.wmkeyboard.**")
+        }
+    }
+
+    dependencies {
+        "baselineProfile"(project(":benchmark"))
+    }
+}
+
+// The generated profile, for every variant rather than only the fullIntl
+// release one it was recorded from. That one already reads the directory as
+// its own source set's default.
+androidComponents {
+    onVariants { variant ->
+        if (variant.name != "fullIntlRelease") {
+            variant.sources.baselineProfiles?.addStaticSourceDirectory(generatedProfileDir)
         }
     }
 }

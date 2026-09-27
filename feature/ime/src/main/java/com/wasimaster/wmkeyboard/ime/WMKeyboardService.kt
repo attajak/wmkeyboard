@@ -67,6 +67,7 @@ import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import androidx.core.graphics.createBitmap
+import androidx.tracing.trace
 import com.wasimaster.wmkeyboard.config.BuildConfig
 import com.wasimaster.wmkeyboard.app.CalendarPermissionActivity
 import com.wasimaster.wmkeyboard.app.CameraPermissionActivity
@@ -4229,7 +4230,9 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var inputRootView: View? = null
 
-    override fun onCreateInputView(): View {
+    override fun onCreateInputView(): View = trace(ImeTrace.CREATE_INPUT_VIEW) { createInputView() }
+
+    private fun createInputView(): View {
         // The window is about to draw for the first time, so the gated state
         // starts from whatever the service has now rather than from an empty
         // keyboard — see [_shownState].
@@ -5013,7 +5016,10 @@ open class WMKeyboardService : InputMethodService() {
         reshowPinned()
     }
 
-    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) =
+        trace(ImeTrace.START_INPUT_VIEW) { startInputView(info, restarting) }
+
+    private fun startInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         // The keyboard is up, by the system's hand or ours; a hide that
         // suspended pinning has run its course.
@@ -5439,6 +5445,17 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     override fun onUpdateSelection(
+        oldSelStart: Int,
+        oldSelEnd: Int,
+        newSelStart: Int,
+        newSelEnd: Int,
+        candidatesStart: Int,
+        candidatesEnd: Int,
+    ) = trace(ImeTrace.UPDATE_SELECTION) {
+        updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+    }
+
+    private fun updateSelection(
         oldSelStart: Int,
         oldSelEnd: Int,
         newSelStart: Int,
@@ -6288,7 +6305,9 @@ open class WMKeyboardService : InputMethodService() {
 
     // No vibrate() here: press-time haptics fire from the UI's pointer-down
     // callback (onKeyPressed) so feedback lands on touch, not on release.
-    fun onKey(key: Key) {
+    fun onKey(key: Key) = trace(ImeTrace.KEY) { handleKey(key) }
+
+    private fun handleKey(key: Key) {
         // Space, backspace and enter on a Keyman layout: the layer may say what
         // modifiers the rules see them with and where they lead, and the
         // keyboard's PostKeystroke group runs after them as after every other
@@ -15540,7 +15559,9 @@ open class WMKeyboardService : InputMethodService() {
         return commitResolution?.takeIf { it.typed == typed }
     }
 
-    private fun refreshSuggestions() {
+    private fun refreshSuggestions() = trace(ImeTrace.REFRESH_SUGGESTIONS) { refreshStrip() }
+
+    private fun refreshStrip() {
         val state = _uiState.value
         if (emailFieldForceActive(state)) {
             refreshEmailFieldSuggestions()
@@ -15685,20 +15706,22 @@ open class WMKeyboardService : InputMethodService() {
                 // completed from what they spelled, not from the roman keys;
                 // the tap and key frames belong to those keys, so they stay out.
                 val completing = state.composer.completionLanguage
-                val deep = engine.suggest(
-                    composing = if (completing != null) state.composer.composeBuffer(typed) else typed,
-                    previousWord = previousWord,
-                    phoneticLanguage = state.composer.phoneticLanguage,
-                    limit = askFor,
-                    touch = touchFrame.takeIf { completing == null },
-                    previousWord2 = previousWord2,
-                    recentWords = recentSnapshot,
-                    allowRerank = true,
-                    keys = keyFrame.takeIf { completing == null },
-                    previousWord3 = previousWord3,
-                    phoneticSlots = state.settings.suggestionStrip.slotCount,
-                    completionLanguage = completing,
-                )
+                val deep = trace(ImeTrace.SUGGEST) {
+                    engine.suggest(
+                        composing = if (completing != null) state.composer.composeBuffer(typed) else typed,
+                        previousWord = previousWord,
+                        phoneticLanguage = state.composer.phoneticLanguage,
+                        limit = askFor,
+                        touch = touchFrame.takeIf { completing == null },
+                        previousWord2 = previousWord2,
+                        recentWords = recentSnapshot,
+                        allowRerank = true,
+                        keys = keyFrame.takeIf { completing == null },
+                        previousWord3 = previousWord3,
+                        phoneticSlots = state.settings.suggestionStrip.slotCount,
+                        completionLanguage = completing,
+                    )
+                }
                 // The walk itself cannot be interrupted — the engine has no
                 // suspension point in it — but everything after it can be, and
                 // on a phonetic or autocorrecting board what follows is not
@@ -16935,8 +16958,15 @@ open class WMKeyboardService : InputMethodService() {
     /** The sources a sandbox decode is restricted to: the words this user has written. */
     private val LEARNED_TIER = setOf(FuzzyBeamSearch.Tier.USER)
 
-    /** Decodes one stroke against the active language's word sources. */
+    /** Decodes one stroke against the active language's word sources; see [decodeStroke]. */
     private fun glideDecode(
+        points: List<GesturePoint>,
+        keys: List<KeyCenter>,
+        keyWidthPx: Float,
+        guessAhead: Boolean = true,
+    ): GlideReading = trace(ImeTrace.GLIDE_DECODE) { decodeStroke(points, keys, keyWidthPx, guessAhead) }
+
+    private fun decodeStroke(
         points: List<GesturePoint>,
         keys: List<KeyCenter>,
         keyWidthPx: Float,

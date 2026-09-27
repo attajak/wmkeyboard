@@ -8,6 +8,9 @@ plugins {
     // configures itself — cross-project configuration is what Gradle's isolated
     // projects mode forbids, and it breaks configuration-cache reuse.
     alias(libs.plugins.detekt) apply false
+    // :benchmark and, under -Pwmkb.benchmark=true, :app's profile consumer.
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
 }
 
 // One entry point for every analyser, so CI and humans run the same thing:
