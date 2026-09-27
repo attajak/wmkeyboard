@@ -272,7 +272,7 @@ private fun Modifier.magnifyOnHold(
     awaitEachGesture {
         val down = awaitFirstDown(requireUnconsumed = false)
         val held = awaitLongPressOrCancellation(down.id) ?: return@awaitEachGesture
-        var shown = hit(held.position)
+        var shown = hit(held.position.x)
         onHold()
         onShow(shown)
         try {
@@ -281,7 +281,7 @@ private fun Modifier.magnifyOnHold(
                 val change = event.changes.firstOrNull { it.id == held.id } ?: break
                 event.changes.forEach { it.consume() }
                 if (!change.pressed) break
-                val next = hit(change.position)
+                val next = hit(change.position.x)
                 if (next != null && next.pick.item.id != shown?.pick?.item?.id) {
                     shown = next
                     onShow(next)
