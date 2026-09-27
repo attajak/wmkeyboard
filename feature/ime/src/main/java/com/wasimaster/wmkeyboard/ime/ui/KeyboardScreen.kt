@@ -519,6 +519,7 @@ import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeyAlternate
 import com.wasimaster.wmkeyboard.core.layout.KeyRole
+import com.wasimaster.wmkeyboard.core.layout.KeymanTarget
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.letterSet
@@ -16831,19 +16832,75 @@ internal fun rememberCurrentLayout(state: KeyboardUiState): KeyboardLayout = rem
  *
  * The layout's own [Key.shiftLabel] wins, which is what gets the scripts whose
  * shifted form is a different character altogether — and the Bengali keys that
- * write two code points, where uppercasing would be nonsense. Otherwise a
- * single letter uppercases itself, and everything else (digits, punctuation, a
+ * write two code points, where uppercasing would be nonsense. Next is [twin],
+ * the key in the same seat on a shift page the layout drew for itself (see
+ * [keymanShiftTwins]), when that key types plain text. Otherwise a single
+ * letter uppercases itself, and everything else (digits, punctuation, a
  * multi-character output) has no capital and adds nothing.
  *
  * Null too when the key already offers it: a layout that listed its own capital
  * keeps that entry in the place it put it.
  */
-internal fun shiftedAlternate(key: Key): String? {
+internal fun shiftedAlternate(key: Key, twin: Key? = null): String? {
     val base = key.output ?: key.label
     val shifted = key.shiftLabel
+        ?: twin?.takeIf { it.action == KeyAction.Text }?.let { it.output ?: it.label }
         ?: base.takeIf { it.length == 1 && it[0].isLetter() }?.uppercase()
         ?: return null
-    return shifted.takeIf { it != base && it !in key.longPress }
+    return shifted.takeIf { it.isNotBlank() && it != base && it !in key.longPress }
+}
+
+/**
+ * Each key of a converted Keyman layout's letters page, mapped to the key in
+ * the same seat on its shift page, for [shiftedAlternate] and
+ * [keymanShiftedAlternate]. Empty for a layout with no shift page.
+ *
+ * Paired by seat rather than by id: a Keyman touch layout draws every layer on
+ * one frame, but the keys on its shift page are the author's own and need not
+ * share an id, a virtual key or a label with the ones under them. A row whose
+ * length differs between the two pages has no seats to pair, so it adds
+ * nothing rather than guess.
+ */
+internal fun keymanShiftTwins(letters: KeyboardLayout, shift: KeyboardLayout?): Map<Key, Key> {
+    if (shift == null) return emptyMap()
+    val twins = HashMap<Key, Key>()
+    letters.rows.zip(shift.rows).forEach { (row, shiftedRow) ->
+        if (row.size == shiftedRow.size) {
+            row.zip(shiftedRow).forEach { (key, twin) -> twins.putIfAbsent(key, twin) }
+        }
+    }
+    return twins
+}
+
+/**
+ * [key] with its shift-page [twin] appended to its popup, the Keyman form of
+ * [shiftedAlternate]: the entry goes out as the twin's own key press, so the
+ * keyboard's rules see a shifted key and type what shift would have, deadkeys
+ * and all, rather than the text on its cap.
+ *
+ * Left alone when there is nothing to add or no safe way to add it. The popup
+ * pairs the key's text list with its Keyman targets by index, and only while
+ * the two are the same length ([alternateEntries]); a key whose lists already
+ * disagree would commit a plain-text entry through this key's own rules.
+ */
+internal fun keymanShiftedAlternate(key: Key, twin: Key): Key {
+    val action = key.action as? KeyAction.KeymanKey ?: return key
+    val shifted = twin.action as? KeyAction.KeymanKey ?: return key
+    if (shifted.isLayerSwitch || (shifted.vkey == 0 && shifted.id == null)) return key
+    if (action.longPress.size != key.longPress.size) return key
+    val label = twin.label
+    if (label.isBlank() || label == key.label || label in key.longPress) return key
+    val target = KeymanTarget(
+        vkey = shifted.vkey,
+        modifiers = shifted.modifiers,
+        nextLayer = shifted.nextLayer,
+        id = shifted.id,
+        text = shifted.text,
+    )
+    return key.copy(
+        longPress = key.longPress + label,
+        action = action.copy(longPress = action.longPress + target),
+    )
 }
 
 /**
@@ -17012,6 +17069,15 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // layer, unlike the accents: a secondary layout of letters is as much a
     // place to want a capital as the letters layer is.
     val shiftedKeys = state.settings.layoutBehavior.shiftedPopupKeys
+    // A converted Keyman layout keeps its shifted keys on a page of their own
+    // rather than in each key's shiftLabel, which is most of the Arabic-script
+    // and Indic boards. Only while the letters page is the one showing: on the
+    // shift page itself every key already is its twin.
+    val shiftTwins = if (shiftedKeys && grid === state.layouts.letters) {
+        keymanShiftTwins(state.layouts.letters, state.layouts.keymanShift)
+    } else {
+        emptyMap()
+    }
     // The clipboard/undo/redo hold shortcuts, on whichever keys the user has
     // bound them to. The keys are settings rather than the literal a/c/v/x/z/y
     // they used to be: on a layout with no Latin letters there was no `a` to
@@ -17168,9 +17234,11 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             // always belonged to the layout. A key that already offers its
             // capital keeps the one it authored.
             if (shiftedKeys && mapped.action == KeyAction.Text) {
-                shiftedAlternate(mapped)?.let { extra ->
+                shiftedAlternate(mapped, shiftTwins[rowKey])?.let { extra ->
                     mapped = mapped.copy(longPress = mapped.longPress + extra)
                 }
+            } else if (shiftedKeys && mapped.action is KeyAction.KeymanKey) {
+                shiftTwins[rowKey]?.let { mapped = keymanShiftedAlternate(mapped, it) }
             }
             // Keyed on what the key types, not what it is labelled: a layout
             // that shows "A" and outputs "a" was silently skipped. A key the
