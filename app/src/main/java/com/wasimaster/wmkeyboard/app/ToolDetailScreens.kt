@@ -2007,6 +2007,7 @@ internal fun ToolDetailSettings(
                     ) { scope.launch { repository.setMediaFullBleed(it) } }
                 }
             }
+            if (tool == ToolbarTool.GIF) OfflineGifPacksGroup()
             SettingsGroup(
                 stringResource(R.string.tooldetail_media_keys_group),
                 info = stringResource(R.string.tooldetail_media_info),
@@ -3893,6 +3894,16 @@ private fun OcrPackManager(settings: LiveSettings) {
                     },
                 )
             }
+        }
+        item {
+            val links = packs.map { (pack, languages) ->
+                OfflineLink(languages.joinToString(", ") { it.displayName }, OcrLanguages.downloadUrl(pack))
+            }
+            OfflineImportRow(
+                subtitle = stringResource(R.string.offline_import_ocr_subtitle),
+                links = links,
+                onImported = { OcrPacks.refresh(filesDir, packs.map { it.first }) },
+            )
         }
     }
     askFor?.let { pack ->

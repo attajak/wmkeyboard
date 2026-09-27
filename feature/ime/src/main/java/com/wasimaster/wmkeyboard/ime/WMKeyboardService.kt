@@ -3850,6 +3850,7 @@ open class WMKeyboardService : InputMethodService() {
         com.wasimaster.wmkeyboard.core.feedback.SoundPackStore.attach(this)
         com.wasimaster.wmkeyboard.core.addons.AddonStore.attach(this)
         stickerPackStore = com.wasimaster.wmkeyboard.core.stickers.StickerPackStore.get(this)
+        com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.attach(filesDir)
     }
 
     /**
@@ -24911,9 +24912,9 @@ open class WMKeyboardService : InputMethodService() {
             if (selected != state.mediaSource) _uiState.update { it.copy(mediaSource = selected) }
         }
         // Data saving. Only the online providers count: the user's own sticker
-        // packs are files on disk, and a panel that refused to show them on
-        // mobile data would be refusing to open a folder.
-        if (targets.any { it != GifSource.LOCAL }) {
+        // packs and imported GIF packs are files on disk, and a panel that
+        // refused to show them on mobile data would be refusing to open a folder.
+        if (targets.any { !it.onDevice }) {
             val decision = dataSaverStatus.decide(MeteredFeature.MEDIA_SEARCH)
             if (decision != MeteredDecision.ALLOWED) {
                 mediaFetchJob?.cancel()
@@ -24944,7 +24945,7 @@ open class WMKeyboardService : InputMethodService() {
                     // The limit is per fetch: in mixed mode each provider
                     // returns up to the limit, so cap the merged grid back
                     // down to it. The user's own packs are never truncated.
-                    val limited = if (targets == listOf(GifSource.LOCAL)) {
+                    val limited = if (targets.all { it.onDevice }) {
                         merged
                     } else {
                         merged.take(settings.gif.resultLimit)
@@ -24972,6 +24973,9 @@ open class WMKeyboardService : InputMethodService() {
         )
         GifSource.LOCAL ->
             stickerPackStore.searchAsGifItems(query, _uiState.value.stickerPackId)
+        GifSource.OFFLINE ->
+            if (sticker) emptyList()
+            else com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.search(query, OFFLINE_GIF_LIMIT)
         // Commons has no sticker corpus at all, so the sticker tab stays empty
         // rather than answering it with animations that are not stickers.
         GifSource.COMMONS ->
@@ -25026,7 +25030,13 @@ open class WMKeyboardService : InputMethodService() {
         mediaCategoryJob?.cancel()
         val panel = state.panel
         mediaCategoryJob = serviceScope.launch {
-            val cached = MediaCategoryCache.get(target, sticker, System.currentTimeMillis())
+            // Imported packs change under the cache's day-long lifetime, and
+            // reading their categories costs a query, not a request.
+            val cached = if (target == GifSource.OFFLINE) {
+                null
+            } else {
+                MediaCategoryCache.get(target, sticker, System.currentTimeMillis())
+            }
             val fetched = cached ?: withContext(Dispatchers.IO) {
                 runCatching { fetchCategories(target, sticker, settings) }
             }.onSuccess {
@@ -25053,6 +25063,7 @@ open class WMKeyboardService : InputMethodService() {
         GifSource.LOCAL -> emptyList()
         // No category endpoint: Commons is a search index, not a curated feed.
         GifSource.COMMONS -> emptyList()
+        GifSource.OFFLINE -> com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.categories()
     }
 
     /** Category chip in the GIF/sticker default view: runs it as a search. */
@@ -25505,6 +25516,11 @@ open class WMKeyboardService : InputMethodService() {
         mime: String,
         trackProgress: Boolean = false,
     ): File? = runCatching {
+        // An imported GIF pack's file is already on the device.
+        if (url.startsWith("file://")) {
+            return@runCatching File(java.net.URI(url)).takeIf { it.isFile }
+                ?: throw java.io.FileNotFoundException(url)
+        }
         val extension = MediaMime.extension(mime)
         val dir = File(cacheDir, "media").apply { mkdirs() }
         pruneMediaCache(dir)
@@ -32356,6 +32372,14 @@ open class WMKeyboardService : InputMethodService() {
     companion object {
         /** Minimum spacing between haptic clicks so rapid presses stay distinct. */
         private const val MIN_HAPTIC_GAP_MS = 45L
+
+        /**
+         * How many GIFs one search of the imported packs lists. They are on the
+         * device, so the provider limit (which is about requests) does not
+         * apply, but a grid of every GIF in a large pack would still be too
+         * many animated cells to lay out.
+         */
+        private const val OFFLINE_GIF_LIMIT = 240
 
         /** What DeepL answers for a language it does not have; see [translateOnline]. */
         private const val HTTP_BAD_REQUEST = 400
