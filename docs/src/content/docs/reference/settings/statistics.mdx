@@ -81,7 +81,7 @@ The rings are hidden from screen readers. The count beside each one already says
 
 **Where you tap** is a heatmap of every key press on the letters layer, drawn over the letters of that layout. Warmer, brighter colour means more taps. Under it are the total number of taps on that layout and the five most tapped letters.
 
-- Every key on the letters layer counts, space, backspace and shift included, because the map is about where your thumbs land rather than what they typed. The symbols layer, a secondary layout and the keys of an open panel are left out, since they put other keys under the same spots.
+- Every key on the letters layer counts, space, backspace and shift included, because the map is about where your thumbs land rather than what they typed. The symbols layer and a secondary layout are left out, since they put other keys under the same spots, and so is anything you type while a panel is open.
 - Each tap is counted in the part of the key it landed in, a quarter of a key each way. Positions are measured in keys across and rows down, so a tap in portrait and the same tap in landscape land in the same place.
 - Each layout gets a map of its own. With more than one, chips above the map pick which one to show (up to the four you tap most). The keyboard keeps maps for up to eight layouts, and a ninth makes room by dropping the one you tap least.
 - A tap more than three quarters of a key from every letter, like one on the space bar, is on the map but not in the "Most tapped" list.
@@ -134,7 +134,7 @@ The row carries an info button repeating the privacy terms. The counts stay on y
 
 - **Words are counted off the keystroke stream, not off the word the field ends up with.** A letter or digit arms a word, and the next separator counts it. That works the same for scripts that compose as they go and for scripts that commit each letter. Finishing a half-typed word by tapping a suggestion counts it once, not twice.
 - **A word committed by a suggestion or a glide adds no characters and no time.** Only the word tally and the achievement counts move, which keeps your average speed honest.
-- **The keyboard's own boxes count on the heatmap only.** Typing into the typing test, a search box or another field that belongs to the keyboard adds no characters or words, but the key presses still land on the heatmap, because your thumb still hit those keys.
+- **The keyboard's own boxes don't count, heatmap included.** Typing into the typing test or a panel's search box adds no characters, no words and no taps, because none of it reaches your text field.
 - **The settings screen only ever reads the file.** It never saves, so opening Statistics can't race the keyboard into losing counts. Deleting works the other way round. The file is emptied, then a counter is bumped that tells the keyboard to drop its in-memory copy instead of writing the old numbers back over your deletion.
 - **A fresh install starts from zero.** The counts live in the app's own storage, so uninstalling takes them with it. A backup that includes the statistics section is the only thing that carries them to a new phone.
 - **Nothing here is edition-gated.** Counting, the level, the achievements, the heatmap, the charts and the delete action work identically on full and lite builds.

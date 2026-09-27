@@ -32376,13 +32376,13 @@ open class WMKeyboardService : InputMethodService() {
         /** The typing test's suggestion row: how long a keystroke burst is left to settle. */
         private const val TYPING_TEST_SUGGEST_DEBOUNCE_MS = 24L
 
+        /** The same, for a keyboard-owned field's own suggestion row (#161). */
+        private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
+
         /** The settings app's Statistics screen, as its NavHost names it. */
         private const val STATISTICS_ROUTE = "statistics"
 
         private const val MM_PER_INCH = 25.4
-
-        /** The same, for a keyboard-owned field's own suggestion row (#161). */
-        private const val CAPTURE_SUGGEST_DEBOUNCE_MS = 24L
 
         /** Marks an [extraPhoneticWanted] token whose spelling map is switched on. */
         private const val WITH_SPELLING_MAP = "+map"
