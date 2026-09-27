@@ -130,6 +130,9 @@ work as usual, and so does a local AI model imported from a file. Anything
 that downloads (dictionary packs, voice and handwriting models, translation
 languages, GIFs, cloud backups) fails as it would with the phone offline, and
 the app cannot check for its own updates, so come back here for new versions.
+Language packs, voice models, OCR data and offline GIF packs fetched on another
+device can be imported instead
+([how](https://wmkeyboard.pages.dev/privacy/offline/)).
 It is signed with the same key as the builds above and installs over them, and
 back, without losing a setting.
 
