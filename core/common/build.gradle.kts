@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.androidx.metrics.performance)
 
     testImplementation(libs.junit)
+    // Flow assertions: every emission accounted for (NetLogFlowTest).
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.coroutines.test)
     // Compose's test rule on an Android runtime, so WmSlider can be driven with
     // real touch events inside a real scrolling column.
     testImplementation(libs.robolectric)

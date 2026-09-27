@@ -123,6 +123,8 @@ tasks.register("unitTests") {
             .filter { it.path.startsWith(":core:") || it.path.startsWith(":feature:") }
             .map { "${it.path}:testFullDebugUnitTest" },
     )
+    // The architecture rules: a plain JVM module, so plain `test`.
+    dependsOn(":tools:architecture:test")
 }
 
 tasks.register("keymanCheck") {

@@ -138,6 +138,8 @@ dependencies {
     testImplementation(libs.junit)
     // A virtual clock for the coroutine plumbing around the input connection.
     testImplementation(libs.kotlinx.coroutines.test)
+    // Flow assertions on the published keyboard state: every emission accounted for.
+    testImplementation(libs.turbine)
     // An Android runtime on the JVM, so a test can drive WMKeyboardService
     // itself rather than only the pure helpers around it.
     testImplementation(libs.robolectric)

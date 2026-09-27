@@ -154,6 +154,11 @@ licensee = "1.14.1"
 dependencyAnalysis = "3.19.2"
 # Coverage. 0.9.5 is the first release that understands AGP 9.
 kover = "0.9.9"
+# Architecture rules as tests (:tools:architecture). 0.17.3 is the latest; it
+# bundles its own Kotlin 2.0 parser, which reads this project's 2.2 sources.
+konsist = "0.17.3"
+# Flow assertions in tests: every emission accounted for.
+turbine = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -231,6 +236,8 @@ androidx-tracing = { group = "androidx.tracing", name = "tracing", version.ref =
 androidx-metrics-performance = { group = "androidx.metrics", name = "metrics-performance", version.ref = "metricsPerformance" }
 androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark" }
 androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Static-analysis rule packs, pulled in via the detektPlugins / lintChecks
 # configurations rather than compiled into the app.

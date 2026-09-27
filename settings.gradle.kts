@@ -99,3 +99,5 @@ if (benchmarkBuild) include(":benchmark")
 // binary assets at build time, sharing the app's own trie/codec sources so the
 // written format can never drift from the reader.
 include(":tools:dictc")
+// Konsist architecture rules over the whole source tree (tests only).
+include(":tools:architecture")
