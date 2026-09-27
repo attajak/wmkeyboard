@@ -110,6 +110,22 @@ class EnglishContractionStripTest {
         assertNull(e.elide("I'm"))
     }
 
+    @Test fun aRepairTakenBackWithBackspaceIsNotMadeAgain() {
+        // Backspace after "i" became "I" puts the "i" back and remembers the
+        // undo; the next space must not capitalise it straight back (#402).
+        val e = english()
+        e.rejectCorrection("i", "I")
+        assertNull(e.elide("i"))
+        e.rejectCorrection("dont", "don't")
+        assertNull(e.elide("dont"))
+        // Still offered, behind what was typed, so the repair is one tap away.
+        val strip = e.suggest("dont", previousWord = null)
+        assertEquals("dont", strip.first())
+        assertTrue("don't" in strip)
+        // Only the pair that was undone.
+        assertEquals("that's", e.elide("thats"))
+    }
+
     @Test fun theSettingTakesTheReadingOffTheStripAsWellAsTheCommit() {
         // "Fix missing apostrophes" off has to mean off everywhere, or the
         // strip would keep promising a repair the space bar no longer makes.

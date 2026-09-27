@@ -3398,6 +3398,14 @@ class SuggestionEngine(
     private fun contractionReading(lower: String, langId: String): ElisionReading? {
         if (!Apostrophes.servesLanguage(langId)) return null
         val fixed = Apostrophes.fix(lower) ?: return declaredReading(lower)
+        // A repair the user took back with backspace is held back the way any
+        // undone correction is (#402): offered on the strip behind what was
+        // typed, never committed over it, for as long as the undo memory says.
+        val undone = when (correctionStats.penalty(lower, fixed)) {
+            CorrectionStats.Penalty.PROBATION, CorrectionStats.Penalty.BLOCKED -> true
+            CorrectionStats.Penalty.NONE, CorrectionStats.Penalty.PENALIZED -> false
+        }
+        if (undone) return declaredReading(lower, fixed)
         val scored = maxOf(finiteScore(fixed.lowercase()), finiteScore(lower))
         return ElisionReading(fixed, scored + CONTRACTION_LEAD, shadowed = true)
     }
@@ -3413,9 +3421,12 @@ class SuggestionEngine(
      * word either way. That keeps it on the strip above the long tail of
      * completions without the strip preferring a reading the space bar will
      * not make.
+     *
+     * [fixed] is the table's own answer for a repair the user has undone,
+     * which drops to exactly this standing.
      */
-    private fun declaredReading(lower: String): ElisionReading? {
-        val fixed = Apostrophes.offer(lower) ?: return null
+    private fun declaredReading(lower: String, fixed: String? = Apostrophes.offer(lower)): ElisionReading? {
+        if (fixed == null) return null
         val typed = dictionaryScore(lower)
         val own = dictionaryScore(fixed.lowercase())
         val score = if (typed == Double.NEGATIVE_INFINITY) {

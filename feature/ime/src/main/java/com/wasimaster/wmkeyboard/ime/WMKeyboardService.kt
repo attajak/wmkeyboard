@@ -11572,6 +11572,13 @@ open class WMKeyboardService : InputMethodService() {
         }
         val revertible = corrected?.let {
             RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = typed, committed = it)
+        } ?: apostrophized?.takeIf { it == output }?.let {
+            // A repaired apostrophe — or the lone "i" made "I" — is the
+            // keyboard rewriting a word just as surely, and one backspace has
+            // to take it back the same way (#402). Its undo is remembered
+            // against the pair like any correction's, which is what keeps the
+            // next space from repairing it straight back.
+            RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = typed, committed = it)
         } ?: scriptFlip?.let {
             RevertibleCommit(
                 RevertibleCommit.Kind.SCRIPT,
@@ -11585,7 +11592,10 @@ open class WMKeyboardService : InputMethodService() {
             )
         }
         lastRevertible = revertible
-        if (revertible != null && revertible.kind == RevertibleCommit.Kind.AUTOCORRECT) {
+        if (corrected != null && revertible != null && revertible.kind == RevertibleCommit.Kind.AUTOCORRECT) {
+            // Only the engine's own guesses: an apostrophe repair is a table,
+            // not a judgement the gate could learn to make more carefully.
+            //
             // The adaptive gate learns from the fired/reverted ratio, but not
             // yet: firing is not a verdict. The correction waits in the watch
             // until the text around it settles, and is counted then — with the
