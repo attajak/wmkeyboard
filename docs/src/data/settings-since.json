@@ -12,6 +12,7 @@
 		"expander/folder/{folderId}": "0.5.4",
 		"expander/folder/{folderId}/new": "0.5.4",
 		"kdeconnect/devices": "0.5.11",
+		"launchercombos": "0.5.13",
 		"learnedcorrections": "0.5.4",
 		"network_activity": "0.5.11",
 		"notifications": "0.5.7",
@@ -25,7 +26,8 @@
 		"signal_stickers": "0.5.11",
 		"sticker_pack/{packId}/add": "0.5.11",
 		"theme_assets/{themeId}": "0.5.13",
-		"typing/octopus": "0.5.4"
+		"typing/octopus": "0.5.4",
+		"whatsapp_stickers": "0.5.13"
 	},
 	"settings": {
 		"about_app_language_title": "0.5.12",
@@ -90,6 +92,7 @@
 		"ime_tool_selection_actions": "0.5.8",
 		"ime_tool_statistics": "0.5.13",
 		"import_signal_row_title": "0.5.11",
+		"import_whatsapp_row_title": "0.5.13",
 		"kdeconnect_auto_connect_title": "0.5.11",
 		"kdeconnect_battery_title": "0.5.11",
 		"kdeconnect_clipboard_receive_title": "0.5.11",
