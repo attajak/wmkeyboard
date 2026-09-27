@@ -1323,6 +1323,15 @@ private fun SettingsNavGraph(
                 }
             }
         }
+        composable("theme_assets/{themeId}") { backStackEntry ->
+            val themeId = backStackEntry.arguments?.getString("themeId").orEmpty()
+            SettingsScreen(
+                stringResource(R.string.theme_assets_title),
+                { navController.popBackStack() },
+            ) {
+                ThemeAssetGuideScreen(settings, themeId)
+            }
+        }
         composable(PHOTO_HUB_ROUTE) {
             PhotoServicesScreen(
                 anim = this,
