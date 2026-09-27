@@ -735,7 +735,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - Per-script pinned fonts `uncommon` — 25 scripts map to a specific Google font; Music to Noto Music, Braille to Noto Sans Symbols 2
     - Per-script font pickers — Curated alternative families per script, shown only while a language on that script is enabled
     - Per-glyph fallback — A glyph the pinned face lacks falls back to the system font rather than blanking
-- **Keyboard layouts** — 1,597 shipped layouts: 21 compiled built-ins + 1,576 JSON assets (862 of them converted Keyman keyboards)
+- **Keyboard layouts** — 1,598 shipped layouts: 22 compiled built-ins + 1,576 JSON assets (862 of them converted Keyman keyboards)
   - Shipped catalogue — 20 Kotlin LayoutSpecs (boot-critical) plus 354 .wmlayout.json assets parsed off the main thread
     - Latin ergonomic alternates — QWERTY, AZERTY, Dvorak, Colemak, Workman, Halmak built in; BÉPO, Swiss German, LatAm Spanish, Turkish-Q as assets
     - Ambiguous boards — T9 and Compact QWERTY built in; keys twice to four times the usual size, decoded rather than multi-tapped (#103); T9 keypads for 309 more languages as assets (#332)
@@ -833,7 +833,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - ASCII returned untouched — Nothing below U+0080 can carry a combining mark
   - Language is asked, never guessed silently `RARE` — A script histogram over the keys seeds the picker; a blank langId would otherwise migrate to English
   - Repaired once, in front of the user `RARE` — So the grid approved in the dialog is the grid that gets typed on
-- **Transliteration and composers** `uncommon` — 15 ComposerType values chosen from a layout's script plus optional override
+- **Transliteration and composers** `uncommon` — 16 ComposerType values chosen from a layout's script plus optional override
   - Bengali Avro phonetic `RARE` — Rule-based greedy longest-match transliteration with ~90 rules bucketed by first character
     - Context-sensitive vowels — Independent letter at word start or after a vowel, kar after a consonant
     - Inherent vowel handling — lowercase o is silent after a consonant but breaks the cluster: kolokata gives কলকাতা, kolkata conjuncts
@@ -844,6 +844,11 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Ridmik spellings accepted alongside Avro's — qq/cb for ঁ, HH for ঃ, hs for hasant (only after a consonant, so "ahsan" is safe)
     - Stray capitals read as lowercase — "Bangla" still types বাংলা instead of dropping a Latin B into the buffer
     - Digits and currency — 0-9 map to ০-৯, $ to ৳, single dot to ।, double dot to a literal period
+  - Bengali Khipro `RARE` — Compositional ক্ষিপ্র layout (#400): the Khipro team's own m17n spec (v36.5.0, MIT) run by a small interpreter, passing their conformance cases
+    - Deterministic — space commits exactly the composed text; no spelling map, no phonetic fold, no autocorrect
+    - Completion strip — composed word first, then bundled/downloaded Bangla words and learned words that start with it
+    - Touch grid per the Khipro guideline — / slicer where shift sits, ; separator beside the spacebar, danda key kept
+    - Hardware keyboard uses the desktop spec — digits to ০-৯, . to ।, $ to ৳, chosen per word by the key that starts it
   - Lenient Banglish matching `RARE` — Both input and every dictionary word fold to a phonetic key where confusable sounds collapse
     - Aspiration kept as a parallel mask — Typing the h and not getting it is penalised 20x; leaving it out is penalised 2x; only ক/খ, গ/ঘ, ত/থ, ট/ঠ, দ/ধ, ড/ঢ count
     - ch and ph excluded on purpose — They are ordinary English-influenced spellings, not aspiration claims

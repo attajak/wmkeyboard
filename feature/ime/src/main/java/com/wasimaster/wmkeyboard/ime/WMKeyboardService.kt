@@ -506,6 +506,7 @@ import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperStore
 import com.wasimaster.wmkeyboard.core.settings.isWhisperEnabled
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.Khipro
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
@@ -526,6 +527,7 @@ import com.wasimaster.wmkeyboard.core.layout.commitsNoText
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
+import com.wasimaster.wmkeyboard.core.input.composer.KhiproComposer
 import com.wasimaster.wmkeyboard.core.input.composer.CjkConfig
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictionaries
@@ -3916,6 +3918,15 @@ open class WMKeyboardService : InputMethodService() {
                 // The ones switched on are about to be asked for on the main
                 // thread by the next field focus, so they are parsed here.
                 AssetLayouts.warm(_uiState.value.settings.enabledLayoutIds)
+                // Khipro's spec is read out of the APK and parsed on first use;
+                // a Khipro layout that is switched on pays for that here
+                // rather than on its first keystroke.
+                val enabled = _uiState.value.settings
+                val khipro = enabled.enabledLayoutIds.any { id ->
+                    val spec = resolveLayout(enabled.customLayouts, id)
+                    composerFor(spec.script(), spec.composerType()) === KhiproComposer
+                }
+                if (khipro) Khipro.Variant.entries.forEach(Khipro::warm)
                 // Older installs inflated the bundled lists into
                 // credential-encrypted storage; they live in the
                 // device-protected area now (see [openLanguageDictionary]).
@@ -7824,6 +7835,13 @@ open class WMKeyboardService : InputMethodService() {
         // The mid-word strip is about the field as it was before this
         // keystroke; the caret's own settle re-derives it afterwards.
         clearCaretWord()
+        // Khipro reads a word typed on a hardware keyboard against its desktop
+        // spec (1 is ১, . is ।), one typed on the keys against the touchscreen
+        // one. Chosen by the key that starts the word and kept to its end, so
+        // one word never reads half one way and half the other.
+        if (state.composer === KhiproComposer && composing.isEmpty()) {
+            KhiproComposer.variant = if (hardwareKeyTyping) Khipro.Variant.DESKTOP else Khipro.Variant.TOUCHSCREEN
+        }
         // One-shot, spent by this keystroke whatever it turns out to be: a mark
         // takes the keyboard's own space back, and anything else simply types
         // past it. Both kinds of space count — the one that ended a word (glide
@@ -7967,7 +7985,7 @@ open class WMKeyboardService : InputMethodService() {
         // that rule would make the first key of every word commit as a number.
         val singleWordChar = text.length == 1 && (
             text[0].isLetter() || text[0] == '\'' ||
-                state.composer.buffersChar(text[0]) ||
+                state.composer.buffersChar(text[0], composing) ||
                 (
                     state.composer.bufferDigits && text[0].isDigit() &&
                         (composing.isNotEmpty() || state.composer.digitsStartBuffer)
@@ -15459,6 +15477,8 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun latinResolution(state: KeyboardUiState, typed: String): Boolean =
         typed.isNotEmpty() && state.composer.phoneticLanguage == null && !state.layouts.ambiguousKeys &&
+            // Khipro's keys spell the word exactly; there is nothing to correct.
+            state.composer.completionLanguage == null &&
             state.settings.correction.enabled && state.allowsTypingIntelligence
 
     /**
@@ -15658,18 +15678,23 @@ open class WMKeyboardService : InputMethodService() {
                 SUGGEST_LIMIT
             }
             val (results, emojis, bias, floating) = withContext(suggestionDispatcher) {
+                // A layout whose keys already spell the word (Khipro) is
+                // completed from what they spelled, not from the roman keys;
+                // the tap and key frames belong to those keys, so they stay out.
+                val completing = state.composer.completionLanguage
                 val deep = engine.suggest(
-                    composing = typed,
+                    composing = if (completing != null) state.composer.composeBuffer(typed) else typed,
                     previousWord = previousWord,
                     phoneticLanguage = state.composer.phoneticLanguage,
                     limit = askFor,
-                    touch = touchFrame,
+                    touch = touchFrame.takeIf { completing == null },
                     previousWord2 = previousWord2,
                     recentWords = recentSnapshot,
                     allowRerank = true,
-                    keys = keyFrame,
+                    keys = keyFrame.takeIf { completing == null },
                     previousWord3 = previousWord3,
                     phoneticSlots = state.settings.suggestionStrip.slotCount,
+                    completionLanguage = completing,
                 )
                 // The walk itself cannot be interrupted — the engine has no
                 // suspension point in it — but everything after it can be, and
@@ -15781,7 +15806,14 @@ open class WMKeyboardService : InputMethodService() {
                     val emojis = if (state.settings.emojiPrediction) {
                         // The word before is passed for the two-word shortcodes
                         // ("alarm clock" → ⏰); one word can never reach them.
-                        emojiSuggester?.suggest(typed, previousWord.orEmpty()).orEmpty()
+                        // Khipro's roman keys ("ami/") are not a word in any
+                        // language; what they spelled is.
+                        val query = if (state.composer.completionLanguage != null) {
+                            state.composer.composeBuffer(typed)
+                        } else {
+                            typed
+                        }
+                        emojiSuggester?.suggest(query, previousWord.orEmpty()).orEmpty()
                     } else {
                         emptyList()
                     }
@@ -31471,7 +31503,12 @@ open class WMKeyboardService : InputMethodService() {
                     clearForHardwareTyping()
                     // Literal: the char already carries the physical layout's
                     // shift/AltGr, so the soft shift state must not re-case it.
-                    processTypedText(unicode.toChar().toString(), applyDeadKeys = false)
+                    hardwareKeyTyping = true
+                    try {
+                        processTypedText(unicode.toChar().toString(), applyDeadKeys = false)
+                    } finally {
+                        hardwareKeyTyping = false
+                    }
                     consumeHardwareKey(keyCode)
                 }
             }
@@ -31508,6 +31545,13 @@ open class WMKeyboardService : InputMethodService() {
      * physical keyboard hugs punctuation to the word before it exactly as the
      * soft one does.
      */
+    /**
+     * True only while [handleHardwareKeyDown] is handing a physical key's
+     * character to [processTypedText], which otherwise cannot tell it from a
+     * soft key (braille, Morse and remote typing arrive the same way).
+     */
+    private var hardwareKeyTyping = false
+
     private fun clearForHardwareTyping() {
         lastGestureWord = null
         pendingAutoSpace = false

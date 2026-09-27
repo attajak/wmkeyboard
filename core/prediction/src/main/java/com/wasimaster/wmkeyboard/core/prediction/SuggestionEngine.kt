@@ -1647,6 +1647,18 @@ class SuggestionEngine(
         /** Chips a strip is assumed to show when the caller does not say. */
         const val DEFAULT_PHONETIC_SLOTS = 3
 
+        /** How many completions [nativeCompletions] draws from each source before ranking. */
+        private const val NATIVE_COMPLETION_POOL = 24
+
+        /**
+         * Where a word the user taught the keyboard starts on
+         * [nativeCompletions]' 0..1 dictionary scale, and how fast its own count
+         * lifts it: a word typed and kept outranks all but the list's commonest,
+         * and a few more uses carry it past those too.
+         */
+        private const val LEARNED_COMPLETION_FLOOR = 0.9
+        private const val LEARNED_COMPLETION_SCALE = 10.0
+
         /**
          * How common a word the user taught the keyboard under English counts
          * as, on [PhoneticScriptVerdict]'s scale. It has no corpus frequency,
@@ -2004,9 +2016,13 @@ class SuggestionEngine(
         keys: KeySets? = null,
         previousWord3: String? = null,
         phoneticSlots: Int = DEFAULT_PHONETIC_SLOTS,
+        completionLanguage: String? = null,
     ): List<String> {
         if (composing.isEmpty()) {
             return nextWords(previousWord, previousWord2, limit, previousWord3)
+        }
+        if (completionLanguage != null) {
+            return nativeCompletions(completionLanguage, composing, previousWord, limit)
         }
         phoneticBackend(phoneticLanguage)?.let { backend ->
             val latinCompletions = {
@@ -2558,6 +2574,61 @@ class SuggestionEngine(
      */
     fun phoneticSpelling(languageId: String, composing: String): String? =
         phoneticBackend(languageId)?.spellings?.lookup(composing)?.firstOrNull { !suppressed(it) }
+
+    /**
+     * The strip of a layout whose keys already spell the word (Khipro, see
+     * `Composer.completionLanguage`): [composed] itself first, since that is
+     * exactly what a space commits, then [languageId]'s words that begin with
+     * it. Dictionary words rank by frequency, the user's own words ride near
+     * the top of them, and a word the user or the corpus has seen after [previousWord]
+     * gets the same bounded lift [suggest] gives it. Nothing here corrects:
+     * the keys are not a guess.
+     */
+    private fun nativeCompletions(
+        languageId: String,
+        composed: String,
+        previousWord: String?,
+        limit: Int,
+    ): List<String> {
+        val index = phoneticBackend(languageId)?.index ?: PhoneticIndex.EMPTY
+        val scores = HashMap<String, Double>()
+        val scale = ln(1.0 + index.maxFrequency.coerceAtLeast(1))
+        // The keys write ড় ঢ় য় precomposed and a word list may hold them
+        // decomposed ([WordKey] explains why both exist), so a prefix with one
+        // in it is asked both ways.
+        for (prefix in listOf(composed, WordKey.surface(composed)).distinct()) {
+            for (word in index.completions(prefix, NATIVE_COMPLETION_POOL)) {
+                scores[word] = ln(1.0 + index.frequencyOf(word)) / scale
+            }
+        }
+        for (learned in userLexicon.complete(WordKey.of(composed), NATIVE_COMPLETION_POOL)) {
+            val score = LEARNED_COMPLETION_FLOOR + ln(1.0 + learned.frequency) / LEARNED_COMPLETION_SCALE
+            scores.merge(displayForm(learned.word), score, ::maxOf)
+        }
+        val prev = previousWord?.takeIf { it.isNotEmpty() }
+        if (prev != null) {
+            for (entry in scores.entries) {
+                val count = maxOf(
+                    userLexicon.bigramCount(prev, entry.key),
+                    ngramPack.bigramCount(prev, entry.key) / PACK_COUNT_SCALE,
+                )
+                if (count > 0) {
+                    entry.setValue(
+                        entry.value + minOf(ln(1.0 + CONTEXT_BIGRAM_BETA * ln(1.0 + count)), MAX_CONTEXT_BOOST),
+                    )
+                }
+            }
+        }
+        applyRankOffsets(scores)
+        // One chip per word however it is composed, and never the typed word twice.
+        val seen = hashSetOf(WordKey.of(composed))
+        val rest = scores.entries
+            .sortedWith(compareByDescending<Map.Entry<String, Double>> { it.value }.thenBy { it.key })
+            .asSequence()
+            .map { it.key }
+            .filter { !suppressed(it) && seen.add(WordKey.of(it)) }
+        return (sequenceOf(composed) + rest).take(limit).toList()
+    }
 
     private fun phoneticSuggestions(backend: PhoneticBackend, composing: String, limit: Int): List<String> {
         val spellings = backend.spellings

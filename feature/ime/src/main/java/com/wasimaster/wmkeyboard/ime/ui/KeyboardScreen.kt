@@ -19955,7 +19955,8 @@ internal fun layoutSwitchLabel(
         // actively wrong about what the user is looking at, which is a roman
         // grid. "Avro phonetic" is both the name they picked it by and the
         // answer to "why are these keys Latin".
-        mode == SpacebarDisplay.LANGUAGE && spec.composerType() == ComposerType.TRANSLITERATE ->
+        mode == SpacebarDisplay.LANGUAGE &&
+            spec.composerType().let { it == ComposerType.TRANSLITERATE || it == ComposerType.KHIPRO } ->
             layout
         // A layout named after its language ("Banglish (Banglish)") collapses.
         (mode == SpacebarDisplay.BOTH || sameLangCount > 1) && layout != lang -> "$lang ($layout)"

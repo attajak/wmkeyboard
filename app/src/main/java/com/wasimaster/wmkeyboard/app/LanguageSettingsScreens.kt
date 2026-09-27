@@ -1015,12 +1015,16 @@ internal fun LanguageDetailScreen(
     // Gated on an *enabled* transliterating layout rather than on the language:
     // someone typing Bengali on Probhat alone has Bengali keys in front of them
     // and nothing to hint.
-    val transliterating = settings.watch { s ->
-        s.enabledLayoutIds.any { id ->
-            val spec = resolveLayout(s.customLayouts, id)
-            spec.langId == langId && spec.composerType() == ComposerType.TRANSLITERATE
+    //
+    // Khipro's grid is roman too, so it gets the hints; the key map and the
+    // phonetic strip below are Avro's and stay with an Avro-style layout.
+    val composers = settings.watch { s ->
+        s.enabledLayoutIds.mapNotNullTo(HashSet()) { id ->
+            resolveLayout(s.customLayouts, id).takeIf { it.langId == langId }?.composerType()
         }
     }
+    val phonetic = ComposerType.TRANSLITERATE in composers
+    val transliterating = phonetic || ComposerType.KHIPRO in composers
     if (transliterating) {
         SettingsGroup(stringResource(R.string.languages_translit_hints_title)) {
             item {
@@ -1050,13 +1054,13 @@ internal fun LanguageDetailScreen(
         }
         // The whole key map, for the letters no hint can teach: a hint shows
         // what the next key writes, never which key writes ঁ.
-        PhoneticKeyMapGroup(langId) { uriHandler.openUri(it) }
+        if (phonetic) PhoneticKeyMapGroup(langId) { uriHandler.openUri(it) }
         // The strip of a phonetic layout (Avro, Hindi phonetic) can keep the
         // word as typed and its transliteration in the first two chips, with
         // the suggestions after them. Other transliterating layouts (Hangul,
         // Telex) commit their composer's output directly and have no such
         // strip, so they get no row.
-        if (PhoneticSchemes.forLanguage(langId) != null) {
+        if (phonetic && PhoneticSchemes.forLanguage(langId) != null) {
             PhoneticStripGroup(langId, lang.englishName, settings, repository, scope)
         }
     }

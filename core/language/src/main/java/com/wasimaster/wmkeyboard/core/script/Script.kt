@@ -243,6 +243,13 @@ enum class ComposerType {
 
     /** Cantonese: 粵拼 Jyutping romanisation with optional tone digits 1-6. */
     JYUTPING,
+
+    /**
+     * Bengali: ক্ষিপ্র Khipro, composed from lowercase keys with `f` and `/` as
+     * modifiers (issue #400). Deterministic, so unlike [TRANSLITERATE] there is
+     * no dictionary reading to rank: the keys spell exactly one word.
+     */
+    KHIPRO,
 }
 
 /**
