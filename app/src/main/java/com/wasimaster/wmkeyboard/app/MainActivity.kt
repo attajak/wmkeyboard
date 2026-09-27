@@ -54,6 +54,8 @@ import com.wasimaster.wmkeyboard.app.statistics.StatisticsScreen
 import com.wasimaster.wmkeyboard.app.storage.StorageScreen
 import com.wasimaster.wmkeyboard.app.storage.storageRoute
 import com.wasimaster.wmkeyboard.app.language.appLanguageSplitCompat
+import com.wasimaster.wmkeyboard.app.launcher.LauncherCombos
+import com.wasimaster.wmkeyboard.app.launcher.LauncherCombosScreen
 import com.wasimaster.wmkeyboard.app.lock.AppLockTargets
 import com.wasimaster.wmkeyboard.app.lock.BiometricAppLock
 import com.wasimaster.wmkeyboard.app.lock.LocalAppLock
@@ -1155,13 +1157,13 @@ private fun SettingsNavGraph(
                 MusicAppsScreen(repository, settings)
             }
         }
-        composable(com.wasimaster.wmkeyboard.app.launcher.LauncherCombos.ROUTE) {
+        composable(LauncherCombos.ROUTE) {
             SettingsScreen(
                 stringResource(R.string.launchercombos_title),
                 { navController.popBackStack() },
-                route = com.wasimaster.wmkeyboard.app.launcher.LauncherCombos.ROUTE,
+                route = LauncherCombos.ROUTE,
             ) {
-                com.wasimaster.wmkeyboard.app.launcher.LauncherCombosScreen(repository, settings)
+                LauncherCombosScreen(repository, settings)
             }
         }
         composable("kdeconnect/devices") {
