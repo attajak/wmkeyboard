@@ -96,6 +96,7 @@ import com.wasimaster.wmkeyboard.core.tools.GifSource
 import com.wasimaster.wmkeyboard.core.tools.GifSources
 import com.wasimaster.wmkeyboard.core.tools.MediaCategory
 import com.wasimaster.wmkeyboard.core.tools.ToolApiKeys
+import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ImageResult
 import com.wasimaster.wmkeyboard.core.tools.WebResult
 import com.wasimaster.wmkeyboard.ime.ImageSearchUi
@@ -374,6 +375,18 @@ fun mediaImageLoader(context: Context): ImageLoader =
                         callFactory = {
                             OkHttpClient.Builder()
                                 .addInterceptor(InternetGate)
+                                // OkHttp's own `okhttp/x.y` agent is refused
+                                // outright by Wikimedia's image hosts, which
+                                // left every Commons preview blank. Same agent
+                                // the downloads send, so the preview and the
+                                // file it stands for are fetched alike.
+                                .addInterceptor { chain ->
+                                    chain.proceed(
+                                        chain.request().newBuilder()
+                                            .header("User-Agent", ToolHttp.USER_AGENT)
+                                            .build(),
+                                    )
+                                }
                                 .addNetworkInterceptor(NetLogInterceptor(NetSource.MEDIA_IMAGES))
                                 .build()
                         },
