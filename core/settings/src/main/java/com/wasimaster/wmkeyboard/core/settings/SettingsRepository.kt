@@ -5248,6 +5248,20 @@ val ClipGridColumnsRange = 1..4
 val ClipMaxTextCharsSteps = listOf(0, 1_000, 2_000, 5_000, 10_000, 20_000, 50_000, 100_000)
 
 /**
+ * The stops of the history's entry cap; 0, the last stop, is no cap at all
+ * (#414). Stops rather than every number for the reason
+ * [ClipMaxTextCharsSteps] has them.
+ */
+val ClipMaxItemsSteps = listOf(5, 10, 20, 50, 100, 200, 500, 1_000, 2_000, 5_000, 0)
+
+/**
+ * How much taller than the keyboard the clipboard panel may be set, in dp
+ * (#414). The panel is fitted to the screen on top of this, so the top of the
+ * range is only reached on a tall one.
+ */
+val ClipPanelExtraHeightRange = 0..600
+
+/**
  * Clipboard-tool settings — history capture, the panel, and the paste chip on
  * the suggestion strip — grouped into their own object (see [CameraSettings]
  * for why). DataStore keys stay flat.
@@ -5271,7 +5285,8 @@ data class ClipboardSettings(
      * How many unpinned entries history keeps; older ones fall off the end.
      * The other half of the bound [expiryHours] sets — a busy day of copying
      * can pile up hundreds of clips well inside the expiry window, and a panel
-     * that long is not history, it is a haystack.
+     * that long is not history, it is a haystack. 0 keeps every clip, leaving
+     * the expiry as the only bound (#414). See [ClipMaxItemsSteps].
      */
     val maxItems: Int = ClipboardStore.DEFAULT_MAX_ITEMS,
     /**
@@ -5423,6 +5438,19 @@ data class ClipboardSettings(
      * default.
      */
     val outlinePinned: Boolean = false,
+    /**
+     * The pin and delete buttons along the bottom of every clip (#414). Off,
+     * the hold popup carries Pin and Delete instead, and a card whose bottom
+     * row has nothing else to show (no number, time or rich-text tag) loses
+     * the row, so more clips fit. On by default.
+     */
+    val cardButtons: Boolean = true,
+    /**
+     * How much taller than the keyboard the clipboard panel opens, in dp
+     * (#414), set by dragging the bar on top of the panel. 0, the default, is
+     * the keyboard's own height. See [ClipPanelExtraHeightRange].
+     */
+    val panelExtraHeightDp: Int = 0,
 )
 
 /**
@@ -7949,6 +7977,8 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_CLEAR_BUTTON = booleanPreferencesKey("clipboard_clear_button")
         private val CLIPBOARD_PINNED_TABS = booleanPreferencesKey("clipboard_pinned_tabs")
         private val CLIPBOARD_OUTLINE_PINNED = booleanPreferencesKey("clipboard_outline_pinned")
+        private val CLIPBOARD_CARD_BUTTONS = booleanPreferencesKey("clipboard_card_buttons")
+        private val CLIPBOARD_PANEL_EXTRA_HEIGHT_DP = intPreferencesKey("clipboard_panel_extra_height_dp")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
         // field" to "code box", but a user who turned it on meant the same
@@ -9383,6 +9413,9 @@ class SettingsRepository(private val context: Context) {
             clearButton = p[CLIPBOARD_CLEAR_BUTTON] ?: defaults.clipboard.clearButton,
             pinnedTabs = p[CLIPBOARD_PINNED_TABS] ?: defaults.clipboard.pinnedTabs,
             outlinePinned = p[CLIPBOARD_OUTLINE_PINNED] ?: defaults.clipboard.outlinePinned,
+            cardButtons = p[CLIPBOARD_CARD_BUTTONS] ?: defaults.clipboard.cardButtons,
+            panelExtraHeightDp = p[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP]?.coerceIn(ClipPanelExtraHeightRange)
+                ?: defaults.clipboard.panelExtraHeightDp,
         )
 
     private fun readOtp(p: Preferences, defaults: KeyboardSettings) =
@@ -14921,8 +14954,11 @@ class SettingsRepository(private val context: Context) {
         editPrefs { it[CLIPBOARD_EXPIRY_HOURS] = value.coerceIn(0, 24 * 7) }
 
     /** Floor of 5: a cap below that turns history into a one-clip buffer. */
+    /** 0 (or less) is no cap (#414); anything else is held to the slider's stops. */
     suspend fun setClipboardMaxItems(value: Int) =
-        editPrefs { it[CLIPBOARD_MAX_ITEMS] = value.coerceIn(5, 500) }
+        editPrefs {
+            it[CLIPBOARD_MAX_ITEMS] = if (value <= 0) 0 else value.coerceIn(5, ClipMaxItemsSteps.max())
+        }
 
     suspend fun setClipboardSensitiveHandling(value: SensitiveClipHandling) =
         editPrefs { it[CLIPBOARD_SENSITIVE_HANDLING] = value.name }
@@ -15048,6 +15084,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardOutlinePinned(value: Boolean) =
         editPrefs { it[CLIPBOARD_OUTLINE_PINNED] = value }
+
+    suspend fun setClipboardCardButtons(value: Boolean) =
+        editPrefs { it[CLIPBOARD_CARD_BUTTONS] = value }
+
+    suspend fun setClipboardPanelExtraHeightDp(value: Int) =
+        editPrefs { it[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP] = value.coerceIn(ClipPanelExtraHeightRange) }
 
     suspend fun setOtpChipEnabled(value: Boolean) =
         editPrefs { it[OTP_CHIP_ENABLED] = value }

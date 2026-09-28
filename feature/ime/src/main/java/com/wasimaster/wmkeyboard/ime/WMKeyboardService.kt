@@ -30311,7 +30311,18 @@ open class WMKeyboardService : InputMethodService() {
         onOpenLink = ::onClipboardOpenLink,
         onViewImage = ::onClipboardViewImage,
         onExtractText = ::onClipboardExtractText,
+        onPanelHeight = ::onClipboardPanelHeight,
     )
+
+    /**
+     * The clipboard panel's height bar let go (#414): [extraDp] is how much
+     * taller than the keyboard the panel opens from now on, the setting the
+     * settings screen's Panel height slider writes.
+     */
+    fun onClipboardPanelHeight(extraDp: Int) {
+        if (extraDp == _uiState.value.settings.clipboard.panelExtraHeightDp) return
+        serviceScope.launch { settingsRepository.setClipboardPanelExtraHeightDp(extraDp) }
+    }
 
     /**
      * Opens a link clip in the browser, from its press-and-hold popup (#371).
