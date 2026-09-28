@@ -44,6 +44,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -182,56 +183,60 @@ internal fun MoreLayoutsScreen(
         }
         val layoutDirection = LocalLayoutDirection.current
         val gridState = rememberLazyGridState()
-        LazyVerticalGrid(
-            state = gridState,
-            columns = GridCells.Adaptive(minSize = GridCellMin),
-            horizontalArrangement = Arrangement.spacedBy(GridGap),
-            verticalArrangement = Arrangement.spacedBy(GridGap),
-            contentPadding = PaddingValues(
-                start = padding.calculateStartPadding(layoutDirection) + GridEdge,
-                end = padding.calculateEndPadding(layoutDirection) + GridEdge,
-                top = padding.calculateTopPadding() + 8.dp,
-                bottom = padding.calculateBottomPadding() + 24.dp,
-            ),
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            if (needle.isEmpty() && !showingOn) {
-                item(key = "intro", span = { GridItemSpan(maxLineSpan) }) { MoreLayoutsIntro() }
-            }
-            items(shown, key = { it.id }) { layout ->
-                val on = settings.watch { layout.id in it.enabledLayoutIds }
-                LayoutCard(
-                    name = layout.name,
-                    layoutId = layout.id,
-                    on = on,
-                    settings = settings,
-                    onToggle = { enable -> toggle(layout.id, enable) },
-                    footer = {
-                        RulesLine(
-                            binding = layout.binding,
-                            layoutName = layout.name,
-                            layoutOn = on,
-                            refreshKey = rulesRefresh,
-                        )
-                    },
-                )
-            }
-            if (shown.isEmpty()) {
-                item(key = "empty", span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
-                        if (needle.isNotEmpty()) {
-                            stringResource(R.string.languages_more_layouts_search_empty, query.trim())
-                        } else {
-                            stringResource(R.string.languages_more_layouts_on_empty)
+        // No card composes a keyboard to capture while the grid moves.
+        val scrolling = remember(gridState) { { gridState.isScrollInProgress } }
+        CompositionLocalProvider(LocalLayoutPreviewScrolling provides scrolling) {
+            LazyVerticalGrid(
+                state = gridState,
+                columns = GridCells.Adaptive(minSize = GridCellMin),
+                horizontalArrangement = Arrangement.spacedBy(GridGap),
+                verticalArrangement = Arrangement.spacedBy(GridGap),
+                contentPadding = PaddingValues(
+                    start = padding.calculateStartPadding(layoutDirection) + GridEdge,
+                    end = padding.calculateEndPadding(layoutDirection) + GridEdge,
+                    top = padding.calculateTopPadding() + 8.dp,
+                    bottom = padding.calculateBottomPadding() + 24.dp,
+                ),
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (needle.isEmpty() && !showingOn) {
+                    item(key = "intro", span = { GridItemSpan(maxLineSpan) }) { MoreLayoutsIntro() }
+                }
+                items(shown, key = { it.id }) { layout ->
+                    val on = settings.watch { layout.id in it.enabledLayoutIds }
+                    LayoutCard(
+                        name = layout.name,
+                        layoutId = layout.id,
+                        on = on,
+                        settings = settings,
+                        onToggle = { enable -> toggle(layout.id, enable) },
+                        footer = {
+                            RulesLine(
+                                binding = layout.binding,
+                                layoutName = layout.name,
+                                layoutOn = on,
+                                refreshKey = rulesRefresh,
+                            )
                         },
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 32.dp)
-                            .semantics { liveRegion = LiveRegionMode.Polite },
                     )
+                }
+                if (shown.isEmpty()) {
+                    item(key = "empty", span = { GridItemSpan(maxLineSpan) }) {
+                        Text(
+                            if (needle.isNotEmpty()) {
+                                stringResource(R.string.languages_more_layouts_search_empty, query.trim())
+                            } else {
+                                stringResource(R.string.languages_more_layouts_on_empty)
+                            },
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 32.dp)
+                                .semantics { liveRegion = LiveRegionMode.Polite },
+                        )
+                    }
                 }
             }
         }
