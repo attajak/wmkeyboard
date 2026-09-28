@@ -245,6 +245,23 @@ data class Key(
      * Additive and defaulted, so no format-version bump.
      */
     val kanaVariantWhileComposing: Boolean = false,
+    /**
+     * What tapping this key again types in place of what the last tap typed —
+     * the feature-phone multi-tap a Korean 천지인 (Cheonjiin) pad cycles its
+     * consonants with (ㄱ → ㅋ → ㄲ) and Samsung's `.,?!` key its punctuation
+     * with (discussion #372).
+     *
+     * KeymanWeb's shape: the first tap types the key itself ([output], falling
+     * back to [label]), the second `multitap[0]`, and so on, wrapping back to the
+     * key after the last entry. A tap only continues the cycle when it is the same
+     * key, soon enough after the one before it, with the caret where that tap
+     * left it; anything else starts over, which is how the same letter is typed
+     * twice in a row. See `MultitapCycle` in `:core:input`.
+     *
+     * Empty, the normal case, is an ordinary key: every tap types it again.
+     * Additive and defaulted, so no format-version bump.
+     */
+    val multitap: List<String> = emptyList(),
 )
 
 /** What a [Key.kanaVariantWhileComposing] key draws while it is the 小゛゜ key. */

@@ -154,6 +154,7 @@ object LanguageRegistry {
                 BuiltInLayouts.KOREAN_ID,
                 AssetLayouts.KO_SEBEOLSIK_390_ID,
                 AssetLayouts.KO_SEBEOLSIK_FINAL_ID,
+                AssetLayouts.KO_CHEONJIIN_ID,
             ),
         ),
         LanguageDef(

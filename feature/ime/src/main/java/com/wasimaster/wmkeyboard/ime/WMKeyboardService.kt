@@ -170,6 +170,7 @@ import com.wasimaster.wmkeyboard.core.input.BrailleChord
 import com.wasimaster.wmkeyboard.core.input.BrailleGrade1
 import com.wasimaster.wmkeyboard.core.input.DeadKeys
 import com.wasimaster.wmkeyboard.core.input.MorseInput
+import com.wasimaster.wmkeyboard.core.input.MultitapCycle
 import com.wasimaster.wmkeyboard.core.prediction.AppNames
 import com.wasimaster.wmkeyboard.core.prediction.ContactEmails
 import com.wasimaster.wmkeyboard.core.prediction.ContactNames
@@ -5029,6 +5030,9 @@ open class WMKeyboardService : InputMethodService() {
 
     private fun startInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
+        // A tap in another field, or before the keyboard went away, is not the
+        // tap before this one.
+        multitap.end()
         // The keyboard is up, by the system's hand or ours; a hide that
         // suspended pinning has run its course.
         pinSuspended = false
@@ -5854,6 +5858,15 @@ open class WMKeyboardService : InputMethodService() {
     /** When a key last typed into the field, for the 🌐 guard: see [globeTapGuarded]. */
     private var lastTypedKeyAt = 0L
 
+    /** The run of taps a [Key.multitap] key is in, if any (discussion #372). */
+    private val multitap = MultitapCycle()
+
+    /**
+     * What the last tap of the open multitap run typed, exactly as it reached
+     * the buffer or the field — the text the next tap of the run takes back.
+     */
+    private var multitapWrote: String? = null
+
     /** The last onStartInput for a different field than the one before it. */
     private var inlineFieldStartedAt = 0L
 
@@ -6444,8 +6457,13 @@ open class WMKeyboardService : InputMethodService() {
         ) {
             commitMorse()
         }
+        // Any other key ends a multitap run; space decides for itself, because on
+        // a Cheonjiin pad ending the run is what it is pressed for.
+        if (key.action != KeyAction.Space && (key.action != KeyAction.Text || key.multitap.isEmpty())) {
+            multitap.end()
+        }
         when (key.action) {
-            KeyAction.Text -> onTextKey(key)
+            KeyAction.Text -> if (key.multitap.isNotEmpty()) onMultitapKey(key) else onTextKey(key)
             // A key of a converted Keyman layout, with no rule engine attached
             // yet. It types its own cap, which is what it would do anyway on a
             // device that has the layout but not the keyboard's rules — the
@@ -6754,6 +6772,80 @@ open class WMKeyboardService : InputMethodService() {
     fun onText(text: String) {
         vibrate()
         onKey(Key(label = text))
+    }
+
+    /**
+     * A tap of a [Key.multitap] key: the key itself when it starts a run, and
+     * otherwise the next entry of its cycle in place of what the tap before it
+     * typed — ㄱ, ㅋ, ㄲ on a Cheonjiin consonant, `.` `,` `?` `!` on Samsung's
+     * punctuation key (discussion #372).
+     *
+     * The previous step is only taken back if it is still exactly what sits at
+     * the end of the buffer or in front of the caret. When it is not — the
+     * field changed under the run — the tap starts a new run instead of
+     * deleting something the user did not type with this key.
+     */
+    private fun onMultitapKey(key: Key) {
+        val now = SystemClock.uptimeMillis()
+        var tap = multitap.press(key, now)
+        var fromField = false
+        if (tap.replaces != null) {
+            val taken = multitapWrote?.let { takeBackMultitapStep(it) }
+            if (taken == null) tap = multitap.restart(key, now) else fromField = taken
+        }
+        // Later steps are their own text: the key's shift label belongs to the
+        // key, not to every letter its cycle passes through.
+        val step = if (tap.replaces == null) key else key.copy(output = tap.text, shiftLabel = null, multitap = emptyList())
+        multitapWrote = keyOutput(step, _uiState.value)
+        onTextKey(step)
+        if (fromField) {
+            // The step taken back may have ended a sentence and armed a capital
+            // that the step replacing it (`.` becoming `,`) does not earn.
+            _uiState.update {
+                if (it.shiftState == ShiftState.ON && !it.shiftPressedByUser) {
+                    it.copy(shiftState = autoCapitalizeShift())
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
+    /**
+     * Removes [wrote], the previous step of a multitap run, from the end of the
+     * composing buffer or else from in front of the caret. Null when it is in
+     * neither place; otherwise whether it came out of the field.
+     */
+    private fun takeBackMultitapStep(wrote: String): Boolean? {
+        val ic = currentInputConnection ?: return null
+        if (composing.isNotEmpty()) {
+            if (!composing.endsWith(wrote)) return null
+            // The same bookkeeping a backspace does on the buffer: the touch,
+            // key and hint twins stay one entry per buffer character.
+            val length = wrote.length
+            composing.setLength(composing.length - length)
+            repeat(length) { composingTouch.removeLastOrNull() }
+            repeat(length) { composingKeys.removeLastOrNull() }
+            repeat(length) { composingHints.removeLastOrNull() }
+            ambiguousReading = null
+            updateComposingText(ic)
+            return false
+        }
+        val before = ic.getTextBeforeCursor(wrote.length + 1, 0)?.toString() ?: return null
+        val length = when {
+            before.endsWith(wrote) -> wrote.length
+            // The space the auto-space rule typed after a `.`: it goes with the
+            // `.`, and the step replacing it earns its own if it is owed one.
+            pendingPunctuationSpace && before.endsWith("$wrote ") -> wrote.length + 1
+            else -> return null
+        }
+        pendingPunctuationSpace = false
+        pendingWordSpace = false
+        revision?.expectDelete(length, 0)
+        if (expectedSelStart >= 0) noteDeletedForLearning(expectedSelStart - length, expectedSelStart)
+        ic.deleteSurroundingText(length, 0)
+        syncPreviousWordFromField(ic)
+        return true
     }
 
     private fun onTextKey(key: Key) {
@@ -10129,6 +10221,15 @@ open class WMKeyboardService : InputMethodService() {
         // Same as a typed character: the mid-word strip described the field
         // before this press.
         clearCaretWord()
+
+        // On a Cheonjiin pad a space straight after a consonant tap says "next
+        // letter", not "next word": ㄱ ㄱ is ㅋ, so ㄱ, space, ㄱ is how 먹고 is
+        // spelled (discussion #372). The press only closes the run; the next one
+        // is a real space, and so is one after the run has timed out.
+        val closesMultitap = composing.isNotEmpty() && state.composer.spaceEndsMultitap &&
+            multitap.isLive(SystemClock.uptimeMillis())
+        multitap.end()
+        if (closesMultitap) return
 
         // Space over a selection replaces it; skip autocorrect/double-space.
         if (hasSelection(ic)) {

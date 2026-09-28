@@ -875,6 +875,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - 19 initials, 21 medials, 28 finals — Plus 7 compound medials and 11 compound finals
     - Re-split — 간+ㅏ gives 가나, 갉+ㅣ gives 갈기; two-set only, a three-set final stays where it was typed
     - Three-set layouts — 세벌식 390 and 세벌식 최종 ship beside the two-set grid; a plain initial typed twice doubles (ᄀᄀ → 까)
+    - 천지인 (Cheonjiin) pad — Samsung-style 12-key grid; vowels folded from the strokes ㅣ ㆍ ㅡ by CheonjiinComposer, consonants picked by multi-tap; space or a 1 s pause ends a consonant's cycle (#372)
     - No candidate step — Korean gets the ordinary suggestion/autocorrect strip, not a conversion bar
   - Dead keys — Any key emitting a combining mark U+0300-U+036F arms a dead key
     - NFC composition, not a table — Every precomposed pair Unicode defines is reachable, including ǹ, ẍ, ṽ

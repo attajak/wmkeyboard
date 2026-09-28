@@ -462,6 +462,13 @@ object AssetLayouts {
      */
     const val KO_SEBEOLSIK_390_ID = "asset_ko_sebeolsik_390"
     const val KO_SEBEOLSIK_FINAL_ID = "asset_ko_sebeolsik_final"
+
+    /**
+     * 천지인 (Cheonjiin), the Korean 12-key pad (discussion #372): vowels drawn
+     * from the strokes ㅣ ㆍ ㅡ by `CheonjiinComposer`, consonants picked by
+     * tapping their key again (`Key.multitap`).
+     */
+    const val KO_CHEONJIIN_ID = "asset_ko_cheonjiin"
     const val ML_INSCRIPT_ENHANCED_ID = "asset_ml_inscript_enhanced"
     const val MNI_INSCRIPT_ID = "asset_mni_inscript"
     const val MNS_ID = "asset_mns"
