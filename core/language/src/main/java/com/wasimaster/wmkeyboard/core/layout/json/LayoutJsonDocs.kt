@@ -73,6 +73,8 @@ object LayoutJsonDocs {
             "This layer's own label size, in place of the layout's. Useful for a symbols page that stays small while the letters grow.",
         "LayerSpec.persistent" to
             "Keeps this layer on screen when the keyboard closes and opens again, instead of going back to the letters.",
+        "LayerSpec.bottomRowAsLaidOut" to
+            "Draws the bottom row exactly as it is here. The Bottom row settings do not hide, move, swap or change its keys.",
         "LayerSpec.themeId" to "A theme for while this layer is on screen, over the layout's theme and the settings.",
 
         "LayoutAppearance.fontId" to

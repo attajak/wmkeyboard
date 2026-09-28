@@ -545,6 +545,12 @@ data class KeyboardLayout(
      */
     val persistent: Boolean = false,
     /**
+     * Whether the Bottom row settings leave this grid alone; see
+     * [LayerSpec.bottomRowAsLaidOut]. On the compiled grid because
+     * [arrangedBy] is handed the grid, not the spec.
+     */
+    val bottomRowAsLaidOut: Boolean = false,
+    /**
      * The theme this grid asks to be drawn in: the layer's own, else the
      * layout's, else null for "whatever is set" (issue #61). Resolved here so
      * the one place that picks the board's theme reads one field of the grid

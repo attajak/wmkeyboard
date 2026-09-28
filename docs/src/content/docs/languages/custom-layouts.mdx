@@ -86,6 +86,14 @@ Undo and redo hold up to 30 whole-layout snapshots for the session (not saved be
 
 A "Problems" section at the bottom lists live validation findings as you edit. See [Details & edge cases](#details--edge-cases) for what gets checked.
 
+### The bottom row and its settings
+
+The [Bottom row keys](/reference/settings/layout/) settings change the bottom row of every layout as the keyboard draws it: **Emoji key instead of 🌐**, **Swap the comma and 🌐 keys** and **Keep the 🌐 key in one place** are all on by default, and **Show the 🌐 key** and **Comma key opens emoji** can change it too. The editor draws the row the same way the keyboard does, so with the default settings a shipped layout stored as <KeyCap>?123</KeyCap> · `,` · 🌐 · space shows <KeyCap>?123</KeyCap> · emoji · `,` · space in the editor as well. Under the grid, a note names the settings that change this layer's row, with a link to them.
+
+Moving or changing a key those settings moved or changed (the emoji key, the comma beside it, a spacebar they resized) turns on **Keep this bottom row as it is here** for that layer. The layer then keeps the row exactly as the grid showed it, your change included, and the settings leave it alone from then on, so a key you place stays where you put it. You can also turn the switch on yourself before editing. Turn it off and the settings arrange the row again. Keys the settings don't touch, like the full stop or Enter, edit in place without turning anything on.
+
+The switch is per layer. The symbols page a layout still inherits keeps following the settings, and since the letters were written down as the settings drew them, the two rows still match on the way into <KeyCap>?123</KeyCap>. In the raw JSON it is `"bottomRowAsLaidOut": true` on the layer.
+
 ### Keeping a layer open
 
 Normally the keyboard goes back to the letters every time it opens: minimise it, switch apps, tap into another field, and whatever layer you were on is gone. **Keep this layer open** is a switch on every layer except the letters of an ordinary layout (and on the one grid of a secondary layout), and it changes that rule for that layer alone. The same switch sits in each [panel layout](#panel-layouts)'s editor, so the text editing pad, the emoji panel, the clipboard or the trackpad can stay open across fields the same way. With it on, the layer stays until you press a key or a tool that takes you somewhere else. Closing the keyboard is not that, and neither is a new field, an app switch, or the keyboard being shut down and started again in the background between one field and the next.
