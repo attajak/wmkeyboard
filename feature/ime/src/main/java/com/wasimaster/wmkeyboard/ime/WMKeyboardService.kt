@@ -508,6 +508,7 @@ import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperModel
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperScript
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperStore
 import com.wasimaster.wmkeyboard.core.settings.isWhisperEnabled
+import com.wasimaster.wmkeyboard.core.transliteration.BijoyAnsi
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.Khipro
@@ -1835,6 +1836,28 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private var lastRevertible: RevertibleCommit? = null
+
+    /**
+     * The ANSI encoding a Bengali layout on screen writes, or null while it
+     * writes Unicode (see [syncAnsiOutput]). Non-null is what routes every
+     * edit through [AnsiOutputConnection].
+     */
+    private var ansiOutputVersion: BijoyAnsi.Version? = null
+
+    /** The converting connection handed out last, kept for as long as its field and version last. */
+    private var ansiConnection: AnsiOutputConnection? = null
+
+    /**
+     * The field's connection, seen through the ANSI converter while a Bengali
+     * layout writes ANSI. Every edit the keyboard makes goes through here, so
+     * this one place is the whole of the conversion's reach into the service.
+     */
+    override fun getCurrentInputConnection(): InputConnection? {
+        val base = super.getCurrentInputConnection() ?: return null
+        val version = ansiOutputVersion ?: return base
+        ansiConnection?.let { if (it.base === base && it.version == version) return it }
+        return AnsiOutputConnection(base, version).also { ansiConnection = it }
+    }
 
     /**
      * True when the last keystroke auto-inserted a space right after
@@ -3711,6 +3734,7 @@ open class WMKeyboardService : InputMethodService() {
                 suggestionEngine?.fieldDetectionShift = fieldDetectionShift(settings)
                 syncPhoneticAutoEnglish(settings, activeSpec)
                 syncPhoneticFixedStrip(settings, activeSpec)
+                syncAnsiOutput(settings, activeSpec)
                 glideSourcesEpoch.update { it + 1 }
             }
         }
@@ -5273,6 +5297,7 @@ open class WMKeyboardService : InputMethodService() {
         // running against the new grid.
         syncKeymanSession(fieldSpec)
         syncEngineBlacklist(fieldSpec.language().id)
+        syncAnsiOutput(modeSettings, fieldSpec)
         _uiState.update {
             it.copy(
                 settings = modeSettings,
@@ -9350,6 +9375,19 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Turns ANSI output on or off for the layout now on screen ([spec]): on for
+     * a Bengali layout while Bengali's ANSI button is lit. A word still being
+     * typed commits in whatever the output was when it started, because the
+     * layout switch commits it before calling here.
+     */
+    private fun syncAnsiOutput(settings: KeyboardSettings, spec: LayoutSpec) {
+        val strip = settings.suggestionStrip
+        ansiOutputVersion = BijoyAnsi.Version.of(strip.bengaliAnsiVersion)
+            .takeIf { strip.bengaliAnsiFor(spec.language().id) }
+        if (ansiOutputVersion == null) ansiConnection = null
+    }
+
+    /**
      * Pushes the fixed-strip setting of the layout now on screen ([spec]) to
      * the engine, and rebuilds the strip of a word being typed when it changed,
      * so the chips rearrange under the finger rather than at the next letter.
@@ -9788,6 +9826,10 @@ open class WMKeyboardService : InputMethodService() {
             // engine's next commitText replaces wholesale, so every key would
             // overwrite the one before it.
             keymanSession == null &&
+            // ANSI in the field is Latin letters standing for Bengali glyphs.
+            // Composed again, it would be read, corrected and converted as
+            // though it were the Unicode the keyboard typed.
+            ansiOutputVersion == null &&
             // Last, so the one term that asks the engine anything is only
             // reached once the screen and the field have already said yes.
             composingResumable(state.composer, suggestionEngine?.hasWordSources == true)
@@ -11073,6 +11115,7 @@ open class WMKeyboardService : InputMethodService() {
         bindEngineToLayout(spec, _uiState.value.settings)
         syncPhoneticAutoEnglish(_uiState.value.settings, spec)
         syncPhoneticFixedStrip(_uiState.value.settings, spec)
+        syncAnsiOutput(_uiState.value.settings, spec)
         refreshSuggestions()
         // The typing test follows the language: a prompt dealt in one
         // language cannot be typed on another's keys, so the switch re-deals.
@@ -12365,6 +12408,10 @@ open class WMKeyboardService : InputMethodService() {
      * same order of precedence.
      */
     fun onStripOfferAction(action: StripOfferAction) {
+        if (action == StripOfferAction.ToggleAnsi) {
+            onAnsiOutputToggle()
+            return
+        }
         if (_uiState.value.learnOffer != null) {
             when (action) {
                 is StripOfferAction.Accept -> acceptLearnOffer()
@@ -12423,6 +12470,7 @@ open class WMKeyboardService : InputMethodService() {
             StripOfferAction.Back -> onSnippetOfferBack()
             StripOfferAction.Decline -> clearSnippetOffer()
             StripOfferAction.Explain -> Unit
+            StripOfferAction.ToggleAnsi -> Unit
         }
     }
 
@@ -21692,6 +21740,32 @@ open class WMKeyboardService : InputMethodService() {
         if (!blocked && language != null) {
             serviceScope.launch { settingsRepository.setPhoneticEnglish(language, next) }
         }
+    }
+
+    /**
+     * The strip's ANSI button on a Bengali layout: write Bijoy-era ANSI
+     * (আ as Av) or Unicode. The settings collector switches the output once
+     * the write lands ([syncAnsiOutput]). A word still being typed commits in
+     * the output it was started in only if it commits before that; it is
+     * committed here first, so the switch starts cleanly at the next word.
+     */
+    fun onAnsiOutputToggle() {
+        vibrate()
+        val state = _uiState.value
+        val strip = state.settings.suggestionStrip
+        if (!strip.bengaliAnsiAllowed) return
+        currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+        val next = !strip.bengaliAnsiOn
+        Toast.makeText(
+            this,
+            if (next) {
+                getString(R.string.ime_service_ansi_on_toast, BijoyAnsi.Version.of(strip.bengaliAnsiVersion).number)
+            } else {
+                getString(R.string.ime_service_ansi_off_toast)
+            },
+            Toast.LENGTH_SHORT,
+        ).show()
+        serviceScope.launch { settingsRepository.setBengaliAnsiOn(next) }
     }
 
     /**

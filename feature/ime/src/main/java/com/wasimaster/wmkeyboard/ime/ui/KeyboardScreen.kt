@@ -100,6 +100,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
@@ -3753,6 +3754,16 @@ private fun TopBar(
                         // row reads as words first.
                         compact = true,
                     ) { onToolTap(ToolbarTool.PHONETIC_ENGLISH) }
+                }
+                // Bengali's ANSI button: on every Bengali layout once Bengali's
+                // screen allows ANSI output, lit while the layouts write it. Beside
+                // the words for the reason the switch above is: the field that
+                // wants ANSI is the one being typed in, and that is when it is
+                // reached for.
+                if (state.language.id == "bn" && state.settings.suggestionStrip.bengaliAnsiAllowed) {
+                    AnsiToggle(active = state.settings.suggestionStrip.bengaliAnsiOn) {
+                        onStripOfferAction(StripOfferAction.ToggleAnsi)
+                    }
                 }
                 // Autofill chips take the whole strip while they are up: they
                 // answer the field directly ("use this saved login"), which beats
@@ -8286,6 +8297,45 @@ internal fun ToolCircle(
                 }
             }
         }
+    }
+}
+
+/**
+ * The ANSI button on a Bengali layout's strip: the word ANSI on a pill the
+ * height of a compact [ToolCircle], filled while the layouts write ANSI. A word
+ * rather than an icon, because ANSI is what the fonts that want it call it and
+ * no glyph says it better.
+ */
+@Composable
+private fun AnsiToggle(active: Boolean, onClick: () -> Unit) {
+    val kb = LocalKbTheme.current
+    val shape = kb.toolShape()
+    val description = stringResource(R.string.ime_ansi_output)
+    Box(
+        modifier = Modifier
+            .height(CompactToolSide.dp)
+            .clip(shape)
+            .background(
+                when {
+                    active -> kb.toolCircleActive
+                    kb.toolRadiusDp > 0 -> kb.toolCircle
+                    else -> Color.Transparent
+                },
+                shape,
+            )
+            .toggleable(value = active, role = Role.Switch, onValueChange = { onClick() })
+            .semantics { contentDescription = description }
+            .padding(horizontal = 7.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            stringResource(R.string.ime_ansi_button),
+            color = if (active) kb.toolCircleActiveIcon else kb.toolbarIcon,
+            fontSize = 11.sp,
+            lineHeight = 12.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+        )
     }
 }
 

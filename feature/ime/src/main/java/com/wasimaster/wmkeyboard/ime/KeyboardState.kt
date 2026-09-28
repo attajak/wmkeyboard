@@ -1927,6 +1927,13 @@ sealed interface StripOfferAction {
 
     /** The chip was held: the setting it asks about, in the app (#312). */
     data object Explain : StripOfferAction
+
+    /**
+     * The ANSI button beside the words on a Bengali layout: write Bijoy-era
+     * ANSI, or Unicode again. Not an offer, but a strip button all the same,
+     * and riding this type costs the screen's call chain no parameter.
+     */
+    data object ToggleAnsi : StripOfferAction
 }
 
 /**
