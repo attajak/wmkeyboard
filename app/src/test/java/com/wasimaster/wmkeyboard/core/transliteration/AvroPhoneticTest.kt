@@ -121,7 +121,7 @@ class AvroPhoneticTest {
         assertEquals("কালো", t("kalO"))
         // A sign closes a consonant's syllable, so the "o" after one is
         // inherent too rather than a fresh অ.
-        assertEquals("রং", t("rongo"))
+        assertEquals("দুঃখ", t("du:kho"))
     }
 
     @Test fun anusvaraJoinsNothing() {
@@ -130,8 +130,12 @@ class AvroPhoneticTest {
         assertEquals("পংক্তি", t("pongkti"))
         assertEquals("আকাংখা", t("akangkha"))
         assertEquals("অংক", t("ongko"))
-        // Before a vowel there is a new syllable to carry, and only ঙ can.
-        assertEquals("বাঙালি", t("bangali"))
+        // Before a vowel there is a new syllable to carry, and ঙ্গ carries it,
+        // as on desktop Avro; capital "Ng" is the bare ঙ.
+        assertEquals("সঙ্গে", t("songe"))
+        assertEquals("জঙ্গল", t("jongol"))
+        assertEquals("বাঙ্গালি", t("bangali"))
+        assertEquals("বাঙালি", t("baNgali"))
         // ...and ঁ and ঃ are the same kind of thing.
         assertEquals("চাঁদ", t("ca^d"))
         assertEquals("দুঃখ", t("du:kh"))

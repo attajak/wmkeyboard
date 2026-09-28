@@ -44,7 +44,7 @@ package com.wasimaster.wmkeyboard.core.transliteration
  * 10. ং, ঃ and ঁ are signs, not consonants: they hang off the syllable in
  *     front of them and join nothing, so "bangla" is বাংলা and not বাং্লা.
  *     Since only a consonant can start the next syllable, "ng" before a
- *     vowel is ঙ instead — "bangali" → বাঙালি.
+ *     vowel is ঙ্গ instead — "songe" → সঙ্গে — as on desktop Avro.
  * 11. A capital that spells nothing of its own reads as its lowercase self,
  *     so a stray shift types Bengali rather than dropping a Latin letter
  *     into the middle of a word. The capitals Avro *does* use (T D N S R J,
@@ -469,15 +469,17 @@ object AvroPhonetic {
 
             // "ng" is ং, which hangs off the syllable in front of it and joins
             // nothing. A vowel after it is a new syllable, and only a consonant
-            // can carry one — so there it is ঙ instead: "bangla" → বাংলা,
-            // "bangali" → বাঙালি.
+            // can carry one — so there it is ঙ্গ instead, as on desktop Avro:
+            // "bangla" → বাংলা, "songe" → সঙ্গে, "jongol" → জঙ্গল. ঙ্গ is
+            // the far commoner spelling before a vowel; the bare ঙ of বাঙালি
+            // or ভাঙা is "Ng", and the everyday ones are in the spelling list.
             if (input.startsWith("ng", i) &&
-                (ruleAt(input, i + 2)?.kind == Kind.VOWEL || input.startsWith("oo", i + 2))
+                (ruleAt(input, i + 2)?.kind == Kind.VOWEL || input.getOrNull(i + 2) == 'o')
             ) {
                 if (prev == Kind.CONSONANT && !breakJoin && (reph || joins(out, "ঙ", input.getOrNull(i - 1)))) {
                     out.append(HASANT)
                 }
-                out.append('ঙ')
+                out.append("ঙ্গ")
                 prev = Kind.CONSONANT
                 prevVowelGlyph = false
                 breakJoin = false

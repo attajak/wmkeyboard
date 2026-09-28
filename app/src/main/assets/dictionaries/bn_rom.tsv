@@ -12759,3 +12759,18 @@ marjito	মার্জিত
 nargis	নার্গিস
 sorto	শর্ত
 vortir	ভর্তির
+# ঙ before a vowel sign. The rules write ঙ্গ there, as desktop Avro does, since
+# it is the commoner spelling (সঙ্গে, জঙ্গল); these are the everyday words
+# spelled with a bare ঙ instead, where the bundled dictionary ranks that form
+# at least twice as high as its ঙ্গ twin. Capital "Ng" types a bare ঙ anywhere.
+bhanga	ভাঙা
+bhengechhe	ভেঙেছে
+bildinger	বিল্ডিঙের
+rongin	রঙিন
+bhengechhi	ভেঙেছি
+bhangate	ভাঙাতে
+bhango	ভাঙো
+bhangano	ভাঙানো
+gongani	গোঙানি
+bildinge	বিল্ডিঙে
+bhangai	ভাঙাই

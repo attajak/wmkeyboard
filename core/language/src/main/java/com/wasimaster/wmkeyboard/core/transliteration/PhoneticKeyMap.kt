@@ -89,7 +89,7 @@ object PhoneticKeyMaps {
             KeyMapEntry(listOf("x"), "ক্স", where = KeyMapWhere.ELSEWHERE, example = "bax" to "বাক্স"),
             KeyMapEntry(listOf("aZ", "AZ"), "অ্যা", example = "aZp" to "অ্যাপ"),
             KeyMapEntry(listOf("ng"), "ং", example = "bangla" to "বাংলা"),
-            KeyMapEntry(listOf("ng"), "ঙ", where = KeyMapWhere.BEFORE_VOWEL, example = "bangali" to "বাঙালি"),
+            KeyMapEntry(listOf("ng"), "ঙ্গ", where = KeyMapWhere.BEFORE_VOWEL, example = "songe" to "সঙ্গে"),
             KeyMapEntry(listOf("^", "qq", "cb"), "ঁ", example = "ca^d" to "চাঁদ"),
             KeyMapEntry(listOf(":", "HH"), "ঃ", example = "du:kho" to "দুঃখ"),
             KeyMapEntry(listOf(",,", "hs"), "্", where = KeyMapWhere.AFTER_CONSONANT, example = "m,," to "ম্"),
