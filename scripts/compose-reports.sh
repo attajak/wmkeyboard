@@ -54,11 +54,12 @@ for m in "${modules[@]}"; do
     continue
   fi
   echo "== $m"
-  for json in "$metrics"/*-module.json; do
+  # One directory per variant under metrics/ (fullDebug/), JSON inside.
+  for json in "$metrics"/*/*-module.json "$metrics"/*-module.json; do
     [ -f "$json" ] || continue
     # One flat JSON object; print the counts that matter, in a fixed order.
-    for key in restartableComposables skippableComposables readonlyComposables \
-               totalComposables restartGroups totalGroups; do
+    for key in totalComposables restartableComposables skippableComposables \
+               knownUnstableArguments totalArguments; do
       value="$(grep -o "\"$key\" *: *[0-9]*" "$json" | grep -o '[0-9]*$' || true)"
       [ -n "$value" ] && printf '  %-24s %s\n' "$key" "$value"
     done
@@ -66,8 +67,10 @@ for m in "${modules[@]}"; do
   # composables.txt: a signature line per composable, one parameter per line
   # after it, and a line holding only ")" to close it.
   awk '
-    /^([a-z]+[ (].* )?fun [A-Za-z0-9_$]+\(/ {
-      match($0, /fun [A-Za-z0-9_$]+\(/); name = substr($0, RSTART + 4, RLENGTH - 5)
+    /^([a-z]+[ (].* )?fun [A-Za-z0-9_$.]+\(/ {
+      # Names come package-qualified; keep the last segment.
+      match($0, /fun [A-Za-z0-9_$.]+\(/); name = substr($0, RSTART + 4, RLENGTH - 5)
+      sub(/.*\./, "", name)
       unstable = ""; inside = 1; next
     }
     inside && /^\)/ {
