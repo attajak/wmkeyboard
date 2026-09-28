@@ -258,6 +258,9 @@ data class Key(
      * left it; anything else starts over, which is how the same letter is typed
      * twice in a row. See `MultitapCycle` in `:core:input`.
      *
+     * On a Keyman key these are the caps of the cycle's keys, and
+     * [KeyAction.KeymanKey.multitap] holds the keys themselves in the same order.
+     *
      * Empty, the normal case, is an ordinary key: every tap types it again.
      * Additive and defaulted, so no format-version bump.
      */
@@ -486,6 +489,19 @@ fun Key.flickKey(direction: FlickDirection): Key? {
     val target = (action as? KeyAction.KeymanKey)?.flick?.get(direction)
         ?: return copy(output = text)
     return Key(label = text, output = target.text, action = target.toAction())
+}
+
+/**
+ * The key tap [step] of a multitap run presses: this key for step 0, else the
+ * cycle's entry. On a Keyman key that is the entry's own Keyman key, typing its
+ * [KeymanTarget.text] with no rules loaded; otherwise this key typing the
+ * entry's text. Either way the result carries no cycle of its own.
+ */
+fun Key.multitapKey(step: Int): Key {
+    val text = multitap.getOrNull(step - 1) ?: return this
+    val target = (action as? KeyAction.KeymanKey)?.multitap?.takeIf { it.size == multitap.size }?.get(step - 1)
+        ?: return copy(output = text, shiftLabel = null, multitap = emptyList())
+    return Key(label = text, output = target.text, action = target.toAction(), width = width)
 }
 
 /**

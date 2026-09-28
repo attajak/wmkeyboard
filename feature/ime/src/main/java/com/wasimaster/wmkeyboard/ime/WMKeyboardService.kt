@@ -523,6 +523,7 @@ import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeymanTarget
 import com.wasimaster.wmkeyboard.core.layout.letterSet
+import com.wasimaster.wmkeyboard.core.layout.multitapKey
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.ModifierKey
@@ -5892,6 +5893,24 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var multitapWrote: String? = null
 
+    /** How the last tap of an open Keyman multitap run typed; see [onKeymanMultitapKey]. */
+    private var keymanMultitapWrote: KeymanMultitapStep? = null
+
+    /** The Keyman layer the open multitap run began on. */
+    private var keymanMultitapLayer: String? = null
+
+    /** What a tap of a Keyman multitap run did, and so how to take it back. */
+    private sealed interface KeymanMultitapStep {
+        /** The engine typed it, into the field and its own context. */
+        class Engine(val session: KeymanSession, val tap: KeymanTap) : KeymanMultitapStep
+
+        /** It went down the ordinary path as [text], with no rules to run. */
+        class Typed(val text: String) : KeymanMultitapStep
+
+        /** It typed nothing: a layer switch. */
+        data object Nothing : KeymanMultitapStep
+    }
+
     /** The last onStartInput for a different field than the one before it. */
     private var inlineFieldStartedAt = 0L
 
@@ -6484,7 +6503,8 @@ open class WMKeyboardService : InputMethodService() {
         }
         // Any other key ends a multitap run; space decides for itself, because on
         // a Cheonjiin pad ending the run is what it is pressed for.
-        if (key.action != KeyAction.Space && (key.action != KeyAction.Text || key.multitap.isEmpty())) {
+        val cycles = key.multitap.isNotEmpty() && (key.action == KeyAction.Text || key.action is KeyAction.KeymanKey)
+        if (key.action != KeyAction.Space && !cycles) {
             multitap.end()
         }
         when (key.action) {
@@ -6493,7 +6513,11 @@ open class WMKeyboardService : InputMethodService() {
             // yet. It types its own cap, which is what it would do anyway on a
             // device that has the layout but not the keyboard's rules — the
             // grid stays an ordinary usable keyboard rather than going dead.
-            is KeyAction.KeymanKey -> onKeymanKeyPress(key, key.action as KeyAction.KeymanKey)
+            is KeyAction.KeymanKey -> if (key.multitap.isNotEmpty()) {
+                onKeymanMultitapKey(key)
+            } else {
+                onKeymanKeyPress(key, key.action as KeyAction.KeymanKey)
+            }
             KeyAction.Shift -> onShift()
             KeyAction.CapsLock -> onCapsLock()
             KeyAction.Delete -> onDelete()
@@ -6906,17 +6930,24 @@ open class WMKeyboardService : InputMethodService() {
      *
      * With no rules on the device the key types its fallback and still switches
      * layers, so the grid stays an ordinary usable keyboard.
+     *
+     * True when the key went down that ordinary path, through [onTextKey],
+     * which a multitap run needs to know to take it back again.
      */
-    private fun onKeymanKeyPress(key: Key, keyman: KeyAction.KeymanKey) {
+    private fun onKeymanKeyPress(key: Key, keyman: KeyAction.KeymanKey): Boolean {
         val startLayer = activeKeymanLayer()
         if (keyman.isLayerSwitch) {
-            switchToKeymanLayer(keyman.nextLayer ?: return)
+            switchToKeymanLayer(keyman.nextLayer ?: return false)
             runKeymanPostKeystroke(startLayer, changed = true)
-            return
+            return false
         }
         val outcome = runKeymanRules(keyman)
+        var ordinary = false
         if (outcome == null) {
-            if (!typeKeymanFallback(key)) onTextKey(key)
+            if (!typeKeymanFallback(key)) {
+                onTextKey(key)
+                ordinary = true
+            }
         } else {
             // The engine typed instead of [processTypedText], which is where a
             // Text key normally spends these. Leaving them armed would hand a
@@ -6933,6 +6964,95 @@ open class WMKeyboardService : InputMethodService() {
             keymanSession?.processor?.hasPostKeystroke != true -> consumeShift()
         }
         runKeymanPostKeystroke(startLayer, changed = target != null)
+        return ordinary
+    }
+
+    /**
+     * A tap of a Keyman key with a repeated-tap cycle, KeymanWeb's way: the
+     * first tap is the key itself, and each later tap takes the previous one
+     * back out, rewinding the engine's context to what it was before the run
+     * began, deadkeys included, then presses the cycle's next key through the
+     * rules as if it were the first thing typed there. A step that names no
+     * layer of its own goes back to the layer the run began on.
+     *
+     * The previous tap is only taken back when it is still exactly what sits
+     * behind the caret. When it is not, the tap starts a new run, as on a
+     * plain [Key.multitap] key ([onMultitapKey]).
+     */
+    private fun onKeymanMultitapKey(key: Key) {
+        val now = SystemClock.uptimeMillis()
+        var tap = multitap.press(key, now)
+        val ic = currentInputConnection
+        // One batch for the take-back and the step, so the editor reports one
+        // caret move, where the step left it, and the engine knows it for its
+        // own echo rather than calling its context stale.
+        ic?.beginBatchEdit()
+        try {
+            if (tap.replaces != null && !takeBackKeymanMultitapStep()) tap = multitap.restart(key, now)
+            val startLayer = activeKeymanLayer()
+            if (tap.replaces == null) keymanMultitapLayer = startLayer
+            val step = key.multitapKey(multitap.step)
+            var action = step.action as KeyAction.KeymanKey
+            val home = keymanMultitapLayer
+            if (tap.replaces != null && action.nextLayer == null && home != null && home != startLayer) {
+                action = action.copy(nextLayer = home)
+            }
+            val session = keymanSession
+            val recording = session != null && beginKeymanTap(session, ic)
+            val typed = keyOutput(step, _uiState.value)
+            val ordinary = onKeymanKeyPress(step, action)
+            val record = if (recording) session?.endTap() else null
+            keymanMultitapWrote = when {
+                ordinary -> KeymanMultitapStep.Typed(typed)
+                session != null && record != null -> KeymanMultitapStep.Engine(session, record)
+                // Recorded, but with nothing to put back: the next tap starts over.
+                recording -> null
+                else -> KeymanMultitapStep.Nothing
+            }
+        } finally {
+            ic?.endBatchEdit()
+        }
+    }
+
+    /**
+     * Brings the engine's context into line with the field before a tap of a
+     * Keyman multitap run, and starts recording what the tap does to both.
+     * False when the engine will not be the one typing it.
+     */
+    private fun beginKeymanTap(session: KeymanSession, ic: InputConnection?): Boolean {
+        if (ic == null || session.disabled || _uiState.value.keysTakenByKeyboard) return false
+        // The same as [runKeymanRules] would do, done first so the context the
+        // tap is recorded from is the one it is typed into.
+        if (composing.isNotEmpty()) {
+            commitComposing(ic, autocorrect = false)
+            session.markStale()
+        }
+        session.syncIfNeeded(expectedSelStart) {
+            ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
+        }
+        return session.beginTap()
+    }
+
+    /**
+     * Takes the previous tap of the open Keyman multitap run back out of the
+     * field, the way it went in. False when it can no longer be found there.
+     */
+    private fun takeBackKeymanMultitapStep(): Boolean = when (val wrote = keymanMultitapWrote) {
+        null -> false
+        KeymanMultitapStep.Nothing -> true
+        is KeymanMultitapStep.Typed -> takeBackMultitapStep(wrote.text) != null
+        is KeymanMultitapStep.Engine -> takeBackKeymanTap(wrote)
+    }
+
+    /** [takeBackKeymanMultitapStep] for a tap the engine typed, with the session that typed it. */
+    private fun takeBackKeymanTap(wrote: KeymanMultitapStep.Engine): Boolean {
+        val ic = currentInputConnection ?: return false
+        val session = keymanSession?.takeIf { it === wrote.session } ?: return false
+        val undo = session.takeBack(wrote.tap, expectedSelStart) {
+            ic.getTextBeforeCursor(KEYMAN_CONTEXT_UNITS, 0) ?: ""
+        } ?: return false
+        applyKeymanEdit(ic, session, undo)
+        return true
     }
 
     /**

@@ -6,6 +6,7 @@ sidebar:
 ---
 
 import SettingsPath from '@components/SettingsPath.astro';
+import KeyCap from '@components/KeyCap.astro';
 import LayoutExplorer from '@components/LayoutExplorer.astro';
 import khmer from '../../../../../app/src/main/assets/layouts/kmn_khmer_angkor.wmlayout.json';
 
@@ -33,10 +34,12 @@ What comes across:
 - The shift and caps pages as their author drew them. Shift and caps lock work the way they do on every other layout here (one tap for one shifted key, a double tap to lock), and while shift is on you see and type the keyboard's own shift page, long presses and all.
 - Long-press alternates and flicks, each typing through the keyboard's rules the way it does in Keyman, not just the character on its label.
 - Keys that exist for the rules to act on, such as the vowel keys of the GFF Ethiopic keyboards, which turn the consonant before them into a syllable.
+- Multi-tap keys, where tapping a key again swaps what it just typed for the next character in its cycle. Each tap in the cycle goes through the keyboard's rules as if it were the first thing typed after the text before the cycle began, which is what Keyman does too. The GFF and GeezWord Ethiopic keyboards use this heavily. A tap continues the cycle when it's the same key within a second of the last one. Any other key, or a pause, starts over.
 
 What doesn't:
 
-- **Multi-tap keys.** WM Keyboard has no equivalent gesture, so those alternates are dropped.
+- **Multi-tap on page keys.** A few keyboards let you tap the <KeyCap>123</KeyCap> key again to go on to a symbols or currency page. In Keyman the next tap counts as the same key even though the first tap already changed the page under your finger. Here it's whatever key is on the new page, so these keys only switch to their first page.
+- **Multi-tap on keys that switch pages as they type.** For the same reason, a cycle stops after the first tap when that tap changes the page, for example a key on the shift page, which drops shift again. Tapping again types that page's key.
 - **Diagonal flicks.** Keyman has eight flick directions and WM Keyboard has four. A flick aimed north-east isn't quietly remapped onto the north key, because typing the wrong character is worse than the gesture doing nothing.
 - **Fonts.** Keyman packages ship their own. WM Keyboard uses [its own font system](/themes/fonts/) instead, which already covers these scripts.
 

@@ -28,8 +28,15 @@ class MultitapCycle(private val timeoutMs: Long = TIMEOUT_MS) {
     data class Tap(val text: String, val replaces: String?)
 
     private var key: Key? = null
-    private var step = 0
     private var at = 0L
+
+    /**
+     * Where the run is in its key's cycle after the last [press]: 0 for the key
+     * itself, n for `multitap[n - 1]`. What a Keyman key needs in place of the
+     * text, since each of its steps is a key of its own for the rules.
+     */
+    var step = 0
+        private set
 
     /** Whether a run is still open at [now]: a tap of the same key would continue it. */
     fun isLive(now: Long): Boolean = key != null && now - at in 0..timeoutMs

@@ -58,4 +58,19 @@ class MultitapCycleTest {
         assertEquals(MultitapCycle.Tap("ㄱ", null), cycle.restart(giyeok, 20))
         assertEquals(MultitapCycle.Tap("ㅋ", "ㄱ"), cycle.press(giyeok, 30))
     }
+
+    /** A Keyman key presses a different key per step, so it reads the step, not the text. */
+    @Test fun `the step says where the run is in the cycle`() {
+        val cycle = MultitapCycle()
+        cycle.press(giyeok, 0)
+        assertEquals(0, cycle.step)
+        cycle.press(giyeok, 10)
+        assertEquals(1, cycle.step)
+        cycle.press(giyeok, 20)
+        assertEquals(2, cycle.step)
+        cycle.press(giyeok, 30)
+        assertEquals(0, cycle.step)
+        cycle.press(nieun, 40)
+        assertEquals(0, cycle.step)
+    }
 }
