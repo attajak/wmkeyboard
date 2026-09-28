@@ -446,6 +446,7 @@ object AssetLayouts {
     const val EN_COLEMAK_DH_ID = "asset_en_colemak_dh"
     const val EN_NALMY_ID = "asset_en_nalmy"
     const val EN_SANGALINE_ID = "asset_en_sangaline"
+    const val EN_QWERTZ_ID = "asset_en_qwertz"
     const val FR_CANADIAN_ID = "asset_fr_canadian"
     const val FR_SWISS_ID = "asset_fr_swiss"
     const val GAA_QWERTY_ID = "asset_gaa_qwerty"
@@ -824,6 +825,12 @@ object AssetLayouts {
         val langId: String,
         /** The Keyman keyboard whose rules the layout runs, when it has one. */
         val keyman: KeymanBinding? = null,
+        /**
+         * Whether the grid is a desktop keyboard's, number row and all, rather
+         * than one drawn for a phone. The build measures it (see
+         * `generateLayoutIndex`), so asking costs no parse.
+         */
+        val desktop: Boolean = false,
     )
 
     @Volatile private var assets: AssetManager? = null
@@ -916,7 +923,7 @@ object AssetLayouts {
                     } else {
                         val keyman = parts.getOrNull(3)?.takeIf { it.isNotEmpty() }
                             ?.let { KeymanBinding(it, parts.getOrNull(4).orEmpty()) }
-                        Entry(parts[0], parts[1], parts[2], keyman)
+                        Entry(parts[0], parts[1], parts[2], keyman, desktop = parts.getOrNull(5) == "1")
                     }
                 }.toList()
             }
@@ -939,8 +946,9 @@ object AssetLayouts {
     const val ID_PREFIX = "asset_"
 
     /**
-     * The build-generated index: `id<TAB>name<TAB>langId<TAB>keymanId<TAB>keymanVersion`
-     * per line, the last two empty for a layout with no Keyman rules.
+     * The build-generated index: `id<TAB>name<TAB>langId<TAB>keymanId<TAB>keymanVersion<TAB>desktop`
+     * per line, the Keyman pair empty for a layout with no Keyman rules and
+     * `desktop` either `1` or empty.
      */
     private const val INDEX = "layouts-index.tsv"
 

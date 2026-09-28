@@ -68,6 +68,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.resolveLayoutKeyman
 import com.wasimaster.wmkeyboard.core.layout.resolveLayoutName
 import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
@@ -123,10 +124,14 @@ internal fun MoreLayoutsScreen(
     val layouts = remember(lang, customLayouts) {
         // From the layout index, not the grids: a language can have a dozen
         // converted layouts of a megabyte each, and this list only names them.
+        // Grids drawn for a phone first, desktop keyboards copied key for key
+        // after them: the first fit the screen and type the way a phone
+        // keyboard should, the second are there for someone who wants their
+        // desktop layout exactly. A stable sort, so each half keeps its order.
         lang.layoutIds.mapNotNull { id ->
             resolveLayoutKeyman(customLayouts, id)
                 ?.let { MoreLayout(id, resolveLayoutName(customLayouts, id), it) }
-        }
+        }.sortedBy { AssetLayouts.entry(it.id)?.desktop == true }
     }
     var query by rememberSaveable { mutableStateOf("") }
     var onlyOn by rememberSaveable { mutableStateOf(false) }

@@ -75,6 +75,10 @@ object LanguageRegistry {
             localeTag = "en-US",
             layoutIds = listOf(
                 BuiltInLayouts.QWERTY_ID,
+                // Its own id rather than German's: a layout belongs to one
+                // language, and English typed on a German grid still wants the
+                // English dictionary (#422).
+                AssetLayouts.EN_QWERTZ_ID,
                 BuiltInLayouts.AZERTY_ID,
                 BuiltInLayouts.DVORAK_ID,
                 BuiltInLayouts.COLEMAK_ID,
