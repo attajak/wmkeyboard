@@ -737,6 +737,8 @@ internal fun ClipboardSettings(
                 },
                 info = stringResource(R.string.clipboard_chip_life_info),
                 default = SettingsDefaults.clipboard.pasteChipSeconds.toFloat(),
+                // Seconds, then minutes: a bare number cannot say which.
+                typed = false,
             ) { value ->
                 val secs = (value / 30f).roundToInt() * 30
                 scope.launch { repository.setPasteChipSeconds(secs) }

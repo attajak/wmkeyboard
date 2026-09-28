@@ -120,6 +120,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.Color
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
@@ -3781,6 +3782,7 @@ internal fun SliderSetting(
     default: Float? = null,
     onReset: (() -> Unit)? = null,
     preview: ((Float) -> Unit)? = null,
+    typed: Boolean = true,
     onChange: (Float) -> Unit,
 ) = SliderSetting(
     title = stringResource(title),
@@ -3795,6 +3797,7 @@ internal fun SliderSetting(
     default = default,
     onReset = onReset,
     preview = preview,
+    typed = typed,
     onChange = onChange,
 )
 
@@ -3842,9 +3845,16 @@ internal fun SliderSetting(
      * `rememberLiveSlider`; everywhere else one write on release is the point.
      */
     live: Boolean = false,
+    /**
+     * Whether tapping the readout opens a field to type the value in. Off only
+     * for a readout that changes unit along the track ("12 hours", then
+     * "1 day"), where a bare number cannot say which one it means.
+     */
+    typed: Boolean = true,
     onChange: (Float) -> Unit,
 ) {
     val slider = rememberLiveSlider(value, onChange, live = live, preview = preview)
+    var typing by rememberSaveable { mutableStateOf(false) }
     // The readout is the slider's detent: this row's values are continuous, so
     // the steps the user is actually aiming at are the ones the number they can
     // read changes on. Keyed on the string rather than the float, so a drag
@@ -3886,10 +3896,25 @@ internal fun SliderSetting(
                     }
                     if (info != null) InfoButton(title, info)
                 }
+                // A slider cannot be landed on one exact millisecond by thumb,
+                // so the number is a button that takes it typed (#415). The
+                // pill is what says so; a bare number reads as a label.
                 Text(
                     readout,
                     style = MaterialTheme.typography.labelLarge,
                     maxLines = 1,
+                    modifier = if (typed && enabled) {
+                        Modifier
+                            .clip(MaterialTheme.shapes.small)
+                            .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                            .clickable(
+                                onClickLabel = stringResource(CommonR.string.common_type_setting_value_desc, title),
+                                role = Role.Button,
+                            ) { typing = true }
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    } else {
+                        Modifier
+                    },
                 )
             },
         ) {
@@ -3900,6 +3925,22 @@ internal fun SliderSetting(
                 valueRange = range,
                 enabled = enabled,
             )
+        }
+    }
+    if (typing) {
+        SliderEntryDialog(
+            title = title,
+            readout = readout,
+            range = range,
+            display = display,
+            onDismiss = { typing = false },
+        ) {
+            typing = false
+            // Through the slider rather than to onChange directly, so the
+            // thumb moves at once, a sound or haptic row plays the new value,
+            // and a live editor writes it the same way a drag would.
+            slider.onDrag(it)
+            slider.onRelease()
         }
     }
 }
