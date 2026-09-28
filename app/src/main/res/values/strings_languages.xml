@@ -146,7 +146,7 @@
     <string name="languages_keymap_vowels">Vowels</string>
     <string name="languages_keymap_vowels_note">The first letter is the vowel on its own. The second is the sign it becomes after a consonant.</string>
     <string name="languages_keymap_consonants">Consonants</string>
-    <string name="languages_keymap_consonants_note">Two consonants in a row join into one letter. Type a vowel between them to keep them apart.</string>
+    <string name="languages_keymap_consonants_note">Two consonants in a row join into one letter where Bangla has that letter: "kt" is ক্ত, but "kb" stays কব. An r, y or w after a consonant always joins as a fola, and reph is a double r. Type a vowel between two consonants to keep them apart.</string>
     <string name="languages_keymap_consonants_note_guessed">Whether two consonants join is a guess from how the word is said. The suggestion strip offers the other reading.</string>
     <string name="languages_keymap_signs">Joins and signs</string>
     <string name="languages_keymap_after_consonant">After a consonant</string>
@@ -155,6 +155,7 @@
     <string name="languages_keymap_before_vowel">Before a vowel</string>
     <string name="languages_keymap_after_t">After t</string>
     <string name="languages_keymap_between_consonants">Between two consonants, keeps them apart</string>
+    <string name="languages_keymap_word_start">At the start of a word</string>
     <string name="languages_phonetic_guide_title">Full guide</string>
     <string name="languages_phonetic_guide_subtitle">Every rule with examples, on the WM Keyboard website</string>
     <string name="languages_phonetic_guide_action">Open guide</string>
