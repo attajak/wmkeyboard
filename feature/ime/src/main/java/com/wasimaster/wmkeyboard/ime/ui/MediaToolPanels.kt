@@ -191,7 +191,7 @@ internal fun SearchQueryText(
                     owner.coordinates = it
                     overlay?.moved(owner)
                 }
-                .pointerInput(Unit) {
+                .pointerInput(query, active) {
                     detectTapGestures(onLongPress = { caretBar = true }, onTap = { caretBar = false })
                 }
         } else {
