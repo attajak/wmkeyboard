@@ -2460,6 +2460,11 @@ data class WebSearchSettings(
      * means "use the built-in key" (which may itself be blank).
      */
     val braveApiKey: String = "",
+    /**
+     * The user's Tavily key (#439). There is no built-in one, so blank means
+     * Tavily is not used; set, it wins over Brave (see `ToolApiKeys.searchBackend`).
+     */
+    val tavilyApiKey: String = "",
     /** SafeSearch for the web and image search tools. */
     val safe: Boolean = true,
     /** Results per web/image search (the API caps a page at 10). */
@@ -8397,6 +8402,7 @@ class SettingsRepository(private val context: Context) {
         private val TRANSLATE_API_KEY = stringPreferencesKey("translate_api_key")
         private val KLIPY_API_KEY = stringPreferencesKey("klipy_api_key")
         private val BRAVE_API_KEY = stringPreferencesKey("brave_api_key")
+        private val TAVILY_API_KEY = stringPreferencesKey("tavily_api_key")
         private val GIPHY_API_KEY = stringPreferencesKey("giphy_api_key")
         private val GIF_SOURCE_MODE = stringPreferencesKey("gif_source_mode")
         private val GIF_CONTENT_FILTER = stringPreferencesKey("gif_content_filter")
@@ -10242,6 +10248,7 @@ class SettingsRepository(private val context: Context) {
     private fun readWebSearch(p: Preferences, defaults: KeyboardSettings) =
         WebSearchSettings(
             braveApiKey = p[BRAVE_API_KEY] ?: defaults.webSearch.braveApiKey,
+            tavilyApiKey = p[TAVILY_API_KEY] ?: defaults.webSearch.tavilyApiKey,
             safe = p[SEARCH_SAFE] ?: defaults.webSearch.safe,
             resultCount = p[SEARCH_RESULT_COUNT] ?: defaults.webSearch.resultCount,
             wikiLanguage = p[WIKI_LANGUAGE] ?: defaults.webSearch.wikiLanguage,
@@ -15738,6 +15745,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setBraveApiKey(value: String) =
         editPrefs { it[BRAVE_API_KEY] = value.trim() }
+
+    suspend fun setTavilyApiKey(value: String) =
+        editPrefs { it[TAVILY_API_KEY] = value.trim() }
 
     suspend fun setGiphyApiKey(value: String) =
         editPrefs { it[GIPHY_API_KEY] = value.trim() }

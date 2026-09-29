@@ -387,6 +387,8 @@ import com.wasimaster.wmkeyboard.core.tools.LibreTranslateClient
 import com.wasimaster.wmkeyboard.core.tools.TranslateServerClient
 import com.wasimaster.wmkeyboard.core.tools.GiphyClient
 import com.wasimaster.wmkeyboard.core.tools.SearxClient
+import com.wasimaster.wmkeyboard.core.tools.SearchBackend
+import com.wasimaster.wmkeyboard.core.tools.TavilySearchClient
 import com.wasimaster.wmkeyboard.core.tools.ReverseImageClient
 import com.wasimaster.wmkeyboard.core.tools.ImageResult
 import com.wasimaster.wmkeyboard.core.tools.KlipyClient
@@ -25173,7 +25175,7 @@ open class WMKeyboardService : InputMethodService() {
 
     // ---- translate / gif / sticker / web & image search tools ----
 
-    /** Whether the web/image search backend (Brave) is keyed. */
+    /** Whether the web/image search tools have a backend to ask. */
     private fun hasSearchKey(): Boolean =
         ToolApiKeys.hasSearchProvider(_uiState.value.settings)
 
@@ -25506,22 +25508,17 @@ open class WMKeyboardService : InputMethodService() {
         webSearchJob = serviceScope.launch {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
-                    // A named instance wins; a key is the fallback. Neither
-                    // channel is forced into one provider.
-                    if (settings.selfHosted.searxUrl.isNotBlank()) {
-                        SearxClient.webSearch(
-                            query,
-                            settings.selfHosted.searxUrl,
-                            settings.webSearch.resultCount,
-                            settings.webSearch.safe,
-                        )
-                    } else {
-                        BraveSearchClient.webSearch(
-                            query,
-                            ToolApiKeys.brave(settings),
-                            settings.webSearch.resultCount,
-                            settings.webSearch.safe,
-                        )
+                    // Neither channel is forced into one provider; see
+                    // ToolApiKeys.searchBackend for the order.
+                    val count = settings.webSearch.resultCount
+                    val safe = settings.webSearch.safe
+                    when (ToolApiKeys.searchBackend(settings)) {
+                        SearchBackend.SEARXNG ->
+                            SearxClient.webSearch(query, settings.selfHosted.searxUrl, count, safe)
+                        SearchBackend.TAVILY ->
+                            TavilySearchClient.webSearch(query, ToolApiKeys.tavily(settings), count, safe)
+                        SearchBackend.BRAVE, null ->
+                            BraveSearchClient.webSearch(query, ToolApiKeys.brave(settings), count, safe)
                     }
                 }
             }
@@ -25567,22 +25564,17 @@ open class WMKeyboardService : InputMethodService() {
         imageSearchJob = serviceScope.launch {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
-                    // A named instance wins; a key is the fallback. Neither
-                    // channel is forced into one provider.
-                    if (settings.selfHosted.searxUrl.isNotBlank()) {
-                        SearxClient.imageSearch(
-                            query,
-                            settings.selfHosted.searxUrl,
-                            settings.webSearch.resultCount,
-                            settings.webSearch.safe,
-                        )
-                    } else {
-                        BraveSearchClient.imageSearch(
-                            query,
-                            ToolApiKeys.brave(settings),
-                            settings.webSearch.resultCount,
-                            settings.webSearch.safe,
-                        )
+                    // Neither channel is forced into one provider; see
+                    // ToolApiKeys.searchBackend for the order.
+                    val count = settings.webSearch.resultCount
+                    val safe = settings.webSearch.safe
+                    when (ToolApiKeys.searchBackend(settings)) {
+                        SearchBackend.SEARXNG ->
+                            SearxClient.imageSearch(query, settings.selfHosted.searxUrl, count, safe)
+                        SearchBackend.TAVILY ->
+                            TavilySearchClient.imageSearch(query, ToolApiKeys.tavily(settings), count, safe)
+                        SearchBackend.BRAVE, null ->
+                            BraveSearchClient.imageSearch(query, ToolApiKeys.brave(settings), count, safe)
                     }
                 }
             }

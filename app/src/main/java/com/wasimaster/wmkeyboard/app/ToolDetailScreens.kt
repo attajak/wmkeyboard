@@ -2167,6 +2167,22 @@ internal fun ToolDetailSettings(
                     ) { repository.setBraveApiKey(it) }
                 }
             }
+            SettingsGroup(
+                stringResource(R.string.tooldetail_tavily_group),
+                info = stringResource(R.string.tooldetail_tavily_info),
+            ) {
+                if (BuildConfig.ENABLE_FDROID) {
+                    serverItems(repository, settings, endpoints = listOf(ServiceEndpoint.TAVILY))
+                }
+                item {
+                    ApiKeyField(
+                        label = stringResource(R.string.tooldetail_tavily_key_label),
+                        value = settings.watch { it.webSearch.tavilyApiKey },
+                        builtInAvailable = false,
+                        emptyHint = stringResource(R.string.tooldetail_tavily_key_hint),
+                    ) { repository.setTavilyApiKey(it) }
+                }
+            }
             SettingsGroup(stringResource(R.string.tooldetail_search_results_group)) {
                 item {
                     ToggleSetting(

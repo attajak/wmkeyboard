@@ -131,6 +131,7 @@ object SettingsBackup {
         "translate_server_key",
         "klipy_api_key",
         "brave_api_key",
+        "tavily_api_key",
         "giphy_api_key",
         "ai_anthropic_key",
         "ai_openai_key",
