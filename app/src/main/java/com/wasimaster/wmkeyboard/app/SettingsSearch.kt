@@ -1491,6 +1491,7 @@ private fun SearchStrings.toolPageRowsB(): List<SettingsSearchEntry> = listOf(
         R.string.toolai_ai_deepseek_key_label,
         R.string.toolai_ai_deepseek_key_hint,
     ),
+    toolEntry(ToolbarTool.AI, R.string.toolai_ai_brave_key_label, R.string.toolai_ai_brave_key_hint),
     toolEntry(
         ToolbarTool.AI,
         R.string.toolai_ai_compatible_url_label,

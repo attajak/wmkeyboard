@@ -453,13 +453,13 @@ object ToolHttp {
 
     /**
      * The provider's own error text, when the response body carried any.
-     * Google APIs return `{"error": {"message": …}}`; anything else reads as
-     * no message at all.
+     * Google APIs return `{"error": {"message": …}}` and Brave
+     * `{"error": {"detail": …}}`; anything else reads as no message at all.
      */
     fun apiErrorText(body: String?): String? = body?.let {
         runCatching {
-            Json.parseToJsonElement(it).jsonObject["error"]?.jsonObject
-                ?.get("message")?.jsonPrimitive?.content
+            val error = Json.parseToJsonElement(it).jsonObject["error"]?.jsonObject
+            (error?.get("message") ?: error?.get("detail"))?.jsonPrimitive?.content
         }.getOrNull()
     }?.takeIf { it.isNotBlank() }
 

@@ -607,6 +607,11 @@ private val serviceAttributions: List<Attribution> = listOf(
         "Provider terms, under your own account", null,
         "https://platform.deepseek.com/downloads/DeepSeek%20Open%20Platform%20Terms%20of%20Service.html",
     ),
+    Attribution(
+        "Brave Answers", R.string.about_service_byok_used, "",
+        "Brave Search API terms, under your own account", null,
+        "https://brave.com/search/api/",
+    ),
     // AiProvider.OPENAI_COMPATIBLE has no fixed endpoint: the address is typed
     // by the user, so the only honest attribution is that whatever they point
     // it at governs itself. The row still needs a destination (an empty URL

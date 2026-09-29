@@ -809,6 +809,7 @@
   {"title":"Gemini API key","name":"toolai_ai_gemini_key_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"Get a free key from aistudio.google.com"},
   {"title":"xAI API key","name":"toolai_ai_xai_key_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"Get the key from console.x.ai on the API keys page"},
   {"title":"DeepSeek API key","name":"toolai_ai_deepseek_key_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"Get the key from platform.deepseek.com on the API keys page"},
+  {"title":"Brave API key","name":"toolai_ai_brave_key_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"Get the key from api-dashboard.search.brave.com. The key needs the Answers plan"},
   {"title":"Service address","name":"toolai_ai_compatible_url_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"For example https://openrouter.ai/api/v1. The app adds /chat/completions to the end."},
   {"title":"API key","name":"toolai_ai_compatible_key_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"Leave this blank if the service does not need a key"},
   {"title":"Server address","name":"toolai_ai_server_address_label","route":"tool/AI","screens":["Tools","AI writing tools"],"screen":false,"description":"For example http://192.168.0.10:11434. Use the network address of your computer."},

@@ -567,6 +567,13 @@ enum class AiProvider(@StringRes val labelRes: Int) {
     DEEPSEEK(R.string.core_settings_ai_provider_deepseek_label),
 
     /**
+     * Brave's Answers API: every answer is grounded in a web search it runs
+     * first. One fixed model, and it takes a single message, so the client
+     * folds the instructions and any chat history into it.
+     */
+    BRAVE(R.string.core_settings_ai_provider_brave_label),
+
+    /**
      * Any other server that speaks the OpenAI chat-completions shape: the user
      * gives the address, the model and (if the service wants one) a key. This
      * is what covers OpenRouter, Groq, Together, Mistral and the rest without a
@@ -583,7 +590,7 @@ enum class AiProvider(@StringRes val labelRes: Int) {
          * appended and would land after ON_DEVICE.
          */
         val displayOrder: List<AiProvider> = listOf(
-            ANTHROPIC, OPENAI, GEMINI, XAI, DEEPSEEK,
+            ANTHROPIC, OPENAI, GEMINI, XAI, DEEPSEEK, BRAVE,
             OLLAMA, LM_STUDIO, OPENAI_COMPATIBLE, ON_DEVICE,
         )
     }
@@ -3811,6 +3818,16 @@ data class AiSettings(
     val xaiModel: String = "",
     val deepSeekKey: String = "",
     val deepSeekModel: String = "",
+    /** Key for Brave's Answers API. Blank = [braveSearchKey]. */
+    val braveKey: String = "",
+    /**
+     * The key the user gave the web search tool, read here so the AI client
+     * can fall back to it without the whole settings object. Never written
+     * through this class: its preference belongs to [WebSearchSettings]. The
+     * key baked into a build is deliberately not included, since it pays for
+     * searches, not for answers.
+     */
+    val braveSearchKey: String = "",
     /**
      * Address of any other OpenAI-compatible service, up to and including the
      * version segment: the client adds `/chat/completions`. The key is optional,
@@ -8523,6 +8540,7 @@ class SettingsRepository(private val context: Context) {
         private val AI_XAI_MODEL = stringPreferencesKey("ai_xai_model")
         private val AI_DEEPSEEK_KEY = stringPreferencesKey("ai_deepseek_key")
         private val AI_DEEPSEEK_MODEL = stringPreferencesKey("ai_deepseek_model")
+        private val AI_BRAVE_KEY = stringPreferencesKey("ai_brave_key")
         private val AI_COMPATIBLE_URL = stringPreferencesKey("ai_compatible_url")
         private val AI_COMPATIBLE_KEY = stringPreferencesKey("ai_compatible_key")
         private val AI_COMPATIBLE_MODEL = stringPreferencesKey("ai_compatible_model")
@@ -10315,6 +10333,8 @@ class SettingsRepository(private val context: Context) {
             xaiModel = p[AI_XAI_MODEL] ?: defaults.ai.xaiModel,
             deepSeekKey = p[AI_DEEPSEEK_KEY] ?: defaults.ai.deepSeekKey,
             deepSeekModel = p[AI_DEEPSEEK_MODEL] ?: defaults.ai.deepSeekModel,
+            braveKey = p[AI_BRAVE_KEY] ?: defaults.ai.braveKey,
+            braveSearchKey = p[BRAVE_API_KEY].orEmpty(),
             compatibleUrl = p[AI_COMPATIBLE_URL] ?: defaults.ai.compatibleUrl,
             compatibleKey = p[AI_COMPATIBLE_KEY] ?: defaults.ai.compatibleKey,
             compatibleModel = p[AI_COMPATIBLE_MODEL] ?: defaults.ai.compatibleModel,
@@ -16220,6 +16240,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAiDeepSeekModel(value: String) =
         editPrefs { it[AI_DEEPSEEK_MODEL] = value.trim() }
+
+    suspend fun setAiBraveKey(value: String) =
+        editPrefs { it[AI_BRAVE_KEY] = value.trim() }
 
     suspend fun setAiCompatibleUrl(value: String) =
         editPrefs { it[AI_COMPATIBLE_URL] = value.trim().trimEnd('/') }
