@@ -352,6 +352,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Re-checked on dictionary download — Source epoch bumps re-ask the coverage question
   - Bengali phonetic glide `RARE` — Swipe roman letters on the Avro grid, get Bengali words back via RomanizedIndex
   - Multi-word glide across the spacebar `uncommon` — One unbroken stroke crossing space commits several words; spacebar points anchor no letter and are dropped
+    - A crossing reaches the bar's midline — Clipping the top of the spacebar on the way to a bottom-row letter stays part of the word, so a long word along the bottom row is not cut in two (#428)
     - Sequential context — Each segment decoded after the previous one is committed and learned, so word 2 sees word 1 as context
     - Toggleable — Off makes a spacebar-crossing stroke decode as one word
   - Capitalize by gliding over Shift `uncommon` — Drawing through the Shift key mid-stroke capitalizes the word, twice shouts it; the key's points are dropped from the word the way the spacebar's are, so the detour spells nothing
