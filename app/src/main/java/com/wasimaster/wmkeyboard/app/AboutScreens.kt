@@ -533,6 +533,11 @@ private val serviceAttributions: List<Attribution> = listOf(
         "https://brave.com/search/api/",
     ),
     Attribution(
+        "Tavily", R.string.about_service_tavily_used, "",
+        "Tavily terms of service", null,
+        "https://www.tavily.com/terms",
+    ),
+    Attribution(
         "KLIPY & GIPHY", R.string.about_service_gif_used, "",
         "Provider API terms", null,
         "https://developers.giphy.com/",
