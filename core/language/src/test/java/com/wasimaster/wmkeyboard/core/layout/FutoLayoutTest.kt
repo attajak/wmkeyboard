@@ -260,6 +260,26 @@ class FutoLayoutTest {
     }
 
     @Test
+    fun `a comma and full stop on the letter rows are not added again`() {
+        // A PC-style grid carries both by the letters; the bottom row keeps
+        // its other keys and gives the spacebar the room.
+        val converted = converted(
+            """
+            name: x
+            rows:
+              - letters: q w e r
+              - letters: ${'$'}shift z x , . ${'$'}delete
+            """.trimIndent(),
+        )
+        assertEquals(1, converted.keys().count { it.label == "," })
+        assertEquals(1, converted.keys().count { it.label == "." })
+        assertEquals(
+            listOf(KeyAction.Symbols, KeyAction.LanguageSwitch, KeyAction.Space, KeyAction.Enter),
+            converted.letters().last().map { it.action },
+        )
+    }
+
+    @Test
     fun `the template keys become the keys they name`() {
         val converted = converted(
             """

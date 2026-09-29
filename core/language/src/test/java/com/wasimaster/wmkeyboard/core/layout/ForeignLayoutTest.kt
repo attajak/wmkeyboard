@@ -433,7 +433,7 @@ class ForeignLayoutTest {
                 "x.json",
             ),
         )
-        assertEquals("a", converted.keys().first().label)
+        assertEquals("a", converted.firstRowText().first().label)
         assertTrue(
             converted.notes.any { it.pluralsRes == R.plurals.core_lang_foreign_selectors_flattened },
         )
@@ -605,8 +605,8 @@ class ForeignLayoutTest {
     @Test
     fun `a bottom row key the house row has no slot for keeps its seat by the spacebar`() {
         // The fixture's bottom row is `?123 voice ␣ tab ⏎`. Voice is dropped as
-        // before; tab has no house slot and stays, taking its width off the
-        // spacebar so the row keeps its length.
+        // before; tab has no house slot and stays, one key wide, taking that
+        // off the spacebar so the row keeps its length.
         val bottom = checkNotNull(
             ForeignLayouts.fromFlorisJson(fixture("floris_qwerty.json"), "f.json"),
         ).letters().last()

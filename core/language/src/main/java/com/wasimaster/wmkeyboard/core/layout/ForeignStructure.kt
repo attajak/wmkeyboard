@@ -99,7 +99,11 @@ private fun bottomSlotsOf(row: List<Key>): BottomSlots? {
         comma = comma?.let { row[it] },
         period = period?.let { row[it] },
         letters = letters,
-        others = row.filter { it.action != KeyAction.Text && it.action !in HouseRowActions },
+        // One key wide, like every seat on the house row: the file's width is
+        // a share of a row that no longer exists.
+        others = row
+            .filter { it.action != KeyAction.Text && it.action !in HouseRowActions }
+            .map { it.copy(width = 1f) },
     )
 }
 
@@ -133,24 +137,31 @@ private fun withShiftAndDelete(letters: List<List<Key>>, elsewhere: List<Key>): 
 /**
  * `?123 , 🌐 ␣ . ⏎`, with the file's own comma and full stop in their slots and
  * whatever else its bottom row had just before the spacebar. A key [above]
- * already has is not drawn twice.
+ * already has is not drawn twice: a functional key by its action, and the
+ * comma and full stop by their slot or their character, unless the file put
+ * its own in the bottom row.
  */
 private fun houseBottomRow(above: List<Key>, slots: BottomSlots): List<Key> {
     val present = above.map { it.action }.toSet()
-    val othersWidth = slots.others.sumOf { it.width.toDouble() }.toFloat()
+    fun has(label: String, role: KeyRole) =
+        above.any { it.action == KeyAction.Text && (it.role == role || (it.output ?: it.label) == label) }
     return buildList {
         if (KeyAction.Symbols !in present) add(Key("?123", action = KeyAction.Symbols, width = WIDE_KEY))
-        add(slotKey(slots.comma, ",", KeyRole.Comma, CommaAlternates))
+        if (slots.comma != null || !has(",", KeyRole.Comma)) {
+            add(slotKey(slots.comma, ",", KeyRole.Comma, CommaAlternates))
+        }
         if (KeyAction.LanguageSwitch !in present) add(Key("🌐", action = KeyAction.LanguageSwitch))
         addAll(slots.others)
         add(
             Key(
                 " ",
                 action = KeyAction.Space,
-                width = (SPACE_WIDTH - othersWidth).coerceAtLeast(MIN_SPACE_WIDTH),
+                width = (SPACE_WIDTH - slots.others.size).coerceAtLeast(MIN_SPACE_WIDTH),
             ),
         )
-        add(slotKey(slots.period, ".", KeyRole.Period, PeriodAlternates))
+        if (slots.period != null || !has(".", KeyRole.Period)) {
+            add(slotKey(slots.period, ".", KeyRole.Period, PeriodAlternates))
+        }
         if (KeyAction.Enter !in present) add(Key("⏎", action = KeyAction.Enter, width = WIDE_KEY))
     }
 }
