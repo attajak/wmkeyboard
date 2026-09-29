@@ -36,9 +36,22 @@ class AiClientBraveTest {
         assertFalse(AiClient.isConfigured(none))
         assertTrue(AiClient.isConfigured(none.copy(braveKey = "k")))
         assertTrue(AiClient.isConfigured(none.copy(braveSearchKey = "k")))
+    }
+
+    @Test
+    fun `the search key alone puts Brave in the pickers only once Brave is chosen`() {
+        val searchKeyOnly = AiSettings(anthropicKey = "k", braveSearchKey = "k")
         assertEquals(
-            listOf(AiProvider.BRAVE),
-            AiClient.configuredRemoteProviders(AiSettings(braveSearchKey = "k")),
+            listOf(AiProvider.ANTHROPIC),
+            AiClient.configuredRemoteProviders(searchKeyOnly),
+        )
+        assertEquals(
+            listOf(AiProvider.ANTHROPIC, AiProvider.BRAVE),
+            AiClient.configuredRemoteProviders(searchKeyOnly.copy(provider = AiProvider.BRAVE)),
+        )
+        assertEquals(
+            listOf(AiProvider.ANTHROPIC, AiProvider.BRAVE),
+            AiClient.configuredRemoteProviders(searchKeyOnly.copy(braveKey = "ai")),
         )
     }
 

@@ -100,7 +100,7 @@ DeepSeek's reasoning models stream their thinking on a separate field. The app f
 **Brave** uses Brave's Answers API, which runs a web search before it writes each answer. That makes it the provider to pick for questions about facts, prices or recent events, and a poor fit for pure writing jobs like Proofread, where the search adds cost and nothing else.
 
 - **API key**: from `api-dashboard.search.brave.com`. The key needs Brave's **Answers** plan. A key that only has the **Search** plan is refused, and the panel shows Brave's own reason.
-- **Leave the key blank to reuse the web search key.** If you already gave the [web search tool](/tools/search/) your own Brave key, the AI tool uses that one. The key built into some builds is never used for answers, only for searches.
+- **Leave the key blank to reuse the web search key.** If you already gave the [web search tool](/tools/search/) your own Brave key, the AI tool uses that one. The key built into some builds is never used for answers, only for searches. A reused key puts Brave in the panel's model picker and the chat's model list only while Brave is the selected provider; paste the key into the Brave field to keep it there.
 - **No Model field.** Brave has one model, so there's nothing to pick.
 - **One message per request.** Brave doesn't accept a system prompt or earlier turns, so the app sends the action's instructions, and in a [chat](#chatting-instead-of-transforming) the earlier messages as a transcript, together with your text as one message.
 - Brave bills each answer for the search it ran plus the tokens in and out. The usage and citation markers it writes into the stream are removed before you see the answer.

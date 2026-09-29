@@ -251,8 +251,12 @@ object AiClient {
                 AiProvider.LM_STUDIO -> settings.lmStudioUrl.isNotBlank()
                 AiProvider.XAI -> settings.xaiKey.isNotBlank()
                 AiProvider.DEEPSEEK -> settings.deepSeekKey.isNotBlank()
-                AiProvider.BRAVE ->
-                    settings.braveKey.isNotBlank() || settings.braveSearchKey.isNotBlank()
+                // The web search key counts only once Brave is the chosen
+                // provider. Otherwise everyone with their own search key would
+                // find a Brave chip in the pickers they never asked for, and a
+                // key with only the Search plan cannot answer anyway.
+                AiProvider.BRAVE -> settings.braveKey.isNotBlank() ||
+                    (settings.provider == AiProvider.BRAVE && settings.braveSearchKey.isNotBlank())
                 AiProvider.OPENAI_COMPATIBLE ->
                     settings.compatibleUrl.isNotBlank() && settings.compatibleModel.isNotBlank()
                 AiProvider.ON_DEVICE -> false
