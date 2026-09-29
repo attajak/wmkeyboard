@@ -939,6 +939,16 @@ open class WMKeyboardService : InputMethodService() {
     private var otpSuggestionJob: Job? = null
     /** How long the clipboard panel's Undo bar stays up (see [onClipboardDelete]). */
     private var clipUndoJob: Job? = null
+    /**
+     * The text clip a panel delete took off the system clipboard (#442), kept
+     * while the Undo bar is up so Undo can put it back there too.
+     */
+    private var clipUndoSystemClip: android.content.ClipData? = null
+    /**
+     * The text Undo is putting back on the system clipboard, so the copy
+     * listener does not record it as a new copy (see [restoreSystemClipOnUndo]).
+     */
+    private var restoringSystemClipText: String? = null
 
     /**
      * The character-by-character run that types a code (see
@@ -2543,6 +2553,15 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
+        restoringSystemClipText?.let { restoring ->
+            restoringSystemClipText = null
+            val back = runCatching {
+                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                    .primaryClip?.getItemAt(0)?.text?.toString()
+            }.getOrNull()
+            // Undo's own copy: the clip is already back in the history, where it was.
+            if (back == restoring) return@OnPrimaryClipChangedListener
+        }
         val state = _uiState.value
         kdeClipboardChanged(state)
         if (!isClipboardAccessible() ||
@@ -30566,11 +30585,13 @@ open class WMKeyboardService : InputMethodService() {
     fun onClipboardDelete(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
         if (!_uiState.value.settings.clipboard.undoDelete) {
             clipboardStore.remove(item.id)
+            clearSystemClipAfterDelete(listOf(item))
             saveClipboardSoon()
             _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
             return
         }
         val removed = clipboardStore.detach(item.id) ?: return
+        clearSystemClipAfterDelete(listOf(removed))
         offerClipUndo(listOf(removed))
     }
 
@@ -30583,14 +30604,74 @@ open class WMKeyboardService : InputMethodService() {
         if (!isClipboardAccessible()) return
         vibrate()
         if (!_uiState.value.settings.clipboard.undoDelete) {
+            val removed = clipboardStore.items().filter { !it.pinned }
             clipboardStore.clearUnpinned()
+            clearSystemClipAfterDelete(removed, clearAll = true)
             saveClipboardSoon()
             _uiState.update { it.copy(clipboardItems = clipboardStore.items()) }
             return
         }
         val removed = clipboardStore.detachUnpinned()
         if (removed.isEmpty()) return
+        clearSystemClipAfterDelete(removed, clearAll = true)
         offerClipUndo(removed)
+    }
+
+    /**
+     * Empties the system clipboard after the panel deleted [removed] (#442),
+     * so a deleted clip cannot still be pasted from there. A single delete
+     * does it only when the clipboard still holds that clip; the Clear button
+     * ([clearAll]) does it unless the clipboard holds one of the pinned clips
+     * it leaves in place.
+     *
+     * Call after the store has let go of [removed]. A text clip taken off
+     * this way waits with the Undo bar, which puts it back.
+     */
+    private fun clearSystemClipAfterDelete(
+        removed: List<com.wasimaster.wmkeyboard.core.clipboard.ClipItem>,
+        clearAll: Boolean = false,
+    ) {
+        if (removed.isEmpty()) return
+        val manager = runCatching {
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        }.getOrNull() ?: return
+        val clip = runCatching { manager.primaryClip }.getOrNull()?.takeIf { it.itemCount > 0 } ?: return
+        val first = clip.getItemAt(0) ?: return
+        val primary = SystemClip(
+            // Coercing a picture or a file would read it, or give its address.
+            text = first.text?.toString() ?: first.takeIf { it.uri == null }?.coerceToText(this)?.toString(),
+            uri = first.uri?.toString(),
+        )
+        val kept = clipboardStore.items()
+        if (!clearsSystemClip(primary, removed, kept, clearAll, clipboardStore.maxTextChars)) return
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                manager.clearPrimaryClip()
+            } else {
+                manager.setPrimaryClip(android.content.ClipData.newPlainText("", ""))
+            }
+        }
+        clearClipboardSuggestion()
+        // Only text goes back on Undo: the app that shared a picture or a
+        // file granted its address to that one copy, not to ours.
+        val textOnly = (0 until clip.itemCount).all { clip.getItemAt(it)?.uri == null }
+        if (textOnly && _uiState.value.settings.clipboard.undoDelete) clipUndoSystemClip = clip
+    }
+
+    /**
+     * Undo after a delete that emptied the system clipboard (#442): the text
+     * goes back there, unless something else was copied while the bar was up.
+     */
+    private fun restoreSystemClipOnUndo() {
+        val clip = clipUndoSystemClip ?: return
+        clipUndoSystemClip = null
+        val manager = runCatching {
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        }.getOrNull() ?: return
+        val current = runCatching { manager.primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0) }.getOrNull()
+        if (current != null && !SystemClip(current.text?.toString(), current.uri?.toString()).isEmpty) return
+        restoringSystemClipText = clip.getItemAt(0)?.text?.toString()
+        runCatching { manager.setPrimaryClip(clip) }
     }
 
     /**
@@ -30628,12 +30709,14 @@ open class WMKeyboardService : InputMethodService() {
         clipUndoJob = null
         vibrate()
         undo.items.forEach { clipboardStore.reattach(it) }
+        restoreSystemClipOnUndo()
         saveClipboardSoon()
         _uiState.update { it.copy(clipboardItems = clipboardStore.items(), clipboardUndo = null) }
     }
 
     /** The Undo bar's time is up: its clips are gone for good, image files included. */
     private fun endClipUndo() {
+        clipUndoSystemClip = null
         val undo = _uiState.value.clipboardUndo ?: return
         undo.items.forEach(clipboardStore::discard)
         _uiState.update { it.copy(clipboardUndo = null) }
