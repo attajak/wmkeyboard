@@ -7814,13 +7814,33 @@ open class WMKeyboardService : InputMethodService() {
                     captureCaretTo(before.collapsed().caretAt(before.selectionEnd))
                 }
             }
-            CaptureSelectionAction.PASTE -> {
-                if (!isClipboardAccessible()) return
-                val clip = KeyboardClipboard.held ?: clipboardStore.latestText().orEmpty()
-                // Through the ladder, so each field filters it as it filters keys.
-                if (clip.isNotEmpty()) captureTyped(clip)
-            }
+            CaptureSelectionAction.PASTE -> capturePaste()
         }
+    }
+
+    /**
+     * The clipboard's text typed into the focused keyboard-owned field (#434),
+     * through the ladder so each field filters it as it filters keys. True
+     * whenever such a field took the paste, even an empty one, so it never
+     * falls through to the app behind the panel; false when no field that can
+     * take text has the keys, so the paste goes to the app as it always did.
+     *
+     * The system clipboard first, as text only: coercing would paste a copied
+     * image as its content:// address. The history's newest text is the
+     * fallback for a clip the system will not hand over.
+     */
+    private fun capturePaste(): Boolean {
+        val target = _uiState.value.captureTarget() ?: return false
+        // The word card and the typing test run editors of their own.
+        if (target == CaptureTarget.WORD_SPELL || !target.movableCaret) return false
+        if (!isClipboardAccessible()) return true
+        val system = runCatching {
+            (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                .primaryClip?.takeIf { it.itemCount > 0 }?.getItemAt(0)?.text?.toString()
+        }.getOrNull()
+        val clip = KeyboardClipboard.held ?: system?.takeIf { it.isNotEmpty() } ?: clipboardStore.latestText().orEmpty()
+        if (clip.isNotEmpty()) captureTyped(clip)
+        return true
     }
 
     /** Moves the shared caret, and its selection, without touching the text. */
@@ -19213,6 +19233,7 @@ open class WMKeyboardService : InputMethodService() {
                 refreshAiHasText()
                 prepareAiChat()
             }
+            PanelMode.TRANSLATE -> prefillTranslateFromSelection()
             PanelMode.PLUGINS -> openPluginList()
             PanelMode.APP_LAUNCHER -> loadLauncherApps()
             PanelMode.TYPING_TEST -> {
@@ -26362,11 +26383,49 @@ open class WMKeyboardService : InputMethodService() {
         )
     }
 
-    /** Replaces the whole field with the translation. */
+    /**
+     * Opens Translate on the field's selection, when there is one (#434). A
+     * passage in a language the user cannot read is exactly the text they
+     * could not have typed into the box by hand. Read once, here, and never
+     * again: from this point the box is the user's to edit.
+     */
+    private fun prefillTranslateFromSelection() {
+        val state = _uiState.value
+        if (state.mediaQuery.isNotEmpty()) return
+        if (currentInputEditorInfo.isSecureField()) return
+        // A collapsed caret the editor has already reported is nothing
+        // selected, and saves the IPC.
+        if (expectedSelStart >= 0 && expectedSelStart == expectedSelEnd) return
+        val ic = currentInputConnection ?: return
+        val selected = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull()?.trim()
+        if (selected.isNullOrEmpty() || selected.length > MAX_MACRO_SELECTION) return
+        _uiState.update { it.copy(mediaQuery = selected, translate = it.translate.copy(selection = selected)) }
+        // Straight to the result, the way the selection bar's Translate opens
+        // it; a tap on the box starts editing the text.
+        runMediaSearch()
+    }
+
+    /**
+     * Replaces the whole field with the translation, or only the selection the
+     * panel opened on while that is still what is selected (#434). A
+     * selection that has gone since puts the translation in at the caret, as
+     * the AI tool does: replacing the whole field would take the text around
+     * the passage with it.
+     */
     fun onTranslateReplace() {
-        val translated = _uiState.value.translate.translated
+        val translate = _uiState.value.translate
+        val translated = translate.translated
         if (translated.isEmpty()) return
         vibrate()
+        if (translate.selection.isNotEmpty()) {
+            val now = runCatching { currentInputConnection?.getSelectedText(0)?.toString() }.getOrNull()
+            if (now != null && now.trim() == translate.selection) {
+                rewriteSelection(translated)
+            } else {
+                commitToField(translated)
+            }
+            return
+        }
         val ic = currentInputConnection ?: return
         // End any editor-side composition too: with a region alive, the
         // commitText below targets the region instead of the select-all,
@@ -28258,11 +28317,14 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * The movement half of [onTextEdit], for a keyboard-owned field.
      *
-     * Only the caret moves and the backspace: those are what the field has,
+     * The caret moves, the backspace and Paste: those are what the field has,
      * and routing them here is what stops an arrow key pressed over a search
-     * box from walking the caret in the app behind the panel. The rest —
-     * copy, cut, paste, the selection actions — still act on that app, which
-     * is what the text-editing panel is for and what Find and replace needs.
+     * box from walking the caret in the app behind the panel. Paste joined
+     * them in #434: the keys are typing into the box, so a Paste key means
+     * the box too, and the Translate tool's text is the one people paste.
+     * The rest (copy, cut, the selection actions) still act on that app,
+     * which is what the text-editing panel is for and what Find and replace
+     * needs; the field's own selection bar copies and cuts its text.
      */
     private fun captureTextEdit(
         action: TextEditAction,
@@ -28312,6 +28374,7 @@ open class WMKeyboardService : InputMethodService() {
             TextEditAction.WORD_LEFT -> onCaptureCaretToEdge(end = false, extend = extend)
             TextEditAction.WORD_RIGHT -> onCaptureCaretToEdge(end = true, extend = extend)
             TextEditAction.BACKSPACE -> captureBackspace()
+            TextEditAction.PASTE -> capturePaste()
             else -> false
         }
         if (handled && haptic) vibrate()
@@ -28349,6 +28412,9 @@ open class WMKeyboardService : InputMethodService() {
             onUndoRedo(redo = action == ClipboardKeyAction.REDO)
             return
         }
+        // A long-pressed V over one of the keyboard's own boxes pastes into
+        // the box, as the Paste key does (#434).
+        if (action == ClipboardKeyAction.PASTE && capturePaste()) return
         val ic = currentInputConnection ?: return
         commitComposing(ic, autocorrect = false)
         lastGestureWord = null
