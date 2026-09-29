@@ -747,6 +747,8 @@
   {"title":"Results for each search","name":"tooldetail_media_limit_title","route":"tool/STICKER","screens":["Tools","Stickers"],"screen":false,"description":"How many items one search or the trending view loads. Your own sticker packs always show fully."},
   {"title":"Brave API key","name":"tooldetail_search_key_label","route":"tool/WEB_SEARCH","screens":["Tools","Web search"],"screen":false,"description":"From api-dashboard.search.brave.com, with a free monthly credit"},
   {"title":"Brave API key","name":"tooldetail_search_key_label","route":"tool/IMAGE_SEARCH","screens":["Tools","Image search"],"screen":false,"description":"From api-dashboard.search.brave.com, with a free monthly credit"},
+  {"title":"Tavily API key","name":"tooldetail_tavily_key_label","route":"tool/WEB_SEARCH","screens":["Tools","Web search"],"screen":false,"description":"From app.tavily.com, with 1,000 free credits a month"},
+  {"title":"Tavily API key","name":"tooldetail_tavily_key_label","route":"tool/IMAGE_SEARCH","screens":["Tools","Image search"],"screen":false,"description":"From app.tavily.com, with 1,000 free credits a month"},
   {"title":"SafeSearch","name":"tooldetail_search_safe_title","route":"tool/WEB_SEARCH","screens":["Tools","Web search"],"screen":false,"description":"Filter explicit results"},
   {"title":"SafeSearch","name":"tooldetail_search_safe_title","route":"tool/IMAGE_SEARCH","screens":["Tools","Image search"],"screen":false,"description":"Filter explicit results"},
   {"title":"Results for each search","name":"tooldetail_search_count_title","route":"tool/WEB_SEARCH","screens":["Tools","Web search"],"screen":false,"description":"Each search uses one API request either way"},
