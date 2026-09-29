@@ -384,6 +384,7 @@ import com.wasimaster.wmkeyboard.core.tools.GifSources
 import com.wasimaster.wmkeyboard.core.tools.CommonsClient
 import com.wasimaster.wmkeyboard.core.tools.DeepLClient
 import com.wasimaster.wmkeyboard.core.tools.LibreTranslateClient
+import com.wasimaster.wmkeyboard.core.tools.TranslateServerClient
 import com.wasimaster.wmkeyboard.core.tools.GiphyClient
 import com.wasimaster.wmkeyboard.core.tools.SearxClient
 import com.wasimaster.wmkeyboard.core.tools.ReverseImageClient
@@ -26107,6 +26108,24 @@ open class WMKeyboardService : InputMethodService() {
         target: String,
         sourceLang: String,
     ): Result<Translation> = withContext(Dispatchers.IO) {
+        // The user's own server outranks every service (#435). It has no
+        // fallback: whatever it answers, error included, is the answer, since
+        // the point of running it is that the text goes nowhere else.
+        val server = settings.translate.server
+        if (server.configured) {
+            val job = coroutineContext[Job]
+            return@withContext runCancellable {
+                TranslateServerClient.translate(
+                    text = source,
+                    target = target,
+                    url = server.url,
+                    model = server.model,
+                    apiKey = server.apiKey,
+                    source = sourceLang.ifBlank { TranslateClient.AUTO },
+                    isActive = { job?.isActive != false },
+                )
+            }
+        }
         // DeepL first while the user has set it up (#331). A 400 is DeepL not
         // having the language, so that pair goes to the usual service instead;
         // any other failure is the answer, since it is the service they chose.
@@ -26176,6 +26195,7 @@ open class WMKeyboardService : InputMethodService() {
                         translated = t.text,
                         detectedSource = t.detectedSource,
                         viaDeepL = t.viaDeepL,
+                        viaServer = t.viaServer,
                     )
                 },
                 onFailure = { e ->
