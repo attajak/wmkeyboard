@@ -99,6 +99,7 @@ import com.wasimaster.wmkeyboard.core.tools.AiActionCodec
 import com.wasimaster.wmkeyboard.core.tools.AiActionSpec
 import com.wasimaster.wmkeyboard.core.tools.BuiltInAiActions
 import com.wasimaster.wmkeyboard.core.tools.BuiltInSymbolSets
+import com.wasimaster.wmkeyboard.core.settings.sync.SyncStatistics
 import com.wasimaster.wmkeyboard.core.tools.TypingStats
 import com.wasimaster.wmkeyboard.core.tools.mergeLegacyAiPrompts
 import com.wasimaster.wmkeyboard.core.tools.DefaultToolLetters
@@ -12719,6 +12720,52 @@ class SettingsRepository(private val context: Context) {
         writeStore(path, JsonObject(local + ("items" to JsonArray(incoming + stays))))
     }
 
+    private fun ownStatistics(): JsonObject? = readStore(TypingStats.FILE_PATH) as? JsonObject
+
+    private fun otherStatistics(): JsonObject? = readStore(TypingStats.DEVICES_FILE_PATH) as? JsonObject
+
+    /** Replaces the other devices' counts; none left removes the file. */
+    private fun writeOtherStatistics(others: JsonObject): Boolean =
+        if (others.isEmpty()) {
+            val file = storeFile(TypingStats.DEVICES_FILE_PATH)
+            !file.exists() || file.delete()
+        } else {
+            writeStore(TypingStats.DEVICES_FILE_PATH, others)
+        }
+
+    /** The typing statistics as sync carries them, one entry per device; see [SyncStatistics]. */
+    fun statisticsByDevice(me: String): JsonObject =
+        SyncStatistics.byDevice(ownStatistics(), otherStatistics(), me)
+
+    /**
+     * Writes the other devices' counts a sync pass agreed on. This device's
+     * own are never taken from elsewhere, since the keyboard is still adding
+     * to them; the one exception is Delete all statistics pressed on another
+     * device, which clears them here too. [hadOwn]: see [SyncStatistics.received].
+     */
+    suspend fun applySyncedStatistics(byDevice: JsonObject, me: String, hadOwn: Boolean) {
+        val received = SyncStatistics.received(byDevice, me, hadOwn)
+        writeOtherStatistics(received.others)
+        if (received.clearOwn) {
+            storeFile(TypingStats.FILE_PATH).delete()
+            bumpStatsVersion()
+        }
+    }
+
+    /**
+     * Moves the counts this device held while it synced one shared total
+     * aside, once, the first time it syncs them per device: see
+     * [SyncStatistics.retire]. The keyboard starts this device's own counts
+     * again from zero, and the total the screen shows stays what it was.
+     */
+    suspend fun retireSharedStatistics() {
+        val others = SyncStatistics.retire(ownStatistics(), otherStatistics()) ?: return
+        if (writeOtherStatistics(others)) {
+            storeFile(TypingStats.FILE_PATH).delete()
+            bumpStatsVersion()
+        }
+    }
+
     /** Relative path of the sticker manifest, the one file that isn't binary. */
     private val stickerManifestPath =
         "${StickerPackStore.DIR_NAME}/packs.json"
@@ -13197,7 +13244,8 @@ class SettingsRepository(private val context: Context) {
             readStore("learning/emoji_usage.json")?.let { out[ConfigBackup.Section.EMOJI] = it }
         }
         if (ConfigBackup.Section.STATISTICS in sections) {
-            readStore(TypingStats.FILE_PATH)?.let { out[ConfigBackup.Section.STATISTICS] = it }
+            SyncStatistics.backup(ownStatistics(), otherStatistics(), BackupInstall.id(context))
+                ?.let { out[ConfigBackup.Section.STATISTICS] = it }
         }
         if (ConfigBackup.Section.VOCAB in sections) {
             vocabSection()?.let { out[ConfigBackup.Section.VOCAB] = it }
@@ -13356,12 +13404,14 @@ class SettingsRepository(private val context: Context) {
             }
         }
         (parsed.sections[ConfigBackup.Section.STATISTICS] as? JsonObject)?.let { obj ->
-            if (writeStore(TypingStats.FILE_PATH, obj)) {
+            val counts = SyncStatistics.restore(obj, BackupInstall.id(context), otherStatistics())
+            val ownWritten = counts.own?.let { writeStore(TypingStats.FILE_PATH, it) }
+            if (ownWritten != false && writeOtherStatistics(counts.others)) {
                 restored.add(ConfigBackup.Section.STATISTICS)
-                // The keyboard holds the counters in memory; without this it
-                // saves its own numbers over the ones just restored.
-                bumpStatsVersion()
             }
+            // The keyboard holds the counters in memory; without this it
+            // saves its own numbers over the ones just restored.
+            if (ownWritten == true) bumpStatsVersion()
         }
 
         (parsed.sections[ConfigBackup.Section.VOCAB] as? JsonObject)?.let { obj ->
