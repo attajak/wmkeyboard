@@ -406,6 +406,15 @@ internal fun TypingCorrectionsSettings(
             }
             item {
                 ToggleSetting(
+                    R.string.typing_autocorrect_on_enter_title,
+                    stringResource(R.string.typing_autocorrect_on_enter_subtitle),
+                    settings.watch { it.correction.onEnter },
+                    info = stringResource(R.string.typing_autocorrect_on_enter_info),
+                    default = SettingsDefaults.correction.onEnter,
+                ) { scope.launch { repository.setAutocorrectOnEnter(it) } }
+            }
+            item {
+                ToggleSetting(
                     R.string.typing_block_offensive_title,
                     stringResource(R.string.typing_block_offensive_subtitle),
                     settings.watch { it.suggestionStrip.blockOffensiveWords },

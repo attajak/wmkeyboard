@@ -114,6 +114,9 @@
 
     <string name="typing_skip_all_caps_title">Skip words in capital letters</string>
     <string name="typing_skip_all_caps_subtitle">Leave words typed in capital letters alone</string>
+    <string name="typing_autocorrect_on_enter_title">Correct the word before Enter</string>
+    <string name="typing_autocorrect_on_enter_subtitle">Enter corrects the last word, as space does</string>
+    <string name="typing_autocorrect_on_enter_info">Enter ends a word the same way space does, so autocorrect can change the word before it. In a search box or a chat, Enter also sends the text, and you cannot see the correction before it goes. Turn this off to send the last word as you typed it. Space and punctuation still correct words.</string>
     <string name="typing_skip_all_caps_info">You usually type acronyms, or words in capital letters for emphasis, on purpose. Examples: ASAP, OFC, NOOO. Autocorrect leaves every word in capital letters alone. Turn this off to correct these words like any other word.</string>
 
     <string name="typing_block_offensive_title">Block offensive words</string>

@@ -10614,10 +10614,12 @@ open class WMKeyboardService : InputMethodService() {
         // word the same way a space does, autocorrect included. A word ended
         // by Enter was typed exactly like one ended by space, and committing
         // it as typed sent `juz` where the strip already showed `już` (#200).
+        // Unless the user asked Enter to leave the word alone (#457): a query
+        // sent with Enter is sent before the correction can be read.
         recordStat { onSeparator(System.currentTimeMillis(), SystemClock.uptimeMillis()) }
         commitComposing(
             ic,
-            autocorrect = state.settings.correction.enabled,
+            autocorrect = state.settings.correction.enabled && state.settings.correction.onEnter,
             fixApostrophes = state.settings.autoText.apostrophe,
             expandPatterns = true,
         )
@@ -10732,7 +10734,7 @@ open class WMKeyboardService : InputMethodService() {
         val settings = _uiState.value.settings
         commitComposing(
             ic,
-            autocorrect = settings.correction.enabled,
+            autocorrect = settings.correction.enabled && settings.correction.onEnter,
             fixApostrophes = settings.autoText.apostrophe,
             expandPatterns = true,
         )

@@ -2115,6 +2115,13 @@ data class AutocorrectSettings(
     val undoMemory: UndoMemory = UndoMemory.NORMAL,
     /** Never autocorrect a word typed all in capitals (acronyms, shouting). */
     val skipAllCaps: Boolean = true,
+    /**
+     * Whether Enter ends a word the way space does, correction included
+     * (issue #457). Off, the word before Enter goes in as typed: a search
+     * query or a name sent with Enter is the one place a correction is sent
+     * before anyone reads it. Space and punctuation still correct.
+     */
+    val onEnter: Boolean = true,
 )
 
 /**
@@ -7642,6 +7649,7 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("revert_autocorrect_on_backspace")
         private val AUTOCORRECT_SKIP_ALL_CAPS =
             booleanPreferencesKey("autocorrect_skip_all_caps")
+        private val AUTOCORRECT_ON_ENTER = booleanPreferencesKey("autocorrect_on_enter")
         private val AUTO_CAPITALIZE = booleanPreferencesKey("auto_capitalize")
         private val DOUBLE_SPACE_PERIOD = booleanPreferencesKey("double_space_period")
         private val DOUBLE_SPACE_TAB = booleanPreferencesKey("double_space_tab")
@@ -9198,6 +9206,7 @@ class SettingsRepository(private val context: Context) {
                 ?.let { runCatching { UndoMemory.valueOf(it) }.getOrNull() }
                 ?: defaults.correction.undoMemory,
             skipAllCaps = p[AUTOCORRECT_SKIP_ALL_CAPS] ?: defaults.correction.skipAllCaps,
+            onEnter = p[AUTOCORRECT_ON_ENTER] ?: defaults.correction.onEnter,
         )
 
     private fun readAutoText(p: Preferences, defaults: KeyboardSettings) =
@@ -13872,6 +13881,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAutocorrectSkipAllCaps(value: Boolean) =
         editPrefs { it[AUTOCORRECT_SKIP_ALL_CAPS] = value }
+
+    suspend fun setAutocorrectOnEnter(value: Boolean) =
+        editPrefs { it[AUTOCORRECT_ON_ENTER] = value }
 
     suspend fun setAutoCapitalize(value: Boolean) =
         editPrefs { it[AUTO_CAPITALIZE] = value }
