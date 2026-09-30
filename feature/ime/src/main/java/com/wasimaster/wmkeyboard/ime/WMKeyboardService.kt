@@ -536,6 +536,7 @@ import com.wasimaster.wmkeyboard.core.layout.commitsNoText
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
+import com.wasimaster.wmkeyboard.core.input.composer.Composer
 import com.wasimaster.wmkeyboard.core.input.composer.KhiproComposer
 import com.wasimaster.wmkeyboard.core.input.composer.CjkConfig
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
@@ -6892,6 +6893,8 @@ open class WMKeyboardService : InputMethodService() {
      * neither place; otherwise whether it came out of the field.
      */
     private fun takeBackMultitapStep(wrote: String): Boolean? {
+        // A keyboard-owned field has the keys, so the step is in its buffer.
+        if (_uiState.value.captureTarget() != null) return takeBackCaptureMultitapStep(wrote)
         val ic = currentInputConnection ?: return null
         if (composing.isNotEmpty()) {
             if (!composing.endsWith(wrote)) return null
@@ -7570,6 +7573,14 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (kdeTypedUnderModifiers(target, text)) return true
         val before = state.captureCaretText() ?: return false
+        // A key a transliterator spells with (Hangul jamo, a Telex letter)
+        // joins the word it is composing here as it would in the app's field
+        // (#454), rather than landing as the bare key.
+        val run = if (composesInCapture(state.composer)) liveCaptureComposition(state, before) else null
+        if (capturesComposingKey(state.composer, target, text, run)) {
+            rewriteCaptureComposition(state, target, before, run, run?.keys.orEmpty() + text)
+            return true
+        }
         // What each field will take of what was typed. The two numeric ones
         // filter rather than accept, and the cluster-shaping scripts need to
         // know the character the new one lands *after* — which, with a caret,
@@ -7610,9 +7621,118 @@ open class WMKeyboardService : InputMethodService() {
             if (target == CaptureTarget.KDE_REMOTE) kdeSendSpecial(KdeSpecialKey.BACKSPACE)
             return true
         }
+        // Inside a word a transliterator is composing, backspace takes back
+        // the last key rather than the whole syllable it helped build (#454).
+        val run = if (composesInCapture(state.composer)) liveCaptureComposition(state, before) else null
+        if (run != null) {
+            rewriteCaptureComposition(state, target, before, run, run.keys.dropLast(1))
+            return true
+        }
         val length = charDeleteLength(before.text.substring(0, before.at))
         captureWrite(target, before, before.deletedBackward(length))
         return true
+    }
+
+    /**
+     * A word a transliterating composer is spelling in a keyboard-owned field
+     * (#454): the [keys] typed so far and where their rendering starts in the
+     * buffer named [key]. The app's field keeps the same thing in its composing
+     * region; these fields have none, so the service holds it here.
+     */
+    private data class CaptureComposition(val key: String, val start: Int, val keys: String)
+
+    /** The word [CaptureComposition] describes, while there is one. */
+    private var captureComposition: CaptureComposition? = null
+
+    /**
+     * Whether [composer] turns its keys into script text by itself, which is
+     * what a keyboard-owned field can show: Hangul, Cheonjiin, Telex and VNI,
+     * Khipro. Not a converter, whose output is a pick off the strip, and not a
+     * phonetic one like Avro, whose buffer stays roman here and is converted
+     * by the field's own suggestions.
+     */
+    private fun composesInCapture(composer: Composer): Boolean =
+        composer.isTransliterating && !composer.isConversion && composer.phoneticLanguage == null
+
+    /**
+     * Whether [text] is a key [composer] spells with and so joins the word it
+     * composes in [target], by the rule the app's field uses for its buffer.
+     */
+    private fun capturesComposingKey(
+        composer: Composer,
+        target: CaptureTarget,
+        text: String,
+        run: CaptureComposition?,
+    ): Boolean {
+        if (!composesInCapture(composer) || !target.takesWords || text.length != 1) return false
+        val c = text[0]
+        val keys = run?.keys.orEmpty()
+        return c.isLetter() || composer.buffersChar(c, keys) ||
+            (composer.bufferDigits && c.isDigit() && (keys.isNotEmpty() || composer.digitsStartBuffer))
+    }
+
+    /**
+     * The composing word, while the buffer still shows it where it was left
+     * with the caret at its end; else null, and the word is let go. Anything
+     * that moved the caret or changed the text around it ends the word, as a
+     * tap elsewhere ends composing in the app's field.
+     */
+    private fun liveCaptureComposition(state: KeyboardUiState, before: CaretText): CaptureComposition? {
+        val run = captureComposition ?: return null
+        val shown = state.composer.composeBuffer(run.keys)
+        val live = run.key == state.captureKey() && !before.hasSelection &&
+            before.at == run.start + shown.length &&
+            before.text.regionMatches(run.start, shown, 0, shown.length)
+        if (!live) captureComposition = null
+        return captureComposition
+    }
+
+    /**
+     * Puts the rendering of [keys] where [run]'s was, or at the caret (in place
+     * of any selection) when no word is being composed, and keeps composing
+     * from there. Empty [keys] take the word out and end it.
+     */
+    private fun rewriteCaptureComposition(
+        state: KeyboardUiState,
+        target: CaptureTarget,
+        before: CaretText,
+        run: CaptureComposition?,
+        keys: String,
+    ) {
+        val composer = state.composer
+        val base = if (run == null) before.withoutSelection() else before
+        val start = run?.start ?: base.at
+        val oldLength = run?.let { composer.composeBuffer(it.keys).length } ?: 0
+        val shown = composer.composeBuffer(keys)
+        val text = base.text.substring(0, start) + shown + base.text.substring(start + oldLength)
+        captureWrite(target, before, CaretText(text, start + shown.length))
+        // After the write, which lets every other edit's word go.
+        captureComposition = if (keys.isEmpty()) {
+            null
+        } else {
+            state.captureKey()?.let { CaptureComposition(it, start, keys) }
+        }
+    }
+
+    /**
+     * [takeBackMultitapStep] for a keyboard-owned field: the step comes off the
+     * composing word or from in front of the caret there, never off the app's
+     * field behind the keyboard.
+     */
+    private fun takeBackCaptureMultitapStep(wrote: String): Boolean? {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return null
+        if (target == CaptureTarget.TYPING_TEST || target.ownsCaret) return null
+        val before = state.captureCaretText() ?: return null
+        val run = if (composesInCapture(state.composer)) liveCaptureComposition(state, before) else null
+        if (run != null) {
+            if (!run.keys.endsWith(wrote)) return null
+            rewriteCaptureComposition(state, target, before, run, run.keys.dropLast(wrote.length))
+            return false
+        }
+        if (before.hasSelection || !before.text.substring(0, before.at).endsWith(wrote)) return null
+        captureWrite(target, before, before.deletedBackward(wrote.length))
+        return false
     }
 
     /** Forward delete in a keyboard-owned field; see [captureBackspace]. */
@@ -7888,6 +8008,9 @@ open class WMKeyboardService : InputMethodService() {
      * asked for, and a caret past the end of the text would draw outside it.
      */
     private fun captureWrite(target: CaptureTarget, before: CaretText, after: CaretText) {
+        // Any edit ends a transliterated word; the one that continues it sets
+        // it again straight after (see [rewriteCaptureComposition]).
+        captureComposition = null
         val key = _uiState.value.captureKey()
         if (after.text != before.text) {
             when (target) {
