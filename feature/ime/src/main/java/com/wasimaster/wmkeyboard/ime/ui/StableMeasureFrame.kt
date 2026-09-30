@@ -1,8 +1,12 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import android.content.Context
+import android.os.Build
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsAnimation
 import android.widget.FrameLayout
+import androidx.annotation.RequiresApi
 
 /**
  * The input view's outermost frame: measures the keyboard against the same
@@ -51,6 +55,15 @@ import android.widget.FrameLayout
  *
  * Exact specs are passed through untouched: they cannot differ between passes
  * in a way this could smooth over.
+ *
+ * It also keeps window-insets animations from reaching the keyboard (issue
+ * #463). Compose's insets listener sets a window inset aside while an insets
+ * animation is being prepared or running, and applies it only when that
+ * animation ends. An IME window that is hidden or handed to another keyboard
+ * part way through one never sees the end, and from then on every new inset
+ * is set aside too: the navigation bar read as zero and the bottom row sat on
+ * the gesture handle after switching keyboards and back. Nothing in the
+ * keyboard animates with an inset, so it takes each one as it arrives.
  */
 internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
 
@@ -105,4 +118,26 @@ internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
         super.onLayout(changed, left, top, right, bottom)
         freshTraversal = true
     }
+
+    // The four stages of an insets animation stop here rather than going on to
+    // the keyboard; see the class comment. The insets themselves still arrive
+    // through the ordinary dispatch.
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun dispatchWindowInsetsAnimationPrepare(animation: WindowInsetsAnimation) = Unit
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun dispatchWindowInsetsAnimationStart(
+        animation: WindowInsetsAnimation,
+        bounds: WindowInsetsAnimation.Bounds,
+    ): WindowInsetsAnimation.Bounds = bounds
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun dispatchWindowInsetsAnimationProgress(
+        insets: WindowInsets,
+        runningAnimations: MutableList<WindowInsetsAnimation>,
+    ): WindowInsets = insets
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    override fun dispatchWindowInsetsAnimationEnd(animation: WindowInsetsAnimation) = Unit
 }

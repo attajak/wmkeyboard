@@ -5993,6 +5993,10 @@ open class WMKeyboardService : InputMethodService() {
     private fun onScreenAgain() {
         windowOnScreen = true
         _shownState.value = _uiState.value
+        // Ask for the window's insets afresh (#463): the navigation bar the
+        // keyboard pads itself clear of is read from them, and a window coming
+        // back from another keyboard must not keep the ones it left with.
+        inputRootView?.requestApplyInsets()
     }
 
     /**
