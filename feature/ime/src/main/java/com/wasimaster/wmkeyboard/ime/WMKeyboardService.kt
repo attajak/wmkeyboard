@@ -10551,6 +10551,20 @@ open class WMKeyboardService : InputMethodService() {
             refreshSmartSuggestion()
             return
         }
+        // And for the caret settling in the middle of a code being typed one
+        // character at a time ([commitCodeToField]). Each of those commits
+        // echoes back as a caret move, and none of them is the user arriving
+        // anywhere: the word at the caret is the one the keyboard is still
+        // writing. Re-armed as the composing region, it is replaced by the very
+        // next character of the same run — the first characters of a pasted
+        // code were eaten this way, in a Vietnamese layout, where a word read
+        // out of the field can be spelled back into keys and so takes the
+        // region. The panel's own tap is unaffected either way, because a
+        // resume is blocked while a panel owns the screen.
+        if (codeEntryJob?.isActive == true) {
+            refreshSmartSuggestion()
+            return
+        }
         val scrubbing = SystemClock.uptimeMillis() - lastCaretScrubMs < CARET_SCRUB_WINDOW_MS
         // A drag is still in progress, so this landing spot is not the one the
         // user means. The editor sends no update when the finger finally stops,
