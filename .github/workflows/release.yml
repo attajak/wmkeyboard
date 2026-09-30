@@ -498,10 +498,13 @@ jobs:
   # android promote`, or the Console). Skips itself with a warning when the
   # service-account secret is absent, so tagging a release still works before
   # Play API access is configured.
+  # A release commit carrying `[skip play]` goes to GitHub and F-Droid only:
+  # a version Play already has under an older versionCode, where a new upload
+  # would only send production back through review for nothing.
   play:
     name: Upload to Play (internal track)
     needs: [verify, bundle]
-    if: github.ref_type == 'tag' && !inputs.dry_run
+    if: github.ref_type == 'tag' && !inputs.dry_run && !contains(github.event.head_commit.message, '[skip play]')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -668,6 +671,9 @@ jobs:
     uses: ./.github/workflows/release-comments.yml
     with:
       tag: ${{ github.ref_name }}
+      # Play is not told about a `[skip play]` release, so the comments
+      # must not promise it there either.
+      stores: ${{ contains(github.event.head_commit.message, '[skip play]') && 'F-Droid' || 'F-Droid,Google Play' }}
 
   # Points the bug report form at the version just published, so reporters
   # are asked to confirm they are on it. Runs after publish, so a failed or
