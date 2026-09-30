@@ -1981,21 +1981,22 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.value.settings.enabledLanguages.mapTo(HashSet()) { it.id }
 
     /**
-     * The offensive-word set for [langIds], unioned.
+     * The offensive-word lists for [langIds], by language.
      *
      * One asset per language under `dictionaries/offensive/`, and a language
-     * with no list contributes nothing rather than failing the read. Unioned
-     * rather than kept per language because the strip mixes languages — a
-     * secondary language's words reach it too — and a candidate is offered or
-     * it is not; there is no per-candidate language to consult at the point
-     * [SuggestionEngine.suppressed] asks.
+     * with no list contributes nothing rather than failing the read. The
+     * engine gets them unioned for the quick check and apart for the second
+     * look: one language's list flags plain words of another (English's holds
+     * Dutch `wel`, `nog` and `ging`, #465), so a flag only stands where the
+     * word is not simply a word of a language that does not flag it.
      *
      * Assets, so this works at a locked boot and with no network. The lists
      * hold only entries spelled in letters; see the header on any of them.
      */
-    private fun readOffensiveWords(langIds: Set<String>): Set<String> {
-        val words = HashSet<String>()
+    private fun readOffensiveWords(langIds: Set<String>): Map<String, Set<String>> {
+        val byLanguage = HashMap<String, Set<String>>()
         for (langId in langIds) {
+            val words = HashSet<String>()
             runCatching {
                 assets.open("dictionaries/offensive/$langId.txt").bufferedReader()
                     .useLines { lines ->
@@ -2006,8 +2007,15 @@ open class WMKeyboardService : InputMethodService() {
                         }
                     }
             }
+            if (words.isNotEmpty()) byLanguage[langId] = words
         }
-        return words
+        return byLanguage
+    }
+
+    /** Hands [byLanguage] to the engine, unioned for the fast check and kept apart for #465. */
+    private fun SuggestionEngine.applyOffensiveWords(byLanguage: Map<String, Set<String>>) {
+        offensiveWords = byLanguage.values.flatMapTo(HashSet()) { it }
+        offensiveByLanguage = byLanguage
     }
 
     /** Languages reading the user's imported lists alone (issue #28). */
@@ -3710,7 +3718,7 @@ open class WMKeyboardService : InputMethodService() {
                     val widened = withContext(Dispatchers.Default) {
                         readOffensiveWords(offensiveLangs)
                     }
-                    suggestionEngine?.offensiveWords = widened
+                    suggestionEngine?.applyOffensiveWords(widened)
                     loadedOffensiveLangs = offensiveLangs
                 }
                 // Imported word lists are per language, so the active one
@@ -4103,7 +4111,7 @@ open class WMKeyboardService : InputMethodService() {
                 glideOutcomes = this@WMKeyboardService.glideOutcomes
                 blacklist = _uiState.value.let { it.settings.suggestionSources.blacklistFor(it.language.id) }
                 rankOffsets = wordRanks.snapshot()
-                offensiveWords = offensiveSet
+                applyOffensiveWords(offensiveSet)
                 blockOffensiveWords = _uiState.value.settings.suggestionStrip.blockOffensiveWords
                 skipAllCapsAutocorrect = _uiState.value.settings.correction.skipAllCaps
                 learnedWordMinCount =
