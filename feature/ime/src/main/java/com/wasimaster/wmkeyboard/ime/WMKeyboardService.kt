@@ -9208,7 +9208,15 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         // Backspace straight after a glide removes the whole swiped word —
-        // a wrong swipe shouldn't cost a letter-by-letter cleanup.
+        // a wrong swipe shouldn't cost a letter-by-letter cleanup. Unless the
+        // user turned that off (#455): a swipe that got a letter or two wrong
+        // is fixed faster by deleting those letters than by redrawing it, so
+        // the word stops being one unit and this press deletes like any other.
+        if (lastGestureWord != null && !state.settings.gesture.backspaceUndoesGlide) {
+            lastGestureWord = null
+            lastGestureStroke = null
+            pendingWordSpace = false
+        }
         lastGestureWord?.let { word ->
             lastGestureWord = null
             val stroke = lastGestureStroke

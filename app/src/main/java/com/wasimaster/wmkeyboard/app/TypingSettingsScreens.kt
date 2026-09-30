@@ -1812,6 +1812,15 @@ internal fun TypingGesturesSettings(
                         default = SettingsDefaults.gesture.autoSpaceAfterGlide,
                     ) { scope.launch { repository.setGestureAutoSpace(it) } }
                 }
+                item {
+                    ToggleSetting(
+                        R.string.typing_glide_backspace_undo_title,
+                        stringResource(R.string.typing_glide_backspace_undo_subtitle),
+                        settings.watch { it.gesture.backspaceUndoesGlide },
+                        info = stringResource(R.string.typing_glide_backspace_undo_info),
+                        default = SettingsDefaults.gesture.backspaceUndoesGlide,
+                    ) { scope.launch { repository.setGestureBackspaceUndoesGlide(it) } }
+                }
                 // Which key a glide reads as an apostrophe, so "it's" can be
                 // drawn rather than guessed at. One key, never several.
                 item {

@@ -6145,6 +6145,14 @@ data class GestureSettings(
      */
     val searchAllChip: Boolean = false,
     /**
+     * Backspace right after a glide takes the whole swiped word back, and
+     * the space it typed, in one press (#455). On by default: a wrong swipe
+     * is usually wrong as a whole. Off, the glided word is ordinary text and
+     * backspace deletes one character, for a hand whose swipes come out one
+     * or two letters off and are quicker to mend than to redraw.
+     */
+    val backspaceUndoesGlide: Boolean = true,
+    /**
      * Bumped by the gestures screen's "forget" so a running keyboard drops
      * its in-memory copies of the swipe-style stores — the contract of
      * [KeyboardSettings.lexiconVersion], on a counter of its own so
@@ -7805,6 +7813,8 @@ class SettingsRepository(private val context: Context) {
         private val GESTURE_LEARN_SWIPE_STYLE = booleanPreferencesKey("gesture_learn_swipe_style")
         private val GESTURE_SHAPES_PER_WORD = intPreferencesKey("gesture_shapes_per_word")
         private val GESTURE_SEARCH_ALL_CHIP = booleanPreferencesKey("gesture_search_all_chip")
+        private val GESTURE_BACKSPACE_UNDOES_GLIDE =
+            booleanPreferencesKey("gesture_backspace_undoes_glide")
         private val GESTURE_SWIPE_STYLE_VERSION = intPreferencesKey("gesture_swipe_style_version")
         // Legacy boolean, read only to migrate into SPACE_LONG_SWIPE.
         private val SPACEBAR_CURSOR = booleanPreferencesKey("spacebar_cursor")
@@ -9322,6 +9332,8 @@ class SettingsRepository(private val context: Context) {
             shapesPerWord = (p[GESTURE_SHAPES_PER_WORD] ?: defaults.gesture.shapesPerWord)
                 .coerceIn(GlideShapesPerWordRange),
             searchAllChip = p[GESTURE_SEARCH_ALL_CHIP] ?: defaults.gesture.searchAllChip,
+            backspaceUndoesGlide = p[GESTURE_BACKSPACE_UNDOES_GLIDE]
+                ?: defaults.gesture.backspaceUndoesGlide,
             swipeStyleVersion = p[GESTURE_SWIPE_STYLE_VERSION] ?: defaults.gesture.swipeStyleVersion,
         )
 
@@ -14379,6 +14391,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGestureSearchAllChip(value: Boolean) =
         editPrefs { it[GESTURE_SEARCH_ALL_CHIP] = value }
+
+    suspend fun setGestureBackspaceUndoesGlide(value: Boolean) =
+        editPrefs { it[GESTURE_BACKSPACE_UNDOES_GLIDE] = value }
 
     /**
      * Deletes everything a swipe style is made of — where the finger lands,
