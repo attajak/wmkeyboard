@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Phonelink
 import androidx.compose.material.icons.outlined.SwipeVertical
 import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.outlined.CloudQueue
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material.icons.automirrored.outlined.Chat
@@ -959,6 +960,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_space_cursor_top_speed_title) { Icons.Outlined.Speed }
         put(R.string.typing_space_cursor_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.typing_space_swipe_down_hide_title) { Icons.Outlined.SwipeDown }
+        put(R.string.typing_edge_swipe_back_title) { Icons.AutoMirrored.Outlined.ArrowBack }
         put(R.string.typing_hint_flick_title) { Icons.Outlined.SwipeDownAlt }
         put(R.string.typing_capital_flick_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.typing_space_hold_keys_label) { Icons.Outlined.TouchApp }

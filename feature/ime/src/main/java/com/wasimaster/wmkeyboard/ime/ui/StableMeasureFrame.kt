@@ -1,12 +1,16 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.WindowInsets
 import android.view.WindowInsetsAnimation
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import kotlin.math.abs
 
 /**
  * The input view's outermost frame: measures the keyboard against the same
@@ -64,6 +68,12 @@ import androidx.annotation.RequiresApi
  * is set aside too: the navigation bar read as zero and the bottom row sat on
  * the gesture handle after switching keyboards and back. Nothing in the
  * keyboard animates with an inset, so it takes each one as it arrives.
+ *
+ * And, when asked, it reads a swipe in from either side edge as Back (issue
+ * #437). Android's own back gesture works over a keyboard, but some phones
+ * block it there, which leaves it half a screen up. Being the parent of every
+ * key, the frame can take the swipe before the keys see more than its start,
+ * and hand them a cancel for the press it began with.
  */
 internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
 
@@ -83,6 +93,81 @@ internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
      */
     private var ceiling = 0
     private var ceilingUnder = 0
+
+    /** Whether a swipe in from a side edge goes back; asked at each touch-down (#437). */
+    var edgeSwipeBackEnabled: () -> Boolean = { false }
+
+    /** What a finished edge swipe does. */
+    var onEdgeSwipeBack: () -> Unit = {}
+
+    private val density = context.resources.displayMetrics.density
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+
+    /** The pointer an edge swipe may be starting with, or -1 while none is. */
+    private var edgePointer = -1
+    private var edgeFromLeft = false
+    private var edgeDownX = 0f
+    private var edgeDownY = 0f
+
+    /** The swipe was taken from the keys, so the rest of it is the frame's. */
+    private var edgeClaimed = false
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        when (ev.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                edgeClaimed = false
+                edgePointer = -1
+                val edge = EDGE_WIDTH_DP * density
+                if (edgeSwipeBackEnabled() && (ev.x <= edge || ev.x >= width - edge)) {
+                    edgePointer = ev.getPointerId(0)
+                    edgeFromLeft = ev.x <= edge
+                    edgeDownX = ev.x
+                    edgeDownY = ev.y
+                }
+            }
+            MotionEvent.ACTION_MOVE -> if (edgePointer >= 0) {
+                val index = ev.findPointerIndex(edgePointer)
+                if (index < 0) {
+                    edgePointer = -1
+                } else {
+                    val inward = (ev.getX(index) - edgeDownX) * if (edgeFromLeft) 1f else -1f
+                    val across = abs(ev.getY(index) - edgeDownY)
+                    when {
+                        // Up or down more than across, or back out over the edge:
+                        // a key press or a glide, and the keys keep it.
+                        across > touchSlop && across > inward -> edgePointer = -1
+                        inward < -touchSlop -> edgePointer = -1
+                        inward >= EDGE_TRIGGER_DP * density -> {
+                            edgeClaimed = true
+                            return true
+                        }
+                    }
+                }
+            }
+            // A second finger is typing, not swiping back.
+            MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+                edgePointer = -1
+        }
+        return false
+    }
+
+    // Back is not a click: there is nothing here for performClick to stand for.
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (!edgeClaimed) return super.onTouchEvent(event)
+        when (event.actionMasked) {
+            MotionEvent.ACTION_UP -> {
+                edgeClaimed = false
+                edgePointer = -1
+                onEdgeSwipeBack()
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                edgeClaimed = false
+                edgePointer = -1
+            }
+        }
+        return true
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, stableHeightSpec(heightMeasureSpec))
@@ -140,4 +225,12 @@ internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun dispatchWindowInsetsAnimationEnd(animation: WindowInsetsAnimation) = Unit
+
+    private companion object {
+        /** How far in from a side a touch may start and still be an edge swipe. */
+        const val EDGE_WIDTH_DP = 16f
+
+        /** How far inward it has to travel before it is taken from the keys. */
+        const val EDGE_TRIGGER_DP = 40f
+    }
 }

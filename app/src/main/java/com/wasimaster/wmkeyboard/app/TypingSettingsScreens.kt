@@ -2136,6 +2136,15 @@ internal fun TypingGesturesSettings(
             ) { scope.launch { repository.setSpaceSwipeDownHide(it) } }
         }
         item {
+            ToggleSetting(
+                R.string.typing_edge_swipe_back_title,
+                stringResource(R.string.typing_edge_swipe_back_subtitle),
+                settings.watch { it.layoutBehavior.edgeSwipeBack },
+                info = stringResource(R.string.typing_edge_swipe_back_info),
+                default = SettingsDefaults.layoutBehavior.edgeSwipeBack,
+            ) { scope.launch { repository.setEdgeSwipeBack(it) } }
+        }
+        item {
             // Issue #178: a quick flick down on a key types its corner hint.
             ToggleSetting(
                 R.string.typing_hint_flick_title,

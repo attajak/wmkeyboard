@@ -6253,6 +6253,13 @@ data class LayoutBehaviorSettings(
      */
     val spaceSwipeDownHide: Boolean = false,
     /**
+     * A swipe in from the left or right edge of the keyboard is Back: it
+     * closes an open panel, or else the keyboard (#437). For phones that keep
+     * the system's back gesture off the keyboard. Off by default, because a
+     * glide that starts right at the edge and heads inward reads the same way.
+     */
+    val edgeSwipeBack: Boolean = false,
+    /**
      * A short, quick swipe down on a key types its corner hint — the first of
      * its long-press characters — without waiting out the hold (issue #178).
      * The `1` on `q`, the `!` on the exclamation-mark key's shifted twin,
@@ -7825,6 +7832,7 @@ class SettingsRepository(private val context: Context) {
         private val SYMBOLS_LONGPRESS_NUMPAD = booleanPreferencesKey("symbols_longpress_numpad")
         private val ENTER_LONGPRESS_EMOJI = booleanPreferencesKey("enter_longpress_emoji")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
+        private val EDGE_SWIPE_BACK = booleanPreferencesKey("edge_swipe_back")
         private val GLOBE_IN_ONE_PLACE = booleanPreferencesKey("globe_in_one_place")
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
         private val CAPITAL_FLICK = booleanPreferencesKey("capital_flick")
@@ -9769,6 +9777,7 @@ class SettingsRepository(private val context: Context) {
                 p[ENTER_LONGPRESS_EMOJI] ?: defaults.layoutBehavior.enterLongPressEmoji,
             spaceSwipeDownHide =
                 p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
+            edgeSwipeBack = p[EDGE_SWIPE_BACK] ?: defaults.layoutBehavior.edgeSwipeBack,
             globeInOnePlace = p[GLOBE_IN_ONE_PLACE] ?: defaults.layoutBehavior.globeInOnePlace,
             hintFlick = p[HINT_FLICK] ?: defaults.layoutBehavior.hintFlick,
             capitalFlick = p[CAPITAL_FLICK] ?: defaults.layoutBehavior.capitalFlick,
@@ -14590,6 +14599,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceSwipeDownHide(value: Boolean) =
         editPrefs { it[SPACE_SWIPE_DOWN_HIDE] = value }
+
+    suspend fun setEdgeSwipeBack(value: Boolean) =
+        editPrefs { it[EDGE_SWIPE_BACK] = value }
 
     suspend fun setGlobeInOnePlace(value: Boolean) =
         editPrefs { it[GLOBE_IN_ONE_PLACE] = value }

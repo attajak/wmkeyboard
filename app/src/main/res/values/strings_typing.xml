@@ -642,6 +642,9 @@
     <string name="typing_space_swipe_cursor_desc">Move the cursor through the text</string>
     <string name="typing_space_swipe_numpad_desc">Open the number pad</string>
 
+    <string name="typing_edge_swipe_back_title">Swipe in from the edge to go back</string>
+    <string name="typing_edge_swipe_back_subtitle">A swipe in from the left or right edge of the keyboard closes a panel or the keyboard</string>
+    <string name="typing_edge_swipe_back_info">Some phones do not let the back gesture of the system start over the keyboard, so you must start it above the keyboard. With this setting on, a swipe that starts at the left or right edge of the keyboard and moves in does the same thing. It closes the panel that is open, for example the voice panel, which also stops the recording. When no panel is open, it closes the keyboard. This setting is off by default, because a glide that starts at the very edge and moves in looks the same. Start glides a little in from the edge.</string>
     <string name="typing_space_swipe_down_hide_title">Swipe down to hide the keyboard</string>
     <string name="typing_space_swipe_down_hide_subtitle">A swipe down on the spacebar closes the keyboard</string>
     <string name="typing_space_swipe_down_hide_info">Swipe straight down on the spacebar to close the keyboard. This setting is off by default, so an accidental swipe down never closes the keyboard. When the 2-D cursor touchpad is on, a swipe down moves the cursor instead. The touchpad has priority.</string>

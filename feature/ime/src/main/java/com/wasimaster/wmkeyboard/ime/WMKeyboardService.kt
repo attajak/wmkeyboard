@@ -4326,6 +4326,8 @@ open class WMKeyboardService : InputMethodService() {
         // The keyboard keeps the params the input frame gives an input view:
         // full width, its own height.
         return StableMeasureFrame(this).apply {
+            edgeSwipeBackEnabled = { _uiState.value.settings.layoutBehavior.edgeSwipeBack }
+            onEdgeSwipeBack = ::onEdgeSwipeBack
             addView(
                 view,
                 android.widget.FrameLayout.LayoutParams(
@@ -31299,6 +31301,21 @@ open class WMKeyboardService : InputMethodService() {
      * keyboard. It used to be written out twice, and the two copies had already
      * drifted on which layer they checked first.
      */
+    /**
+     * A swipe in from a side edge of the keyboard (#437), for phones that keep
+     * the system's back gesture off it: Back, as that gesture would have done.
+     * An open layer closes first, a dictation panel with its microphone, and
+     * with nothing open the keyboard goes down.
+     */
+    private fun onEdgeSwipeBack() {
+        vibrate()
+        if (backClosesLayer()) {
+            dismissTopLayer(fromBack = true)
+        } else {
+            requestHideSelf(0)
+        }
+    }
+
     private fun dismissTopLayer(fromBack: Boolean = false): Boolean {
         // Above everything else, and for the same reason the layer peek's popup
         // closes before the layer it is on: it is the newest thing the user
