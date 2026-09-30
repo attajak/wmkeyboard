@@ -7933,6 +7933,7 @@ class SettingsRepository(private val context: Context) {
         private val DS_DOWNLOADS = stringPreferencesKey("data_saver_downloads")
         private val DS_CLOUD_AI = stringPreferencesKey("data_saver_cloud_ai")
         private val DS_CLOUD_VOICE = stringPreferencesKey("data_saver_cloud_voice")
+        private val OFFLINE_FALLBACK = booleanPreferencesKey("offline_fallback")
         private val BACKSPACE_SWIPE_DELETE = booleanPreferencesKey("backspace_swipe_delete")
         private val HARDWARE_KEYBOARD_INPUT = booleanPreferencesKey("hardware_keyboard_input")
         private val HW_SHORTCUTS_ENABLED = booleanPreferencesKey("hw_shortcuts_enabled")
@@ -12632,6 +12633,7 @@ class SettingsRepository(private val context: Context) {
             downloads = p.policy(DS_DOWNLOADS, legacyDownloads),
             cloudAi = p.policy(DS_CLOUD_AI, d.cloudAi),
             cloudVoice = p.policy(DS_CLOUD_VOICE, d.cloudVoice),
+            offlineFallback = p[OFFLINE_FALLBACK] ?: d.offlineFallback,
         )
     }
 
@@ -14798,6 +14800,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setDataSaverCloudVoice(value: MeteredPolicy) =
         editPrefs { it[DS_CLOUD_VOICE] = value.name }
+
+    /** @see DataSaverSettings.offlineFallback */
+    suspend fun setOfflineFallback(value: Boolean) =
+        editPrefs { it[OFFLINE_FALLBACK] = value }
 
     /**
      * Picks [value] as [langId]'s numeral system. [NumeralSystem.AUTO] drops the

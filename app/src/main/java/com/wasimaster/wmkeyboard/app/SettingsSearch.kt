@@ -1738,6 +1738,7 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         dataSaver(R.string.datasaver_downloads_title, R.string.datasaver_downloads_subtitle),
         dataSaver(R.string.datasaver_ai_title, R.string.datasaver_ai_subtitle),
         dataSaver(R.string.datasaver_voice_title, R.string.datasaver_voice_subtitle),
+        dataSaver(R.string.datasaver_offline_fallback_title, R.string.datasaver_offline_fallback_subtitle),
         // The four kinds of notification, each one a thing someone will come
         // looking for by name the first time it arrives or stops arriving.
         notifications(R.string.notify_downloads_title, R.string.notify_downloads_subtitle),

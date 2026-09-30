@@ -1181,6 +1181,7 @@ internal object SettingsRowIcons {
         put(R.string.datasaver_downloads_title) { Icons.Outlined.CloudDownload }
         put(R.string.datasaver_ai_title) { Icons.Outlined.AutoAwesome }
         put(R.string.datasaver_voice_title) { Icons.Outlined.Dns }
+        put(R.string.datasaver_offline_fallback_title) { Icons.Outlined.CloudOff }
         // The signpost left behind on the languages screen, where the metered
         // download confirmation used to live.
         put(R.string.langemoji_lang_metered_title) { Icons.Outlined.DataSaverOn }

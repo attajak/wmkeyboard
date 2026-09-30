@@ -20070,7 +20070,7 @@ open class WMKeyboardService : InputMethodService() {
             fail(VoiceStatus.NEED_PERMISSION)
             return
         }
-        val server = serverVoiceSelected()
+        var server = serverVoiceSelected()
         if (server && _uiState.value.settings.whisper.serverFor(_uiState.value.language.id).url.isBlank()) {
             // The server engine is chosen but has no address: say so, with the
             // same way out the missing Whisper model gets.
@@ -20085,6 +20085,12 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
+        // No connection, and the user asked for the device to stand in (#452):
+        // a downloaded Whisper model for this language, else the system
+        // recognizer, instead of a clip nobody can send.
+        val offlineVoice = server && offlineFallbackNow()
+        if (offlineVoice) server = false
+        if (offlineVoice) noteOfflineFallback(OFFLINE_FALLBACK_VOICE, true)
         voiceMeteredAsked = false
         if (server) {
             val decision = dataSaverStatus.decide(MeteredFeature.CLOUD_VOICE)
@@ -20103,7 +20109,7 @@ open class WMKeyboardService : InputMethodService() {
                 return
             }
         }
-        val whisperModel = whisperModel()
+        val whisperModel = if (offlineVoice) fallbackWhisperModel() else whisperModel()
         val whisperSelected = isWhisperEnabled() && _uiState.value.settings.whisper.engine == "whisper"
         if (whisperSelected && whisperModel == null) {
             // Whisper is chosen but no model is downloaded — prompt for one
@@ -20306,6 +20312,69 @@ open class WMKeyboardService : InputMethodService() {
     /** The transcription server is the chosen engine (#286). Every flavour has it. */
     private fun serverVoiceSelected(): Boolean =
         _uiState.value.settings.whisper.engine == "server"
+
+    /**
+     * Whether a request that would go to a server goes to the device instead
+     * before it is even tried (#452): the user asked for that, and there is no
+     * connection to send it over.
+     */
+    private fun offlineFallbackNow(): Boolean =
+        _uiState.value.settings.dataSaver.offlineFallback && !networkWatcher.state.value.online
+
+    /** The features [noteOfflineFallback] has already told the user about. */
+    private val offlineFallbackNoted = HashSet<String>()
+
+    /**
+     * Tells the user, once, that [feature] has moved to the on-device model
+     * (#452) when [fellBack], or forgets that it had when the server answered
+     * again, so the next move is told too. Once rather than per request: a
+     * continuous dictation or a translation typed a letter at a time would
+     * otherwise put a message up for every phrase. Main thread.
+     */
+    private fun noteOfflineFallback(feature: String, fellBack: Boolean) {
+        if (!fellBack) {
+            offlineFallbackNoted -= feature
+            return
+        }
+        if (!offlineFallbackNoted.add(feature)) return
+        Toast.makeText(this, getString(R.string.ime_offline_fallback_toast), Toast.LENGTH_SHORT).show()
+    }
+
+    /**
+     * The downloaded Whisper model for the language being typed in, whichever
+     * engine is picked, for dictation to fall back on (#452). Null when there is
+     * none, or no runtime to run it with yet.
+     */
+    private fun fallbackWhisperModel(): WhisperModel? {
+        if (!isWhisperEnabled() || !WhisperEngine.ready) return null
+        val s = _uiState.value.settings
+        return WhisperStore.modelForLanguage(
+            filesDir,
+            _uiState.value.language.id,
+            s.whisper.modelId,
+            s.whisper.modelByLang,
+        )
+    }
+
+    /**
+     * [pcm] transcribed by [model] the way [finishWhisper] does it, for a clip
+     * recorded for the server that could not be sent (#452). Blocking; call off
+     * the main thread.
+     */
+    private fun transcribeOnDevice(model: WhisperModel, pcm: FloatArray, languageId: String): String {
+        val langToken = model.langTokenFor(languageId)
+        val translate = _uiState.value.settings.whisper.translate && model.supportsTranslate
+        val text = WhisperEngine.transcribe(
+            WhisperStore.modelFile(filesDir, model),
+            WhisperStore.vocabFile(filesDir, model),
+            pcm,
+            translate,
+            langToken,
+        ).trim()
+        // As in [finishWhisper]: only a graph left to detect the language can
+        // answer in the wrong script.
+        return if (langToken == null && model.fixedLang == null) WhisperScript.rescue(text, languageId) else text
+    }
 
     /**
      * What the system recognizer is told to listen for (#305): the user's own
@@ -20622,9 +20691,24 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
             }
+            // The server could not be reached, and the user asked for the
+            // device to stand in (#452): the clip is already recorded, so a
+            // downloaded Whisper model transcribes it here rather than the
+            // phrase being lost to an error line.
+            val failure = result.exceptionOrNull()
+            val local = if (failure != null && ToolHttp.isUnreachable(failure) &&
+                _uiState.value.settings.dataSaver.offlineFallback
+            ) {
+                fallbackWhisperModel()
+            } else {
+                null
+            }
+            val heard = if (local != null) runCatching { transcribeOnDevice(local, pcm, languageId) } else result
             withContext(Dispatchers.Main) {
                 if (gen != voiceGeneration) return@withContext
-                result
+                // Told on the move, and forgotten once the server answers again.
+                if (local != null || heard.isSuccess) noteOfflineFallback(OFFLINE_FALLBACK_VOICE, local != null)
+                heard
                     .map { VoiceClipGate.clean(it, faint) }
                     .onSuccess { commitWhisperResult(it, tag, userStopped) }
                     .onFailure { e ->
@@ -23719,6 +23803,15 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { if (it.aiHasText == hasText) it else it.copy(aiHasText = hasText) }
     }
 
+    /**
+     * Whether the AI actions have an on-device model to fall back on when the
+     * server they are set to cannot be reached (#452): the user asked for it,
+     * the provider is a server, and a local model is downloaded.
+     */
+    private fun aiOfflineStandIn(settings: KeyboardSettings): Boolean =
+        settings.dataSaver.offlineFallback && BuildConfig.ENABLE_LOCAL_LLM &&
+            settings.ai.provider != AiProvider.ON_DEVICE && effectiveLocalModelFile(settings) != null
+
     /** What the AI panel should show before any action runs. */
     private fun aiInitialState(settings: KeyboardSettings): AiUi = when {
         settings.ai.provider == AiProvider.ON_DEVICE && BuildConfig.ENABLE_LOCAL_LLM &&
@@ -24154,10 +24247,15 @@ open class WMKeyboardService : InputMethodService() {
         fromSelection: Boolean = false,
     ) {
         aiJob?.cancel()
+        // A downloaded on-device model the user asked to stand in for the
+        // server (#452): tried first with no connection, and again if the
+        // server turns out not to answer.
+        val localStandIn = aiOfflineStandIn(_uiState.value.settings)
+        val offlineFirst = localStandIn && !networkWatcher.state.value.online
         // Data saving, for the providers that are a request over the network.
         // An on-device model costs nothing to reach, so it is never held.
         val aiSettings = _uiState.value.settings.ai
-        if (aiSettings.provider != AiProvider.ON_DEVICE) {
+        if (aiSettings.provider != AiProvider.ON_DEVICE && !offlineFirst) {
             val decision = dataSaverStatus.decide(MeteredFeature.CLOUD_AI)
             if (decision != MeteredDecision.ALLOWED) {
                 _uiState.update {
@@ -24201,18 +24299,26 @@ open class WMKeyboardService : InputMethodService() {
                 else -> AiPrompts.systemPrompt(action, settings.ai.translateTo)
             }
             val config = AiClient.config(settings.ai)
+            var fellBack = offlineFirst
             val result = withContext(Dispatchers.IO) {
                 runCatching {
-                    if (config.provider == AiProvider.ON_DEVICE) {
+                    if (config.provider == AiProvider.ON_DEVICE || offlineFirst) {
                         runAiOnDevice(seq, action, source, system, settings, generated, fromSelection)
                     } else {
                         runAiRemote(seq, action, source, system, settings, config, startedAt, generated, fromSelection)
                     }
+                }.recoverCatching { e ->
+                    // Only a server that could not be reached, and only when a
+                    // run on the device was not already the one that failed.
+                    if (!localStandIn || fellBack || seq != aiRunSeq || !ToolHttp.isUnreachable(e)) throw e
+                    fellBack = true
+                    runAiOnDevice(seq, action, source, system, settings, generated, fromSelection)
                 }
             }
             // A superseded or cancelled run never gets past here, so it is
             // never recorded either.
             if (seq != aiRunSeq) return@launch
+            if (localStandIn && (fellBack || result.isSuccess)) noteOfflineFallback(OFFLINE_FALLBACK_AI, fellBack)
             val next = result.fold(
                 onSuccess = { completion ->
                     val raw = completion.text
@@ -26196,7 +26302,7 @@ open class WMKeyboardService : InputMethodService() {
             val outcome: (TranslateUi) -> TranslateUi =
                 when (engineOverride ?: translateEngine(state.settings)) {
                     TranslateEngine.ONLINE ->
-                        onlineTranslateUi(source, translateOnline(state.settings, source, target, sourceLang))
+                        onlineOrStandInTranslateUi(state, source, target, sourceLang)
                     TranslateEngine.ON_DEVICE ->
                         offlineTranslateUi(source, translateOnDevice(state, source, target, sourceLang))
                     TranslateEngine.AUTO -> {
@@ -26315,6 +26421,42 @@ open class WMKeyboardService : InputMethodService() {
         )
     }
 
+    /**
+     * The online engine's answer, or the on-device engine's when the user asked
+     * it to stand in (#452) and there is no connection or the service could not
+     * be reached. Only a finished on-device translation replaces the online
+     * result: a pair with no models downloaded keeps the online error, which
+     * says what is actually wrong. Text that goes to the device goes nowhere,
+     * so this keeps the promise of the user's own server (#435) too.
+     */
+    private suspend fun onlineOrStandInTranslateUi(
+        state: KeyboardUiState,
+        source: String,
+        target: String,
+        sourceLang: String,
+    ): (TranslateUi) -> TranslateUi {
+        val standIn = state.settings.dataSaver.offlineFallback && OnDeviceTranslator.AVAILABLE
+        // Runs on the main thread (the translate job is the service's), so the
+        // notice can be put up from here.
+        if (standIn && !networkWatcher.state.value.online) {
+            val local = translateOnDevice(state, source, target, sourceLang)
+            if (local is OfflineTranslateResult.Success) noteOfflineFallback(OFFLINE_FALLBACK_TRANSLATE, true)
+            return offlineTranslateUi(source, local, standIn = true)
+        }
+        val online = translateOnline(state.settings, source, target, sourceLang)
+        val failure = online.exceptionOrNull()
+        if (standIn && failure != null && ToolHttp.isUnreachable(failure)) {
+            val local = translateOnDevice(state, source, target, sourceLang)
+            if (local is OfflineTranslateResult.Success) {
+                noteOfflineFallback(OFFLINE_FALLBACK_TRANSLATE, true)
+                return offlineTranslateUi(source, local, standIn = true)
+            }
+        } else if (standIn && online.isSuccess) {
+            noteOfflineFallback(OFFLINE_FALLBACK_TRANSLATE, false)
+        }
+        return onlineTranslateUi(source, online)
+    }
+
     private fun onlineTranslateUi(source: String, result: Result<Translation>): (TranslateUi) -> TranslateUi =
         { current ->
             result.fold(
@@ -26338,7 +26480,11 @@ open class WMKeyboardService : InputMethodService() {
             )
         }
 
-    private fun offlineTranslateUi(source: String, result: OfflineTranslateResult): (TranslateUi) -> TranslateUi =
+    private fun offlineTranslateUi(
+        source: String,
+        result: OfflineTranslateResult,
+        standIn: Boolean = false,
+    ): (TranslateUi) -> TranslateUi =
         { current ->
             val base = current.cleared().copy(sourceText = source)
             when (result) {
@@ -26347,6 +26493,7 @@ open class WMKeyboardService : InputMethodService() {
                     detectedSource = result.source,
                     sourceGuessed = result.guessed,
                     onDevice = true,
+                    offlineStandIn = standIn,
                 )
                 is OfflineTranslateResult.NeedsModels -> base.copy(
                     detectedSource = result.source,
@@ -33230,6 +33377,11 @@ open class WMKeyboardService : InputMethodService() {
          */
         private const val VOICE_SILENT_RETRIES = 2
         private const val VOICE_SILENT_RETRIES_INTERACTIVE = 12
+
+        /** What [noteOfflineFallback] tells the user about, one feature each (#452). */
+        private const val OFFLINE_FALLBACK_VOICE = "voice"
+        private const val OFFLINE_FALLBACK_AI = "ai"
+        private const val OFFLINE_FALLBACK_TRANSLATE = "translate"
 
         /** The [VoiceBarSettings.typingMode] tokens the Voice tool's hold menu may hand back (#173). */
         private val VoiceTypingModes = setOf(
