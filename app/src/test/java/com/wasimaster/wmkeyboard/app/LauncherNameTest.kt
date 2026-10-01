@@ -135,10 +135,20 @@ class LauncherNameTest {
      * declaration as "TV only" and stops offering the app to phones. Both lines
      * are one edit away from silently halving the install base in one direction
      * or the other.
+     *
+     * The two screen orientations are there because a library activity locked
+     * to portrait implies a required portrait screen, which Play's Android TV
+     * review rejects.
      */
     @Test
     fun `the manifest declares a television can install this`() {
-        for (feature in listOf("android.hardware.touchscreen", "android.software.leanback")) {
+        val features = listOf(
+            "android.hardware.touchscreen",
+            "android.software.leanback",
+            "android.hardware.screen.portrait",
+            "android.hardware.screen.landscape",
+        )
+        for (feature in features) {
             assertTrue(
                 "$feature must be declared not required",
                 Regex(

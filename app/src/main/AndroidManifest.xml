@@ -118,6 +118,17 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
     <uses-feature android:name="android.software.leanback" android:required="false" />
 
+    <!--
+         ML Kit's document scanner ships an activity locked to portrait
+         (GmsDocumentScanningDelegateActivity), and a locked orientation is an
+         implied *required* `android.hardware.screen.portrait`. A television
+         has no portrait screen, so Play rejected the Android TV form factor
+         over it (0.5.13, versionCode 27). Nothing here needs either
+         orientation: the scanner is a tool a TV never opens.
+    -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
+    <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
+
     <!-- The keyboard-mode editor lists installed apps (launcher activities)
          so a mode can be bound to specific apps; Android 11+ hides the app
          list without this. -->
