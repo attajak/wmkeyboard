@@ -157,7 +157,9 @@ internal fun GrammarPanel(
     val onFocus = callbacks.onFocus
     val kb = LocalKbTheme.current
     val grammar = state.grammar
-    val deeplWrite = state.settings.translate.deepl.writeActive
+    // Refused in a password field: the chip would send the whole field to
+    // DeepL, so it is not offered there (the service refuses it too).
+    val deeplWrite = state.settings.translate.deepl.writeActive && !state.secureField
     val rephrase = grammar.rephrase
     var pickerOpen by remember { mutableStateOf(false) }
     var filterOpen by remember { mutableStateOf(false) }

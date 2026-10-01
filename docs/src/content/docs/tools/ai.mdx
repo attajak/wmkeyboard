@@ -26,6 +26,8 @@ The panel opens on a row of action chips. Eleven ship with the keyboard, and the
 - **Rewrite**, **Summarize**, **Translate**, **Improve**, **Formal**, **Shorter**, **Friendly**, **Fix grammar**, **Explain**, **Continue**: each needs text to work on and is greyed out on an empty field.
 - **Custom**: the one chip that stays live on an empty field. Tapping it opens an instruction box on the keyboard itself. Whatever you type there is the prompt for that run, so Custom can write brand-new text from nothing instead of transforming what's already in the field.
 
+In a password field the chips that read the field are greyed out, and no action runs at all, Custom included. The text in a password box never goes to a provider, the same rule [AI chat](/tools/ai-chat/) follows when it reads a field.
+
 If nothing is configured yet, the panel shows a short explanation in place of the chip row. You get an **Open settings** shortcut when no provider is set up, which is where a fresh install starts, or a **Download a model** shortcut when On-device is selected and nothing has come down yet. A model that's downloading right now takes over that empty state with its progress. Once you're past the empty state, a one-line progress strip sits above the chips, so a download you started in Settings stays visible while you carry on typing.
 
 <PhoneFrame side caption="The empty state shown before any provider or local model is set up.">

@@ -24894,6 +24894,10 @@ open class WMKeyboardService : InputMethodService() {
      * would only make the model invent something.
      */
     private fun aiFieldHasText(): Boolean {
+        // Never out of a password field: the action chips stay greyed out
+        // however the editor answers. Same rule the chat attachment follows
+        // (see [aiChatAttachmentFromField]).
+        if (_uiState.value.secureField) return false
         val ic = currentInputConnection ?: return false
         if (!ic.getSelectedText(0).isNullOrBlank()) return true
         return extractFieldText().isNotBlank()
@@ -25352,6 +25356,11 @@ open class WMKeyboardService : InputMethodService() {
         generated: Boolean = false,
         fromSelection: Boolean = false,
     ) {
+        // A password field's text never leaves the device, whatever the user
+        // pressed. The guard [aiChatAttachmentFromField] already carries for
+        // chat, applied to every AI run: the chips are greyed out in such a
+        // field ([aiFieldHasText]), so this is the backstop.
+        if (_uiState.value.secureField) return
         aiJob?.cancel()
         // A downloaded on-device model the user asked to stand in for the
         // server (#452): tried first with no connection, and again if the
@@ -28171,6 +28180,9 @@ open class WMKeyboardService : InputMethodService() {
         val state = _uiState.value
         val deepl = state.settings.translate.deepl
         if (!deepl.writeActive || state.grammar.rephrase?.working == true) return
+        // The whole field goes to DeepL, so a password field is refused here
+        // the same way the AI actions and chat refuse it.
+        if (state.secureField) return
         vibrate()
         val text = state.grammar.sourceText.ifBlank { extractFieldText() }.take(DeepLClient.MAX_CHARS)
         if (text.isBlank()) return

@@ -159,6 +159,10 @@ A secure field switches off, for as long as it has focus:
 - **Voice dictation, entirely.** Tap the voice tool in a password field and
   you get `You cannot use voice typing in a password field` instead of a
   recording. That's a hard block rather than a hidden strip.
+- **The AI actions and DeepL Write.** Both send the field's text to a
+  server, so in a password field no AI action runs and the Grammar panel has
+  no DeepL Write button. Nothing goes out even if you have a cloud provider
+  set up.
 
 What a secure field does *not* switch off is character entry itself.
 Transliteration composing still runs in password fields. That's the
