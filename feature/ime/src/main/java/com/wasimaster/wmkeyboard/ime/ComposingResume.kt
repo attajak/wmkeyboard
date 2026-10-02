@@ -31,6 +31,14 @@ import com.wasimaster.wmkeyboard.core.prediction.WordContext
  * conversion composer sets [Composer.isTransliterating] too, so the one term
  * covers both.
  *
+ * That is what [Composer.resumesComposedText] asks, and Vietnamese Telex and VNI
+ * are the transliterators that answer yes: their output is a pure function of
+ * their keystrokes, so the word read out of the field can be spelled back into
+ * the keys that would compose it ([Composer.resumeBuffer]) and edited on. The
+ * resume itself declines per word when that spelling does not survive the round
+ * trip, so this stays the cheap gate it was — one field read is still only paid
+ * for a layout that may use it.
+ *
  * Everything that types its own script qualifies — Latin, Cyrillic, Greek,
  * Arabic, Hebrew, and the cluster-shaping layouts (Probhat, Jatiya, the fixed
  * Devanagari/Tamil/… ones). Bengali typed on Probhat is Bengali in the field and
@@ -47,7 +55,7 @@ import com.wasimaster.wmkeyboard.core.prediction.WordContext
  * complete from the same sources English does.
  */
 internal fun composingResumable(composer: Composer, hasWordSources: Boolean): Boolean =
-    hasWordSources && !composer.isTransliterating
+    hasWordSources && composer.resumesComposedText
 
 /**
  * The word a language switch mid-word may hand to a transliterating layout as

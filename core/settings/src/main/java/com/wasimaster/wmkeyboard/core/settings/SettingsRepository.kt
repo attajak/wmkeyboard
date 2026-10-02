@@ -2960,6 +2960,7 @@ data class KeyboardSettings(
     val conjunctBackspaceLanguages: Set<String> = emptySet(),
     /** Chinese/Cantonese conversion-IME options (see [CjkSettings] for why nested). */
     val cjk: CjkSettings = CjkSettings(),
+    val vietnamese: VietnameseSettings = VietnameseSettings(),
     val oneHandedMode: OneHandedMode = OneHandedMode.OFF,
     /** Per-orientation one-handed width, height scale and dock side. */
     val oneHanded: OneHandedSettings = OneHandedSettings(),
@@ -4562,6 +4563,30 @@ data class CjkSettings(
     val fullWidthSpaceLanguages: Set<String> = emptySet(),
     /** Which region's vocabulary Traditional output should prefer. */
     val hanRegion: HanVariant.HanRegion = HanVariant.HanRegion.GENERIC,
+)
+
+/**
+ * Vietnamese options. Keyed by the language rather than by the layout, so the
+ * Telex and the VNI board share one answer — they are two spellings of the same
+ * request, and a person switching between them means the same thing by both.
+ */
+data class VietnameseSettings(
+    /**
+     * Whether a tone key may tone only a syllable Vietnamese actually spells.
+     *
+     * Off, Telex marks whatever the vowel run allows, so `fas` becomes `fá` —
+     * free tone marking. On, a tone key that would land on something that is not
+     * a word is the letter it is drawn as instead: `fas` stays `fas`, `fix`
+     * stays `fix`. `f` is not an onset, so there was never a word there.
+     *
+     * The rule is Vietnamese spelling, not "does it look English": `mix` is
+     * still `mĩ`, because m is an onset and ĩ is a tone it can carry.
+     *
+     * Off by default. It changes what the keys do, and a Telex typist who has
+     * learned the loose rule would be surprised by it; the strict reading is
+     * the one that has to be asked for.
+     */
+    val strictTones: Boolean = false,
 )
 
 /**
@@ -8391,6 +8416,7 @@ class SettingsRepository(private val context: Context) {
         private val KANA_LOOSE_MARKS = booleanPreferencesKey("kana_loose_marks")
         private val FULL_WIDTH_SPACE_LANGUAGES = stringSetPreferencesKey("full_width_space_languages")
         private val CJK_HAN_REGION = stringPreferencesKey("cjk_han_region")
+        private val VI_STRICT_TONES = booleanPreferencesKey("vi_strict_tones")
         private val ONE_HANDED_MODE = stringPreferencesKey("one_handed_mode")
         private val ONE_HANDED_PORTRAIT_ONLY = booleanPreferencesKey("one_handed_portrait_only")
         // One-handed width leaves room for the rail on the inner edge, so it is
@@ -9326,6 +9352,7 @@ class SettingsRepository(private val context: Context) {
             rows = readRows(p, defaults),
             conjunctBackspaceLanguages = conjunctLanguagesFromPrefs(p, layoutSelection.enabledLanguages),
             cjk = readCjk(p, defaults),
+            vietnamese = readVietnamese(p, defaults),
             oneHandedMode = p[ONE_HANDED_MODE]
                 ?.let { runCatching { OneHandedMode.valueOf(it) }.getOrNull() }
                 ?: defaults.oneHandedMode,
@@ -9884,6 +9911,11 @@ class SettingsRepository(private val context: Context) {
             hanRegion = p[CJK_HAN_REGION]
                 ?.let { runCatching { HanVariant.HanRegion.valueOf(it) }.getOrNull() }
                 ?: defaults.cjk.hanRegion,
+        )
+
+    private fun readVietnamese(p: Preferences, defaults: KeyboardSettings) =
+        VietnameseSettings(
+            strictTones = p[VI_STRICT_TONES] ?: defaults.vietnamese.strictTones,
         )
 
     private fun readOneHanded(p: Preferences, defaults: KeyboardSettings) =
@@ -15626,6 +15658,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setPinyinFuzzy(value: Boolean) =
         editPrefs { it[PINYIN_FUZZY] = value }
+
+    suspend fun setVietnameseStrictTones(value: Boolean) =
+        editPrefs { it[VI_STRICT_TONES] = value }
 
     suspend fun setPinyinFuzzyPair(id: String, on: Boolean) = editPrefs { p ->
         val current = p[PINYIN_FUZZY_PAIRS] ?: PinyinFuzzy.ALL_PAIRS

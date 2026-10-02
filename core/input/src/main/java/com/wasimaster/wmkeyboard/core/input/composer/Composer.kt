@@ -29,6 +29,52 @@ interface Composer {
     val isTransliterating: Boolean get() = false
 
     /**
+     * Whether a word read back out of the field may be re-armed as the composing
+     * buffer at all — the word-independent half of [resumeBuffer], and the reason
+     * it is asked before the field is read.
+     *
+     * False for every composer whose buffer is not the field's text: Avro's
+     * buffer is the roman source of Bengali text that cannot be reversed back
+     * into it, Hangul's is jamo, and a conversion IME's is a reading with a whole
+     * choice of outputs behind it. Asking this first keeps a blocking read of the
+     * focused app off the caret path for the layouts that could never use it.
+     *
+     * Vietnamese Telex and VNI are the exception among transliterators: their
+     * output is a pure function of their keystrokes, so a word already in the
+     * field can be spelled back into keys ([resumeBuffer]) and edited further.
+     */
+    val resumesComposedText: Boolean get() = !isTransliterating
+
+    /**
+     * The composing buffer that reproduces [text] — the word the caret was put
+     * back into, read out of the field — or null when this composer cannot take
+     * it.
+     *
+     * Only asked when [resumesComposedText] is true. The buffer is the field's
+     * text itself for most layouts, so the default is the identity; a
+     * transliterator overrides it to spell its own output back into keys, and
+     * answers null for anything its keys would not compose exactly, which leaves
+     * the word with the read-only treatment it has today.
+     */
+    fun resumeBuffer(text: String): String? = if (isTransliterating) null else text
+
+    /**
+     * The composing buffer after one backspace — what is left of [buffer] once
+     * the last thing the user can *see* has been taken off it.
+     *
+     * Not the same as dropping the last key. A transliterator's buffer holds
+     * the keys while the field holds what they spelled, and the last letter on
+     * screen may sit several keys back with a tone key or two riding it: one
+     * backspace over `huowngs` (`hướng`) has to leave `hướn`, not `hương`.
+     *
+     * The default drops one key, which is what every composer whose keys *are*
+     * its letters needs. Vietnamese overrides it to take the last letter of
+     * its output and keep the marks of the letters before it.
+     */
+    fun backspaceBuffer(buffer: String): String =
+        if (buffer.isEmpty()) buffer else buffer.dropLast(1)
+
+    /**
      * The language whose dictionary a phonetic transliterator is ranked against
      * (`"bn"` for Avro), by `LanguageDef.id`: its commit and suggestions route
      * through that language's phonetic index and spelling map rather than

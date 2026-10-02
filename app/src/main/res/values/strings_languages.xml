@@ -165,6 +165,10 @@
     <string name="languages_fancy_style_title">Style</string>
     <string name="languages_fancy_style_row_title">Fancy style</string>
     <string name="languages_fancy_style_row_subtitle">The lettering the fancy keyboard types. Also switchable from the strip over the keys.</string>
+    <string name="languages_vietnamese_tones_title">Tone marks</string>
+    <string name="languages_vietnamese_strict_tones_title">Only tone real syllables</string>
+    <string name="languages_vietnamese_strict_tones_subtitle">A tone key is a letter unless the word is one the language spells</string>
+    <string name="languages_vietnamese_strict_tones_info">Telex and VNI mark a tone whenever the vowels allow it, so typing fas gives fá even though f is not a Vietnamese onset and there is no word there. With this on, a tone key that would land on something that is not a word is typed as the letter it is drawn as instead, and only a syllable the language actually spells takes a tone. mix is still mĩ, because that is a word.</string>
     <string name="languages_numeral_system_title">Numeral system</string>
     <!-- %1$s is the English name of the language, for example "Arabic". -->
     <string name="languages_numeral_system_subtitle">The digits that the number row and the keypad show while you type <xliff:g id="language" example="Arabic">%1$s</xliff:g></string>

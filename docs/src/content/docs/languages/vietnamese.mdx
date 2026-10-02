@@ -1,0 +1,94 @@
+---
+title: "Vietnamese"
+description: "Type Vietnamese with Telex or VNI: plain keys in, accented letters and tones out. How the tone lands, how to take one back, and how English words survive."
+sidebar:
+  order: 3.7
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+
+Vietnamese ships four layouts. **Tiếng Việt Telex** is what you get when you add Vietnamese, and it spells every mark and tone with ordinary letters. **Tiếng Việt VNI** does the same with digits. **Tiếng Việt** is a plain QWERTY with the accented letters on long-press, and **Tiếng Việt T9** is the keypad (see [Ambiguous layouts](/languages/ambiguous/#thai-lao-and-vietnamese)). This page is about Telex and VNI, because they're the two that build letters out of keys.
+
+## Turning it on
+
+<SettingsPath path="Languages & layouts / Tiếng Việt · Vietnamese / Layouts" />
+
+Add Vietnamese and Telex is on. Tap the VNI card on the same screen if that's the method you learned, and turn Telex off if you don't want both in the switch ring. Then download the Vietnamese word list from the **Dictionary** row. Telex and VNI type fine without it, but the list is what gives you suggestions, lets you go back into a word you already typed, and lets [autocorrect](#filling-in-what-you-left-out) put back a mark you missed.
+
+## Telex
+
+The word you're typing shows up already composed, marks and all, and the space commits it.
+
+| You type | You get | |
+|---|---|---|
+| `aa`, `ee`, `oo` | â, ê, ô | circumflex |
+| `aw` | ă | breve |
+| `ow`, `uw` | ơ, ư | horn |
+| `w` on its own | ư | `tw` is tư |
+| `uow` + a final consonant | ươ | `nuocsw` is nước, `huowng` is hương |
+| `dd` | đ | |
+| `s`, `f`, `r`, `x`, `j` | sắc, huyền, hỏi, ngã, nặng | `tieengs` is tiếng |
+| `z` | takes the tone off | `toansz` is toan |
+
+The tone key can go anywhere after the vowels, and it doesn't have to be last. `tieengs` and `tieesng` both give tiếng, because the keyboard puts the tone on the right vowel by the usual rule rather than on the letter you typed it after. So `hoafng` is hoàng, and `thuowr` is thuở, since a vowel with a mark of its own takes the tone.
+
+A mark key doesn't have to come straight after its letter either. `dod` is đo, `tono` is tôn, and `nuocsw` is nước: the key looks back for the letter it names, as long as the word it makes could still be Vietnamese. `hello` has no such letter and stays as it is. `banana` does, and comes out as bânna unless [Only tone real syllables](#only-toning-real-syllables) is on.
+
+### Taking a mark back
+
+Press the same key again and the mark comes off and the letter goes in instead. `hass` is has, `aaa` is aa, and `oww` is ow. For a tone there's also `z`, which removes the tone and types nothing. With no tone to remove, `z` is just a z.
+
+A `w` on its own is ư, and a second `w` turns it back into w. Every `w` after that is a w as well, so holding the key down types a run of them instead of flipping between ư and w.
+
+### `uo` and `ươ`
+
+`huơ`, `quơ` and `thuở` are written with a plain `u`, while `hương`, `người` and `đường` horn both letters. They're the same keys until the end of the word, so the keyboard decides once it can see what follows:
+
+- `huow` is huơ, and `huowng` is hương, because a final consonant makes it ươ.
+- `nguowif` is người, because ng can't come before an open uơ.
+- After `qu` the u belongs to the qu, so `quow` is quơ and `quowng` is quơng.
+- `ww` after `uo` horns the u too, if you want ươ and the keyboard picked uơ.
+
+### English on Telex
+
+Telex reads letters as marks, which gets in the way of English typed on the same keyboard. Two things keep the common cases readable:
+
+- A word that starts with `w` keeps its w when what follows can't come after ư. `why`, `when`, `we`, `with` and `web` stay English.
+- A doubled key is always an escape hatch: `hass` is has, `oww` is ow.
+
+For anything more, turn on the setting below, or switch to the plain **Tiếng Việt** layout for a stretch of English.
+
+### Only toning real syllables
+
+<SettingsPath path="Languages & layouts / Tiếng Việt · Vietnamese / Tone marks / Only tone real syllables" />
+
+Off by default. Telex normally puts a tone on anything with a vowel in it, so `fas` becomes fá even though no Vietnamese word starts with f. Turn this on and a tone key only marks a word that Vietnamese could actually spell. Anything else gets the letter instead: `fas` stays fas and `fix` stays fix. A word that picked up a mark but turned out not to be Vietnamese goes back to the keys you typed, so `banana` stays banana. It goes by Vietnamese spelling rather than by guessing at English, so `mix` is still mĩ, because that's a word. Abbreviations with no vowel keep their đ, so `ddc`, `ddt` and `ddh` still give đc, đt and đh. The setting covers VNI too.
+
+## VNI
+
+VNI is the same engine with digits for the marks.
+
+| You type | You get |
+|---|---|
+| `a6`, `e6`, `o6` | â, ê, ô |
+| `a8` | ă |
+| `o7`, `u7` | ơ, ư |
+| `d9` | đ |
+| `1`, `2`, `3`, `4`, `5` | sắc, huyền, hỏi, ngã, nặng |
+| `0` | takes the tone off |
+
+A digit with nothing to mark is typed as the digit, so `banana1`, a street number or a model name keeps its numbers. `0` only does something when the word has a tone. Otherwise it's a 0.
+
+## Backspace
+
+Backspace takes off the last letter you can see, not the last key you pressed. `huowngs` is hướng, and one press leaves hướn with the tone still on the ơ. `hif` is hì, and one press takes the whole ì, tone included.
+
+## Going back into a word
+
+Put the cursor at the end of a Vietnamese word you already typed and you can carry on typing it. A tone key typed there marks that word rather than being added as a letter, so coming back to the end of `chao` and typing `f` gives chào. This needs a word list on the device (the same condition as for any other language), and it only kicks in for a word the keys could have typed. A word with marks Telex or VNI can't produce is left alone.
+
+## Filling in what you left out
+
+With the Vietnamese word list downloaded and autocorrect on, a word typed without its marks gets them back when the list has only one way to read it. `tieng` becomes tiếng, `khong` becomes không, `duong` becomes đường, and `ngieeng` becomes nghiêng. One backspace takes the correction back and leaves the word as you typed it.
+
+Two things it never does. A word the list already knows is never changed, so a real word with the wrong tone stays as typed. And a spelling with several readings is left alone: `toan` could be toàn, toán or toản, so the keyboard doesn't pick one.

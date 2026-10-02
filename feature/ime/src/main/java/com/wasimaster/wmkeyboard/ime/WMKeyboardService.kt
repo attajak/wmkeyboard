@@ -569,6 +569,9 @@ import com.wasimaster.wmkeyboard.core.input.composer.T9Pinyin
 import com.wasimaster.wmkeyboard.core.input.composer.ZhuyinSyllables
 import com.wasimaster.wmkeyboard.core.input.composer.CodeTableDictionary
 import com.wasimaster.wmkeyboard.core.input.composer.ConversionDictionary
+import com.wasimaster.wmkeyboard.core.input.composer.VietnameseConfig
+import com.wasimaster.wmkeyboard.core.input.composer.VietnameseTelexComposer
+import com.wasimaster.wmkeyboard.core.input.composer.VietnameseVniComposer
 import com.wasimaster.wmkeyboard.core.script.FancyStyle
 import com.wasimaster.wmkeyboard.core.script.FancyStyles
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
@@ -1169,7 +1172,24 @@ open class WMKeyboardService : InputMethodService() {
         set(value) {
             // A word the user came back to and edited in the buffer ends here,
             // whatever ends it: the buffer is the word as they left it.
-            finishComposingRevision(field.toString())
+            //
+            // Only for the composers whose buffer *is* the field's text, though.
+            // A transliterator's buffer holds the keys, not the word they
+            // spelled, and a revision armed on a resumed word holds the word
+            // ([armComposingRevision] is called from the resume alone): handing
+            // the keys over as "what the word became" reads `hát` → `hats` — a
+            // pair between a word and the keystrokes that spelled it, which the
+            // commit path already refuses to teach (see the `isTransliterating`
+            // term there). [composedPreview] is how the field's own text is
+            // derived from a buffer everywhere else, and hands back a
+            // non-transliterator's buffer unchanged.
+            finishComposingRevision(
+                if (revision?.mode == WordRevision.Mode.COMPOSING) {
+                    composedPreview(_uiState.value, field.toString())
+                } else {
+                    field.toString()
+                },
+            )
             revisionFragment = ""
             field = value
             // Any wholesale replacement (commit, field change, re-arm from the
@@ -3749,6 +3769,8 @@ open class WMKeyboardService : InputMethodService() {
                 CjkConfig.lazyJyutping = settings.cjk.jyutpingLazy
                 CjkConfig.looseKanaMarks = settings.cjk.kanaLooseMarks
                 HanVariant.region = settings.cjk.hanRegion
+                // Vietnamese, pushed the same way and for the same reason.
+                VietnameseConfig.strictTones = settings.vietnamese.strictTones
                 // The settings half of the learning gate; the per-field half
                 // (incognito, fields that forbid typing intelligence) is checked
                 // at the commit itself, where the field is known.
@@ -9904,18 +9926,43 @@ open class WMKeyboardService : InputMethodService() {
             // not the word the field shows, so a "cluster" read off it is a run
             // of unrelated keypresses; one backspace takes back one press, and
             // the reading is decoded afresh from the presses that are left.
-            val length = if (
-                !state.layouts.ambiguousKeys &&
-                state.language.id in state.settings.conjunctBackspaceLanguages
-            ) {
-                state.composer.deleteLength(composing).coerceIn(1, composing.length)
+            //
+            // Vietnamese is the exception, and for the same reason its buffer is
+            // not the field's text at all: it holds keys (`huowngs`) where the
+            // field holds a word (`hướng`), so a press has to take off a *letter*
+            // — one press for `hướng` where the keys would cost two. Which keys
+            // that is the composer works out ([Composer.backspaceBuffer]); a
+            // tone key goes only when the letter it marks is the one going.
+            val before = composing.toString()
+            val after = if (isVietnameseTransliterator(state)) {
+                state.composer.backspaceBuffer(before)
             } else {
-                1
+                val length = if (
+                    !state.layouts.ambiguousKeys &&
+                    state.language.id in state.settings.conjunctBackspaceLanguages
+                ) {
+                    state.composer.deleteLength(composing).coerceIn(1, composing.length)
+                } else {
+                    1
+                }
+                before.dropLast(length)
             }
-            composing.setLength(composing.length - length)
-            repeat(length) { composingTouch.removeLastOrNull() }
-            repeat(length) { composingKeys.removeLastOrNull() }
-            repeat(length) { composingHints.removeLastOrNull() }
+            composing.setLength(0)
+            composing.append(after)
+            if (before.startsWith(after)) {
+                repeat(before.length - after.length) {
+                    composingTouch.removeLastOrNull()
+                    composingKeys.removeLastOrNull()
+                    composingHints.removeLastOrNull()
+                }
+            } else {
+                // The keys were re-spelled rather than cut, so nothing is known
+                // about the new ones — the same boundary a re-armed word is, and
+                // the frames go the same way (see the `composing` setter).
+                composingTouch.clear()
+                composingKeys.clear()
+                composingHints.clear()
+            }
             ambiguousReading = null
             updateComposingText(ic)
             refreshSuggestions()
@@ -10505,12 +10552,16 @@ open class WMKeyboardService : InputMethodService() {
      * preceding-word context is re-derived — a caret mid-word or after a
      * separator has no word to resume, so it predicts the next one (or clears).
      *
-     * Any language whose composing buffer is the field's own text and that has
-     * something to complete from — see [composingResumable], which is where the
-     * transliterating layouts drop out. The cluster-shaping ones (Probhat,
-     * Jatiya, fixed Devanagari…) are in: they do not compose while typing, but a
-     * word handed to them here is their own script and they keep composing it
-     * until the next boundary (see [processTypedText]'s `composingMode`).
+     * Any language that has something to complete from and whose composer can
+     * say what to put behind the region — see [composingResumable], which is
+     * where the transliterating layouts drop out. The cluster-shaping ones
+     * (Probhat, Jatiya, fixed Devanagari…) are in: they do not compose while
+     * typing, but a word handed to them here is their own script and they keep
+     * composing it until the next boundary (see [processTypedText]'s
+     * `composingMode`). Vietnamese is in too, and is the one that hands back
+     * something other than the word: its buffer is the keystrokes that spell it
+     * ([Composer.resumeBuffer]), so a tone key typed after the resume lands on
+     * the word rather than being spelled into it.
      * [newSelStart] is the caret offset the field just reported, used to place
      * the composing region.
      */
@@ -10652,10 +10703,20 @@ open class WMKeyboardService : InputMethodService() {
                 // And only if newSelStart is still the live caret: the word was
                 // read at the *current* cursor, so pairing it with a stale echo
                 // offset puts the region over the wrong span (see caretStillAt).
-                if (caretStillAt(ic, newSelStart) &&
+                //
+                // The buffer is the composer's own reading of the word, which is
+                // the word itself for most layouts and the keystrokes that spell
+                // it for Vietnamese (Telex `toois` behind the field's `tối`), so
+                // the next tone key lands on the word the caret came back to
+                // instead of being spelled into it. A composer that cannot read
+                // this word back — one of the several spellings that would not
+                // compose it — leaves the caret where the fall-through below
+                // treats it: read-only.
+                val buffer = state.composer.resumeBuffer(word)
+                if (buffer != null && caretStillAt(ic, newSelStart) &&
                     ic.setComposingRegion(newSelStart - word.length, newSelStart)
                 ) {
-                    composing = StringBuilder(word)
+                    composing = StringBuilder(buffer)
                     composingCaseTrusted = false
                     // Went back to this word: if a glide wrote it, the strip
                     // offers that stroke's other readings (#115).
@@ -12691,6 +12752,17 @@ open class WMKeyboardService : InputMethodService() {
         // On a phonetic layout that could have committed this buffer in either
         // script: the other script's word, which a backspace or the chip flips to.
         var scriptAlternate: String? = null
+        // The word a Vietnamese buffer commits, composed ahead of the branch
+        // that ranks it: the undo below has to put this back, not the keystrokes
+        // that spelled it. Null for every other composer.
+        val vietnameseComposed =
+            if (isVietnameseTransliterator(state)) state.composer.composeBuffer(typed) else null
+        // The word the field holds before this commit replaces it: the
+        // composer's own spelling for Vietnamese, the buffer itself for every
+        // other composer. Everything that has to name the word being replaced —
+        // the undo, the near-miss chip, the correction span — names this, and
+        // never the keystrokes that spelled it.
+        val fieldWord = vietnameseComposed ?: typed
         val output = when {
             state.composer.phoneticLanguage != null -> {
                 val language = state.composer.phoneticLanguage.orEmpty()
@@ -12704,10 +12776,35 @@ open class WMKeyboardService : InputMethodService() {
                 } ?: state.composer.composeBuffer(typed)
                 if (isLatinOnPhonetic(top, state)) sentenceCasedLatin(top, typed, state) else top
             }
-            // Other transliterators (Hangul, Vietnamese) commit the composed text
-            // directly, with no dictionary pass.
+            // Vietnamese commits a composed Vietnamese word, and a word list
+            // knows more about that word than the composer does: the spelling
+            // with the tone or the letter the user left out is in the list, and
+            // the one the keystrokes composed is not. Ranked on the composed
+            // text, because the buffer holds keystrokes ("tieengs") that no list
+            // has heard of. A word the list does hold is protected from
+            // correction, so a real word is committed as the user wrote it.
+            vietnameseComposed != null && autocorrect && state.allowsTypingIntelligence &&
+                !gluedToWord -> {
+                val decision = suggestionEngine?.decideCorrection(
+                    vietnameseComposed,
+                    timingMultiplier = timingMultiplier(),
+                    previousWord = previousWord,
+                ) ?: SuggestionEngine.NO_CORRECTION
+                corrected = decision.apply?.takeIf { it != vietnameseComposed }
+                offered = decision.offer?.takeIf { it != vietnameseComposed }
+                obviousness = decision.obviousness
+                corrected ?: vietnameseComposed
+            }
+            // Other transliterators (Hangul) commit the composed text
+            // directly, with no dictionary pass. A layout whose keys spell the
+            // word outright (Khipro) commits the English word they spell; the
+            // Vietnamese pair commits the word its own list knows. The two
+            // never both answer — `completionLanguage` is set on the layouts
+            // that have no Vietnamese dictionary pass, and [vietnameseComposed]
+            // on the one that has no completion language.
             state.composer.isTransliterating ->
-                completionLatin(state, typed) ?: state.composer.composeBuffer(typed)
+                completionLatin(state, typed) ?: vietnameseComposed
+                    ?: state.composer.composeBuffer(typed)
             // An ambiguous board commits its reading, always. There is no
             // confidence gate here and there should not be: the buffer holds
             // anchor letters, so "leave it as typed" is not a conservative
@@ -12773,14 +12870,20 @@ open class WMKeyboardService : InputMethodService() {
             )
         }
         val revertible = corrected?.let {
-            RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = typed, committed = it)
+            // The undo puts back what the user had in the field, and one
+            // backspace has to take the correction back the same way.
+            RevertibleCommit(
+                RevertibleCommit.Kind.AUTOCORRECT,
+                original = fieldWord,
+                committed = it,
+            )
         } ?: apostrophized?.takeIf { it == output }?.let {
             // A repaired apostrophe — or the lone "i" made "I" — is the
             // keyboard rewriting a word just as surely, and one backspace has
             // to take it back the same way (#402). Its undo is remembered
             // against the pair like any correction's, which is what keeps the
             // next space from repairing it straight back.
-            RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = typed, committed = it)
+            RevertibleCommit(RevertibleCommit.Kind.AUTOCORRECT, original = fieldWord, committed = it)
         } ?: scriptFlip?.let {
             RevertibleCommit(
                 RevertibleCommit.Kind.SCRIPT,
@@ -12810,7 +12913,7 @@ open class WMKeyboardService : InputMethodService() {
         } else if (revertible != null) {
             armRevertGuard()
         }
-        armUndoChip(typed, corrected, obviousness, state)
+        armUndoChip(fieldWord, corrected, obviousness, state)
         if (revertible != null && revertible.kind == RevertibleCommit.Kind.SCRIPT) {
             // The same chip, offering the other script. No obviousness gate: a
             // script the keyboard picked for a word both languages have is
@@ -12822,7 +12925,7 @@ open class WMKeyboardService : InputMethodService() {
         // Armed before the commit lands so the strip refresh that follows it
         // publishes the chip; cleared here too, so a commit with no near miss
         // takes the previous word's offer down with it.
-        correctionOfferFor = offered?.let { typed }
+        correctionOfferFor = offered?.let { fieldWord }
         pendingCorrectionOffer = offered
         ic.commitText(
             if (revertible == null || revertible.kind == RevertibleCommit.Kind.SCRIPT) {
@@ -16872,7 +16975,24 @@ open class WMKeyboardService : InputMethodService() {
         typed.isNotEmpty() && state.composer.phoneticLanguage == null && !state.layouts.ambiguousKeys &&
             // Khipro's keys spell the word exactly; there is nothing to correct.
             state.composer.completionLanguage == null &&
+            // Vietnamese commits a composed word through its own branch, which
+            // asks the engine about that word and not about the keystrokes. A
+            // resolution computed over "tieengs" could only be discarded.
+            !isVietnameseTransliterator(state) &&
             state.settings.correction.enabled && state.allowsTypingIntelligence
+
+    /**
+     * Whether the composer writes Vietnamese by transliteration, Telex or VNI.
+     *
+     * These two commit a composed Vietnamese word, where every other
+     * transliterator commits the reading itself — Hangul's buffer holds jamo,
+     * and there is no list to rank that against. Asked by identity rather than
+     * by a new flag on `Composer`: upstream retired `isBengaliPhonetic` in
+     * favour of a language id the composer carries, and a second such flag
+     * would be the branch that change set out to remove.
+     */
+    private fun isVietnameseTransliterator(state: KeyboardUiState): Boolean =
+        state.composer === VietnameseTelexComposer || state.composer === VietnameseVniComposer
 
     /**
      * Starts working out what a space would make of [typed], now.

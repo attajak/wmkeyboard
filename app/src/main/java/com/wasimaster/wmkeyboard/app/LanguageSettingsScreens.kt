@@ -966,6 +966,23 @@ internal fun LanguageDetailScreen(
         }
     }
 
+    // Vietnamese tone marking. One answer for both boards: Telex and VNI are
+    // two spellings of the same request, and someone switching between them
+    // means the same thing by both.
+    if (langId == "vi") {
+        SettingsGroup(stringResource(R.string.languages_vietnamese_tones_title)) {
+            item {
+                ToggleSetting(
+                    R.string.languages_vietnamese_strict_tones_title,
+                    stringResource(R.string.languages_vietnamese_strict_tones_subtitle),
+                    settings.watch { it.vietnamese.strictTones },
+                    info = stringResource(R.string.languages_vietnamese_strict_tones_info),
+                    default = SettingsDefaults.vietnamese.strictTones,
+                ) { scope.launch { repository.setVietnameseStrictTones(it) } }
+            }
+        }
+    }
+
     // Cluster deletion, for the languages whose script has clusters to delete.
     // Per language for the same reason numerals are: someone typing Bengali and
     // Hindi together may well want whole conjuncts gone in one and code points

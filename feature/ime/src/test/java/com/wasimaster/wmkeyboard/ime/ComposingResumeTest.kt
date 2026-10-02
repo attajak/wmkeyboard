@@ -2,6 +2,8 @@ package com.wasimaster.wmkeyboard.ime
 
 import com.wasimaster.wmkeyboard.core.input.composer.JapaneseComposer
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinComposer
+import com.wasimaster.wmkeyboard.core.input.composer.VietnameseTelexComposer
+import com.wasimaster.wmkeyboard.core.input.composer.VietnameseVniComposer
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
@@ -70,6 +72,25 @@ class ComposingResumeTest {
         val avro = composerOf(BuiltInLayouts.AVRO)
         assertTrue(avro.isTransliterating)
         assertFalse(composingResumable(avro, hasWordSources = true))
+    }
+
+    @Test
+    fun `vietnamese telex and vni resume`() {
+        // The transliterators that *can*: both are pure functions of their
+        // keystrokes, so the word read out of the field is spelled back into
+        // the keys that spell it (`tôi` → `tooi`, VNI `to6i`) and the caret
+        // types on into it. Pinned next to Avro and Hangul because the gate
+        // used to read "a transliterator's buffer is not its output", which is
+        // still true of them and no longer the whole story.
+        for (composer in listOf(VietnameseTelexComposer, VietnameseVniComposer)) {
+            assertTrue(composer.isTransliterating)
+            assertTrue(composer.resumesComposedText)
+            assertTrue(composingResumable(composer, hasWordSources = true))
+        }
+        // The same rule as every other layout: nothing to complete from, no
+        // resume.
+        assertFalse(composingResumable(VietnameseTelexComposer, hasWordSources = false))
+        assertFalse(composingResumable(VietnameseVniComposer, hasWordSources = false))
     }
 
     @Test
