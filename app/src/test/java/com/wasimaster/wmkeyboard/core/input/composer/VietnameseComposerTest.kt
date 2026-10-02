@@ -109,6 +109,20 @@ class VietnameseComposerTest {
         assertEquals("flow", c.composeBuffer("floww"))
         assertEquals("ow", c.composeBuffer("oww"))
         assertEquals("uw", c.composeBuffer("uww"))
+        // A w typed on its own made the ư, so a second one gives the w back (#467).
+        assertEquals("w", c.composeBuffer("ww"))
+        assertEquals("W", c.composeBuffer("Ww"))
+        assertEquals("why", c.composeBuffer("wwhy"))
+        // English behind a leading w: nothing Vietnamese goes from ư to these.
+        assertEquals("why", c.composeBuffer("why"))
+        assertEquals("when", c.composeBuffer("when"))
+        assertEquals("we", c.composeBuffer("we"))
+        assertEquals("with", c.composeBuffer("with"))
+        // Vietnamese that opens with ư is untouched.
+        assertEquals("ưa", c.composeBuffer("wa"))
+        assertEquals("ưng", c.composeBuffer("wng"))
+        assertEquals("ước", c.composeBuffer("wowcs"))
+        assertEquals("ức", c.composeBuffer("wcs"))
         // The uo cluster behaves the same way, both marks at once.
         assertEquals("dương", c.composeBuffer("duongw"))
         assertEquals("đương", c.composeBuffer("dduongw"))

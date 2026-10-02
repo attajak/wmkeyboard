@@ -1231,6 +1231,7 @@ internal object SettingsRowIcons {
         put(R.string.voice_ui_title) { Icons.Outlined.ViewAgenda }
         put(R.string.voice_typing_title) { Icons.Outlined.RecordVoiceOver }
         put(R.string.voice_hold_picks_title) { Icons.Outlined.TouchApp }
+        put(R.string.voice_pause_media_title) { Icons.Outlined.MusicNote }
         put(R.string.voice_continuous_title) { Icons.Outlined.MicNone }
         put(R.string.voice_punctuation_title) { Icons.Outlined.MoreHoriz }
         put(R.string.voice_engine_title) { Icons.Outlined.GraphicEq }

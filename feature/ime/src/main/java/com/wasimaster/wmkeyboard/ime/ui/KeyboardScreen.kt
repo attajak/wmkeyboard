@@ -424,6 +424,7 @@ import com.wasimaster.wmkeyboard.core.settings.LayoutBehaviorSettings
 import com.wasimaster.wmkeyboard.core.settings.OneHandedSide
 import com.wasimaster.wmkeyboard.core.settings.LetterSwipeAction
 import com.wasimaster.wmkeyboard.core.settings.SpaceSwipeAction
+import com.wasimaster.wmkeyboard.core.settings.switchLayoutIds
 import com.wasimaster.wmkeyboard.core.settings.SpacebarDisplay
 import com.wasimaster.wmkeyboard.core.settings.TransliterationHintMode
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
@@ -13322,7 +13323,7 @@ private fun spacebarArrowsShown(state: KeyboardUiState): Boolean {
         state.settings.spaceLongSwipe == SpaceSwipeAction.LANGUAGE
     return state.settings.spacebarLanguageArrows &&
         swipeSwitchesLanguage &&
-        state.settings.enabledLayoutIds.size > 1
+        state.settings.switchLayoutIds().size > 1
 }
 
 /**
@@ -18397,7 +18398,7 @@ internal fun KeyButton(
                     key, settings.longPressDelayMs, settings.keyRepeat, settings.textEditing,
                     spaceShortSwipe = settings.spaceShortSwipe,
                     spaceLongSwipe = settings.spaceLongSwipe,
-                    enabledLayoutIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) },
+                    enabledLayoutIds = settings.switchLayoutIds(),
                     currentLayoutId = layoutId,
                     setPressed = { down ->
                         // Judged here rather than at the commit: every branch
@@ -18642,7 +18643,7 @@ internal fun KeyButton(
         // five-chip window sliding with the selection — drawing every enabled
         // layout ran off the screen the moment a handful were enabled.
         shownLanguage?.let { previewMode ->
-            val enabledLayoutIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
+            val enabledLayoutIds = settings.switchLayoutIds()
             val previewWindow = if (enabledLayoutIds.size <= 5) {
                 enabledLayoutIds
             } else {
@@ -18736,7 +18737,7 @@ internal fun KeyButton(
         }
 
         if (showLanguagePicker) {
-            val pickerIds = settings.enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
+            val pickerIds = settings.switchLayoutIds()
             val onPick: (String) -> Unit = {
                 showLanguagePicker = false
                 pickerDragIndex = null

@@ -26,7 +26,10 @@ internal enum class VTone(val combining: Char?) {
     NONE(null), ACUTE('́'), GRAVE('̀'), HOOK('̉'), TILDE('̃'), DOT('̣')
 }
 
-private class VLetter(var base: Char, var mark: VMark, val upper: Boolean)
+private class VLetter(var base: Char, var mark: VMark, val upper: Boolean) {
+    /** A `ư` that a `w` typed on its own stands for, with no `u` behind it. */
+    var fromBareW: Boolean = false
+}
 
 internal object VietnameseEngine {
 
@@ -228,14 +231,22 @@ internal object VietnameseEngine {
                             (it.base == 'a' && it.mark == VMark.BREVE) ||
                                 ((it.base == 'o' || it.base == 'u') && it.mark == VMark.HORN)
                         }
-                        if (marked != -1) {
+                        if (marked != -1 && letters[marked].fromBareW) {
+                            // The ư here was never a u: one w made it, so a
+                            // second w gives the w back, not `uw` (#467).
+                            letters[marked].base = 'w'
+                            letters[marked].mark = VMark.NONE
+                            letters[marked].fromBareW = false
+                        } else if (marked != -1) {
                             letters[marked].mark = VMark.NONE
                             letters.add(VLetter('w', VMark.NONE, upper))
                         } else {
                             val applied = applyMark(letters, "a", VMark.BREVE) ||
                                 applyMark(letters, "ou", VMark.HORN)
                             // A bare w is ư, which is Telex as it is written.
-                            if (!applied) letters.add(VLetter('u', VMark.HORN, upper))
+                            if (!applied) {
+                                letters.add(VLetter('u', VMark.HORN, upper).also { it.fromBareW = true })
+                            }
                         }
                     }
                 }
@@ -268,8 +279,33 @@ internal object VietnameseEngine {
                 else -> letters.add(VLetter(lc, VMark.NONE, upper))
             }
         }
+        keepEnglishW(letters, tone)
         return render(letters, tone)
     }
+
+    /**
+     * Puts back the `w` a word began with when what follows cannot follow `ư`
+     * (#467): `why`, `what`, `when` and `we` are English typed on the Telex
+     * layout, and `ưhy` is nothing. Only a leading w is asked about, since that
+     * is where English puts it and where Vietnamese has few words to lose: ưa,
+     * ưng, ức and ước all go on to a letter from [AFTER_BARE_U]. A longer word
+     * that is no syllable either (`with`) is read the same way, except through
+     * `ưo`, which is `ươ` one keystroke before its horn.
+     */
+    private fun keepEnglishW(letters: List<VLetter>, tone: VTone) {
+        val first = letters.firstOrNull() ?: return
+        if (!first.fromBareW || first.mark != VMark.HORN || letters.size < 2) return
+        val next = letters[1].base
+        val english = next !in AFTER_BARE_U ||
+            (letters.size >= 3 && next != 'o' && !VietnameseOrthography.isSyllable(render(letters, tone)))
+        if (english) {
+            first.base = 'w'
+            first.mark = VMark.NONE
+        }
+    }
+
+    /** The letters a syllable that opens with `ư` can go on to. */
+    private const val AFTER_BARE_U = "aoiucnmtp"
 }
 
 /** Vietnamese Telex: letters spell the diacritics (`as`→á, `aw`→ă, `dd`→đ). */

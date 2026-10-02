@@ -96,6 +96,9 @@
     <string name="voice_system_info">Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.</string>
 
     <!-- The line between a tap and a walkie-talkie hold. -->
+    <string name="voice_pause_media_title">Pause media during voice typing</string>
+    <string name="voice_pause_media_subtitle">Pause music and video while the microphone listens</string>
+    <string name="voice_pause_media_info">When voice typing starts, the keyboard asks other apps to pause their sound. Music, podcasts and video stop while the microphone listens. They continue a moment after voice typing stops. An app that ignores the request continues to play.</string>
     <string name="voice_hold_picks_title">Hold the tool to pick a mode</string>
     <string name="voice_hold_picks_subtitle">Press and hold the Voice tool on the toolbar to choose a voice typing mode and start at once</string>
     <string name="voice_hold_picks_info">A press and hold on the toolbar\'s Voice tool opens a menu of the three voice typing modes. Picking one makes it the mode and starts dictation straight away, so switching between one block at a time and typing while you speak is one hold rather than a trip through settings. Tap the tool to stop. Turn this off to give the hold back to the toolbar: it then runs the tool you bound to it, or opens this screen.</string>

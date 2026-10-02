@@ -1081,7 +1081,7 @@ class SuggestionEngine(
     ): List<GlideBeam.Candidate> {
         val romanization = glideRomanization
         val sources = if (romanization.isEmpty) {
-            (walkSources() + glideTriggerSources())
+            (walkSources() + glideTriggerSources() + glideContractionSources())
                 .let { all -> if (tiers == null) all else all.filter { it.tier in tiers } }
         } else {
             romanization.walkSources()
@@ -1425,6 +1425,40 @@ class SuggestionEngine(
         }
         return sources
     }
+
+    /**
+     * The contractions a stroke could not otherwise reach (#451).
+     *
+     * The glide grid has no apostrophe, so a contraction is drawn without one
+     * and repaired afterwards, the way a typed one is: `dont` decodes and
+     * becomes `don't`. That only ever worked for the spellings a word list
+     * happens to hold. The shipped English list has `dont` and `didnt` and no
+     * `doesnt`, `isnt` or `wasnt`, so those strokes found nothing at all.
+     *
+     * Here each such spelling stands in the walk at the count of the
+     * contraction it is drawn for. Only the unambiguous table, so `its` and
+     * `were` are still read as themselves, and only while the repair is on:
+     * without it the stroke would commit `doesnt`.
+     */
+    private fun glideContractionSources(): List<FuzzyBeamSearch.WalkSource> {
+        if (!apostropheFixes || mixLanguageIds().none(Apostrophes::servesLanguage)) return emptyList()
+        val stamp = generation.get()
+        val cached = glideContractions?.takeIf { it.first == stamp }?.second ?: run {
+            val entries = Apostrophes.repairs().mapNotNull { (bare, fixed) ->
+                if (inDictionaries(bare)) return@mapNotNull null
+                dictionaryFrequencyOf(fixed.lowercase()).takeIf { it > 0 }?.let { bare to it }
+            }
+            (if (entries.isEmpty()) PackedTrie.EMPTY else PackedTrie.of(entries))
+                .also { glideContractions = stamp to it }
+        }
+        return cached.walkers().map {
+            FuzzyBeamSearch.WalkSource(it, 0.0, FuzzyBeamSearch.Tier.DICTIONARY)
+        }
+    }
+
+    /** [glideContractionSources]' trie, with the [generation] it was built at. */
+    @Volatile
+    private var glideContractions: Pair<Long, WordSource>? = null
 
     /** [glideTriggers] as walk sources, at the user tier. */
     private fun glideTriggerSources(): List<FuzzyBeamSearch.WalkSource> =
@@ -2768,6 +2802,33 @@ class SuggestionEngine(
         } else {
             null
         }
+
+    /**
+     * The English a space should commit for [roman] on a layout whose keys
+     * spell the word outright (Khipro, #487), or null when it should commit
+     * [composed], the layout's own reading.
+     *
+     * Such a layout has no reading to weigh, so this is a plain rule and not
+     * [PhoneticScriptVerdict]: the keys are an English word, and what they
+     * spell in the layout's script is no word its list or the user knows.
+     * `hello` is English and হেল্লো is nothing; `ami` is আমি and stays.
+     * Under the same switches as the phonetic layouts' ([phoneticAutoEnglish],
+     * with English among the language's secondaries).
+     */
+    fun completionLatin(languageId: String, roman: String, composed: String): String? {
+        if (!phoneticMixing || !phoneticAutoEnglish) return null
+        if (roman.length < 2 || !roman.all { it in 'a'..'z' || it in 'A'..'Z' }) return null
+        if (roman.drop(1).any { it.isUpperCase() }) return null
+        val lower = roman.lowercase()
+        if (suppressed(lower)) return null
+        val english = dictionary.contains(lower) ||
+            (userLexicon.contains(lower) && userLexicon.languageOf(lower) == EN)
+        if (!english) return null
+        val index = phoneticBackend(languageId)?.index ?: return null
+        val native = index.frequencyOf(composed) > 0 || index.frequencyOf(WordKey.surface(composed)) > 0 ||
+            userLexicon.contains(WordKey.of(composed))
+        return if (native) null else latinForm(roman)
+    }
 
     /**
      * The user took [script] for [spelling] where the verdict had chosen the

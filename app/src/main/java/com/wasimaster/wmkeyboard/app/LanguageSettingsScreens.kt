@@ -85,6 +85,7 @@ import com.wasimaster.wmkeyboard.core.script.LanguageSuggestions
 import com.wasimaster.wmkeyboard.core.script.NumeralSystem
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
+import com.wasimaster.wmkeyboard.core.script.isRomanized
 import com.wasimaster.wmkeyboard.core.script.SuggestedLanguage
 import com.wasimaster.wmkeyboard.core.script.SuggestionReason
 import com.wasimaster.wmkeyboard.core.script.resolveNumeralDigits
@@ -928,6 +929,23 @@ internal fun LanguageDetailScreen(
     // same id and resolves in its place, so this list can hold a broken layout
     // too. Same gate as the custom list; switching off is never gated.
     LayoutsGroup(lang, settings, repository, scope, onNavigate)
+
+    // A romanized language is mostly wanted for its words, on the keyboard
+    // of the language it shares letters with (#473). Hidden, it stays on and
+    // keeps lending them, and the switcher has one stop fewer.
+    if (lang.isRomanized) {
+        SettingsGroup(stringResource(R.string.languages_picker_hidden_group)) {
+            item {
+                ToggleSetting(
+                    R.string.languages_picker_hidden_title,
+                    stringResource(R.string.languages_picker_hidden_subtitle),
+                    settings.watch { langId in it.layoutBehavior.pickerHiddenLanguages },
+                    info = stringResource(R.string.languages_picker_hidden_info, lang.englishName),
+                    default = false,
+                ) { scope.launch { repository.setLanguageHiddenFromPicker(langId, it) } }
+            }
+        }
+    }
 
     // Fancy Text: the style the one fancy layout draws and types. The strip
     // over the keys switches it too; this row makes it discoverable from

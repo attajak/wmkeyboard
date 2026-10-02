@@ -174,6 +174,10 @@
 
     <string name="languages_secondary_title">Also suggest from</string>
     <!-- %1$s is the English name of the language this screen is about. -->
+    <string name="languages_picker_hidden_group">Language switcher</string>
+    <string name="languages_picker_hidden_title">Do not show in the language switcher</string>
+    <string name="languages_picker_hidden_subtitle">Keep this language for its suggestions only</string>
+    <string name="languages_picker_hidden_info"><xliff:g id="language" example="Bangla (Romanized)">%1$s</xliff:g> stays on, but the globe key, the spacebar swipe and the language list do not stop at it. Its words continue to show on each keyboard that has it below Also suggest from. Use this to type it on your English keyboard and have one keyboard less to switch through.</string>
     <string name="languages_phonetic_english_group">English words</string>
     <string name="languages_phonetic_english_title">Type English words as English</string>
     <string name="languages_phonetic_english_subtitle">On the phonetic layout, hello stays hello</string>

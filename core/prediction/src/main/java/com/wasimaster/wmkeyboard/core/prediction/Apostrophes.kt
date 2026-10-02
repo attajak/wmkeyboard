@@ -174,6 +174,12 @@ object Apostrophes {
      * word that the next commit corrects straight back (#128). Nothing in the
      * app reads this; `EnglishApostropheEntriesTest` holds the two in step.
      */
+    /**
+     * Every spelling [fix] repairs, with what it repairs it to: `doesnt` →
+     * `doesn't`. The ambiguous forms [offer] shows are not among them.
+     */
+    fun repairs(): Map<String, String> = CONTRACTIONS
+
     fun everyFix(): List<String> = (CONTRACTIONS.values + DECLARED.values).distinct()
 
     private fun fix(word: String, table: Map<String, String>): String? {

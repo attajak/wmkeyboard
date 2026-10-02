@@ -1018,6 +1018,23 @@ data class HapticSettings(
 )
 
 /**
+ * The layouts the language switcher stops at: [KeyboardSettings.enabledLayoutIds]
+ * without the layouts of a language in
+ * [LayoutBehaviorSettings.pickerHiddenLanguages] (#473). What the globe key,
+ * the spacebar swipe and the language picker walk.
+ *
+ * Never empty. If hiding would leave nothing to switch to, every layout
+ * stands, since a switcher with no stops strands the keyboard on whatever it
+ * was showing.
+ */
+fun KeyboardSettings.switchLayoutIds(): List<String> {
+    val all = enabledLayoutIds.ifEmpty { listOf(BuiltInLayouts.DEFAULT_ID) }
+    val hidden = layoutBehavior.pickerHiddenLanguages
+    if (hidden.isEmpty()) return all
+    return all.filter { resolveLayout(customLayouts, it).language().id !in hidden }.ifEmpty { all }
+}
+
+/**
  * What a horizontal swipe on the spacebar does. "Short" swipes start
  * moving right away; "long" swipes hold the spacebar past the long-press
  * delay first, then drag — distance is deliberately not the discriminator,
@@ -4541,6 +4558,13 @@ data class VoiceBarSettings(
      */
     val holdPicksTypingMode: Boolean = true,
     /**
+     * Pause whatever is playing while the microphone is listening (#485), and
+     * let it carry on when dictation ends. Off by default: music under a
+     * dictation is something a few people want gone and the rest never asked
+     * to have interrupted.
+     */
+    val pauseMedia: Boolean = false,
+    /**
      * The surface the bar's expand button goes back to — whichever of
      * [MODE_PANEL] or [MODE_STRIP] the user collapsed from, defaulting to the
      * panel when the bar was chosen in settings instead.
@@ -6345,6 +6369,14 @@ data class LayoutBehaviorSettings(
      * spaces is what a second tap does.
      */
     val spaceHoldKeys: List<String> = emptyList(),
+    /**
+     * Languages that stay switched on without a stop of their own in the
+     * language switcher (#473). For a romanized language that is only there
+     * to lend its words to another keyboard: Banglish suggested on the
+     * English layout, with one swipe between that and Bangla instead of two.
+     * See [switchLayoutIds].
+     */
+    val pickerHiddenLanguages: Set<String> = emptySet(),
     /** What the resting spacebar label shows: language, layout, or both. */
     val spacebarDisplay: SpacebarDisplay = SpacebarDisplay.LANGUAGE,
     /**
@@ -7890,6 +7922,7 @@ class SettingsRepository(private val context: Context) {
         private val SHIFTED_POPUP_KEYS = booleanPreferencesKey("shifted_popup_keys")
         private val CURRENCY_KEYS = stringPreferencesKey("currency_keys")
         private val SPACE_HOLD_KEYS = stringPreferencesKey("space_hold_keys")
+        private val PICKER_HIDDEN_LANGUAGES = stringSetPreferencesKey("picker_hidden_languages")
         private val SYMBOLS_RETURN_TO_LETTERS =
             booleanPreferencesKey("symbols_return_to_letters")
         private val SYMBOLS_RETURN_CHARS = stringPreferencesKey("symbols_return_chars")
@@ -8295,6 +8328,7 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_BAR_DOCK_BIAS = floatPreferencesKey("voice_bar_dock_bias")
         private val VOICE_HOLD_TO_TALK_MS = intPreferencesKey("voice_hold_to_talk_ms")
         private val VOICE_HOLD_PICKS_MODE = booleanPreferencesKey("voice_hold_picks_mode")
+        private val VOICE_PAUSE_MEDIA = booleanPreferencesKey("voice_pause_media")
         private val VOICE_UI_RETURN_MODE = stringPreferencesKey("voice_ui_return_mode")
         private val VOICE_BAR_INLINE = booleanPreferencesKey("voice_bar_inline")
         private val VOICE_CONTINUOUS = booleanPreferencesKey("voice_continuous")
@@ -9819,6 +9853,8 @@ class SettingsRepository(private val context: Context) {
             spaceHoldKeys = p[SPACE_HOLD_KEYS]
                 ?.split('\n')?.filter { it.isNotEmpty() }
                 ?: defaults.layoutBehavior.spaceHoldKeys,
+            pickerHiddenLanguages = p[PICKER_HIDDEN_LANGUAGES]
+                ?: defaults.layoutBehavior.pickerHiddenLanguages,
             hintFontScale = p[HINT_FONT_SCALE] ?: defaults.layoutBehavior.hintFontScale,
             hintOffsetDp = p[HINT_OFFSET] ?: defaults.layoutBehavior.hintOffsetDp,
             transliterationHints = p[TRANSLITERATION_HINTS]
@@ -10065,6 +10101,7 @@ class SettingsRepository(private val context: Context) {
             dockBias = p[VOICE_BAR_DOCK_BIAS] ?: defaults.voiceBar.dockBias,
             holdToTalkMs = p[VOICE_HOLD_TO_TALK_MS] ?: defaults.voiceBar.holdToTalkMs,
             holdPicksTypingMode = p[VOICE_HOLD_PICKS_MODE] ?: defaults.voiceBar.holdPicksTypingMode,
+            pauseMedia = p[VOICE_PAUSE_MEDIA] ?: defaults.voiceBar.pauseMedia,
             returnMode = p[VOICE_UI_RETURN_MODE] ?: defaults.voiceBar.returnMode,
             inline = p[VOICE_BAR_INLINE] ?: defaults.voiceBar.inline,
         )
@@ -11027,6 +11064,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceHoldPicksTypingMode(value: Boolean) =
         editPrefs { it[VOICE_HOLD_PICKS_MODE] = value }
+
+    suspend fun setVoicePauseMedia(value: Boolean) =
+        editPrefs { it[VOICE_PAUSE_MEDIA] = value }
 
     suspend fun setVoiceBarActive(value: Boolean) =
         editPrefs { it[VOICE_BAR_ACTIVE] = value }
@@ -14014,6 +14054,13 @@ class SettingsRepository(private val context: Context) {
                 ?: LEGACY_PHONETIC_ENGLISH_LANGS.takeIf { _ -> it[PHONETIC_AUTO_ENGLISH] == true }
                 ?: emptySet()
             it[PHONETIC_ENGLISH_LANGS] = if (enabled) on + langId else on - langId
+        }
+
+    /** Takes [langId] out of the language switcher, or puts it back (#473). */
+    suspend fun setLanguageHiddenFromPicker(langId: String, hidden: Boolean) =
+        editPrefs {
+            val current = it[PICKER_HIDDEN_LANGUAGES].orEmpty()
+            it[PICKER_HIDDEN_LANGUAGES] = if (hidden) current + langId else current - langId
         }
 
     suspend fun setPhoneticEnglishSwitch(value: Boolean) =
