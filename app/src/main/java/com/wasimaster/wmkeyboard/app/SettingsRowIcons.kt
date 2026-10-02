@@ -519,6 +519,7 @@ internal object SettingsRowIcons {
         put(R.string.keypress_haptic_intensity_title) { Icons.Outlined.GraphicEq }
         put(R.string.keypress_long_press_haptics_title) { Icons.Outlined.TouchApp }
         put(R.string.keypress_long_press_release_title) { Icons.Outlined.TouchApp }
+        put(R.string.keypress_cursor_haptics_title) { Icons.Outlined.SpaceBar }
         put(R.string.keypress_vibrate_space_title) { Icons.Outlined.SpaceBar }
         put(R.string.keypress_vibrate_delete_swipe_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.keypress_vibrate_repeat_title) { Icons.Outlined.Repeat }
@@ -567,6 +568,7 @@ internal object SettingsRowIcons {
 
         // ---- Emoji ----
         put(R.string.langemoji_emoji_toolbar_title) { Icons.Outlined.EmojiEmotions }
+        put(R.string.langemoji_strip_shortcut_title) { Icons.Outlined.SwapHoriz }
         put(R.string.langemoji_emoji_full_bleed_title) { Icons.Outlined.Fullscreen }
         put(R.string.langemoji_emoji_prediction_title) { Icons.Outlined.AutoAwesome }
         put(R.string.langemoji_emoji_insert_mode_title) { Icons.Outlined.TouchApp }
@@ -824,6 +826,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_adapt_taps_title) { Icons.Outlined.TouchApp }
         put(R.string.typing_skip_all_caps_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.typing_autocorrect_on_enter_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
+        put(R.string.typing_dictionary_capitals_title) { Icons.Outlined.TextFields }
         put(R.string.typing_skip_typed_word_title) { Icons.Outlined.FilterList }
         put(R.string.typing_number_prediction_title) { Icons.Outlined.Numbers }
         put(R.string.typing_block_offensive_title) { Icons.Outlined.Block }

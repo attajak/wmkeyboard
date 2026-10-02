@@ -25,6 +25,7 @@ Space and Enter trigger autocorrect. A full stop or other punctuation does not: 
 - **The edit itself is weighted by how it happens.** Cheapest, and so likeliest, are three: a swapped pair of letters, a doubled letter (the hold-repeat slip in "helllo"), and a substitution toward a key right next to the one you meant. A dropped letter, or a stray one typed next to where your finger actually landed, costs noticeably more. A substitution or an insertion nowhere near the key you hit is the most expensive of all and rarely survives. The neighbour test uses the adjacency map for your *active layout*, so the same typo resolves differently on QWERTY than on AZERTY or Dvorak, and where the keyboard has your real tap coordinates it uses those instead of the map.
 - **A missing accent is not a typo.** Typing `z` where the word has `ż`, `e` for `é`, or `l` for `ł` costs almost nothing and does not count as an edit, because the accented letter is on the same key. So "juz" becomes "już", and a word with every accent left off ("zolw" for "żółw") is found as easily as a word with one.
 - **The fix keeps your capitalization.** Typing "hte" mid-sentence corrects to "the". Typing "Hte" at the start of one corrects to "The."
+- **A word the list spells with a capital gets its capital.** Some downloaded word lists write words with a capital letter: every German noun ("Haus", "Zeit"), and the names of places and people. Type or swipe one in small letters and it is written with its capital, in the strip and when space commits it. A word the list has both ways ("essen" and "Essen") stays as you typed it. Backspace right after puts back what you typed, and the undo is remembered like any other. This is **Capitals from the word list** (see [Options](#options)). The built-in English list has no capitals, so it needs a downloaded list. A list you downloaded before this existed is converted on the device the next time the keyboard starts.
 
 The two candidates have to be genuinely far apart in score, which keeps autocorrect conservative by design. "helo" is evenly split between "hello" and "help", and "tesr" between "test" and "tear", so both are left for you to resolve yourself. An unambiguous slip like "wprld" resolves immediately.
 
@@ -227,6 +228,7 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 | Learn where my taps land | On | Autocorrect on |
 | Skip words in capital letters | On | Autocorrect on |
 | Correct the word before Enter | On | Autocorrect on |
+| Capitals from the word list | On | Autocorrect on |
 | Block offensive words | On | Autocorrect on |
 | Context-aware suggestions | On | Autocorrect on |
 | Add missing spaces | On | Autocorrect on |

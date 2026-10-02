@@ -6,6 +6,7 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.core.prediction.AospScores
+import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrieCodec
 import com.wasimaster.wmkeyboard.prediction.R
@@ -100,6 +101,9 @@ object WordlistDownloadManager {
     /** Guards against pathological lines masquerading as words. */
     private const val MAX_WORD_LENGTH = 48
 
+    /** The largest list [foldCapitals] rebuilds in place. */
+    private const val MAX_REFOLD_WORDS = 600_000
+
     /** Rough on-disk bytes per stored word (measured ~40 B on the bundled lists). */
     private const val BYTES_PER_WORD = 64L
 
@@ -143,8 +147,7 @@ object WordlistDownloadManager {
                 // would ask the free-space check for 137 GB.
                 val list = fetchEntries(entry, DictionaryCatalog.wordCap(entry, size), part)
                 set(entry.id, DownloadStatus.Processing)
-                val trie = PackedTrie.of(list.words, list.frequencies, list.count)
-                part.outputStream().use { PackedTrieCodec.write(trie, it) }
+                val trie = pack(filesDir, entry.languageId, list, part)
                 val final = DictionaryStore.downloadedFile(filesDir, entry.languageId)
                 if (!part.renameTo(final)) {
                     throw FailedException(FailReason.OTHER, R.string.core_pred_wordlist_save_error)
@@ -209,8 +212,7 @@ object WordlistDownloadManager {
             val list = openList(file).use { input ->
                 parse(entry, DictionaryCatalog.wordCap(entry, size), input) {}
             }
-            val trie = PackedTrie.of(list.words, list.frequencies, list.count)
-            part.outputStream().use { PackedTrieCodec.write(trie, it) }
+            val trie = pack(filesDir, entry.languageId, list, part)
             val final = DictionaryStore.downloadedFile(filesDir, entry.languageId)
             if (!part.renameTo(final)) throw IOException("could not move the list into place")
             DictionaryStore.writeSourceEntryId(filesDir, entry.languageId, entry.id)
@@ -220,6 +222,67 @@ object WordlistDownloadManager {
             part.delete()
             activeId = null
             refresh(filesDir)
+        }
+    }
+
+    /**
+     * Packs [list] into [part], keyed in lower case, and writes the capitals
+     * that folding took out of it beside the list (see [DictionaryCapitals]).
+     * The capitals go first: the list is only moved into place after this
+     * returns, so a list on disk always has its capitals with it.
+     */
+    private fun pack(filesDir: File, langId: String, list: Wordlist, part: File): PackedTrie {
+        val capitals = DictionaryCapitals.fold(list.words, list.count).capitals
+        val trie = PackedTrie.of(list.words, list.frequencies, list.count)
+        part.outputStream().use { PackedTrieCodec.write(trie, it) }
+        val file = DictionaryStore.capitalsFile(filesDir, langId)
+        // Empty when the list has no capitals: the file is also the mark that
+        // this list is keyed in lower case, which [foldCapitals] reads.
+        // Renamed into place, never written over: the keyboard may have the
+        // old one mapped, and a mapped file cut short under its reader faults.
+        val scratch = File(file.path + ".part")
+        scratch.outputStream().use { out -> capitals?.let { PackedTrieCodec.write(it, out) } }
+        if (!scratch.renameTo(file)) scratch.delete()
+        return trie
+    }
+
+    /**
+     * Rebuilds, from what is already on the device, every list downloaded
+     * before capitals were kept apart. Such a list holds `Haus` under a key
+     * that typing "haus" never reaches (#481). Nothing is fetched, and a list
+     * already done is one file check. Run once at keyboard start, off the
+     * main thread, before the lists are mapped.
+     */
+    fun foldCapitals(filesDir: File) {
+        if (isBusy) return
+        for (langId in DictionaryStore.downloadedLanguageIds(filesDir)) {
+            if (DictionaryStore.capitalsFile(filesDir, langId).exists()) continue
+            val main = DictionaryStore.downloadedFile(filesDir, langId)
+            val part = DictionaryStore.partFile(filesDir, langId)
+            runCatching {
+                val mapped = MappedTrie.open(main) ?: return@runCatching
+                // An "everything" list is millions of words, and this walk
+                // puts each on the heap. Those are counted lists, lower case
+                // already; the curated ones that carry capitals are far smaller.
+                if (mapped.wordCount > MAX_REFOLD_WORDS) {
+                    DictionaryStore.capitalsFile(filesDir, langId).createNewFile()
+                    return@runCatching
+                }
+                val entries = mapped.entries()
+                val words = arrayOfNulls<String>(entries.size)
+                val frequencies = IntArray(entries.size)
+                // Most frequent first, the order a download reads them in,
+                // which is what decides between two spellings of one word.
+                entries.sortedByDescending { it.second }.forEachIndexed { i, (word, frequency) ->
+                    words[i] = word
+                    frequencies[i] = frequency
+                }
+                pack(filesDir, langId, Wordlist(words, frequencies, entries.size), part)
+                if (!part.renameTo(main)) part.delete()
+            }.onFailure {
+                part.delete()
+                DictionaryStore.capitalsFile(filesDir, langId).delete()
+            }
         }
     }
 

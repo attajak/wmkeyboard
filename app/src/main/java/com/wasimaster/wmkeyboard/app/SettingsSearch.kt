@@ -279,6 +279,7 @@ private fun SearchStrings.typingCorrectionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_adapt_taps_title, R.string.typing_adapt_taps_subtitle),
         row(R.string.typing_skip_all_caps_title, R.string.typing_skip_all_caps_subtitle),
         row(R.string.typing_autocorrect_on_enter_title, R.string.typing_autocorrect_on_enter_subtitle),
+        row(R.string.typing_dictionary_capitals_title, R.string.typing_dictionary_capitals_subtitle),
         row(R.string.typing_block_offensive_title, R.string.typing_block_offensive_subtitle),
         row(R.string.typing_context_rerank_title, R.string.typing_context_rerank_subtitle),
         row(R.string.typing_autocorrect_splits_title, R.string.typing_autocorrect_splits_subtitle),
@@ -596,6 +597,7 @@ private fun SearchStrings.keypressHapticsRows(): List<SettingsSearchEntry> {
         row(R.string.keypress_haptic_intensity_title, R.string.keypress_haptic_intensity_subtitle),
         row(R.string.keypress_long_press_haptics_title, R.string.keypress_long_press_haptics_subtitle),
         row(R.string.keypress_long_press_release_title, R.string.keypress_long_press_release_subtitle),
+        row(R.string.keypress_cursor_haptics_title, R.string.keypress_cursor_haptics_subtitle),
         row(R.string.keypress_vibrate_space_title, R.string.keypress_vibrate_space_subtitle),
         row(R.string.keypress_vibrate_delete_swipe_title, R.string.keypress_vibrate_delete_swipe_subtitle),
         row(R.string.keypress_vibrate_repeat_title, R.string.keypress_vibrate_repeat_subtitle),
@@ -912,6 +914,7 @@ private fun SearchStrings.emojiRows(): List<SettingsSearchEntry> {
         entry(title, subtitle, R.string.home_emoji_title, "emoji", weight = weight)
     return listOf(
         row(R.string.langemoji_emoji_toolbar_title, R.string.langemoji_emoji_toolbar_subtitle),
+        row(R.string.langemoji_strip_shortcut_title, R.string.langemoji_strip_shortcut_subtitle),
         row(R.string.langemoji_emoji_full_bleed_title, R.string.langemoji_emoji_full_bleed_subtitle),
         row(R.string.panel_layout_row_title, R.string.panel_layout_row_subtitle),
         row(R.string.langemoji_emoji_prediction_title, R.string.langemoji_emoji_prediction_subtitle),

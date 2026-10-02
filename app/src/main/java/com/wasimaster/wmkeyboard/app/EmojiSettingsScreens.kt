@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -49,6 +50,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
+import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
 import kotlin.math.roundToInt
 import com.wasimaster.wmkeyboard.core.emoji.EmojiSearchExamples
 import com.wasimaster.wmkeyboard.core.fonts.FontStore
@@ -70,6 +73,7 @@ internal fun EmojiSettings(
     // What decides which rows the groups hold; each row reads its own value.
     val predictionOn = settings.watch { it.emojiPrediction }
     val barMode = settings.watch { it.emojiBarMode }
+    val emojiButtonOn = settings.watch { it.emojiToolbar }
     SettingsGroup(stringResource(R.string.langemoji_emoji_access_title)) {
         item {
             ToggleSetting(
@@ -79,6 +83,30 @@ internal fun EmojiSettings(
                 info = stringResource(R.string.langemoji_emoji_toolbar_info),
                 default = SettingsDefaults.emojiToolbar,
             ) { scope.launch { repository.setEmojiToolbar(it) } }
+        }
+        // Which tool that button is (#462). Here, beside the switch that
+        // shows it, because this is the row people come to when they want it
+        // to be something else.
+        item(visible = emojiButtonOn) {
+            val shortcut = settings.watch { it.toolbarBehavior.stripShortcut }
+            var picking by remember { mutableStateOf(false) }
+            NavRow(
+                title = R.string.langemoji_strip_shortcut_title,
+                subtitle = stringResource(R.string.langemoji_strip_shortcut_subtitle),
+                value = stringResource(toolTitle(shortcut)),
+            ) { picking = true }
+            if (picking) {
+                ToolPickerDialog(
+                    title = stringResource(R.string.langemoji_strip_shortcut_title),
+                    current = shortcut,
+                    options = ToolbarTool.entries.filter { isSupportedTool(it) },
+                    onDismiss = { picking = false },
+                    onPick = { picked ->
+                        picking = false
+                        if (picked != null) scope.launch { repository.setStripShortcut(picked) }
+                    },
+                )
+            }
         }
         item {
             ToggleSetting(

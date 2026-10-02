@@ -415,6 +415,15 @@ internal fun TypingCorrectionsSettings(
             }
             item {
                 ToggleSetting(
+                    R.string.typing_dictionary_capitals_title,
+                    stringResource(R.string.typing_dictionary_capitals_subtitle),
+                    settings.watch { it.correction.dictionaryCapitals },
+                    info = stringResource(R.string.typing_dictionary_capitals_info),
+                    default = SettingsDefaults.correction.dictionaryCapitals,
+                ) { scope.launch { repository.setDictionaryCapitals(it) } }
+            }
+            item {
+                ToggleSetting(
                     R.string.typing_block_offensive_title,
                     stringResource(R.string.typing_block_offensive_subtitle),
                     settings.watch { it.suggestionStrip.blockOffensiveWords },

@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCapitals
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.GlideBeam
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSource
@@ -544,6 +545,22 @@ class SuggestionEngine(
      */
     @Volatile
     var skipAllCapsAutocorrect: Boolean = true
+
+    /**
+     * The capitals each loaded word list spells its words with, by language
+     * id (#481); see [DictionaryCapitals]. Read for the language being typed
+     * and its secondaries, so the IME hands over every language's once and
+     * a language switch needs no second call.
+     *
+     * Outside the walk's [generation] for the reason [systemWordCases] is:
+     * this decides how a word is written, never which words are found.
+     */
+    @Volatile
+    var dictionaryCapitals: Map<String, WordSource> = emptyMap()
+
+    /** The user's switch over [dictionaryCapitals]. */
+    @Volatile
+    var dictionaryCapitalsEnabled: Boolean = true
 
     /**
      * How many times a word has to be typed before being learned protects it
@@ -1495,7 +1512,7 @@ class SuggestionEngine(
      */
     fun spellsInLowerCase(word: String): Boolean {
         val lower = word.lowercase()
-        return lower !in systemWordCases && inDictionaries(lower)
+        return lower !in systemWordCases && inDictionaries(lower) && listSpelling(lower) == null
     }
 
     /**
@@ -3190,12 +3207,52 @@ class SuggestionEngine(
         keys: KeySets? = null,
     ): CorrectionDecision {
         val lower = word.lowercase()
+        if (word == lower) dictionaryCapital(lower)?.let { return it }
         if (lower.length < 3) return NO_CORRECTION
         // An all-caps word is a deliberate acronym or shout, not a typo of a
         // lowercase word — don't "correct" it away when the user asked us not to.
         if (skipAllCapsAutocorrect && isAllCaps(word)) return NO_CORRECTION
         val ordinary = decideOrdinary(word, lower, touch, timingMultiplier, keys)
         return withTaughtFix(word, lower, previousWord, ordinary)
+    }
+
+    /**
+     * The capital a word list gives [lower], as a correction (#481): "haus"
+     * commits as "Haus". Only a word typed with no capital at all is asked
+     * about, so one the user shifted themselves is never touched.
+     *
+     * Not a guess, so it carries full certainty and shows no undo chip. A
+     * backspace still takes it back, and the undo is remembered against the
+     * pair like any other. A spelling the user has pinned or keeps their own
+     * way in the personal dictionary is theirs.
+     */
+    private fun dictionaryCapital(lower: String): CorrectionDecision? {
+        val spelling = listSpelling(lower) ?: return null
+        if (userLexicon.isCasePinned(lower)) return null
+        if (userLexicon.displayOf(lower)?.let { it != spelling } == true) return null
+        if (suppressed(lower)) return null
+        if (correctionStats.penalty(lower, spelling) != CorrectionStats.Penalty.NONE) return null
+        return CorrectionDecision(apply = spelling, certainty = 1.0)
+    }
+
+    /**
+     * How the word lists in use spell [key], when that is with a capital.
+     *
+     * The language being typed answers first. Its secondaries are asked only
+     * about a word it does not have: German's `Gift` and `Art` are nouns, and
+     * with German as a second language they must not capitalize the English
+     * words typed on an English layout.
+     */
+    private fun listSpelling(key: String): String? {
+        val all = dictionaryCapitals
+        if (!dictionaryCapitalsEnabled || all.isEmpty()) return null
+        all[primaryLanguageId.ifBlank { EN }]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+        if (activeDictionary.contains(key) || customDictionary.contains(key)) return null
+        for (secondary in secondaryDictionaries) {
+            all[secondary.langId]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+        }
+        if (englishAsSecondary) all[EN]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+        return null
     }
 
     /**
@@ -3983,7 +4040,8 @@ class SuggestionEngine(
      * be re-picked from the strip every single time (#44). This puts it back
      * from the two stores that record how the user themselves spells a word:
      * their own learned-word case memory, and the platform dictionary they
-     * typed the entry into by hand.
+     * typed the entry into by hand. After those, the word list's own capital
+     * (#481), unless the user pinned the word in lower case.
      *
      * Only lower-case candidates are touched. A candidate that already carries
      * case came from a source that knows better than this does — a contact
@@ -3999,7 +4057,8 @@ class SuggestionEngine(
         if (word.isEmpty()) return word
         val key = word.lowercase()
         if (key != word) return word
-        return userLexicon.displayOf(key) ?: systemWordCases[key] ?: word
+        return userLexicon.displayOf(key) ?: systemWordCases[key]
+            ?: listSpelling(key)?.takeUnless { userLexicon.isCasePinned(key) } ?: word
     }
 
     /**

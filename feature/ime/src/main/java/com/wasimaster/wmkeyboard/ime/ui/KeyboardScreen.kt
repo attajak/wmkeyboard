@@ -3651,6 +3651,7 @@ private fun TopBar(
             // which read as the handoff still playing for a button that was off.
             // Same condition the strip's copy is drawn under, below.
             val stripHasEmoji = state.settings.emojiToolbar &&
+                state.settings.toolbarBehavior.stripShortcut == ToolbarTool.EMOJI &&
                 ToolbarTool.EMOJI in state.settings.enabledTools
             ToolbarRow(
                 state, onPanelChange, onToolTap, drag, toolContentAlpha,
@@ -3686,11 +3687,25 @@ private fun TopBar(
                 // while the tools are off screen. With the tools row up and the emoji
                 // tool pinned on it, the pinned one is already in reach and a second
                 // copy beside the suggestions is just the same button twice.
-                val emojiOnToolsRow = toolsRowVisible && ToolbarTool.EMOJI in visibleToolbarTools(state)
-                if (
-                    state.settings.emojiToolbar && ToolbarTool.EMOJI in state.settings.enabledTools &&
-                    !emojiOnToolsRow
-                ) {
+                //
+                // Which tool that is, is the user's to say (#462): the clipboard
+                // or the microphone for someone who never opens the emoji panel.
+                // Only the emoji has a pinned twin to slide to, so any other tool
+                // is drawn as a plain button and takes no part in the handoff.
+                val shortcut = state.settings.toolbarBehavior.stripShortcut
+                val shortcutShown = state.settings.emojiToolbar && shortcut in state.settings.enabledTools &&
+                    isSupportedTool(shortcut) && isUsableTool(shortcut, state.settings) &&
+                    !(toolsRowVisible && shortcut in visibleToolbarTools(state))
+                if (shortcutShown && shortcut != ToolbarTool.EMOJI) {
+                    ToolCircle(
+                        slot = IconSlots.forTool(shortcut),
+                        description = stringResource(toolLabelRes(shortcut)),
+                        active = toolActive(shortcut, state),
+                        longPressLabel = stringResource(toolLabelRes(shortcut)),
+                        wide = true,
+                    ) { onToolTap(shortcut) }
+                }
+                if (shortcutShown && shortcut == ToolbarTool.EMOJI) {
                     // The width the bar would give this icon, so the two copies are
                     // the same shape. Nothing constrains it here, so at a tool width
                     // wider than a toolbar cell the strip's copy came out at the

@@ -177,6 +177,7 @@ import com.wasimaster.wmkeyboard.core.prediction.ContactNames
 import com.wasimaster.wmkeyboard.core.prediction.Elisions
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
+import com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager
 import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.MappedNgramPack
@@ -3633,6 +3634,7 @@ open class WMKeyboardService : InputMethodService() {
                 suggestionEngine?.blockOffensiveWords =
                     settings.suggestionStrip.blockOffensiveWords
                 suggestionEngine?.skipAllCapsAutocorrect = settings.correction.skipAllCaps
+                suggestionEngine?.dictionaryCapitalsEnabled = settings.correction.dictionaryCapitals
                 suggestionEngine?.learnedWordMinCount =
                     settings.suggestionStrip.learnedWordMinCount
                 emojiUsage.maxRecents = settings.emoji.recentsLimit
@@ -4006,6 +4008,9 @@ open class WMKeyboardService : InputMethodService() {
                     // largest thing on disk. Dropping them here is also what
                     // makes Settings offer the language for download again.
                     DictionaryStore.sweepUnreadable(filesDir)
+                    // A list downloaded before capitals were kept apart holds
+                    // "Haus" under a key no lower-case typing reaches (#481).
+                    WordlistDownloadManager.foldCapitals(filesDir)
                 }
                 // Bundled lists ship as compiled .wmdict binaries and are
                 // memory-mapped, not parsed: the trie stays out of the Java
@@ -4114,6 +4119,8 @@ open class WMKeyboardService : InputMethodService() {
                 applyOffensiveWords(offensiveSet)
                 blockOffensiveWords = _uiState.value.settings.suggestionStrip.blockOffensiveWords
                 skipAllCapsAutocorrect = _uiState.value.settings.correction.skipAllCaps
+                dictionaryCapitalsEnabled = _uiState.value.settings.correction.dictionaryCapitals
+                dictionaryCapitals = loadDictionaryCapitals()
                 learnedWordMinCount =
                     _uiState.value.settings.suggestionStrip.learnedWordMinCount
                 autocorrectSplits = _uiState.value.settings.suggestionStrip.autocorrectSplits
@@ -16989,12 +16996,12 @@ open class WMKeyboardService : InputMethodService() {
         // scrub meant for a search query or a spelling draft used to walk the
         // app's caret behind the keyboard (#204, #161).
         if (_uiState.value.captureTarget() != null) {
-            vibrate()
+            caretStepFeedback()
             onCaptureCaretMove(delta, extend = _uiState.value.caretExtendsSelection)
             return
         }
         val ic = currentInputConnection ?: return
-        vibrate()
+        caretStepFeedback()
         // Mark the scrub so the caret's landing spot doesn't resume-compose the
         // word under it mid-drag (this same commit would then churn it).
         lastCaretScrubMs = SystemClock.uptimeMillis()
@@ -17007,6 +17014,16 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * The feedback for one step of the caret under a spacebar drag or a volume
+     * key. The vibration has a switch of its own (#466): a drag across a line
+     * is dozens of steps, and a buzz for each is what some people turn the
+     * whole of haptics off to be rid of. The key sound is not part of that.
+     */
+    private fun caretStepFeedback() {
+        if (_uiState.value.settings.haptics.onCursorMove) vibrate() else playKeySound(role = KeySoundRole.DEFAULT)
+    }
+
+    /**
      * 2-D spacebar touchpad: move the cursor one line up (-1) or down (+1).
      * Mirrors [onCursorMove] but on the vertical axis, selection mode and a held
      * shift included.
@@ -17014,12 +17031,12 @@ open class WMKeyboardService : InputMethodService() {
     fun onCursorMoveVertical(delta: Int) {
         // A one-line buffer: up is its start, down its end.
         if (_uiState.value.captureTarget() != null) {
-            vibrate()
+            caretStepFeedback()
             onCaptureCaretToEdge(end = delta >= 0, extend = _uiState.value.caretExtendsSelection)
             return
         }
         val ic = currentInputConnection ?: return
-        vibrate()
+        caretStepFeedback()
         lastCaretScrubMs = SystemClock.uptimeMillis()
         commitComposing(ic, autocorrect = false)
         lastGestureWord = null
@@ -32563,6 +32580,19 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * The capitals each downloaded list spells its words with, by language
+     * (#481): "haus" → "Haus". Written beside the list by the download, and
+     * mapped like it. Empty while locked, as the lists themselves are.
+     */
+    private fun loadDictionaryCapitals(): Map<String, WordSource> {
+        if (!userUnlocked) return emptyMap()
+        return DictionaryStore.downloadedLanguageIds(filesDir)
+            .filter { shippedDictionaryEnabled(it) }
+            .mapNotNull { id -> MappedTrie.open(DictionaryStore.capitalsFile(filesDir, id))?.let { id to it } }
+            .toMap()
+    }
+
+    /**
      * Where the bundled dictionaries are inflated: always the device-protected
      * area, so the copy made on a normal run is the same copy a direct boot
      * reads. They come out of the APK, so nothing of the user's is exposed by
@@ -32592,6 +32622,7 @@ open class WMKeyboardService : InputMethodService() {
         customDictionaries = loadCustomDictionaries()
         suggestionEngine?.let { engine ->
             engine.dictionary = english ?: PackedTrie.EMPTY
+            engine.dictionaryCapitals = loadDictionaryCapitals()
             engine.bengaliIndex = buildBengaliIndex()
             val lang = _uiState.value.language
             engine.customDictionary = customDictionaries[lang.id] ?: PackedTrie.EMPTY

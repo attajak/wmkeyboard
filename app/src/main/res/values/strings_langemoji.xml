@@ -58,6 +58,8 @@
     <string name="langemoji_emoji_access_title">Access</string>
     <string name="langemoji_emoji_toolbar_title">Emoji button in toolbar</string>
     <string name="langemoji_emoji_toolbar_subtitle">Open emoji with one press from the top bar</string>
+    <string name="langemoji_strip_shortcut_title">Button beside the suggestions</string>
+    <string name="langemoji_strip_shortcut_subtitle">The tool that stays in the top bar while the suggestions show</string>
     <string name="langemoji_emoji_toolbar_info">The emoji button stays visible in the top bar, also while the suggestions show. The emoji panel has a tab for each category. You can search in English and Bengali, and in any language that you add a keyword pack for. Press and hold an emoji for the skin tone variants.</string>
     <string name="langemoji_emoji_full_bleed_title">Full-screen emoji panel</string>
     <string name="langemoji_emoji_full_bleed_subtitle">Hide the toolbar and move the category tabs up, next to a back button</string>

@@ -1031,6 +1031,15 @@ internal fun KeyPressHapticsSettings(
                 default = SettingsDefaults.haptics.onLongPressRelease,
             ) { scope.launch { repository.setHapticOnLongPressRelease(it) } }
         }
+        item(visible = hapticsOn) {
+            ToggleSetting(
+                R.string.keypress_cursor_haptics_title,
+                stringResource(R.string.keypress_cursor_haptics_subtitle),
+                settings.watch { it.haptics.onCursorMove },
+                info = stringResource(R.string.keypress_cursor_haptics_info),
+                default = SettingsDefaults.haptics.onCursorMove,
+            ) { scope.launch { repository.setHapticOnCursorMove(it) } }
+        }
         // Per-event gates: only meaningful while the master switch above is on,
         // so they fold away when it is off.
         item(visible = hapticsOn) {

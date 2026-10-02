@@ -29,6 +29,9 @@
 
     <string name="keypress_long_press_release_title">Press and hold release haptics</string>
     <string name="keypress_long_press_release_subtitle">Vibrate on release after a press and hold</string>
+    <string name="keypress_cursor_haptics_title">Cursor movement haptics</string>
+    <string name="keypress_cursor_haptics_subtitle">Vibrate for each step when you move the cursor with the spacebar</string>
+    <string name="keypress_cursor_haptics_info">The keyboard vibrates one time for each character that the cursor moves when you slide on the spacebar or use the volume keys. Turn this off to move the cursor without vibration. The keys continue to vibrate when you press them.</string>
     <string name="keypress_long_press_release_info">The keyboard vibrates again when you lift your finger at the end of a press and hold. This completes the press, hold and release loop. It is off by default. Some users find a third vibration too much.</string>
 
     <string name="keypress_vibrate_space_title">Vibrate on space</string>

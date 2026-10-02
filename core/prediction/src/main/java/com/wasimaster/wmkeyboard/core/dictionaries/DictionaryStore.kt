@@ -25,6 +25,7 @@ import java.io.IOException
 object DictionaryStore {
 
     private const val FILE_NAME = "main.wmdict"
+    private const val CAPITALS_NAME = "caps.wmdict"
     private const val BUNDLED_DIR = "bundled"
 
     private fun root(filesDir: File) = File(filesDir, "dict")
@@ -36,6 +37,15 @@ object DictionaryStore {
 
     fun partFile(filesDir: File, langId: String): File =
         File(File(root(filesDir), langId), "$FILE_NAME.part")
+
+    /**
+     * The capitals [langId]'s downloaded list spells its words with (see
+     * [DictionaryCapitals]). Always written with the list, and empty for a
+     * list with no capitals, so its presence also says the list beside it is
+     * keyed in lower case.
+     */
+    fun capitalsFile(filesDir: File, langId: String): File =
+        File(File(root(filesDir), langId), CAPITALS_NAME)
 
     /**
      * Whether this build can actually read [langId]'s downloaded dictionary.
@@ -77,6 +87,7 @@ object DictionaryStore {
         val dir = File(root(filesDir), langId)
         File(dir, FILE_NAME).delete()
         File(dir, "$FILE_NAME.part").delete()
+        File(dir, CAPITALS_NAME).delete()
         File(dir, "source").delete()
         File(dir, "size").delete()
     }

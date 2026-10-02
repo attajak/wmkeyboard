@@ -1009,6 +1009,12 @@ data class HapticSettings(
     val onLongPress: Boolean = true,
     /** Vibrate again when the finger lifts off a long press. */
     val onLongPressRelease: Boolean = false,
+    /**
+     * Vibrate on each step the caret takes under a spacebar drag or a volume
+     * key (#466). On by default, which is how the drag has always felt; off,
+     * the caret moves silently while every other key keeps its vibration.
+     */
+    val onCursorMove: Boolean = true,
 )
 
 /**
@@ -1607,6 +1613,13 @@ data class ToolbarBehavior(
      * never asked for.
      */
     val holdActions: Map<ToolbarTool, ToolHoldAction> = emptyMap(),
+    /**
+     * The tool whose button stays beside the suggestions while the pinned
+     * tools are off the row (#462). The emoji tool by default, which is the
+     * button this has always been; [KeyboardSettings.emojiToolbar] is what
+     * shows or hides it.
+     */
+    val stripShortcut: ToolbarTool = ToolbarTool.EMOJI,
 )
 
 /**
@@ -2122,6 +2135,12 @@ data class AutocorrectSettings(
      * before anyone reads it. Space and punctuation still correct.
      */
     val onEnter: Boolean = true,
+    /**
+     * Whether a word the word list spells with a capital and never without
+     * one ("Haus", "Berlin") is written that way when it is typed or swiped
+     * in lower case (#481). German writes every noun like this.
+     */
+    val dictionaryCapitals: Boolean = true,
 )
 
 /**
@@ -7619,6 +7638,7 @@ class SettingsRepository(private val context: Context) {
         private val HAPTIC_STYLE = stringPreferencesKey("haptic_style")
         private val HAPTIC_ON_LONG_PRESS = booleanPreferencesKey("haptic_on_long_press")
         private val HAPTIC_ON_LONG_PRESS_RELEASE = booleanPreferencesKey("haptic_on_long_press_release")
+        private val HAPTIC_ON_CURSOR_MOVE = booleanPreferencesKey("haptic_on_cursor_move")
         private val FEEDBACK_VIBRATE_SPACE = booleanPreferencesKey("feedback_vibrate_space")
         private val FEEDBACK_VIBRATE_DELETE_SWIPE = booleanPreferencesKey("feedback_vibrate_delete_swipe")
         private val FEEDBACK_VIBRATE_REPEAT = booleanPreferencesKey("feedback_vibrate_repeat")
@@ -7665,6 +7685,7 @@ class SettingsRepository(private val context: Context) {
         private val AUTOCORRECT_SKIP_ALL_CAPS =
             booleanPreferencesKey("autocorrect_skip_all_caps")
         private val AUTOCORRECT_ON_ENTER = booleanPreferencesKey("autocorrect_on_enter")
+        private val DICTIONARY_CAPITALS = booleanPreferencesKey("dictionary_capitals")
         private val AUTO_CAPITALIZE = booleanPreferencesKey("auto_capitalize")
         private val DOUBLE_SPACE_PERIOD = booleanPreferencesKey("double_space_period")
         private val DOUBLE_SPACE_TAB = booleanPreferencesKey("double_space_tab")
@@ -8187,6 +8208,7 @@ class SettingsRepository(private val context: Context) {
         private val TOOLBAR_PLACEMENT = stringPreferencesKey("toolbar_placement")
         private val TOOLBAR_SHOW_STRIP = booleanPreferencesKey("toolbar_show_strip")
         private val TOOLBAR_HOLD_ACTIONS = stringPreferencesKey("toolbar_hold_actions")
+        private val TOOLBAR_STRIP_SHORTCUT = stringPreferencesKey("toolbar_strip_shortcut")
         private val TOOLBAR_DRAG_REARRANGE = booleanPreferencesKey("toolbar_drag_rearrange")
         private val THEMES_PANEL_BUILTINS = stringSetPreferencesKey("themes_panel_builtins")
         private val COMMA_AS_EMOJI = booleanPreferencesKey("comma_as_emoji")
@@ -9172,6 +9194,7 @@ class SettingsRepository(private val context: Context) {
             onLongPress = p[HAPTIC_ON_LONG_PRESS] ?: defaults.haptics.onLongPress,
             onLongPressRelease = p[HAPTIC_ON_LONG_PRESS_RELEASE]
                 ?: defaults.haptics.onLongPressRelease,
+            onCursorMove = p[HAPTIC_ON_CURSOR_MOVE] ?: defaults.haptics.onCursorMove,
         )
 
     private fun readFeedback(p: Preferences, defaults: KeyboardSettings) =
@@ -9226,6 +9249,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.correction.undoMemory,
             skipAllCaps = p[AUTOCORRECT_SKIP_ALL_CAPS] ?: defaults.correction.skipAllCaps,
             onEnter = p[AUTOCORRECT_ON_ENTER] ?: defaults.correction.onEnter,
+            dictionaryCapitals = p[DICTIONARY_CAPITALS] ?: defaults.correction.dictionaryCapitals,
         )
 
     private fun readAutoText(p: Preferences, defaults: KeyboardSettings) =
@@ -9927,6 +9951,9 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.toolbarBehavior.placement,
             showStrip = p[TOOLBAR_SHOW_STRIP] ?: defaults.toolbarBehavior.showStrip,
             holdActions = ToolHoldActions.decode(p[TOOLBAR_HOLD_ACTIONS]),
+            stripShortcut = p[TOOLBAR_STRIP_SHORTCUT]
+                ?.let { runCatching { ToolbarTool.valueOf(it) }.getOrNull() }
+                ?: defaults.toolbarBehavior.stripShortcut,
         )
 
     private fun readEmoji(p: Preferences, defaults: KeyboardSettings) =
@@ -11524,6 +11551,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setToolbarShowStrip(value: Boolean) =
         editPrefs { it[TOOLBAR_SHOW_STRIP] = value }
+
+    suspend fun setStripShortcut(value: ToolbarTool) =
+        editPrefs { it[TOOLBAR_STRIP_SHORTCUT] = value.name }
 
     /**
      * Sets or clears one tool's press-and-hold action. Null puts that tool back
@@ -13762,6 +13792,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setHapticOnLongPressRelease(value: Boolean) =
         editPrefs { it[HAPTIC_ON_LONG_PRESS_RELEASE] = value }
 
+    suspend fun setHapticOnCursorMove(value: Boolean) =
+        editPrefs { it[HAPTIC_ON_CURSOR_MOVE] = value }
+
     suspend fun setVibrateOnSpace(value: Boolean) =
         editPrefs { it[FEEDBACK_VIBRATE_SPACE] = value }
 
@@ -13907,6 +13940,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAutocorrectOnEnter(value: Boolean) =
         editPrefs { it[AUTOCORRECT_ON_ENTER] = value }
+
+    suspend fun setDictionaryCapitals(value: Boolean) =
+        editPrefs { it[DICTIONARY_CAPITALS] = value }
 
     suspend fun setAutoCapitalize(value: Boolean) =
         editPrefs { it[AUTO_CAPITALIZE] = value }
