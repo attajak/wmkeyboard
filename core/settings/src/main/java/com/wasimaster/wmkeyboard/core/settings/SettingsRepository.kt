@@ -1040,7 +1040,19 @@ fun KeyboardSettings.switchLayoutIds(): List<String> {
  * delay first, then drag — distance is deliberately not the discriminator,
  * a fast flick travels further than a careful drag.
  */
-enum class SpaceSwipeAction { NONE, LANGUAGE, CURSOR, NUMPAD }
+enum class SpaceSwipeAction {
+    NONE,
+    LANGUAGE,
+    CURSOR,
+    NUMPAD,
+
+    /**
+     * Opens Android's own list of keyboards (#477). On the hold slot a still
+     * hold is enough: there is nothing for a drag to steer, so the list
+     * opens when the hold delay runs out.
+     */
+    KEYBOARDS,
+}
 
 /**
  * What the resting spacebar label shows. [LANGUAGE] the current language name,

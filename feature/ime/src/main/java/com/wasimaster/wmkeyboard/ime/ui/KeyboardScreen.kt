@@ -21075,7 +21075,12 @@ private fun Modifier.pointerInputKey(
                     } else {
                         minOf(longPressDelayMs, SpaceHoldPickerMs)
                     }
-                    val holdJob = if (holdOpensAlternates || holdOpensSwitcher) {
+                    // A hold slot set to the keyboard list opens it on the hold
+                    // alone (#477), unless authored keys have the hold.
+                    val holdOpensKeyboards = !holdOpensAlternates &&
+                        spaceLongSwipe == SpaceSwipeAction.KEYBOARDS
+                    var keyboardsOpened = false
+                    val holdJob = if (holdOpensAlternates || holdOpensSwitcher || holdOpensKeyboards) {
                         scope.launch {
                             delay(holdDelayMs.toLong())
                             if (action == null) {
@@ -21083,6 +21088,14 @@ private fun Modifier.pointerInputKey(
                                     alternatesOpened = true
                                     if (hapticOnLongPress) onKeyPress()
                                     openAlternates()
+                                    return@launch
+                                }
+                                if (holdOpensKeyboards) {
+                                    // `hidden` latches so the release types no space.
+                                    keyboardsOpened = true
+                                    hidden = true
+                                    if (hapticOnLongPress) onKeyPress()
+                                    onKey(Key(label = " ", action = KeyAction.InputMethodPicker))
                                     return@launch
                                 }
                                 // List for a long ring (> 4, unless the user keeps
@@ -21117,6 +21130,11 @@ private fun Modifier.pointerInputKey(
                         // types no space either.
                         if (alternatesOpened) {
                             alternates?.moveTo(change.position, reachPx, steerPx)
+                            change.consume()
+                            continue
+                        }
+                        // The keyboard list is up: nothing left for this finger to do.
+                        if (keyboardsOpened) {
                             change.consume()
                             continue
                         }
@@ -21210,6 +21228,14 @@ private fun Modifier.pointerInputKey(
                                 lastY = change.position.y
                                 accumulated = 0f
                                 accumulatedY = 0f
+                                if (action == SpaceSwipeAction.KEYBOARDS) {
+                                    // Discrete, like the numpad below: the list
+                                    // opens once and the gesture goes inert.
+                                    onKey(Key(label = " ", action = KeyAction.InputMethodPicker))
+                                    hidden = true
+                                    change.consume()
+                                    break
+                                }
                                 if (action == SpaceSwipeAction.NUMPAD) {
                                     // Discrete action (A39): open the numeric panel once
                                     // and go inert. The synthetic Numpad key routes

@@ -133,6 +133,7 @@ private fun SpaceSwipeSetting(
     val language = stringResource(R.string.home_space_swipe_language_label)
     val cursor = stringResource(R.string.home_space_swipe_cursor_label)
     val numpad = stringResource(R.string.home_space_swipe_numpad_label)
+    val keyboards = stringResource(R.string.home_space_swipe_keyboards_label)
     ChoiceSetting(
         title = title,
         subtitle = subtitle,
@@ -143,6 +144,7 @@ private fun SpaceSwipeSetting(
                 SpaceSwipeAction.LANGUAGE -> language
                 SpaceSwipeAction.CURSOR -> cursor
                 SpaceSwipeAction.NUMPAD -> numpad
+                SpaceSwipeAction.KEYBOARDS -> keyboards
             }
         },
         selected = value,
@@ -2837,6 +2839,7 @@ private fun spaceSwipeDescRes(action: SpaceSwipeAction): Int = when (action) {
     SpaceSwipeAction.LANGUAGE -> R.string.typing_space_swipe_language_desc
     SpaceSwipeAction.CURSOR -> R.string.typing_space_swipe_cursor_desc
     SpaceSwipeAction.NUMPAD -> R.string.typing_space_swipe_numpad_desc
+    SpaceSwipeAction.KEYBOARDS -> R.string.typing_space_swipe_keyboards_desc
 }
 
 /**
