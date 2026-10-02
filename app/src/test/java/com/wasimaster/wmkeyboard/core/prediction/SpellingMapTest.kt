@@ -118,4 +118,25 @@ class SpellingMapTest {
             assertFalse("decomposed nukta: $line", bengali.contains('\u09BC'))
         }
     }
+
+    @Test fun anEnglishLookalikeDoesNotTakeABanglaWordsKeys() {
+        // Issue #486: the generated list had `fire` as the English word, so
+        // Avro wrote the loanword where its own rules spell a far commoner
+        // Bangla word. The keys of such a word belong to the rules.
+        val keys = listOf("dictionaries/en_bn.tsv", "dictionaries/bn_rom.tsv")
+            .flatMap { java.io.File("src/main/assets/$it").readLines() }
+            .filterNot { it.isBlank() || it.startsWith("#") }
+            .mapTo(HashSet()) { it.substringBefore('\t') }
+        val rules = mapOf(
+            "fire" to "\u09AB\u09BF\u09B0\u09C7",
+            "nice" to "\u09A8\u09BF\u099A\u09C7",
+            "make" to "\u09AE\u09BE\u0995\u09C7",
+            "here" to "\u09B9\u09C7\u09B0\u09C7",
+            "uni" to "\u0989\u09A8\u09BF",
+        )
+        for ((spelling, word) in rules) {
+            assertFalse("$spelling is listed", spelling in keys)
+            assertEquals(word, com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic.transliterate(spelling))
+        }
+    }
 }
