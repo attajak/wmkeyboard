@@ -774,6 +774,23 @@ internal fun ClipboardSettings(
                 default = SettingsDefaults.clipboard.detectEntities,
             ) { scope.launch { repository.setClipboardDetectEntities(it) } }
         }
+        item(visible = detectEntities) {
+            ToggleSetting(
+                R.string.clipboard_entity_icons_title,
+                stringResource(R.string.clipboard_entity_icons_subtitle),
+                settings.watch { it.clipboard.entityIcons },
+                info = stringResource(R.string.clipboard_entity_icons_info),
+                default = SettingsDefaults.clipboard.entityIcons,
+            ) { scope.launch { repository.setClipboardEntityIcons(it) } }
+        }
+        item(visible = detectEntities) {
+            ToggleSetting(
+                R.string.clipboard_entity_to_clipboard_title,
+                stringResource(R.string.clipboard_entity_to_clipboard_subtitle),
+                settings.watch { it.clipboard.entityToClipboard },
+                default = SettingsDefaults.clipboard.entityToClipboard,
+            ) { scope.launch { repository.setClipboardEntityToClipboard(it) } }
+        }
         // The number chips are the ones that go wrong, because a phone
         // number is the one fragment with no shape of its own. This row
         // is where the user gives it one.

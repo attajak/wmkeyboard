@@ -650,6 +650,11 @@
     <string name="ime_clip_open_link">Open link</string>
     <string name="ime_clip_view_image">View</string>
     <string name="ime_clip_extract_text">Extract text</string>
+    <string name="ime_clip_extract_parts">Extract</string>
+    <string name="ime_clip_extract_links">Links</string>
+    <string name="ime_clip_extract_phones">Phone numbers</string>
+    <string name="ime_clip_extract_codes">One-time codes</string>
+    <string name="ime_clip_entity_copied_toast">Copied to the clipboard</string>
     <string name="ime_clip_view_text">View full text</string>
     <!-- The bar on top of the clipboard panel that drags it taller or shorter, for a screen reader. -->
     <string name="ime_clipboard_height_desc">Clipboard panel height. Drag up or down</string>

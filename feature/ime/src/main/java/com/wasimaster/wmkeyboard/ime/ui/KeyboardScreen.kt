@@ -23816,6 +23816,8 @@ internal fun ClipInfoPopup(
     onView: (() -> Unit)? = null,
     /** Reads the text in an image clip; null for any other, or with the OCR tool off (#371). */
     onExtractText: (() -> Unit)? = null,
+    /** The links, numbers and codes found in a clip; null for a clip with none (#472). */
+    onExtractParts: (() -> Unit)? = null,
     /** Shows the clip's whole text; null for a clip with none, or one kept hidden (#414). */
     onViewText: (() -> Unit)? = null,
     /** Pins or unpins the clip; null while the clip's own pin button does that (#414). */
@@ -23931,6 +23933,16 @@ internal fun ClipInfoPopup(
                         Icon(Icons.Outlined.TextFields, contentDescription = null)
                         Spacer(Modifier.width(6.dp))
                         Text(stringResource(R.string.ime_clip_extract_text))
+                    }
+                }
+                if (onExtractParts != null) {
+                    TextButton(
+                        onClick = onExtractParts,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(Icons.Outlined.ContentCut, contentDescription = null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(stringResource(R.string.ime_clip_extract_parts))
                     }
                 }
                 if (onSendSticker != null) {

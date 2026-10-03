@@ -70,7 +70,8 @@ Turn on **Clear button** under [Options](#options) and a bin sits at the end of 
 
 To see a clip's info popup instead, press and hold its card. The popup gives the time it was copied, its type and size, and (if [source tracking](#options) is on) the app it came from. Some clips get buttons there too:
 
-- A **text** clip gets **View full text**, which swaps the popup for the clip's whole text, however long, in a box you can scroll. **Paste** there does what a tap on the card does, and **Close** puts it away. A [hidden password or code](#passwords-are-handled-deliberately) has no such button, since the panel never shows its text.
+- A **text** clip gets **View full text**, which swaps the popup for the clip's whole text, however long, in a box you can scroll, with every web address in it underlined in your theme's accent colour. **Paste** there does what a tap on the card does, and **Close** puts it away.
+- A clip with codes, phone numbers or links inside it gets **Extract** while [entity detection](#pulling-codes-and-links-out-of-a-clip) is on. With one part found, it pastes that part. With more, it lists them in sections, **Links**, **Phone numbers** and **One-time codes**, and a press on one pastes it. A [hidden password or code](#passwords-are-handled-deliberately) has no such button, since the panel never shows its text.
 - A **link**, a clip that is one web address and nothing else, gets **Open link**, which opens it in your browser. A hidden clip never does, since the browser would show what the panel hides.
 - An **image** gets **View**, which shows the picture full screen: pinch or double-tap to zoom, drag to look around, tap or press Back to return to where you were typing. It also gets **Send as sticker**, which runs the picture through the sticker processor before it goes.
 - An **image** also gets **Extract text** while the [text scanner](/tools/scanner/#scanning-text-ocr) is on in your tools <Flavor edition="full" />. The scanner opens on the picture instead of the camera and reads it straight away, in the language you type in. The words come back as chips: keep the ones you want, then **Copy** puts them on the clipboard, where they become a clip of their own, or **Insert** types them. **Scan again** shows the picture with its language chip, so you can read it again in another language. The back button returns to the clipboard.
@@ -114,6 +115,10 @@ Matching is a case-insensitive substring search, and it reaches past a clip's ow
 ## Pulling codes and links out of a clip
 
 Turn on entity detection and the panel scans your recent clips for one-time codes, phone numbers and links. Each one becomes a dashed-outline chip above the history grid, so the six digits inside a verification text are one tap away rather than a copy-select-paste. Tapping a chip pastes just that fragment and leaves the full clip in place. Press and hold a chip to see it highlighted inside the message it came from.
+
+With **Show the found parts as icons on each clip** on, the chips give way to icons on the clips themselves: a link, a phone or a code icon at the end of each card's bottom row, for each kind found in it, with a small number when there's more than one. Press an icon to paste its part, or, when it counts more than one, to pick from the list. Every clip shows its own parts this way, not only the newest few the chip strip has room for.
+
+With **Copy picked parts to the clipboard** on, a part you pick, from a chip, an icon or **Extract**, is copied as a clip of its own instead of typed, ready to paste wherever you need it.
 
 <PhoneFrame side caption="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message.">
   <Shot id="tools/clipboard-entity-chips" alt="Entity chips above the history grid: an OTP and a phone number pulled out of a longer message." />
@@ -178,6 +183,8 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.
 - **Clear button**: the [bin](#clearing-the-history) that deletes every unpinned clip after asking, and empties the system clipboard unless it holds a pinned clip; off by default.
 - **Detect codes, numbers and links**: enables the [entity chips](#pulling-codes-and-links-out-of-a-clip); on by default. Detection runs entirely on the device.
+- **Show the found parts as icons on each clip**: off by default, and only while detection is on. Icons with counts on each clip in place of the chip strip.
+- **Copy picked parts to the clipboard**: off by default, and only while detection is on. A picked code, number or link is copied rather than typed.
 - **Phone number formats**: a nav row, shown only while detection is on, opening the mask editor covered in [Phone number formats](/reference/settings/phone-formats/). Its subtitle counts your saved formats, and says every number becomes a chip once you have deleted them all.
 - **Forget after you paste a password**: the paste-time purge described [above](#passwords-are-handled-deliberately); off by default.
 - **Link previews**: fetches a copied link's page title and description directly from the linked site; off by default, and the toggle's own description says so plainly.

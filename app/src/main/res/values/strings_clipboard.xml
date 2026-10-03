@@ -90,6 +90,11 @@
     <string name="clipboard_search_subtitle">Show a search bar at the top of the clipboard panel. It filters the history as you type</string>
     <string name="clipboard_entities_title">Detect codes, numbers and links</string>
     <string name="clipboard_entities_subtitle">Take one-time codes, phone numbers and links out of your clips. Each one becomes its own chip</string>
+    <string name="clipboard_entity_icons_title">Show the found parts as icons on each clip</string>
+    <string name="clipboard_entity_icons_subtitle">In place of the chips above the history</string>
+    <string name="clipboard_entity_icons_info">Each clip shows a small icon for each kind of part found in it: a link, a phone number or a code. A number on the icon says how many there are. Press an icon to see the parts and pick one. The chips above the history go away while this is on. Press and hold a clip and press Extract to do the same from its menu.</string>
+    <string name="clipboard_entity_to_clipboard_title">Copy picked parts to the clipboard</string>
+    <string name="clipboard_entity_to_clipboard_subtitle">A picked link, number or code becomes a clip, and is not typed</string>
     <string name="clipboard_entities_info">The chips sit above the history in dashed outlines, so they read as parts of a clip and not as clips of their own. Press and hold a chip to see it marked inside the clip that it comes from. A press pastes only that part, and the clip stays in the history. The keyboard finds these parts on your device.</string>
     <string name="clipboard_phone_formats_title">Phone number formats</string>
     <string name="clipboard_phone_formats_subtitle">Keep only the numbers that look like the ones you copy. Every number becomes a chip now</string>

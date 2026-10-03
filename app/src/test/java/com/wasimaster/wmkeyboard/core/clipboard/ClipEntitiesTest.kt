@@ -152,6 +152,25 @@ class ClipEntitiesTest {
         assertEquals(listOf("445566"), ClipEntities.entitiesIn(store.items(now)).map { it.value })
     }
 
+    @Test fun eachClipKeepsItsOwnParts() {
+        // #472: the cards count what is in them, so a part two clips share is
+        // on both, and one clip lists every part it holds.
+        val store = ClipboardStore(null)
+        val now = System.currentTimeMillis()
+        store.add("code 445566 expires soon", now = now)
+        store.add("your code 445566, see https://a.example/x and https://b.example/y", now = now)
+        store.add("https://only.example/link", now = now)
+        val byClip = ClipEntities.byClip(store.items(now))
+        val items = store.items(now)
+        assertEquals(
+            listOf(ClipEntityKind.OTP, ClipEntityKind.URL, ClipEntityKind.URL),
+            byClip[items.first { it.text.startsWith("your") }.id]!!.map { it.kind },
+        )
+        assertEquals(listOf("445566"), byClip[items.first { it.text.startsWith("code") }.id]!!.map { it.value })
+        // A clip that is only its fragment has nothing to extract.
+        assertTrue(items.first { it.text.startsWith("https://only") }.id !in byClip)
+    }
+
     @Test fun imageAndFileClipsAreNotScanned() {
         val store = ClipboardStore(null)
         val now = System.currentTimeMillis()

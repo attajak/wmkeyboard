@@ -195,6 +195,31 @@ object ClipEntities {
         return found.sortedBy { it.kind.ordinal }.take(MAX_ENTITIES)
     }
 
+    /**
+     * Each clip's own fragments, by [ClipItem.id] (#472): what the clip cards
+     * count in their corner and offer under Extract. The same rules as
+     * [entitiesIn] (no masked clip, nothing that is the whole clip), but per
+     * clip and uncapped across clips, since every card answers for itself. A
+     * fragment repeated inside one clip is listed once.
+     */
+    fun byClip(
+        items: List<ClipItem>,
+        phoneFormats: List<PhoneMask> = emptyList(),
+    ): Map<Long, List<ClipEntity>> {
+        val out = HashMap<Long, List<ClipEntity>>()
+        for (item in items) {
+            if (!item.kind.isTextual || item.sensitive) continue
+            val text = item.text.take(MAX_SCANNED_CHARS)
+            val whole = text.trim()
+            val found = extract(text, item.id, phoneFormats)
+                .filter { it.value != whole }
+                .distinctBy { it.key }
+                .sortedBy { it.kind.ordinal }
+            if (found.isNotEmpty()) out[item.id] = found
+        }
+        return out
+    }
+
     /** Codes sitting close enough to a code-ish word to be that code. */
     private fun otpTokens(text: String): List<Pair<Int, String>> {
         // Half-open (start, end) spans, so a token butting straight up against

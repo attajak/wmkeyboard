@@ -30707,6 +30707,20 @@ open class WMKeyboardService : InputMethodService() {
     fun onClipboardEntityTapped(entity: com.wasimaster.wmkeyboard.core.clipboard.ClipEntity) {
         if (!isClipboardAccessible()) return
         vibrate()
+        // Asked for as a clip of its own rather than typed (#472). Through the
+        // system clipboard, so the copy listener files it in the history like
+        // any other copy, and the next paste anywhere is this part.
+        if (_uiState.value.settings.clipboard.entityToClipboard) {
+            runCatching {
+                (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                    .setPrimaryClip(android.content.ClipData.newPlainText(null, entity.value))
+            }
+            // Android 13 and later say so themselves.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                Toast.makeText(this, getString(R.string.ime_clip_entity_copied_toast), Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
         // A code out of a clip goes in the same way a code off the chip does:
         // character by character, for the boxes that take one each.
         if (entity.kind == ClipEntityKind.OTP) {

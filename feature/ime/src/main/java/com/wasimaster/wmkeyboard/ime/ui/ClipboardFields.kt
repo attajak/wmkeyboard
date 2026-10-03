@@ -98,6 +98,16 @@ import kotlin.math.roundToInt
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntities
 import com.wasimaster.wmkeyboard.core.clipboard.ClipEntity
+import com.wasimaster.wmkeyboard.core.clipboard.ClipEntityKind
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.Password
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Link
 import com.wasimaster.wmkeyboard.core.clipboard.ClipItem
 import com.wasimaster.wmkeyboard.core.clipboard.ClipKind
 import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
@@ -209,6 +219,13 @@ internal class ClipboardPanelSession(
     val clearAsking: MutableState<Boolean>,
     /** Image clips offer Extract text: the OCR tool is on in a build that has it. */
     val ocr: Boolean,
+    /**
+     * Each clip's own fragments, by id (#472), for the Extract action and,
+     * with [entityIcons], the icons on the cards. Empty with detection off.
+     */
+    val perClip: Map<Long, List<ClipEntity>> = emptyMap(),
+    /** The cards count their fragments in icons, and the chip strip stands down. */
+    val entityIcons: Boolean = false,
 ) {
     /** The question is on screen: asked, and there is still something to delete. */
     val confirmingClear: Boolean get() = showClear && clearAsking.value
@@ -240,10 +257,17 @@ internal fun rememberClipboardPanelSession(state: KeyboardUiState): ClipboardPan
     // per history change rather than on every recomposition.
     val phoneFormats = state.settings.clipboard.phoneFormats
     val phoneMasks = remember(phoneFormats) { PhoneFormats.parseAll(phoneFormats) }
-    val allEntities = if (state.settings.clipboard.detectEntities) {
+    val detect = state.settings.clipboard.detectEntities
+    val entityIcons = detect && state.settings.clipboard.entityIcons
+    val allEntities = if (detect && !entityIcons) {
         remember(state.clipboardItems, phoneMasks) { ClipEntities.entitiesIn(state.clipboardItems, phoneMasks) }
     } else {
         emptyList()
+    }
+    val perClip = if (detect) {
+        remember(state.clipboardItems, phoneMasks) { ClipEntities.byClip(state.clipboardItems, phoneMasks) }
+    } else {
+        emptyMap()
     }
     // While searching the panel is only a couple of rows tall — the keys have
     // taken the rest — so the fragment strip stands down rather than eating one.
@@ -260,11 +284,11 @@ internal fun rememberClipboardPanelSession(state: KeyboardUiState): ClipboardPan
     }
     return remember(
         shownItems, entities, showSearch, query, gridState, list, numbers,
-        tabbed, pinnedCount, unpinnedCount, showClear, ocr,
+        tabbed, pinnedCount, unpinnedCount, showClear, ocr, perClip, entityIcons,
     ) {
         ClipboardPanelSession(
             shownItems, entities, showSearch, query, gridState, list, numbers,
-            tabbed, tab, pinnedCount, unpinnedCount, showClear, clearAsking, ocr,
+            tabbed, tab, pinnedCount, unpinnedCount, showClear, clearAsking, ocr, perClip, entityIcons,
         )
     }
 }
@@ -773,7 +797,13 @@ private fun ClipboardHistory(
             ) {
                 val number = session.numbers[item.id]
                 val time = clipTimeText(item, timeLabel, clipboard, now)
-                val hold = ClipHold(holdDelete = !swipe || !buttons, holdPin = !buttons, ocr = session.ocr)
+                val hold = ClipHold(
+                    holdDelete = !swipe || !buttons,
+                    holdPin = !buttons,
+                    ocr = session.ocr,
+                    entities = session.perClip[item.id].orEmpty(),
+                    icons = session.entityIcons,
+                )
                 val outlined = clipboard.outlinePinned && item.pinned
                 if (session.list) {
                     ClipRow(item, number, lines, time, focused = index == focused, outlined, buttons, hold, callbacks)
@@ -878,10 +908,17 @@ private fun Modifier.clipSurface(
  * What a clip's press-and-hold popup offers beyond its kind: a Delete when
  * [holdDelete] (the swipe or the bin that would otherwise delete is off), Pin
  * when [holdPin] (the clip has no pin button, #414), and Extract text on a
- * picture when [ocr] (#371).
+ * picture when [ocr] (#371). Extract, when the clip holds [entities] (#472),
+ * which the card also shows as icons while [icons] is on.
  */
 @Immutable
-private class ClipHold(val holdDelete: Boolean, val holdPin: Boolean, val ocr: Boolean)
+private class ClipHold(
+    val holdDelete: Boolean,
+    val holdPin: Boolean,
+    val ocr: Boolean,
+    val entities: List<ClipEntity> = emptyList(),
+    val icons: Boolean = false,
+)
 
 /**
  * The press-and-hold popup for a clip, with the actions its kind allows: View
@@ -897,12 +934,17 @@ private fun ClipHoldPopup(
     onDismiss: () -> Unit,
 ) {
     var fullText by remember { mutableStateOf(false) }
+    var extracting by remember { mutableStateOf(false) }
     if (fullText) {
         ClipFullTextPopup(
             item,
             onPaste = { onDismiss(); callbacks.onItem(item) },
             onDismiss = onDismiss,
         )
+        return
+    }
+    if (extracting) {
+        ClipExtractPopup(hold.entities, onPick = { onDismiss(); callbacks.onEntity(it) }, onDismiss = onDismiss)
         return
     }
     val image = item.kind == ClipKind.IMAGE
@@ -931,6 +973,12 @@ private fun ClipHoldPopup(
         onExtractText = if (image && hold.ocr) {
             { onDismiss(); callbacks.actions.onExtractText(item) }
         } else null,
+        // One part is simply that part; more open the picker (#472).
+        onExtractParts = when (hold.entities.size) {
+            0 -> null
+            1 -> { { onDismiss(); callbacks.onEntity(hold.entities.single()) } }
+            else -> { { extracting = true } }
+        },
         onDelete = if (hold.holdDelete) {
             { onDismiss(); callbacks.onDelete(item) }
         } else null,
@@ -979,7 +1027,11 @@ private fun ClipFullTextPopup(item: ClipItem, onPaste: () -> Unit, onDismiss: ()
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp),
                 ) {
                     items(chunks) { chunk ->
-                        Text(chunk, fontSize = 13.sp, color = kb.popupText)
+                        // Links in the accent colour (#472), so an address
+                        // stands out of a long clip.
+                        val accent = kb.accent
+                        val shown = remember(chunk, accent) { withLinksMarked(chunk, accent) }
+                        Text(shown, fontSize = 13.sp, color = kb.popupText)
                     }
                 }
                 Row(
@@ -1025,6 +1077,25 @@ internal fun clipTextChunks(text: String, max: Int = ClipTextChunkChars): List<S
     }
     return out
 }
+
+/** [text] with every web address in it set in [color] and underlined. */
+internal fun withLinksMarked(text: String, color: Color): AnnotatedString = buildAnnotatedString {
+    append(text)
+    for (match in WebAddress.findAll(text)) {
+        val end = match.range.last + 1 - match.value.takeLastWhile { it in TrailingPunctuation }.length
+        addStyle(
+            SpanStyle(color = color, textDecoration = TextDecoration.Underline),
+            match.range.first,
+            end,
+        )
+    }
+}
+
+/** An http(s) address or one starting with www., up to the next space. */
+private val WebAddress = Regex("""(?i)\b(?:https?://|www\.)[^\s<>"]+""")
+
+/** What a sentence leaves stuck to the end of an address it ends on. */
+private const val TrailingPunctuation = ".,;:!?)]}'\""
 
 /** How much text one item of [ClipFullTextPopup]'s list holds. */
 internal const val ClipTextChunkChars = 2_000
@@ -1126,9 +1197,10 @@ private fun ClipCard(
     ) {
         if (showInfo) ClipHoldPopup(item, hold, callbacks) { showInfo = false }
         ClipBody(item, maxLines = lines)
+        val icons = hold.icons && hold.entities.isNotEmpty()
         // Per card: one clip may still have a number or a time to show while
         // the next, pinned and unnumbered, has nothing left for the row.
-        val footer = buttons || number != null || time != null || item.kind == ClipKind.HTML
+        val footer = buttons || number != null || time != null || item.kind == ClipKind.HTML || icons
         if (footer) Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1149,10 +1221,139 @@ private fun ClipCard(
             }
             if (time != null) ClipTimeText(time, Modifier.weight(1f, fill = false))
             Spacer(Modifier.weight(1f))
+            if (icons) ClipEntityIcons(hold.entities, callbacks)
             if (buttons) ClipActions(item, callbacks)
         }
     }
 }
+
+/**
+ * What was found in one clip, as an icon per kind with a count once there is
+ * more than one (#472): the strip's chips folded onto the card they came from.
+ * A press opens the parts to pick from; a kind with one part pastes it.
+ */
+@Composable
+private fun ClipEntityIcons(entities: List<ClipEntity>, callbacks: ClipboardFieldCallbacks) {
+    var picking by remember { mutableStateOf<List<ClipEntity>?>(null) }
+    picking?.let { shown ->
+        ClipExtractPopup(shown, onPick = { picking = null; callbacks.onEntity(it) }, onDismiss = { picking = null })
+    }
+    for ((kind, ofKind) in entities.groupBy { it.kind }) {
+        val label = stringResource(kind.labelRes)
+        Box {
+            ClipActionCircle(
+                icon = clipEntityIcon(kind),
+                description = label,
+                tint = MaterialTheme.colorScheme.primary,
+            ) {
+                if (ofKind.size == 1) callbacks.onEntity(ofKind.single()) else picking = ofKind
+            }
+            if (ofKind.size > 1) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(x = 4.dp, y = (-4).dp)
+                        .heightIn(min = 14.dp)
+                        .widthIn(min = 14.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(horizontal = 3.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        ofKind.size.toString(),
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** The icon each kind of fragment wears, here and on the strip's chips. */
+internal fun clipEntityIcon(kind: ClipEntityKind): ImageVector = when (kind) {
+    ClipEntityKind.OTP -> Icons.Outlined.Password
+    ClipEntityKind.PHONE -> Icons.Outlined.Phone
+    ClipEntityKind.URL -> Icons.Outlined.Link
+}
+
+/**
+ * The parts found in a clip, in sections by kind (#472): links, phone numbers,
+ * codes. A press on one pastes it, or copies it with "Copy picked parts" on.
+ */
+@Composable
+private fun ClipExtractPopup(entities: List<ClipEntity>, onPick: (ClipEntity) -> Unit, onDismiss: () -> Unit) {
+    val kb = LocalKbTheme.current
+    Popup(
+        popupPositionProvider = rememberAboveAnchorPopup(),
+        onDismissRequest = onDismiss,
+    ) {
+        Surface(
+            shape = kb.menuShape(),
+            color = kb.popup,
+            border = kb.popupSurfaceBorder(),
+            shadowElevation = elevationFor(kb.menuShapeKind, 6.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .widthIn(min = 200.dp, max = ClipFullTextMaxWidth),
+        ) {
+            LazyColumn(
+                modifier = Modifier.heightIn(max = ClipFullTextMaxHeight),
+                contentPadding = PaddingValues(vertical = 8.dp),
+            ) {
+                // Links first, then numbers, then codes: the order the request
+                // names them in, and the order they are looked at.
+                val sections = listOf(ClipEntityKind.URL, ClipEntityKind.PHONE, ClipEntityKind.OTP)
+                    .mapNotNull { kind -> entities.filter { it.kind == kind }.takeIf { it.isNotEmpty() }?.let { kind to it } }
+                for ((kind, ofKind) in sections) {
+                    item(key = "header-${kind.name}") {
+                        Text(
+                            stringResource(kind.sectionRes),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = kb.popupText.copy(alpha = 0.6f),
+                            modifier = Modifier.padding(start = 14.dp, end = 14.dp, top = 6.dp, bottom = 2.dp),
+                        )
+                    }
+                    items(ofKind, key = { it.key }) { entity ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onPick(entity) }
+                                .padding(horizontal = 14.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                clipEntityIcon(kind),
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                                tint = kb.accent,
+                            )
+                            Spacer(Modifier.width(10.dp))
+                            Text(
+                                entity.value,
+                                fontSize = 14.sp,
+                                color = kb.popupText,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** A section heading in [ClipExtractPopup]. */
+private val ClipEntityKind.sectionRes: Int
+    get() = when (this) {
+        ClipEntityKind.URL -> R.string.ime_clip_extract_links
+        ClipEntityKind.PHONE -> R.string.ime_clip_extract_phones
+        ClipEntityKind.OTP -> R.string.ime_clip_extract_codes
+    }
 
 /**
  * One history row of the list view: the number, the clip across the full
@@ -1220,7 +1421,13 @@ private fun ClipRow(
                 if (time != null) ClipTimeText(time, Modifier.padding(top = 2.dp))
             }
         }
-        if (buttons) Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { ClipActions(item, callbacks) }
+        val icons = hold.icons && hold.entities.isNotEmpty()
+        if (buttons || icons) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                if (icons) ClipEntityIcons(hold.entities, callbacks)
+                if (buttons) ClipActions(item, callbacks)
+            }
+        }
     }
 }
 

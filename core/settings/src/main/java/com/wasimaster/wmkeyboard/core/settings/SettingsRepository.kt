@@ -5494,6 +5494,17 @@ data class ClipboardSettings(
      */
     val detectEntities: Boolean = true,
     /**
+     * Each clip shows what was found in it as small icons, a count on each
+     * kind, instead of the strip of chips above the history (#472). Only
+     * while [detectEntities] is on.
+     */
+    val entityIcons: Boolean = false,
+    /**
+     * A fragment picked from a clip (a chip, or from Extract) goes onto the
+     * clipboard as a clip of its own instead of into the text box (#472).
+     */
+    val entityToClipboard: Boolean = false,
+    /**
      * The phone-number shapes to keep, as masks (`+880 1XXX-XXXXXX`). Empty
      * means every number-shaped run counts, which is where the detector's false
      * positives come from — an invoice total and a tracking id have the shape
@@ -8159,6 +8170,8 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_CLEAR_AFTER_PASSWORD_PASTE =
             booleanPreferencesKey("clipboard_clear_after_password_paste")
         private val CLIPBOARD_DETECT_ENTITIES = booleanPreferencesKey("clipboard_detect_entities")
+        private val CLIPBOARD_ENTITY_ICONS = booleanPreferencesKey("clipboard_entity_icons")
+        private val CLIPBOARD_ENTITY_TO_CLIPBOARD = booleanPreferencesKey("clipboard_entity_to_clipboard")
         private val CLIPBOARD_PHONE_FORMATS = stringSetPreferencesKey("clipboard_phone_formats")
         private val CLIPBOARD_FULL_BLEED = booleanPreferencesKey("clipboard_full_bleed")
         private val CLIPBOARD_VIEW = stringPreferencesKey("clipboard_view")
@@ -9607,6 +9620,8 @@ class SettingsRepository(private val context: Context) {
             clearAfterPasswordPaste = p[CLIPBOARD_CLEAR_AFTER_PASSWORD_PASTE]
                 ?: defaults.clipboard.clearAfterPasswordPaste,
             detectEntities = p[CLIPBOARD_DETECT_ENTITIES] ?: defaults.clipboard.detectEntities,
+            entityIcons = p[CLIPBOARD_ENTITY_ICONS] ?: defaults.clipboard.entityIcons,
+            entityToClipboard = p[CLIPBOARD_ENTITY_TO_CLIPBOARD] ?: defaults.clipboard.entityToClipboard,
             phoneFormats = p[CLIPBOARD_PHONE_FORMATS] ?: seededPhoneFormats(),
             fullBleed = p[CLIPBOARD_FULL_BLEED] ?: defaults.clipboard.fullBleed,
             view = p[CLIPBOARD_VIEW]
@@ -15365,6 +15380,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardDetectEntities(value: Boolean) =
         editPrefs { it[CLIPBOARD_DETECT_ENTITIES] = value }
+
+    suspend fun setClipboardEntityIcons(value: Boolean) =
+        editPrefs { it[CLIPBOARD_ENTITY_ICONS] = value }
+
+    suspend fun setClipboardEntityToClipboard(value: Boolean) =
+        editPrefs { it[CLIPBOARD_ENTITY_TO_CLIPBOARD] = value }
 
     /**
      * Adds a phone-number mask. Invalid masks are dropped here rather than at
