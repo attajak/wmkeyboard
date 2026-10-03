@@ -952,9 +952,11 @@ internal fun KbTheme.accessibilityAdjusted(settings: KeyboardSettings): KbTheme 
             modifierKey = modifier,
             keyText = maxContrastOn(key),
             modifierKeyText = maxContrastOn(modifier),
-            // Back to the label colour faded: a theme's own hint hue was
-            // picked against faces this mode has just repainted.
-            hintText = null,
+            // As legible as the label it sits beside. A theme's own hint hue
+            // was picked against faces this mode has just repainted, and the
+            // label faded to half, the fallback everywhere else, is the one
+            // thing on the key a low-vision reader cannot make out (#493).
+            hintText = maxContrastOn(key),
             enterKeyText = maxContrastOn(kb.enterKey),
             popupText = maxContrastOn(kb.popup),
             chipText = maxContrastOn(kb.chip),

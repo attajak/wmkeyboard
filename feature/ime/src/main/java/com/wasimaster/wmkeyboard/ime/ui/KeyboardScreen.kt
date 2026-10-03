@@ -20390,6 +20390,9 @@ private fun BoxScope.KeyCornerHint(
     // silences it, since that is an author asking for a clean corner
     // rather than an opinion about which hint belongs in it.
     val translit = transliterationRoman?.let { LocalTransliterationPreview.current?.of(it) }
+    // Bold labels make the corner bold too: it is the smaller of the two, so
+    // the harder one to read (#493).
+    val hintWeight = if (settings.accessibility.boldLabels) FontWeight.Bold else null
     when {
         // Drawn a step larger than the hint lane: these are Bengali
         // conjuncts, not a single Latin letter, and ক্ক at [HintLabelSp]
@@ -20401,6 +20404,7 @@ private fun BoxScope.KeyCornerHint(
                 .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
             fontSize = (TranslitHintSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
             color = hintColor,
+            fontWeight = hintWeight,
             maxLines = 1,
             softWrap = false,
             style = keyHintTextStyle(),
@@ -20421,6 +20425,7 @@ private fun BoxScope.KeyCornerHint(
                 .padding(top = settings.layoutBehavior.hintOffsetDp.dp, end = HintEndPadding),
             fontSize = (HintLabelSp * fontScale * settings.layoutBehavior.hintFontScale).sp,
             color = hintColor,
+            fontWeight = hintWeight,
             maxLines = 1,
             softWrap = false,
             style = keyHintTextStyle(),

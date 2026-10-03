@@ -1323,6 +1323,7 @@ fun ThemesScreen(
             action = stringResource(CommonR.string.common_disable),
         ) { scope.launch { repository.setAutoThemeEnabled(false) } }
     }
+    HighContrastThemeBanner(repository, settings)
     ChoiceControl(
         options = ThemeGalleryStyle.entries.map { it to stringResource(themeGalleryStyleLabelRes(it)) },
         selected = settings.watch { it.appUi.themeGalleryStyle },
@@ -2002,6 +2003,22 @@ private class OpenLook(
         settings.watch { pick(it, openFamilyAndLook(it, routeId, id)?.second ?: GoneLook) }
 }
 
+/**
+ * High contrast repaints the keys, the board and the hints over whatever theme
+ * is on, and the previews here draw the theme as it is stored. Without a word
+ * about it, a theme edited to the user's own colours looks right in every card
+ * and wrong on the keyboard (#493).
+ */
+@Composable
+private fun HighContrastThemeBanner(repository: SettingsRepository, settings: LiveSettings) {
+    if (!settings.watch { it.accessibility.highContrast }) return
+    val scope = rememberCoroutineScope()
+    StateBanner(
+        text = stringResource(R.string.theme_high_contrast_on_body),
+        action = stringResource(CommonR.string.common_disable),
+    ) { scope.launch { repository.setHighContrastKeys(false) } }
+}
+
 @Composable
 fun ThemeEditorScreen(
     repository: SettingsRepository,
@@ -2276,6 +2293,7 @@ fun ThemeEditorScreen(
     // variant is open — a way to delete it. Everything below the row edits
     // the open look alone.
     var confirmDeleteVariant by remember(lookId) { mutableStateOf(false) }
+    HighContrastThemeBanner(repository, settings)
     SettingsGroup(stringResource(R.string.theme_variant_section_title), foldKey = "theme/variant") {
         item {
             val members = settings.watch { s ->
