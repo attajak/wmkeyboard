@@ -3,6 +3,8 @@ package com.wasimaster.wmkeyboard.ime.ui
 import android.text.format.Formatter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.DownloadDone
 import androidx.compose.material.icons.outlined.PhoneAndroid
@@ -83,6 +86,8 @@ data class TranslateCallbacks(
     val onDownload: () -> Unit = {},
     val onReplace: () -> Unit = {},
     val onInsert: () -> Unit = {},
+    /** The clipboard's newest text into the text box (#474). */
+    val onPaste: () -> Unit = {},
 )
 
 /**
@@ -257,6 +262,7 @@ private fun TranslatePanel(
                 state = state,
                 focused = queryFocused,
                 onQueryTap = onQueryTap,
+                onPaste = callbacks.onPaste,
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
@@ -279,6 +285,7 @@ private fun TranslatePanel(
             state = state,
             focused = queryFocused,
             onQueryTap = onQueryTap,
+            onPaste = callbacks.onPaste,
             modifier = Modifier.fillMaxWidth(),
         )
         TranslateLanguageRow(state, callbacks, menus)
@@ -571,6 +578,7 @@ private fun TranslateQueryBox(
     state: KeyboardUiState,
     focused: Boolean,
     onQueryTap: () -> Unit,
+    onPaste: () -> Unit,
     modifier: Modifier,
 ) {
     val kb = LocalKbTheme.current
@@ -584,7 +592,8 @@ private fun TranslateQueryBox(
             .chipBorder(kb, shape)
             .focusRing(focused, shape)
             .clickable(enabled = !state.mediaSearchActive) { onQueryTap() }
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            // Room on the right for the paste button below.
+            .padding(start = 12.dp, end = 12.dp + TranslatePasteSize, top = 8.dp, bottom = 8.dp),
     ) {
         if (state.mediaSearchActive) {
             ClipEditText(
@@ -606,8 +615,26 @@ private fun TranslateQueryBox(
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        // Issue #474: text to translate is very often text just copied out of
+        // another app, and without this it took the clipboard panel, which
+        // closes this one.
+        Icon(
+            Icons.Outlined.ContentPaste,
+            contentDescription = stringResource(CommonR.string.common_paste),
+            tint = kb.secondaryText,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = TranslatePasteSize)
+                .size(TranslatePasteSize)
+                .clip(CircleShape)
+                .clickable(onClick = onPaste)
+                .padding(4.dp),
+        )
     }
 }
+
+/** The paste button in the text box's corner, padding included. */
+private val TranslatePasteSize = 28.dp
 
 /**
  * What the source chip says: the user's pick, or what was detected, or the

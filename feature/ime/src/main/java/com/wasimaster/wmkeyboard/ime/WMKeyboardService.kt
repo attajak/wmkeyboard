@@ -26926,7 +26926,22 @@ open class WMKeyboardService : InputMethodService() {
             onDownload = ::onTranslateDownload,
             onReplace = ::onTranslateReplace,
             onInsert = ::onTranslateInsert,
+            onPaste = ::onTranslatePaste,
         )
+    }
+
+    /**
+     * The paste button in Translate's text box (#474): the clipboard's text
+     * goes in at the box's caret, through the same path a paste key takes.
+     * Pasted into a box that was not being typed in, it translates straight
+     * away and leaves the result showing, the way a selection opens it.
+     */
+    fun onTranslatePaste() {
+        vibrate()
+        val typing = _uiState.value.mediaSearchActive
+        if (!typing) _uiState.update { it.copy(mediaSearchActive = true, mediaAction = null) }
+        capturePaste()
+        if (!typing && _uiState.value.mediaQuery.isNotBlank()) runMediaSearch()
     }
 
     /**
