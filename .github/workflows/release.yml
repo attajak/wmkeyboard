@@ -286,22 +286,23 @@ jobs:
           retention-days: 30
 
   # The build with no INTERNET permission (#292), for people who want a
-  # keyboard that cannot reach the network at all. One flavour only: full,
-  # because everything it adds over lite (the bundled scanners, the grammar
-  # checker, an imported local model) runs on the device, and all languages,
-  # because it is one download for everyone. arm64-v8a and universal only.
+  # keyboard that cannot reach the network at all. Two of the four: full · all
+  # languages, because everything full adds over lite (the bundled scanners,
+  # the grammar checker, an imported local model) runs on the device, and lite ·
+  # English, the smallest, for a phone short on space or memory (#490). Both
+  # install over the regular builds and back. arm64-v8a and universal only.
   #
   # Its own runner, like `fdroid`: wmkb.noInternet is a project-wide flag, so
   # it cannot share a Gradle invocation with the four regular builds, and a
-  # second invocation in that job would overwrite their fullIntlRelease APKs.
+  # second invocation in that job would overwrite their release APKs.
   # Every other input matches the `apks` job, which keeps the dex the same as
-  # full-intl's and so lets the retrace workflow use that mapping.
+  # the regular build's and so lets the retrace workflow use that mapping.
   offline:
     name: No-internet APKs
     needs: verify
     if: needs.verify.outputs.buildable == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -343,7 +344,7 @@ jobs:
           WMKB_DROPBOX_APP_KEY: ${{ secrets.WMKB_DROPBOX_APP_KEY }}
           WMKB_ONEDRIVE_CLIENT_ID: ${{ secrets.WMKB_ONEDRIVE_CLIENT_ID }}
         run: |
-          ./gradlew assembleFullIntlRelease \
+          ./gradlew assembleFullIntlRelease assembleLiteEnRelease \
             -Pkotlin.daemon.jvmargs=-Xmx4g --stacktrace
 
       - name: Wipe keystore
@@ -363,26 +364,30 @@ jobs:
           code=$(grep '^wmkb.versionCode=' gradle.properties | cut -d= -f2)
           aapt2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)
           mkdir -p dist
-          for abi in arm64-v8a universal; do
-            apk=$(find app/build/outputs/apk -name "app-full-intl-${abi}-release.apk" | head -1)
-            if [ -z "$apk" ]; then
-              echo "::error::No app-full-intl-${abi}-release.apk under app/build/outputs/apk"
+          for variant in full-intl:fullIntl lite-en:liteEn; do
+            name=${variant%%:*}
+            gradle=${variant##*:}
+            for abi in arm64-v8a universal; do
+              apk=$(find app/build/outputs/apk -name "app-${name}-${abi}-release.apk" | head -1)
+              if [ -z "$apk" ]; then
+                echo "::error::No app-${name}-${abi}-release.apk under app/build/outputs/apk"
+                exit 1
+              fi
+              perms=$("$aapt2" dump permissions "$apk")
+              echo "$perms"
+              if echo "$perms" | grep -q "android.permission.INTERNET'"; then
+                echo "::error::$apk still declares android.permission.INTERNET"
+                exit 1
+              fi
+              cp "$apk" "dist/wmkeyboard-${version}-vc${code}-${name}-nointernet-${abi}.apk"
+            done
+            map=app/build/outputs/mapping/${gradle}Release/mapping.txt
+            if [ ! -f "$map" ]; then
+              echo "::error::No R8 mapping at $map"
               exit 1
             fi
-            perms=$("$aapt2" dump permissions "$apk")
-            echo "$perms"
-            if echo "$perms" | grep -q "android.permission.INTERNET'"; then
-              echo "::error::$apk still declares android.permission.INTERNET"
-              exit 1
-            fi
-            cp "$apk" "dist/wmkeyboard-${version}-vc${code}-full-intl-nointernet-${abi}.apk"
+            gzip -9c "$map" > "dist/wmkeyboard-${version}-vc${code}-${name}-nointernet-mapping.txt.gz"
           done
-          map=app/build/outputs/mapping/fullIntlRelease/mapping.txt
-          if [ ! -f "$map" ]; then
-            echo "::error::No R8 mapping at $map"
-            exit 1
-          fi
-          gzip -9c "$map" > "dist/wmkeyboard-${version}-vc${code}-full-intl-nointernet-mapping.txt.gz"
           ls -l dist
 
       - uses: actions/upload-artifact@v4
@@ -576,9 +581,9 @@ jobs:
           name: offline-apks
           path: dist
 
-      # Only the manifest differs from full-intl, so R8 should have renamed
-      # both the same way, and the retrace workflow, which reads `fullIntl`
-      # off either build's crash record, uses full-intl's mapping for both.
+      # Only the manifest differs from the regular build of each, so R8 should
+      # have renamed both the same way, and the retrace workflow, which reads
+      # the variant off either build's crash record, uses the regular mapping.
       # Identical: drop the copy. Different: keep it, and say so, because the
       # retrace workflow will not find it by itself.
       - name: Keep the no-internet mapping only if it differs

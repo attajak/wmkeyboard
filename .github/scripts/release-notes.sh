@@ -119,26 +119,34 @@ EOF
 # carry neither file, and get no section rather than one saying "not built".
 if [ -f "$dist/${prefix}-full-intl-nointernet-arm64-v8a.apk" ] \
   || [ -f "$dist/${prefix}-full-intl-nointernet-universal.apk" ]; then
+# lite · English joined it after 0.5.13 (#490); a release without it gets the row
+# left out rather than two empty cells.
+lite_offline=''
+if [ -f "$dist/${prefix}-lite-en-nointernet-arm64-v8a.apk" ] \
+  || [ -f "$dist/${prefix}-lite-en-nointernet-universal.apk" ]; then
+  lite_offline="| **lite · English** | $(cell "${prefix}-lite-en-nointernet-arm64-v8a.apk") | $(cell "${prefix}-lite-en-nointernet-universal.apk") |"
+fi
 cat <<EOF
 <details>
 <summary><b>No internet permission</b> (a keyboard that cannot reach the network at all)</summary>
 
-**full · all languages**, with \`android.permission.INTERNET\` taken out of the
+The regular builds with \`android.permission.INTERNET\` taken out of the
 manifest, so Android refuses every connection the app tries to make. Typing,
-prediction, gesture typing, the clipboard, grammar checking and the scanners
-work as usual, and so does a local AI model imported from a file. Anything
+prediction, gesture typing and the clipboard work as usual, and on full so do
+grammar checking, the scanners and a local AI model imported from a file. Anything
 that downloads (dictionary packs, voice and handwriting models, translation
 languages, GIFs, cloud backups) fails as it would with the phone offline, and
 the app cannot check for its own updates, so come back here for new versions.
 Language packs, voice models, OCR data and offline GIF packs fetched on another
 device can be imported instead
 ([how](https://wmkeyboard.pages.dev/privacy/offline/)).
-It is signed with the same key as the builds above and installs over them, and
-back, without losing a setting.
+Each is signed with the same key as the builds above and installs over them,
+and back, without losing a setting.
 
-| arm64-v8a | universal |
-|:---|:---|
-| $(cell "${prefix}-full-intl-nointernet-arm64-v8a.apk") | $(cell "${prefix}-full-intl-nointernet-universal.apk") |
+| | arm64-v8a | universal |
+|:---|:---|:---|
+| **full · all languages** | $(cell "${prefix}-full-intl-nointernet-arm64-v8a.apk") | $(cell "${prefix}-full-intl-nointernet-universal.apk") |
+${lite_offline}
 
 </details>
 
@@ -161,6 +169,7 @@ row "${prefix}-full-en-mapping.txt.gz" 'R8 mapping, **full · English**'
 row "${prefix}-lite-intl-mapping.txt.gz" 'R8 mapping, **lite · all languages**'
 row "${prefix}-lite-en-mapping.txt.gz" 'R8 mapping, **lite · English**'
 row "${prefix}-full-intl-nointernet-mapping.txt.gz" 'R8 mapping, **no internet permission**. Only attached when it differs from full · all languages, which otherwise serves both'
+row "${prefix}-lite-en-nointernet-mapping.txt.gz" 'R8 mapping, **lite · English, no internet permission**. Only attached when it differs from lite · English'
 row "${prefix}-play-mapping.txt.gz" 'R8 mapping, **Play build**. The Play channel flags change what R8 renames, so this is the only one that reads a crash from a Play install'
 row "${prefix}-full-intl-native-symbols.zip" 'Native debug symbols, **full · all languages**'
 row "${prefix}-full-en-native-symbols.zip" 'Native debug symbols, **full · English**'

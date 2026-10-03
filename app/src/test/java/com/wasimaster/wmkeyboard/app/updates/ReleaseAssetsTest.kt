@@ -49,6 +49,7 @@ class ReleaseAssetsTest {
     fun `never reads the no-internet build as an update for a regular one`() {
         assertNull(ReleaseAssets.parseAssetName("wmkeyboard-0.5.12-vc30-full-intl-nointernet-arm64-v8a.apk"))
         assertNull(ReleaseAssets.parseAssetName("wmkeyboard-0.5.12-vc30-full-intl-nointernet-universal.apk"))
+        assertNull(ReleaseAssets.parseAssetName("wmkeyboard-0.5.14-vc32-lite-en-nointernet-arm64-v8a.apk"))
     }
 
     @Test
