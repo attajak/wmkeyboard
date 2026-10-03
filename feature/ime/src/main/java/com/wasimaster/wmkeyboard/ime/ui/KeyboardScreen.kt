@@ -3113,7 +3113,10 @@ private fun TopBar(
     // nothing. With it off those openers wait behind the chevron instead: the
     // toolbar rests, and the first key moves the caret off the start, at which
     // point the candidates take the row as they always did.
+    // Not in an email field, where the strip only ever holds addresses: the
+    // remembered ones are offered at the start of the field on purpose (#475).
     val openersAtRest = !suggestionsFirst && state.caretAtFieldStart &&
+        state.fieldKind != FieldKind.EMAIL &&
         state.composingPreview.isEmpty() &&
         (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())
     val hasSuggestions =

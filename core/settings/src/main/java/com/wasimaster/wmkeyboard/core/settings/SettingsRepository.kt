@@ -2287,6 +2287,12 @@ data class SuggestionSourceSettings(
      * matters while [contactEmails] is on.
      */
     val contactEmailsInEmailFields: Boolean = true,
+    /**
+     * Remember the addresses typed into email fields and offer them in the
+     * next one, before a letter is typed (issue #475). Learns only from fields
+     * that call themselves email fields, and stays on the device.
+     */
+    val typedEmails: Boolean = false,
     /** Suggest the names of installed apps ("sign" → Signal). No permission needed. */
     val appNames: Boolean = false,
     /**
@@ -3772,6 +3778,9 @@ const val PHONETIC_SCRIPT_CHOICES_FILE = "learning/phonetic_script_choices.json"
 /** What the user did with the words their glides gave them (see `GlideOutcomes` in :core:prediction). */
 const val GLIDE_OUTCOMES_FILE = "learning/glide_outcomes.json"
 
+/** Addresses typed into email fields (see `TypedEmails` in :core:prediction). */
+const val TYPED_EMAILS_FILE = "learning/typed_emails.json"
+
 /** How the user draws each word (see `GlideShapeStore` in :core:prediction). */
 const val GLIDE_SHAPES_FILE = "learning/glide_shapes.json"
 
@@ -3789,6 +3798,7 @@ val LEARNED_DATA_FILES = listOf(
     LEARNED_CORRECTIONS_FILE,
     TAP_MODEL_FILE,
     APP_LANGUAGE_MIX_FILE,
+    TYPED_EMAILS_FILE,
     PHONETIC_SCRIPT_CHOICES_FILE,
     GLIDE_OUTCOMES_FILE,
     GLIDE_SHAPES_FILE,
@@ -7787,6 +7797,7 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("contact_email_suggestions")
         private val CONTACT_EMAIL_SUGGESTIONS_IN_EMAIL_FIELDS =
             booleanPreferencesKey("contact_email_suggestions_in_email_fields")
+        private val TYPED_EMAIL_SUGGESTIONS = booleanPreferencesKey("typed_email_suggestions")
         private val APP_NAME_SUGGESTIONS = booleanPreferencesKey("app_name_suggestions")
         private val SUGGESTION_BLACKLIST = stringSetPreferencesKey("suggestion_blacklist")
         private val SUGGESTION_BLACKLIST_SCOPE = stringPreferencesKey("suggestion_blacklist_scope")
@@ -9322,6 +9333,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.suggestionSources.contactEmails,
             contactEmailsInEmailFields = p[CONTACT_EMAIL_SUGGESTIONS_IN_EMAIL_FIELDS]
                 ?: defaults.suggestionSources.contactEmailsInEmailFields,
+            typedEmails = p[TYPED_EMAIL_SUGGESTIONS] ?: defaults.suggestionSources.typedEmails,
             appNames = p[APP_NAME_SUGGESTIONS] ?: defaults.suggestionSources.appNames,
             blacklist = p[SUGGESTION_BLACKLIST] ?: defaults.suggestionSources.blacklist,
             blacklistByLanguage = blacklistsByLanguage(p),
@@ -14387,6 +14399,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setContactEmailSuggestionsInEmailFields(value: Boolean) =
         editPrefs { it[CONTACT_EMAIL_SUGGESTIONS_IN_EMAIL_FIELDS] = value }
+
+    suspend fun setTypedEmailSuggestions(value: Boolean) =
+        editPrefs { it[TYPED_EMAIL_SUGGESTIONS] = value }
 
     suspend fun setAppNameSuggestions(value: Boolean) =
         editPrefs { it[APP_NAME_SUGGESTIONS] = value }

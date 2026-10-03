@@ -42,6 +42,12 @@ A second setting, **Contact emails in email fields too**, extends this into fiel
 
 Tapping a suggested email in an email field commits the whole address with no trailing space, since an address is usually the entire field. It also stays out of your personal dictionary, because an address isn't treated as a word to learn.
 
+### Addresses you type yourself
+
+**Remember email addresses you type** (off by default, no permission needed) covers the addresses that aren't in your contacts: your own, and the ones you sign in with. Each time you leave a field that asks for an email address, the keyboard keeps what it holds, as long as that's a whole address (an `@` with a name before it and a domain with a dot after it). The next time an email field opens, the addresses you've used most show on the suggestion strip before you type anything, and typing the start of one narrows the list. With **Suggest contact emails** on too, your own addresses come first and your contacts' follow once you've typed two characters.
+
+It learns only from fields that call themselves email fields, never from ordinary text, and it keeps your 50 most recently used addresses. Unlike everything else on this page, these are written to the phone's storage, in the learning data, so they survive a restart. Delete them from the Storage screen in the settings, which lists them as **Email addresses you typed**.
+
 ### App names in the strip
 
 Turn on **Suggest app names** and installed-app labels complete the same way contact names do, but ranked lower. Ordinary words that happen to also be app names (Files, Photos, Clock) shouldn't outrank the dictionary, and you type a contact's name far more often than you reference an app by name. App names complete in the suggestion strip only. They don't extend into the system-wide spell checker below.
@@ -55,6 +61,7 @@ Turn on **Suggest app names** and installed-app labels complete the same way con
 | Suggest contact names | Off | Contacts permission |
 | Suggest contact emails | Off | Contacts permission |
 | Contact emails in email fields too | On (only shown while contact emails are on) | Nothing |
+| Remember email addresses you type | Off | Nothing |
 | Suggest app names | Off | Nothing |
 
 Turning on either of the two contact toggles requests the Contacts permission the first time, if it isn't already granted. Turning a toggle back off never prompts for anything. Both toggles use the same Android permission, so granting it for one covers the other automatically. App-name suggestions need no permission at all. They're covered by the app's existing ability to list installed launcher activities.
@@ -72,7 +79,7 @@ When selected, it reads the same **Suggest contact names** setting described abo
 ## Details & edge cases
 
 - **What's read.** A one-shot query against `ContactsContract` for contact display names, and a separate one for contact email addresses, each covering the whole address book in a single pass rather than filtering or searching incrementally. App names come from querying installed launcher activities, the same list your home screen's app drawer is built from.
-- **What's stored.** Nothing on disk for this feature. Contact names, contact emails, and app names are held as plain in-memory lookup tables, rebuilt from scratch whenever the keyboard process starts with the relevant setting on, and dropped the instant you turn that setting off. If a query fails for any reason, such as a permission revoked mid-session or an unavailable provider, the source silently falls back to empty rather than crashing or retrying in a loop.
+- **What's stored.** Nothing on disk for contacts or app names. Contact names, contact emails, and app names are held as plain in-memory lookup tables, rebuilt from scratch whenever the keyboard process starts with the relevant setting on, and dropped the instant you turn that setting off. If a query fails for any reason, such as a permission revoked mid-session or an unavailable provider, the source silently falls back to empty rather than crashing or retrying in a loop.
 - **What never leaves the device.** There's no network code anywhere in this path. Contacts, contact emails, and app names are read, indexed, and matched entirely locally.
 - **Typing a name is still "learning."** The memory-only guarantee covers the index this feature builds. If you type a contact's name as ordinary text, that word goes through the keyboard's general on-device learning path like any other typed word. That's a separate, on-by-default setting, unrelated to the toggles on this page. There's also a distinct, off-by-default setting that would additionally copy a learned word into Android's own shared personal dictionary, which other apps can read. Leave it off and this doesn't apply. See [Personal dictionary](/smart/personal-dictionary/) for both.
 - **Before you unlock the phone.** Right after a reboot, before you've entered your device credential the first time, all three toggles behave as off regardless of their saved state. Android's contacts and app-label providers are themselves locked at that point and can't be read no matter what the setting says. Nothing about your saved preference changes. The moment you unlock, contact and app suggestions resume on their own.

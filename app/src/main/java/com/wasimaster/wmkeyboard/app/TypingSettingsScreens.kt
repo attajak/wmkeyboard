@@ -842,6 +842,15 @@ internal fun TypingSuggestionsSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_typed_emails_title,
+                stringResource(R.string.typing_typed_emails_subtitle),
+                settings.watch { it.suggestionSources.typedEmails },
+                info = stringResource(R.string.typing_typed_emails_info),
+                default = SettingsDefaults.suggestionSources.typedEmails,
+            ) { scope.launch { repository.setTypedEmailSuggestions(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_app_names_title,
                 stringResource(R.string.typing_app_names_subtitle),
                 settings.watch { it.suggestionSources.appNames },

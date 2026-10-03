@@ -167,6 +167,7 @@ import android.provider.CalendarContract
 import android.provider.ContactsContract
 import com.wasimaster.wmkeyboard.core.prediction.Apostrophes
 import com.wasimaster.wmkeyboard.core.prediction.AppLanguageMix
+import com.wasimaster.wmkeyboard.core.prediction.TypedEmails
 import com.wasimaster.wmkeyboard.core.input.BrailleChord
 import com.wasimaster.wmkeyboard.core.input.BrailleGrade1
 import com.wasimaster.wmkeyboard.core.input.DeadKeys
@@ -328,6 +329,7 @@ import com.wasimaster.wmkeyboard.core.prediction.GlideGuessGate
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxLadder
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.settings.APP_LANGUAGE_MIX_FILE
+import com.wasimaster.wmkeyboard.core.settings.TYPED_EMAILS_FILE
 import com.wasimaster.wmkeyboard.core.settings.HAND_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.settings.LEARNED_CORRECTIONS_FILE
 import com.wasimaster.wmkeyboard.core.settings.PHONETIC_SCRIPT_CHOICES_FILE
@@ -715,6 +717,7 @@ open class WMKeyboardService : InputMethodService() {
         tapOffsets.save()
         correctionMemory.save()
         appLanguageMix.save()
+        typedEmails.save()
         scriptChoices.save()
         glideOutcomes.save()
         glideShapes.save()
@@ -908,6 +911,9 @@ open class WMKeyboardService : InputMethodService() {
      * until unlock, like every learning store.
      */
     private var appLanguageMix = AppLanguageMix(null)
+
+    /** Addresses typed into email fields, when the user asked for them (#475). */
+    private var typedEmails = TypedEmails(null)
 
     /**
      * The spellings the user has switched between English and a phonetic
@@ -3490,6 +3496,7 @@ open class WMKeyboardService : InputMethodService() {
                         emojiUsage.reload()
                         languageMixConfidence.reload()
                         appLanguageMix.reload()
+                        typedEmails.reload()
                         scriptChoices.reload()
                     }
                     suggestionEngine?.rankOffsets = wordRanks.snapshot()
@@ -3898,6 +3905,7 @@ open class WMKeyboardService : InputMethodService() {
         CjkLearning.store = CjkUserHistory(store("learning/cjk_history.json"))
         languageMixConfidence = LanguageMixConfidence(store("learning/language_mix.json"))
         appLanguageMix = AppLanguageMix(store(APP_LANGUAGE_MIX_FILE))
+        typedEmails = TypedEmails(store(TYPED_EMAILS_FILE))
         scriptChoices = PhoneticScriptChoices(store(PHONETIC_SCRIPT_CHOICES_FILE))
         suggestionEngine?.scriptChoices = scriptChoices
         emojiUsage = EmojiUsage(store("learning/emoji_usage.json")).also {
@@ -6107,6 +6115,9 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
+        // Before the base class lets go of the connection: the address is
+        // read off the field that is closing.
+        rememberTypedEmail()
         super.onFinishInputView(finishingInput)
         keyboardVisible = false
         // The drag that put it up cannot finish with the keyboard gone.
@@ -15768,9 +15779,32 @@ open class WMKeyboardService : InputMethodService() {
         state.fieldKind == FieldKind.EMAIL &&
             !state.secureField &&
             state.settings.suggestions &&
-            state.settings.suggestionSources.contactEmails &&
+            (contactEmailsInEmailField(state) || typedEmailsInEmailField(state))
+
+    private fun contactEmailsInEmailField(state: KeyboardUiState): Boolean =
+        state.settings.suggestionSources.contactEmails &&
             state.settings.suggestionSources.contactEmailsInEmailFields &&
             !contactEmails.isEmpty
+
+    /** Is [typedEmails] what the strip offers here? Its own switch is the email-field one too. */
+    private fun typedEmailsInEmailField(state: KeyboardUiState): Boolean =
+        state.settings.suggestionSources.typedEmails && !typedEmails.isEmpty
+
+    /**
+     * Keeps the address the email field is leaving with (#475). Read whole,
+     * both sides of the caret, so an address corrected in the middle is kept
+     * as it was finally written; [TypedEmails.record] drops anything that is
+     * not a complete address.
+     */
+    private fun rememberTypedEmail() {
+        val state = _uiState.value
+        if (state.fieldKind != FieldKind.EMAIL || state.secureField || !userUnlocked) return
+        if (!state.settings.suggestionSources.typedEmails) return
+        val ic = currentInputConnection ?: return
+        val before = ic.getTextBeforeCursor(EMAIL_FIELD_LOOKBEHIND, 0)?.toString() ?: return
+        val after = ic.getTextAfterCursor(EMAIL_FIELD_LOOKBEHIND, 0)?.toString().orEmpty()
+        typedEmails.record(before + after)
+    }
 
     /** The email-address token immediately before the cursor (may be empty). */
     private fun emailTokenBeforeCursor(ic: InputConnection): String {
@@ -15788,7 +15822,13 @@ open class WMKeyboardService : InputMethodService() {
         suggestionJob?.cancel()
         val ic = currentInputConnection
         val token = ic?.let { emailTokenBeforeCursor(it) }.orEmpty().lowercase()
-        if (token.length < EMAIL_FIELD_MIN_PREFIX) {
+        val state = _uiState.value
+        // The user's own addresses need no prefix: an empty email field is
+        // exactly where the one they always use belongs (#475). Contacts keep
+        // theirs, since the whole address book is no answer to nothing.
+        val typed = typedEmailsInEmailField(state)
+        val contacts = contactEmailsInEmailField(state) && token.length >= EMAIL_FIELD_MIN_PREFIX
+        if (!contacts && !typed) {
             _uiState.update {
                 if (it.suggestions.isEmpty()) it
                 else it.copy(suggestions = emptyList(), emojiSuggestions = emptyList(), octopus = emptyMap())
@@ -15797,7 +15837,9 @@ open class WMKeyboardService : InputMethodService() {
         }
         suggestionJob = serviceScope.launch {
             val results = withContext(Dispatchers.Default) {
-                contactEmails.complete(token, EMAIL_FIELD_SUGGESTION_LIMIT)
+                val own = if (typed) typedEmails.complete(token, EMAIL_FIELD_SUGGESTION_LIMIT) else emptyList()
+                val book = if (contacts) contactEmails.complete(token, EMAIL_FIELD_SUGGESTION_LIMIT) else emptyList()
+                (own + book).distinct().take(EMAIL_FIELD_SUGGESTION_LIMIT)
             }
             _uiState.update {
                 it.copy(suggestions = results, emojiSuggestions = emptyList(), inlineEmoji = false)

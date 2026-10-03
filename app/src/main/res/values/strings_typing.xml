@@ -202,6 +202,9 @@
 
     <string name="typing_contact_emails_in_email_fields_title">Contact emails in email fields too</string>
     <string name="typing_contact_emails_in_email_fields_subtitle">Show them even where the app hides the suggestions</string>
+    <string name="typing_typed_emails_title">Remember email addresses you type</string>
+    <string name="typing_typed_emails_subtitle">Offer them in the next email field</string>
+    <string name="typing_typed_emails_info">When you type an email address into a field that asks for an email address, the keyboard keeps it. The next time an email field opens, the addresses you used most show on the suggestion strip before you type, and typing the start of one narrows the list. It learns only from email fields, never from ordinary text. The addresses stay on this phone. To delete them, use Storage in the settings.</string>
     <string name="typing_contact_emails_in_email_fields_info">Email fields usually tell the keyboard to hide the suggestion strip. This would hide these completions where they help most. With this setting on, contact email completions still show in email fields. Other suggestions stay hidden there. Turn it off to follow the field, and complete email addresses only in ordinary text.</string>
 
     <string name="typing_app_names_title">Suggest app names</string>
