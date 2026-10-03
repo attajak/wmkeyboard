@@ -3183,6 +3183,7 @@ open class WMKeyboardService : InputMethodService() {
         // Keeps the app-launcher tool's list honest across installs/removals;
         // cheap (it only drops caches), so registered unconditionally.
         registerPackageChangeReceiver()
+        registerKeyguardReceiver()
         // Direct boot: nothing below can read credential-encrypted storage yet,
         // so wait for the unlock rather than for the next process start — the
         // keyboard is very often the app that is *on screen* when it happens.
@@ -5018,6 +5019,40 @@ open class WMKeyboardService : InputMethodService() {
     private fun isDeviceLocked(): Boolean =
         (getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager)?.isKeyguardLocked == true
 
+    /**
+     * The keyguard went away under a field that started while it was up
+     * (issue #492). Turning the screen on restarts the field the keyboard was
+     * left in, often before the unlock has finished, and the app getting its
+     * window back starts nothing new. So [KeyboardUiState.deviceLocked] stayed
+     * true for the rest of the session: with "hide on the lock screen" on, the
+     * strip and its tools never came back, and the clipboard stayed empty.
+     */
+    private val keyguardReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_USER_PRESENT) onKeyguardGone()
+        }
+    }
+
+    /** For the rest of the process's life, like [registerPackageChangeReceiver]. */
+    private fun registerKeyguardReceiver() {
+        ContextCompat.registerReceiver(
+            this, keyguardReceiver, IntentFilter(Intent.ACTION_USER_PRESENT),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
+    }
+
+    /** Puts back what the field start withheld for the lock screen, once it is gone. */
+    private fun onKeyguardGone() {
+        if (!_uiState.value.deviceLocked || isDeviceLocked()) return
+        _uiState.update {
+            it.copy(
+                deviceLocked = false,
+                clipboardItems = if (userUnlocked) clipboardStore.items() else it.clipboardItems,
+            )
+        }
+        syncKdeConnect()
+    }
+
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
         // Runs for every field even while the soft view stays hidden
@@ -6040,6 +6075,7 @@ open class WMKeyboardService : InputMethodService() {
     override fun onWindowShown() {
         super.onWindowShown()
         onScreenAgain()
+        onKeyguardGone()
         lifecycleOwner.onResume()
         jankMonitor.start(window.window)
     }
