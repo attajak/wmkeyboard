@@ -496,6 +496,15 @@
     <string name="tooldetail_search_safe_subtitle">Filter explicit results</string>
     <string name="tooldetail_search_count_title">Results for each search</string>
     <string name="tooldetail_search_count_subtitle">Each search uses one API request either way</string>
+    <string name="tooldetail_ocr_engine_online">Online model</string>
+    <string name="tooldetail_ocr_online_group">Online text reader</string>
+    <string name="tooldetail_ocr_online_info">The photo goes to a model that can read images, at an address you choose, and the model writes out the text it sees. It reads any script and needs no language data. Any service with an OpenAI-compatible API works: OpenAI, OpenRouter, Gemini, Mistral, or a model on your own computer with Ollama or LM Studio. Each scan sends the photo to that service, and the service may charge for it.</string>
+    <string name="tooldetail_ocr_online_url_label">Address</string>
+    <string name="tooldetail_ocr_online_url_hint">For example https://api.openai.com/v1</string>
+    <string name="tooldetail_ocr_online_model_label">Model</string>
+    <string name="tooldetail_ocr_online_model_hint">A model that reads images, for example gpt-4o-mini</string>
+    <string name="tooldetail_ocr_online_key_label">API key</string>
+    <string name="tooldetail_ocr_online_key_hint">Leave blank for a server that asks for no key</string>
     <string name="tooldetail_search_answer_title">Show the answer from the search engine</string>
     <string name="tooldetail_search_answer_subtitle">A short answer above the results, when the engine writes one</string>
     <string name="tooldetail_search_answer_info">Tavily writes a short answer to your query from the pages it found, and some SearXNG instances give instant answers. With this on, that answer shows in a box above the results, and Insert puts it in your text. Brave gives no answer with a normal search key, so nothing shows when Brave does the search. On Tavily the answer costs no extra credits.</string>

@@ -73,7 +73,7 @@ object OcrLanguages {
         if (!tesseractAvailable) return null
         val pack = packFor(language) ?: return null
         return when (engine) {
-            OcrEngine.ML_KIT -> null
+            OcrEngine.ML_KIT, OcrEngine.ONLINE -> null
             OcrEngine.TESSERACT -> pack
             // ML Kit's recognizer here is the Latin one.
             OcrEngine.AUTO -> pack.takeIf { language.script != ScriptId.LATIN }
@@ -91,7 +91,8 @@ object OcrLanguages {
         enabled: List<LanguageDef>,
         tesseractAvailable: Boolean,
     ): List<LanguageDef> {
-        if (engine == OcrEngine.ML_KIT || !tesseractAvailable) return emptyList()
+        // The online model reads any script, so the language changes nothing there either.
+        if (engine == OcrEngine.ML_KIT || engine == OcrEngine.ONLINE || !tesseractAvailable) return emptyList()
         return enabled.filter { packFor(it) != null }
             .distinctBy { tesseractPack(engine, it, true) ?: ML_KIT_ROUTE }
     }

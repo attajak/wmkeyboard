@@ -96,6 +96,7 @@ import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
 import com.wasimaster.wmkeyboard.core.clipboard.LinkPreview
 import com.wasimaster.wmkeyboard.core.ocr.OcrLanguages
 import com.wasimaster.wmkeyboard.core.ocr.OcrPacks
+import com.wasimaster.wmkeyboard.core.settings.OcrEngine
 import com.wasimaster.wmkeyboard.core.ocr.TesseractException
 import com.wasimaster.wmkeyboard.core.ocr.TesseractOcr
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
@@ -103,6 +104,7 @@ import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.MeteredFeature
 import com.wasimaster.wmkeyboard.core.tools.EggLinks
 import com.wasimaster.wmkeyboard.core.tools.LinkPreviewClient
+import com.wasimaster.wmkeyboard.core.tools.VisionOcrClient
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
@@ -334,6 +336,8 @@ private fun OcrContent(
         if (stage !is OcrStage.Viewfinder || viewSize == IntSize.Zero || !packReady) return
         if (!auto) feedback()
         val readPack = pack
+        val scanner = state.settings.scanner
+        val online = engine == OcrEngine.ONLINE
         scope.launch {
             val bitmap = if (clipImage != null) {
                 clipBitmap?.getOrNull()
@@ -347,7 +351,9 @@ private fun OcrContent(
             stage = OcrStage.Recognizing(bitmap)
             val read = withContext(Dispatchers.Default) {
                 runCancellable {
-                    if (readPack != null) {
+                    if (online) {
+                        readOnline(scanner.ocrOnlineUrl, scanner.ocrOnlineModel, scanner.ocrOnlineKey, bitmap)
+                    } else if (readPack != null) {
                         readWithTesseract(filesDir, readPack, bitmap)
                     } else {
                         var id = 0
@@ -375,6 +381,22 @@ private fun OcrContent(
                 }
                 failure is TesseractException &&
                     failure.reason == TesseractException.Reason.PACK_BROKEN -> OcrStage.Viewfinder
+                // The online reader names its own trouble: no address set, a
+                // wrong key, a model that cannot see.
+                online -> {
+                    Log.w(OCR_LOG_TAG, "online text reader failed", failure)
+                    OcrStage.Done(
+                        OcrResult(
+                            bitmap,
+                            emptyList(),
+                            if (scanner.ocrOnlineUrl.isBlank() || scanner.ocrOnlineModel.isBlank()) {
+                                R.string.ime_scanner_ocr_online_unset
+                            } else {
+                                R.string.ime_scanner_ocr_online_error
+                            },
+                        ),
+                    )
+                }
                 else -> {
                     Log.w(OCR_LOG_TAG, "text recognition failed", failure)
                     OcrStage.Done(OcrResult(bitmap, emptyList(), R.string.ime_scanner_ocr_read_error))
@@ -727,6 +749,35 @@ private fun decodeClipImage(file: File): Bitmap {
 }
 
 private const val OCR_LOG_TAG = "WMKB-OCR"
+
+/**
+ * The online reader's text as the panel's lines of words (#469). The photo is
+ * scaled to [ONLINE_OCR_MAX_SIDE] first: enough for small print, and a
+ * full-sensor picture would only cost upload time and the model's tokens.
+ */
+private fun readOnline(url: String, model: String, key: String, bitmap: Bitmap): List<List<OcrWord>> {
+    require(url.isNotBlank() && model.isNotBlank()) { "the online text reader is not set up" }
+    val scale = ONLINE_OCR_MAX_SIDE.toFloat() / maxOf(bitmap.width, bitmap.height)
+    val sized = if (scale < 1f) {
+        Bitmap.createScaledBitmap(bitmap, (bitmap.width * scale).toInt(), (bitmap.height * scale).toInt(), true)
+    } else {
+        bitmap
+    }
+    val jpeg = java.io.ByteArrayOutputStream().use { out ->
+        sized.compress(Bitmap.CompressFormat.JPEG, ONLINE_OCR_JPEG_QUALITY, out)
+        out.toByteArray()
+    }
+    if (sized !== bitmap) sized.recycle()
+    val text = VisionOcrClient.read(url, model, key, jpeg)
+    var id = 0
+    return text.lines()
+        .map { line -> line.split(WHITESPACE).filter { it.isNotEmpty() } }
+        .filter { it.isNotEmpty() }
+        .map { words -> words.map { OcrWord(id++, it) } }
+}
+
+private const val ONLINE_OCR_MAX_SIDE = 1600
+private const val ONLINE_OCR_JPEG_QUALITY = 85
 
 /**
  * Tesseract's text as the panel's lines of words. Throws

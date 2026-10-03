@@ -62,6 +62,9 @@ enum class NetSource(
     DOWNLOAD_FONT("download_font"),
     DOWNLOAD_CUTOUT("download_cutout", ToolbarTool.STICKER),
 
+    /** A photo the scan text tool sends to the user's online text reader (#469). */
+    OCR_ONLINE("ocr_online", ToolbarTool.OCR),
+
     /** Tesseract language data for the scan text tool. */
     DOWNLOAD_OCR("download_ocr", ToolbarTool.OCR),
     ADDONS("addons"),

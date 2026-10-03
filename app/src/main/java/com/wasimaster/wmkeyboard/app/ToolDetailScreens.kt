@@ -2263,13 +2263,47 @@ internal fun ToolDetailSettings(
                             OcrEngine.AUTO to stringResource(R.string.tooldetail_ocr_engine_auto),
                             OcrEngine.ML_KIT to stringResource(R.string.tooldetail_ocr_engine_mlkit),
                             OcrEngine.TESSERACT to stringResource(R.string.tooldetail_ocr_engine_tesseract),
+                            OcrEngine.ONLINE to stringResource(R.string.tooldetail_ocr_engine_online),
                         ),
                         selected = settings.watch { it.scanner.ocrEngine },
                         default = SettingsDefaults.scanner.ocrEngine,
                     ) { scope.launch { repository.setOcrEngine(it) } }
                 }
             }
-            if (settings.watch { it.scanner.ocrEngine != OcrEngine.ML_KIT }) {
+            // Issue #469: a model that reads images, behind an
+            // OpenAI-compatible address of the user's choosing.
+            if (settings.watch { it.scanner.ocrEngine == OcrEngine.ONLINE }) {
+                SettingsGroup(
+                    stringResource(R.string.tooldetail_ocr_online_group),
+                    info = stringResource(R.string.tooldetail_ocr_online_info),
+                ) {
+                    item {
+                        TextFieldSetting(
+                            label = stringResource(R.string.tooldetail_ocr_online_url_label),
+                            value = settings.watch { it.scanner.ocrOnlineUrl },
+                            hint = stringResource(R.string.tooldetail_ocr_online_url_hint),
+                            default = SettingsDefaults.scanner.ocrOnlineUrl,
+                        ) { repository.setOcrOnlineUrl(it) }
+                    }
+                    item {
+                        TextFieldSetting(
+                            label = stringResource(R.string.tooldetail_ocr_online_model_label),
+                            value = settings.watch { it.scanner.ocrOnlineModel },
+                            hint = stringResource(R.string.tooldetail_ocr_online_model_hint),
+                            default = SettingsDefaults.scanner.ocrOnlineModel,
+                        ) { repository.setOcrOnlineModel(it) }
+                    }
+                    item {
+                        ApiKeyField(
+                            label = stringResource(R.string.tooldetail_ocr_online_key_label),
+                            value = settings.watch { it.scanner.ocrOnlineKey },
+                            builtInAvailable = false,
+                            emptyHint = stringResource(R.string.tooldetail_ocr_online_key_hint),
+                        ) { repository.setOcrOnlineKey(it) }
+                    }
+                }
+            }
+            if (settings.watch { it.scanner.ocrEngine != OcrEngine.ML_KIT && it.scanner.ocrEngine != OcrEngine.ONLINE }) {
                 SectionHeader(
                     stringResource(R.string.tooldetail_ocr_packs_header),
                     info = stringResource(R.string.tooldetail_ocr_packs_info),

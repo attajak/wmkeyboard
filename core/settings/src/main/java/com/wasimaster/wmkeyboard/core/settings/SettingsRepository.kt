@@ -622,6 +622,13 @@ enum class OcrEngine {
     AUTO,
     ML_KIT,
     TESSERACT,
+
+    /**
+     * A model that reads images, through an OpenAI-compatible API the user
+     * names (#469). Any script, nothing to download, but the photo leaves the
+     * phone. See [ScannerSettings.ocrOnlineUrl].
+     */
+    ONLINE,
 }
 
 /**
@@ -2462,6 +2469,12 @@ data class ScannerSettings(
     val ocrAutoSelectWords: Boolean = true,
     /** Which engine the text scanner reads with; see [OcrEngine]. */
     val ocrEngine: OcrEngine = OcrEngine.AUTO,
+    /** [OcrEngine.ONLINE]'s OpenAI-compatible address, up to `/v1` or the whole `/chat/completions`. */
+    val ocrOnlineUrl: String = "",
+    /** The model [OcrEngine.ONLINE] asks; one that reads images. */
+    val ocrOnlineModel: String = "",
+    /** The key for [ocrOnlineUrl]; blank for a server that asks for none. */
+    val ocrOnlineKey: String = "",
     /** Vibrate when the QR scanner spots a code. */
     val qrScanHaptics: Boolean = true,
     /** Insert a scanned code into the field the moment it is spotted. */
@@ -8465,6 +8478,9 @@ class SettingsRepository(private val context: Context) {
         private val AUTO_INCOGNITO = booleanPreferencesKey("auto_incognito")
         private val OCR_AUTO_SELECT_WORDS = booleanPreferencesKey("ocr_auto_select_words")
         private val OCR_ENGINE = stringPreferencesKey("ocr_engine")
+        private val OCR_ONLINE_URL = stringPreferencesKey("ocr_online_url")
+        private val OCR_ONLINE_MODEL = stringPreferencesKey("ocr_online_model")
+        private val OCR_ONLINE_KEY = stringPreferencesKey("ocr_online_key")
         private val QR_SCAN_HAPTICS = booleanPreferencesKey("qr_scan_haptics")
         private val QR_SCAN_AUTO_INSERT = booleanPreferencesKey("qr_scan_auto_insert")
         private val QR_SCAN_LINK_PREVIEWS = booleanPreferencesKey("qr_scan_link_previews")
@@ -10196,6 +10212,9 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.scanner.ocrAutoSelectWords,
             ocrEngine = p[OCR_ENGINE]?.let { runCatching { OcrEngine.valueOf(it) }.getOrNull() }
                 ?: defaults.scanner.ocrEngine,
+            ocrOnlineUrl = p[OCR_ONLINE_URL] ?: defaults.scanner.ocrOnlineUrl,
+            ocrOnlineModel = p[OCR_ONLINE_MODEL] ?: defaults.scanner.ocrOnlineModel,
+            ocrOnlineKey = p[OCR_ONLINE_KEY] ?: defaults.scanner.ocrOnlineKey,
             qrScanHaptics = p[QR_SCAN_HAPTICS] ?: defaults.scanner.qrScanHaptics,
             qrScanAutoInsert = p[QR_SCAN_AUTO_INSERT] ?: defaults.scanner.qrScanAutoInsert,
             qrScanLinkPreviews = p[QR_SCAN_LINK_PREVIEWS]
@@ -11413,6 +11432,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setOcrEngine(value: OcrEngine) =
         editPrefs { it[OCR_ENGINE] = value.name }
+
+    suspend fun setOcrOnlineUrl(value: String) =
+        editPrefs { it[OCR_ONLINE_URL] = value.trim() }
+
+    suspend fun setOcrOnlineModel(value: String) =
+        editPrefs { it[OCR_ONLINE_MODEL] = value.trim() }
+
+    suspend fun setOcrOnlineKey(value: String) =
+        editPrefs { it[OCR_ONLINE_KEY] = value.trim() }
 
     suspend fun setQrScanHaptics(value: Boolean) =
         editPrefs { it[QR_SCAN_HAPTICS] = value }

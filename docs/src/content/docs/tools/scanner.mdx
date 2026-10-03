@@ -24,10 +24,11 @@ Open **Text scan (OCR)** from the toolbar or toolbox to replace the keyboard wit
 
 ### Which languages it reads
 
-Two engines read the text, both on your device:
+Two engines read the text on your device, and a third, which you set up yourself, reads it online:
 
 - **ML Kit** reads Latin-script text only: English, French, Spanish and the like. It needs no download.
 - **Tesseract** reads more than 100 languages in most scripts, for example Bangla, Hindi, Arabic, Russian, Greek, Thai, Chinese, Japanese and Korean. Each language needs a one-time download of its data, from 0.4 MB to 12 MB.
+- **Online model** sends the photo to a model that can read images and shows the text the model writes back. It reads any script, mixed scripts and handwriting as well as the model does, with no language data to download. You choose the service: any one with an OpenAI-compatible API, such as OpenAI, OpenRouter, Gemini or Mistral, or a model on your own computer through Ollama or LM Studio. See [Reading text online](#reading-text-online).
 
 With **Text recognition** on **Automatic** (the default), Latin-script languages read with ML Kit and every other script reads with Tesseract. The scanner reads in the language you're typing in when you open it. If you've turned on more than one language, a chip at the bottom left of the viewfinder names the text's language, and tapping it steps to the next one without switching your keyboard. On Automatic, all your Latin-script languages share one stop on the chip, since ML Kit reads them the same way.
 
@@ -77,12 +78,22 @@ All three scanners have their own settings screen, and all three start with the 
 - **Vibrate on detection**: on by default. A short buzz when a code is spotted.
 - **Load link details**: off by default. When a scanned value is a web link, it fetches the page's title and description to show above the result. That needs a network connection. [Power Saving mode](/typing/power-saving/) force-disables this row while its background-network toggle is on.
 
-Recognition for both OCR and the QR/barcode scanner runs entirely on-device, so no photo is uploaded and both work offline once any Tesseract language data they need is downloaded. Link previews are the one exception, since fetching a page's title needs the network. See [network policy](/privacy/network/) for what else does and doesn't touch the network.
+Recognition for both OCR and the QR/barcode scanner runs entirely on-device, so no photo is uploaded and both work offline once any Tesseract language data they need is downloaded. The one exception is **Text recognition** set to **Online model**, which sends each photo you scan to the service you named. Link previews are the one exception, since fetching a page's title needs the network. See [network policy](/privacy/network/) for what else does and doesn't touch the network.
 
 <SettingsPath path="Tools / Text scan (OCR) / Options" />
 
 - **Start with everything selected**: on by default, described above.
-- **Text recognition**: **Automatic** (the default), **ML Kit** or **Tesseract**. See [which languages it reads](#which-languages-it-reads). ML Kit ignores the text's language, so the viewfinder shows no language chip with it. Tesseract reads Latin script too, usually slower than ML Kit.
+- **Text recognition**: **Automatic** (the default), **ML Kit**, **Tesseract** or **Online model**. See [which languages it reads](#which-languages-it-reads). ML Kit and the online model ignore the text's language, so the viewfinder shows no language chip with them. Tesseract reads Latin script too, usually slower than ML Kit.
+
+### Reading text online
+
+With **Text recognition** on **Online model**, an **Online text reader** group appears under it with three fields:
+
+- **Address**: the service's OpenAI-compatible address, such as `https://api.openai.com/v1`, `https://openrouter.ai/api/v1`, or `http://192.168.0.10:11434/v1` for Ollama on your computer. The full address ending in `/chat/completions` works too.
+- **Model**: the name of a model that reads images, as the service spells it, for example `gpt-4o-mini`.
+- **API key**: the service's key. Leave it blank for a server of your own that asks for none. It's kept with your other API keys, and leaves the phone in a backup only with **Include API keys** on.
+
+Each scan sends the photo, scaled down to 1600 pixels on its longer side, with a request to write out exactly the text in it and nothing else. The text comes back as the same word chips the other engines give. The service may charge for each scan. Without an address and a model the panel says so after the shutter, and an error from the service, such as a wrong key or a model that can't read images, shows as a message rather than as "No text found". Every scan shows in the [network activity log](/privacy/network-activity/) as **Scan text, online**.
 
 <SettingsPath path="Tools / Text scan (OCR) / Tesseract languages" />
 

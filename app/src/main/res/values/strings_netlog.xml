@@ -143,6 +143,7 @@
     <string name="netlog_source_web_search">Web search</string>
     <string name="netlog_source_image_search">Image search</string>
     <string name="netlog_source_photo_search">Search by photo</string>
+    <string name="netlog_source_ocr_online">Scan text, online</string>
     <string name="netlog_source_ai">AI writing</string>
     <string name="netlog_source_ai_chat">AI chat</string>
     <string name="netlog_source_transcription">Transcription server</string>
@@ -183,6 +184,7 @@
     <string name="netlog_sent_web_search">The search you submitted.</string>
     <string name="netlog_sent_image_search">The search you submitted.</string>
     <string name="netlog_sent_photo_search">The photo you pressed Search on.</string>
+    <string name="netlog_sent_ocr_online">The photo you scanned, to read the text in it.</string>
     <string name="netlog_sent_ai">The text you ran the action on, and the action\'s instructions.</string>
     <string name="netlog_sent_ai_chat">The conversation so far, and your new message.</string>
     <string name="netlog_sent_transcription">The recording of one phrase, the model name, and the language unless you turned that off.</string>

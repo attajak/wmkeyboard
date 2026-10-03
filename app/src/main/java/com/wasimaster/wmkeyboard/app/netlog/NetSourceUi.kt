@@ -109,6 +109,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.WEB_SEARCH -> R.string.netlog_source_web_search to R.string.netlog_sent_web_search
     NetSource.IMAGE_SEARCH -> R.string.netlog_source_image_search to R.string.netlog_sent_image_search
     NetSource.PHOTO_SEARCH -> R.string.netlog_source_photo_search to R.string.netlog_sent_photo_search
+    NetSource.OCR_ONLINE -> R.string.netlog_source_ocr_online to R.string.netlog_sent_ocr_online
     NetSource.AI -> R.string.netlog_source_ai to R.string.netlog_sent_ai
     NetSource.AI_CHAT -> R.string.netlog_source_ai_chat to R.string.netlog_sent_ai_chat
     NetSource.TRANSCRIPTION -> R.string.netlog_source_transcription to R.string.netlog_sent_transcription
@@ -183,7 +184,7 @@ private fun fallbackIcon(source: NetSource): ImageVector = when (source) {
  */
 private val DataSaverSources = NetSource.entries.toSet() - setOf(
     NetSource.TRANSLATE, NetSource.DEEPL_WRITE, NetSource.BACKUP, NetSource.UPDATES, NetSource.KDE_CONNECT,
-    NetSource.LINK_IMPORT, NetSource.SYNONYMS, NetSource.OTHER,
+    NetSource.LINK_IMPORT, NetSource.SYNONYMS, NetSource.OCR_ONLINE, NetSource.OTHER,
 )
 
 private val NeutralAccent = Color(0xFF90A4AE)
