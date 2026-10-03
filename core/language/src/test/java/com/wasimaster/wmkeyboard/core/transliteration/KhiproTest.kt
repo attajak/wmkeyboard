@@ -63,6 +63,17 @@ class KhiproTest {
     }
 
     @Test
+    fun `the touch spec builds the double danda and the abbreviation sign on the danda`() {
+        // Issue #488: the danda key's own output, then f.
+        assertEquals("।", Khipro.convert("।"))
+        assertEquals("॥", Khipro.convert("।f"))
+        assertEquals("৺", Khipro.convert("।ff"))
+        assertEquals("আমি॥", Khipro.convert("ami।f"))
+        // Any other key after it starts afresh.
+        assertEquals("আমি।ত", Khipro.convert("ami।t"))
+    }
+
+    @Test
     fun `nukta letters come out precomposed, as the word lists spell them`() {
         val word = Khipro.convert("barfi")
         assertTrue(word, 'ড়' in word)

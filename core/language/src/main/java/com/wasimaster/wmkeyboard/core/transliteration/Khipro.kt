@@ -21,9 +21,10 @@ package com.wasimaster.wmkeyboard.core.transliteration
  * conformance-tested against the same `khipro-testcases` this module's tests
  * replay.
  *
- * Upstream: spec tag v36.5.0 of rank-coder/khipro-m17n (MIT, © 2024 rank_coder)
- * and KhiproTeam/khipro-mim-touchscreen; interpreter semantics from
- * KhiproTeam/khipro-library (MIT, © 2026 KhiproTeam).
+ * Upstream: rank-coder/khipro-m17n (MIT, © 2024 rank_coder) and
+ * KhiproTeam/khipro-mim-touchscreen, as of v36.5.0 plus later commits on their
+ * main branches; `scripts/update-khipro.sh` refreshes them. Interpreter
+ * semantics from KhiproTeam/khipro-library (MIT, © 2026 KhiproTeam).
  */
 object Khipro {
 

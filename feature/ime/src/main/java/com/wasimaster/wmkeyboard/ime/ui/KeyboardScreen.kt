@@ -17103,6 +17103,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // where the layout has not already put the mark there itself — the fixed
     // Bengali layouts carry দাঁড়ি on their own keys.
     val fullStop = state.script.fullStop.takeIf { it != "." }
+    val symbolsLayer = state.layoutMode == LayoutMode.SYMBOLS || state.layoutMode == LayoutMode.SYMBOLS_SHIFTED
     // The script's own punctuation, on the shared symbol key that types the
     // nearest ASCII mark: Bengali's ঃ on the colon. Every layer, since that key
     // is on the symbols one.
@@ -17222,15 +17223,23 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             // period key outright or hang domain endings off it — the script's
             // own mark and the "." it displaces travel together either way. A
             // layout that already types the mark is left alone.
+            //
+            // Not on the symbols pages, which are where numbers are typed: there
+            // the key stays "." for a decimal point and the mark leads its popup
+            // instead (issue #489).
             val stopped = if (
                 fullStop != null && role == KeyRole.Period &&
                 (rowKey.output ?: rowKey.label) == "."
             ) {
-                rowKey.copy(
-                    label = fullStop,
-                    output = null,
-                    longPress = listOf(".") + rowKey.longPress.filterNot { it == fullStop },
-                )
+                if (symbolsLayer) {
+                    rowKey.copy(longPress = listOf(fullStop) + rowKey.longPress.filterNot { it == fullStop })
+                } else {
+                    rowKey.copy(
+                        label = fullStop,
+                        output = null,
+                        longPress = listOf(".") + rowKey.longPress.filterNot { it == fullStop },
+                    )
+                }
             } else {
                 rowKey
             }
@@ -19096,7 +19105,7 @@ private fun AlternatesPopup(
                 key.alternateEntries().forEachIndexed { index, entry ->
                     when (entry) {
                         is AlternateEntry.Character -> Text(
-                            text = shiftCased(entry.text, shifted),
+                            text = visibleAlternate(shiftCased(entry.text, shifted)),
                             modifier = Modifier
                                 .clickable { onText(entry.text) }
                                 .alternateHighlight(
@@ -19130,6 +19139,17 @@ private fun AlternatesPopup(
             }
         }
     }
+}
+
+/**
+ * What a popup entry draws: the entry itself, or a name for a character that
+ * has no glyph of its own. A joiner typed into a popup would otherwise be an
+ * empty cell nobody could tell from a gap (issue #489).
+ */
+internal fun visibleAlternate(text: String): String = when (text) {
+    "\u200D" -> "ZWJ"
+    "\u200C" -> "ZWNJ"
+    else -> text
 }
 
 /** The size the alternates popup opens at, as a share of its own. */

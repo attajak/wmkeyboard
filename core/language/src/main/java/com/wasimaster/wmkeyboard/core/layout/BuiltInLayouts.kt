@@ -600,8 +600,14 @@ private val khiproRows = listOf(
         // Not a full stop: no role, so the danda rewrite leaves it alone.
         Key(";", longPress = listOf(":", "?")),
         // The danda once the script's full stop is applied; ॥ is what
-        // Khipro's desktop spec spells as `.f`.
-        Key(".", role = KeyRole.Period, longPress = listOf("॥", "…", ",", "?", "!", ":")),
+        // Khipro's desktop spec spells as `.f`. ZWJ and ZWNJ next, which the
+        // desktop spec types from `` ` `` and the touch one has no key for
+        // (issue #489).
+        Key(
+            ".",
+            role = KeyRole.Period,
+            longPress = listOf("॥", "\u200D", "\u200C", "…", ",", "?", "!", ":"),
+        ),
         Key("⏎", action = KeyAction.Enter, width = 1.5f),
     ),
 )

@@ -57,7 +57,7 @@ class ComposerTest {
     fun `Khipro buffers its modifier keys, and a comma only inside a word`() {
         val composer = KhiproComposer
         composer.variant = Khipro.Variant.TOUCHSCREEN
-        for (c in "/;?\\") assertTrue("$c", composer.buffersChar(c, ""))
+        for (c in "/;?\\।") assertTrue("$c", composer.buffersChar(c, ""))
         assertFalse(composer.buffersChar(',', ""))
         assertTrue(composer.buffersChar(',', "j"))
         assertFalse(composer.buffersChar('.', "ami"))

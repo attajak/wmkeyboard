@@ -15,7 +15,8 @@ import com.wasimaster.wmkeyboard.core.transliteration.Khipro
  * Khipro's modifiers are punctuation keys, so this composer takes more than
  * letters into its buffer: `/` (the slicer, and ঁ after a vowel), `;` (the
  * separator: `budh;bar` is বুধবার), `?` and `\` (the blinder, whose run stays
- * Latin) and, inside a word, `,` (`,,` is the nukta).
+ * Latin), the danda (`।f` is ॥ and `।ff` is ৺, issue #488) and, inside a
+ * word, `,` (`,,` is the nukta).
  *
  * Two specs ship. A phone keyboard already has keys for Bengali digits and the
  * danda, so soft keys read against the touchscreen spec, which leaves those
@@ -26,8 +27,12 @@ import com.wasimaster.wmkeyboard.core.transliteration.Khipro
  */
 object KhiproComposer : Composer {
 
-    /** Everything the touchscreen spec gives a meaning to, besides letters. */
-    private const val TOUCH_KEYS = "/;?\\"
+    /**
+     * Everything the touchscreen spec gives a meaning to, besides letters. The
+     * danda is the full stop key's own output on this board, and the spec
+     * builds ॥ and ৺ on it, so it stays in the word for the `f` that may follow.
+     */
+    private const val TOUCH_KEYS = "/;?\\।"
 
     /** What the desktop spec adds: the danda, currency, arithmetic, ZWNJ/ZWJ. */
     private const val DESKTOP_KEYS = "/;?\\.\$+-=`"
