@@ -9540,6 +9540,14 @@ open class WMKeyboardService : InputMethodService() {
                 refreshSuggestions()
                 return
             }
+            // Nothing behind the caret: the app is the one that knows what a
+            // backspace at the start of its field means. A block editor (Notion,
+            // issue #494) joins the line to the block above, which it does for
+            // a key event and never for deleteSurroundingText, a no-op here.
+            if (before != null && before.isEmpty()) {
+                sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+                return
+            }
             // An editor that will not say what is behind the cursor still owes
             // the press a delete, so an unknown answer is one code unit.
             val deleteLength = charDeleteLength(before ?: "").coerceAtLeast(1)
@@ -10330,6 +10338,11 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val before = ic.getTextBeforeCursor(96, 0) ?: return
+        // At the start of the field, the app's own backspace; see deleteFromField.
+        if (before.isEmpty()) {
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
+            return
+        }
         val length = WordDelete.lengthBefore(before)
         if (length > 0) {
             revision?.expectDelete(length, 0)
