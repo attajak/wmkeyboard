@@ -75,7 +75,11 @@ import kotlin.math.abs
  * key, the frame can take the swipe before the keys see more than its start,
  * and hand them a cancel for the press it began with.
  */
-internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
+internal class StableMeasureFrame(
+    context: Context,
+    /** Where the navigation bar's insets are kept for the keys; see [ImeNavigationBars]. */
+    private val navigationBars: ImeNavigationBars? = null,
+) : FrameLayout(context) {
 
     /** The largest `AT_MOST` height offered since the last layout. */
     private var roomSize = 0
@@ -202,6 +206,25 @@ internal class StableMeasureFrame(context: Context) : FrameLayout(context) {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         freshTraversal = true
+        // The window's current insets, read rather than waited for: cached by
+        // the view root, so this costs a lookup, and an unchanged value
+        // invalidates nothing.
+        refreshNavigationBars()
+    }
+
+    override fun dispatchApplyWindowInsets(insets: WindowInsets): WindowInsets {
+        navigationBars?.update(insets, this)
+        return super.dispatchApplyWindowInsets(insets)
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        refreshNavigationBars()
+    }
+
+    /** Reads the navigation bar's insets off the window as it stands now. */
+    fun refreshNavigationBars() {
+        navigationBars?.update(rootWindowInsets, this)
     }
 
     // The four stages of an insets animation stop here rather than going on to

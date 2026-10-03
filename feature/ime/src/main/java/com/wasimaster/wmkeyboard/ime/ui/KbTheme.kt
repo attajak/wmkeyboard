@@ -13,8 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -1561,7 +1559,7 @@ fun BoxScope.BoardBackground(kb: KbTheme) {
  *
  * Drawn straight after [BoardBackground] and under everything else in the
  * keyboard box, so the keys — which hold themselves clear of the bar with
- * `navigationBarsPadding` — never sit on top of it. A theme that leaves
+ * [navigationBarInsets] — never sit on top of it. A theme that leaves
  * [KbTheme.navigationBar] unset draws nothing at all here, which is what keeps
  * the board's gradient, image and animation running to the edges exactly as
  * they did before this existed (issue #109).
@@ -1579,7 +1577,7 @@ fun BoxScope.BoardBackground(kb: KbTheme) {
 @Composable
 fun BoxScope.NavigationBarBackground(kb: KbTheme) {
     val color = kb.navigationBar ?: return
-    val insets = WindowInsets.navigationBars
+    val insets = navigationBarInsets()
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
     val bottom = insets.getBottom(density).toFloat()

@@ -3,7 +3,6 @@ package com.wasimaster.wmkeyboard.ime.ui
 import android.annotation.SuppressLint
 import android.content.res.Resources
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.tappableElement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -116,7 +115,7 @@ fun SystemNavigationBarColor(kb: KbTheme) {
 @Composable
 fun gestureBarAtBottom(): Boolean {
     val density = LocalDensity.current
-    if (WindowInsets.navigationBars.getBottom(density) == 0) return false
+    if (navigationBarInsets().getBottom(density) == 0) return false
     val resources = LocalContext.current.resources
     // Switching the navigation mode swaps a framework overlay, which arrives
     // as a configuration change.

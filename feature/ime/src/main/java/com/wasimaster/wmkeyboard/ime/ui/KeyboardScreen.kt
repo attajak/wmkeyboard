@@ -72,7 +72,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.offset
@@ -2013,8 +2012,11 @@ private fun DockedKeyboardFrame(
                 }
                 // A start-to-end share, so a right-to-left row moves the other way.
                 val slideSign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1f else 1f
-                // navigationBarsPadding keeps the bottom key row clear of the
-                // gesture-navigation bar on edge-to-edge (SDK 35+) IME windows;
+                // The navigation bar's inset keeps the bottom key row clear of
+                // the gesture-navigation bar on edge-to-edge (SDK 35+) IME
+                // windows, read from the window's own record of it rather than
+                // Compose's, which could stay at zero after a keyboard switch
+                // (#463, #468; see [ImeNavigationBars]);
                 // the bottom padding is extra breathing room above it,
                 // adjustable in Settings → Appearance. Both are the board's own
                 // room, so the card takes them inside itself and runs down to
@@ -2025,7 +2027,7 @@ private fun DockedKeyboardFrame(
                 // it above the window, not beside the keys.
                 val bottomRoom = Modifier
                     .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
-                    .navigationBarsPadding()
+                    .windowInsetsPadding(navigationBarInsets())
                     .padding(bottom = bottomPaddingDp(state.settings).dp)
                 Row(
                     modifier = Modifier

@@ -360,6 +360,8 @@ import com.wasimaster.wmkeyboard.core.tools.parseLeader
 import com.wasimaster.wmkeyboard.core.tools.pickerLetter
 import com.wasimaster.wmkeyboard.core.tools.toolbarHintButtons
 import com.wasimaster.wmkeyboard.ime.ui.StableMeasureFrame
+import com.wasimaster.wmkeyboard.ime.ui.ImeNavigationBars
+import com.wasimaster.wmkeyboard.ime.ui.LocalImeNavigationBars
 import com.wasimaster.wmkeyboard.ime.ui.SymbolRowAction
 import com.wasimaster.wmkeyboard.ime.ui.activeSymbolSet
 import com.wasimaster.wmkeyboard.ime.ui.keyboardHintPlan
@@ -4327,6 +4329,9 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var inputRootView: View? = null
 
+    /** The input view's outer frame, for the insets re-read when the window comes back (#468). */
+    private var inputFrame: StableMeasureFrame? = null
+
     override fun onCreateInputView(): View = trace(ImeTrace.CREATE_INPUT_VIEW) { createInputView() }
 
     private fun createInputView(): View {
@@ -4336,6 +4341,7 @@ open class WMKeyboardService : InputMethodService() {
         _shownState.value = _uiState.value
         val view = ComposeView(this)
         inputRootView = view
+        val navigationBars = ImeNavigationBars()
         lifecycleOwner.attachTo(requireNotNull(window.window).decorView)
         view.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
         // A named composable, not an inline lambda: the argument list below
@@ -4355,6 +4361,7 @@ open class WMKeyboardService : InputMethodService() {
                 LocalLayoutDirection provides LayoutDirection.Ltr,
                 LocalSystemNavBarPainter provides systemNavBarPainter,
                 LocalInlineChipPaletteReporter provides inlineChipPaletteReporter,
+                LocalImeNavigationBars provides navigationBars,
             ) {
                 ServiceKeyboardContent()
             }
@@ -4365,7 +4372,8 @@ open class WMKeyboardService : InputMethodService() {
         // whole window.
         // The keyboard keeps the params the input frame gives an input view:
         // full width, its own height.
-        return StableMeasureFrame(this).apply {
+        return StableMeasureFrame(this, navigationBars).apply {
+            inputFrame = this
             edgeSwipeBackEnabled = { _uiState.value.settings.layoutBehavior.edgeSwipeBack }
             onEdgeSwipeBack = ::onEdgeSwipeBack
             addView(
@@ -6085,6 +6093,8 @@ open class WMKeyboardService : InputMethodService() {
         // keyboard pads itself clear of is read from them, and a window coming
         // back from another keyboard must not keep the ones it left with.
         inputRootView?.requestApplyInsets()
+        // And read them now, without waiting for that dispatch to arrive.
+        inputFrame?.refreshNavigationBars()
     }
 
     /**
