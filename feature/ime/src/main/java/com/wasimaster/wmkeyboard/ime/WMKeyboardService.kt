@@ -5389,6 +5389,17 @@ open class WMKeyboardService : InputMethodService() {
         // running against the new grid.
         syncKeymanSession(fieldSpec)
         syncEngineBlacklist(fieldSpec.language().id)
+        // The word lists follow the layout too. A field can open on a layout
+        // the settings never emitted, the app's remembered one or the one its
+        // language hint asks for, and the engine went on reading the last
+        // app's language under the new one's name until the next manual
+        // switch (#484). Read before the update below replaces layoutId.
+        val engine = suggestionEngine
+        if (engine != null &&
+            (engine.primaryLanguageId != fieldSpec.language().id || _uiState.value.layoutId != fieldSpec.id)
+        ) {
+            bindEngineToLayout(fieldSpec, current)
+        }
         syncAnsiOutput(modeSettings, fieldSpec)
         _uiState.update {
             it.copy(
