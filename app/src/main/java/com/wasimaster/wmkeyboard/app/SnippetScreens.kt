@@ -39,8 +39,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.AssistChip
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Checkbox
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.runtime.mutableStateListOf
@@ -1554,6 +1555,53 @@ private fun SnippetEditorForm(
     val kept = expansions.filter { it.isNotBlank() }
     val valid = label.isNotBlank() && kept.isNotEmpty() && patternOk
 
+    // The snippet as the fields describe it right now: what Save writes, and
+    // what the back check compares against the snippet as it was opened.
+    fun draft() = Snippet(
+        id = initial?.id ?: 0,
+        label = label.trim(),
+        text = kept.firstOrNull().orEmpty(),
+        alternates = kept.drop(1),
+        createdAt = initial?.createdAt ?: 0,
+        trigger = if (word) allTriggers.firstOrNull() else null,
+        aliases = if (word) allTriggers.drop(1) else emptyList(),
+        propagateCase = word && propagateCase,
+        uppercaseStyle = uppercaseStyle,
+        triggerPattern = if (word) null else pattern.text.trim().ifBlank { null },
+        triggerWords = if (word) 0 else words,
+        confirm = confirm,
+        folderId = folderId,
+        // A link to something deleted while this screen was open is not a link.
+        children = children.filter { id -> all.any { it.id == id } },
+        tags = allTags,
+        multiExpand = multiExpand,
+    )
+    // Issue #471: Save sat under every field, where nobody scrolled to it, and
+    // back threw the edit away without a word, on a settings app where every
+    // other screen saves as it goes. So Save floats where it is always in
+    // reach, and leaving with changes asks first.
+    val opened = remember { draft() }
+    val dirty = draft() != opened
+    var leaveOpen by remember { mutableStateOf(false) }
+    BackHandler(enabled = dirty) { leaveOpen = true }
+    RegisterFab {
+        ExtendedFloatingActionButton(
+            onClick = { if (valid) onSave(draft()) },
+            icon = { Icon(Icons.Outlined.Check, contentDescription = null) },
+            text = { Text(stringResource(CommonR.string.common_save)) },
+            containerColor = if (valid) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            },
+            contentColor = if (valid) {
+                MaterialTheme.colorScheme.onPrimaryContainer
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+            },
+        )
+    }
+
     Column(modifier = Modifier.imePadding()) {
         SettingsGroup {
             item {
@@ -1759,43 +1807,36 @@ private fun SnippetEditorForm(
             }
         }
 
-        Spacer(Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Button(
-                enabled = valid,
-                onClick = {
-                    onSave(
-                        Snippet(
-                            id = initial?.id ?: 0,
-                            label = label.trim(),
-                            text = kept.first(),
-                            alternates = kept.drop(1),
-                            createdAt = initial?.createdAt ?: 0,
-                            trigger = if (word) allTriggers.firstOrNull() else null,
-                            aliases = if (word) allTriggers.drop(1) else emptyList(),
-                            propagateCase = word && propagateCase,
-                            uppercaseStyle = uppercaseStyle,
-                            triggerPattern = if (word) null else pattern.text.trim().ifBlank { null },
-                            triggerWords = if (word) 0 else words,
-                            confirm = confirm,
-                            folderId = folderId,
-                            // A link to something deleted while this screen was
-                            // open is not a link.
-                            children = children.filter { id -> all.any { it.id == id } },
-                            tags = allTags,
-                            multiExpand = multiExpand,
-                        ),
-                    )
-                },
-            ) { Text(stringResource(CommonR.string.common_save)) }
-            OutlinedButton(onClick = onCancel) {
-                Text(stringResource(CommonR.string.common_cancel))
-            }
-        }
-        Spacer(Modifier.height(24.dp))
+        // Room for the Save button, which floats over the last rows.
+        Spacer(Modifier.height(88.dp))
+    }
+
+    if (leaveOpen) {
+        AlertDialog(
+            onDismissRequest = { leaveOpen = false },
+            title = { Text(stringResource(R.string.rows_snippet_unsaved_title)) },
+            text = { Text(stringResource(R.string.rows_snippet_unsaved_body)) },
+            confirmButton = {
+                TextButton(
+                    enabled = valid,
+                    onClick = {
+                        leaveOpen = false
+                        onSave(draft())
+                    },
+                ) { Text(stringResource(CommonR.string.common_save)) }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(onClick = {
+                        leaveOpen = false
+                        onCancel()
+                    }) { Text(stringResource(R.string.rows_snippet_unsaved_discard)) }
+                    TextButton(onClick = { leaveOpen = false }) {
+                        Text(stringResource(CommonR.string.common_cancel))
+                    }
+                }
+            },
+        )
     }
 
     if (pickingLinks) {

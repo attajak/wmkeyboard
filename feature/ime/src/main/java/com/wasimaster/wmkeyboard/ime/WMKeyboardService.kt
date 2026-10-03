@@ -10689,6 +10689,19 @@ open class WMKeyboardService : InputMethodService() {
 
         // Space over a selection replaces it; skip autocorrect/double-space.
         if (hasSelection(ic)) {
+            // A browser's address bar shows its inline completion as a
+            // selection after the caret, so a trigger typed there always
+            // arrives with one. The expansion replaces it the way the space
+            // would have.
+            if (tryUncomposedTrigger(ic, state)) {
+                if (swallowTerminatorAfterCommit) {
+                    swallowTerminatorAfterCommit = false
+                } else {
+                    ic.commitText(spaceText(state), 1)
+                }
+                lastSpaceTime = 0
+                return
+            }
             dropComposingForSelectionEdit(ic)
             invalidateExpectedSelection()
             ic.commitText(spaceText(state), 1)
@@ -10771,7 +10784,7 @@ open class WMKeyboardService : InputMethodService() {
             autocorrect = state.settings.correction.enabled,
             fixApostrophes = state.settings.autoText.apostrophe,
             expandPatterns = true,
-        )
+        ) || tryUncomposedTrigger(ic, state)
         // The expansion left the caret inside itself, at its {cursor} marker.
         // A space committed there lands in the middle of the text the snippet
         // inserted, so this press is spent on the expansion instead.
@@ -10874,7 +10887,7 @@ open class WMKeyboardService : InputMethodService() {
             autocorrect = state.settings.correction.enabled && state.settings.correction.onEnter,
             fixApostrophes = state.settings.autoText.apostrophe,
             expandPatterns = true,
-        )
+        ) || tryUncomposedTrigger(ic, state)
         // The word is over, however this key ends up reaching the field. What
         // follows hands the field to the app, so the caret update that comes
         // back must not re-compose the word this just finished (#236).
@@ -12331,6 +12344,62 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update {
             it.copy(composingPreview = "", suggestions = emptyList(), emojiSuggestions = emptyList(), octopus = emptyMap())
         }
+    }
+
+    /**
+     * A trigger typed into a field where nothing composes (#471): a browser's
+     * address bar asks for no suggestions, so its letters go straight into the
+     * field and [commitComposing] never sees a word to match. The trigger is
+     * read back off the field instead, when the space or Enter that ends it
+     * lands. Returns true when it expanded one.
+     *
+     * Only where the buffer is off, so an ordinary text box keeps its one
+     * matching path, and never in a password field. The read is skipped
+     * outright for a user with no triggers.
+     */
+    private fun tryUncomposedTrigger(ic: InputConnection, state: KeyboardUiState): Boolean {
+        if (composing.isNotEmpty() || state.secureField || state.nullField) return false
+        if (state.composer.isTransliterating || state.composer.isConversion || state.composesForSuggestions) {
+            return false
+        }
+        val prefixes = snippetStore.hasPrefixTriggers()
+        if (snippetStore.expandingTriggers().isEmpty() && !prefixes) return false
+        val read = ic.getTextBeforeCursor(UNCOMPOSED_TRIGGER_LOOKBACK, 0)?.toString() ?: return false
+        val run = read.substring(read.indexOfLast { it.isWhitespace() } + 1)
+        if (run.isEmpty()) return false
+        val wordStart = run.indexOfLast { !isComposingWordChar(it) } + 1
+        val word = run.substring(wordStart)
+        // The run as a plain trigger first, then its last word finishing a
+        // prefix trigger (`:shrug`, `gr db`), the same order the buffer uses.
+        val consumed: String
+        val snippet: Snippet
+        val plain = snippetStore.matchTrigger(run)?.takeIf { !snippetStore.offers(it) }
+        if (plain != null) {
+            consumed = run
+            snippet = plain
+        } else {
+            if (!prefixes || word.isEmpty() || !snippetStore.couldFinishPrefix(word)) return false
+            val before = read.substring(0, read.length - word.length)
+            val hit = snippetStore.matchPrefix(word, before) ?: return false
+            consumed = before.takeLast(hit.prefix.length) + word
+            snippet = hit.snippet
+        }
+        stopVoiceForManualInput()
+        val expanded = SnippetStore.expandWithCursor(
+            snippet.text,
+            context = snippetContext(ic),
+            casing = SnippetStore.casingFor(snippet, consumed),
+        )
+        ic.beginBatchEdit()
+        ic.deleteSurroundingText(consumed.length, 0)
+        commitSplitAtCaret(ic, expanded.text, expanded.cursorOffset)
+        ic.endBatchEdit()
+        afterSnippetExpansion(
+            inserted = expanded.text,
+            original = consumed,
+            caretParked = expanded.cursorOffset < expanded.text.length,
+        )
+        return true
     }
 
     /**
@@ -33704,6 +33773,9 @@ open class WMKeyboardService : InputMethodService() {
         private const val PER_APP_RECENT_WORDS = 50
 
         private val SENTENCE_ENDERS = charArrayOf('.', '!', '?', '।')
+
+        /** How far back [tryUncomposedTrigger] reads for a trigger: more than any word. */
+        private const val UNCOMPOSED_TRIGGER_LOOKBACK = 64
 
         /**
          * Marks that get a space typed after them when

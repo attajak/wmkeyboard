@@ -21,6 +21,9 @@
 
     <string name="rows_snippet_new_title">New snippet</string>
     <string name="rows_snippet_edit_title">Edit snippet</string>
+    <string name="rows_snippet_unsaved_title">Save this snippet?</string>
+    <string name="rows_snippet_unsaved_body">You changed this snippet and did not save it. If you leave now, the changes are lost.</string>
+    <string name="rows_snippet_unsaved_discard">Discard</string>
     <string name="rows_snippet_label_label">Label</string>
     <!-- Text field label. The names in braces are variable tokens the user
          types. Keep them exactly as they are. -->

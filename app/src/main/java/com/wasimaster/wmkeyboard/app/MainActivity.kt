@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.fragment.app.FragmentActivity
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -1831,9 +1832,12 @@ private fun SettingsNavGraph(
         // link, process death and the back stack exactly as the folder id does.
         composable("expander/folder/{folderId}/new") { backStackEntry ->
             val folderId = backStackEntry.arguments?.getString("folderId")?.toLongOrNull() ?: 0L
+            // Back through the dispatcher, so the editor's unsaved-changes check
+            // hears the toolbar arrow as well as the system back (#471).
+            val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
             SettingsScreen(
                 stringResource(R.string.rows_snippet_new_title),
-                { navController.popBackStack() },
+                { backDispatcher?.onBackPressed() ?: navController.popBackStack() },
             ) {
                 SnippetEditor(settings, 0L, folderId) { navController.popBackStack() }
             }
@@ -1842,11 +1846,12 @@ private fun SettingsNavGraph(
             // 0 is "a snippet that does not exist yet", which is what the Add
             // button navigates to.
             val snippetId = backStackEntry.arguments?.getString("snippetId")?.toLongOrNull() ?: 0L
+            val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
             SettingsScreen(
                 stringResource(
                     if (snippetId == 0L) R.string.rows_snippet_new_title else R.string.rows_snippet_edit_title,
                 ),
-                { navController.popBackStack() },
+                { backDispatcher?.onBackPressed() ?: navController.popBackStack() },
                 route = snippetEditRoute(snippetId),
             ) {
                 SnippetEditor(settings, snippetId) { navController.popBackStack() }
