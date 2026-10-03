@@ -4,6 +4,9 @@ import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.tools.feature.R
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -27,9 +30,26 @@ import kotlinx.serialization.json.jsonPrimitive
 object SearxClient {
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
-    fun webSearch(query: String, instance: String, count: Int, safe: Boolean): List<WebResult> =
-        parseWeb(get(searchUrl(instance, query, categories = "general", safe = safe), NetSource.WEB_SEARCH))
-            .take(count.coerceIn(1, 50))
+    fun webSearch(query: String, instance: String, count: Int, safe: Boolean): WebSearchPage {
+        val body = get(searchUrl(instance, query, categories = "general", safe = safe), NetSource.WEB_SEARCH)
+        return WebSearchPage(parseWeb(body).take(count.coerceIn(1, 50)), parseAnswer(body))
+    }
+
+    /**
+     * The instance's `answers`, the first that says anything: plain strings on
+     * older SearXNG, `{"answer": …}` objects on newer.
+     */
+    internal fun parseAnswer(body: String): String? {
+        val answers = Json.parseToJsonElement(body).jsonObject["answers"] as? JsonArray ?: return null
+        return answers.firstNotNullOfOrNull { element ->
+            val text = when (element) {
+                is JsonPrimitive -> element.takeIf { it.isString }?.content
+                is JsonObject -> (element["answer"] as? JsonPrimitive)?.takeIf { it.isString }?.content
+                else -> null
+            }
+            text?.trim()?.takeIf { it.isNotEmpty() }
+        }
+    }
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun imageSearch(query: String, instance: String, count: Int, safe: Boolean): List<ImageResult> =

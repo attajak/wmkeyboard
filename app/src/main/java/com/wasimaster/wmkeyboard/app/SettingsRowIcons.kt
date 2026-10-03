@@ -246,6 +246,7 @@ import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material.icons.outlined.Toll
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material.icons.outlined.TravelExplore
 import androidx.compose.material.icons.outlined.TripOrigin
 import androidx.compose.material.icons.outlined.Tune
@@ -1223,6 +1224,9 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_image_columns_title) { Icons.Outlined.GridOn }
         put(R.string.tooldetail_search_safe_title) { Icons.Outlined.Shield }
         put(R.string.tooldetail_search_count_title) { Icons.Outlined.Numbers }
+        put(R.string.tooldetail_search_answer_title) { Icons.Outlined.AutoAwesome }
+        put(R.string.tooldetail_search_open_browser_title) { Icons.Outlined.OpenInBrowser }
+        put(R.string.tooldetail_tavily_advanced_title) { Icons.Outlined.TravelExplore }
         put(R.string.tooldetail_ocr_select_all_title) { Icons.Outlined.SelectAll }
         put(R.string.tooldetail_ocr_engine_title) { Icons.Outlined.TextFields }
         put(R.string.tooldetail_qr_scan_auto_title) { Icons.Outlined.Bolt }

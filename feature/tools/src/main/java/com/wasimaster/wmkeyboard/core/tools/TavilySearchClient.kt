@@ -29,9 +29,28 @@ object TavilySearchClient {
 
     private const val PATH = "/search"
 
-    /** Blocking; call on an IO dispatcher. Throws on failure. */
-    fun webSearch(query: String, apiKey: String, count: Int, safe: Boolean): List<WebResult> =
-        parseWeb(post(requestBody(query, count, safe, images = false), apiKey, NetSource.WEB_SEARCH))
+    /**
+     * Blocking; call on an IO dispatcher. Throws on failure.
+     *
+     * [advanced] is Tavily's deeper search, two credits instead of one (#470).
+     * [answer] asks for the short answer Tavily writes from the results, which
+     * costs nothing more.
+     */
+    fun webSearch(
+        query: String,
+        apiKey: String,
+        count: Int,
+        safe: Boolean,
+        advanced: Boolean = false,
+        answer: Boolean = false,
+    ): WebSearchPage {
+        val body = post(
+            requestBody(query, count, safe, images = false, advanced = advanced, answer = answer),
+            apiKey,
+            NetSource.WEB_SEARCH,
+        )
+        return WebSearchPage(parseWeb(body), if (answer) parseAnswer(body) else null)
+    }
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */
     fun imageSearch(query: String, apiKey: String, count: Int, safe: Boolean): List<ImageResult> =
@@ -52,18 +71,31 @@ object TavilySearchClient {
         )
 
     /**
-     * `basic` depth, the one-credit search. `safe_search` is sent either way:
-     * Tavily refuses it only at the `fast` depths, which this never asks for.
+     * `basic` depth, the one-credit search, unless [advanced]. `safe_search`
+     * is sent either way: Tavily refuses it only at the `fast` depths, which
+     * this never asks for.
      */
-    internal fun requestBody(query: String, count: Int, safe: Boolean, images: Boolean): String =
+    internal fun requestBody(
+        query: String,
+        count: Int,
+        safe: Boolean,
+        images: Boolean,
+        advanced: Boolean = false,
+        answer: Boolean = false,
+    ): String =
         buildJsonObject {
             put("query", query.trim())
-            put("search_depth", "basic")
+            put("search_depth", if (advanced) "advanced" else "basic")
             put("max_results", count.coerceIn(1, MAX_RESULTS))
-            put("include_answer", false)
+            put("include_answer", answer)
             put("include_images", images)
             put("safe_search", safe)
         }.toString()
+
+    /** Tavily's written answer, or null when it gave none. */
+    internal fun parseAnswer(body: String): String? =
+        (Json.parseToJsonElement(body).jsonObject["answer"] as? JsonPrimitive)
+            ?.takeIf { it.isString }?.content?.trim()?.takeIf { it.isNotEmpty() }
 
     internal fun parseWeb(body: String): List<WebResult> {
         val results = Json.parseToJsonElement(body).jsonObject["results"]?.jsonArray.orEmpty()

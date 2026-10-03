@@ -491,6 +491,7 @@ import com.wasimaster.wmkeyboard.core.tools.CalendarSystems
 import com.wasimaster.wmkeyboard.core.tools.WeatherClient
 import com.wasimaster.wmkeyboard.core.tools.WeatherInfo
 import com.wasimaster.wmkeyboard.core.tools.WebResult
+import com.wasimaster.wmkeyboard.core.tools.WebSearchPage
 import com.wasimaster.wmkeyboard.core.mlkit.MlKitInit
 import com.wasimaster.wmkeyboard.core.media.MediaControlManager
 import com.wasimaster.wmkeyboard.core.media.MediaNotificationListener
@@ -26041,17 +26042,30 @@ open class WMKeyboardService : InputMethodService() {
                     when (ToolApiKeys.searchBackend(settings)) {
                         SearchBackend.SEARXNG ->
                             SearxClient.webSearch(query, settings.selfHosted.searxUrl, count, safe)
-                        SearchBackend.TAVILY ->
-                            TavilySearchClient.webSearch(query, ToolApiKeys.tavily(settings), count, safe)
-                        SearchBackend.BRAVE, null ->
-                            BraveSearchClient.webSearch(query, ToolApiKeys.brave(settings), count, safe)
+                        SearchBackend.TAVILY -> TavilySearchClient.webSearch(
+                            query,
+                            ToolApiKeys.tavily(settings),
+                            count,
+                            safe,
+                            advanced = settings.webSearch.tavilyAdvanced,
+                            answer = settings.webSearch.showAnswer,
+                        )
+                        SearchBackend.BRAVE, null -> WebSearchPage(
+                            BraveSearchClient.webSearch(query, ToolApiKeys.brave(settings), count, safe),
+                        )
                     }
                 }
             }
             _uiState.update {
                 it.copy(
                     webSearch = result.fold(
-                        onSuccess = { r -> WebSearchUi.Ready(r, query) },
+                        onSuccess = { page ->
+                            WebSearchUi.Ready(
+                                page.results,
+                                query,
+                                answer = page.answer.takeIf { settings.webSearch.showAnswer },
+                            )
+                        },
                         onFailure = { e ->
                             WebSearchUi.Error(
                                 requestErrorText(e, R.string.ime_service_search_error),
@@ -26362,10 +26376,14 @@ open class WMKeyboardService : InputMethodService() {
         commitToField(result.imageUrl)
     }
 
-    /** Tapped a web result: insert its URL at the cursor. */
+    /**
+     * Tapped a web result: insert its URL at the cursor. The panel's answer
+     * box (#470) comes through here too, as a result with no address, and
+     * inserts its text.
+     */
     fun onWebResultSelect(result: WebResult) {
         vibrate()
-        commitToField(result.url)
+        commitToField(result.url.ifEmpty { result.snippet })
     }
 
     /** Open a web result in the browser (leaves the keyboard). */

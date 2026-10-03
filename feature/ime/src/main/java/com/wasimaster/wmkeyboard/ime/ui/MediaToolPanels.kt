@@ -40,6 +40,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import androidx.compose.material.icons.outlined.AddLink
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Info
@@ -48,6 +50,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -1587,26 +1590,42 @@ internal fun WebSearchPanel(
             )
             is WebSearchUi.Metered -> MeteredNotice(ui.canAllow, onRetry)
             is WebSearchUi.Ready -> {
-                if (ui.results.isEmpty()) {
+                if (ui.results.isEmpty() && ui.answer == null) {
                     PanelNotice(stringResource(R.string.ime_web_search_empty, ui.query))
                 } else {
                     val focused = state.focusedIndex()
                     val listState = rememberLazyListState()
+                    // Issue #470: the row can open the page instead, with the
+                    // side button inserting the link, for a user who searches to
+                    // read rather than to share.
+                    val openFirst = state.settings.webSearch.openInBrowser
+                    val rowAction = if (openFirst) onOpen else onResult
+                    val sideAction = if (openFirst) onResult else onOpen
+                    // The answer box is the list's first item when there is one,
+                    // so focus indices start after it.
+                    val lead = if (ui.answer != null) 1 else 0
                     PanelFocusTarget(
                         panel = PanelMode.WEB_SEARCH,
                         count = ui.results.size,
                         columns = 1,
-                        // The open-in-browser icon stays touch-only; Enter does
-                        // what a tap on the row does, which is insert.
-                        onActivate = { index -> ui.results.getOrNull(index)?.let(onResult) },
+                        // The side icon stays touch-only; Enter does what a tap
+                        // on the row does.
+                        onActivate = { index -> ui.results.getOrNull(index)?.let(rowAction) },
                     )
-                    ScrollFocusIntoView(focused) { listState.animateScrollToItem(it) }
+                    ScrollFocusIntoView(focused) { listState.animateScrollToItem(it + lead) }
                     LazyColumn(state = listState, modifier = Modifier.fillMaxSize()) {
+                        ui.answer?.let { answer ->
+                            item(key = "answer") {
+                                WebSearchAnswer(answer) {
+                                    onResult(WebResult(title = "", snippet = answer, url = "", displayUrl = ""))
+                                }
+                            }
+                        }
                         itemsIndexed(ui.results) { index, result ->
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable { onResult(result) }
+                                    .clickable { rowAction(result) }
                                     .focusRing(index == focused, RoundedCornerShape(8.dp))
                                     .padding(horizontal = 12.dp, vertical = 6.dp),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -1637,11 +1656,13 @@ internal fun WebSearchPanel(
                                         )
                                     }
                                 }
-                                IconButton(onClick = { onOpen(result) }) {
+                                IconButton(onClick = { sideAction(result) }) {
                                     Icon(
-                                        Icons.AutoMirrored.Outlined.OpenInNew,
-                                        contentDescription =
-                                            stringResource(R.string.ime_web_search_open_desc),
+                                        if (openFirst) Icons.Outlined.AddLink else Icons.AutoMirrored.Outlined.OpenInNew,
+                                        contentDescription = stringResource(
+                                            if (openFirst) R.string.ime_web_search_insert_desc
+                                            else R.string.ime_web_search_open_desc,
+                                        ),
                                         modifier = Modifier.size(18.dp),
                                         tint = kb.toolbarIcon,
                                     )
@@ -1654,6 +1675,58 @@ internal fun WebSearchPanel(
         }
     }
 }
+
+/**
+ * The backend's own answer to the query, above the results (#470): Tavily's
+ * written answer, a SearXNG instance's instant answer. Folded to a few lines,
+ * a tap opens the rest, and Insert puts the whole of it in the field.
+ */
+@Composable
+private fun WebSearchAnswer(answer: String, onInsert: () -> Unit) {
+    val kb = LocalKbTheme.current
+    var expanded by remember(answer) { mutableStateOf(false) }
+    val shape = kb.cardShape()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clip(shape)
+            .background(kb.chip)
+            .clickable { expanded = !expanded }
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.Outlined.AutoAwesome,
+                contentDescription = null,
+                modifier = Modifier.size(16.dp),
+                tint = kb.accent,
+            )
+            Text(
+                stringResource(R.string.ime_web_search_answer_label),
+                color = kb.secondaryText,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 6.dp),
+            )
+            TextButton(onClick = onInsert) {
+                Text(stringResource(R.string.ime_insert_action), color = kb.accent, fontSize = 13.sp)
+            }
+        }
+        Text(
+            answer,
+            color = kb.chipText,
+            fontSize = 13.sp,
+            lineHeight = 18.sp,
+            maxLines = if (expanded) Int.MAX_VALUE else WebAnswerFoldedLines,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+/** How many lines of the answer show before a tap opens the rest. */
+private const val WebAnswerFoldedLines = 4
 
 // ---- image search panel ----
 

@@ -73,6 +73,25 @@ class TavilySearchClientTest {
     }
 
     @Test
+    fun `advanced depth and the answer are asked for only when wanted`() {
+        val body = Json.parseToJsonElement(
+            TavilySearchClient.requestBody("cats", count = 5, safe = false, images = false, advanced = true, answer = true),
+        ).jsonObject
+        assertEquals("advanced", body["search_depth"]!!.jsonPrimitive.content)
+        assertTrue(body["include_answer"]!!.jsonPrimitive.boolean)
+    }
+
+    @Test
+    fun `answers are read from tavily and searxng`() {
+        assertEquals("Cats purr.", TavilySearchClient.parseAnswer("""{"answer":" Cats purr. ","results":[]}"""))
+        assertNull(TavilySearchClient.parseAnswer("""{"answer":null,"results":[]}"""))
+        assertNull(TavilySearchClient.parseAnswer("{}"))
+        assertEquals("42", SearxClient.parseAnswer("""{"answers":["42"],"results":[]}"""))
+        assertEquals("Paris", SearxClient.parseAnswer("""{"answers":[{"answer":"Paris","url":null}]}"""))
+        assertNull(SearxClient.parseAnswer("""{"answers":[],"results":[]}"""))
+    }
+
+    @Test
     fun `tavily error bodies surface their own words`() {
         assertEquals(
             "Unauthorized: missing or invalid API key.",

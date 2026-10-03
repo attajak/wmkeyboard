@@ -1205,6 +1205,8 @@ sealed interface WebSearchUi {
     data class Ready(
         val results: List<com.wasimaster.wmkeyboard.core.tools.WebResult>,
         val query: String,
+        /** The backend's own short answer, shown above the results (#470). */
+        val answer: String? = null,
     ) : WebSearchUi
 }
 

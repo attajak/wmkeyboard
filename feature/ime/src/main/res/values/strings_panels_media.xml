@@ -200,6 +200,8 @@
     <!-- %1$s is what the user typed in the search box. -->
     <string name="ime_web_search_empty">No results for “<xliff:g id="query" example="weather">%1$s</xliff:g>”</string>
     <string name="ime_web_search_open_desc">Open in the browser</string>
+    <string name="ime_web_search_insert_desc">Insert the link</string>
+    <string name="ime_web_search_answer_label">Answer from the search engine</string>
 
     <!-- Image search panel. -->
     <string name="ime_image_search_idle">Type a search and press enter.\nPress an image to insert it. Press and hold to insert its link.</string>

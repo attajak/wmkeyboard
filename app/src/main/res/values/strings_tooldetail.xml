@@ -496,6 +496,14 @@
     <string name="tooldetail_search_safe_subtitle">Filter explicit results</string>
     <string name="tooldetail_search_count_title">Results for each search</string>
     <string name="tooldetail_search_count_subtitle">Each search uses one API request either way</string>
+    <string name="tooldetail_search_answer_title">Show the answer from the search engine</string>
+    <string name="tooldetail_search_answer_subtitle">A short answer above the results, when the engine writes one</string>
+    <string name="tooldetail_search_answer_info">Tavily writes a short answer to your query from the pages it found, and some SearXNG instances give instant answers. With this on, that answer shows in a box above the results, and Insert puts it in your text. Brave gives no answer with a normal search key, so nothing shows when Brave does the search. On Tavily the answer costs no extra credits.</string>
+    <string name="tooldetail_search_open_browser_title">Open results in the browser</string>
+    <string name="tooldetail_search_open_browser_subtitle">A tap opens the page; the button beside it inserts the link</string>
+    <string name="tooldetail_tavily_advanced_title">Advanced search</string>
+    <string name="tooldetail_tavily_advanced_subtitle">Better results, for 2 credits for each search instead of 1</string>
+    <string name="tooldetail_tavily_advanced_info">Tavily has two search depths. Basic is the default and costs 1 credit. Advanced looks deeper into each page for the parts that match your query, and costs 2 credits. The free plan gives 1,000 credits each month.</string>
 
     <!-- Text scan (OCR) tool. -->
     <string name="tooldetail_ocr_select_all_title">Start with everything selected</string>

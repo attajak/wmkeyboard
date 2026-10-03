@@ -2535,8 +2535,14 @@ data class WebSearchSettings(
     val tavilyApiKey: String = "",
     /** SafeSearch for the web and image search tools. */
     val safe: Boolean = true,
-    /** Results per web/image search (the API caps a page at 10). */
+    /** Results per web/image search; Brave and Tavily both cap a page at 20 (#470). */
     val resultCount: Int = 8,
+    /** Show the short answer the backend writes for a web search above its results (#470). */
+    val showAnswer: Boolean = true,
+    /** A tapped web result opens in the browser, and the side button inserts its link instead (#470). */
+    val openInBrowser: Boolean = false,
+    /** Tavily's advanced search: better results for two credits a search instead of one (#470). */
+    val tavilyAdvanced: Boolean = false,
     /** Wikipedia subdomain the encyclopedia tool reads (en, bn, de …). */
     val wikiLanguage: String = "en",
     /** Insert Wikipedia links as `[Title](url)` instead of the bare URL. */
@@ -3777,6 +3783,9 @@ const val PHONETIC_SCRIPT_CHOICES_FILE = "learning/phonetic_script_choices.json"
 
 /** What the user did with the words their glides gave them (see `GlideOutcomes` in :core:prediction). */
 const val GLIDE_OUTCOMES_FILE = "learning/glide_outcomes.json"
+
+/** The most results one web or image search asks for: Brave's and Tavily's page size. */
+const val MAX_SEARCH_RESULTS = 20
 
 /** Addresses typed into email fields (see `TypedEmails` in :core:prediction). */
 const val TYPED_EMAILS_FILE = "learning/typed_emails.json"
@@ -8536,6 +8545,9 @@ class SettingsRepository(private val context: Context) {
         private val STICKER_SUGGEST_MAGNIFY = booleanPreferencesKey("sticker_suggest_magnify")
         private val SEARCH_SAFE = booleanPreferencesKey("search_safe")
         private val SEARCH_RESULT_COUNT = intPreferencesKey("search_result_count")
+        private val SEARCH_SHOW_ANSWER = booleanPreferencesKey("search_show_answer")
+        private val SEARCH_OPEN_IN_BROWSER = booleanPreferencesKey("search_open_in_browser")
+        private val SEARCH_TAVILY_ADVANCED = booleanPreferencesKey("search_tavily_advanced")
         private val WIKI_LANGUAGE = stringPreferencesKey("wiki_language")
         private val WIKI_LINKS_MARKDOWN = booleanPreferencesKey("wiki_links_markdown")
         // Tab-separated (symbols are single graphemes; some are commas).
@@ -10388,6 +10400,9 @@ class SettingsRepository(private val context: Context) {
             tavilyApiKey = p[TAVILY_API_KEY] ?: defaults.webSearch.tavilyApiKey,
             safe = p[SEARCH_SAFE] ?: defaults.webSearch.safe,
             resultCount = p[SEARCH_RESULT_COUNT] ?: defaults.webSearch.resultCount,
+            showAnswer = p[SEARCH_SHOW_ANSWER] ?: defaults.webSearch.showAnswer,
+            openInBrowser = p[SEARCH_OPEN_IN_BROWSER] ?: defaults.webSearch.openInBrowser,
+            tavilyAdvanced = p[SEARCH_TAVILY_ADVANCED] ?: defaults.webSearch.tavilyAdvanced,
             wikiLanguage = p[WIKI_LANGUAGE] ?: defaults.webSearch.wikiLanguage,
             wikiLinksMarkdown = p[WIKI_LINKS_MARKDOWN]
                 ?: defaults.webSearch.wikiLinksMarkdown,
@@ -15952,7 +15967,16 @@ class SettingsRepository(private val context: Context) {
         editPrefs { it[GIF_RESULT_LIMIT] = value.coerceIn(6, 48) }
 
     suspend fun setSearchResultCount(value: Int) =
-        editPrefs { it[SEARCH_RESULT_COUNT] = value.coerceIn(1, 10) }
+        editPrefs { it[SEARCH_RESULT_COUNT] = value.coerceIn(1, MAX_SEARCH_RESULTS) }
+
+    suspend fun setSearchShowAnswer(value: Boolean) =
+        editPrefs { it[SEARCH_SHOW_ANSWER] = value }
+
+    suspend fun setSearchOpenInBrowser(value: Boolean) =
+        editPrefs { it[SEARCH_OPEN_IN_BROWSER] = value }
+
+    suspend fun setSearchTavilyAdvanced(value: Boolean) =
+        editPrefs { it[SEARCH_TAVILY_ADVANCED] = value }
 
     suspend fun setWikiLanguage(value: String) =
         editPrefs { it[WIKI_LANGUAGE] = value.trim().lowercase() }

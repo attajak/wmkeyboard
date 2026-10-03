@@ -9,6 +9,16 @@ data class WebResult(
     val displayUrl: String,
 )
 
+/**
+ * One page of web results, and the short answer the backend wrote for the
+ * query when it writes one (#470): Tavily's `answer`, a SearXNG instance's
+ * `answers`. Brave gives none on the plain search API.
+ */
+data class WebSearchPage(
+    val results: List<WebResult>,
+    val answer: String? = null,
+)
+
 /** One image hit from the image search tool. */
 data class ImageResult(
     val title: String,
