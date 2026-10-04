@@ -25,6 +25,44 @@ private const val LAYOUT_ID_KEY = "layoutId"
 internal fun layoutExtraValue(layoutId: String): String = "$LAYOUT_ID_KEY=$layoutId"
 
 /**
+ * The framework's own extra-value key: when a subtype's name resource holds a
+ * `%s`, this string is formatted into it instead of the locale's display name.
+ * `InputMethodSubtype.EXTRA_KEY_UNTRANSLATABLE_STRING_IN_SUBTYPE_NAME`, which is
+ * hidden API but has read this key since API 19.
+ */
+private const val NAME_OVERRIDE_KEY = "UntranslatableReplacementStringInSubtypeName"
+
+/**
+ * The whole extra-value string for a subtype: the layout id, and the switcher
+ * label when [nameOverride] asks for one. The value is a comma-separated list
+ * of `key=value` pairs, so a name carrying either separator is flattened
+ * rather than allowed to break the pair after it.
+ */
+internal fun subtypeExtraValue(layoutId: String, nameOverride: String?): String {
+    val base = layoutExtraValue(layoutId)
+    val safe = nameOverride?.replace(',', ' ')?.replace('=', ' ')?.trim().orEmpty()
+    if (safe.isEmpty()) return base
+    return "$base,$NAME_OVERRIDE_KEY=$safe"
+}
+
+/**
+ * The label the OS switcher shows for a language in place of the one it derives
+ * from the locale, or null to leave the framework's name alone.
+ *
+ * Android names `hi-Latn` "Hindi (Latin)", which next to "Hindi (India)" in the
+ * same sheet says nothing about which of the two is the phonetic layout (#497).
+ * The romanized languages are the ones this app deliberately names differently
+ * from their locale, "Hinglish · Hindi (Romanized)", so that name goes out to
+ * the switcher too. Every other language keeps the framework's locale name,
+ * which is translated into the phone's language where this one is not.
+ */
+internal fun subtypeNameOverride(languageId: String, displayName: String): String? =
+    displayName.takeIf { languageId.endsWith(ROMANIZED_ID_SUFFIX) && it.isNotBlank() }
+
+/** How the romanized languages' ids end: `hi_rom`, `bn_rom`, `ar_rom`, and the rest. */
+private const val ROMANIZED_ID_SUFFIX = "_rom"
+
+/**
  * A 31-bit id derived only from the layout id, so a layout keeps the same
  * subtype identity across process restarts and app updates. Android persists the
  * user's enabled-subtype choice by this int — a value that shifted when, say, a
@@ -69,17 +107,21 @@ internal fun layoutIdFromExtraValue(extraValue: String?): String? {
  * [nameResId] chooses the label the switcher shows: 0 (the default) lets the
  * framework derive it from the locale (the plain language name); a string
  * resource containing `%s` is formatted with that locale name, e.g. a
- * "WM Keyboard · %s" resource yields an app-name-first label.
+ * "WM Keyboard · %s" resource yields an app-name-first label. A romanized
+ * language puts its own name in that `%s` instead ([subtypeNameOverride]), so
+ * with no resource asked for it still needs one, the bare "%s".
  */
 fun subtypeFor(spec: LayoutSpec, nameResId: Int = 0): InputMethodSubtype {
     val lang = spec.language()
     val asciiCapable = spec.script().id == ScriptId.LATIN
+    val nameOverride = subtypeNameOverride(lang.id, lang.displayName)
+    val resId = if (nameOverride != null && nameResId == 0) R.string.subtype_plain_label else nameResId
     return InputMethodSubtypeBuilder()
         .setSubtypeMode("keyboard")
-        .setSubtypeNameResId(nameResId)
+        .setSubtypeNameResId(resId)
         .setSubtypeLocale(lang.localeTag.replace('-', '_'))
         .setLanguageTag(lang.localeTag)
-        .setSubtypeExtraValue(layoutExtraValue(spec.id))
+        .setSubtypeExtraValue(subtypeExtraValue(spec.id, nameOverride))
         .setIsAsciiCapable(asciiCapable)
         .setOverridesImplicitlyEnabledSubtype(false)
         .setSubtypeId(stableSubtypeId(spec.id))

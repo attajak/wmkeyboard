@@ -37,6 +37,35 @@ class SubtypesTest {
     }
 
     @Test
+    fun `layout id still reads back when a switcher label rides along`() {
+        val value = subtypeExtraValue("hi_rom", "Hinglish · Hindi (Romanized)")
+        assertEquals("hi_rom", layoutIdFromExtraValue(value))
+        assertTrue(value.endsWith("=Hinglish · Hindi (Romanized)"))
+        // No label, no second pair: the value is exactly what it always was.
+        assertEquals(layoutExtraValue("qwerty"), subtypeExtraValue("qwerty", null))
+        assertEquals(layoutExtraValue("qwerty"), subtypeExtraValue("qwerty", "  "))
+    }
+
+    /** The pairs are comma-separated and `=`-split, so a label may hold neither. */
+    @Test
+    fun `switcher label cannot break the extra-value pairs`() {
+        val value = subtypeExtraValue("x", "a, b=c")
+        assertEquals("x", layoutIdFromExtraValue(value))
+        assertTrue(value.endsWith("=a  b c"))
+    }
+
+    @Test
+    fun `only romanized languages override the switcher label`() {
+        assertEquals(
+            "Hinglish · Hindi (Romanized)",
+            subtypeNameOverride("hi_rom", "Hinglish · Hindi (Romanized)"),
+        )
+        assertNull(subtypeNameOverride("hi", "हिन्दी"))
+        assertNull(subtypeNameOverride("en", "English"))
+        assertNull(subtypeNameOverride("bn_rom", ""))
+    }
+
+    @Test
     fun `subtype id is stable, non-negative and layout-specific`() {
         assertEquals(stableSubtypeId("qwerty"), stableSubtypeId("qwerty"))
         assertTrue(stableSubtypeId("qwerty") >= 0)

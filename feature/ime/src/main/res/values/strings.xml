@@ -6,4 +6,10 @@
       Lives in :feature:ime because only WMKeyboardService reads it.
     -->
     <string name="subtype_app_label">WM Keyboard · %s</string>
+    <!--
+      The bare locale-name slot, for a romanized language whose switcher label
+      is the app's own name for it (Subtypes.kt, issue #497). Nothing to
+      translate: the %s is the whole string.
+    -->
+    <string name="subtype_plain_label" translatable="false">%s</string>
 </resources>
