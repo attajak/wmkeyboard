@@ -18094,7 +18094,10 @@ internal fun barClipboardSearching(state: KeyboardUiState): Boolean =
  * [FullBleedTool], which has to leave them room.
  */
 internal fun keyRowsUnderPanel(state: KeyboardUiState): Boolean = when (state.captureTarget()) {
-    null, CaptureTarget.CALC, CaptureTarget.CONVERTER, CaptureTarget.WORD_SPELL -> false
+    // No field of the keyboard's own: the keys stay under the clipboard only
+    // when it is stacked over them (#414), and then they type into the app.
+    null -> clipboardStacked(state)
+    CaptureTarget.CALC, CaptureTarget.CONVERTER, CaptureTarget.WORD_SPELL -> false
     // The emoji and clipboard panels reroute their search pills;
     // the rest are only ever up with their own panel open.
     CaptureTarget.EMOJI_SEARCH -> state.panel == PanelMode.EMOJI
@@ -18104,6 +18107,14 @@ internal fun keyRowsUnderPanel(state: KeyboardUiState): Boolean = when (state.ca
     CaptureTarget.SNIPPET_SEARCH -> state.panel == PanelMode.SNIPPETS
     else -> true
 }
+
+/**
+ * The clipboard panel is open stacked over the live keys (#414). Only the
+ * full-bleed panel has the header the toggle sits in, so only it stacks.
+ */
+internal fun clipboardStacked(state: KeyboardUiState): Boolean =
+    state.panel == PanelMode.CLIPBOARD && state.clipboardWithKeys &&
+        state.settings.clipboard.fullBleed && !barLockHidden(state)
 
 /** A panel is claiming the strip's height, so the rows above the keys are gone. */
 internal fun barFullBleed(state: KeyboardUiState): Boolean =

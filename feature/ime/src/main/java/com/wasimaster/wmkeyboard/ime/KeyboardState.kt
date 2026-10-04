@@ -2810,6 +2810,13 @@ data class KeyboardUiState(
     val clipboardQuery: String = "",
     /** Typing edits [clipboardQuery] instead of the field, like emoji search. */
     val clipboardSearchActive: Boolean = false,
+    /**
+     * The clipboard is stacked over the live keys (#414): a short strip of
+     * clips with the key rows under it, typing into the app, so pasting and
+     * typing can alternate without opening and closing the panel. Toggled
+     * from the panel's header and kept until toggled back.
+     */
+    val clipboardWithKeys: Boolean = false,
     /** The clip open in the clipboard panel's editor; see [clipEditActive]. */
     val clipEdit: ClipEdit? = null,
     /** The clipboard panel's Undo bar, while a delete can still be taken back. */

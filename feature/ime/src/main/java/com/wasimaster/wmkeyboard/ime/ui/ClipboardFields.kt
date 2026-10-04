@@ -169,6 +169,8 @@ data class ClipboardPanelActions(
     val onExtractText: (ClipItem) -> Unit = {},
     /** The height bar let go: how many dp taller than the keyboard the panel opens (#414). */
     val onPanelHeight: (Int) -> Unit = {},
+    /** The header's keyboard button: stack the panel over the live keys, or back (#414). */
+    val onKeysToggle: () -> Unit = {},
 )
 
 /** The history's two tabs, when [ClipboardSettings.pinnedTabs] is on (#371). */

@@ -31731,7 +31731,18 @@ open class WMKeyboardService : InputMethodService() {
         onViewImage = ::onClipboardViewImage,
         onExtractText = ::onClipboardExtractText,
         onPanelHeight = ::onClipboardPanelHeight,
+        onKeysToggle = ::onClipboardKeysToggle,
     )
+
+    /**
+     * The clipboard header's keyboard button (#414): the panel shrinks to a
+     * strip of clips with the keys under it, typing into the app, or goes
+     * back to filling the keyboard.
+     */
+    fun onClipboardKeysToggle() {
+        vibrate()
+        _uiState.update { it.copy(clipboardWithKeys = !it.clipboardWithKeys, panelFocus = null) }
+    }
 
     /**
      * The clipboard panel's height bar let go (#414): [extraDp] is how much

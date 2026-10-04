@@ -635,6 +635,9 @@
     <!-- The clipboard panel. -->
     <string name="ime_clipboard_search_hint">Search the clipboard…</string>
     <string name="ime_clipboard_search_clear_desc">Clear the search</string>
+    <!-- The clipboard header's keyboard button: keep the keys under a smaller clipboard, or give the clipboard the whole keyboard back. -->
+    <string name="ime_clipboard_keys_show_desc">Show the keys under the clipboard</string>
+    <string name="ime_clipboard_keys_hide_desc">Hide the keys</string>
     <string name="ime_clipboard_empty">The clipboard history is empty.\nCopied text shows here.</string>
     <!-- %1$s is what the user typed in the clipboard search box. -->
     <string name="ime_clipboard_no_match">No clips match “%1$s”.</string>
