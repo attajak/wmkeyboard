@@ -54,6 +54,8 @@ object AssetLayouts {
     const val NB_QWERTY_ID = "asset_nb_qwerty"
     const val HR_QWERTZ_ID = "asset_hr_qwertz"
     const val FA_STANDARD_ID = "asset_fa_standard"
+    /** Persian as Gboard lays it out (#506): ژ on its own key, no shift, harakat on the full stop. */
+    const val FA_GBOARD_ID = "asset_fa_gboard"
     const val BE_JCUKEN_ID = "asset_be_jcuken"
     const val ET_QWERTY_ID = "asset_et_qwerty"
     const val LT_QWERTY_ID = "asset_lt_qwerty"

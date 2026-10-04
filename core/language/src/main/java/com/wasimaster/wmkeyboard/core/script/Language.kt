@@ -421,7 +421,7 @@ object LanguageRegistry {
             englishName = "Persian",
             script = ScriptId.ARABIC,
             localeTag = "fa-IR",
-            layoutIds = listOf(AssetLayouts.FA_STANDARD_ID, AssetLayouts.FA_T9_ID),
+            layoutIds = listOf(AssetLayouts.FA_STANDARD_ID, AssetLayouts.FA_GBOARD_ID, AssetLayouts.FA_T9_ID),
             numeralSystem = NumeralSystem.PERSIAN,
         ),
         LanguageDef(
