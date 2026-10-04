@@ -332,7 +332,9 @@ object EspansoFile {
      */
     private fun matchable(trigger: String): Boolean =
         trigger.all(SnippetMatcher::isTriggerWordChar) ||
-            SnippetMatcher.splitPrefix(trigger) != null
+            SnippetMatcher.splitPrefix(trigger) != null ||
+            // `js:`, `->`: fired off the field when the last symbol lands (#471).
+            SnippetMatcher.isSuffixTrigger(trigger)
 
     /**
      * True when this app would insist on a word boundary in front of [trigger]

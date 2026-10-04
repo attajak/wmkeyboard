@@ -876,6 +876,15 @@ class SnippetStore(private val storageFile: File?) {
     /** True when some prefix trigger offers itself instead of expanding. */
     fun hasConfirmPrefixTriggers(): Boolean = index().hasConfirmPrefixTriggers
 
+    /** True when some trigger ends in a symbol (#471), the suffix path's gate. */
+    fun hasSuffixTriggers(): Boolean = index().hasSuffixTriggers
+
+    /** True when a trigger ends in [symbol], asked without reading the field. */
+    fun couldEndWith(symbol: Char): Boolean = index().couldEndWith(symbol)
+
+    /** The symbol-ending trigger [before] ends with, or null. See [SnippetIndex.matchSuffix]. */
+    fun matchSuffix(before: CharSequence): SuffixTrigger? = index().matchSuffix(before)
+
     /** True when [word] could finish a prefix trigger, asked without reading the field. */
     fun couldFinishPrefix(word: String): Boolean = index().prefixCandidates(word).isNotEmpty()
 

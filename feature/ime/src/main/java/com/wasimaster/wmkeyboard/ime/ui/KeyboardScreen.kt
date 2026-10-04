@@ -23681,11 +23681,19 @@ internal fun ClipEntityStrip(
     entities: List<ClipEntity>,
     focused: Int?,
     onPaste: (ClipEntity) -> Unit,
-) {
+) = BoxWithConstraints {
+    // The cell is a share of the key height, and small keys leave it shorter
+    // than the caption and a two-line chip together: the chip's text was then
+    // cut off at the cell's bottom edge (#414). The caption is the part that
+    // can go — the chips' dashed outline already says what they are.
+    val compact = maxHeight < EntityStripFullHeight
     // A light top inset: the panel layout's cell already keeps a key gap
     // above the strip, and every dp here comes out of the chips' row.
-    Column(modifier = Modifier.padding(top = 3.dp)) {
-        Row(
+    Column(
+        modifier = Modifier.padding(top = if (compact) 0.dp else 3.dp),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        if (!compact) Row(
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -23714,6 +23722,9 @@ internal fun ClipEntityStrip(
         }
     }
 }
+
+/** The least a cell may give [ClipEntityStrip] before its caption is dropped to fit the chips. */
+private val EntityStripFullHeight = 64.dp
 
 /** One dashed fragment chip: kind tag above the text that will be pasted. */
 @Composable
@@ -24111,6 +24122,12 @@ internal fun SwipeToDeleteCard(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    /**
+     * What a swipe to the right does instead of deleting (#414): pinning, on
+     * the clipboard. The card springs back afterwards rather than leaving,
+     * since it is still there. Null keeps both directions deleting.
+     */
+    onSwipeRight: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     if (!enabled) {
@@ -24133,6 +24150,8 @@ internal fun SwipeToDeleteCard(
                 alpha = when {
                     dismissed -> 0f
                     width == 0 -> 1f
+                    // A swipe that pins keeps the card, so it does not fade.
+                    onSwipeRight != null && offset.value > 0 -> 1f
                     // Gone by the time it has travelled its own width, so the
                     // card never ghosts over its neighbour on the way out.
                     else -> (1f - abs(offset.value) / width).coerceIn(0f, 1f)
@@ -24149,7 +24168,12 @@ internal fun SwipeToDeleteCard(
                     onDragEnd = {
                         if (!dismissed) scope.launch {
                             val threshold = width * 0.4f
-                            if (width > 0 && abs(offset.value) > threshold) {
+                            if (width > 0 && offset.value > threshold && onSwipeRight != null) {
+                                // Pinned, not gone: the card comes back to its
+                                // slot, where the grid re-sorts it in a moment.
+                                onSwipeRight()
+                                offset.animateTo(0f, spring(stiffness = Spring.StiffnessMediumLow))
+                            } else if (width > 0 && abs(offset.value) > threshold) {
                                 // Finish the slide off-screen, then delete, and
                                 // leave the card where it landed.
                                 offset.animateTo(
@@ -24354,9 +24378,14 @@ private fun formatDuration(millis: Long): String? {
  * A copied link, tinted and underlined so it reads as one. When link previews
  * are on and the fetch found something, the page title and description replace
  * the raw URL, which drops to a host line underneath.
+ *
+ * Without a preview the address is the whole clip, so it gets the card's
+ * [maxLines] like any text would, and no host line: the host is the start of
+ * the address already on the card, and drawing it again under two cut lines
+ * was the one thing the card found room for (#414).
  */
 @Composable
-internal fun ClipLinkBody(item: ClipItem) {
+internal fun ClipLinkBody(item: ClipItem, maxLines: Int = 2) {
     val preview = item.linkPreview?.takeIf { !it.failed && !it.isEmpty }
     val linkColor = MaterialTheme.colorScheme.primary
     Column {
@@ -24371,7 +24400,7 @@ internal fun ClipLinkBody(item: ClipItem) {
             )
             Text(
                 text = preview?.title?.takeIf { it.isNotBlank() } ?: item.text,
-                maxLines = 2,
+                maxLines = if (preview != null) 2 else maxLines,
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 13.sp,
                 fontWeight = if (preview != null) FontWeight.Medium else FontWeight.Normal,
@@ -24399,7 +24428,7 @@ internal fun ClipLinkBody(item: ClipItem) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        val host = ClipLinks.host(ClipLinks.asUrl(item.text) ?: item.text)
+        val host = if (preview == null) "" else ClipLinks.host(ClipLinks.asUrl(item.text) ?: item.text)
         if (host.isNotBlank()) {
             Text(
                 text = preview?.siteName?.takeIf { it.isNotBlank() } ?: host,

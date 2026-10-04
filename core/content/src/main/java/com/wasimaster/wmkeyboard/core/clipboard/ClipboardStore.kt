@@ -187,6 +187,12 @@ class ClipboardStore(
      * is never touched.
      */
     var maxTextChars: Int = 0,
+    /**
+     * Whether a copy that arrives with markup keeps it (#414). Off, every
+     * text clip is stored as plain text: the markup is dropped at the door,
+     * so the clip wears no "Rich text" tag and pastes as plain text.
+     */
+    var keepRichText: Boolean = true,
 ) {
 
     @Serializable
@@ -367,8 +373,9 @@ class ClipboardStore(
         if (whole.isEmpty()) return null
         // A cut can land after a space; the clip should not end in one.
         val trimmed = capClipText(whole, maxTextChars).trimEnd()
-        // Markup for the whole text would paste back what the cut dropped.
-        val html = html.takeIf { trimmed.length == whole.length }
+        // Markup for the whole text would paste back what the cut dropped;
+        // and none at all when the user has asked for plain text (#414).
+        val html = html.takeIf { keepRichText && trimmed.length == whole.length }
         val isLink = html == null && ClipLinks.asUrl(trimmed) != null
         // Re-copying an existing item moves it to the top instead of duplicating.
         val existing = items.firstOrNull { it.kind.isTextual && it.text == trimmed }

@@ -5633,6 +5633,24 @@ data class ClipboardSettings(
      */
     val typeOutPastes: Boolean = false,
     /**
+     * The small "Rich text" tag under a clip that carries formatting (#414).
+     * On by default. Off, the tag goes, and with it the footer row of a card
+     * that had nothing else to show there, the same as the buttons toggle.
+     */
+    val typeTags: Boolean = true,
+    /**
+     * Keep the formatting of a copied rich text, so a paste into an app that
+     * takes it gets it back (#414). On by default. Off, every copy is kept as
+     * plain text: no "Rich text" tag, no formatting on paste.
+     */
+    val keepRichText: Boolean = true,
+    /**
+     * A swipe to the right pins the clip instead of deleting it (#414), so the
+     * two directions do two things. Off by default, where either direction
+     * deletes, as it always has. Only while swipes are on at all.
+     */
+    val swipeRightPins: Boolean = false,
+    /**
      * How much taller than the keyboard the clipboard panel opens, in dp
      * (#414), set by dragging the bar on top of the panel. 0, the default, is
      * the keyboard's own height. See [ClipPanelExtraHeightRange].
@@ -8239,6 +8257,9 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_OUTLINE_PINNED = booleanPreferencesKey("clipboard_outline_pinned")
         private val CLIPBOARD_CARD_BUTTONS = booleanPreferencesKey("clipboard_card_buttons")
         private val CLIPBOARD_TYPE_OUT_PASTES = booleanPreferencesKey("clipboard_type_out_pastes")
+        private val CLIPBOARD_TYPE_TAGS = booleanPreferencesKey("clipboard_type_tags")
+        private val CLIPBOARD_KEEP_RICH_TEXT = booleanPreferencesKey("clipboard_keep_rich_text")
+        private val CLIPBOARD_SWIPE_RIGHT_PINS = booleanPreferencesKey("clipboard_swipe_right_pins")
         private val CLIPBOARD_PANEL_EXTRA_HEIGHT_DP = intPreferencesKey("clipboard_panel_extra_height_dp")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
@@ -9700,6 +9721,9 @@ class SettingsRepository(private val context: Context) {
             outlinePinned = p[CLIPBOARD_OUTLINE_PINNED] ?: defaults.clipboard.outlinePinned,
             cardButtons = p[CLIPBOARD_CARD_BUTTONS] ?: defaults.clipboard.cardButtons,
             typeOutPastes = p[CLIPBOARD_TYPE_OUT_PASTES] ?: defaults.clipboard.typeOutPastes,
+            typeTags = p[CLIPBOARD_TYPE_TAGS] ?: defaults.clipboard.typeTags,
+            keepRichText = p[CLIPBOARD_KEEP_RICH_TEXT] ?: defaults.clipboard.keepRichText,
+            swipeRightPins = p[CLIPBOARD_SWIPE_RIGHT_PINS] ?: defaults.clipboard.swipeRightPins,
             panelExtraHeightDp = p[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP]?.coerceIn(ClipPanelExtraHeightRange)
                 ?: defaults.clipboard.panelExtraHeightDp,
         )
@@ -15523,6 +15547,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardTypeOutPastes(value: Boolean) =
         editPrefs { it[CLIPBOARD_TYPE_OUT_PASTES] = value }
+
+    suspend fun setClipboardTypeTags(value: Boolean) =
+        editPrefs { it[CLIPBOARD_TYPE_TAGS] = value }
+
+    suspend fun setClipboardKeepRichText(value: Boolean) =
+        editPrefs { it[CLIPBOARD_KEEP_RICH_TEXT] = value }
+
+    suspend fun setClipboardSwipeRightPins(value: Boolean) =
+        editPrefs { it[CLIPBOARD_SWIPE_RIGHT_PINS] = value }
 
     suspend fun setClipboardPanelExtraHeightDp(value: Int) =
         editPrefs { it[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP] = value.coerceIn(ClipPanelExtraHeightRange) }

@@ -79,6 +79,15 @@
     <string name="clipboard_type_out_title">Type out pasted clips</string>
     <string name="clipboard_type_out_subtitle">Paste a clip one character at a time, as if typed</string>
     <string name="clipboard_type_out_info">The text appears letter by letter, the way a one-time code goes into a row of code boxes. A clip longer than 200 characters is pasted all at once. Codes are typed out either way, from the One-time codes setting. This setting is off by default.</string>
+    <string name="clipboard_type_tags_title">Rich text tag</string>
+    <string name="clipboard_type_tags_subtitle">Mark a clip that was copied with formatting</string>
+    <string name="clipboard_type_tags_info">A clip copied with bold, links or other formatting shows a small Rich text label under its text. Turn this off to hide the label. A card with nothing else on that row then loses the row, so more clips fit. This setting is on by default.</string>
+    <string name="clipboard_keep_rich_text_title">Keep formatting</string>
+    <string name="clipboard_keep_rich_text_subtitle">Store copied text with its bold, links and other formatting</string>
+    <string name="clipboard_keep_rich_text_info">With this setting on, a copy that came with formatting pastes it back into apps that take formatting. Turn it off and every copy is kept as plain text from then on, so it pastes as plain text everywhere and never shows the Rich text label. Clips already in the history keep what they have. This setting is on by default.</string>
+    <string name="clipboard_swipe_right_pins_title">Swipe right to pin</string>
+    <string name="clipboard_swipe_right_pins_subtitle">A swipe to the right pins the clip, a swipe to the left deletes it</string>
+    <string name="clipboard_swipe_right_pins_info">With this setting off, a swipe in either direction deletes the clip. Turn it on and the two directions do two things: left deletes, right pins or unpins, and the clip slides back into place. This setting is off by default.</string>
     <string name="clipboard_panel_height_title">Panel height</string>
     <string name="clipboard_panel_height_subtitle">How much taller than the keyboard the clipboard panel opens</string>
     <string name="clipboard_panel_height_info">You can also drag the bar on top of the clipboard panel up or down. A taller panel shows more clips, so there is less to scroll. The panel never covers more than most of the screen, so on a short screen, or with the phone sideways, it can stay shorter than this. The default is the keyboard\'s own height.</string>

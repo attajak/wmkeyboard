@@ -70,7 +70,7 @@ Turn on **Clear button** under [Options](#options) and a bin sits at the end of 
 
 To see a clip's info popup instead, press and hold its card. The popup gives the time it was copied, its type and size, and (if [source tracking](#options) is on) the app it came from. Some clips get buttons there too:
 
-- A **text** clip gets **View full text**, which swaps the popup for the clip's whole text, however long, in a box you can scroll, with every web address in it underlined in your theme's accent colour. **Paste** there does what a tap on the card does, and **Close** puts it away.
+- A **text** clip opens straight on its whole text, however long, in a box you can scroll, with every web address in it underlined in your theme's accent colour. Under the text sits a row of icons: ⓘ for the details described above (when it was copied, which app it came from, its type and length), then edit, open link, extract parts, pin and delete as the clip and your settings allow, and **Paste** at the end, which does what a tap on the card does. Tap anywhere outside to put it away. From the details, **View full text** brings the text back.
 - A clip with codes, phone numbers or links inside it gets **Extract** while [entity detection](#pulling-codes-and-links-out-of-a-clip) is on. With one part found, it pastes that part. With more, it lists them in sections, **Links**, **Phone numbers** and **One-time codes**, and a press on one pastes it. A [hidden password or code](#passwords-are-handled-deliberately) has no such button, since the panel never shows its text.
 - A **link**, a clip that is one web address and nothing else, gets **Open link**, which opens it in your browser. A hidden clip never does, since the browser would show what the panel hides.
 - An **image** gets **View**, which shows the picture full screen: pinch or double-tap to zoom, drag to look around, tap or press Back to return to where you were typing. It also gets **Send as sticker**, which runs the picture through the sticker processor before it goes.
@@ -90,7 +90,7 @@ Clips are stored under seven kinds. The panel groups them like this:
   <Shot id="tools/clipboard-rich-media" alt="A file, video, and folder clip side by side — each keeps only a reference to the source, not the bytes." />
 </PhoneFrame>
 
-- **Text and rich text**: the plain content, shown as-is.
+- **Text and rich text**: the plain content, shown as-is. A copied **link** with no preview is shown as the address itself, as many lines of it as **Lines per clip** allows, with no separate host line; with a preview, the title and description take its place and the address and host sit underneath.
 - **Links**: shown as the raw URL, or as a fetched title and description if [link previews](#options) are on.
 - **Images**: copied into the app's own storage, so the source app can discard its copy without losing yours. Also captures device screenshots directly, if you turn that on (not in the Play Store build).
 - **Files and videos**: not copied. Only the file's URI, name, MIME type and size are kept, so copying a multi-gigabyte video costs nothing. A video card even shows a frame grabbed from the very start of the clip instead of a blank icon. Copying several files or a whole folder at once keeps up to 20 items from that one copy.
@@ -178,7 +178,10 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Outline pinned clips**: a thin accent border around each pinned clip; off by default.
 - **Pin and delete buttons**: the pin and bin circles on every clip; on by default. Off, **Pin** and **Delete** move into the clip's press-and-hold popup, and a card with no number, time or rich text tag loses its bottom row.
 - **Type out pasted clips**: pastes a clip one character at a time, as if typed, the way a one-time code goes into a row of code boxes; off by default. A clip longer than 200 characters is pasted all at once. Bare codes are typed out either way, under the control of the One-time codes setting.
+- **Rich text tag**: the small "Rich text" label under a clip that was copied with formatting; on by default. Off, the label goes, and a card with nothing else on that row loses the row.
+- **Keep formatting**: on by default, so a copy that came with bold, links or other formatting pastes it back into apps that take it. Off, every copy from then on is stored as plain text, pastes as plain text everywhere, and never wears the tag. Clips already in the history keep what they have.
 - **Swipe to delete**: a sideways swipe across a clip deletes it; on by default. Off, the swipe does nothing and a **Delete** button joins the clip's press-and-hold popup. The bin works either way, while **Pin and delete buttons** is on.
+- **Swipe right to pin**: shown while swipes are on, off by default. On, the two directions part ways: a swipe left still deletes, a swipe right pins or unpins the clip and lets it slide back into place.
 - **Undo a deleted clip**: shows the Undo bar for a few seconds after you delete a clip with the bin or a swipe; on by default. Off, a delete is immediate and final.
 - **Pinned entries last**: moves pinned clips to the end of the panel instead of the top; off by default. Greyed out while the tabs are on.
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.

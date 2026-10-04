@@ -956,12 +956,39 @@ internal fun ClipboardSettings(
         }
         item {
             ToggleSetting(
+                R.string.clipboard_type_tags_title,
+                stringResource(R.string.clipboard_type_tags_subtitle),
+                settings.watch { it.clipboard.typeTags },
+                info = stringResource(R.string.clipboard_type_tags_info),
+                default = SettingsDefaults.clipboard.typeTags,
+            ) { scope.launch { repository.setClipboardTypeTags(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.clipboard_keep_rich_text_title,
+                stringResource(R.string.clipboard_keep_rich_text_subtitle),
+                settings.watch { it.clipboard.keepRichText },
+                info = stringResource(R.string.clipboard_keep_rich_text_info),
+                default = SettingsDefaults.clipboard.keepRichText,
+            ) { scope.launch { repository.setClipboardKeepRichText(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.clipboard_swipe_delete_title,
                 stringResource(R.string.clipboard_swipe_delete_subtitle),
                 settings.watch { it.clipboard.swipeToDelete },
                 info = stringResource(R.string.clipboard_swipe_delete_info),
                 default = SettingsDefaults.clipboard.swipeToDelete,
             ) { scope.launch { repository.setClipboardSwipeToDelete(it) } }
+        }
+        item(visible = settings.watch { it.clipboard.swipeToDelete }) {
+            ToggleSetting(
+                R.string.clipboard_swipe_right_pins_title,
+                stringResource(R.string.clipboard_swipe_right_pins_subtitle),
+                settings.watch { it.clipboard.swipeRightPins },
+                info = stringResource(R.string.clipboard_swipe_right_pins_info),
+                default = SettingsDefaults.clipboard.swipeRightPins,
+            ) { scope.launch { repository.setClipboardSwipeRightPins(it) } }
         }
         item {
             ToggleSetting(

@@ -117,6 +117,7 @@ import androidx.compose.material.icons.outlined.Flip
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.FontDownload
 import androidx.compose.material.icons.outlined.FormatBold
+import androidx.compose.material.icons.outlined.SwipeRight
 import androidx.compose.material.icons.outlined.FormatColorFill
 import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.FormatSize
@@ -1035,6 +1036,9 @@ internal object SettingsRowIcons {
         put(R.string.clipboard_outline_pinned_title) { Icons.Outlined.BorderStyle }
         put(R.string.clipboard_card_buttons_title) { Icons.Outlined.PushPin }
         put(R.string.clipboard_type_out_title) { Icons.Outlined.Keyboard }
+        put(R.string.clipboard_type_tags_title) { Icons.AutoMirrored.Outlined.Label }
+        put(R.string.clipboard_keep_rich_text_title) { Icons.Outlined.FormatBold }
+        put(R.string.clipboard_swipe_right_pins_title) { Icons.Outlined.SwipeRight }
         put(R.string.clipboard_panel_height_title) { Icons.Outlined.Height }
         put(R.string.clipboard_password_paste_title) { Icons.Outlined.Password }
         put(R.string.clipboard_link_previews_title) { Icons.Outlined.Link }

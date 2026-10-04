@@ -2023,6 +2023,15 @@ private fun ExpansionListEditor(
                 },
                 trailing = {
                     Row {
+                        // Says the row can be opened (#471): with one expansion
+                        // the arrows and the bin all draw disabled, and nothing
+                        // else on the row said a saved text could be changed.
+                        IconButton(onClick = { onOpenChange(if (open) null else index) }) {
+                            Icon(
+                                Icons.Outlined.Edit,
+                                contentDescription = stringResource(CommonR.string.common_edit),
+                            )
+                        }
                         IconButton(
                             enabled = index > 0,
                             onClick = {

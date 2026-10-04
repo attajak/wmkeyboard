@@ -443,9 +443,10 @@ class SuggestionEngine(
     /**
      * When on, [shouldAutocorrect] may return a two-word split ("kortehobe" →
      * "korte hobe") when no single-word correction fires and both halves are
-     * known words that clear the same confidence gate. Off by default — the
-     * IME turns it on from the user's setting; the standalone spell checker
-     * judges isolated words and leaves it off.
+     * known words that clear the same confidence gate, and [suggest] offers
+     * such splits as candidates for an unknown word (#413). Off by default —
+     * the IME turns it on from the user's setting; the standalone spell
+     * checker judges isolated words and leaves it off.
      */
     @Volatile
     var autocorrectSplits: Boolean = false
@@ -2179,7 +2180,11 @@ class SuggestionEngine(
             for (s in apps.complete(lower, limit)) {
                 merged.merge(s.word, flatScore(s.frequency, APP_WEIGHT), ::maxOf)
             }
-            if (!known) {
+            // Offered only while the setting that applies them is on (#413):
+            // a user who turned "Add missing spaces" off did not want "his to"
+            // on the strip while typing "history" either, and the join the
+            // other way round is a different candidate that stays.
+            if (!known && autocorrectSplits) {
                 for (split in splitCandidates(lower, touch)) {
                     merged.merge(split.text, split.score, ::maxOf)
                 }

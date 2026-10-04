@@ -5993,6 +5993,7 @@ open class WMKeyboardService : InputMethodService() {
         clipboardStore.expiryMillis = settings.clipboard.expiryHours * 60L * 60 * 1000
         clipboardStore.maxItems = settings.clipboard.maxItems
         clipboardStore.maxTextChars = settings.clipboard.maxTextChars
+        clipboardStore.keepRichText = settings.clipboard.keepRichText
         clipboardStore.sensitiveExpiryMillis =
             if (settings.clipboard.sensitiveHandling == SensitiveClipHandling.SHORT_LIVED) {
                 settings.clipboard.sensitiveExpiryMinutes * 60L * 1000
@@ -6687,8 +6688,14 @@ open class WMKeyboardService : InputMethodService() {
             is KeyAction.BrailleDot -> onBrailleDot(key.action as KeyAction.BrailleDot)
             KeyAction.MorseDot -> onMorseSignal(dash = false)
             KeyAction.MorseDash -> onMorseSignal(dash = true)
-            // A key carrying its own modifiers, so it fires with no latch.
-            is KeyAction.SendKey -> sendShortcut(key, Modifiers.None)
+            // A key carrying its own modifiers, so it fires with no latch. An
+            // arrow, Home or End goes to the keyboard's own field first while
+            // one has the keys (#414): the clip editor's caret, not the app's.
+            is KeyAction.SendKey -> {
+                if (!captureCaretKeyCode((key.action as KeyAction.SendKey).keyCode)) {
+                    sendShortcut(key, Modifiers.None)
+                }
+            }
             // Fire the user's broadcast; types nothing.
             is KeyAction.Broadcast -> sendKeyBroadcast((key.action as KeyAction.Broadcast).action)
             // A text-editing key on a panel layout (or on a typing grid). The
@@ -8000,9 +8007,21 @@ open class WMKeyboardService : InputMethodService() {
      * that has a selection to extend (#204, and the shared caret since #352).
      */
     private fun captureCaretKey(event: KeyEvent): Boolean {
+        val handled = captureCaretKeyCode(event.keyCode, event.isShiftPressed)
+        if (handled) consumeHardwareKey(event.keyCode)
+        return handled
+    }
+
+    /**
+     * The caret move [keyCode] asks of the keyboard-owned field that has the
+     * keys, or false when none has them or the code is not a caret key. The
+     * one table behind both a hardware arrow and an on-screen arrow key, so
+     * the arrow row under the keyboard moves the clip editor's caret the way a
+     * physical arrow always has (#414).
+     */
+    private fun captureCaretKeyCode(keyCode: Int, extend: Boolean = false): Boolean {
         if (_uiState.value.captureTarget() == null) return false
-        val extend = event.isShiftPressed
-        val handled = when (event.keyCode) {
+        return when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> onCaptureCaretMove(-1, extend)
             KeyEvent.KEYCODE_DPAD_RIGHT -> onCaptureCaretMove(1, extend)
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_MOVE_HOME ->
@@ -8011,8 +8030,6 @@ open class WMKeyboardService : InputMethodService() {
                 onCaptureCaretToEdge(end = true, extend = extend)
             else -> false
         }
-        if (handled) consumeHardwareKey(event.keyCode)
-        return handled
     }
 
     /** The caret put where a tap landed in the field's text. */
@@ -8747,6 +8764,13 @@ open class WMKeyboardService : InputMethodService() {
                     committed = SpacedPunctuation.SPACE + text,
                 )
                 armRevertGuard()
+            }
+            // A trigger that ends in this very mark (#471) fires now that the
+            // mark is in the field, before the bracket and the spacing rules
+            // put anything after it.
+            if (trySuffixExpansion(ic, text, state)) {
+                consumeShift()
+                return
             }
             // The other half of an opening bracket, behind the caret. Last of
             // the rules that touch the field, so it closes what actually
@@ -12432,6 +12456,46 @@ open class WMKeyboardService : InputMethodService() {
             context = snippetContext(ic),
             casing = SnippetStore.casingFor(snippet, consumed),
         )
+        ic.beginBatchEdit()
+        ic.deleteSurroundingText(consumed.length, 0)
+        commitSplitAtCaret(ic, expanded.text, expanded.cursorOffset)
+        ic.endBatchEdit()
+        afterSnippetExpansion(
+            inserted = expanded.text,
+            original = consumed,
+            caretParked = expanded.cursorOffset < expanded.text.length,
+        )
+        return true
+    }
+
+    /**
+     * Expands a trigger that ends in the symbol just typed (#471): `js:` the
+     * moment the colon lands, with "js" already committed in front of it.
+     *
+     * The counterpart of [tryPrefixExpansion] for the other end of a trigger.
+     * A trigger's last character is what the keyboard can look up for free,
+     * and a symbol is one the composing buffer never holds, so the lookup is
+     * on the symbol itself and the rest is confirmed by reading the field
+     * back, as the uncomposed path does. The read happens only once the index
+     * has said a trigger ends in this symbol at all. Returns true when it
+     * committed something.
+     */
+    private fun trySuffixExpansion(ic: InputConnection, typed: String, state: KeyboardUiState): Boolean {
+        if (typed.length != 1 || state.secureField || state.nullField) return false
+        if (!snippetStore.hasSuffixTriggers() || !snippetStore.couldEndWith(typed[0])) return false
+        val read = ic.getTextBeforeCursor(SnippetMatcher.MAX_PREFIX + 1, 0)?.toString() ?: return false
+        if (!read.endsWith(typed)) return false
+        val hit = snippetStore.matchSuffix(read)?.takeIf { !snippetStore.offers(it.snippet) } ?: return false
+        // What the user actually typed, case included, is what is taken back
+        // and what a revert puts back.
+        val consumed = read.takeLast(hit.typed.length)
+        stopVoiceForManualInput()
+        val expanded = SnippetStore.expandWithCursor(
+            hit.snippet.text,
+            context = snippetContext(ic),
+            casing = SnippetStore.casingFor(hit.snippet, consumed),
+        )
+        lastRevertible = null
         ic.beginBatchEdit()
         ic.deleteSurroundingText(consumed.length, 0)
         commitSplitAtCaret(ic, expanded.text, expanded.cursorOffset)
@@ -16487,12 +16551,31 @@ open class WMKeyboardService : InputMethodService() {
                     state.composer.phoneticLanguage == null && completing == null
                 fun dropTyped(list: List<String>) =
                     if (skipTyped) list.filterNot { it.equals(typed, ignoreCase = true) } else list
+                // The other half of that setting (#413): with it off the strip
+                // keeps one slot for the word exactly as typed, which is what
+                // the setting's own text has always promised — but the engine
+                // only produced the word when it ranked it, and a long word it
+                // does not know rarely was, so "invigorate" left the strip
+                // empty. Put back in the second slot, which centre-primary
+                // draws on the left: the place a typed word holds on every
+                // keyboard. Never ahead of the first entry, for the reason the
+                // comment below gives.
+                val keepTyped = !skipTyped && typed.isNotEmpty() && typed[0].isLetterOrDigit() &&
+                    state.composer.phoneticLanguage == null && completing == null &&
+                    state.allowsTypingIntelligence
+                fun withTyped(list: List<String>): List<String> =
+                    if (keepTyped && list.none { it.equals(typed, ignoreCase = true) }) {
+                        val at = minOf(1, list.size)
+                        list.take(at) + typed + list.drop(at)
+                    } else {
+                        list
+                    }
                 // Deliberately unfiltered: commitResolution below reads this,
                 // and on a Bengali or ambiguous board its first entry is what a
                 // space commits. Dropping the typed word from *that* would make
                 // the setting silently replace what was written, so the filter
                 // is applied to the strip and the keys alone.
-                val words = withShortcut(suggested)
+                val words = withTyped(withShortcut(suggested))
                 // The same list, only longer, so the keys and the strip never
                 // disagree about what is being offered — the keys just see
                 // further down it.

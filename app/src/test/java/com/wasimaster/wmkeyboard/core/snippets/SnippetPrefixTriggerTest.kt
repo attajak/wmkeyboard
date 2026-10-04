@@ -37,6 +37,42 @@ class SnippetPrefixTriggerTest {
         uppercaseStyle = style,
     )
 
+    // ---- symbol endings (#471) ----
+
+    @Test
+    fun `a trigger ending in a symbol is a suffix trigger, a word is not`() {
+        assertTrue(SnippetMatcher.isSuffixTrigger("js:"))
+        assertTrue(SnippetMatcher.isSuffixTrigger("->"))
+        assertTrue(SnippetMatcher.isSuffixTrigger("gr db:"))
+        assertFalse(SnippetMatcher.isSuffixTrigger("js"))
+        assertFalse(SnippetMatcher.isSuffixTrigger(":shrug"))
+        assertFalse(SnippetMatcher.isSuffixTrigger(":"))
+        assertFalse(SnippetMatcher.isSuffixTrigger("a\tb:"))
+    }
+
+    @Test
+    fun `a suffix trigger matches the field the moment its symbol lands`() {
+        val index = SnippetIndex.of(listOf(snip("js:", id = 1), snip("gr db:", id = 2, text = "gradle")))
+        assertTrue(index.hasSuffixTriggers)
+        assertTrue(index.couldEndWith(':'))
+        assertFalse(index.couldEndWith(';'))
+        assertEquals(1L, index.matchSuffix("type js:")?.snippet?.id)
+        assertEquals(1L, index.matchSuffix("JS:")?.snippet?.id)
+        // Longest wins, and the shorter one is not taken out of the longer.
+        assertEquals(2L, index.matchSuffix("gr db:")?.snippet?.id)
+        // A word boundary in front, as every trigger starting with a letter needs.
+        assertNull(index.matchSuffix("xjs:"))
+        assertNull(index.matchSuffix("js;"))
+        assertNull(index.matchSuffix(""))
+    }
+
+    @Test
+    fun `a suffix trigger starting with a symbol needs no boundary`() {
+        val index = SnippetIndex.of(listOf(snip("->", id = 3, text = "→")))
+        assertNotNull(index.matchSuffix("a->"))
+        assertNotNull(index.matchSuffix("->"))
+    }
+
     // ---- splitting ----
 
     @Test

@@ -41,14 +41,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.outlined.ContentCut
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material.icons.outlined.ViewAgenda
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -782,6 +786,10 @@ private fun ClipboardHistory(
             SwipeToDeleteCard(
                 onDelete = { callbacks.onDelete(item) },
                 enabled = swipe,
+                // Right pins, left deletes, when asked (#414).
+                onSwipeRight = if (clipboard.swipeRightPins) {
+                    { callbacks.onPin(item) }
+                } else null,
                 modifier = if (state.settings.reduceMotion) {
                     Modifier
                 } else {
@@ -803,6 +811,7 @@ private fun ClipboardHistory(
                     ocr = session.ocr,
                     entities = session.perClip[item.id].orEmpty(),
                     icons = session.entityIcons,
+                    typeTag = clipboard.typeTags,
                 )
                 val outlined = clipboard.outlinePinned && item.pinned
                 if (session.list) {
@@ -918,13 +927,21 @@ private class ClipHold(
     val ocr: Boolean,
     val entities: List<ClipEntity> = emptyList(),
     val icons: Boolean = false,
+    /** Whether a rich-text clip wears its "Rich text" tag (#414). */
+    val typeTag: Boolean = true,
 )
 
 /**
- * The press-and-hold popup for a clip, with the actions its kind allows: View
- * full text for text (#414), Edit for text, Open link for a bare address, View
- * and Extract text for a picture (#371), and Pin and Delete when [hold] asks.
- * View full text turns the popup into [ClipFullTextPopup].
+ * The press-and-hold popup for a clip, with the actions its kind allows: Edit
+ * for text, Open link for a bare address, View and Extract text for a picture
+ * (#371), and Pin and Delete when [hold] asks.
+ *
+ * A text clip opens straight on its whole text (#414): that is what a hold most
+ * often wants, and the details that used to come first sit one press away
+ * behind the ⓘ there. The actions ride under the text as icons, the shapes
+ * every phone user already knows, so a row of worded buttons does not push the
+ * text up. Everything else — a picture, a file, a secret — still opens on the
+ * details, which for those is the useful half.
  */
 @Composable
 private fun ClipHoldPopup(
@@ -933,26 +950,49 @@ private fun ClipHoldPopup(
     callbacks: ClipboardFieldCallbacks,
     onDismiss: () -> Unit,
 ) {
-    var fullText by remember { mutableStateOf(false) }
+    val textual = item.kind.isTextual && !item.sensitive && item.text.isNotEmpty()
+    var fullText by remember { mutableStateOf(textual) }
     var extracting by remember { mutableStateOf(false) }
-    if (fullText) {
-        ClipFullTextPopup(
-            item,
-            onPaste = { onDismiss(); callbacks.onItem(item) },
-            onDismiss = onDismiss,
-        )
-        return
+    val image = item.kind == ClipKind.IMAGE
+    // Not a secret's: the panel never shows one's text, and the browser would.
+    val link = item.kind.isTextual && !item.sensitive && ClipLinks.asUrl(item.text) != null
+    // One part is simply that part; more open the picker (#472).
+    val extractParts: (() -> Unit)? = when (hold.entities.size) {
+        0 -> null
+        1 -> { { onDismiss(); callbacks.onEntity(hold.entities.single()) } }
+        else -> { { extracting = true } }
     }
     if (extracting) {
         ClipExtractPopup(hold.entities, onPick = { onDismiss(); callbacks.onEntity(it) }, onDismiss = onDismiss)
         return
     }
-    val image = item.kind == ClipKind.IMAGE
-    // Not a secret's: the panel never shows one's text, and the browser would.
-    val link = item.kind.isTextual && !item.sensitive && ClipLinks.asUrl(item.text) != null
+    if (fullText) {
+        ClipFullTextPopup(
+            item,
+            actions = ClipTextActions(
+                onInfo = { fullText = false },
+                onEdit = if (item.clipEditable) {
+                    { onDismiss(); callbacks.actions.onEdit(item) }
+                } else null,
+                onOpenLink = if (link) {
+                    { onDismiss(); callbacks.actions.onOpenLink(item) }
+                } else null,
+                onExtractParts = extractParts,
+                onTogglePin = if (hold.holdPin) {
+                    { onDismiss(); callbacks.onPin(item) }
+                } else null,
+                onDelete = if (hold.holdDelete) {
+                    { onDismiss(); callbacks.onDelete(item) }
+                } else null,
+            ),
+            onPaste = { onDismiss(); callbacks.onItem(item) },
+            onDismiss = onDismiss,
+        )
+        return
+    }
     ClipInfoPopup(
         item,
-        onViewText = if (item.kind.isTextual && !item.sensitive && item.text.isNotEmpty()) {
+        onViewText = if (textual) {
             { fullText = true }
         } else null,
         onTogglePin = if (hold.holdPin) {
@@ -973,12 +1013,7 @@ private fun ClipHoldPopup(
         onExtractText = if (image && hold.ocr) {
             { onDismiss(); callbacks.actions.onExtractText(item) }
         } else null,
-        // One part is simply that part; more open the picker (#472).
-        onExtractParts = when (hold.entities.size) {
-            0 -> null
-            1 -> { { onDismiss(); callbacks.onEntity(hold.entities.single()) } }
-            else -> { { extracting = true } }
-        },
+        onExtractParts = extractParts,
         onDelete = if (hold.holdDelete) {
             { onDismiss(); callbacks.onDelete(item) }
         } else null,
@@ -987,14 +1022,36 @@ private fun ClipHoldPopup(
 }
 
 /**
- * A clip's whole text (#414), in place of its hold popup: a card shows a few
- * lines, and the rest of a long clip could only be read by pasting it or by
- * opening the editor. The text scrolls under a fixed ceiling, in the chunks
- * [clipTextChunks] cuts, so a clip the size of a document lays out a screenful
- * at a time rather than whole. Paste does what a tap on the clip does.
+ * What [ClipFullTextPopup] can do to its clip besides paste it, each null when
+ * the clip or the settings leave it out. [onInfo] is never null: the details
+ * are always one press away.
+ */
+@Immutable
+private class ClipTextActions(
+    val onInfo: () -> Unit,
+    val onEdit: (() -> Unit)? = null,
+    val onOpenLink: (() -> Unit)? = null,
+    val onExtractParts: (() -> Unit)? = null,
+    val onTogglePin: (() -> Unit)? = null,
+    val onDelete: (() -> Unit)? = null,
+)
+
+/**
+ * A clip's whole text (#414), the first thing a hold on a text clip shows: a
+ * card shows a few lines, and the rest of a long clip could only be read by
+ * pasting it or by opening the editor. The text scrolls under a fixed ceiling,
+ * in the chunks [clipTextChunks] cuts, so a clip the size of a document lays
+ * out a screenful at a time rather than whole. Under it, [actions] as a row of
+ * icons with Paste at the end, which does what a tap on the clip does. Tapping
+ * outside puts it away.
  */
 @Composable
-private fun ClipFullTextPopup(item: ClipItem, onPaste: () -> Unit, onDismiss: () -> Unit) {
+private fun ClipFullTextPopup(
+    item: ClipItem,
+    actions: ClipTextActions,
+    onPaste: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     val kb = LocalKbTheme.current
     val chunks = remember(item.text) { clipTextChunks(item.text) }
     val length = item.text.length
@@ -1036,16 +1093,57 @@ private fun ClipFullTextPopup(item: ClipItem, onPaste: () -> Unit, onDismiss: ()
                 }
                 Row(
                     modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(end = 4.dp),
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, end = 4.dp, bottom = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_close)) }
+                    val tint = kb.popupText
+                    ClipTextActionIcon(Icons.Outlined.Info, stringResource(R.string.ime_clip_details_desc), tint, actions.onInfo)
+                    actions.onEdit?.let {
+                        ClipTextActionIcon(Icons.Outlined.Edit, stringResource(R.string.ime_clip_edit), tint, it)
+                    }
+                    actions.onOpenLink?.let {
+                        ClipTextActionIcon(
+                            Icons.AutoMirrored.Outlined.OpenInNew,
+                            stringResource(R.string.ime_clip_open_link),
+                            tint,
+                            it,
+                        )
+                    }
+                    actions.onExtractParts?.let {
+                        ClipTextActionIcon(Icons.Outlined.ContentCut, stringResource(R.string.ime_clip_extract_parts), tint, it)
+                    }
+                    actions.onTogglePin?.let {
+                        ClipTextActionIcon(
+                            if (item.pinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
+                            stringResource(if (item.pinned) R.string.ime_clip_unpin else R.string.ime_clip_pin),
+                            tint,
+                            it,
+                        )
+                    }
+                    actions.onDelete?.let {
+                        ClipTextActionIcon(
+                            Icons.Outlined.Delete,
+                            stringResource(CommonR.string.common_delete),
+                            MaterialTheme.colorScheme.error,
+                            it,
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
                     TextButton(onClick = onPaste) {
                         Text(stringResource(CommonR.string.common_paste), fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
         }
+    }
+}
+
+/** One icon in the full-text popup's action row: the glyph says what it does, TalkBack says it in words. */
+@Composable
+private fun ClipTextActionIcon(icon: ImageVector, description: String, tint: Color, onClick: () -> Unit) {
+    IconButton(onClick = onClick, modifier = Modifier.size(36.dp)) {
+        Icon(icon, contentDescription = description, tint = tint, modifier = Modifier.size(19.dp))
     }
 }
 
@@ -1114,7 +1212,7 @@ private fun ClipBody(item: ClipItem, maxLines: Int) {
         item.kind == ClipKind.IMAGE -> ClipThumbnail(item)
         item.kind == ClipKind.VIDEO -> ClipVideoBody(item)
         item.kind == ClipKind.FILE || item.kind == ClipKind.FOLDER -> ClipFileBody(item)
-        item.kind == ClipKind.LINK -> ClipLinkBody(item)
+        item.kind == ClipKind.LINK -> ClipLinkBody(item, maxLines)
         // Cut before layout: a paragraph is measured whole however few lines
         // are drawn, and one clip can be a whole document.
         else -> Text(
@@ -1198,9 +1296,10 @@ private fun ClipCard(
         if (showInfo) ClipHoldPopup(item, hold, callbacks) { showInfo = false }
         ClipBody(item, maxLines = lines)
         val icons = hold.icons && hold.entities.isNotEmpty()
+        val tag = item.kind == ClipKind.HTML && hold.typeTag
         // Per card: one clip may still have a number or a time to show while
         // the next, pinned and unnumbered, has nothing left for the row.
-        val footer = buttons || number != null || time != null || item.kind == ClipKind.HTML || icons
+        val footer = buttons || number != null || time != null || tag || icons
         if (footer) Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1209,7 +1308,7 @@ private fun ClipCard(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             if (number != null) ClipNumberBadge(number)
-            if (item.kind == ClipKind.HTML) {
+            if (tag) {
                 Text(
                     stringResource(R.string.ime_clip_type_rich_text),
                     fontSize = 10.sp,
@@ -1409,7 +1508,7 @@ private fun ClipRow(
         } else {
             Column(modifier = Modifier.weight(1f)) {
                 ClipBody(item, maxLines = lines)
-                if (item.kind == ClipKind.HTML) {
+                if (item.kind == ClipKind.HTML && hold.typeTag) {
                     Text(
                         stringResource(R.string.ime_clip_type_rich_text),
                         fontSize = 10.sp,

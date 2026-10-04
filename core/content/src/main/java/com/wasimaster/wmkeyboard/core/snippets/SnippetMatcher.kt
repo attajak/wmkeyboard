@@ -95,6 +95,21 @@ object SnippetMatcher {
      */
     fun isTriggerWordChar(c: Char): Boolean = c.isLetterOrDigit() || c == '\''
 
+    /**
+     * True for a trigger that ends in a symbol — `js:`, `->`, `gr db:` — and
+     * so fires the moment that symbol is typed, matched by reading the field
+     * back rather than by looking the composing word up (#471). The symbol
+     * itself is the lookup key; what stands in front of it is confirmed off
+     * the field, the way a lead-in is for [splitPrefix]. Spaces may appear
+     * inside it, but no other whitespace, for the reason [splitPrefix] gives.
+     */
+    fun isSuffixTrigger(trigger: String): Boolean {
+        if (trigger.length < 2 || trigger.length > MAX_PREFIX) return false
+        val last = trigger.last()
+        if (isTriggerWordChar(last) || last.isWhitespace()) return false
+        return trigger.none { it != ' ' && it.isWhitespace() }
+    }
+
     /** Why a pattern cannot be used. */
     enum class Fault {
         /** There is no pattern to compile. */
@@ -492,9 +507,17 @@ internal class CompiledSnippet(
  */
 class PrefixTrigger(val prefix: String, val typed: String, val snippet: Snippet)
 
+/**
+ * A trigger that ends in a symbol (#471), keyed under that symbol: `js:`
+ * fires when the colon lands behind "js". [typed] is the trigger as written,
+ * for the casing rule and for how much of the field to take back.
+ */
+class SuffixTrigger(val typed: String, val snippet: Snippet)
+
 class SnippetIndex private constructor(
     private val plain: Map<String, Snippet>,
     private val prefixed: Map<String, List<PrefixTrigger>>,
+    private val suffixed: Map<Char, List<SuffixTrigger>>,
     private val byHead: Map<Char, List<CompiledSnippet>>,
     private val ungated: List<CompiledSnippet>,
     /**
@@ -553,6 +576,34 @@ class SnippetIndex private constructor(
 
     /** True when some prefix trigger offers itself instead of expanding. */
     val hasConfirmPrefixTriggers: Boolean = prefixed.values.any { list -> list.any { asks(it.snippet) } }
+
+    /** True when some trigger ends in a symbol, so the keyboard need not look otherwise (#471). */
+    val hasSuffixTriggers: Boolean = suffixed.isNotEmpty()
+
+    /** True when a trigger ends in [symbol]: the free half of the suffix gate, asked before any read. */
+    fun couldEndWith(symbol: Char): Boolean = suffixed.containsKey(symbol.lowercaseChar())
+
+    /**
+     * The symbol-ending trigger that [before] ends with — the text in front of
+     * the caret, the symbol just typed included — or null. Longest wins, so
+     * `gr db:` beats `db:`. A trigger that starts with a word character needs
+     * a word boundary in front of it, as every other trigger does; one that
+     * starts with a symbol is its own boundary.
+     */
+    fun matchSuffix(before: CharSequence): SuffixTrigger? {
+        val last = before.lastOrNull() ?: return null
+        for (candidate in suffixed[last.lowercaseChar()].orEmpty()) {
+            val typed = candidate.typed
+            if (before.length < typed.length) continue
+            if (!before.endsWith(typed, ignoreCase = true)) continue
+            if (SnippetMatcher.isTriggerWordChar(typed[0])) {
+                val ahead = before.getOrNull(before.length - typed.length - 1)
+                if (ahead != null && SnippetMatcher.isTriggerWordChar(ahead)) continue
+            }
+            return candidate
+        }
+        return null
+    }
 
     /**
      * The prefix triggers whose word part is [word], longest prefix first, or
@@ -780,6 +831,7 @@ class SnippetIndex private constructor(
             val asking = HashSet<Long>()
             val plain = LinkedHashMap<String, Snippet>()
             val prefixed = LinkedHashMap<String, MutableList<PrefixTrigger>>()
+            val suffixed = LinkedHashMap<Char, MutableList<SuffixTrigger>>()
             val byHead = LinkedHashMap<Char, MutableList<CompiledSnippet>>()
             val ungated = ArrayList<CompiledSnippet>()
             for (snippet in snippets) {
@@ -792,6 +844,13 @@ class SnippetIndex private constructor(
                 var triggered = false
                 for (spelling in snippet.spellings()) {
                     triggered = true
+                    // A symbol at the end is matched off the field the moment
+                    // it lands (#471); it has no word for either map below.
+                    if (SnippetMatcher.isSuffixTrigger(spelling)) {
+                        suffixed.getOrPut(spelling.last().lowercaseChar()) { ArrayList() } +=
+                            SuffixTrigger(spelling, snippet)
+                        continue
+                    }
                     val split = SnippetMatcher.splitPrefix(spelling)
                     if (split == null) {
                         plain.putIfAbsent(spelling.lowercase(Locale.ROOT), snippet)
@@ -820,7 +879,8 @@ class SnippetIndex private constructor(
             // Longest prefix first, so `::x` is preferred to `:x` when a user
             // has installed both and the field ends in "::".
             for (list in prefixed.values) list.sortByDescending { it.prefix.length }
-            return SnippetIndex(plain, prefixed, byHead, ungated, asking)
+            for (list in suffixed.values) list.sortByDescending { it.typed.length }
+            return SnippetIndex(plain, prefixed, suffixed, byHead, ungated, asking)
         }
     }
 }

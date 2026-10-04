@@ -38,7 +38,7 @@ The punctuation form is the convention almost every [Espanso](/reference/importi
 
 Both work the same way under the hood, and it's worth knowing because it explains the one rule below. The keyboard's word buffer only ever holds letters, digits and apostrophes, so by the time you finish typing `:shrug` the colon has already gone into the field, and by the time you finish `gr db` so has "gr ". Only the last word is in the buffer. So the keyboard looks that word up, and only when it could finish some trigger does it read the short run of characters in front of it to check the rest. A snippet list with no trigger of this kind in it costs nothing at all.
 
-The rule that follows: **a trigger has to end in a word.** One made entirely of punctuation (`->`) can't be watched for, and neither can one ending in it (`x:` or `gr db:`), because there'd be nothing to look up. Punctuation in the middle is fine, so `a-b` and `:a.b` both work.
+A trigger can also **end in a symbol**: `js:`, `->`, `gr db:`. Those fire the moment the symbol is typed, with no space or Enter after it, because the symbol itself is the cue: the keyboard checks whether a trigger ends in that symbol at all, and only then reads the short run in front of it off the field to confirm the rest. `js:` typed as `JS:` still matches, and a trigger that starts with a letter needs a word boundary in front of it, as every trigger does, so `xjs:` leaves `js:` alone. Punctuation in the middle is fine too, so `a-b` and `:a.b` both work. The one shape that can't be watched for is a trigger ending in a space.
 
 Two smaller ones:
 
@@ -123,6 +123,8 @@ What happens when the trigger fires is up to you, in **Settings → Text expansi
 - **Insert first** puts the default in straight away, the way a one-expansion snippet always has, and offers the rest as chips. Pressing one swaps what was just inserted for it, and you can keep swapping. Backspace still takes the whole thing back to the trigger you typed.
 
 Any one snippet can overrule that. Once it has more than one expansion, its editor grows a row of its own with the same two choices plus **App setting**, which is what it starts on.
+
+Each expansion is a row of its own in the editor, under **Expansions**. Press the row, or its pencil, to open the text for editing; the arrows move it up and down the list, where the top one is the default, and the bin removes it (a snippet keeps at least one). **Add expansion** opens a fresh row.
 
 The bar scrolls sideways when there are more chips than fit. Nothing is hidden behind a "more" button, because reaching for one would mean leaving the bar and losing the text you were in the middle of.
 
