@@ -105,6 +105,7 @@ import androidx.compose.material.icons.outlined.Draw
 import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.EmojiEmotions
+import androidx.compose.material.icons.outlined.ViewColumn
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.FastForward
@@ -854,6 +855,8 @@ internal object SettingsRowIcons {
         put(R.string.typing_suggestions_first_title) { Icons.Outlined.VerticalAlignTop }
         put(R.string.typing_suggestion_slots_title) { Icons.Outlined.Numbers }
         put(R.string.typing_suggestion_emoji_slot_title) { Icons.Outlined.EmojiEmotions }
+        put(R.string.typing_suggestion_emoji_count_title) { Icons.Outlined.EmojiEmotions }
+        put(R.string.typing_suggestion_fixed_slots_title) { Icons.Outlined.ViewColumn }
         put(R.string.typing_suggestion_scroll_title) { Icons.Outlined.SwapHoriz }
         put(R.string.typing_primary_center_title) { Icons.Outlined.CenterFocusStrong }
         put(R.string.typing_contact_names_title) { Icons.Outlined.Contacts }

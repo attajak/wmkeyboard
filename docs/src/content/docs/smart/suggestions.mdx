@@ -32,7 +32,9 @@ If you'd rather the strip never shrank anything, turn on **Scroll the suggestion
   <Shot id="smart/suggestion-strip-emoji-tail" alt="Word candidates followed by predicted emoji." />
 </PhoneFrame>
 
-Up to four predicted emoji can ride after the word chips (see [Emoji in the strip](#emoji-in-the-strip)), and a row of punctuation marks can ride after that (see [Punctuation chips](#punctuation-chips)), but never both at once. The emoji tail always wins the shared space. Punctuation only appears when no emoji prediction is offered. The tail sits on top of **Number of suggestions**: three words and an emoji is four chips. Turn on **Emoji takes a slot** (see [Options](#options)) and the best emoji takes the last slot instead, the same width as a word, with one word fewer, so the strip never shows more chips than the number asks for.
+Up to four predicted emoji can ride after the word chips (see [Emoji in the strip](#emoji-in-the-strip)), and a row of punctuation marks can ride after that (see [Punctuation chips](#punctuation-chips)), but never both at once. The emoji tail always wins the shared space. Punctuation only appears when no emoji prediction is offered. The tail sits on top of **Number of suggestions**: three words and an emoji is four chips. Turn on **Emoji takes a slot** (see [Options](#options)) and the best emoji takes the last slot instead, the same width as a word, with one word fewer, so the strip never shows more chips than the number asks for. **Suggested emoji** sets how long the tail can get, from one emoji to four.
+
+The words share the strip between them by default: two words split it in half, and an emoji tail, the punctuation marks, a tool's keyword chip or a rewrite chip (join, revision, undo) takes room from them, so the best word can drift from one keystroke to the next. Turn on **Keep suggestions in place** and the strip is always cut into **Number of suggestions** slots of one width. A slot with nothing to show stays empty, and the best word keeps its slot. With **Best suggestion in the middle** on that is the second slot, the runner-up on its left and the third word on its right, exactly where they sit on a full strip. Anything that is not a word takes a slot of its own rather than pushing the words aside: a suggested emoji or the punctuation marks the last slot, a tool's keyword chip or a rewrite chip the first. It has no effect while **Scroll the suggestions** is on, since that strip sizes each word to fit.
 
 When one of the keyboard's own text boxes has the keys — a panel's search bar, the AI prompt, Find and replace, a plugin's field — the strip moves to the row directly above the keys, since the panel has taken the toolbar's row. It shows the same words for the box's text that it would for your field, and tapping one replaces the word at the box's caret. The exception is the emoji panel's search box, which is querying the emoji catalogue rather than writing prose: its strip offers [emoji search terms](/emoji/picker/#searching-for-an-emoji) instead of dictionary words. See [Panels and captured keys](/tools/overview/#panels-and-captured-keys).
 
@@ -130,6 +132,8 @@ The same two lists are editable from settings, if you would rather not chase the
 | Number of suggestions | 3 (range 2&ndash;6) |
 | Swipe down for more suggestions | Off |
 | Emoji takes a slot | Off |
+| Suggested emoji | 4 (range 1&ndash;4) |
+| Keep suggestions in place | Off |
 | Scroll the suggestions | Off |
 | Suggestions in every field | On |
 | Suggestion strip always visible | Off |

@@ -724,6 +724,28 @@ internal fun TypingSuggestionsSettings(
             ) { scope.launch { repository.setSuggestionEmojiTakesSlot(it) } }
         }
         item {
+            // Issue #509: the tail of emoji after the words.
+            SliderSetting(
+                R.string.typing_suggestion_emoji_count_title,
+                subtitle = stringResource(R.string.typing_suggestion_emoji_count_subtitle),
+                value = settings.watch { it.suggestionStrip.emojiCount }.toFloat(),
+                range = 1f..4f,
+                display = { it.toInt().toString() },
+                info = stringResource(R.string.typing_suggestion_emoji_count_info),
+                default = SettingsDefaults.suggestionStrip.emojiCount.toFloat(),
+            ) { scope.launch { repository.setSuggestionEmojiCount(it.toInt()) } }
+        }
+        item {
+            // Issue #513: words that stay where the eye expects them.
+            ToggleSetting(
+                R.string.typing_suggestion_fixed_slots_title,
+                stringResource(R.string.typing_suggestion_fixed_slots_subtitle),
+                settings.watch { it.suggestionStrip.fixedSlots },
+                info = stringResource(R.string.typing_suggestion_fixed_slots_info),
+                default = SettingsDefaults.suggestionStrip.fixedSlots,
+            ) { scope.launch { repository.setSuggestionFixedSlots(it) } }
+        }
+        item {
             ToggleSetting(
                 R.string.typing_suggestion_scroll_title,
                 stringResource(R.string.typing_suggestion_scroll_subtitle),

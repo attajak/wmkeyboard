@@ -7040,6 +7040,21 @@ data class SuggestionStripSettings(
      */
     val emojiTakesSlot: Boolean = false,
     /**
+     * Every word keeps its place (#513): the strip always lays out
+     * [slotCount] slots of one width, an empty one stays empty rather than
+     * the others widening into it, and the primary word stays in its slot. A
+     * chip that is not a word takes a slot of its own instead of pushing the
+     * words aside: an emoji or the punctuation marks the last, a tool's
+     * keyword chip the first. Off by default.
+     */
+    val fixedSlots: Boolean = false,
+    /**
+     * How many suggested emoji ride after the words, 1 to 4 (#509). Four is
+     * what the strip always showed. Not read while an emoji takes a slot,
+     * which holds one.
+     */
+    val emojiCount: Int = 4,
+    /**
      * The colour the strip draws its primary word in: the bold one autocorrect
      * puts in for a space (#90). ARGB; null follows the theme's suggestion text.
      */
@@ -8623,6 +8638,8 @@ class SettingsRepository(private val context: Context) {
         private val SUGGESTION_SLOT_COUNT = intPreferencesKey("suggestion_slot_count")
         private val SUGGESTION_SCROLLABLE = booleanPreferencesKey("suggestion_scrollable")
         private val SUGGESTION_EMOJI_TAKES_SLOT = booleanPreferencesKey("suggestion_emoji_takes_slot")
+        private val SUGGESTION_FIXED_SLOTS = booleanPreferencesKey("suggestion_fixed_slots")
+        private val SUGGESTION_EMOJI_COUNT = intPreferencesKey("suggestion_emoji_count")
         private val SUGGESTION_PRIMARY_COLOR = longPreferencesKey("suggestion_primary_color")
         private val SUGGESTION_CHIP_PADDING = intPreferencesKey("suggestion_chip_padding")
         private val NUMPAD_CALCULATOR_LAYOUT = booleanPreferencesKey("numpad_calculator_layout")
@@ -9908,6 +9925,8 @@ class SettingsRepository(private val context: Context) {
             textScale = p[SUGGESTION_TEXT_SCALE] ?: defaults.suggestionStrip.textScale,
             scrollable = p[SUGGESTION_SCROLLABLE] ?: defaults.suggestionStrip.scrollable,
             emojiTakesSlot = p[SUGGESTION_EMOJI_TAKES_SLOT] ?: defaults.suggestionStrip.emojiTakesSlot,
+            fixedSlots = p[SUGGESTION_FIXED_SLOTS] ?: defaults.suggestionStrip.fixedSlots,
+            emojiCount = (p[SUGGESTION_EMOJI_COUNT] ?: defaults.suggestionStrip.emojiCount).coerceIn(1, 4),
             primaryColor = p[SUGGESTION_PRIMARY_COLOR] ?: defaults.suggestionStrip.primaryColor,
             chipPadding = p[SUGGESTION_CHIP_PADDING] ?: defaults.suggestionStrip.chipPadding,
             learnedWordMinCount = p[LEARNED_WORD_MIN_COUNT]
@@ -15554,6 +15573,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSuggestionEmojiTakesSlot(value: Boolean) =
         editPrefs { it[SUGGESTION_EMOJI_TAKES_SLOT] = value }
+
+    suspend fun setSuggestionFixedSlots(value: Boolean) =
+        editPrefs { it[SUGGESTION_FIXED_SLOTS] = value }
+
+    suspend fun setSuggestionEmojiCount(value: Int) =
+        editPrefs { it[SUGGESTION_EMOJI_COUNT] = value.coerceIn(1, 4) }
 
     /** Null clears the key, so the strip follows the theme again (#90). */
     suspend fun setSuggestionPrimaryColor(value: Long?) =

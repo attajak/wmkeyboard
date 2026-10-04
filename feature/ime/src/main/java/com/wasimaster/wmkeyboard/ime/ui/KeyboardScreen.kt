@@ -4094,6 +4094,12 @@ private fun TopBar(
                 // because the word being typed may simply be that word.
                 val smart = state.smart
                 val keywordChip = smart != null && smart.kind in SmartSuggest.narrowKinds
+                // #513: every word in a place of its own. Chips that are not
+                // words take a slot each instead of shoving the words aside.
+                val fixedStrip = state.settings.suggestionStrip.fixedSlots &&
+                    !state.settings.suggestionStrip.scrollable &&
+                    !state.composer.isConversion && !shownInlineEmoji && !glideStripOnly
+                val keywordInSlot = fixedStrip && keywordChip
                 if (smart != null) {
                     // Opening runs in two halves: the service clears the trigger
                     // text and stages the prefill, then the tool is tapped the
@@ -4115,7 +4121,9 @@ private fun TopBar(
                         // and onToolTap would drop the gear's press without a word.
                         canOpen = smart.tool in state.settings.enabledTools &&
                             isSupportedTool(smart.tool) && isUsableTool(smart.tool, state.settings),
-                        modifier = if (keywordChip) {
+                        modifier = if (keywordInSlot) {
+                            Modifier.weight(1f).padding(horizontal = 4.dp)
+                        } else if (keywordChip) {
                             Modifier.padding(start = 4.dp)
                         } else {
                             Modifier
@@ -4293,13 +4301,21 @@ private fun TopBar(
                 // the slots the count asks for rather than a chip after them,
                 // so the strip never shows more than that number. The words
                 // give up one slot and the emoji takes it at the same width.
-                val emojiInSlot = state.settings.suggestionStrip.emojiTakesSlot &&
+                val emojiInSlot = (state.settings.suggestionStrip.emojiTakesSlot || fixedStrip) &&
                     shownEmojiSuggestions.isNotEmpty() && !shownInlineEmoji && !glideStripOnly
-                val wordSlots = if (emojiInSlot) {
-                    (state.settings.suggestionStrip.slotCount - 1).coerceAtLeast(1)
-                } else {
-                    state.settings.suggestionStrip.slotCount
-                }
+                // The marks and the emoji never show together (the service
+                // leaves one list empty), so they share the one last slot.
+                val punctuationInSlot = fixedStrip && !emojiInSlot && shownPunctuation.isNotEmpty()
+                val rewriteInSlot = fixedStrip && suggestionsShowing && (
+                    state.joinSuggestion ?: state.revisionSuggestion
+                        ?: state.correctionOffer ?: state.correctionUndo
+                    ) != null
+                // Slots ahead of the words, so the primary can still land in
+                // the strip's own second slot.
+                val leadSlots = (if (keywordInSlot) 1 else 0) + (if (rewriteInSlot) 1 else 0)
+                val tailSlots = if (emojiInSlot || punctuationInSlot) 1 else 0
+                val wordSlots = (state.settings.suggestionStrip.slotCount - leadSlots - tailSlots)
+                    .coerceAtLeast(1)
                 if (shownInlineEmoji) {
                     // A ":tada" buffer: emoji, in the emoji font, as many as fit
                     // the scroll rather than the three slots words get.
@@ -4343,6 +4359,7 @@ private fun TopBar(
                             state.correctionOffer == null && undo != null
                         Box(
                             modifier = Modifier
+                                .then(if (rewriteInSlot) Modifier.weight(1f) else Modifier)
                                 .fillMaxHeight()
                                 .graphicsLayer { alpha = stripContentFade() }
                                 .padding(vertical = 8.dp, horizontal = 2.dp)
@@ -4428,6 +4445,8 @@ private fun TopBar(
                         suggestionHold = suggestionHold,
                         menuItems = state.settings.suggestionStrip.wordMenuItems,
                         overflow = state.settings.suggestionStrip.overflow,
+                        fixedSlots = fixedStrip,
+                        primarySlot = (1 - leadSlots).coerceAtLeast(0),
                     )
                     // The word card (#99) is a window over the whole keyboard, so
                     // where it is composed does not matter; it lives beside the
@@ -4465,7 +4484,8 @@ private fun TopBar(
                             R.string.ime_emoji_suggestion_hold_keep
                         },
                     )
-                    for (emoji in shownEmojiSuggestions.take(if (emojiInSlot) 1 else 4)) {
+                    val emojiShown = if (emojiInSlot) 1 else state.settings.suggestionStrip.emojiCount
+                    for (emoji in shownEmojiSuggestions.take(emojiShown)) {
                         Box(
                             modifier = Modifier
                                 // A slot of its own, the width of a word's (#413).
@@ -4513,20 +4533,28 @@ private fun TopBar(
                             .graphicsLayer { alpha = stripContentFade() },
                         color = MaterialTheme.colorScheme.outlineVariant,
                     )
-                    for (mark in shownPunctuation) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .graphicsLayer { alpha = stripContentFade() }
-                                .clickable(enabled = suggestionsShowing) { onPunctuation(mark) }
-                                .padding(horizontal = 8.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = mark,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontWeight = FontWeight.Medium,
-                            )
+                    // In a slot of their own (#513) the marks share the last
+                    // slot's width between them instead of each taking its own.
+                    Row(
+                        modifier = if (punctuationInSlot) Modifier.weight(1f) else Modifier,
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        for (mark in shownPunctuation) {
+                            Box(
+                                modifier = Modifier
+                                    .then(if (punctuationInSlot) Modifier.weight(1f) else Modifier)
+                                    .fillMaxHeight()
+                                    .graphicsLayer { alpha = stripContentFade() }
+                                    .clickable(enabled = suggestionsShowing) { onPunctuation(mark) }
+                                    .padding(horizontal = if (punctuationInSlot) 2.dp else 8.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = mark,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Medium,
+                                )
+                            }
                         }
                     }
                 }
@@ -4684,6 +4712,13 @@ private fun RowScope.LatinSuggestionChips(
     menuItems: Set<WordMenuItem> = emptySet(),
     /** Where a word still too long after shrinking is cut. */
     overflow: SuggestionOverflow = SuggestionOverflow.MIDDLE,
+    /**
+     * Lay out all [slotCount] slots whatever the number of words, so no word
+     * moves because another one is missing (#513). See [fixedSlotOrder].
+     */
+    fixedSlots: Boolean = false,
+    /** With [fixedSlots] and a centred primary: which of this row's slots it takes. */
+    primarySlot: Int = 1,
 ) {
     // The word a long press is asking about, or null while no menu is up. Held
     // here rather than per slot so the menu survives the strip re-laying itself
@@ -4716,13 +4751,15 @@ private fun RowScope.LatinSuggestionChips(
         // the runner-up on its left. The commit path still uses the engine's
         // order — this is display-only.
         val centerPrimary = centerPrimaryEnabled && ranked.size >= 2
-        val shown = if (centerPrimary) {
-            listOf(ranked[1], ranked[0]) + ranked.drop(2)
-        } else {
-            ranked
+        val fixed = fixedSlots && !scrollable && ranked.isNotEmpty()
+        val shown: List<String?> = when {
+            fixed -> fixedSlotOrder(ranked, slotCount, if (centerPrimaryEnabled) primarySlot else 0)
+            centerPrimary -> listOf(ranked[1], ranked[0]) + ranked.drop(2)
+            else -> ranked
         }
         val primaryIndex = when {
             primaryWord != null -> shown.indexOf(primaryWord)
+            fixed -> shown.indexOf(ranked.first())
             centerPrimary -> 1
             else -> 0
         }
@@ -4758,11 +4795,21 @@ private fun RowScope.LatinSuggestionChips(
         ) {
             shown.forEachIndexed { index, suggestion ->
                 if (index > 0) {
+                    // Drawn clear beside an empty slot rather than left out, so
+                    // every slot keeps the same width.
                     VerticalDivider(
                         modifier = Modifier.height(20.dp),
                         thickness = SuggestionDividerWidth,
-                        color = MaterialTheme.colorScheme.outlineVariant,
+                        color = if (suggestion != null && shown[index - 1] != null) {
+                            MaterialTheme.colorScheme.outlineVariant
+                        } else {
+                            Color.Transparent
+                        },
                     )
+                }
+                if (suggestion == null) {
+                    Box(modifier = Modifier.weight(1f).fillMaxHeight())
+                    return@forEachIndexed
                 }
                 // Fixed mode splits the width by weight. Scroll mode cannot
                 // (weights are meaningless under unbounded width), so each
@@ -4808,7 +4855,11 @@ private fun RowScope.LatinSuggestionChips(
                     // Counted by slot, so the strip always reads 1 2 3 from the
                     // left even with the primary centred. The plan holds the
                     // rank each slot is drawing (see [suggestionDisplayOrder]).
-                    val hint = hints?.label(HintSurface.SUGGESTION, index)
+                    // By word, not by slot, when empty slots sit among them.
+                    val hint = hints?.label(
+                        HintSurface.SUGGESTION,
+                        if (fixed) shown.subList(0, index).count { it != null } else index,
+                    )
                     if (hint != null) {
                         HintBadge(hint, modifier = Modifier.align(Alignment.BottomCenter))
                     }
@@ -5254,6 +5305,29 @@ private fun CandidateGridPanel(
 
 /** Widest the paste chip grows on an otherwise empty strip; longer copies ellipsize (#519). */
 private val ClipChipMaxWidth = 280.dp
+
+/**
+ * The words of [ranked] laid into [slots] fixed places (#513): the primary at
+ * [primarySlot], then the runner-up to its left, the next to its right, and on
+ * outwards, the order the centred strip has always used. A slot with no word
+ * left for it is null and stays empty, so a word's place depends only on its
+ * rank, never on how many others there are.
+ */
+internal fun fixedSlotOrder(ranked: List<String>, slots: Int, primarySlot: Int): List<String?> {
+    if (slots <= 0) return emptyList()
+    val out = arrayOfNulls<String>(slots)
+    val p = primarySlot.coerceIn(0, slots - 1)
+    var next = 0
+    fun put(at: Int) {
+        if (next < ranked.size) out[at] = ranked[next++]
+    }
+    put(p)
+    for (d in 1 until slots) {
+        if (p - d >= 0) put(p - d)
+        if (p + d < slots) put(p + d)
+    }
+    return out.toList()
+}
 
 /** Row height in the expanded grid — a comfortable tap target for one glyph. */
 private val CandidateGridRowHeight = 44.dp
