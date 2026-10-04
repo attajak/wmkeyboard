@@ -207,6 +207,10 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 
 **Mistype tolerance** (100% by default, 50% to 200%) sets how far into a neighbouring key a tap may land and still be read as a slip of the key you meant. Every tap is scored by where it landed, so a tap near a key's edge can already count as its neighbour; raise this if you type fast and loose and want the keyboard to look further, lower it if you type carefully and want the key you hit trusted. It moves both the strip's candidates and autocorrect's pick.
 
+## Spell checking in other apps
+
+Android has a spell checker of its own, separate from the keyboard: it draws the red underline under a misspelt word in apps that ask for one, and offers fixes when you tap it. WM Keyboard can be that spell checker. Open the phone's **Settings**, search for **Spell checker** (usually under System, Languages & input), and pick **WM Keyboard spell checker**. It then checks words against the same word lists the suggestion strip uses: a word list you downloaded for the language, the built-in list for English, and the words the keyboard has learned from you. The fixes it offers are the ones autocorrect and the strip would give. A language with no word list on the phone gets no underlines at all, rather than every word marked wrong. Nothing runs until you choose it there, and switching back is the same setting.
+
 ## Options
 
 <SettingsPath path="Typing / Automatic corrections" />

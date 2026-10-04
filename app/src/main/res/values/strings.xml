@@ -16,6 +16,9 @@
          The site file stays where it is; it answers the other direction. -->
     <string name="asset_statements" translatable="false">[{\"relation\": [\"delegate_permission/common.handle_all_urls\"], \"target\": {\"namespace\": \"web\", \"site\": \"https://wmkeyboard.pages.dev\"}}]</string>
     <string name="ime_name">WM Keyboard</string>
+    <!-- Android's name for the keyboard as a spell checker (#511), under the
+         system's spell checker setting. -->
+    <string name="spell_checker_name">WM Keyboard spell checker</string>
     <!-- Play's name for the on-demand AI-runtime module (:feature:llm);
          surfaces in Play's download UI and settings. Lives here because a
          dist:title must resolve from the BASE module's resources. -->

@@ -920,6 +920,24 @@
         </service>
 
         <!--
+             The keyboard's word lists as Android's spell checker (#511). Only
+             runs once the user picks it under the system's spell checker
+             setting.
+        -->
+        <service
+            android:name="com.wasimaster.wmkeyboard.app.spell.WMSpellCheckerService"
+            android:exported="true"
+            android:label="@string/spell_checker_name"
+            android:permission="android.permission.BIND_TEXT_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.textservice.SpellCheckerService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.view.textservice.scs"
+                android:resource="@xml/spellchecker" />
+        </service>
+
+        <!--
              Carves the keyboard's own window out of TalkBack's touch handling
              so the keyboard's gestures (spacebar cursor slide, backspace word
              swipe, glide typing, handwriting) still work while a screen reader
