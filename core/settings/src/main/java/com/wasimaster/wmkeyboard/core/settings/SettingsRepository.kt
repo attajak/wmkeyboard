@@ -7055,6 +7055,12 @@ data class SuggestionStripSettings(
      */
     val emojiCount: Int = 4,
     /**
+     * Each word on a pill of the theme's accent colour, the best word's the
+     * deepest (#510): the slots told apart by colour, which a Material You
+     * theme takes from the wallpaper. Off by default.
+     */
+    val tintedSlots: Boolean = false,
+    /**
      * The colour the strip draws its primary word in: the bold one autocorrect
      * puts in for a space (#90). ARGB; null follows the theme's suggestion text.
      */
@@ -8640,6 +8646,7 @@ class SettingsRepository(private val context: Context) {
         private val SUGGESTION_EMOJI_TAKES_SLOT = booleanPreferencesKey("suggestion_emoji_takes_slot")
         private val SUGGESTION_FIXED_SLOTS = booleanPreferencesKey("suggestion_fixed_slots")
         private val SUGGESTION_EMOJI_COUNT = intPreferencesKey("suggestion_emoji_count")
+        private val SUGGESTION_TINTED_SLOTS = booleanPreferencesKey("suggestion_tinted_slots")
         private val SUGGESTION_PRIMARY_COLOR = longPreferencesKey("suggestion_primary_color")
         private val SUGGESTION_CHIP_PADDING = intPreferencesKey("suggestion_chip_padding")
         private val NUMPAD_CALCULATOR_LAYOUT = booleanPreferencesKey("numpad_calculator_layout")
@@ -9927,6 +9934,7 @@ class SettingsRepository(private val context: Context) {
             emojiTakesSlot = p[SUGGESTION_EMOJI_TAKES_SLOT] ?: defaults.suggestionStrip.emojiTakesSlot,
             fixedSlots = p[SUGGESTION_FIXED_SLOTS] ?: defaults.suggestionStrip.fixedSlots,
             emojiCount = (p[SUGGESTION_EMOJI_COUNT] ?: defaults.suggestionStrip.emojiCount).coerceIn(1, 4),
+            tintedSlots = p[SUGGESTION_TINTED_SLOTS] ?: defaults.suggestionStrip.tintedSlots,
             primaryColor = p[SUGGESTION_PRIMARY_COLOR] ?: defaults.suggestionStrip.primaryColor,
             chipPadding = p[SUGGESTION_CHIP_PADDING] ?: defaults.suggestionStrip.chipPadding,
             learnedWordMinCount = p[LEARNED_WORD_MIN_COUNT]
@@ -15579,6 +15587,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSuggestionEmojiCount(value: Int) =
         editPrefs { it[SUGGESTION_EMOJI_COUNT] = value.coerceIn(1, 4) }
+
+    suspend fun setSuggestionTintedSlots(value: Boolean) =
+        editPrefs { it[SUGGESTION_TINTED_SLOTS] = value }
 
     /** Null clears the key, so the strip follows the theme again (#90). */
     suspend fun setSuggestionPrimaryColor(value: Long?) =

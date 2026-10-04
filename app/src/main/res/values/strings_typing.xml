@@ -805,6 +805,9 @@
     <string name="typing_suggestion_fixed_slots_title">Keep suggestions in place</string>
     <string name="typing_suggestion_fixed_slots_subtitle">Same-width slots, and the best word never moves</string>
     <string name="typing_suggestion_fixed_slots_info">Normally the words share the strip between them: two words split it in half, and an emoji, a row of punctuation marks or a tool\'s chip pushes the words aside to make room. With this setting on, the strip is always cut into the number of suggestions, every slot the same width, and a slot with nothing to show stays empty. The best word keeps the slot it always has. Anything that is not a word takes a slot of its own: a suggested emoji or the punctuation marks the last slot, a tool\'s keyword chip the first. This setting is off by default.</string>
+    <string name="typing_suggestion_tinted_title">Coloured suggestions</string>
+    <string name="typing_suggestion_tinted_subtitle">Put each word on a pill of the theme\'s accent colour</string>
+    <string name="typing_suggestion_tinted_info">Each suggestion sits on a rounded pill in the theme\'s accent colour, with the best word\'s pill the deepest, so the slots are told apart by colour rather than by thin dividers. With a Material You theme the colour follows your wallpaper. This setting is off by default.</string>
     <string name="typing_suggestion_emoji_count_title">Suggested emoji</string>
     <string name="typing_suggestion_emoji_count_subtitle">How many emoji ride after the words</string>
     <string name="typing_suggestion_emoji_count_info">How many suggested emoji can follow the words on the strip, from one to four. Four is the default. While an emoji takes a slot, the slot holds one, whatever this says. Emoji suggestions are turned on and off under Emoji.</string>

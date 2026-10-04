@@ -857,6 +857,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_suggestion_emoji_slot_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.typing_suggestion_emoji_count_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.typing_suggestion_fixed_slots_title) { Icons.Outlined.ViewColumn }
+        put(R.string.typing_suggestion_tinted_title) { Icons.Outlined.Palette }
         put(R.string.typing_suggestion_scroll_title) { Icons.Outlined.SwapHoriz }
         put(R.string.typing_primary_center_title) { Icons.Outlined.CenterFocusStrong }
         put(R.string.typing_contact_names_title) { Icons.Outlined.Contacts }

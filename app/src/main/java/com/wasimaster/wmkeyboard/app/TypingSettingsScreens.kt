@@ -746,6 +746,16 @@ internal fun TypingSuggestionsSettings(
             ) { scope.launch { repository.setSuggestionFixedSlots(it) } }
         }
         item {
+            // Issue #510: slots told apart by colour.
+            ToggleSetting(
+                R.string.typing_suggestion_tinted_title,
+                stringResource(R.string.typing_suggestion_tinted_subtitle),
+                settings.watch { it.suggestionStrip.tintedSlots },
+                info = stringResource(R.string.typing_suggestion_tinted_info),
+                default = SettingsDefaults.suggestionStrip.tintedSlots,
+            ) { scope.launch { repository.setSuggestionTintedSlots(it) } }
+        }
+        item {
             ToggleSetting(
                 R.string.typing_suggestion_scroll_title,
                 stringResource(R.string.typing_suggestion_scroll_subtitle),

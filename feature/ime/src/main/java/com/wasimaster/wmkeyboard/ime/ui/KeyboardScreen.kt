@@ -4447,6 +4447,7 @@ private fun TopBar(
                         overflow = state.settings.suggestionStrip.overflow,
                         fixedSlots = fixedStrip,
                         primarySlot = (1 - leadSlots).coerceAtLeast(0),
+                        tinted = state.settings.suggestionStrip.tintedSlots,
                     )
                     // The word card (#99) is a window over the whole keyboard, so
                     // where it is composed does not matter; it lives beside the
@@ -4719,7 +4720,13 @@ private fun RowScope.LatinSuggestionChips(
     fixedSlots: Boolean = false,
     /** With [fixedSlots] and a centred primary: which of this row's slots it takes. */
     primarySlot: Int = 1,
+    /**
+     * Each word on a pill of the theme's accent, the best word's the deepest
+     * (#510), so the slots read apart at a glance. Dividers step aside.
+     */
+    tinted: Boolean = false,
 ) {
+    val tint = LocalKbTheme.current.let { kb -> kb.accent to kb.dark }
     // The word a long press is asking about, or null while no menu is up. Held
     // here rather than per slot so the menu survives the strip re-laying itself
     // out underneath it, which it does on every keystroke.
@@ -4805,7 +4812,7 @@ private fun RowScope.LatinSuggestionChips(
                     VerticalDivider(
                         modifier = Modifier.height(20.dp),
                         thickness = SuggestionDividerWidth,
-                        color = if (suggestion != null && shown[index - 1] != null) {
+                        color = if (!tinted && suggestion != null && shown[index - 1] != null) {
                             MaterialTheme.colorScheme.outlineVariant
                         } else {
                             Color.Transparent
@@ -4827,6 +4834,27 @@ private fun RowScope.LatinSuggestionChips(
                 Box(
                     modifier = slotModifier
                         .fillMaxHeight()
+                        .then(
+                            if (tinted) {
+                                val (accent, dark) = tint
+                                val strong = index == primaryIndex
+                                Modifier
+                                    .padding(horizontal = 2.dp, vertical = 5.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(
+                                        accent.copy(
+                                            alpha = when {
+                                                strong && dark -> 0.34f
+                                                strong -> 0.24f
+                                                dark -> 0.16f
+                                                else -> 0.10f
+                                            },
+                                        ),
+                                    )
+                            } else {
+                                Modifier
+                            },
+                        )
                         // Reachable by remote: a suggestion taken with one
                         // button press is the difference between typing a word
                         // and walking a ring across ten keys to spell it.

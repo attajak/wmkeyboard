@@ -327,6 +327,7 @@ private fun SearchStrings.typingSuggestionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_suggestion_emoji_slot_title, R.string.typing_suggestion_emoji_slot_subtitle),
         row(R.string.typing_suggestion_emoji_count_title, R.string.typing_suggestion_emoji_count_subtitle),
         row(R.string.typing_suggestion_fixed_slots_title, R.string.typing_suggestion_fixed_slots_subtitle),
+        row(R.string.typing_suggestion_tinted_title, R.string.typing_suggestion_tinted_subtitle),
         row(R.string.typing_suggestion_scroll_title, R.string.typing_suggestion_scroll_subtitle),
         row(R.string.typing_punctuation_suggestions_title, R.string.typing_punctuation_suggestions_subtitle),
         row(R.string.typing_suggestions_all_fields_title, R.string.typing_suggestions_all_fields_subtitle),
