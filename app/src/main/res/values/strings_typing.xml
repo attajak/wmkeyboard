@@ -811,8 +811,8 @@
     <string name="typing_suggestion_emoji_slot_info">Suggested emoji normally ride after the words, up to four of them, on top of the number of suggestions. With this setting on, the best emoji takes the last slot and the words get one fewer, so the strip never shows more than the number of suggestions. Emoji suggestions are turned on and off under Emoji. This setting is off by default.</string>
 
     <string name="typing_suggestion_scroll_title">Scroll the suggestions</string>
-    <string name="typing_suggestion_scroll_subtitle">Show each word at full size and scroll the strip sideways when they do not fit</string>
-    <string name="typing_suggestion_scroll_info">Normally the strip splits its width evenly and shrinks long words to fit their slot. With this on, every word keeps its natural size and the strip scrolls sideways instead. Short words still fill the strip as before, so nothing changes until a word overruns. Turn it on if you want five or six suggestions on a narrow phone. This setting is off by default.</string>
+    <string name="typing_suggestion_scroll_subtitle">Show each word at full size, and every word found, in a strip that scrolls sideways</string>
+    <string name="typing_suggestion_scroll_info">Normally the strip splits its width evenly and shrinks long words to fit their slot. With this on, every word keeps its natural size and the strip scrolls sideways instead. The strip also carries on past the number of suggestions, through every word the keyboard found, so the one you want is a swipe away even when it ranked fourth or tenth. Short words still fill the visible part as before. Turn it on if you want five or six suggestions on a narrow phone, or if your word is often not among the first few. This setting is off by default.</string>
 
     <string name="typing_double_space_title">Double space</string>
     <string name="typing_double_space_subtitle">What two quick presses of space type</string>

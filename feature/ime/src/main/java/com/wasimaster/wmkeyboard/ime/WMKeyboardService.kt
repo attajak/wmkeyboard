@@ -16614,10 +16614,14 @@ open class WMKeyboardService : InputMethodService() {
             // strip is unaffected: a deeper ask does not reorder its head, and
             // it takes the same slice it always did.
             val octopusOn = state.settings.octopus.enabled && state.allowsTypingIntelligence
+            // A strip that scrolls has room for every word the pass ranked,
+            // not only the few that fit (#516): Avro's fourth reading is as
+            // often the word as its first.
+            val stripDepth = if (state.settings.suggestionStrip.scrollable) SUGGEST_PAGES_POOL else SUGGEST_LIMIT
             val askFor = if (octopusOn) {
-                maxOf(SUGGEST_LIMIT, state.settings.octopus.density * OCTOPUS_POOL_DEPTH)
+                maxOf(stripDepth, state.settings.octopus.density * OCTOPUS_POOL_DEPTH)
             } else {
-                SUGGEST_LIMIT
+                stripDepth
             }
             // Pages of suggestions (#385) want the deeper list the strip never
             // shows. Asked for in the same walk, so a swipe down has it at once;
@@ -16661,7 +16665,7 @@ open class WMKeyboardService : InputMethodService() {
                 // it, one tap away (#487).
                 val latin = if (completing != null) completionLatin(state, typed) else null
                 val suggested = (if (latin != null) listOf(latin) + deep.filterNot { it == latin } else deep)
-                    .take(SUGGEST_LIMIT)
+                    .take(stripDepth)
                 // A28: a personal-dictionary shortcut typed in full offers its
                 // expansion as the top chip (e.g. "omw" → "on my way"). Prepended
                 // so it wins the primary slot; deduped against the word list.

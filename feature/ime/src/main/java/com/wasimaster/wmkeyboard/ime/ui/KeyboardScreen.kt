@@ -4746,7 +4746,9 @@ private fun RowScope.LatinSuggestionChips(
             // and out as they leave (see [stripContentAlpha]).
             .graphicsLayer { this.alpha = alpha() },
     ) {
-        val ranked = candidates.take(slotCount)
+        // A scrolling strip runs on through every word it was given (#516);
+        // a fixed one shows what fits its slots.
+        val ranked = if (scrollable) candidates else candidates.take(slotCount)
         // Gboard convention: the primary candidate sits in the middle slot with
         // the runner-up on its left. The commit path still uses the engine's
         // order — this is display-only.
@@ -4763,10 +4765,13 @@ private fun RowScope.LatinSuggestionChips(
             centerPrimary -> 1
             else -> 0
         }
-        val slotWidth = if (shown.isEmpty()) {
+        // Scroll mode floors each word at the share it would have had among
+        // the first [slotCount], however many more follow it.
+        val shares = if (scrollable) minOf(shown.size, slotCount) else shown.size
+        val slotWidth = if (shares == 0) {
             0.dp
         } else {
-            (maxWidth - SuggestionDividerWidth * (shown.size - 1)) / shown.size
+            (maxWidth - SuggestionDividerWidth * (shares - 1)) / shares
         }
         val textWidth = (slotWidth - textPadding * 2).coerceAtLeast(0.dp)
         val measurer = rememberTextMeasurer()
