@@ -199,6 +199,22 @@ object EmojiFontDownload {
         _state.value = Status.Idle
     }
 
+    /**
+     * Whether [done] is an install nobody has acted on yet. True once per
+     * install. [state] keeps reporting it for the rest of the process, since
+     * the shade's progress reads it, so without this every screen that drew
+     * the download row pointed the emoji font setting back at this file each
+     * time it was opened, undoing a Custom or System choice made since (#430).
+     */
+    @Synchronized
+    fun claim(done: Status.Installed): Boolean {
+        if (applied == done) return false
+        applied = done
+        return true
+    }
+
+    private var applied: Status.Installed? = null
+
     private fun fetchAndInstall(context: Context, published: Published?): Status {
         val url = published?.url ?: EmojiFontCatalog.NOTO_URL
         val connection = URL(url).openConnection() as HttpURLConnection

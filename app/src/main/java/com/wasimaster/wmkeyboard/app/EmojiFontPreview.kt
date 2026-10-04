@@ -118,11 +118,13 @@ internal fun EmojiFontDownloadRow(
     // Asked once per process, and quietly: not knowing is the normal offline
     // answer and must not turn into an error on a screen nobody opened for it.
     LaunchedEffect(Unit) { EmojiFontDownload.checkPublished() }
-    // Fires once per install rather than on every recomposition that sees the
-    // finished state.
+    // Fires once per install: not on every recomposition that sees the
+    // finished state, and not again when this row is composed afresh on a
+    // later visit to the screen, which is what [EmojiFontDownload.claim] rules
+    // out (#430).
     LaunchedEffect(status) {
         val done = status as? EmojiFontDownload.Status.Installed ?: return@LaunchedEffect
-        onInstalled(done.fontId)
+        if (EmojiFontDownload.claim(done)) onInstalled(done.fontId)
     }
     // The copy already in the library, if it is this font, and whether the
     // repository has since published a different build of it.
