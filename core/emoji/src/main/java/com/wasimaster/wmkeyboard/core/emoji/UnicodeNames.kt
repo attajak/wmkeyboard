@@ -59,7 +59,9 @@ object UnicodeNames {
      * ahead of WAVE DASH ahead of the longer compounds.
      */
     fun search(query: String, limit: Int = 20): List<EmojiEntry> {
+        // Unicode spells the Greek letter LAMDA; people type lambda.
         val tokens = query.lowercase(Locale.ROOT).split(Regex("[\\s_]+")).filter { it.isNotEmpty() }
+            .map { it.replace("lambd", "lamd") }
         if (tokens.isEmpty() || tokens.all { it.length < 2 }) return emptyList()
         val scored = ArrayList<Pair<Named, Int>>()
         for (entry in entries()) {

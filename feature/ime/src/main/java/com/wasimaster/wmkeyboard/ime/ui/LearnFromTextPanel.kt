@@ -132,7 +132,7 @@ internal fun LearnFromTextPanel(
         if (editing) {
             EditBody(ui)
         } else {
-            ListBody(ui, focusedRow, callbacks)
+            ListBody(ui, focusedRow, callbacks, onOpenDictionary)
         }
     }
 }
@@ -235,7 +235,12 @@ private fun EditBody(ui: LearnFromTextUi) {
 }
 
 @Composable
-private fun ListBody(ui: LearnFromTextUi, focusedRow: Int?, callbacks: LearnFromTextCallbacks) {
+private fun ListBody(
+    ui: LearnFromTextUi,
+    focusedRow: Int?,
+    callbacks: LearnFromTextCallbacks,
+    onOpenDictionary: () -> Unit,
+) {
     val kb = LocalKbTheme.current
     val note = when {
         ui.blocked -> stringResource(R.string.ime_learn_blocked_info)

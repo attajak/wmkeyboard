@@ -574,6 +574,7 @@ internal fun ClipboardSettings(
     val userScreenshots = settings.watch { it.clipboard.userScreenshots }
     val trackSource = settings.watch { it.clipboard.trackSource }
     val suggestRecent = settings.watch { it.clipboard.suggestRecent }
+    val swipeToDelete = settings.watch { it.clipboard.swipeToDelete }
     val detectEntities = settings.watch { it.clipboard.detectEntities }
     val sensitiveHandling = settings.watch { it.clipboard.sensitiveHandling }
     // The slider readouts are plain lambdas, so their format strings are
@@ -994,7 +995,7 @@ internal fun ClipboardSettings(
                 default = SettingsDefaults.clipboard.swipeToDelete,
             ) { scope.launch { repository.setClipboardSwipeToDelete(it) } }
         }
-        item(visible = settings.watch { it.clipboard.swipeToDelete }) {
+        item(visible = swipeToDelete) {
             ToggleSetting(
                 R.string.clipboard_swipe_right_pins_title,
                 stringResource(R.string.clipboard_swipe_right_pins_subtitle),
