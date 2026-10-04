@@ -4925,6 +4925,18 @@ data class TextEditingSettings(
      */
     val spaceCursorTopSpeed: Int = 4,
     /**
+     * Move the caret under a spacebar swipe by setting the selection rather
+     * than by sending arrow keys (#505). An arrow key event is what a search
+     * box with a dropdown reads as "step through my suggestions", and what
+     * some file managers answer by putting their field's caret back at the
+     * start; a selection change is nothing but a caret move. Off by default:
+     * the arrow key is what every editor understands, and this needs the
+     * field to have reported where its caret is, which not every app does —
+     * when it has not, the swipe falls back to the arrow key. Selection mode
+     * and a held shift keep the arrow, which is what drags a selection out.
+     */
+    val spaceCursorDirect: Boolean = false,
+    /**
      * A magnifier over the caret while a spacebar cursor swipe moves it
      * (discussion #303): the line around the caret, enlarged, in a bubble over
      * the text. The trackpad has its own switch, [TrackpadSettings.magnifier].
@@ -5728,6 +5740,13 @@ data class EmojiSettings(
      * complete emoji font under Emoji → Emoji font is the way to widen it.
      */
     val hideUnrenderable: Boolean = false,
+    /**
+     * The emoji search also finds any character of the Basic Multilingual
+     * Plane by the words of its Unicode name (#385): "em dash", "greek small
+     * letter lambda", "copyright sign". Off by default, so a search for "cat"
+     * is emoji and nothing else unless asked.
+     */
+    val unicodeSearch: Boolean = false,
     /**
      * Let the emoji row scroll sideways to reach the emoji past its visible
      * slots. On by default: the row is seeded with more emoji than fit across a
@@ -8397,6 +8416,7 @@ class SettingsRepository(private val context: Context) {
             booleanPreferencesKey("emoji_tone_override_last_used")
         private val EMOJI_CLOSE_AFTER_INSERT = booleanPreferencesKey("emoji_close_after_insert")
         private val EMOJI_HIDE_UNRENDERABLE = booleanPreferencesKey("emoji_hide_unrenderable")
+        private val EMOJI_UNICODE_SEARCH = booleanPreferencesKey("emoji_unicode_search")
         private val EMOJI_BAR_SCROLLABLE = booleanPreferencesKey("emoji_bar_scrollable")
         private val EMOJI_BAR_COUNT = intPreferencesKey("emoji_bar_count")
         private val EMOJI_GRID_CELL_SIZE = intPreferencesKey("emoji_grid_cell_size")
@@ -8547,6 +8567,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACE_CURSOR_STEP_DP = intPreferencesKey("space_cursor_step_dp")
         private val SPACE_CURSOR_MAGNIFIER = booleanPreferencesKey("space_cursor_magnifier")
         private val SPACE_CURSOR_ACCELERATE = booleanPreferencesKey("space_cursor_accelerate")
+        private val SPACE_CURSOR_DIRECT = booleanPreferencesKey("space_cursor_direct")
         private val SPACE_CURSOR_TOP_SPEED = intPreferencesKey("space_cursor_top_speed")
         private val BACKSPACE_WORD_STEP_DP = intPreferencesKey("backspace_word_step_dp")
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
@@ -10159,6 +10180,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.emoji.toneOverrideByLastUsed,
             closeAfterInsert = p[EMOJI_CLOSE_AFTER_INSERT] ?: defaults.emoji.closeAfterInsert,
             hideUnrenderable = p[EMOJI_HIDE_UNRENDERABLE] ?: defaults.emoji.hideUnrenderable,
+            unicodeSearch = p[EMOJI_UNICODE_SEARCH] ?: defaults.emoji.unicodeSearch,
             barScrollable = p[EMOJI_BAR_SCROLLABLE] ?: defaults.emoji.barScrollable,
             barCount = p[EMOJI_BAR_COUNT]?.coerceIn(EmojiBarCountRange)
                 ?: defaults.emoji.barCount,
@@ -10384,6 +10406,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.textEditing.spaceCursorMagnifier,
             spaceCursorAccelerate = p[SPACE_CURSOR_ACCELERATE]
                 ?: defaults.textEditing.spaceCursorAccelerate,
+            spaceCursorDirect = p[SPACE_CURSOR_DIRECT] ?: defaults.textEditing.spaceCursorDirect,
             spaceCursorTopSpeed = p[SPACE_CURSOR_TOP_SPEED]
                 ?: defaults.textEditing.spaceCursorTopSpeed,
             backspaceWordStepDp = p[BACKSPACE_WORD_STEP_DP]
@@ -11425,6 +11448,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceCursorAccelerate(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_ACCELERATE] = value }
+
+    suspend fun setSpaceCursorDirect(value: Boolean) =
+        editPrefs { it[SPACE_CURSOR_DIRECT] = value }
 
     suspend fun setSpaceCursorTopSpeed(value: Int) =
         editPrefs { it[SPACE_CURSOR_TOP_SPEED] = value.coerceIn(2, 8) }
@@ -16027,6 +16053,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHideUnrenderableEmoji(value: Boolean) =
         editPrefs { it[EMOJI_HIDE_UNRENDERABLE] = value }
+
+    suspend fun setEmojiUnicodeSearch(value: Boolean) =
+        editPrefs { it[EMOJI_UNICODE_SEARCH] = value }
 
     suspend fun setEmojiKaomojiTabs(value: Boolean) =
         editPrefs { it[EMOJI_KAOMOJI_TABS] = value }

@@ -37,6 +37,8 @@ Set a slot to **Cursor** and the drag moves the text cursor instead of typing. T
 
 **Speed up long cursor swipes** (off by default) makes a long drag cover more text. The first 48&nbsp;dp of travel move at your Cursor speed, so a short nudge of a few characters stays exact. After that, each character costs less travel, and by 240&nbsp;dp the cursor is moving at **Top cursor speed**, 4× by default (2× to 8×). It keeps that pace for as long as you keep dragging the same way, the way a mouse's middle-button scroll does. Turn back and the cursor drops to Cursor speed again and builds up from there, so fixing an overshoot is as exact as a short nudge. A small wobble the other way doesn't count as turning back. With the 2-D cursor touchpad on, up and down movement speeds up the same way, on its own, one line at a time.
 
+**Move the cursor directly** (off by default) changes what a swipe sends. Normally each step is a left or right arrow key, which is what a hardware keyboard would send and what every editor understands. A few fields read an arrow as something else: a search box with a dropdown steps through its suggestions, and some file managers put the cursor back at the start of a name being renamed. With this on, the swipe places the cursor by moving the selection instead, and the app sees no key at all. It needs the app to have told the keyboard where the cursor is; when one hasn't, the arrow keys are used as before. Selection mode and a held shift keep the arrows, since that is how they stretch a selection.
+
 <SettingsPath path="Typing / Gestures / 2-D cursor touchpad" />
 
 **2-D cursor touchpad** (off by default) turns the same drag into a touchpad. A vertical component now steps the cursor up and down through the text too, on the same Cursor speed distance. Both axes send real arrow-key events rather than computing a raw text offset, so vertical movement follows whatever line-wrapping the app is doing instead of guessing at it. The toggle only appears once one of the two swipe slots above is set to Cursor, and Cursor speed appears beside it.
@@ -256,6 +258,7 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | 2-D cursor touchpad | Off |
 | Cursor speed | 16&nbsp;dp (8–32&nbsp;dp) |
 | Speed up long cursor swipes | Off |
+| Move the cursor directly | Off |
 | Top cursor speed | 4× (2–8×) |
 | Cursor magnifier | On |
 | Swipe in from the edge to go back | Off |

@@ -508,6 +508,7 @@ private fun SearchStrings.typingGesturesRows(): List<SettingsSearchEntry> {
         row(R.string.typing_space_long_swipe_title, R.string.typing_space_long_swipe_subtitle),
         row(R.string.typing_space_cursor_step_title, R.string.typing_space_cursor_step_subtitle),
         row(R.string.typing_space_cursor_accelerate_title, R.string.typing_space_cursor_accelerate_subtitle),
+        row(R.string.typing_space_cursor_direct_title, R.string.typing_space_cursor_direct_subtitle),
         row(R.string.typing_space_cursor_top_speed_title, R.string.typing_space_cursor_top_speed_subtitle),
         row(R.string.typing_space_cursor_magnifier_title, R.string.typing_space_cursor_magnifier_subtitle),
         row(R.string.typing_space_cursor_2d_title, R.string.typing_space_cursor_2d_subtitle),
@@ -933,6 +934,7 @@ private fun SearchStrings.emojiRows(): List<SettingsSearchEntry> {
         // is drawn in the phone's own font rather than hidden, so the toggle is
         // always about the phone.
         row(R.string.langemoji_emoji_hide_unrenderable_title, R.string.langemoji_emoji_hide_unrenderable_subtitle),
+        row(R.string.langemoji_emoji_unicode_search_title, R.string.langemoji_emoji_unicode_search_subtitle),
     )
 }
 

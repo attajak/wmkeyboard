@@ -596,6 +596,7 @@ internal object SettingsRowIcons {
         put(R.string.langemoji_media_switcher_title) { Icons.Outlined.SwapHoriz }
         put(R.string.langemoji_media_remember_title) { Icons.Outlined.History }
         put(R.string.langemoji_emoji_hide_unrenderable_title) { Icons.Outlined.VisibilityOff }
+        put(R.string.langemoji_emoji_unicode_search_title) { Icons.Outlined.Translate }
         put(R.string.langemoji_emoji_categories_title) { Icons.AutoMirrored.Outlined.Sort }
         put(R.string.langemoji_emoji_keywords_title) { Icons.Outlined.EmojiEmotions }
 
@@ -967,6 +968,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_space_cursor_2d_title) { Icons.Outlined.Mouse }
         put(R.string.typing_space_cursor_step_title) { Icons.Outlined.Speed }
         put(R.string.typing_space_cursor_accelerate_title) { Icons.Outlined.FastForward }
+        put(R.string.typing_space_cursor_direct_title) { Icons.Outlined.SwapHoriz }
         put(R.string.typing_space_cursor_top_speed_title) { Icons.Outlined.Speed }
         put(R.string.typing_space_cursor_magnifier_title) { Icons.Outlined.ZoomIn }
         put(R.string.typing_space_swipe_down_hide_title) { Icons.Outlined.SwipeDown }

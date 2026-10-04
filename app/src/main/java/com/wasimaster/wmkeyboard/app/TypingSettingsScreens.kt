@@ -2132,6 +2132,16 @@ internal fun TypingGesturesSettings(
                     default = SettingsDefaults.textEditing.spaceCursorAccelerate,
                 ) { scope.launch { repository.setSpaceCursorAccelerate(it) } }
             }
+            // Issue #505: a caret move that no search box mistakes for Tab.
+            item {
+                ToggleSetting(
+                    R.string.typing_space_cursor_direct_title,
+                    stringResource(R.string.typing_space_cursor_direct_subtitle),
+                    settings.watch { it.textEditing.spaceCursorDirect },
+                    info = stringResource(R.string.typing_space_cursor_direct_info),
+                    default = SettingsDefaults.textEditing.spaceCursorDirect,
+                ) { scope.launch { repository.setSpaceCursorDirect(it) } }
+            }
             item {
                 val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
                 SliderSetting(

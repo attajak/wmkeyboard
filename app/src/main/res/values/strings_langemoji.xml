@@ -196,6 +196,9 @@
     <string name="langemoji_emoji_hide_unrenderable_info">Older devices, and some brands, have an emoji font that is older than the newest emoji. Those emoji then show as an empty \"tofu\" box. This setting hides every emoji that the emoji font of your device cannot draw. To see them all, set the emoji font above to \"Google\" (Noto Color Emoji). You can also install a complete emoji font from Addons, such as Twemoji or OpenMoji. WM Keyboard has no emoji font of its own. It uses the font that you select here.</string>
     <!-- Second paragraph, added only when the user selected an emoji font of their own. -->
     <string name="langemoji_emoji_hide_unrenderable_own_font_info">The font that you selected above covers only the emoji that it was built with. Usually only the newest release has the newest emoji. The keyboard does not hide those emoji. It draws each one in the emoji font of your device, so you still see it, but in another style.</string>
+    <string name="langemoji_emoji_unicode_search_title">Find any character by its Unicode name</string>
+    <string name="langemoji_emoji_unicode_search_subtitle">The emoji search also finds symbols, letters and marks by the words of their name</string>
+    <string name="langemoji_emoji_unicode_search_info">Type the words of a character\'s Unicode name in the emoji search and it appears after the emoji: em dash, copyright sign, greek small letter lambda, latin small letter a with ogonek. Every character of the Basic Multilingual Plane is covered, which is tens of thousands of letters, marks and symbols. Tapping one inserts it. This setting is off by default.</string>
 
     <string name="langemoji_emoji_tip_body">Tip: press and hold any emoji in the panel to make it a favourite or to select skin tones. For an emoji with two persons, such as 🤝, you can set the tone of each person.</string>
 

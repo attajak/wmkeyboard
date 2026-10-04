@@ -134,6 +134,7 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiKeywordPacks
 import com.wasimaster.wmkeyboard.core.emoji.EmojiFontShaping
 import com.wasimaster.wmkeyboard.core.emoji.EmojiRenderCheck
 import com.wasimaster.wmkeyboard.core.emoji.EmojiSearch
+import com.wasimaster.wmkeyboard.core.emoji.UnicodeNames
 import com.wasimaster.wmkeyboard.core.emoji.EmojiShortcodes
 import com.wasimaster.wmkeyboard.core.emoji.EmojiSuggester
 import com.wasimaster.wmkeyboard.core.emoji.EmojiTriggers
@@ -2279,6 +2280,33 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     private var caretWord: CaretWord? = null
+
+    /**
+     * Puts a selected word on the strip (#413): one word, selected whole, is
+     * the user asking about it, and the strip's answer is the same as for a
+     * caret parked inside the word — the word itself, for the hold menu, and
+     * the engine's other readings of it. The pick then replaces the selection
+     * (see [onSuggestionTapped]). A span with a space or a symbol in it is a
+     * passage, not a word, and gets nothing; so does anything past
+     * [MAX_SELECTED_WORD]. One `getSelectedText` round-trip, on a selection
+     * update rather than a keystroke, and only once the cheap gates have
+     * passed.
+     */
+    private fun publishSelectedWordSuggestions(selStart: Int, selEnd: Int) {
+        val engine = suggestionEngine ?: return
+        val state = _uiState.value
+        if (!state.allowsTypingIntelligence || !state.settings.suggestions) return
+        if (state.composer.isTransliterating || state.composer.isConversion) return
+        if (state.captureTarget() != null || state.panel != PanelMode.NONE) return
+        if (selEnd - selStart !in 1..MAX_SELECTED_WORD) return
+        val ic = currentInputConnection ?: return
+        val selected = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull() ?: return
+        if (selected.length != selEnd - selStart || !selected.all { isComposingWordChar(it) }) return
+        if (!selected.any { it.isLetter() }) return
+        val caret = CaretWord(selected, "", selStart)
+        caretWord = caret
+        publishCaretWordSuggestions(engine, caret)
+    }
 
     /**
      * Takes down the mid-word strip. Called from every path that changes the
@@ -5821,6 +5849,12 @@ open class WMKeyboardService : InputMethodService() {
             // — a selection dragged out over the span it names is no longer a
             // caret sitting after it.
             refreshSnippetOffer(_uiState.value)
+            // A single word highlighted is a question about that word (#413):
+            // the strip answers with its other spellings, the way it does for
+            // a caret parked inside one, and a pick goes in over the selection.
+            if (newSelStart != newSelEnd && composing.isEmpty()) {
+                publishSelectedWordSuggestions(newSelStart, newSelEnd)
+            }
         }
         // The grammar strip follows the field: any text or cursor change
         // while it is open re-extracts and re-lints (offline, so cheap).
@@ -16979,6 +17013,35 @@ open class WMKeyboardService : InputMethodService() {
             // about (#135).
             val search = glideSearchOffer
             clearCaretWord()
+            // The word was selected rather than parked in (#413): the pick
+            // goes in over the selection, which is what a commit does with
+            // one, and the splice below — which reads around a collapsed
+            // caret — would read the wrong text.
+            if (caret.tail.isEmpty() && expectedSelEnd > expectedSelStart &&
+                ic.getSelectedText(0)?.toString() == caret.word
+            ) {
+                val replacement =
+                    displayCaseForShift(caseLike(suggestion, caret.word), _uiState.value.shiftState)
+                ic.commitText(replacement, 1)
+                invalidateExpectedSelection()
+                recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
+                consumeShift()
+                revision = null
+                val fix = Revision(caret.word, suggestion, caret.start + suggestion.length)
+                learn(
+                    suggestion,
+                    reinforcement = 2,
+                    caseTrusted = false,
+                    origin = WordOrigin.PICK,
+                    replaces = resolveRevision(fix),
+                )
+                lastRevertible = null
+                clearSwapOffer()
+                _uiState.update {
+                    it.copy(suggestions = emptyList(), emojiSuggestions = emptyList(), octopus = emptyMap())
+                }
+                return
+            }
             val head = caret.head
             val tail = caret.tail
             val wordStart = expectedSelStart - head.length
@@ -17342,10 +17405,44 @@ open class WMKeyboardService : InputMethodService() {
         lastCaretScrubMs = SystemClock.uptimeMillis()
         commitComposing(ic, autocorrect = false)
         lastGestureWord = null
+        // A plain step, under the setting, moves the selection instead of
+        // pressing an arrow (#505); extending one keeps the arrow, which is
+        // what the shifted step is.
+        if (_uiState.value.settings.textEditing.spaceCursorDirect &&
+            !_uiState.value.caretExtendsSelection && moveCaretDirectly(ic, delta)
+        ) {
+            return
+        }
         sendEditorKey(
             if (delta < 0) KeyEvent.KEYCODE_DPAD_LEFT else KeyEvent.KEYCODE_DPAD_RIGHT,
             shift = _uiState.value.caretExtendsSelection,
         )
+    }
+
+    /**
+     * Moves the caret one character the way [delta] points by setting the
+     * selection (#505). False when the field has not said where its caret is,
+     * so the arrow key path runs instead. Steps over a whole surrogate pair,
+     * so an emoji is one step and the caret never lands inside one; at either
+     * end of the text the step is spent on nothing, as an arrow's would be.
+     */
+    private fun moveCaretDirectly(ic: InputConnection, delta: Int): Boolean {
+        if (expectedSelStart < 0 || expectedSelStart != expectedSelEnd) return false
+        val from = expectedSelStart
+        val step = if (delta < 0) {
+            val before = ic.getTextBeforeCursor(2, 0) ?: return false
+            if (before.isEmpty()) return true
+            if (before.length == 2 && Character.isSurrogatePair(before[0], before[1])) 2 else 1
+        } else {
+            val after = ic.getTextAfterCursor(2, 0) ?: return false
+            if (after.isEmpty()) return true
+            if (after.length == 2 && Character.isSurrogatePair(after[0], after[1])) 2 else 1
+        }
+        val to = (if (delta < 0) from - step else from + step).coerceAtLeast(0)
+        if (!ic.setSelection(to, to)) return false
+        expectedSelStart = to
+        expectedSelEnd = to
+        return true
     }
 
     /**
@@ -30736,9 +30833,21 @@ open class WMKeyboardService : InputMethodService() {
     private fun refreshEmojiResults() {
         val search = emojiSearch ?: return
         val query = _uiState.value.emojiQuery
+        val unicode = _uiState.value.settings.emoji.unicodeSearch
         serviceScope.launch {
             val hidden = _uiState.value.hiddenEmoji
-            val results = withContext(Dispatchers.Default) { search.search(query) }
+            val results = withContext(Dispatchers.Default) {
+                val emoji = search.search(query)
+                // Any character by its Unicode name, after the emoji (#385):
+                // the catalogue knows an emoji by better words than its name,
+                // so one found both ways is listed once, where the emoji was.
+                if (!unicode || query.length < 2) {
+                    emoji
+                } else {
+                    val seen = emoji.mapTo(HashSet()) { it.emoji }
+                    emoji + UnicodeNames.search(query, UNICODE_SEARCH_RESULTS).filterNot { it.emoji in seen }
+                }
+            }
             val shown = if (hidden.isEmpty()) results else results.filterNot { it.emoji in hidden }
             updateQuery { it.copy(emojiResults = shown) }
         }
@@ -34468,6 +34577,16 @@ private class GlideRetryOffer(
  * Copy is what somebody selecting that much text is reaching for anyway.
  */
 private const val MAX_MACRO_SELECTION = 4000
+
+/** How many characters found by Unicode name the emoji search appends (#385). */
+private const val UNICODE_SEARCH_RESULTS = 24
+
+/**
+ * The longest selection the strip treats as one word (#413). Longer than any
+ * word anyone types, short enough that a selected sentence with no spaces in
+ * it (a URL, a hash) is never read back and offered respellings.
+ */
+private const val MAX_SELECTED_WORD = 48
 
 /** The Google app, whose image share target is Lens (#349). Declared in the manifest's queries. */
 private const val GOOGLE_APP_PACKAGE = "com.google.android.googlequicksearchbox"

@@ -382,6 +382,16 @@ internal fun EmojiSettings(
                 default = SettingsDefaults.emoji.hideUnrenderable,
             ) { scope.launch { repository.setHideUnrenderableEmoji(it) } }
         }
+        item {
+            // Issue #385: any character by the words of its Unicode name.
+            ToggleSetting(
+                R.string.langemoji_emoji_unicode_search_title,
+                stringResource(R.string.langemoji_emoji_unicode_search_subtitle),
+                settings.watch { it.emoji.unicodeSearch },
+                info = stringResource(R.string.langemoji_emoji_unicode_search_info),
+                default = SettingsDefaults.emoji.unicodeSearch,
+            ) { scope.launch { repository.setEmojiUnicodeSearch(it) } }
+        }
     }
 }
 
