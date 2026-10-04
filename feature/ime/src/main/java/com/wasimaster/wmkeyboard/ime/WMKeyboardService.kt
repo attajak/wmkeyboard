@@ -979,6 +979,13 @@ open class WMKeyboardService : InputMethodService() {
     private var codeEntryJob: Job? = null
 
     /**
+     * How many times a field has been started, counted so [commitCodeToField]
+     * can tell a code box that hands the focus on after each character from
+     * one field that takes the whole code.
+     */
+    private var inputStarts = 0
+
+    /**
      * The clip whose code has already been typed, so
      * [maybeShowCopiedCodeSuggestion] stops offering it. A spent code is done —
      * and unlike the notification chip, which clears its bus, this offer is
@@ -5111,6 +5118,7 @@ open class WMKeyboardService : InputMethodService() {
 
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
+        inputStarts++
         // Runs for every field even while the soft view stays hidden
         // (hardware-keyboard typing), where onStartInputView never fires:
         // the previous field's cached selection and half-typed word must not
@@ -11965,7 +11973,39 @@ open class WMKeyboardService : InputMethodService() {
             commitToField(code)
             return
         }
-        commitCharacterByCharacter(code)
+        currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+        codeEntryJob?.cancel()
+        codeEntryJob = serviceScope.launch {
+            // Paced by the field rather than by a clock (#508). A fixed step
+            // raced the form's own focus handler: a character sent while the
+            // next box was still taking over went to a connection already
+            // closed, and 098805 arrived as 08805. So each character waits
+            // for the box it filled to hand over, however long that takes.
+            // A field that does not hand over after the first character is
+            // one field, and the rest goes in at once rather than trickling.
+            var boxes = false
+            var i = 0
+            while (i < code.length) {
+                val ic = currentInputConnection ?: break
+                val starts = inputStarts
+                commitTypedCharacter(ic, code[i].toString())
+                i++
+                if (i == code.length) break
+                val handedOver = withTimeoutOrNull(CODE_BOX_HANDOFF_MS) {
+                    while (inputStarts == starts) delay(CODE_ENTRY_POLL_MS)
+                } != null
+                if (handedOver) {
+                    boxes = true
+                    // The new box's connection is up; give its view a frame.
+                    delay(CODE_ENTRY_POLL_MS)
+                } else if (!boxes) {
+                    val rest = currentInputConnection ?: break
+                    rest.beginBatchEdit()
+                    while (i < code.length) commitTypedCharacter(rest, code[i++].toString())
+                    rest.endBatchEdit()
+                }
+            }
+        }
     }
 
     /**
@@ -34328,6 +34368,15 @@ open class WMKeyboardService : InputMethodService() {
          * before the user could have read it off the chip.
          */
         private const val CODE_ENTRY_STEP_MS = 40L
+
+        /**
+         * How long a code character waits for its box to move the focus on
+         * before the field is taken for a single one (see [commitCodeToField]).
+         */
+        private const val CODE_BOX_HANDOFF_MS = 160L
+
+        /** Poll step while a code waits on the field, about a frame. */
+        private const val CODE_ENTRY_POLL_MS = 16L
         /**
          * How recently a code must have been copied to be offered as a chip in
          * a code field (see [maybeShowCopiedCodeSuggestion]). A code goes stale

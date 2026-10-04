@@ -61,7 +61,7 @@ A field counts as a code box when it asks for a number keypad, or when the app n
 
 Plenty of apps and websites split a code across a row of single-character boxes that advance the focus for you. A code committed whole lands entirely in the first of them, which keeps one character and drops the rest.
 
-**Type codes one character at a time** (on by default) handles that. The keyboard sends one character every 40 ms or so, and re-reads the input connection between each one, because the focus moving to the next box is exactly what replaces it. In an ordinary single field the result is identical, just spread over a few frames.
+**Type codes one character at a time** (on by default) handles that. The keyboard types the first character and watches what the field does with it. If the focus moves on to a next box, each later character waits for its box to take over before it is sent, however long the form takes, so none lands in a box that is already closing. If the focus stays put, it is one ordinary field, and the rest of the code goes in at once.
 
 This setting sits outside the rest of the group on purpose. It governs every path that types a code, including a code tapped from a [clipboard chip](/smart/chips/#pulling-fragments-out-of-your-clipboard), which needs no notification access at all.
 
