@@ -47,7 +47,7 @@
     <!-- Slider readout when the pause is set to zero. -->
     <string name="voice_silence_stop_off">Off</string>
     <!-- Slider readout: a pause length in seconds, e.g. "1.5 s". -->
-    <string name="voice_silence_stop_seconds"><xliff:g id="seconds" example="1.5">%1$.1f</xliff:g> s</string>
+    <string name="voice_silence_stop_seconds">%1$.1f s</string>
     <string name="voice_punctuation_title">Spoken punctuation</string>
     <!-- The three quoted words are spoken examples. Translate them into words that the user would say. -->
     <string name="voice_punctuation_subtitle">Say \"comma\", \"question mark\" or \"দাঁড়ি\" to type the mark</string>
