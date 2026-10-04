@@ -2142,6 +2142,16 @@ internal fun TypingGesturesSettings(
                     default = SettingsDefaults.textEditing.spaceCursorDirect,
                 ) { scope.launch { repository.setSpaceCursorDirect(it) } }
             }
+            // Issue #505: the drag goes on past the end of the spacebar.
+            item {
+                ToggleSetting(
+                    R.string.typing_space_cursor_edge_repeat_title,
+                    stringResource(R.string.typing_space_cursor_edge_repeat_subtitle),
+                    settings.watch { it.textEditing.spaceCursorEdgeRepeat },
+                    info = stringResource(R.string.typing_space_cursor_edge_repeat_info),
+                    default = SettingsDefaults.textEditing.spaceCursorEdgeRepeat,
+                ) { scope.launch { repository.setSpaceCursorEdgeRepeat(it) } }
+            }
             item {
                 val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
                 SliderSetting(

@@ -820,6 +820,9 @@
 
     <string name="typing_space_cursor_step_title">Cursor speed</string>
     <string name="typing_space_cursor_step_subtitle">How far you slide along the spacebar to move one character</string>
+    <string name="typing_space_cursor_edge_repeat_title">Keep moving past the edge</string>
+    <string name="typing_space_cursor_edge_repeat_subtitle">A cursor swipe held past the end of the spacebar keeps going</string>
+    <string name="typing_space_cursor_edge_repeat_info">The spacebar is shorter than a long line of text, so a cursor swipe can run out of key before the cursor gets where you want it. With this setting on, hold your finger past either end of the spacebar and the cursor keeps moving that way, about eight characters a second, until you move back onto the key or lift. This setting is off by default.</string>
     <string name="typing_space_cursor_direct_title">Move the cursor directly</string>
     <string name="typing_space_cursor_direct_subtitle">Place the cursor instead of pressing arrow keys</string>
     <string name="typing_space_cursor_direct_info">A spacebar swipe normally moves the cursor by pressing the left and right arrow keys, the way a hardware keyboard would. Some search boxes read an arrow key as a step through their suggestions, and some file managers put the cursor back at the start of the name after one. With this setting on, the swipe places the cursor directly instead, and no app sees a key press. The app has to tell the keyboard where its cursor is for this to work; when it does not, the arrow keys are used as before. Selection mode and a held shift always use the arrow keys, which is how they stretch a selection. This setting is off by default.</string>

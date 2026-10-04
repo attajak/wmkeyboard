@@ -4944,6 +4944,15 @@ data class TextEditingSettings(
      */
     val spaceCursorDirect: Boolean = false,
     /**
+     * A cursor drag parked past either end of the spacebar keeps the caret
+     * moving that way, a step at a time, until the finger comes back or
+     * lifts (#505). The spacebar runs out before a long line does; this is
+     * how the drag reaches the rest of it without a second swipe. Off by
+     * default: a caret that keeps going after the finger has stopped is a
+     * surprise to anyone who did not ask for it.
+     */
+    val spaceCursorEdgeRepeat: Boolean = false,
+    /**
      * A magnifier over the caret while a spacebar cursor swipe moves it
      * (discussion #303): the line around the caret, enlarged, in a bubble over
      * the text. The trackpad has its own switch, [TrackpadSettings.magnifier].
@@ -8589,6 +8598,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACE_CURSOR_MAGNIFIER = booleanPreferencesKey("space_cursor_magnifier")
         private val SPACE_CURSOR_ACCELERATE = booleanPreferencesKey("space_cursor_accelerate")
         private val SPACE_CURSOR_DIRECT = booleanPreferencesKey("space_cursor_direct")
+        private val SPACE_CURSOR_EDGE_REPEAT = booleanPreferencesKey("space_cursor_edge_repeat")
         private val SPACE_CURSOR_TOP_SPEED = intPreferencesKey("space_cursor_top_speed")
         private val BACKSPACE_WORD_STEP_DP = intPreferencesKey("backspace_word_step_dp")
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
@@ -10430,6 +10440,7 @@ class SettingsRepository(private val context: Context) {
             spaceCursorAccelerate = p[SPACE_CURSOR_ACCELERATE]
                 ?: defaults.textEditing.spaceCursorAccelerate,
             spaceCursorDirect = p[SPACE_CURSOR_DIRECT] ?: defaults.textEditing.spaceCursorDirect,
+            spaceCursorEdgeRepeat = p[SPACE_CURSOR_EDGE_REPEAT] ?: defaults.textEditing.spaceCursorEdgeRepeat,
             spaceCursorTopSpeed = p[SPACE_CURSOR_TOP_SPEED]
                 ?: defaults.textEditing.spaceCursorTopSpeed,
             backspaceWordStepDp = p[BACKSPACE_WORD_STEP_DP]
@@ -11474,6 +11485,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceCursorDirect(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_DIRECT] = value }
+
+    suspend fun setSpaceCursorEdgeRepeat(value: Boolean) =
+        editPrefs { it[SPACE_CURSOR_EDGE_REPEAT] = value }
 
     suspend fun setSpaceCursorTopSpeed(value: Int) =
         editPrefs { it[SPACE_CURSOR_TOP_SPEED] = value.coerceIn(2, 8) }

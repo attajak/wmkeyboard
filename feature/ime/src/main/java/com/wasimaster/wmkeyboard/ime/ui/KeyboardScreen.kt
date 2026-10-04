@@ -11038,6 +11038,7 @@ private fun KeyboardBody(
                     state = state,
                     callbacks = toolHold.learnFromText,
                     onClose = { onPanelChange(PanelMode.LEARN_FROM_TEXT) },
+                    onOpenDictionary = { onOpenRoute("dictionary") },
                 )
                 PanelMode.PASSWORD_GEN -> FullBleedTool(
                     state, title = "",
@@ -12264,6 +12265,13 @@ internal fun shiftChordKey(target: Key): Key? = when (target.action) {
 
 /** Identity of the one bubble a chord drag raises; see [shiftChordPreview]. */
 private val ChordPreviewToken = Any()
+
+/**
+ * How often a cursor drag parked past the spacebar's edge steps the caret
+ * (#505): eight a second, a pace the eye follows and a lift interrupts
+ * within a character or two.
+ */
+private const val SpaceCursorEdgeRepeatMs = 125L
 
 /**
  * The preview bubble for [target] under a drag off [source] (#436): the capital
@@ -21334,8 +21342,23 @@ private fun Modifier.pointerInputKey(
                     } else {
                         null
                     }
+                    // Issue #505: a cursor drag parked past either end of the
+                    // spacebar keeps the caret moving that way. Which way, or 0
+                    // while the finger is over the key; set by the cursor step
+                    // below and spent by the timed wait here.
+                    var edgeDir = 0
                     while (true) {
-                        val event = awaitPointerEvent()
+                        val event = if (edgeDir != 0) {
+                            withTimeoutOrNull(SpaceCursorEdgeRepeatMs) { awaitPointerEvent() }
+                        } else {
+                            awaitPointerEvent()
+                        }
+                        if (event == null) {
+                            // No event in the interval: the finger is parked
+                            // past the edge, so the caret takes another step.
+                            onCursorMove(edgeDir)
+                            continue
+                        }
                         val change = event.changes.firstOrNull { it.id == down.id } ?: break
                         if (!change.pressed) {
                             liftAt = change.uptimeMillis
@@ -21526,6 +21549,14 @@ private fun Modifier.pointerInputKey(
                                     onCursorMove(-1); accumulated += stepPx; moved = true
                                 }
                                 if (moved) change.consume()
+                                // Past the key's edge, the drag goes on by itself
+                                // (#505); back over the key it stops.
+                                edgeDir = when {
+                                    !textEditing.spaceCursorEdgeRepeat -> 0
+                                    change.position.x < 0f -> -1
+                                    change.position.x > size.width -> 1
+                                    else -> 0
+                                }
                             }
                             SpaceSwipeAction.LANGUAGE -> {
                                 if (twoModes) {

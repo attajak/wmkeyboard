@@ -39,6 +39,8 @@ Set a slot to **Cursor** and the drag moves the text cursor instead of typing. T
 
 **Move the cursor directly** (off by default) changes what a swipe sends. Normally each step is a left or right arrow key, which is what a hardware keyboard would send and what every editor understands. A few fields read an arrow as something else: a search box with a dropdown steps through its suggestions, and some file managers put the cursor back at the start of a name being renamed. With this on, the swipe places the cursor by moving the selection instead, and the app sees no key at all. It needs the app to have told the keyboard where the cursor is; when one hasn't, the arrow keys are used as before. Selection mode and a held shift keep the arrows, since that is how they stretch a selection.
 
+**Keep moving past the edge** (off by default) is for the line that outruns the spacebar. Drag the cursor to the end of the key and hold your finger there, past the edge, and the cursor keeps going the same way at about eight characters a second until you slide back onto the key or lift. Nothing changes while your finger is over the key itself.
+
 <SettingsPath path="Typing / Gestures / 2-D cursor touchpad" />
 
 **2-D cursor touchpad** (off by default) turns the same drag into a touchpad. A vertical component now steps the cursor up and down through the text too, on the same Cursor speed distance. Both axes send real arrow-key events rather than computing a raw text offset, so vertical movement follows whatever line-wrapping the app is doing instead of guessing at it. The toggle only appears once one of the two swipe slots above is set to Cursor, and Cursor speed appears beside it.
@@ -259,6 +261,7 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | Cursor speed | 16&nbsp;dp (8–32&nbsp;dp) |
 | Speed up long cursor swipes | Off |
 | Move the cursor directly | Off |
+| Keep moving past the edge | Off |
 | Top cursor speed | 4× (2–8×) |
 | Cursor magnifier | On |
 | Swipe in from the edge to go back | Off |

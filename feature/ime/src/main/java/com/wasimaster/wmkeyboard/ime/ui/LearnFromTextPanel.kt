@@ -25,6 +25,8 @@ import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -82,6 +84,8 @@ internal fun LearnFromTextPanel(
     state: KeyboardUiState,
     callbacks: LearnFromTextCallbacks,
     onClose: () -> Unit,
+    /** Opens the personal dictionary in Settings: where the words already learned live (#495). */
+    onOpenDictionary: () -> Unit = {},
 ) {
     val ui = state.learnFromText ?: return
     val sort = state.settings.suggestionStrip.learnFromTextSort
@@ -257,10 +261,28 @@ private fun ListBody(ui: LearnFromTextUi, focusedRow: Int?, callbacks: LearnFrom
                 Text(stringResource(R.string.ime_learn_scanning_progress), color = kb.secondaryText, fontSize = 13.sp)
             }
             ui.blocked -> {}
-            ui.rows.isEmpty() -> Centered {
-                Icon(Icons.Outlined.Check, contentDescription = null, modifier = Modifier.size(16.dp), tint = kb.accent)
-                Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.ime_learn_empty), color = kb.secondaryText, fontSize = 13.sp)
+            ui.rows.isEmpty() -> Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Check, contentDescription = null, modifier = Modifier.size(16.dp), tint = kb.accent)
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.ime_learn_empty), color = kb.secondaryText, fontSize = 13.sp)
+                }
+                // The tool is mistaken for a list of the words already learned
+                // (#495): say where those are, and offer the way there.
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    stringResource(R.string.ime_learn_empty_learned_hint),
+                    color = kb.secondaryText,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                )
+                Spacer(Modifier.height(6.dp))
+                ToolPanelChip(stringResource(R.string.ime_learn_open_dictionary_action)) { onOpenDictionary() }
             }
             else -> {
                 var expanded by remember { mutableStateOf<String?>(null) }

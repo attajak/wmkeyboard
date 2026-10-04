@@ -418,6 +418,9 @@
     </plurals>
     <string name="ime_learn_scanning_progress">Reading the text…</string>
     <string name="ime_learn_empty">No new words here. The keyboard knows every word in this text.</string>
+    <!-- Under the line above: this tool lists words to add, not the words already learned. -->
+    <string name="ime_learn_empty_learned_hint">Looking for the words the keyboard has learned? They are in the personal dictionary in Settings.</string>
+    <string name="ime_learn_open_dictionary_action">Open the dictionary</string>
     <string name="ime_learn_blocked_info">This is a password field, so nothing was read.</string>
     <string name="ime_learn_partial_info">Only part of this field could be read.</string>
     <string name="ime_learn_capped_info">Showing the first %1$d new words.</string>
