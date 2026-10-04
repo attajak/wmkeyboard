@@ -146,5 +146,8 @@
     <string name="clipboard_chip_life_subtitle">Time before the recently copied chip hides itself</string>
     <string name="clipboard_chip_life_info">The chip appears on the suggestion strip after you copy something, so that you can paste it without opening the clipboard. Typing does not dismiss it, because it is meant to survive writing the message you will paste it into. Set a shorter time if you would rather what you copied stopped being on screen, which matters for a password or an address. You can always dismiss the chip yourself.</string>
     <string name="clipboard_chip_until_dismissed">Until dismissed</string>
+    <string name="clipboard_recent_chips_title">Recent copies on the strip</string>
+    <string name="clipboard_recent_chips_subtitle">How many of your latest copies the empty suggestion strip offers</string>
+    <string name="clipboard_recent_chips_info">At 1, the strip shows one chip for the last copy, for as long as the setting above says. Set more, and whenever the strip has nothing to suggest it shows that many of your latest text clips in a row you can scroll, each one a press from pasted. The row goes away while you type, and its cross puts it away for the field you are in; it is back in the next field, and the moment you copy something new. Hidden clips never appear. The default is 1.</string>
 
 </resources>

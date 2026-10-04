@@ -2821,6 +2821,12 @@ data class KeyboardUiState(
      */
     val clipboardSuggestion: ClipItem? = null,
     /**
+     * The row of recent copies on the idle strip (#414) was put away with its
+     * ✕, for this field. Back for the next field, and the moment something new
+     * is copied.
+     */
+    val clipChipsDismissed: Boolean = false,
+    /**
      * One-time code lifted from a just-arrived notification, offered as a chip
      * on the suggestion strip. Null when there is none, it expired, it was
      * used or dismissed, or the current field fails the feature's gates

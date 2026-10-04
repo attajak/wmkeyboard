@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.os.Build
 import com.wasimaster.wmkeyboard.core.input.composer.CjkLearning
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
+import com.wasimaster.wmkeyboard.core.settings.ClipRecentChipsMax
 import com.wasimaster.wmkeyboard.core.settings.HoldToTalkRange
 import com.wasimaster.wmkeyboard.core.settings.VoiceSilenceStopRange
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
@@ -772,6 +773,18 @@ internal fun ClipboardSettings(
                 val secs = (value / 30f).roundToInt() * 30
                 scope.launch { repository.setPasteChipSeconds(secs) }
             }
+        }
+        item(visible = suggestRecent) {
+            // Issue #414: the last few copies as a row, FUTO-style.
+            SliderSetting(
+                R.string.clipboard_recent_chips_title,
+                subtitle = stringResource(R.string.clipboard_recent_chips_subtitle),
+                value = settings.watch { it.clipboard.recentChips }.toFloat(),
+                range = 1f..ClipRecentChipsMax.toFloat(),
+                display = { it.toInt().toString() },
+                info = stringResource(R.string.clipboard_recent_chips_info),
+                default = SettingsDefaults.clipboard.recentChips.toFloat(),
+            ) { scope.launch { repository.setClipboardRecentChips(it.toInt()) } }
         }
         item(visible = suggestRecent) {
             ChoiceSetting(

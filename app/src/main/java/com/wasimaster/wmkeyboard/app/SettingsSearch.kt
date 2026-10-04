@@ -988,6 +988,7 @@ private fun SearchStrings.clipboardRows(): List<SettingsSearchEntry> {
         row(R.string.clipboard_history_title, R.string.clipboard_history_subtitle, weight = EntryWeight.PRIMARY),
         row(R.string.clipboard_suggest_recent_title, R.string.clipboard_suggest_recent_subtitle),
         row(R.string.clipboard_chip_life_title, R.string.clipboard_chip_life_subtitle),
+        row(R.string.clipboard_recent_chips_title, R.string.clipboard_recent_chips_subtitle),
         row(R.string.clipboard_suggest_codes_title, R.string.clipboard_suggest_codes_subtitle),
         row(R.string.clipboard_toast_title, R.string.clipboard_toast_subtitle),
         row(R.string.clipboard_expiry_title, R.string.clipboard_expiry_subtitle),

@@ -5663,12 +5663,24 @@ data class ClipboardSettings(
      */
     val swipeRightPins: Boolean = false,
     /**
+     * How many recent copies the idle strip offers as chips (#414), 1 to
+     * [ClipRecentChipsMax]. At 1, the default, the strip shows the single
+     * paste chip for the last copy, as it always has, for as long as its own
+     * timer says. Above 1 the idle strip shows that many of the latest text
+     * clips in a row that scrolls, until something is typed or its ✕ is
+     * pressed, and comes back on the next field or the next copy.
+     */
+    val recentChips: Int = 1,
+    /**
      * How much taller than the keyboard the clipboard panel opens, in dp
      * (#414), set by dragging the bar on top of the panel. 0, the default, is
      * the keyboard's own height. See [ClipPanelExtraHeightRange].
      */
     val panelExtraHeightDp: Int = 0,
 )
+
+/** The most recent copies [ClipboardSettings.recentChips] may put on the strip. */
+const val ClipRecentChipsMax: Int = 5
 
 /**
  * The longest clip [ClipboardSettings.typeOutPastes] types out character by
@@ -8286,6 +8298,7 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_TYPE_TAGS = booleanPreferencesKey("clipboard_type_tags")
         private val CLIPBOARD_KEEP_RICH_TEXT = booleanPreferencesKey("clipboard_keep_rich_text")
         private val CLIPBOARD_SWIPE_RIGHT_PINS = booleanPreferencesKey("clipboard_swipe_right_pins")
+        private val CLIPBOARD_RECENT_CHIPS = intPreferencesKey("clipboard_recent_chips")
         private val CLIPBOARD_PANEL_EXTRA_HEIGHT_DP = intPreferencesKey("clipboard_panel_extra_height_dp")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
@@ -9752,6 +9765,8 @@ class SettingsRepository(private val context: Context) {
             typeTags = p[CLIPBOARD_TYPE_TAGS] ?: defaults.clipboard.typeTags,
             keepRichText = p[CLIPBOARD_KEEP_RICH_TEXT] ?: defaults.clipboard.keepRichText,
             swipeRightPins = p[CLIPBOARD_SWIPE_RIGHT_PINS] ?: defaults.clipboard.swipeRightPins,
+            recentChips = p[CLIPBOARD_RECENT_CHIPS]?.coerceIn(1, ClipRecentChipsMax)
+                ?: defaults.clipboard.recentChips,
             panelExtraHeightDp = p[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP]?.coerceIn(ClipPanelExtraHeightRange)
                 ?: defaults.clipboard.panelExtraHeightDp,
         )
@@ -15594,6 +15609,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardSwipeRightPins(value: Boolean) =
         editPrefs { it[CLIPBOARD_SWIPE_RIGHT_PINS] = value }
+
+    suspend fun setClipboardRecentChips(value: Int) =
+        editPrefs { it[CLIPBOARD_RECENT_CHIPS] = value.coerceIn(1, ClipRecentChipsMax) }
 
     suspend fun setClipboardPanelExtraHeightDp(value: Int) =
         editPrefs { it[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP] = value.coerceIn(ClipPanelExtraHeightRange) }

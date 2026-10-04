@@ -5548,6 +5548,7 @@ open class WMKeyboardService : InputMethodService() {
                 shiftPressedByUser = false,
                 clipboardItems = if (clipboardAccessible) clipboardStore.items() else emptyList(),
                 clipboardSuggestion = if (clipboardAccessible) it.clipboardSuggestion else null,
+                clipChipsDismissed = false,
                 enterAction = info.enterAction(),
                 enterActionLabel = info?.actionLabel?.toString()?.takeIf { label -> label.isNotBlank() },
                 handwriting = it.handwriting.copy(strokes = emptyList(), recognizing = false),
@@ -31059,7 +31060,8 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun showClipboardSuggestion(item: com.wasimaster.wmkeyboard.core.clipboard.ClipItem) {
         clipboardSuggestionJob?.cancel()
-        _uiState.update { it.copy(clipboardSuggestion = item) }
+        // A fresh copy brings the row of recent copies back too (#414).
+        _uiState.update { it.copy(clipboardSuggestion = item, clipChipsDismissed = false) }
         // 0 is "until pasted or dismissed": no timer at all rather than a very
         // long one, so the chip cannot outlive the process quietly.
         val ttlSeconds = _uiState.value.settings.clipboard.pasteChipSeconds
@@ -31129,6 +31131,9 @@ open class WMKeyboardService : InputMethodService() {
         // A dismissed code chip must stay dismissed: the next field entry would
         // otherwise put the same clip straight back on the strip.
         _uiState.value.clipboardSuggestion?.let { pastedCodeClipId = it.id }
+        // The row of recent copies goes with it (#414), until the next field
+        // or the next copy.
+        _uiState.update { it.copy(clipChipsDismissed = true) }
         clearClipboardSuggestion()
     }
 

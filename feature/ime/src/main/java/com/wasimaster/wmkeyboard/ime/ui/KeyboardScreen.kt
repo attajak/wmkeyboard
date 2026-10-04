@@ -3109,6 +3109,11 @@ private fun TopBar(
     // to what was just typed with it. The recently-copied paste chip counts
     // the same way, so an idle strip holds it instead of flipping to the tools.
     val recentClipChip = state.settings.clipboard.suggestRecent && state.clipboardSuggestion != null
+    // The row of the last few copies (#414), which holds the idle strip the
+    // same way the single chip does, until its ✕ or the next keystroke.
+    val recentClipsBar = state.settings.clipboard.suggestRecent &&
+        state.settings.clipboard.recentChips > 1 && !state.clipChipsDismissed &&
+        state.clipboardItems.any { it.kind.isTextual && !it.sensitive && it.text.isNotBlank() }
     // Suggestions-first mode keeps the strip as the resting state (an empty
     // strip plus the chevron into the toolbar); the override then survives
     // idle gaps and instead resets when fresh candidates arrive.
@@ -3126,7 +3131,7 @@ private fun TopBar(
         (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())
     val hasSuggestions =
         (!openersAtRest && (state.suggestions.isNotEmpty() || state.emojiSuggestions.isNotEmpty())) ||
-        state.smart != null || recentClipChip ||
+        state.smart != null || recentClipChip || recentClipsBar ||
         // Stickers a typed word asked for, in the styles that draw them here.
         stickerStripShows(state) ||
         // The one-time-code chip counts as strip content for the same reason
@@ -4159,6 +4164,53 @@ private fun TopBar(
                 // paste chip gives way to its narrow form when both are present
                 // rather than stretching across a strip it now shares.
                 val clipChipShares = suggestionsShowing || smartReplies.isNotEmpty()
+                // The last few copies as a row of chips (#414): the idle strip
+                // holds them until something is typed, and one ✕ at the end
+                // puts the row away for this field. Text clips only, never a
+                // secret, the same gates as the single chip's.
+                val clipBarChips = if (recentClipsBar && smart == null && !clipChipShares) {
+                    state.clipboardItems
+                        .filter { it.kind.isTextual && !it.sensitive && it.text.isNotBlank() }
+                        .take(state.settings.clipboard.recentChips)
+                } else {
+                    emptyList()
+                }
+                if (clipBarChips.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .horizontalScroll(rememberScrollState())
+                            .padding(horizontal = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        for (chip in clipBarChips) {
+                            ClipboardSuggestionChip(
+                                clip = chip,
+                                onPaste = { onClipboardSuggestion(chip) },
+                                onDismiss = {},
+                                dismissible = false,
+                                modifier = Modifier.widthIn(max = 200.dp),
+                            )
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .clickable { onClipboardSuggestionDismiss() }
+                            .padding(horizontal = 8.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Outlined.Close,
+                            contentDescription = stringResource(R.string.ime_clip_chip_dismiss_desc),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
+                    return@StripSlot
+                }
                 if (recentClipChip && smart == null) {
                     ClipboardSuggestionChip(
                         clip = recentClip,
@@ -5170,6 +5222,8 @@ private fun ClipboardSuggestionChip(
     stretch: Boolean = false,
     /** Set when the chip offers a code out of [clip] rather than all of it. */
     otp: ClipEntity? = null,
+    /** False for a chip in the row of recent copies (#414), which shares one ✕ for the row. */
+    dismissible: Boolean = true,
 ) {
     val kb = LocalKbTheme.current
     val feedback = LocalKeyPressFeedback.current
@@ -5300,7 +5354,7 @@ private fun ClipboardSuggestionChip(
                 modifier = Modifier.weight(1f, fill = false),
             )
         }
-        Box(
+        if (dismissible) Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .clip(CircleShape)
