@@ -277,8 +277,17 @@ internal fun IconsScreen(
     }
 
     for (group in IconSlotGroup.entries) {
-        SettingsGroup(stringResource(group.titleRes)) {
-            for (slot in IconSlots.inGroup(group)) {
+        val slots = IconSlots.inGroup(group)
+        // Folds, like the Tools screen's groups (#504): the tools alone are
+        // seventy-odd rows, and the key you came to change sat under all of
+        // them. A closed fold names what it holds, and the one you opened
+        // stays open next time.
+        SettingsGroup(
+            stringResource(group.titleRes),
+            foldKey = group.name.lowercase(),
+            foldSummary = { slots.joinToString(", ") { slotLabel(context, it) } },
+        ) {
+            for (slot in slots) {
                 item {
                     WmRow(
                         title = slotLabel(context, slot),
