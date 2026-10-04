@@ -113,6 +113,8 @@ An **Undo** control appears (bottom-left in the panel, as a small icon on either
 
 With **Keep listening** on (the default), finishing one sentence doesn't stop dictation. The next listening session starts on its own, so you can keep talking sentence after sentence without re-tapping the mic. Turn it off and each session ends after one utterance. Tap the mic again for the next one.
 
+**Stop after a pause**, next to it, is for the two engines that record a whole clip, [offline Whisper](/tools/whisper/) and the [transcription server](/tools/transcription-server/): off by default, and from 0.5 to 4 seconds it ends their clip by itself once you have said something and then gone quiet for that long. The system recognizer already stops on a pause and ignores it. With **Keep listening** off the pause ends the whole dictation, so nothing has to be pressed to finish.
+
 Between sentences the mic is really closed for a moment: the recognizer has stopped hearing and is working out the words. The pulse ring goes away and the line shows "…" for exactly that stretch, so you can see when to wait. It comes back when the next sentence is listening. Pressing the mic while it's working out the words makes that sentence the last one.
 
 Continuous mode is also patient with silence: a pause that would normally time out the recognizer just restarts listening quietly instead of surfacing an error, but only for two silent retries in a row. After that it gives up and goes idle, so an abandoned open mic doesn't sit there listening forever.

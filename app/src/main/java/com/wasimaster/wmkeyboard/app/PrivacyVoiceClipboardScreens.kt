@@ -30,6 +30,7 @@ import android.os.Build
 import com.wasimaster.wmkeyboard.core.input.composer.CjkLearning
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.settings.HoldToTalkRange
+import com.wasimaster.wmkeyboard.core.settings.VoiceSilenceStopRange
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
 import com.wasimaster.wmkeyboard.core.settings.ClipGridColumnsRange
 import com.wasimaster.wmkeyboard.core.settings.ClipMaxItemsSteps
@@ -375,6 +376,24 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: LiveSetting
                 enabled = !chainingForced,
                 default = SettingsDefaults.voiceContinuous,
             ) { scope.launch { repository.setVoiceContinuous(it) } }
+        }
+        item {
+            val offLabel = stringResource(R.string.voice_silence_stop_off)
+            val secondsFormat = stringResource(R.string.voice_silence_stop_seconds)
+            SliderSetting(
+                R.string.voice_silence_stop_title,
+                subtitle = stringResource(R.string.voice_silence_stop_subtitle),
+                value = settings.watch { it.voiceBar.silenceStopMs }.toFloat(),
+                range = 0f..VoiceSilenceStopRange.last.toFloat(),
+                display = { picked ->
+                    val ms = (picked / 250f).roundToInt() * 250
+                    if (ms == 0) offLabel else secondsFormat.format(ms / 1000f)
+                },
+                info = stringResource(R.string.voice_silence_stop_info),
+                default = SettingsDefaults.voiceBar.silenceStopMs.toFloat(),
+            ) { picked ->
+                scope.launch { repository.setVoiceSilenceStopMs((picked / 250f).roundToInt() * 250) }
+            }
         }
         if (typingMode != com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings.TYPING_PLAIN) item {
             ToggleSetting(

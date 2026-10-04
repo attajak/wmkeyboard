@@ -41,6 +41,13 @@
     <string name="voice_typing_plain_desc">The same, but with no punctuation and no spaces</string>
     <string name="voice_continuous_title">Keep listening</string>
     <string name="voice_continuous_subtitle">Start the next sentence automatically after each one goes into the field</string>
+    <string name="voice_silence_stop_title">Stop after a pause</string>
+    <string name="voice_silence_stop_subtitle">End a Whisper or server clip by itself when you stop talking</string>
+    <string name="voice_silence_stop_info">Offline Whisper and the transcription server record a whole clip, so the microphone stays open until you press it or the 30 second clip fills. Set a pause here and the clip ends by itself once you have said something and then gone quiet for that long. With Keep listening off, that also ends dictation, so you never have to reach for the microphone. The system recognizer stops after a pause of its own and ignores this. Off by default.</string>
+    <!-- Slider readout when the pause is set to zero. -->
+    <string name="voice_silence_stop_off">Off</string>
+    <!-- Slider readout: a pause length in seconds, e.g. "1.5 s". -->
+    <string name="voice_silence_stop_seconds"><xliff:g id="seconds" example="1.5">%1$.1f</xliff:g> s</string>
     <string name="voice_punctuation_title">Spoken punctuation</string>
     <!-- The three quoted words are spoken examples. Translate them into words that the user would say. -->
     <string name="voice_punctuation_subtitle">Say \"comma\", \"question mark\" or \"দাঁড়ি\" to type the mark</string>

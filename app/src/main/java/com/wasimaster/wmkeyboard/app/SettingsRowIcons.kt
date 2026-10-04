@@ -651,6 +651,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_follow_portrait_title) { Icons.Outlined.ScreenRotation }
         put(R.string.layout_variant_follows_portrait_label) { Icons.Outlined.ScreenRotation }
         put(R.string.layout_one_handed_title) { Icons.Outlined.PanTool }
+        put(R.string.layout_one_handed_portrait_only_title) { Icons.Outlined.ScreenRotation }
         put(R.string.layout_split_title) { Icons.Outlined.VerticalSplit }
         put(R.string.layout_split_gap_title) { Icons.Outlined.SpaceBar }
         put(R.string.layout_split_spacebar_title) { Icons.Outlined.SpaceBar }
@@ -846,6 +847,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_punctuation_suggestions_title) { Icons.Outlined.MoreHoriz }
         put(R.string.typing_suggestions_first_title) { Icons.Outlined.VerticalAlignTop }
         put(R.string.typing_suggestion_slots_title) { Icons.Outlined.Numbers }
+        put(R.string.typing_suggestion_emoji_slot_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.typing_suggestion_scroll_title) { Icons.Outlined.SwapHoriz }
         put(R.string.typing_primary_center_title) { Icons.Outlined.CenterFocusStrong }
         put(R.string.typing_contact_names_title) { Icons.Outlined.Contacts }
@@ -1242,6 +1244,7 @@ internal object SettingsRowIcons {
         put(R.string.voice_hold_picks_title) { Icons.Outlined.TouchApp }
         put(R.string.voice_pause_media_title) { Icons.Outlined.MusicNote }
         put(R.string.voice_continuous_title) { Icons.Outlined.MicNone }
+        put(R.string.voice_silence_stop_title) { Icons.Outlined.Timer }
         put(R.string.voice_punctuation_title) { Icons.Outlined.MoreHoriz }
         put(R.string.voice_engine_title) { Icons.Outlined.GraphicEq }
         put(R.string.voice_translate_title) { Icons.Outlined.Translate }

@@ -1523,6 +1523,15 @@ internal fun LayoutOneHandedSettings(
                 default = SettingsDefaults.oneHandedMode,
             ) { scope.launch { repository.setOneHandedMode(it) } }
         }
+        if (oneHanded) item {
+            ToggleSetting(
+                R.string.layout_one_handed_portrait_only_title,
+                stringResource(R.string.layout_one_handed_portrait_only_subtitle),
+                settings.watch { it.oneHanded.portraitOnly },
+                info = stringResource(R.string.layout_one_handed_portrait_only_info),
+                default = SettingsDefaults.oneHanded.portraitOnly,
+            ) { scope.launch { repository.setOneHandedPortraitOnly(it) } }
+        }
         val orientations = listOf(
             false to R.string.layout_orientation_portrait_label,
             true to R.string.layout_orientation_landscape_label,

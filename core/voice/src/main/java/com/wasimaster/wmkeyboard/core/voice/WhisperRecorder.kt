@@ -26,6 +26,15 @@ class WhisperRecorder(
     private val onLevel: (Float) -> Unit,
     private val onMaxReached: () -> Unit,
     private val onLost: () -> Unit = {},
+    /**
+     * How long the microphone may hear nothing, after it has heard speech,
+     * before the clip ends by itself (#500). 0, the default, records until
+     * [stop] or the window filling, as before. Measured in captured samples
+     * rather than wall time, so a stalled reader cannot end a clip early.
+     */
+    private val silenceStopMs: Int = 0,
+    /** The clip ended on a pause; the samples so far are there for [stop]. */
+    private val onSilence: () -> Unit = {},
 ) {
     private val maxSamples = WhisperMel.N_SAMPLES // 16 kHz * 30 s
     private val buffer = FloatArray(maxSamples)
@@ -88,6 +97,12 @@ class WhisperRecorder(
         // the capture buffer overruns, and a gap in the audio is a wrong word.
         runCatching { Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO) }
         val chunk = ShortArray(1600) // ~100 ms
+        // Silence stop (#500): armed by the first chunk loud enough to be
+        // speech, so the quiet before the user starts talking never ends the
+        // clip; then a run of quiet chunks of the asked length does.
+        val quietLimit = silenceStopMs.toLong() * WhisperMel.SAMPLE_RATE / 1000
+        var heard = false
+        var quiet = 0L
         while (running) {
             val n = r.read(chunk, 0, chunk.size)
             if (n < 0) {
@@ -110,6 +125,19 @@ class WhisperRecorder(
             if (room > 0) {
                 val rms = sqrt(sumSq / room).toFloat()
                 onLevel((rms * 6f).coerceIn(0f, 1f))
+                if (quietLimit > 0) {
+                    if (rms >= SPEECH_RMS) {
+                        heard = true
+                        quiet = 0
+                    } else if (heard) {
+                        quiet += room
+                        if (quiet >= quietLimit) {
+                            running = false
+                            onSilence()
+                            break
+                        }
+                    }
+                }
             }
             if (count >= maxSamples) {
                 running = false
@@ -117,6 +145,18 @@ class WhisperRecorder(
                 break
             }
         }
+    }
+
+    private companion object {
+        /**
+         * The RMS a 100 ms chunk must reach to count as speech for the
+         * silence stop. Speech into a phone held normally reads 0.03 and up
+         * on this scale; a quiet room's floor is under 0.005, and the pulse
+         * ring draws this as a tenth of its height. Fixed rather than adapted
+         * to the room: a floor that learns a fan's hum would also learn a
+         * speaker who trails off.
+         */
+        const val SPEECH_RMS = 0.015f
     }
 
     /** Stops capture and returns the samples recorded so far. Idempotent. */

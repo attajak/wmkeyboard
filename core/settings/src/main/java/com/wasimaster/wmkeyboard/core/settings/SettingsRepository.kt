@@ -530,11 +530,27 @@ data class OneHandedProfile(
 data class OneHandedSettings(
     val portrait: OneHandedProfile = OneHandedProfile(),
     val landscape: OneHandedProfile = OneHandedProfile(widthPercent = 55),
+    /**
+     * Hold one-handed mode back while the phone is sideways (#503): on, the
+     * keyboard is one-handed in portrait and whole in landscape, where the
+     * width is usually wanted for a split keyboard instead. Off by default.
+     * The mode itself stays as set, so rotating back brings it straight back.
+     */
+    val portraitOnly: Boolean = false,
 ) {
     /** The profile that applies for the current orientation. */
     fun forLandscape(landscape: Boolean): OneHandedProfile =
         if (landscape) this.landscape else portrait
 }
+
+/**
+ * The one-handed mode in force on a screen held [landscape] or upright:
+ * [KeyboardSettings.oneHandedMode], unless [OneHandedSettings.portraitOnly]
+ * holds it back in landscape (#503). Every reader of the mode that draws or
+ * toggles the board goes through this; the raw field is what the setting stores.
+ */
+fun KeyboardSettings.oneHandedModeFor(landscape: Boolean): OneHandedMode =
+    if (landscape && oneHanded.portraitOnly) OneHandedMode.OFF else oneHandedMode
 
 /** Where a width-reduced keyboard sits horizontally. */
 enum class KeyboardAlignment { LEFT, CENTER, RIGHT }
@@ -4563,6 +4579,9 @@ data class CameraSettings(
 /** What [VoiceBarSettings.holdToTalkMs] may be set to. */
 val HoldToTalkRange = 200..1500
 
+/** What [VoiceBarSettings.silenceStopMs] may be set to when it is on; 0 is off. */
+val VoiceSilenceStopRange = 500..4000
+
 data class VoiceBarSettings(
     /** What the voice tool opens: the full panel, the strip over the keys, or the collapsed bar. */
     val mode: String = MODE_PANEL,
@@ -4592,6 +4611,14 @@ data class VoiceBarSettings(
      * time with nothing to adjust.
      */
     val holdToTalkMs: Int = 600,
+    /**
+     * How long a pause ends a Whisper or transcription-server clip by itself
+     * (#500), in milliseconds; 0, the default, keeps recording until the
+     * microphone is pressed or the 30-second window fills. The system
+     * recognizer stops on a pause of its own accord and ignores this. See
+     * [VoiceSilenceStopRange].
+     */
+    val silenceStopMs: Int = 0,
     /**
      * A press and hold on the Voice tool while it is pinned to the toolbar
      * opens a menu of the three [typingMode]s, and picking one starts
@@ -6940,6 +6967,14 @@ data class SuggestionStripSettings(
      */
     val scrollable: Boolean = false,
     /**
+     * An emoji candidate takes one of the [slotCount] slots instead of riding
+     * after them (#413). On, the strip never shows more chips than the count
+     * asks for: the best emoji sits in the last slot and the words get one
+     * fewer. Off by default, which keeps the tail of up to four emoji after
+     * the words.
+     */
+    val emojiTakesSlot: Boolean = false,
+    /**
      * The colour the strip draws its primary word in: the bold one autocorrect
      * puts in for a space (#90). ARGB; null follows the theme's suggestion text.
      */
@@ -8133,6 +8168,7 @@ class SettingsRepository(private val context: Context) {
         private val FULL_WIDTH_SPACE_LANGUAGES = stringSetPreferencesKey("full_width_space_languages")
         private val CJK_HAN_REGION = stringPreferencesKey("cjk_han_region")
         private val ONE_HANDED_MODE = stringPreferencesKey("one_handed_mode")
+        private val ONE_HANDED_PORTRAIT_ONLY = booleanPreferencesKey("one_handed_portrait_only")
         // One-handed width leaves room for the rail on the inner edge, so it is
         // capped below 100%. Height scale never grows the keys, only shrinks.
         const val ONE_HANDED_WIDTH_MIN = 40
@@ -8401,6 +8437,7 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_BAR_EDGE_RIGHT = booleanPreferencesKey("voice_bar_edge_right")
         private val VOICE_BAR_Y_BIAS = floatPreferencesKey("voice_bar_y_bias")
         private val VOICE_BAR_DOCK_BIAS = floatPreferencesKey("voice_bar_dock_bias")
+        private val VOICE_SILENCE_STOP_MS = intPreferencesKey("voice_silence_stop_ms")
         private val VOICE_HOLD_TO_TALK_MS = intPreferencesKey("voice_hold_to_talk_ms")
         private val VOICE_HOLD_PICKS_MODE = booleanPreferencesKey("voice_hold_picks_mode")
         private val VOICE_PAUSE_MEDIA = booleanPreferencesKey("voice_pause_media")
@@ -8492,6 +8529,7 @@ class SettingsRepository(private val context: Context) {
         private val PUNCTUATION_CHIPS = stringPreferencesKey("punctuation_chips")
         private val SUGGESTION_SLOT_COUNT = intPreferencesKey("suggestion_slot_count")
         private val SUGGESTION_SCROLLABLE = booleanPreferencesKey("suggestion_scrollable")
+        private val SUGGESTION_EMOJI_TAKES_SLOT = booleanPreferencesKey("suggestion_emoji_takes_slot")
         private val SUGGESTION_PRIMARY_COLOR = longPreferencesKey("suggestion_primary_color")
         private val SUGGESTION_CHIP_PADDING = intPreferencesKey("suggestion_chip_padding")
         private val NUMPAD_CALCULATOR_LAYOUT = booleanPreferencesKey("numpad_calculator_layout")
@@ -9607,6 +9645,7 @@ class SettingsRepository(private val context: Context) {
         OneHandedSettings(
             portrait = readOneHandedProfile(p, landscape = false, defaults.oneHanded.portrait),
             landscape = readOneHandedProfile(p, landscape = true, defaults.oneHanded.landscape),
+            portraitOnly = p[ONE_HANDED_PORTRAIT_ONLY] ?: defaults.oneHanded.portraitOnly,
         )
 
     private fun readClipboard(p: Preferences, defaults: KeyboardSettings) =
@@ -9768,6 +9807,7 @@ class SettingsRepository(private val context: Context) {
             slotCount = p[SUGGESTION_SLOT_COUNT] ?: defaults.suggestionStrip.slotCount,
             textScale = p[SUGGESTION_TEXT_SCALE] ?: defaults.suggestionStrip.textScale,
             scrollable = p[SUGGESTION_SCROLLABLE] ?: defaults.suggestionStrip.scrollable,
+            emojiTakesSlot = p[SUGGESTION_EMOJI_TAKES_SLOT] ?: defaults.suggestionStrip.emojiTakesSlot,
             primaryColor = p[SUGGESTION_PRIMARY_COLOR] ?: defaults.suggestionStrip.primaryColor,
             chipPadding = p[SUGGESTION_CHIP_PADDING] ?: defaults.suggestionStrip.chipPadding,
             learnedWordMinCount = p[LEARNED_WORD_MIN_COUNT]
@@ -10185,6 +10225,7 @@ class SettingsRepository(private val context: Context) {
             yBias = p[VOICE_BAR_Y_BIAS] ?: defaults.voiceBar.yBias,
             dockBias = p[VOICE_BAR_DOCK_BIAS] ?: defaults.voiceBar.dockBias,
             holdToTalkMs = p[VOICE_HOLD_TO_TALK_MS] ?: defaults.voiceBar.holdToTalkMs,
+            silenceStopMs = p[VOICE_SILENCE_STOP_MS] ?: defaults.voiceBar.silenceStopMs,
             holdPicksTypingMode = p[VOICE_HOLD_PICKS_MODE] ?: defaults.voiceBar.holdPicksTypingMode,
             pauseMedia = p[VOICE_PAUSE_MEDIA] ?: defaults.voiceBar.pauseMedia,
             returnMode = p[VOICE_UI_RETURN_MODE] ?: defaults.voiceBar.returnMode,
@@ -14342,6 +14383,12 @@ class SettingsRepository(private val context: Context) {
         it[VOICE_HOLD_TO_TALK_MS] = value.coerceIn(HoldToTalkRange.first, HoldToTalkRange.last)
     }
 
+    /** 0 turns the pause off; anything else is held to [VoiceSilenceStopRange]. */
+    suspend fun setVoiceSilenceStopMs(value: Int) = editPrefs {
+        it[VOICE_SILENCE_STOP_MS] =
+            if (value <= 0) 0 else value.coerceIn(VoiceSilenceStopRange.first, VoiceSilenceStopRange.last)
+    }
+
     suspend fun setAiKeepChats(value: Boolean) = editPrefs { it[AI_KEEP_CHATS] = value }
 
     suspend fun setAiChatEnterSends(value: Boolean) =
@@ -15292,6 +15339,9 @@ class SettingsRepository(private val context: Context) {
     suspend fun setOneHandedSide(landscape: Boolean, value: OneHandedSide) =
         editPrefs { it[oneHandedSideKey(landscape)] = value.name }
 
+    suspend fun setOneHandedPortraitOnly(value: Boolean) =
+        editPrefs { it[ONE_HANDED_PORTRAIT_ONLY] = value }
+
     /**
      * Reads one orientation's one-handed profile. A missing dock side falls
      * back to the legacy global [ONE_HANDED_MODE] so users who had picked
@@ -15373,6 +15423,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSuggestionScrollable(value: Boolean) =
         editPrefs { it[SUGGESTION_SCROLLABLE] = value }
+
+    suspend fun setSuggestionEmojiTakesSlot(value: Boolean) =
+        editPrefs { it[SUGGESTION_EMOJI_TAKES_SLOT] = value }
 
     /** Null clears the key, so the strip follows the theme again (#90). */
     suspend fun setSuggestionPrimaryColor(value: Long?) =

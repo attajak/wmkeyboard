@@ -417,6 +417,7 @@ import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.MeteredFeature
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
+import com.wasimaster.wmkeyboard.core.settings.oneHandedModeFor
 import com.wasimaster.wmkeyboard.core.settings.BoardCorner
 import com.wasimaster.wmkeyboard.core.settings.BoardCornerRadiusRange
 import com.wasimaster.wmkeyboard.core.settings.LayoutBehaviorSettings
@@ -1954,7 +1955,7 @@ private fun DockedKeyboardFrame(
             val boardShape = remember(behavior.boardCornerTopDp, behavior.boardCornerBottomDp, behavior.boardCorners) {
                 boardCornerShape(behavior)
             }.takeUnless {
-                resize != null || (state.television && state.settings.oneHandedMode == OneHandedMode.OFF)
+                resize != null || (state.television && state.settings.oneHandedModeFor(landscape) == OneHandedMode.OFF)
             }
             Box(
                 modifier = Modifier
@@ -1970,7 +1971,7 @@ private fun DockedKeyboardFrame(
                 // A television draws the board as a card over the app (see
                 // [TelevisionCard]) and paints its own background, so the
                 // sides beside it stay clear.
-                val card = state.television && state.settings.oneHandedMode == OneHandedMode.OFF
+                val card = state.television && state.settings.oneHandedModeFor(landscape) == OneHandedMode.OFF
                 if (!card) {
                     BoardBackground(LocalKbTheme.current)
                     // Under the keys and over the board, so a theme that gives the
@@ -1985,7 +1986,9 @@ private fun DockedKeyboardFrame(
                 // their presentation spec long before this composition runs, so
                 // the resolved colours are reported out to it (#250).
                 InlineChipPaletteReport(LocalKbTheme.current)
-                val oneHanded = state.settings.oneHandedMode
+                // Through the orientation: portrait-only one-handed (#503) is
+                // off here when the phone is sideways, whatever is stored.
+                val oneHanded = state.settings.oneHandedModeFor(landscape)
                 val ohProfile = state.settings.oneHanded.forLandscape(landscape)
                 // Entering, leaving or flipping one-handed mode slides the board
                 // from where it was to where it now docks, instead of the keys
@@ -4205,6 +4208,17 @@ private fun TopBar(
                 // genuinely ambiguous — the composer offers a dozen candidates and
                 // picking among them *is* the typing. Splitting here rather than
                 // widening the shared row keeps the Latin strip exactly as it was.
+                // Issue #413: with the setting on, an emoji candidate is one of
+                // the slots the count asks for rather than a chip after them,
+                // so the strip never shows more than that number. The words
+                // give up one slot and the emoji takes it at the same width.
+                val emojiInSlot = state.settings.suggestionStrip.emojiTakesSlot &&
+                    shownEmojiSuggestions.isNotEmpty() && !shownInlineEmoji && !glideStripOnly
+                val wordSlots = if (emojiInSlot) {
+                    (state.settings.suggestionStrip.slotCount - 1).coerceAtLeast(1)
+                } else {
+                    state.settings.suggestionStrip.slotCount
+                }
                 if (shownInlineEmoji) {
                     // A ":tada" buffer: emoji, in the emoji font, as many as fit
                     // the scroll rather than the three slots words get.
@@ -4303,7 +4317,8 @@ private fun TopBar(
                         },
                         enabled = suggestionsShowing,
                         alpha = stripContentFade,
-                        slotCount = state.settings.suggestionStrip.slotCount,
+                        slotCount = wordSlots,
+                        weight = wordSlots.toFloat(),
                         textScale = state.settings.suggestionStrip.textScale,
                         scrollable = state.settings.suggestionStrip.scrollable,
                         textPadding = state.settings.suggestionStrip.chipPadding.dp,
@@ -4369,9 +4384,11 @@ private fun TopBar(
                             R.string.ime_emoji_suggestion_hold_keep
                         },
                     )
-                    for (emoji in shownEmojiSuggestions.take(4)) {
+                    for (emoji in shownEmojiSuggestions.take(if (emojiInSlot) 1 else 4)) {
                         Box(
                             modifier = Modifier
+                                // A slot of its own, the width of a word's (#413).
+                                .then(if (emojiInSlot) Modifier.weight(1f) else Modifier)
                                 .fillMaxHeight()
                                 .graphicsLayer { alpha = stripContentFade() }
                                 .combinedClickable(
@@ -4538,6 +4555,12 @@ private fun RowScope.LatinSuggestionChips(
     enabled: Boolean,
     alpha: () -> Float,
     slotCount: Int,
+    /**
+     * The chips' share of the row against the other weighted children: one
+     * per word slot when an emoji candidate holds a slot of its own (#413),
+     * so every slot, word or emoji, comes out the same width.
+     */
+    weight: Float = 1f,
     /** Multiplier on the suggestion text, from the settings slider. */
     textScale: Float,
     /**
@@ -4601,7 +4624,7 @@ private fun RowScope.LatinSuggestionChips(
     // every slot: they carry equal weight, so each is the same width.
     BoxWithConstraints(
         modifier = Modifier
-            .weight(1f)
+            .weight(weight)
             .fillMaxHeight()
             // Fades in a beat behind the emoji's slide as candidates arrive,
             // and out as they leave (see [stripContentAlpha]).
@@ -7106,6 +7129,7 @@ internal fun toolLabelRes(tool: ToolbarTool): Int = when (tool) {
 @Composable
 internal fun toolLabel(tool: ToolbarTool): String = stringResource(toolLabelRes(tool))
 
+@Composable
 private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = when (tool) {
     // With "open the last used" on, the emoji tool opens and closes all three
     // of emoji, GIFs and stickers (#366), so it is lit for any of them.
@@ -7118,7 +7142,11 @@ private fun toolActive(tool: ToolbarTool, state: KeyboardUiState): Boolean = whe
     ToolbarTool.SNIPPETS -> state.panel == PanelMode.SNIPPETS
     ToolbarTool.TEXT_EDIT -> state.panel == PanelMode.TEXT_EDIT
     ToolbarTool.TRACKPAD -> state.panel == PanelMode.TRACKPAD
-    ToolbarTool.ONE_HANDED -> state.settings.oneHandedMode != OneHandedMode.OFF
+    // Lit for the mode in force, not the stored one: portrait-only one-handed
+    // (#503) is off while the phone is sideways, and the tool says so.
+    ToolbarTool.ONE_HANDED -> state.settings.oneHandedModeFor(
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE,
+    ) != OneHandedMode.OFF
     ToolbarTool.SPLIT -> state.settings.splitKeyboard
     ToolbarTool.FLOATING -> state.settings.floatingKeyboard
     ToolbarTool.PERSISTENT -> state.settings.persistentKeyboard
@@ -12162,6 +12190,28 @@ internal fun shiftChordKey(target: Key): Key? = when (target.action) {
     else -> chordKey(target, KeyEvent.META_SHIFT_ON or KeyEvent.META_SHIFT_LEFT_ON)
 }
 
+/** Identity of the one bubble a chord drag raises; see [shiftChordPreview]. */
+private val ChordPreviewToken = Any()
+
+/**
+ * The preview bubble for [target] under a drag off [source] (#436): the capital
+ * the lift would type, over [cell], exactly as a tap on the key bubbles its
+ * letter. Dragging off shift was otherwise a blind reach, with the trail and a
+ * lit cell but no glyph until the finger came up. Null for anything but a shift
+ * drag onto a text key (a Ctrl chord has no glyph to show), and null while key
+ * previews are off, which is the same switch a tap's bubble answers to.
+ */
+private fun shiftChordPreview(source: Key?, target: Key, cell: Rect, enabled: Boolean): KeyPreview? {
+    if (!enabled || source?.action != KeyAction.Shift || target.action != KeyAction.Text) return null
+    val label = shiftChordKey(target)?.output ?: return null
+    return KeyPreview(
+        token = ChordPreviewToken,
+        label = label,
+        position = cell.topLeft,
+        size = IntSize(cell.width.roundToInt(), cell.height.roundToInt()),
+    )
+}
+
 /**
  * The layer a drag off [source] shows while the finger is down, or null when
  * that key is not one a drag can look through (issue #108).
@@ -14426,10 +14476,17 @@ private fun KeyRows(
                                 val now = rects.keyAt(change.position + boxOrigin)
                                 if (now !== over) {
                                     over = now
-                                    chordDrag.pressRect.value = now
+                                    val cell = now
                                         ?.takeIf(::fires)
                                         ?.let { rects.cellAt(change.position + boxOrigin) }
-                                        ?.translate(-boxOrigin)
+                                    chordDrag.pressRect.value = cell?.translate(-boxOrigin)
+                                    // The bubble a tap on this key would raise, over
+                                    // the key the lift will type (#436). One token,
+                                    // so moving on replaces it rather than stacking.
+                                    val bubble = cell?.let {
+                                        shiftChordPreview(source, now, it, state.settings.popup.enabled)
+                                    }
+                                    if (bubble != null) keyPreview.press(bubble) else keyPreview.cancel(ChordPreviewToken)
                                 }
                             }
                         }
@@ -14465,6 +14522,10 @@ private fun KeyRows(
                         chordDrag.active = false
                         chordDrag.shifted = false
                         chordDrag.pressRect.value = null
+                        // Released, not cancelled: the bubble gets the same short
+                        // minimum a tapped key's does, so the capital typed is
+                        // readable for a beat after the lift.
+                        keyPreview.release(ChordPreviewToken)
                         if (holdsShift) shiftHold.end()
                     }
                 }

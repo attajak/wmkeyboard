@@ -19311,14 +19311,26 @@ open class WMKeyboardService : InputMethodService() {
             ToolbarTool.TEXT_EDIT -> onPanelChange(PanelMode.TEXT_EDIT)
             ToolbarTool.TRACKPAD -> onPanelChange(PanelMode.TRACKPAD)
             ToolbarTool.SETTINGS -> openSettings()
-            ToolbarTool.ONE_HANDED -> onOneHandedChange(
-                if (settings.oneHandedMode == OneHandedMode.OFF) {
-                    // Enable on this orientation's preferred side.
-                    val landscape =
-                        resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-                    settings.oneHanded.forLandscape(landscape).side.toMode()
-                } else OneHandedMode.OFF
-            )
+            ToolbarTool.ONE_HANDED -> {
+                val landscape =
+                    resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                if (landscape && settings.oneHanded.portraitOnly) {
+                    // The setting holds the mode off sideways (#503), so a press
+                    // here would change nothing visible: say why instead.
+                    Toast.makeText(
+                        this,
+                        getString(R.string.ime_service_one_handed_portrait_only_toast),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                } else {
+                    onOneHandedChange(
+                        if (settings.oneHandedMode == OneHandedMode.OFF) {
+                            // Enable on this orientation's preferred side.
+                            settings.oneHanded.forLandscape(landscape).side.toMode()
+                        } else OneHandedMode.OFF,
+                    )
+                }
+            }
             ToolbarTool.SPLIT -> onToggleSplit()
             ToolbarTool.FLOATING -> onFloatingChange(!settings.floatingKeyboard)
             ToolbarTool.PERSISTENT -> onPersistentChange(!settings.persistentKeyboard)
@@ -20769,6 +20781,11 @@ open class WMKeyboardService : InputMethodService() {
                 finishWhisper(userStopped = false)
             },
             onLost = { onWhisperCaptureLost(generation) },
+            // A pause ends the clip the way it ends a sentence for the system
+            // recognizer (#500); with "Keep listening" off that also ends the
+            // session, which is the hands-free stop the setting is for.
+            silenceStopMs = _uiState.value.settings.voiceBar.silenceStopMs,
+            onSilence = { finishWhisper(userStopped = false) },
         )
         if (!recorder.start()) {
             _uiState.update {

@@ -693,6 +693,15 @@ internal fun TypingSuggestionsSettings(
         }
         item {
             ToggleSetting(
+                R.string.typing_suggestion_emoji_slot_title,
+                stringResource(R.string.typing_suggestion_emoji_slot_subtitle),
+                settings.watch { it.suggestionStrip.emojiTakesSlot },
+                info = stringResource(R.string.typing_suggestion_emoji_slot_info),
+                default = SettingsDefaults.suggestionStrip.emojiTakesSlot,
+            ) { scope.launch { repository.setSuggestionEmojiTakesSlot(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.typing_suggestion_scroll_title,
                 stringResource(R.string.typing_suggestion_scroll_subtitle),
                 scrollable,
