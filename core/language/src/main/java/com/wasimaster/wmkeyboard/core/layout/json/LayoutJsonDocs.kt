@@ -135,10 +135,19 @@ object LayoutJsonDocs {
         "action:space" to "Types a space. Holding it opens the language picker, unless the key has alternates.",
         "action:enter" to "Enter, or the field's own action, such as Send or Search.",
         "action:newline" to "Types a line break, and never the field's Send or Search action.",
+        "action:editor_action" to
+            "Fires the field's own action, Send or Search or Go, whatever Shift is doing. The enter key's hold uses it while a " +
+            "shift has turned the key itself into a line break.",
         "action:symbols" to "Goes from the letters to the symbols, and between the two symbol pages.",
         "action:letters" to "Goes straight back to the letters.",
         "action:language_switch" to "Goes to the next layout that is on.",
         "action:input_method_picker" to "Opens the system list of keyboards, to change to another keyboard app.",
+        "action:switch_input_method" to
+            "Hands the field straight to one keyboard app you name, with no list in between. A keyboard that is no longer on " +
+            "opens the system list instead, so the key is never dead.",
+        "action:switch_input_method.id" to
+            "The other keyboard's input method id, the package/.ServiceClass text the system files it under. Leave it blank and " +
+            "the key opens the system list.",
         "action:emoji" to "Opens the emoji panel.",
         "action:numpad" to "Opens the number pad. The keyboard makes this key by itself, and a layout does not use it.",
         "action:tool" to "Opens one of the keyboard's tools, the same as its toolbar button.",
