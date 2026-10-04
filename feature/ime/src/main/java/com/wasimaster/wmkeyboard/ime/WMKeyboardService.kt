@@ -12423,7 +12423,35 @@ open class WMKeyboardService : InputMethodService() {
         val split = caret.coerceIn(0, text.length)
         ic.commitText(text.substring(0, split), 1)
         val tail = text.substring(split)
-        if (tail.isNotEmpty()) ic.commitText(tail, 0)
+        if (tail.isEmpty()) return
+        ic.commitText(tail, 0)
+        parkCaretBeforeTail(ic, tail)
+    }
+
+    /**
+     * Some editors take no notice of `newCursorPosition` and leave the caret
+     * after whatever was committed (#471: Xed, FUTO Notes), so a `{cursor}`
+     * marker landed at the end of the snippet. Checked once the tail is in:
+     * when the caret is not in front of it but right behind it, it is walked
+     * back by hand. Only on this path — a snippet with a marker — so the extra
+     * reads cost nothing anywhere else, and nothing is moved unless the text
+     * behind the caret is exactly the tail, which also leaves a field that
+     * rewrote the text (a single-line box dropping newlines) alone.
+     */
+    private fun parkCaretBeforeTail(ic: InputConnection, tail: String) {
+        val after = runCatching { ic.getTextAfterCursor(tail.length, 0)?.toString() }.getOrNull()
+        if (after == null || after == tail) return
+        val before = runCatching { ic.getTextBeforeCursor(tail.length, 0)?.toString() }.getOrNull()
+        if (before != tail) return
+        val extracted = runCatching {
+            ic.getExtractedText(android.view.inputmethod.ExtractedTextRequest(), 0)
+        }.getOrNull()
+        if (extracted != null && extracted.selectionStart >= 0 && extracted.selectionStart == extracted.selectionEnd) {
+            val at = extracted.startOffset + extracted.selectionStart - tail.length
+            if (at >= 0 && ic.setSelection(at, at)) return
+        }
+        // No offsets to set: one left arrow per character of the tail.
+        repeat(tail.codePointCount(0, tail.length)) { sendDownUpKeyEvents(KeyEvent.KEYCODE_DPAD_LEFT) }
     }
 
     /**

@@ -514,7 +514,9 @@ private fun ClipTabRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 6.dp, end = 6.dp, top = 6.dp),
+            // A margin under the tabs as well: without it a card scrolled up
+            // under the row ran straight into the buttons (#414).
+            .padding(start = 6.dp, end = 6.dp, top = 6.dp, bottom = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         for ((index, tab) in ClipTab.entries.withIndex()) {
@@ -1289,6 +1291,10 @@ private fun ClipCard(
     var showInfo by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
+            // The whole column, whatever the text: the swipe wrapper is a plain
+            // Box and hands its child no minimum width, so a clip of one short
+            // word shrank to it and the grid looked broken (#414).
+            .fillMaxWidth()
             .clipSurface(LocalKbTheme.current, item, focused, outlined, callbacks) { showInfo = true }
             // An image card insets less: the picture is the content.
             .padding(if (item.kind == ClipKind.IMAGE || item.kind == ClipKind.VIDEO) 5.dp else 10.dp),

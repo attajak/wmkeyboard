@@ -528,7 +528,7 @@ internal fun EmojiSearchPanel(
     // not resize the window.
     val strip = captureStripHeight(state)
     val wanted = if (fullBleed) {
-        EmojiSearchPanelHeight + fullBleedHiddenRows(state) - strip
+        EmojiSearchPanelHeight + fullBleedHiddenRows(state, macroRowAtPanelOpen(state)) - strip
     } else {
         EmojiSearchPanelHeight + topBarHeight(state.settings) + barCompensation - strip
     }

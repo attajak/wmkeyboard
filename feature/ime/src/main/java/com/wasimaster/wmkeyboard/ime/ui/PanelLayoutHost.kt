@@ -283,7 +283,7 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
     // keyboard, up to what the screen can give it, and the bar on top drags it.
     val clipboard = state.settings.clipboard
     val resize = rememberClipPanelResize(clipboard.panelExtraHeightDp)
-    val base = if (clipboard.fullBleed) keyRowsHeight(state) + fullBleedHiddenRows(state) else keyRowsHeight(state)
+    val base = if (clipboard.fullBleed) keyRowsHeight(state) + fullBleedHiddenRows(state, macroRowAtPanelOpen(state)) else keyRowsHeight(state)
     val maxPanel = toolPanelHeight(state, wanted = base + ClipPanelExtraHeightRange.last.dp, floor = base)
     val maxExtra = (maxPanel - base).coerceAtLeast(0.dp)
     val extra = resize.shownDp(clipboard.panelExtraHeightDp).dp.coerceIn(0.dp, maxExtra)
@@ -327,7 +327,10 @@ internal fun ClipboardPanelHost(state: KeyboardUiState, callbacks: PanelLayoutCa
                                 Box(
                                     modifier = cell
                                         .fillMaxHeight()
-                                        .padding(horizontal = 2.dp),
+                                        // Clear of the header's edges the way its
+                                        // circles are, so the pill no longer sits
+                                        // on the cards scrolled up under it (#414).
+                                        .padding(horizontal = 2.dp, vertical = 4.dp),
                                 ) { fields(kind) }
                             }
                         }

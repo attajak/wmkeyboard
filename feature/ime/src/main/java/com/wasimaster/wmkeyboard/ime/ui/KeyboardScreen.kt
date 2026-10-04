@@ -9787,7 +9787,16 @@ private fun isFullBleedPanel(panel: PanelMode, settings: KeyboardSettings): Bool
  * keyboard window. Shared with the scanner panels, which draw their own
  * chrome instead of using [FullBleedTool].
  */
-internal fun fullBleedHiddenRows(state: KeyboardUiState): Dp =
+internal fun fullBleedHiddenRows(
+    state: KeyboardUiState,
+    /**
+     * Whether the selection macro row counts. Callers pass
+     * [macroRowAtPanelOpen]: the row as it was when the panel opened, not as
+     * it is now. Counting it live grew the panel by a row the moment text was
+     * selected under an open clipboard, and the keyboard jumped (#414).
+     */
+    macroRow: Boolean = selectionMacroBarVisible(state),
+): Dp =
     // The strip, unless it has given its row up to the tools' (#302).
     (if (state.settings.toolbarBehavior.stripHidden) 0.dp else topBarHeight(state.settings)) +
         // An always-open tools row is one more strip's worth hidden under the
@@ -9813,14 +9822,21 @@ internal fun fullBleedHiddenRows(state: KeyboardUiState): Dp =
         // can be counted: whether it is on screen is in the ui state this
         // function already has.
         (
-            if (state.settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
-                selectionMacroBarVisible(state)
-            ) {
+            if (state.settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW && macroRow) {
                 topBarHeight(state.settings)
             } else {
                 0.dp
             }
             )
+
+/**
+ * Whether the selection macro row was showing when the open panel opened
+ * (#414). Remembered per panel, so a selection made or dropped while the panel
+ * is up leaves the panel's height where it was.
+ */
+@Composable
+internal fun macroRowAtPanelOpen(state: KeyboardUiState): Boolean =
+    remember(state.panel) { selectionMacroBarVisible(state) }
 
 /**
  * Chrome for a full-bleed tool: a slim header (back button + tool name)
@@ -9866,7 +9882,7 @@ internal fun FullBleedTool(
         // just that has nothing left to give, and the strip costs height.
         toolPanelHeight(state, wanted = compactHeight - captureStripHeight(state), floor = FullBleedHeaderHeight)
     } else {
-        val board = keyRowsHeight(state) + fullBleedHiddenRows(state)
+        val board = keyRowsHeight(state) + fullBleedHiddenRows(state, macroRowAtPanelOpen(state))
         toolPanelHeight(state, wanted = board + extraHeight, floor = board)
     }
     Column(
@@ -9912,8 +9928,13 @@ internal fun FullBleedTool(
     }
 }
 
-/** The slim header every full-bleed tool draws, and the floor its height has. */
-internal val FullBleedHeaderHeight = 40.dp
+/**
+ * The slim header every full-bleed tool draws, and the floor its height has.
+ * Four dp clear of the 38 dp tool circles above and below: at 40 the back
+ * button sat on the keyboard's top edge with one dp to spare, which read as
+ * no gap at all (#414).
+ */
+internal val FullBleedHeaderHeight = 46.dp
 
 /**
  * The height a panel over the keyboard gets, fitted to the screen by
@@ -9929,7 +9950,7 @@ internal val FullBleedHeaderHeight = 40.dp
 internal fun toolPanelHeight(state: KeyboardUiState, wanted: Dp, floor: Dp): Dp {
     val rowsStandIn = barFullBleed(state) || barClipboardSearching(state) ||
         (state.panel == PanelMode.EMOJI && state.emojiSearchActive)
-    val around = (if (rowsStandIn) 0.dp else fullBleedHiddenRows(state)) +
+    val around = (if (rowsStandIn) 0.dp else fullBleedHiddenRows(state, macroRowAtPanelOpen(state))) +
         (if (keyRowsUnderPanel(state)) keyRowsHeight(state) + captureStripHeight(state) else 0.dp) +
         bottomPaddingDp(state.settings).dp
     return fitToolPanelHeight(wanted, floor, LocalConfiguration.current.screenHeightDp.dp, around)
@@ -10339,9 +10360,10 @@ private fun KeyboardBody(
             // anything to draw is the animated half, below.
             val macroRowHost = state.settings.selectionMacros.enabled &&
                 state.settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
-                // The panel carries Undo and the stepping itself; two rows
-                // moving the same selection would fight over it.
-                state.panel != PanelMode.FIND_REPLACE &&
+                // No panel open: a row appearing over one the moment text
+                // is selected moves the whole keyboard (#414), and the find
+                // panel carries Undo and the stepping itself.
+                state.panel == PanelMode.NONE &&
                 !fullBleed && !emojiSearching && !clipboardSearching && !lockHidden
             // Disabling the toolbar drops the whole strip — suggestions and
             // tools alike — so the keys claim its height.
@@ -10644,7 +10666,7 @@ private fun KeyboardBody(
                             }
                         },
                         compact = searching,
-                        compactHeight = 44.dp,
+                        compactHeight = FullBleedHeaderHeight,
                         headerActions = {
                             if (searching) {
                                 SnippetHeaderSearchBar(state, snippetPanel.onSearchToggle)
@@ -10869,7 +10891,7 @@ private fun KeyboardBody(
                     // While the query types on the key rows below, only the
                     // header (with its search bar) needs to stay visible.
                     compact = state.dictionarySearchActive,
-                    compactHeight = 44.dp,
+                    compactHeight = FullBleedHeaderHeight,
                     headerActions = {
                         DictionaryHeaderSearchBar(
                             state = state,

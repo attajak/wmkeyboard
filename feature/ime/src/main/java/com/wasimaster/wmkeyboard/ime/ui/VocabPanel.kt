@@ -125,7 +125,7 @@ internal fun VocabPanelHost(
         title = "",
         onClose = { if (vocab.stack.isNotEmpty()) callbacks.onBack() else onPanelChange(PanelMode.VOCABULARY) },
         compact = state.mediaSearchActive,
-        compactHeight = 44.dp,
+        compactHeight = FullBleedHeaderHeight,
         headerActions = {
             VocabHeader(state, callbacks, onQueryTap)
         },
