@@ -76,6 +76,9 @@
     <string name="clipboard_card_buttons_title">Pin and delete buttons</string>
     <string name="clipboard_card_buttons_subtitle">Show a pin and a bin on every clip</string>
     <string name="clipboard_card_buttons_info">With this setting off, press and hold a clip to pin or delete it from its popup. A card also loses the row the buttons sat on, unless the row still shows the clip\'s number, its time or a rich text tag, so more clips fit in the panel. This setting is on by default.</string>
+    <string name="clipboard_type_out_title">Type out pasted clips</string>
+    <string name="clipboard_type_out_subtitle">Paste a clip one character at a time, as if typed</string>
+    <string name="clipboard_type_out_info">The text appears letter by letter, the way a one-time code goes into a row of code boxes. A clip longer than 200 characters is pasted all at once. Codes are typed out either way, from the One-time codes setting. This setting is off by default.</string>
     <string name="clipboard_panel_height_title">Panel height</string>
     <string name="clipboard_panel_height_subtitle">How much taller than the keyboard the clipboard panel opens</string>
     <string name="clipboard_panel_height_info">You can also drag the bar on top of the clipboard panel up or down. A taller panel shows more clips, so there is less to scroll. The panel never covers more than most of the screen, so on a short screen, or with the phone sideways, it can stay shorter than this. The default is the keyboard\'s own height.</string>

@@ -928,6 +928,15 @@ internal fun ClipboardSettings(
         }
         item {
             ToggleSetting(
+                R.string.clipboard_type_out_title,
+                stringResource(R.string.clipboard_type_out_subtitle),
+                settings.watch { it.clipboard.typeOutPastes },
+                info = stringResource(R.string.clipboard_type_out_info),
+                default = SettingsDefaults.clipboard.typeOutPastes,
+            ) { scope.launch { repository.setClipboardTypeOutPastes(it) } }
+        }
+        item {
+            ToggleSetting(
                 R.string.clipboard_swipe_delete_title,
                 stringResource(R.string.clipboard_swipe_delete_subtitle),
                 settings.watch { it.clipboard.swipeToDelete },

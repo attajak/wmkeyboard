@@ -82,6 +82,7 @@ import com.wasimaster.wmkeyboard.core.media.MediaMime
 import com.wasimaster.wmkeyboard.core.netlog.InternetPermission
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
+import com.wasimaster.wmkeyboard.core.settings.ClipTypeOutMaxChars
 import com.wasimaster.wmkeyboard.core.settings.switchLayoutIds
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.LauncherOpenMode
@@ -11885,13 +11886,32 @@ open class WMKeyboardService : InputMethodService() {
             commitToField(code)
             return
         }
+        commitCharacterByCharacter(code)
+    }
+
+    /**
+     * Types [text] into the field one character at a time, at the code's own
+     * pace. Shared by [commitCodeToField] and the typed-out paste of
+     * [ClipboardSettings.typeOutPastes] (#418).
+     *
+     * Steps by grapheme cluster, not by `Char`: a code is ASCII, but a pasted
+     * clip can hold an emoji or a combining mark, and committing half a
+     * surrogate pair or a base letter without its accent puts something in the
+     * field that was never in the clip.
+     */
+    private fun commitCharacterByCharacter(text: String) {
         currentInputConnection?.let { commitComposing(it, autocorrect = false) }
         codeEntryJob?.cancel()
         codeEntryJob = serviceScope.launch {
-            for (character in code) {
+            val clusters = java.text.BreakIterator.getCharacterInstance().apply { setText(text) }
+            var start = clusters.first()
+            var end = clusters.next()
+            while (end != java.text.BreakIterator.DONE) {
                 val ic = currentInputConnection ?: break
-                commitTypedCharacter(ic, character.toString())
+                commitTypedCharacter(ic, text.substring(start, end))
                 delay(CODE_ENTRY_STEP_MS)
+                start = end
+                end = clusters.next()
             }
         }
     }
@@ -30681,12 +30701,17 @@ open class WMKeyboardService : InputMethodService() {
             }
             // A clip that is nothing but a code is pasted into a code box far
             // more often than anywhere else, so it goes in character by
-            // character like the chips do.
-            else -> if (ClipSensitivity.isBareCode(item.text.trim())) {
-                pastedCodeClipId = item.id
-                commitCodeToField(item.text.trim())
-            } else {
-                commitToField(item.text)
+            // character like the chips do. Any other clip goes in the same
+            // way when the user asked for the typed-out effect (#418), up to
+            // a length where the effect would become a wait.
+            else -> when {
+                ClipSensitivity.isBareCode(item.text.trim()) -> {
+                    pastedCodeClipId = item.id
+                    commitCodeToField(item.text.trim())
+                }
+                _uiState.value.settings.clipboard.typeOutPastes &&
+                    item.text.length in 2..ClipTypeOutMaxChars -> commitCharacterByCharacter(item.text)
+                else -> commitToField(item.text)
             }
         }
         // Whether tapped from the panel or the strip chip, the recent-copy chip

@@ -5598,12 +5598,28 @@ data class ClipboardSettings(
      */
     val cardButtons: Boolean = true,
     /**
+     * Type a pasted clip into the field one character at a time, the way a
+     * one-time code goes into a row of boxes, instead of committing it whole
+     * (#418). Asked for as an effect: the text appears as if typed. Off by
+     * default. Clips longer than [ClipTypeOutMaxChars] are pasted whole, so a
+     * page of text does not take a minute to arrive.
+     */
+    val typeOutPastes: Boolean = false,
+    /**
      * How much taller than the keyboard the clipboard panel opens, in dp
      * (#414), set by dragging the bar on top of the panel. 0, the default, is
      * the keyboard's own height. See [ClipPanelExtraHeightRange].
      */
     val panelExtraHeightDp: Int = 0,
 )
+
+/**
+ * The longest clip [ClipboardSettings.typeOutPastes] types out character by
+ * character; a longer one is pasted whole. At the forty-millisecond step a
+ * code uses, this is eight seconds of typing, which is already the far end
+ * of an effect.
+ */
+const val ClipTypeOutMaxChars: Int = 200
 
 /**
  * Emoji behaviour split off into its own object because [KeyboardSettings]
@@ -8186,6 +8202,7 @@ class SettingsRepository(private val context: Context) {
         private val CLIPBOARD_PINNED_TABS = booleanPreferencesKey("clipboard_pinned_tabs")
         private val CLIPBOARD_OUTLINE_PINNED = booleanPreferencesKey("clipboard_outline_pinned")
         private val CLIPBOARD_CARD_BUTTONS = booleanPreferencesKey("clipboard_card_buttons")
+        private val CLIPBOARD_TYPE_OUT_PASTES = booleanPreferencesKey("clipboard_type_out_pastes")
         private val CLIPBOARD_PANEL_EXTRA_HEIGHT_DP = intPreferencesKey("clipboard_panel_extra_height_dp")
         private val OTP_CHIP_ENABLED = booleanPreferencesKey("otp_chip_enabled")
         // Stored under its old name: the test behind it grew from "number
@@ -9643,6 +9660,7 @@ class SettingsRepository(private val context: Context) {
             pinnedTabs = p[CLIPBOARD_PINNED_TABS] ?: defaults.clipboard.pinnedTabs,
             outlinePinned = p[CLIPBOARD_OUTLINE_PINNED] ?: defaults.clipboard.outlinePinned,
             cardButtons = p[CLIPBOARD_CARD_BUTTONS] ?: defaults.clipboard.cardButtons,
+            typeOutPastes = p[CLIPBOARD_TYPE_OUT_PASTES] ?: defaults.clipboard.typeOutPastes,
             panelExtraHeightDp = p[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP]?.coerceIn(ClipPanelExtraHeightRange)
                 ?: defaults.clipboard.panelExtraHeightDp,
         )
@@ -15449,6 +15467,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setClipboardCardButtons(value: Boolean) =
         editPrefs { it[CLIPBOARD_CARD_BUTTONS] = value }
+
+    suspend fun setClipboardTypeOutPastes(value: Boolean) =
+        editPrefs { it[CLIPBOARD_TYPE_OUT_PASTES] = value }
 
     suspend fun setClipboardPanelExtraHeightDp(value: Int) =
         editPrefs { it[CLIPBOARD_PANEL_EXTRA_HEIGHT_DP] = value.coerceIn(ClipPanelExtraHeightRange) }
