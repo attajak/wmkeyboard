@@ -199,6 +199,15 @@ interface Composer {
     fun composeBuffer(buffer: String): String = buffer
 
     /**
+     * What Enter commits for a conversion reading: the reading itself,
+     * converted to nothing (#514, #515). Japanese gives the kana the user sees,
+     * which is how a kana IME confirms hiragana it is not asked to convert.
+     * The default is [composeBuffer]; a composer whose composing region shows
+     * something other than the keys pressed answers with the keys instead.
+     */
+    fun typedReading(buffer: String): String = composeBuffer(buffer)
+
+    /**
      * What a key typing [key] would write, given the roman [buffer] already
      * composing — the ক a `k` writes at a word start, and after a consonant
      * either the ্ক it adds or the ক্ক that leaves ([wholeCluster]). The

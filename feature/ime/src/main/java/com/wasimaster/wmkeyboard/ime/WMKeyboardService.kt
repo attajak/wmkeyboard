@@ -10970,6 +10970,13 @@ open class WMKeyboardService : InputMethodService() {
         // never to the app behind the panel.
         if (captureEnter()) return
         val ic = currentInputConnection ?: return
+        // A conversion reading still waiting: Enter confirms it as typed, and
+        // that is all it does — the hiragana or the letters, no candidate, no
+        // newline, no send (#514, #515). Space and a tapped candidate convert.
+        if (composing.isNotEmpty() && state.composer.isConversion) {
+            commitConversionAsTyped(ic)
+            return
+        }
         // Whether this ends up a newline or an editor action, it ends the
         // word the same way a space does, autocorrect included. A word ended
         // by Enter was typed exactly like one ended by space, and committing
@@ -13424,6 +13431,18 @@ open class WMKeyboardService : InputMethodService() {
             ic.commitText(chosen, 1)
             composing.delete(0, consumed)
         }
+        afterConversionFlushed()
+    }
+
+    /** Enter's side of a conversion reading: commits [Composer.typedReading] whole. */
+    private fun commitConversionAsTyped(ic: InputConnection) {
+        ic.commitText(_uiState.value.composer.typedReading(composing.toString()), 1)
+        consumeShift()
+        afterConversionFlushed()
+    }
+
+    /** The buffer is spent: clears it and turns the strip to next-word suggestions. */
+    private fun afterConversionFlushed() {
         composing = StringBuilder()
         val (nextWords, nextEmojis) = nextWordStrip()
         _uiState.update {

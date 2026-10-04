@@ -528,6 +528,17 @@ class CjkComposerTest {
     }
 
     @Test
+    fun `enter writes the keys pressed, the region shows the pinyin`() {
+        // #514: the composing line reads nihao, Enter writes nihc.
+        PinyinSyllables.valid = setOf("ni", "hao")
+        CjkConfig.doublePinyin = DoublePinyinScheme.XIAOHE
+        assertEquals("nihao", PinyinComposer.composeBuffer("nihc"))
+        assertEquals("nihc", PinyinComposer.typedReading("nihc"))
+        // #515: Japanese confirms the kana, never the romaji behind it.
+        assertEquals("かな", JapaneseComposer.typedReading("kana"))
+    }
+
+    @Test
     fun `double pinyin survives an apostrophe`() {
         // An apostrophe means nothing in Double Pinyin — a syllable is always
         // two keys — but the user can still type one, and stepping blindly by two

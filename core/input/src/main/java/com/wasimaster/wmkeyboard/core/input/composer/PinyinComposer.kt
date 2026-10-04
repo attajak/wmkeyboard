@@ -69,6 +69,13 @@ object PinyinComposer : Composer {
         else buffer.lowercase()
     }
 
+    /**
+     * The keys as pressed. In Double Pinyin the composing region shows the
+     * pinyin they spell (`nihc` as *nihao*), but Enter is "write what I typed",
+     * so it is what goes in (#514). In full pinyin the two are the same.
+     */
+    override fun typedReading(buffer: String): String = buffer
+
     override fun candidates(buffer: String): List<String> = candidates(buffer, LIMIT)
 
     override fun candidates(buffer: String, limit: Int): List<String> =
