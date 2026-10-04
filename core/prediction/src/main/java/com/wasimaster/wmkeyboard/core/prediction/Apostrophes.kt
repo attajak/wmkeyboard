@@ -141,7 +141,7 @@ object Apostrophes {
         "bin", "bleibt", "braucht", "fehlt", "gab", "gefällt", "geht", "gibt",
         "ging", "hab", "hat", "hilft", "hört", "ist", "kann", "klappt", "kommt",
         "kriegt", "läuft", "lohnt", "mach", "macht", "mag", "nimmt", "passt",
-        "regnet", "reicht", "sag", "soll", "steht", "stimmt", "tut", "versuch",
+        "regnet", "reicht", "sag", "sieht", "soll", "steht", "stimmt", "tut", "versuch",
         "war", "wär", "will", "wird", "zeig",
     ).associate { verb -> verb + "s" to "$verb's" }
 

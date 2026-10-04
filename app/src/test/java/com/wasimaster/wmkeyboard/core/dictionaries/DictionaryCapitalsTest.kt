@@ -84,4 +84,19 @@ class DictionaryCapitalsTest {
         assertNull(engine.shouldAutocorrect("gift"))
         assertEquals("Haus", engine.shouldAutocorrect("haus"))
     }
+
+    /** #517: English's bundled list is lower case, so its capitals ship beside it. */
+    @Test fun theBundledCapitalsNameTheDaysForTheBundledList() {
+        val english = PackedTrie.of(listOf("monday" to 100, "london" to 100, "will" to 100))
+        val shipped = DictionaryCapitals.ofSpellings(sequenceOf("# comment", "Monday", "London", ""))!!
+        val engine = SuggestionEngine(english, BengaliPhoneticIndex(emptyList()), UserLexicon(null)).apply {
+            primaryLanguageId = "en"
+            bundledCapitals = mapOf("en" to shipped)
+        }
+        assertEquals("Monday", engine.shouldAutocorrect("monday"))
+        assertEquals("London", engine.shouldAutocorrect("london"))
+        assertNull(engine.shouldAutocorrect("will"))
+        engine.dictionaryCapitalsEnabled = false
+        assertNull(engine.shouldAutocorrect("monday"))
+    }
 }
