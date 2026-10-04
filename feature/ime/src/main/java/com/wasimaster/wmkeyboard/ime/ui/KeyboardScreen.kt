@@ -4230,22 +4230,33 @@ private fun TopBar(
                     return@StripSlot
                 }
                 if (recentClipChip && smart == null) {
-                    ClipboardSuggestionChip(
-                        clip = recentClip,
-                        otp = chipOtp,
-                        onPaste = {
-                            if (chipOtp != null) onClipboardEntity(chipOtp)
-                            else onClipboardSuggestion(recentClip)
-                        },
-                        onDismiss = onClipboardSuggestionDismiss,
-                        stretch = !clipChipShares,
-                        modifier = if (clipChipShares) {
-                            Modifier.widthIn(max = 160.dp).padding(horizontal = 4.dp)
-                        } else {
-                            Modifier.weight(1f).padding(horizontal = 4.dp)
-                        },
-                    )
-                    if (!clipChipShares) return@StripSlot
+                    val clipChip = @Composable { chipModifier: Modifier ->
+                        ClipboardSuggestionChip(
+                            clip = recentClip,
+                            otp = chipOtp,
+                            onPaste = {
+                                if (chipOtp != null) onClipboardEntity(chipOtp)
+                                else onClipboardSuggestion(recentClip)
+                            },
+                            onDismiss = onClipboardSuggestionDismiss,
+                            modifier = chipModifier,
+                        )
+                    }
+                    if (clipChipShares) {
+                        clipChip(Modifier.widthIn(max = 160.dp).padding(horizontal = 4.dp))
+                    } else {
+                        // Alone on the strip it still sizes to what it holds
+                        // (#519): a four-letter copy is a short pill, not a bar
+                        // with the ✕ a screen away. The Box keeps the rest of
+                        // the row where a full-width chip would have left it.
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight(),
+                            contentAlignment = Alignment.CenterStart,
+                        ) {
+                            clipChip(Modifier.widthIn(max = ClipChipMaxWidth).padding(horizontal = 4.dp))
+                        }
+                        return@StripSlot
+                    }
                 }
                 // Nothing typed yet: the replies are the strip, so they take the
                 // rest of the row and carry the dismiss ✕ the way the autofill lane
@@ -5241,6 +5252,9 @@ private fun CandidateGridPanel(
     }
 }
 
+/** Widest the paste chip grows on an otherwise empty strip; longer copies ellipsize (#519). */
+private val ClipChipMaxWidth = 280.dp
+
 /** Row height in the expanded grid — a comfortable tap target for one glyph. */
 private val CandidateGridRowHeight = 44.dp
 
@@ -5261,7 +5275,6 @@ private fun ClipboardSuggestionChip(
     onPaste: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    stretch: Boolean = false,
     /** Set when the chip offers a code out of [clip] rather than all of it. */
     otp: ClipEntity? = null,
     /** False for a chip in the row of recent copies (#414), which shares one ✕ for the row. */
@@ -5313,7 +5326,7 @@ private fun ClipboardSuggestionChip(
     ) {
         Row(
             modifier = Modifier
-                .weight(1f, fill = stretch)
+                .weight(1f, fill = false)
                 .fillMaxHeight()
                 .clickable {
                     feedback()
