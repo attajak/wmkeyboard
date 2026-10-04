@@ -180,6 +180,7 @@ import com.wasimaster.wmkeyboard.core.prediction.ContactEmails
 import com.wasimaster.wmkeyboard.core.prediction.ContactNames
 import com.wasimaster.wmkeyboard.core.prediction.Elisions
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
+import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCapitals
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
 import com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager
 import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
@@ -4193,6 +4194,7 @@ open class WMKeyboardService : InputMethodService() {
                 skipAllCapsAutocorrect = _uiState.value.settings.correction.skipAllCaps
                 dictionaryCapitalsEnabled = _uiState.value.settings.correction.dictionaryCapitals
                 dictionaryCapitals = loadDictionaryCapitals()
+                bundledCapitals = loadBundledCapitals()
                 learnedWordMinCount =
                     _uiState.value.settings.suggestionStrip.learnedWordMinCount
                 autocorrectSplits = _uiState.value.settings.suggestionStrip.autocorrectSplits
@@ -33316,6 +33318,18 @@ open class WMKeyboardService : InputMethodService() {
             .filter { shippedDictionaryEnabled(it) }
             .mapNotNull { id -> MappedTrie.open(DictionaryStore.capitalsFile(filesDir, id))?.let { id to it } }
             .toMap()
+    }
+
+    /**
+     * The capitals shipped for English's bundled list, which spells nothing
+     * with one (#517): Monday, London, iPhone. Read from the APK, so a locked
+     * boot has them too. Small enough to hold on the heap.
+     */
+    private fun loadBundledCapitals(): Map<String, WordSource> {
+        val shipped = runCatching {
+            assets.open("dictionaries/en_caps.txt").bufferedReader().useLines { DictionaryCapitals.ofSpellings(it) }
+        }.getOrNull() ?: return emptyMap()
+        return mapOf("en" to shipped)
     }
 
     /**

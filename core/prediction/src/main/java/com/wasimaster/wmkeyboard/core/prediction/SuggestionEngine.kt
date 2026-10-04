@@ -559,6 +559,15 @@ class SuggestionEngine(
     @Volatile
     var dictionaryCapitals: Map<String, WordSource> = emptyMap()
 
+    /**
+     * Capitals shipped with the app for a language whose bundled list has
+     * none (#517): English's is all lower case, so without a download "monday"
+     * and "london" never got their capital. Asked after [dictionaryCapitals],
+     * so a downloaded list that spells a word its own way still decides it.
+     */
+    @Volatile
+    var bundledCapitals: Map<String, WordSource> = emptyMap()
+
     /** The user's switch over [dictionaryCapitals]. */
     @Volatile
     var dictionaryCapitalsEnabled: Boolean = true
@@ -3312,13 +3321,17 @@ class SuggestionEngine(
      */
     private fun listSpelling(key: String): String? {
         val all = dictionaryCapitals
-        if (!dictionaryCapitalsEnabled || all.isEmpty()) return null
-        all[primaryLanguageId.ifBlank { EN }]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+        val bundled = bundledCapitals
+        if (!dictionaryCapitalsEnabled || (all.isEmpty() && bundled.isEmpty())) return null
+        fun spelled(lang: String): String? =
+            all[lang]?.let { DictionaryCapitals.spelling(it, key) }
+                ?: bundled[lang]?.let { DictionaryCapitals.spelling(it, key) }
+        spelled(primaryLanguageId.ifBlank { EN })?.let { return it }
         if (activeDictionary.contains(key) || customDictionary.contains(key)) return null
         for (secondary in secondaryDictionaries) {
-            all[secondary.langId]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+            spelled(secondary.langId)?.let { return it }
         }
-        if (englishAsSecondary) all[EN]?.let { DictionaryCapitals.spelling(it, key) }?.let { return it }
+        if (englishAsSecondary) spelled(EN)?.let { return it }
         return null
     }
 

@@ -65,6 +65,16 @@ object DictionaryCapitals {
         return Folded(pack(shapes))
     }
 
+    /**
+     * The capitals of a plain list of spellings, one a line, `#` for a
+     * comment: what the app ships for a bundled list that has none (#517).
+     */
+    fun ofSpellings(lines: Sequence<String>): PackedTrie? {
+        val words = lines.map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
+            .toList<String?>().toTypedArray()
+        return fold(words, words.size).capitals
+    }
+
     private fun pack(shapes: Map<String, Int>): PackedTrie? {
         val kept = shapes.filterValues { it > 0 }
         if (kept.isEmpty()) return null
