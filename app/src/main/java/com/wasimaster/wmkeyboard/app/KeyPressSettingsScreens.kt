@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import com.wasimaster.wmkeyboard.core.addons.AddonType
+import com.wasimaster.wmkeyboard.core.settings.AlternateGroup
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.BackspaceSwipeUnit
 import androidx.compose.material.icons.outlined.Delete
@@ -812,6 +813,26 @@ internal fun KeyPressSettings(
                 info = stringResource(R.string.keypress_alternates_nearest_info),
                 default = SettingsDefaults.popup.alternatesNearestFirst,
             ) { scope.launch { repository.setAlternatesNearestFirst(it) } }
+        }
+        item {
+            // Issue #385: which group a letter's popup leads with.
+            ControlSetting(
+                R.string.keypress_alternates_order_title,
+                subtitle = stringResource(R.string.keypress_alternates_order_subtitle),
+                info = stringResource(R.string.keypress_alternates_order_info),
+            ) {
+                val names = mapOf(
+                    AlternateGroup.LAYOUT to stringResource(R.string.keypress_alternates_group_layout),
+                    AlternateGroup.ACCENTS to stringResource(R.string.keypress_alternates_group_accents),
+                    AlternateGroup.SHIFTED to stringResource(R.string.keypress_alternates_group_shifted),
+                )
+                ReorderableColumn(
+                    items = settings.watch { it.popup.alternatesOrder },
+                    label = { names[it].orEmpty() },
+                    onReorder = { scope.launch { repository.setAlternatesOrder(it) } },
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+            }
         }
         item {
             ToggleSetting(

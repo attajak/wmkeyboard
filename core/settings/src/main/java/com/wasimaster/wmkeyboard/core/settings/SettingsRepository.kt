@@ -413,6 +413,13 @@ data class KeyPopupSettings(
      */
     val alternatesNearestFirst: Boolean = false,
     /**
+     * The order of the groups in a letter's popup (#385): the layout's own
+     * alternates, the accents the passes add, and the capital or shifted
+     * form. The default is the order they were always assembled in. See
+     * [AlternateGroup].
+     */
+    val alternatesOrder: List<AlternateGroup> = DefaultAlternatesOrder,
+    /**
      * Whether the finger that opened the popup keeps choosing inside it: the
      * first alternate is highlighted as the popup appears, sliding the finger
      * moves the highlight, and letting go commits what is highlighted.
@@ -7859,6 +7866,7 @@ class SettingsRepository(private val context: Context) {
         private val ALTERNATES_PADDING = intPreferencesKey("alternates_padding")
         private val ALTERNATES_COLUMNS = intPreferencesKey("alternates_columns")
         private val ALTERNATES_NEAREST_FIRST = booleanPreferencesKey("alternates_nearest_first")
+        private val ALTERNATES_ORDER = stringPreferencesKey("alternates_order")
         private val ALTERNATES_HOLD_TO_SELECT = booleanPreferencesKey("alternates_hold_to_select")
         private val COLOR_VISION_FILTER = stringPreferencesKey("color_vision_filter")
         private val HIGH_CONTRAST_KEYS = booleanPreferencesKey("high_contrast_keys")
@@ -12855,6 +12863,8 @@ class SettingsRepository(private val context: Context) {
             alternatesColumns = p[ALTERNATES_COLUMNS] ?: defaults.popup.alternatesColumns,
             alternatesNearestFirst = p[ALTERNATES_NEAREST_FIRST]
                 ?: defaults.popup.alternatesNearestFirst,
+            alternatesOrder = p[ALTERNATES_ORDER]?.let(::decodeAlternatesOrder)
+                ?: defaults.popup.alternatesOrder,
             alternatesHoldToSelect = p[ALTERNATES_HOLD_TO_SELECT]
                 ?: defaults.popup.alternatesHoldToSelect,
         )
@@ -14118,6 +14128,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAlternatesNearestFirst(value: Boolean) =
         editPrefs { it[ALTERNATES_NEAREST_FIRST] = value }
+
+    suspend fun setAlternatesOrder(value: List<AlternateGroup>) =
+        editPrefs { it[ALTERNATES_ORDER] = encodeAlternatesOrder(value) }
 
     suspend fun setAlternatesHoldToSelect(value: Boolean) =
         editPrefs { it[ALTERNATES_HOLD_TO_SELECT] = value }

@@ -141,6 +141,13 @@
     <string name="keypress_alternates_nearest_subtitle">Fill the popup from the key outward</string>
     <string name="keypress_alternates_nearest_info">The popup opens above the key that you hold. This decides which end of it the first alternate goes to.\n\nOff: the first alternate is at the top left and the popup fills downward, like lines of text. On a popup of several rows, the first alternate is then the furthest from your finger.\n\nOn: the first alternate is on the row nearest the key, and the rest climb away from it. This is what most stock keyboards do, and it is a shorter reach on a key with many alternates. A popup of one row looks the same either way.</string>
 
+    <string name="keypress_alternates_order_title">Order of the alternates</string>
+    <string name="keypress_alternates_order_subtitle">Which group comes first in a letter\'s popup</string>
+    <string name="keypress_alternates_order_info">A letter\'s popup can hold three kinds of character: the alternates the layout itself puts under the key, the accents added by All accents and Native letters first, and the capital or shifted form added by Shifted letter on press and hold. Drag the groups into the order you want. Inside each group the order stays as it was. The first entry is the one a hold and release types, so the group you reach for most belongs at the top. The default is the layout\'s own, then the accents, then the capital.</string>
+    <string name="keypress_alternates_group_layout">The layout\'s own alternates</string>
+    <string name="keypress_alternates_group_accents">Accents and native letters</string>
+    <string name="keypress_alternates_group_shifted">Capital or shifted form</string>
+
     <string name="keypress_alternates_hold_title">Choose without lifting</string>
     <string name="keypress_alternates_hold_subtitle">Hold, slide to the alternate you want, and let go</string>
     <string name="keypress_alternates_hold_info">On: the first alternate is highlighted as the popup opens. Slide your finger to move the highlight, and let go to type what is highlighted. Hold a key and let go without moving to get its first alternate, which is how most keyboards work. To type nothing, slide away from the popup before you let go.\n\nOff: the popup stays open after you lift your finger, and you tap the alternate you want. That is two steps, but each one is easier to aim.</string>

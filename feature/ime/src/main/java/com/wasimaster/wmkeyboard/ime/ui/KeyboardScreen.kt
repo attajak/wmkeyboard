@@ -417,6 +417,8 @@ import com.wasimaster.wmkeyboard.core.settings.MeteredDecision
 import com.wasimaster.wmkeyboard.core.settings.MeteredFeature
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
+import com.wasimaster.wmkeyboard.core.settings.AlternateGroup
+import com.wasimaster.wmkeyboard.core.settings.DefaultAlternatesOrder
 import com.wasimaster.wmkeyboard.core.settings.oneHandedModeFor
 import com.wasimaster.wmkeyboard.core.settings.BoardCorner
 import com.wasimaster.wmkeyboard.core.settings.BoardCornerRadiusRange
@@ -17309,6 +17311,11 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // layer, unlike the accents: a secondary layout of letters is as much a
     // place to want a capital as the letters layer is.
     val shiftedKeys = state.settings.layoutBehavior.shiftedPopupKeys
+    // Issue #385: the user's order for the popup's groups. The default is the
+    // order the passes below assemble them in, so only a changed order costs
+    // the sort at the end.
+    val alternatesOrder = state.settings.popup.alternatesOrder
+    val reorderAlternates = alternatesOrder != DefaultAlternatesOrder
     // A converted Keyman layout keeps its shifted keys on a page of their own
     // rather than in each key's shiftLabel, which is most of the Arabic-script
     // and Indic boards. Only while the letters page is the one showing: on the
@@ -17365,7 +17372,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
         !newlineAlternate && !emojiAlternate && spaceHoldKeys.isEmpty() &&
         punctuationAlternates.isEmpty() && !kanaVariantKeys && nativeLetters.isEmpty() &&
-        questionMark == null
+        questionMark == null && !reorderAlternates
     ) {
         return base
     }
@@ -17479,6 +17486,29 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                 }
             } else if (shiftedKeys && mapped.action is KeyAction.KeymanKey) {
                 shiftTwins[rowKey]?.let { mapped = keymanShiftedAlternate(mapped, it) }
+            }
+            // The groups in the user's order (#385): the layout's own entries,
+            // the accents (the merged set and the native letters), and the
+            // capital or shifted form. A stable sort, so each group keeps the
+            // order it had; the default order is how they were just built, so
+            // this runs only once the user has changed it.
+            if (reorderAlternates && mapped.action == KeyAction.Text && mapped.longPress.size > 1) {
+                val letter = mapped.output ?: mapped.label
+                val accents = LatinAccents[letter.lowercase().firstOrNull() ?: ' '].orEmpty().toSet() + nativeLetters
+                // Asked with an empty list, since the helper withholds a form
+                // the list already holds — which it does by now.
+                val shifted = shiftedAlternate(mapped.copy(longPress = emptyList()), shiftTwins[rowKey])
+                mapped = mapped.copy(
+                    longPress = mapped.longPress.sortedBy { alt ->
+                        alternatesOrder.indexOf(
+                            when {
+                                alt == shifted -> AlternateGroup.SHIFTED
+                                alt in accents -> AlternateGroup.ACCENTS
+                                else -> AlternateGroup.LAYOUT
+                            },
+                        )
+                    },
+                )
             }
             // Keyed on what the key types, not what it is labelled: a layout
             // that shows "A" and outputs "a" was silently skipped. A key the
