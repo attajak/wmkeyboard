@@ -281,12 +281,20 @@ private fun TranslatePanel(
             .fillMaxSize()
             .padding(horizontal = 8.dp),
     ) {
+        // Weighted, so the box is the thing that gives when the panel is short:
+        // while it has the keys the panel is collapsed to a few lines, and a
+        // long text at its full height pushed Replace and Insert off the
+        // bottom edge, leaving two slivers of button (#501). The chips and the
+        // actions are measured first now; the text and the result share what
+        // is left, and the text scrolls inside its share.
         TranslateQueryBox(
             state = state,
             focused = queryFocused,
             onQueryTap = onQueryTap,
             onPaste = callbacks.onPaste,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f, fill = false),
         )
         TranslateLanguageRow(state, callbacks, menus)
         TranslateResult(
