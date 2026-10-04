@@ -5223,6 +5223,9 @@ open class WMKeyboardService : InputMethodService() {
         // (the media one re-checks notification access there) would otherwise
         // ask about a keyboard this flag still calls hidden.
         keyboardVisible = true
+        // Back on screen inside the idle window: whatever is still loaded stays.
+        idleReleaseJob?.cancel()
+        idleReleaseJob = null
         onScreenAgain()
         lifecycleOwner.onResume()
         // Starts the media-session listener the toolbar's auto-pin needs, and
@@ -6320,6 +6323,10 @@ open class WMKeyboardService : InputMethodService() {
         if (_uiState.value.settings.sensorTools.flashlightAutoOff && _uiState.value.torchOn) {
             setTorch(false)
         }
+        // Nothing is on screen to need a model loaded. Armed after the saves
+        // and before [reshowPinned], which either brings the keyboard back —
+        // and [startInputView] disarms it — or leaves it away for good.
+        scheduleIdleRelease()
         // Last: everything above has settled the field the keyboard is
         // leaving, and a pinned keyboard is about to be asked back.
         reshowPinned()
@@ -6540,36 +6547,80 @@ open class WMKeyboardService : InputMethodService() {
         // from the file. Trimmed at every level, since holding them through an
         // idle hour is part of what gets a keyboard killed.
         BackgroundBitmapCache.trim(level)
-        // A cached local model pins hundreds of MB to a few GB — free it the
-        // moment the system signals pressure; the next AI action reloads it.
         @Suppress("DEPRECATION")
         if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
-            LocalLlmEngine.release()
-            WhisperEngine.release()
-            // Reloads on the next translation; the panel's state is untouched.
-            if (translateEngineLoaded) OnDeviceTranslator.release()
-            // Vocabulary cards: read back from the pack files on demand.
-            if (_uiState.value.panel != PanelMode.VOCABULARY) vocabIndex?.releaseRecords()
-            // Decoded app icons: megabytes of ARGB that the package manager
-            // can hand back. Kept while the launcher is the open panel, since
-            // dropping them under the user's finger would blank the grid it is
-            // scrolling and re-decode every tile.
-            if (_uiState.value.panel != PanelMode.APP_LAUNCHER) launcherIconCache.evictAll()
-            // The ink recognizer pins its ML Kit model — tens of megabytes for
-            // one script, and until now nothing ever let go of it: [close] had
-            // no caller anywhere, so a single use of the handwriting panel cost
-            // that for the life of the process. Rebuilt by the next stroke;
-            // `recognize` prepares the runtime itself.
-            if (_uiState.value.panel != PanelMode.HANDWRITING) hwRecognizer.close()
-            // Open SQLite handles, one per installed GIF pack.
-            if (_uiState.value.panel != PanelMode.GIF) {
-                com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.releaseDatabases()
-            }
-            // Media thumbnails: a tenth of the heap, and nothing is looking at
-            // them while the keyboard is just a keyboard. Only with no panel
-            // up at all, since every media panel is one scroll away from
-            // wanting them back and they are shared between all of them.
-            if (_uiState.value.panel == PanelMode.NONE) trimMediaImageMemory()
+            releaseHeavyEngines(onScreen = true)
+        }
+    }
+
+    /**
+     * Frees every optional subsystem that holds real memory: the local model,
+     * the transcriber, the translator, the ink recognizer, decoded app icons,
+     * media thumbnails and the GIF packs' database handles.
+     *
+     * [onScreen] says whether to respect the open panel. From trim-memory the
+     * keyboard may well be in front of the user, so the panel they are looking
+     * at keeps what it needs — dropping the launcher's icons under a scrolling
+     * finger would blank the grid and re-decode every tile. From
+     * [scheduleIdleRelease] the window is long gone and the stored panel is
+     * only what the *next* keyboard will open on, so nothing is spared.
+     *
+     * Everything here reloads on demand and every `release` is non-blocking —
+     * the engines skip the free outright while a generation or a lint is
+     * running — so being wrong costs one reload, not a failure.
+     */
+    private fun releaseHeavyEngines(onScreen: Boolean) {
+        val panel = if (onScreen) _uiState.value.panel else null
+        // A cached local model pins hundreds of MB to a few GB (issue #476).
+        LocalLlmEngine.release()
+        WhisperEngine.release()
+        // Reloads on the next translation; the panel's state is untouched.
+        if (translateEngineLoaded) OnDeviceTranslator.release()
+        // Vocabulary cards: read back from the pack files on demand.
+        if (panel != PanelMode.VOCABULARY) vocabIndex?.releaseRecords()
+        // Decoded app icons: megabytes of ARGB the package manager can hand back.
+        if (panel != PanelMode.APP_LAUNCHER) launcherIconCache.evictAll()
+        // The ink recognizer pins its ML Kit model — tens of megabytes for one
+        // script. Rebuilt by the next stroke; `recognize` prepares the runtime.
+        if (panel != PanelMode.HANDWRITING) hwRecognizer.close()
+        // Open SQLite handles, one per installed GIF pack.
+        if (panel != PanelMode.GIF) {
+            com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.releaseDatabases()
+        }
+        // Media thumbnails: a tenth of the heap, shared by every media panel,
+        // so they only go when none of them is the one on screen.
+        if (panel == null || panel == PanelMode.NONE) trimMediaImageMemory()
+        if (!onScreen) BackgroundBitmapCache.evictAll()
+    }
+
+    /** Pending [releaseHeavyEngines]; see [scheduleIdleRelease]. */
+    private var idleReleaseJob: Job? = null
+
+    /**
+     * Arms the idle release: if the keyboard stays away for
+     * [IDLE_RELEASE_MS], everything [releaseHeavyEngines] frees is freed.
+     *
+     * Trim-memory was the only thing that ever did this, and for an input
+     * method that is not enough. The system trims *background* processes under
+     * pressure, and it is reluctant to pick on the process drawing the
+     * keyboard; a user who ran one AI action could sit at a few gigabytes of
+     * resident model for hours without the callback ever arriving, which is
+     * what issue #476 is reports of. Waiting for the window to go away and
+     * then some turns "the system is desperate" into "the user has stopped
+     * typing", which is the moment a keyboard should be cheap.
+     *
+     * The delay is what keeps this off the ordinary path: the keyboard hides
+     * every time a field loses focus, so anything short would be releasing
+     * models between one text box and the next. Two minutes of *continuous*
+     * absence is not app-switching, and [startInputView] cancels on the way
+     * back in.
+     */
+    private fun scheduleIdleRelease() {
+        idleReleaseJob?.cancel()
+        idleReleaseJob = serviceScope.launch {
+            delay(IDLE_RELEASE_MS)
+            releaseHeavyEngines(onScreen = false)
+            DebugLog.i("ime", "idle: released the heavy engines")
         }
     }
 
@@ -34756,6 +34807,14 @@ fun compositionCannotPrecedeCaret(
  * screen of the grid on the smallest heap; the ceiling stops a device with a
  * generous heap from deciding that a hundred app icons are worth holding.
  */
+/**
+ * How long the keyboard has to stay off screen before [WMKeyboardService]
+ * frees the optional engines. Long enough that moving between fields, or
+ * between apps, never trips it; short enough that a phone the user has put
+ * down is not holding a language model.
+ */
+private const val IDLE_RELEASE_MS = 120_000L
+
 private const val LAUNCHER_ICON_MIN_BUDGET = 2L * 1024 * 1024
 private const val LAUNCHER_ICON_MAX_BUDGET = 6L * 1024 * 1024
 
