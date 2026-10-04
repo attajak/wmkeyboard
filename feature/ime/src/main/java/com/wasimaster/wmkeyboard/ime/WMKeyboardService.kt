@@ -6590,6 +6590,11 @@ open class WMKeyboardService : InputMethodService() {
         // Media thumbnails: a tenth of the heap, shared by every media panel,
         // so they only go when none of them is the one on screen.
         if (panel == null || panel == PanelMode.NONE) trimMediaImageMemory()
+        // Harper's rule sets, one per dialect, built on the first lint and
+        // until now never freed — and the spell-checker service lints in this
+        // process too, so a user who never opened the grammar tool could still
+        // be carrying them. No-op when nothing has linted yet.
+        if (panel != PanelMode.GRAMMAR) GrammarChecker.release()
         if (!onScreen) BackgroundBitmapCache.evictAll()
     }
 

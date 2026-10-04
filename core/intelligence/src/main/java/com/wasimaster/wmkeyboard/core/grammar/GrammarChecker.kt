@@ -92,19 +92,48 @@ object GrammarChecker {
         }
     }
 
-    private val dispatcher =
-        Executors.newSingleThreadExecutor { r -> Thread(r, "harper-lint") }.asCoroutineDispatcher()
+    private val linter = Executors.newSingleThreadExecutor { r -> Thread(r, "harper-lint") }
+    private val dispatcher = linter.asCoroutineDispatcher()
     private val json = Json { ignoreUnknownKeys = true }
+
+    /**
+     * Whether a rule set has actually been built, so [release] can tell
+     * "nothing to free" from "not loaded yet" **without reading [available]**
+     * — which would map and relocate the 5 MB library just to discover there
+     * was nothing to give back.
+     */
+    @Volatile
+    private var built = false
 
     /** Builds the native linter ahead of the first check; cheap if already built. */
     suspend fun warmUp(dialectOrdinal: Int) {
         if (!available) return
         withContext(dispatcher) { runCatching { HarperNative.nativeWarmUp(dialectOrdinal) } }
+        built = true
+    }
+
+    /**
+     * Frees the rule sets Harper has built, if it has built any.
+     *
+     * Harper caches a `LintGroup` per dialect for the life of the process, and
+     * until this existed there was no way to hand that back — on a keyboard
+     * that lints in the same process it draws in, which is what issue #476 is
+     * about. Rebuilt on the next lint at the usual ~100 ms.
+     *
+     * Posted to the lint thread rather than run here, because the native cache
+     * is thread-local: it has to be freed by the thread that filled it. That
+     * also serialises it behind any lint already running instead of racing one.
+     */
+    fun release() {
+        if (!built) return
+        built = false
+        linter.execute { runCatching { HarperNative.nativeRelease() } }
     }
 
     /** Lints [text]; empty result when the native library is missing or errors. */
     suspend fun check(text: String, dialectOrdinal: Int): List<GrammarLint> {
         if (!available || text.isBlank()) return emptyList()
+        built = true
         return withContext(dispatcher) {
             runCatching {
                 val raw = HarperNative.nativeLint(text, dialectOrdinal) ?: return@runCatching emptyList()

@@ -123,6 +123,29 @@ pub extern "system" fn Java_com_wasimaster_wmkeyboard_core_grammar_HarperNative_
     let _ = lint_text("", dialect.clamp(0, 3) as u8);
 }
 
+/// JNI: `HarperNative.nativeRelease()` — drops every cached `LintGroup`.
+///
+/// There was no way to give this memory back before, which on a keyboard is
+/// not a detail: the rule sets are built on first use and `LINTERS` keeps one
+/// per dialect for the life of the process, in the process that draws the
+/// keyboard (issue #476). The next lint rebuilds, paying the ~100ms again.
+///
+/// **Must be called on the same thread as the lints**, since the cache is
+/// thread-local — calling it elsewhere clears an empty map belonging to that
+/// thread and frees nothing. The Kotlin side funnels both through its single
+/// `harper-lint` dispatcher, which is what makes this correct.
+///
+/// Note what this does *not* free: `FstDictionary::curated()` is a process-wide
+/// `Arc` inside harper-core, so the curated word list stays mapped once built.
+/// Dropping the groups is the part this crate owns.
+#[no_mangle]
+pub extern "system" fn Java_com_wasimaster_wmkeyboard_core_grammar_HarperNative_nativeRelease(
+    _env: JNIEnv,
+    _class: JClass,
+) {
+    LINTERS.with(|cell| cell.borrow_mut().clear());
+}
+
 #[cfg(test)]
 mod tests {
     use super::lint_text;

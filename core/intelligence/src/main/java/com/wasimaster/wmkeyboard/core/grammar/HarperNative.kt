@@ -21,4 +21,11 @@ internal object HarperNative {
 
     /** Pre-builds the linter for [dialect] so the first real check is fast. */
     external fun nativeWarmUp(dialect: Int)
+
+    /**
+     * Drops every cached rule set. Thread-local like the cache it clears, so
+     * this too must go through [GrammarChecker]'s single thread — called on
+     * any other one it frees nothing and says nothing about it.
+     */
+    external fun nativeRelease()
 }
