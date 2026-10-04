@@ -32,7 +32,7 @@ package com.wasimaster.wmkeyboard.core.script
  */
 object KeymanLanguages {
 
-    private val chunk0: List<LanguageDef> = listOf(
+    private val chunk0: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "aae",
             displayName = "Arbëreshë Albanian",
@@ -691,9 +691,9 @@ object KeymanLanguages {
             localeTag = "byn-Ethi",
             layoutIds = listOf("asset_kmn_gff_blin"),
         ),
-    )
+    ) }
 
-    private val chunk1: List<LanguageDef> = listOf(
+    private val chunk1: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "bza",
             displayName = "Bandi",
@@ -1358,9 +1358,9 @@ object KeymanLanguages {
             localeTag = "gaw",
             layoutIds = listOf("asset_kmn_nobonob"),
         ),
-    )
+    ) }
 
-    private val chunk2: List<LanguageDef> = listOf(
+    private val chunk2: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "gd-Latn",
             displayName = "Scottish Gaelic (Latin)",
@@ -2042,9 +2042,9 @@ object KeymanLanguages {
             localeTag = "ks-Shrd",
             layoutIds = listOf("asset_kmn_sharada_inscript"),
         ),
-    )
+    ) }
 
-    private val chunk3: List<LanguageDef> = listOf(
+    private val chunk3: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "ksw",
             displayName = "S'gaw Karen",
@@ -2716,9 +2716,9 @@ object KeymanLanguages {
             localeTag = "orc-Latn",
             layoutIds = listOf("asset_kmn_btl_kenya"),
         ),
-    )
+    ) }
 
-    private val chunk4: List<LanguageDef> = listOf(
+    private val chunk4: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "oru",
             displayName = "Ormuri",
@@ -3383,9 +3383,9 @@ object KeymanLanguages {
             localeTag = "syl-Sylo",
             layoutIds = listOf("asset_kmn_sylheti_nagri"),
         ),
-    )
+    ) }
 
-    private val chunk5: List<LanguageDef> = listOf(
+    private val chunk5: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "syr",
             displayName = "Syriac",
@@ -4062,9 +4062,9 @@ object KeymanLanguages {
             localeTag = "ywq",
             layoutIds = listOf("asset_kmn_sil_ywq_plrd"),
         ),
-    )
+    ) }
 
-    private val chunk6: List<LanguageDef> = listOf(
+    private val chunk6: List<LanguageDef> by lazy { listOf(
         LanguageDef(
             id = "zh-Bopo",
             displayName = "Chinese (Bopomofo)",
@@ -4108,25 +4108,37 @@ object KeymanLanguages {
                 "asset_kmn_phaistos_disc",
             ),
         ),
-    )
+    ) }
 
     // Declared after the chunks on purpose: an object's properties initialize in
     // declaration order, so an `all` written above them would read uninitialized
     // fields and yield an empty registry - a failure that surfaces much later as
-    // a missing language rather than as a compile error.
+    // a missing language rather than as a compile error. (The chunks are `by
+    // lazy` now, so order no longer decides correctness, but the reason the
+    // ordering is deliberate is worth keeping.)
 
     /**
      * Split into chunks for the bytecode limit described above, not for meaning;
      * the boundaries are arbitrary and alphabetical.
+     *
+     * Lazy, and so is every chunk, because of what this costs to build: 481
+     * [LanguageDef]s out of an initializer ART will not compile (over its
+     * 10,000-instruction huge-method ceiling, so interpreted every time), in a
+     * process that is usually the keyboard's and usually types one language.
+     * [LanguageRegistry] now reaches this only when a Keyman language is
+     * actually asked for, and each chunk's body, moved out of `<clinit>` into
+     * its own lambda, is small enough for ART to compile when it is.
      */
-    val all: List<LanguageDef> = buildList {
-        addAll(chunk0)
-        addAll(chunk1)
-        addAll(chunk2)
-        addAll(chunk3)
-        addAll(chunk4)
-        addAll(chunk5)
-        addAll(chunk6)
+    val all: List<LanguageDef> by lazy {
+        buildList {
+            addAll(chunk0)
+            addAll(chunk1)
+            addAll(chunk2)
+            addAll(chunk3)
+            addAll(chunk4)
+            addAll(chunk5)
+            addAll(chunk6)
+        }
     }
 
     /**

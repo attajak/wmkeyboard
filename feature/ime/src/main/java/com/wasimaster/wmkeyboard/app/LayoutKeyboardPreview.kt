@@ -509,12 +509,44 @@ private object PreviewLayoutSets {
 
     private const val CAPACITY = 32
 
-    private val sets = object : LinkedHashMap<Key, Pair<Map<String, KeyboardLayout>, LayoutSet>>(
+    /**
+     * How many compiled keys the cache may hold in total, across however few
+     * or many entries that turns out to be.
+     *
+     * The count alone was the wrong unit. Nearly every layout compiles to some
+     * fifty keys, so thirty-two of them is nothing — but the converted Keyman
+     * grids for the Ethiopic scripts run to thousands of keys apiece, and the
+     * previews screen is exactly where somebody scrolls past a dozen of those
+     * in a row. This object outlives the screen (it is a process singleton, in
+     * the process the keyboard runs in), so what it was holding was held for
+     * good. A key budget tracks the real cost closely enough and costs one
+     * addition per compile to maintain.
+     */
+    private const val KEY_BUDGET = 20_000
+
+    private val sets = LinkedHashMap<Key, Pair<Map<String, KeyboardLayout>, LayoutSet>>(
         CAPACITY, 0.75f, true,
-    ) {
-        override fun removeEldestEntry(
-            eldest: MutableMap.MutableEntry<Key, Pair<Map<String, KeyboardLayout>, LayoutSet>>?,
-        ): Boolean = size > CAPACITY
+    )
+
+    /** Compiled key counts, parallel to [sets], and their running total. */
+    private val weights = HashMap<Key, Int>()
+    private var weight = 0
+
+    /** The keys a spec compiles to, near enough: every layer's grid and its number row. */
+    private fun keyCount(spec: LayoutSpec): Int =
+        spec.layers.values.sumOf { layer ->
+            layer.rows.sumOf { it.size } + (layer.numberRow?.size ?: 0)
+        }
+
+    /** Drops least-recently-used entries until the budget holds, keeping [keep]. */
+    private fun trim(keep: Key) {
+        val stale = sets.keys.iterator()
+        while ((weight > KEY_BUDGET || sets.size > CAPACITY) && stale.hasNext()) {
+            val key = stale.next()
+            if (key == keep) continue
+            weight -= weights.remove(key) ?: 0
+            stale.remove()
+        }
     }
 
     private var secondaryCache: Pair<List<LayoutSpec>, Map<String, KeyboardLayout>>? = null
@@ -532,7 +564,10 @@ private object PreviewLayoutSets {
         val key = Key(spec, form, numberRow, television)
         sets[key]?.let { (grids, set) -> if (grids === secondaries) return set }
         val set = compileLayoutSet(spec, FieldKind.TEXT, form, numberRow, secondaries, television)
+        weight -= weights.remove(key) ?: 0
         sets[key] = secondaries to set
+        weights[key] = keyCount(spec).also { weight += it }
+        trim(keep = key)
         return set
     }
 }

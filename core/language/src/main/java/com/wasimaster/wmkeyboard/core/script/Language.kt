@@ -3689,10 +3689,12 @@ object LanguageRegistry {
      * them instead would leave 290 layouts that no language names — which is to
      * say, that the user cannot reach.
      */
-    val all: List<LanguageDef> = (handWritten + handWrittenMore).map { lang ->
+    private val handWrittenAll: List<LanguageDef> = (handWritten + handWrittenMore).map { lang ->
         val extra = KeymanLanguages.extraLayoutIds[lang.id]
         if (extra.isNullOrEmpty()) lang else lang.copy(layoutIds = lang.layoutIds + extra)
-    } + KeymanLanguages.all
+    }
+
+    val all: List<LanguageDef> by lazy { handWrittenAll + KeymanLanguages.all }
 
     /** The stand-in for an id this build does not recognise. Never surfaced in UI. */
     val GENERIC: LanguageDef = LanguageDef(
@@ -3704,13 +3706,41 @@ object LanguageRegistry {
         layoutIds = emptyList(),
     )
 
-    private val index: Map<String, LanguageDef> = all.associateBy { it.id }
+    private val index: Map<String, LanguageDef> = handWrittenAll.associateBy { it.id }
 
     private val byLayout: Map<String, LanguageDef> = buildMap {
-        for (lang in all) for (layoutId in lang.layoutIds) putIfAbsent(layoutId, lang)
+        for (lang in handWrittenAll) for (layoutId in lang.layoutIds) putIfAbsent(layoutId, lang)
     }
 
-    fun byId(id: String): LanguageDef = index[id] ?: GENERIC
+    /**
+     * The generated half's two indexes, built only if something asks for a
+     * language or a layout the hand-written half does not have.
+     *
+     * The split is a cold-start cost, not a design preference. Building the 481
+     * Keyman entries runs an initializer ART refuses to compile (past its
+     * 10,000-instruction ceiling, so interpreted every process start) and keeps
+     * their defs, layout lists and two map's worth of entries resident — in the
+     * keyboard's process, which typically types one language and will never
+     * name any of them. Nothing above this line reaches them, so a user who has
+     * no Keyman layout enabled never pays for the table at all.
+     *
+     * Hand-written entries win a collision here where the merged map let the
+     * generated ones shadow them. That is the documented intent either way (see
+     * [all]) — `extraLayoutIds` exists precisely so a converted layout for a
+     * language we already carry joins that entry instead of replacing it — and
+     * `LanguageRegistryTest` holds the ids apart.
+     */
+    private val keymanIndex: Map<String, LanguageDef> by lazy {
+        KeymanLanguages.all.associateBy { it.id }
+    }
+
+    private val keymanByLayout: Map<String, LanguageDef> by lazy {
+        buildMap {
+            for (lang in KeymanLanguages.all) for (layoutId in lang.layoutIds) putIfAbsent(layoutId, lang)
+        }
+    }
+
+    fun byId(id: String): LanguageDef = index[id] ?: keymanIndex[id] ?: GENERIC
 
     /**
      * The language whose primary subtag matches a BCP-47 tag ("fr-FR" → French,
@@ -3720,7 +3750,12 @@ object LanguageRegistry {
     fun byLocale(tag: String): LanguageDef? {
         val primary = tag.replace('_', '-').substringBefore('-').lowercase()
         if (primary.isEmpty()) return null
-        return all.firstOrNull { it.id == primary || it.localeTag.substringBefore('-').lowercase() == primary }
+        fun match(lang: LanguageDef) =
+            lang.id == primary || lang.localeTag.substringBefore('-').lowercase() == primary
+        // Hand-written first, which is the order the merged list had, so the
+        // answer is unchanged — but a tag one of them matches never builds the
+        // generated half.
+        return handWrittenAll.firstOrNull(::match) ?: KeymanLanguages.all.firstOrNull(::match)
     }
 
     /**
@@ -3728,5 +3763,6 @@ object LanguageRegistry {
      * their own `langId` on the spec and should resolve through that instead;
      * this covers the built-in ids the UI lists.
      */
-    fun languageOf(layoutId: String): LanguageDef = byLayout[layoutId] ?: GENERIC
+    fun languageOf(layoutId: String): LanguageDef =
+        byLayout[layoutId] ?: keymanByLayout[layoutId] ?: GENERIC
 }

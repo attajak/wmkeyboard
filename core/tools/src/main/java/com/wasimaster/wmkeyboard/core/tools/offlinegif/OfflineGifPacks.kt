@@ -225,6 +225,20 @@ object OfflineGifPacks {
         synchronized(databases) { databases.remove(id)?.close() }
     }
 
+    /**
+     * Closes every open pack handle. Each one is a live SQLite connection with
+     * a page cache behind it, held for the next search — worth it while the
+     * GIF panel is in use and not worth it for the rest of the process's life,
+     * which is how long they lasted before. [database] reopens on demand, so
+     * the only cost of being wrong is one open on the next search.
+     */
+    fun releaseDatabases() {
+        synchronized(databases) {
+            databases.values.forEach { it.close() }
+            databases.clear()
+        }
+    }
+
     private fun database(id: String): SQLiteDatabase? {
         val base = root ?: return null
         synchronized(databases) {

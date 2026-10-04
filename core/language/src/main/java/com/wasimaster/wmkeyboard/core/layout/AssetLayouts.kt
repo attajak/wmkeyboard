@@ -954,15 +954,56 @@ object AssetLayouts {
     @Volatile private var entryById: Map<String, Entry> = emptyMap()
     @Volatile private var loaded = false
 
+    /** A parsed layout and what holding on to it is estimated to cost. */
+    private class Parsed(val spec: LayoutSpec, val weightBytes: Long)
+
     /**
      * Parsed layouts, most recently used last. Bounded because the settings
      * app can walk through a great many of them (every language's preview
      * cards), and the keyboard needs only the few that are switched on: those
-     * are asked for on every field focus, so they never age out.
+     * are asked for on every field focus, so as the most recently used they
+     * never age out.
+     *
+     * Bounded by estimated **bytes**, not by entry count. A count was the wrong
+     * unit by three orders of magnitude at the top of the range: these files
+     * are a couple of kilobytes each for nearly every layout, but the converted
+     * Ethiopic keyboards run from 500 KB to 2.2 MB of JSON apiece and there are
+     * a dozen of them, so the old ceiling of 48 entries permitted well over a
+     * hundred megabytes of parsed keys — in the keyboard's process, which the
+     * settings app shares, and which is the process that has to survive on a
+     * low-memory phone. Scrolling one language's layout cards was enough.
+     *
+     * The weight is the source length times [PARSED_WEIGHT_FACTOR] rather than
+     * a real measurement, because there is no cheap way to size an object graph
+     * on Android and the source length is already in hand at the only place
+     * that matters. It is a proportionality, not an accounting: what it has to
+     * get right is that the Amharic grid counts for a thousand times the French
+     * one, and it does.
      */
-    private val parsed = object : LinkedHashMap<String, LayoutSpec>(16, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, LayoutSpec>?): Boolean =
-            size > PARSED_CAPACITY
+    private val parsed = LinkedHashMap<String, Parsed>(16, 0.75f, true)
+
+    /** The sum of [Parsed.weightBytes] over [parsed]. Guarded by `parsed`. */
+    private var parsedWeight = 0L
+
+    /**
+     * Evicts least-recently-used entries until the estimate is back inside the
+     * budget, never touching [keep] — the entry the caller is about to return,
+     * which must survive even when it is larger than the whole budget by
+     * itself. Must be called holding `parsed`.
+     */
+    private fun trimParsed(keep: String) {
+        if (parsedWeight <= parsedBudget) return
+        // Over the entries, and reading the weight off the entry rather than
+        // through `parsed[id]`: this map is access-ordered, so a `get` is a
+        // structural change to it and bumps modCount — it would throw
+        // ConcurrentModificationException on the next step of this very loop.
+        val stale = parsed.entries.iterator()
+        while (parsedWeight > parsedBudget && stale.hasNext()) {
+            val entry = stale.next()
+            if (entry.key == keep) continue
+            parsedWeight -= entry.value.weightBytes
+            stale.remove()
+        }
     }
 
     /**
@@ -1004,16 +1045,23 @@ object AssetLayouts {
      */
     fun byId(id: String): LayoutSpec? {
         if (id !in entryById) return null
-        synchronized(parsed) { parsed[id] }?.let { return it }
+        synchronized(parsed) { parsed[id] }?.let { return it.spec }
         val manager = assets ?: return null
-        val spec = runCatching {
+        val loaded = runCatching {
             val text = manager.open("$DIR/${id.removePrefix(ID_PREFIX)}$SUFFIX")
                 .use { it.readBytes().decodeToString() }
-            LayoutFile.decode(text)?.layout
+            LayoutFile.decode(text)?.layout?.let { Parsed(it, text.length.toLong() * PARSED_WEIGHT_FACTOR) }
         }.getOrNull() ?: return null
         // Two threads racing the same miss both parse; the first one in wins,
         // so every caller ends up holding the same instance.
-        return synchronized(parsed) { parsed.getOrPut(id) { spec } }
+        return synchronized(parsed) {
+            val winner = parsed.getOrPut(id) {
+                parsedWeight += loaded.weightBytes
+                loaded
+            }
+            trimParsed(keep = id)
+            winner.spec
+        }
     }
 
     /** Parses [ids] now, on the calling thread, so a later [byId] is a lookup. */
@@ -1068,7 +1116,21 @@ object AssetLayouts {
      */
     private const val INDEX = "layouts-index.tsv"
 
-    private const val PARSED_CAPACITY = 48
+    /**
+     * How much heap a parsed layout is assumed to cost per byte of its source.
+     * A `Key` carries a label, an output string, a role, a width and usually a
+     * long-press list, so the object graph runs several times its JSON; four is
+     * a deliberate under-estimate, since over-estimating would evict layouts
+     * the keyboard is actually using.
+     */
+    private const val PARSED_WEIGHT_FACTOR = 4
+
+    private const val PARSED_MIN_BUDGET = 4L * 1024 * 1024
+    private const val PARSED_MAX_BUDGET = 16L * 1024 * 1024
+
+    /** A share of the heap, clamped — the same shape as every other cache here. */
+    private val parsedBudget: Long =
+        (Runtime.getRuntime().maxMemory() / 16).coerceIn(PARSED_MIN_BUDGET, PARSED_MAX_BUDGET)
 
     private val SUFFIX = ".${LayoutFile.FILE_EXTENSION}"
 }

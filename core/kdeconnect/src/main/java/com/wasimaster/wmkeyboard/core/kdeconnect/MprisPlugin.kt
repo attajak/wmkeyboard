@@ -28,8 +28,22 @@ class MprisRemotePlugin internal constructor(
     override val outgoing = setOf(KdeTypes.MPRIS_REQUEST)
 
     private val artLock = Any()
+
+    /**
+     * Album art by URL, most recently used last. Bounded by bytes as well as
+     * by count: [MAX_ART_BYTES] is what one download is allowed to be, so
+     * eight entries alone permitted forty-eight megabytes of covers to sit in
+     * the keyboard's process for as long as a phone stayed paired. The count
+     * stays because it is also what keeps the map from filling with thumbnails
+     * from a long playlist.
+     */
     private val art = object : LinkedHashMap<String, ByteArray>(8, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, ByteArray>?): Boolean = size > MAX_ART
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, ByteArray>?): Boolean {
+            if (size > MAX_ART) return true
+            var total = 0L
+            for (bytes in values) total += bytes.size
+            return total > MAX_ART_TOTAL_BYTES && size > 1
+        }
     }
     private val artRequested = HashSet<String>()
 
@@ -202,6 +216,9 @@ class MprisRemotePlugin internal constructor(
     private companion object {
         const val MAX_ART = 8
         const val MAX_ART_BYTES = 6L * 1024 * 1024
+
+        /** The whole cache's ceiling, against [MAX_ART_BYTES] for one cover. */
+        const val MAX_ART_TOTAL_BYTES = 8L * 1024 * 1024
     }
 }
 

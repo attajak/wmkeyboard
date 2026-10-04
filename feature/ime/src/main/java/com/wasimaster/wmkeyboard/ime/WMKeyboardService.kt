@@ -367,6 +367,7 @@ import com.wasimaster.wmkeyboard.ime.ui.ImeNavigationBars
 import com.wasimaster.wmkeyboard.ime.ui.LocalImeNavigationBars
 import com.wasimaster.wmkeyboard.ime.ui.SymbolRowAction
 import com.wasimaster.wmkeyboard.ime.ui.activeSymbolSet
+import com.wasimaster.wmkeyboard.ime.ui.trimMediaImageMemory
 import com.wasimaster.wmkeyboard.ime.ui.keyboardHintPlan
 import com.wasimaster.wmkeyboard.ime.ui.suggestionDisplayOrder
 import com.wasimaster.wmkeyboard.ime.ui.visibleEmojiBarItems
@@ -6549,6 +6550,26 @@ open class WMKeyboardService : InputMethodService() {
             if (translateEngineLoaded) OnDeviceTranslator.release()
             // Vocabulary cards: read back from the pack files on demand.
             if (_uiState.value.panel != PanelMode.VOCABULARY) vocabIndex?.releaseRecords()
+            // Decoded app icons: megabytes of ARGB that the package manager
+            // can hand back. Kept while the launcher is the open panel, since
+            // dropping them under the user's finger would blank the grid it is
+            // scrolling and re-decode every tile.
+            if (_uiState.value.panel != PanelMode.APP_LAUNCHER) launcherIconCache.evictAll()
+            // The ink recognizer pins its ML Kit model — tens of megabytes for
+            // one script, and until now nothing ever let go of it: [close] had
+            // no caller anywhere, so a single use of the handwriting panel cost
+            // that for the life of the process. Rebuilt by the next stroke;
+            // `recognize` prepares the runtime itself.
+            if (_uiState.value.panel != PanelMode.HANDWRITING) hwRecognizer.close()
+            // Open SQLite handles, one per installed GIF pack.
+            if (_uiState.value.panel != PanelMode.GIF) {
+                com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks.releaseDatabases()
+            }
+            // Media thumbnails: a tenth of the heap, and nothing is looking at
+            // them while the keyboard is just a keyboard. Only with no panel
+            // up at all, since every media panel is one scroll away from
+            // wanting them back and they are shared between all of them.
+            if (_uiState.value.panel == PanelMode.NONE) trimMediaImageMemory()
         }
     }
 
@@ -11507,8 +11528,13 @@ open class WMKeyboardService : InputMethodService() {
         // its imported list. Each is tagged with its id so its share of the
         // strip adapts to how much the user actually types it.
         val secondaryIds = settings.secondaryLanguages[lang.id].orEmpty()
+        // Every secondary gets a slot, empty source and all. [customDictionaries]
+        // only holds the languages with something on disk now, and a secondary
+        // with no list is still a secondary: the engine gates whole behaviours
+        // on this list being non-empty, so dropping the empty ones would make
+        // "configured but has no words yet" mean "not configured".
         engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
-            .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
+            .map { id -> SecondaryDictionary(id, customDictionaries[id] ?: PackedTrie.EMPTY) }
         engine.englishAsSecondary = "en" in secondaryIds && !lang.isEnglish
         // English's own word pairs, for the word after an English one typed on
         // a layout that is not English's (`hello` on Avro).
@@ -15239,13 +15265,33 @@ open class WMKeyboardService : InputMethodService() {
     private var launcherAppsCache: List<LauncherApp>? = null
 
     /**
-     * Decoded app icons, keyed by flattened component. Bounded: an adaptive
-     * icon decodes to a fixed square at the largest icon-size setting, so the
-     * whole cache stays under two megabytes and lives for the process — a
-     * panel close is not a reason to re-decode a hundred icons, and a size
+     * Decoded app icons, keyed by flattened component. Lives for the process —
+     * a panel close is not a reason to re-decode a hundred icons, and a size
      * change only scales what is already decoded.
+     *
+     * Bounded by **bytes**, like [BackgroundBitmapCache] and
+     * [LayoutPreviewCache], and not by entry count. It used to hold 128
+     * entries on the claim that that was "under two megabytes", which was off
+     * by most of an order of magnitude: [launcherIconFor] decodes every icon
+     * at the top of `ICON_SIZE_RANGE` (60 dp) so a size change never re-reads
+     * the package manager, and 60 dp on an ordinary xxhdpi phone is 180 px of
+     * ARGB_8888 — 127 KB an icon, 16 MB once a user with a full app drawer has
+     * scrolled the grid. On the low-memory phones this keyboard has to live on
+     * that is the single largest thing a tool can leave behind, and nothing
+     * ever dropped it.
+     *
+     * The budget is a share of the heap rather than a constant because the
+     * ceiling that matters is the process's, not the icon's. Four megabytes on
+     * a typical device still holds thirty-odd icons, which is more than one
+     * screen of the grid and all of its scrollback.
      */
-    private val launcherIconCache = android.util.LruCache<String, ImageBitmap>(128)
+    private val launcherIconCache = object : android.util.LruCache<String, ImageBitmap>(
+        (Runtime.getRuntime().maxMemory() / 32)
+            .coerceIn(LAUNCHER_ICON_MIN_BUDGET, LAUNCHER_ICON_MAX_BUDGET)
+            .toInt(),
+    ) {
+        override fun sizeOf(key: String, value: ImageBitmap): Int = value.width * value.height * 4
+    }
 
     private var launcherDetailJob: Job? = null
 
@@ -33202,9 +33248,26 @@ open class WMKeyboardService : InputMethodService() {
             .associateWith { CustomDictionaries.shortcuts(filesDir, it) }
             .filterValues { it.isNotEmpty() }
         val imported = HashMap<String, WordSource>()
-        val sources = LanguageRegistry.all.associate { lang ->
-            lang.id to loadCustomDictionary(lang.id, imported)
+        // Only the languages that can actually have a source. This used to walk
+        // [LanguageRegistry.all] — 869 languages since the Keyman tail landed —
+        // and [loadCustomDictionary] stats two paths and reads a setting for
+        // each, so a keyboard whose user types one language paid some seventeen
+        // hundred syscalls per engine build and kept 869 empty composites alive
+        // for the life of the process. The two listings below each cost one
+        // directory read and name exactly the languages with something on disk;
+        // the enabled set is added because a language with nothing is still
+        // expected in the map (an empty secondary slot is not the same as an
+        // absent one to [SuggestionEngine.secondaryDictionaries]). Every read of
+        // the result already falls back for a missing key, so a language outside
+        // all three is correctly absent rather than mapped to nothing.
+        val candidates = LinkedHashSet<String>()
+        candidates += CustomDictionaries.languagesWithLists(filesDir)
+        candidates += DictionaryStore.downloadedLanguageIds(filesDir)
+        candidates += enabledLanguageIds()
+        for (secondaries in _uiState.value.settings.secondaryLanguages.values) {
+            candidates += secondaries
         }
+        val sources = candidates.associateWith { loadCustomDictionary(it, imported) }
         importedLists = imported
         return sources
     }
@@ -33255,7 +33318,7 @@ open class WMKeyboardService : InputMethodService() {
         engine.customDictionary = customDictionaries[lang.id] ?: PackedTrie.EMPTY
         val secondaryIds = _uiState.value.settings.secondaryLanguages[lang.id].orEmpty()
         engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
-            .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
+            .map { id -> SecondaryDictionary(id, customDictionaries[id] ?: PackedTrie.EMPTY) }
         if ("bn_rom" in langIds) {
             romanizedGlides = romanizedGlides + ("bn" to RomanizedIndex.of(
                 spellings = engine.spellingMap,
@@ -33369,7 +33432,7 @@ open class WMKeyboardService : InputMethodService() {
             engine.ngramPack = loadNgramPack(lang.id)
             val secondaryIds = _uiState.value.settings.secondaryLanguages[lang.id].orEmpty()
             engine.secondaryDictionaries = secondaryIds.filter { it != "en" }
-                .mapNotNull { id -> customDictionaries[id]?.let { SecondaryDictionary(id, it) } }
+                .map { id -> SecondaryDictionary(id, customDictionaries[id] ?: PackedTrie.EMPTY) }
             // A romanized-Bengali download is what turns Avro from unglidable
             // into glidable, so the romanization is rebuilt alongside.
             romanizedGlides = romanizedGlides + ("bn" to RomanizedIndex.of(
@@ -34687,6 +34750,15 @@ fun compositionCannotPrecedeCaret(
  * stale, and putting its candidates on the strip would undo the commit's own.
  */
 /** What the strip asks for, and [SuggestionEngine.suggest]'s own default. */
+/**
+ * The floor and ceiling of [WMKeyboardService.launcherIconCache]'s byte
+ * budget, around the heap share it is actually sized from. The floor is a
+ * screen of the grid on the smallest heap; the ceiling stops a device with a
+ * generous heap from deciding that a hundred app icons are worth holding.
+ */
+private const val LAUNCHER_ICON_MIN_BUDGET = 2L * 1024 * 1024
+private const val LAUNCHER_ICON_MAX_BUDGET = 6L * 1024 * 1024
+
 private const val SUGGEST_LIMIT = 5
 
 /** How deep the pages of suggestions go (#385). */

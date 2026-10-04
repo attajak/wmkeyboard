@@ -460,6 +460,22 @@ fun mediaImageLoader(context: Context): ImageLoader =
             .also { sharedMediaLoader = it }
     }
 
+/**
+ * Empties the media loader's in-memory thumbnails, if one was ever built.
+ *
+ * Coil 3.2 has no notion of "the UI is not on screen" — the background
+ * trimming its 3.3 release added keys off a process lifecycle an input method
+ * never drives — so nothing here ever gave these back on its own. Twelve
+ * percent of the heap in GIF and sticker thumbnails is worth holding while the
+ * panel is open and worth nothing at all once the keyboard is a text field's
+ * keyboard again, and the disk cache behind it makes a re-scroll a decode
+ * rather than a download. Deliberately does not touch the loader itself:
+ * shutting it down would close the disk cache the next panel wants.
+ */
+fun trimMediaImageMemory() {
+    sharedMediaLoader?.memoryCache?.clear()
+}
+
 /** The process-wide media loader; see [mediaImageLoader]. */
 @Composable
 fun rememberMediaImageLoader(): ImageLoader {

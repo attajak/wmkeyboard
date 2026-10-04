@@ -86,6 +86,30 @@ class LanguageRegistryTest {
         }
     }
 
+    /**
+     * The hand-written and generated halves are indexed separately so the
+     * keyboard's process never builds the 481 Keyman entries unless it is asked
+     * for one, and the hand-written index is consulted first. That ordering is
+     * only invisible while the two halves share no id — a duplicate would
+     * change which entry `byId` and `languageOf` answer with, and the
+     * hand-written one is the one with the endonym and the dictionary.
+     */
+    @Test
+    fun `the generated half shares no id or layout with the hand-written half`() {
+        val keymanIds = KeymanLanguages.all.map { it.id }
+        assertEquals("duplicate ids within the generated half", keymanIds.size, keymanIds.toSet().size)
+        val handWrittenIds = LanguageRegistry.all.map { it.id }.toMutableList()
+        for (id in keymanIds) handWrittenIds.remove(id)
+        val clash = handWrittenIds.toSet() intersect keymanIds.toSet()
+        assertEquals("ids in both halves", emptySet<String>(), clash)
+
+        val handWrittenLayouts = handWrittenIds.flatMapTo(HashSet()) { LanguageRegistry.byId(it).layoutIds }
+        val shadowed = KeymanLanguages.all
+            .filter { lang -> lang.layoutIds.any { it in handWrittenLayouts } }
+            .map { it.id }
+        assertEquals("generated layouts a hand-written language already claims", emptyList<String>(), shadowed)
+    }
+
     @Test
     fun `an unknown id resolves to the generic language, never null`() {
         assertSame(LanguageRegistry.GENERIC, LanguageRegistry.byId("zz-Xxxx"))
