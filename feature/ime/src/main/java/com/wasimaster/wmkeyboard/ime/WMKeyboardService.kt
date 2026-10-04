@@ -833,6 +833,9 @@ open class WMKeyboardService : InputMethodService() {
     /** Whether the touch model was last built with the tap adaptation on. */
     private var tapAdaptApplied = true
 
+    /** The mistype tolerance the engine's touch model was last built with (#385). */
+    private var toleranceApplied = 100
+
     /**
      * The word the user has gone back into and is editing, if any; see
      * [WordRevision]. Armed when the caret lands on a word
@@ -1421,6 +1424,8 @@ open class WMKeyboardService : InputMethodService() {
         val centers = if (adapt) tapOffsets.shifted(keys, keyWidth = 1f) else keys
         appliedTapVersion = if (adapt) tapOffsets.version else -1
         tapAdaptApplied = adaptSetting
+        val tolerance = _uiState.value.settings.suggestionStrip.mistypeTolerance
+        toleranceApplied = tolerance
         // The typing beam walks the trie one UTF-16 unit at a time, so its touch
         // model is keyed by Char: a letter outside the BMP has no single unit to
         // file under and simply gets no tap evidence, the same as before.
@@ -1430,6 +1435,7 @@ open class WMKeyboardService : InputMethodService() {
                     if (key.codePoint <= 0xFFFF) put(key.codePoint.toChar(), TouchPoint(key.x, key.y))
                 }
             },
+            sigma = KeyTouchModel.SIGMA * tolerance / 100.0,
         )
     }
 
@@ -3668,7 +3674,11 @@ open class WMKeyboardService : InputMethodService() {
                 val nowArmed = keyboardHandwriteActive(_uiState.value)
                 if (nowArmed && !hwKeyboardArmed) refreshHandwritingStatus()
                 hwKeyboardArmed = nowArmed
-                if (settings.suggestionStrip.adaptToTaps != tapAdaptApplied) applyTouchModel()
+                if (settings.suggestionStrip.adaptToTaps != tapAdaptApplied ||
+                    settings.suggestionStrip.mistypeTolerance != toleranceApplied
+                ) {
+                    applyTouchModel()
+                }
                 suggestionEngine?.autocorrectConfidence =
                     settings.correction.confidence.toDouble()
                 suggestionEngine?.adaptiveConfidence = settings.correction.adaptive
@@ -16522,17 +16532,22 @@ open class WMKeyboardService : InputMethodService() {
             } else {
                 SUGGEST_LIMIT
             }
+            // Pages of suggestions (#385) want the deeper list the strip never
+            // shows. Asked for in the same walk, so a swipe down has it at once;
+            // the strip and the keys still take the head they always took.
+            val pagesOn = state.settings.suggestionStrip.swipeForMore && state.composer.completionLanguage == null
+            val askDeep = if (pagesOn) maxOf(askFor, SUGGEST_PAGES_POOL) else askFor
             val (results, emojis, bias, floating) = withContext(suggestionDispatcher) {
                 // A layout whose keys already spell the word (Khipro) is
                 // completed from what they spelled, not from the roman keys;
                 // the tap and key frames belong to those keys, so they stay out.
                 val completing = state.composer.completionLanguage
-                val deep = trace(ImeTrace.SUGGEST) {
+                val deepAll = trace(ImeTrace.SUGGEST) {
                     engine.suggest(
                         composing = if (completing != null) state.composer.composeBuffer(typed) else typed,
                         previousWord = previousWord,
                         phoneticLanguage = state.composer.phoneticLanguage,
-                        limit = askFor,
+                        limit = askDeep,
                         touch = touchFrame.takeIf { completing == null },
                         previousWord2 = previousWord2,
                         recentWords = recentSnapshot,
@@ -16543,6 +16558,7 @@ open class WMKeyboardService : InputMethodService() {
                         completionLanguage = completing,
                     )
                 }
+                val deep = deepAll.take(askFor)
                 // The walk itself cannot be interrupted — the engine has no
                 // suspension point in it — but everything after it can be, and
                 // on a phonetic or autocorrecting board what follows is not
@@ -16618,6 +16634,9 @@ open class WMKeyboardService : InputMethodService() {
                 // disagree about what is being offered — the keys just see
                 // further down it.
                 val pool = dropTyped(withShortcut(deep))
+                // What a swipe down on the strip pages through (#385): the strip's
+                // own words first, in its order, then the rest of the deep list.
+                suggestionPages = if (pagesOn) typed to (words + withShortcut(deepAll)).distinct() else null
                 // Next-letter distribution for smart key-hit detection. Only for
                 // plain Latin composing — conversion/transliteration IMEs commit
                 // through their own composer, where a Latin-letter nudge is wrong.
@@ -16901,13 +16920,54 @@ open class WMKeyboardService : InputMethodService() {
     private val CANDIDATE_GRID_LIMIT = 100
 
     /**
+     * The buffer the last suggestion pass ran for, and every word it ranked,
+     * deepest first-to-last: what a swipe down on the strip shows (#385).
+     * Written on the suggestion dispatcher, read on the main thread.
+     */
+    @Volatile
+    private var suggestionPages: Pair<String, List<String>>? = null
+
+    /**
+     * A swipe on the word strip (#385): down opens the grid of every word the
+     * last pass ranked, over the keys, reusing the conversion candidates' grid;
+     * up, or a second swipe, closes it. Nothing happens when the pass that
+     * filled the list was for a different word, or found nothing the strip
+     * is not already showing.
+     */
+    fun onSuggestionPagesToggle(open: Boolean) {
+        val state = _uiState.value
+        if (state.composer.isConversion) return
+        if (!open || state.panel == PanelMode.CANDIDATES) {
+            if (state.panel == PanelMode.CANDIDATES) {
+                _uiState.update { it.copy(panel = PanelMode.NONE, expandedCandidates = emptyList()) }
+            }
+            return
+        }
+        if (state.panel != PanelMode.NONE) return
+        val (forWord, words) = suggestionPages ?: return
+        if (forWord != composing.toString() || words.size <= state.settings.suggestionStrip.slotCount) return
+        vibrate()
+        _uiState.update { it.copy(panel = PanelMode.CANDIDATES, expandedCandidates = words) }
+    }
+
+    /**
      * A conversion candidate tapped in the strip or the expanded grid. Resolved
      * by position rather than by text — see [Composer.consumedForIndex].
      */
     fun onCandidateTapped(candidate: String, index: Int) {
+        // The pages grid's own "back to the keys" row (#385).
+        if (index < 0 && candidate.isEmpty()) {
+            onSuggestionPagesToggle(false)
+            return
+        }
         val ic = currentInputConnection ?: return
         val composer = _uiState.value.composer
         if (!composer.isConversion) {
+            // A word picked from the pages grid (#385): the grid goes, and the
+            // pick is an ordinary strip pick.
+            if (_uiState.value.panel == PanelMode.CANDIDATES) {
+                _uiState.update { it.copy(panel = PanelMode.NONE, expandedCandidates = emptyList()) }
+            }
             onSuggestionTapped(candidate)
             return
         }
@@ -30187,6 +30247,7 @@ open class WMKeyboardService : InputMethodService() {
             onMenu = ::onWordMenuAction,
             onCard = ::onWordCardAction,
             onSynonyms = ::onSynonymAction,
+            onPagesToggle = ::onSuggestionPagesToggle,
         )
     }
 
@@ -34502,6 +34563,9 @@ fun compositionCannotPrecedeCaret(
  */
 /** What the strip asks for, and [SuggestionEngine.suggest]'s own default. */
 private const val SUGGEST_LIMIT = 5
+
+/** How deep the pages of suggestions go (#385). */
+private const val SUGGEST_PAGES_POOL = 24
 
 /**
  * The chips a fixed phonetic strip keeps in place ahead of its suggestions:

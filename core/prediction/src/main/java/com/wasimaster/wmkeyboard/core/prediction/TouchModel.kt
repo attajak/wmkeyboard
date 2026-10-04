@@ -16,7 +16,15 @@ data class TouchPoint(val x: Float, val y: Float)
  * Per-key 2D Gaussian likelihood. [centers] maps each committed character to
  * its key center in key-width units.
  */
-class KeyTouchModel(private val centers: Map<Char, TouchPoint>) {
+class KeyTouchModel(
+    private val centers: Map<Char, TouchPoint>,
+    /**
+     * Tap-scatter sigma in key widths: how far from a key's centre a tap may
+     * land and still read as that key (#385, "mistype tolerance"). Wider
+     * makes a tap well inside a neighbour cheaper to read as a slip.
+     */
+    private val sigma: Double = SIGMA,
+) {
 
     private val keysArray: CharArray = centers.keys.toCharArray()
     private val centersArray: Array<TouchPoint> = Array(keysArray.size) { centers[keysArray[it]]!! }
@@ -34,7 +42,7 @@ class KeyTouchModel(private val centers: Map<Char, TouchPoint>) {
         val center = centers[ch] ?: return Double.NEGATIVE_INFINITY
         val dx = (p.x - center.x).toDouble()
         val dy = (p.y - center.y).toDouble()
-        return -(dx * dx + dy * dy) / (2.0 * SIGMA * SIGMA)
+        return -(dx * dx + dy * dy) / (2.0 * sigma * sigma)
     }
 
     /** The most likely intended key for a tap, or null off-keyboard. */

@@ -31,4 +31,6 @@ class SuggestionHoldCallbacks(
     val onCard: (WordCardAction) -> Unit = {},
     /** Something on the open synonyms sheet was pressed (#321). */
     val onSynonyms: (SynonymAction) -> Unit = {},
+    /** A swipe on the word strip: true opens the pages of suggestions, false closes them (#385). */
+    val onPagesToggle: (Boolean) -> Unit = {},
 )

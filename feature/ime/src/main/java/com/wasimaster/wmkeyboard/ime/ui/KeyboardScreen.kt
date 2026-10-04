@@ -3468,8 +3468,17 @@ private fun TopBar(
             // its long-press first and never reaches this detector; a quick
             // flick never trips the long-press, so the two don't collide.
             .then(
-                if (state.settings.toolbarBehavior.swipeDownHide) {
-                    Modifier.pointerInput(onSwipeDownHide) {
+                if (state.settings.toolbarBehavior.swipeDownHide || state.settings.suggestionStrip.swipeForMore) {
+                    // Read at the moment of the swipe, not when the detector
+                    // was installed: whether there are words to page through
+                    // changes with every keystroke (#385).
+                    val pages = rememberUpdatedState(
+                        state.settings.suggestionStrip.swipeForMore && state.suggestions.isNotEmpty() &&
+                            !state.composer.isConversion,
+                    )
+                    val pagesOpen = rememberUpdatedState(state.panel == PanelMode.CANDIDATES)
+                    val hide = rememberUpdatedState(state.settings.toolbarBehavior.swipeDownHide)
+                    Modifier.pointerInput(onSwipeDownHide, suggestionHold) {
                         val threshold = ToolbarSwipeHideThreshold.toPx()
                         var travelled = 0f
                         var fired = false
@@ -3479,9 +3488,16 @@ private fun TopBar(
                             onDragCancel = { travelled = 0f; fired = false },
                         ) { _, dragAmount ->
                             travelled += dragAmount
-                            if (!fired && travelled > threshold) {
+                            if (!fired && pagesOpen.value && kotlin.math.abs(travelled) > threshold) {
+                                // Either way closes the open pages.
                                 fired = true
-                                onSwipeDownHide()
+                                suggestionHold.onPagesToggle(false)
+                            } else if (!fired && travelled > threshold) {
+                                fired = true
+                                // Words to page through win the swipe; the
+                                // keyboard hides from an idle strip.
+                                if (pages.value) suggestionHold.onPagesToggle(true)
+                                else if (hide.value) onSwipeDownHide()
                             }
                         }
                     }
@@ -5176,6 +5192,30 @@ private fun CandidateGridPanel(
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
+        // Pages of word suggestions (#385) have no chevron on the strip to
+        // close them by, so they carry their own way back to the keys.
+        if (!state.composer.isConversion) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onCandidate("", -1) }
+                    .padding(vertical = 4.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Outlined.KeyboardArrowUp,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp),
+                )
+                Text(
+                    stringResource(R.string.ime_suggestion_pages_close),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 13.sp,
+                )
+            }
+        }
         FlowRow(modifier = Modifier.fillMaxWidth()) {
             state.expandedCandidates.forEachIndexed { index, candidate ->
                 Box(
@@ -12272,6 +12312,23 @@ private val ChordPreviewToken = Any()
  * within a character or two.
  */
 private const val SpaceCursorEdgeRepeatMs = 125L
+
+/**
+ * How long a cursor drag must rest, held away from where it began, before the
+ * caret starts moving on by itself (#505). Long enough that settling the finger
+ * on the right spot before lifting does not set it off.
+ */
+private const val SpaceCursorHoldDelayMs = 450L
+
+/** How far from the drag's start, as a share of the spacebar's width, a rest counts as holding a direction. */
+private const val SpaceCursorHoldReach = 0.2f
+
+/**
+ * On the 2-D pad, how much of a movement must be vertical for it to count
+ * toward a line step (#505): its vertical part at least this share of its
+ * horizontal part.
+ */
+private const val SpaceCursorVerticalShare = 0.75f
 
 /**
  * The preview bubble for [target] under a drag off [source] (#436): the capital
@@ -21347,18 +21404,23 @@ private fun Modifier.pointerInputKey(
                     // while the finger is over the key; set by the cursor step
                     // below and spent by the timed wait here.
                     var edgeDir = 0
+                    // When the next repeated step is due, on the pointer clock.
+                    // Kept as a deadline rather than a timeout per wait, so a
+                    // finger that trembles in place (and keeps sending events)
+                    // still gets its steps.
+                    var nextRepeatAt = 0L
                     while (true) {
                         val event = if (edgeDir != 0) {
-                            withTimeoutOrNull(SpaceCursorEdgeRepeatMs) { awaitPointerEvent() }
+                            val wait = (nextRepeatAt - SystemClock.uptimeMillis()).coerceAtLeast(1L)
+                            withTimeoutOrNull(wait) { awaitPointerEvent() }
                         } else {
                             awaitPointerEvent()
                         }
-                        if (event == null) {
-                            // No event in the interval: the finger is parked
-                            // past the edge, so the caret takes another step.
+                        if (edgeDir != 0 && SystemClock.uptimeMillis() >= nextRepeatAt) {
                             onCursorMove(edgeDir)
-                            continue
+                            nextRepeatAt = SystemClock.uptimeMillis() + SpaceCursorEdgeRepeatMs
                         }
+                        if (event == null) continue
                         val change = event.changes.firstOrNull { it.id == down.id } ?: break
                         if (!change.pressed) {
                             liftAt = change.uptimeMillis
@@ -21517,7 +21579,18 @@ private fun Modifier.pointerInputKey(
                         // horizontal step below, so a diagonal drag moves both axes.
                         if (spaceCursor2d && action == SpaceSwipeAction.CURSOR) {
                             val dy = change.position.y - lastY
-                            accumulatedY += dy
+                            // A sideways drag drifts up and down a little all
+                            // the way along, and that drift added up into line
+                            // jumps nobody asked for (#505). Vertical travel
+                            // counts only while the finger is actually moving
+                            // up or down more than sideways; while it moves
+                            // sideways, what had built up drains away.
+                            val dxNow = change.position.x - lastX
+                            if (abs(dy) >= abs(dxNow) * SpaceCursorVerticalShare) {
+                                accumulatedY += dy
+                            } else {
+                                accumulatedY *= 0.5f
+                            }
                             lastY = change.position.y
                             cursorRampY.add(dy)
                             val stepYPx = spaceCursorStepPx(
@@ -21549,13 +21622,26 @@ private fun Modifier.pointerInputKey(
                                     onCursorMove(-1); accumulated += stepPx; moved = true
                                 }
                                 if (moved) change.consume()
-                                // Past the key's edge, the drag goes on by itself
-                                // (#505); back over the key it stops.
-                                edgeDir = when {
+                                // The drag goes on by itself (#505): at once past
+                                // either end of the key, and after a pause when
+                                // the finger is held still well away from where
+                                // the drag began, the way SwiftKey's does. Any
+                                // step the finger itself makes restarts the pause.
+                                val pastEdge = change.position.x < 0f || change.position.x > size.width
+                                val offset = change.position.x - down.position.x
+                                val dir = when {
                                     !textEditing.spaceCursorEdgeRepeat -> 0
                                     change.position.x < 0f -> -1
                                     change.position.x > size.width -> 1
+                                    abs(offset) > size.width * SpaceCursorHoldReach -> if (offset > 0) 1 else -1
                                     else -> 0
+                                }
+                                if (dir == 0) {
+                                    edgeDir = 0
+                                } else if (moved || dir != edgeDir) {
+                                    edgeDir = dir
+                                    nextRepeatAt = SystemClock.uptimeMillis() +
+                                        if (pastEdge) SpaceCursorEdgeRepeatMs else SpaceCursorHoldDelayMs
                                 }
                             }
                             SpaceSwipeAction.LANGUAGE -> {

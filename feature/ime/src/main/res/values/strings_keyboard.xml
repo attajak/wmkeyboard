@@ -417,6 +417,8 @@
         <item quantity="other">%d new words</item>
     </plurals>
     <string name="ime_learn_scanning_progress">Reading the text…</string>
+    <!-- The row at the top of the grid of extra word suggestions; tapping it goes back to the keys. -->
+    <string name="ime_suggestion_pages_close">Back to the keys</string>
     <string name="ime_learn_empty">No new words here. The keyboard knows every word in this text.</string>
     <!-- Under the line above: this tool lists words to add, not the words already learned. -->
     <string name="ime_learn_empty_learned_hint">Looking for the words the keyboard has learned? They are in the personal dictionary in Settings.</string>

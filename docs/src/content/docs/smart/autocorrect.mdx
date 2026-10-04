@@ -205,6 +205,8 @@ The rule also stands down when the bracket lands in front of a word — `(` type
 
 Autopilot nudges which key a *borderline* tap resolves to, biasing toward whichever neighboring letter is more likely to continue the word you're typing. Fewer boundary mis-taps happen in the first place, before autocorrect would ever need to fix them. It has its own screen under the Suggestions settings group rather than sitting alongside autocorrect, since it needs suggestions on to have anything to bias toward. Its Strength slider sets how far a favoured letter reaches, and two optional views draw the touch areas it has claimed. See [Suggestions & prediction](/smart/suggestions/) for the rest of how the suggestion engine ranks candidates.
 
+**Mistype tolerance** (100% by default, 50% to 200%) sets how far into a neighbouring key a tap may land and still be read as a slip of the key you meant. Every tap is scored by where it landed, so a tap near a key's edge can already count as its neighbour; raise this if you type fast and loose and want the keyboard to look further, lower it if you type carefully and want the key you hit trusted. It moves both the strip's candidates and autocorrect's pick.
+
 ## Options
 
 <SettingsPath path="Typing / Automatic corrections" />
@@ -226,6 +228,7 @@ Autopilot nudges which key a *borderline* tap resolves to, biasing toward whiche
 | Learn from my fixes | On | Autocorrect on |
 | Learned corrections | (a screen) | Autocorrect on |
 | Learn where my taps land | On | Autocorrect on |
+| Mistype tolerance | 100% (50&ndash;200%) | |
 | Skip words in capital letters | On | Autocorrect on |
 | Correct the word before Enter | On | Autocorrect on |
 | Capitals from the word list | On | Autocorrect on |

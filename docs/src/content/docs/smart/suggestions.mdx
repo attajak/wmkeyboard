@@ -22,6 +22,8 @@ This page covers the strip itself: its layout, the completion/correction/predict
 
 Word candidates fill three slots by default. **Number of suggestions** (see [Options](#options)) takes that as low as two or as high as six. The strongest candidate, the one autocorrect would pick, sits in the middle with the runner-up to its left. That's the layout most keyboards use. Turn off **Best suggestion in the middle** and the candidates rank left to right instead.
 
+**Swipe down for more suggestions** (off by default) is for the words that don't fit. Swipe down on the strip while it has words and a grid of up to 24 candidates covers the keys, best first, the strip's own words leading. Tap one to use it as if you'd tapped it on the strip. Swipe the strip again, or tap **Back to the keys** at the top of the grid, to close it. With this on, a downward swipe over suggestions opens the grid rather than hiding the keyboard; over an empty strip it still hides it if that setting is on.
+
 Slots are equal width, so a long word gets no more room than a short one. Rather than cut it off, the strip shrinks it to fit: the point size drops first, down to about two thirds of normal, and past that the letters themselves narrow a little. Most words that would once have read "internationali…" now fit whole, just set smaller and tighter. The shrinking itself has no settings, though the size it shrinks *from* does: **Suggestion text size** under <SettingsPath path="Appearance / Toolbar" /> runs from 80% to 160%. Short words are never scaled, and a word that already fits is drawn at full size. **Suggestion spacing**, on the same screen, is the gap either side of each word inside its slot, 6 dp out of the box. Lower it and a long word has a little more room before it shrinks.
 
 If you'd rather the strip never shrank anything, turn on **Scroll the suggestions**. Every word is then drawn at its natural size and the row scrolls sideways when the words overrun the strip. A slot still gets at least its equal share of the width, so a set of short words looks exactly as it does with the setting off. It's the setting for a narrow phone that wants five or six candidates: at fixed widths those slots are too tight to read. A new set of candidates always starts back at the left edge.
@@ -126,6 +128,7 @@ The same two lists are editable from settings, if you would rather not chase the
 | Suggestions | On |
 | Punctuation suggestions | Off |
 | Number of suggestions | 3 (range 2&ndash;6) |
+| Swipe down for more suggestions | Off |
 | Emoji takes a slot | Off |
 | Scroll the suggestions | Off |
 | Suggestions in every field | On |

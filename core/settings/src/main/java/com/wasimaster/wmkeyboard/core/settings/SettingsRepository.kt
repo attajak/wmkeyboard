@@ -7159,6 +7159,19 @@ data class SuggestionStripSettings(
      */
     val adaptToTaps: Boolean = true,
     /**
+     * Mistype tolerance (#385), as a percentage of the tap model's own
+     * scatter: 100 is the long-standing reading, more lets a tap land further
+     * inside a neighbouring key and still be read as a slip of the one meant,
+     * less trusts the key that was hit. 50 to 200.
+     */
+    val mistypeTolerance: Int = 100,
+    /**
+     * Swipe down on the word suggestions to see more of them (#385): the
+     * engine's deeper list, in a grid over the keys. Off by default, since a
+     * downward swipe on the strip otherwise hides the keyboard when that is on.
+     */
+    val swipeForMore: Boolean = false,
+    /**
      * Bumped by the settings app when it edits or deletes the learned
      * corrections or the tap model, so a running keyboard reloads its copy —
      * its own signal, because the lexicon's also empties the learning buffer.
@@ -8677,6 +8690,8 @@ class SettingsRepository(private val context: Context) {
         private val UNDO_CHIP_OBVIOUSNESS = floatPreferencesKey("undo_chip_obviousness")
         private val LEARN_FROM_CORRECTIONS = booleanPreferencesKey("learn_from_corrections")
         private val ADAPT_TO_TAPS = booleanPreferencesKey("adapt_to_taps")
+        private val MISTYPE_TOLERANCE = intPreferencesKey("mistype_tolerance")
+        private val SUGGESTIONS_SWIPE_FOR_MORE = booleanPreferencesKey("suggestions_swipe_for_more")
         private val CORRECTIONS_VERSION = intPreferencesKey("corrections_version")
         private val EMOJI_ROW_ABOVE_TOOLBAR = booleanPreferencesKey("emoji_row_above_toolbar")
         private val TRANSLATE_TARGET_LANG = stringPreferencesKey("translate_target_lang")
@@ -9910,6 +9925,9 @@ class SettingsRepository(private val context: Context) {
             learnFromCorrections = p[LEARN_FROM_CORRECTIONS]
                 ?: defaults.suggestionStrip.learnFromCorrections,
             adaptToTaps = p[ADAPT_TO_TAPS] ?: defaults.suggestionStrip.adaptToTaps,
+            mistypeTolerance = p[MISTYPE_TOLERANCE]?.coerceIn(50, 200)
+                ?: defaults.suggestionStrip.mistypeTolerance,
+            swipeForMore = p[SUGGESTIONS_SWIPE_FOR_MORE] ?: defaults.suggestionStrip.swipeForMore,
             correctionsVersion = p[CORRECTIONS_VERSION]
                 ?: defaults.suggestionStrip.correctionsVersion,
             suggestionsFirst = p[SUGGESTIONS_FIRST] ?: defaults.suggestionStrip.suggestionsFirst,
@@ -11742,6 +11760,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAdaptToTaps(value: Boolean) =
         editPrefs { it[ADAPT_TO_TAPS] = value }
+
+    suspend fun setMistypeTolerance(value: Int) =
+        editPrefs { it[MISTYPE_TOLERANCE] = value.coerceIn(50, 200) }
+
+    suspend fun setSuggestionsSwipeForMore(value: Boolean) =
+        editPrefs { it[SUGGESTIONS_SWIPE_FOR_MORE] = value }
 
     /**
      * The Learned-corrections screen changed the learned corrections or the

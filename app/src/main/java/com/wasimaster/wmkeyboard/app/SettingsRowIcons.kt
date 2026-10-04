@@ -831,6 +831,8 @@ internal object SettingsRowIcons {
         put(R.string.typing_learned_corrections_title) { Icons.Outlined.Spellcheck }
         put(R.string.typing_learned_corrections_clear_title) { Icons.Outlined.DeleteSweep }
         put(R.string.typing_adapt_taps_title) { Icons.Outlined.TouchApp }
+        put(R.string.typing_mistype_tolerance_title) { Icons.Outlined.TouchApp }
+        put(R.string.typing_suggestion_pages_title) { Icons.Outlined.UnfoldMore }
         put(R.string.typing_skip_all_caps_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.typing_autocorrect_on_enter_title) { Icons.AutoMirrored.Outlined.KeyboardReturn }
         put(R.string.typing_dictionary_capitals_title) { Icons.Outlined.TextFields }

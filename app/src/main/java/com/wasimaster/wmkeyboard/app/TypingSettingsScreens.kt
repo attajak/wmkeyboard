@@ -396,6 +396,19 @@ internal fun TypingCorrectionsSettings(
                     default = SettingsDefaults.suggestionStrip.adaptToTaps,
                 ) { scope.launch { repository.setAdaptToTaps(it) } }
             }
+            // Issue #385: how far a tap may stray into a neighbour.
+            item {
+                SliderSetting(
+                    R.string.typing_mistype_tolerance_title,
+                    subtitle = stringResource(R.string.typing_mistype_tolerance_subtitle),
+                    value = settings.watch { it.suggestionStrip.mistypeTolerance }.toFloat(),
+                    range = 50f..200f,
+                    // Steps of ten: finer than that is not a difference anyone feels.
+                    display = { "${(it.toInt() + 5) / 10 * 10}%" },
+                    info = stringResource(R.string.typing_mistype_tolerance_info),
+                    default = SettingsDefaults.suggestionStrip.mistypeTolerance.toFloat(),
+                ) { scope.launch { repository.setMistypeTolerance((it.toInt() + 5) / 10 * 10) } }
+            }
             item { ForgetTapModelRow(repository) }
             item {
                 ToggleSetting(
@@ -690,6 +703,16 @@ internal fun TypingSuggestionsSettings(
                 info = stringResource(R.string.typing_suggestion_slots_info),
                 default = SettingsDefaults.suggestionStrip.slotCount.toFloat(),
             ) { scope.launch { repository.setSuggestionSlotCount(it.toInt()) } }
+        }
+        item {
+            // Issue #385: the words the strip has no room for.
+            ToggleSetting(
+                R.string.typing_suggestion_pages_title,
+                stringResource(R.string.typing_suggestion_pages_subtitle),
+                settings.watch { it.suggestionStrip.swipeForMore },
+                info = stringResource(R.string.typing_suggestion_pages_info),
+                default = SettingsDefaults.suggestionStrip.swipeForMore,
+            ) { scope.launch { repository.setSuggestionsSwipeForMore(it) } }
         }
         item {
             ToggleSetting(
