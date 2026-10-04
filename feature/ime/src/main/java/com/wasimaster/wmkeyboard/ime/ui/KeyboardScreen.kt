@@ -15949,6 +15949,26 @@ fun arrowRowKey(arrow: ArrowKey): Key = when (arrow) {
 }
 
 /**
+ * The icon slot a key sending [keyCode] draws, or null for any key code that is
+ * not one of the four arrows. The arrow row's keys draw through a slot so an
+ * icon pack can redress them with the rest of the keys (#504).
+ */
+internal fun arrowKeySlot(keyCode: Int): String? = when (keyCode) {
+    KeyEvent.KEYCODE_DPAD_LEFT -> IconSlots.KEY_ARROW_LEFT
+    KeyEvent.KEYCODE_DPAD_UP -> IconSlots.KEY_ARROW_UP
+    KeyEvent.KEYCODE_DPAD_DOWN -> IconSlots.KEY_ARROW_DOWN
+    KeyEvent.KEYCODE_DPAD_RIGHT -> IconSlots.KEY_ARROW_RIGHT
+    else -> null
+}
+
+/**
+ * The labels [arrowRowKey] writes. A custom key sending an arrow code under one
+ * of these, or under no label, draws the slot's icon; one its author worded
+ * ("Prev") keeps the word, like any other key.
+ */
+private val ArrowGlyphs = setOf("←", "↑", "↓", "→")
+
+/**
  * Autopilot's drawn letters and the octopus words over the grid, with the
  * occupancy flags the corner hints read.
  *
@@ -20234,6 +20254,11 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             val toolSlot = (key.action as? KeyAction.Tool)
                 ?.takeIf { mainIcon == null && key.label.isBlank() }
                 ?.let { IconSlots.forTool(it.tool) }
+                // The arrow row's keys, and a custom key wearing the same glyph
+                // for the same code, draw their slot the same way (#504).
+                ?: (key.action as? KeyAction.SendKey)
+                    ?.takeIf { mainIcon == null && (key.label.isBlank() || key.label in ArrowGlyphs) }
+                    ?.let { arrowKeySlot(it.keyCode) }
             if (mainIcon != null) {
                 Icon(
                     mainIcon,

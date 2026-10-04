@@ -69,6 +69,12 @@ object IconSlots {
     const val KEY_INPUT_METHOD_PICKER = "key.input_method_picker"
     const val KEY_EMOJI = "key.emoji"
 
+    /** The four keys of the arrow row under the keyboard (#369, slots per #504). */
+    const val KEY_ARROW_LEFT = "key.arrow_left"
+    const val KEY_ARROW_UP = "key.arrow_up"
+    const val KEY_ARROW_DOWN = "key.arrow_down"
+    const val KEY_ARROW_RIGHT = "key.arrow_right"
+
     /**
      * One per enter action the field can ask for. `EnterAction.CUSTOM` has no
      * slot: the app supplied its own wording and the key draws that as text,
@@ -146,6 +152,10 @@ object IconSlots {
             R.string.core_icons_slot_input_method_picker_label,
         ),
         IconSlot(KEY_EMOJI, IconSlotGroup.KEY, R.string.core_icons_slot_emoji_key_label),
+        IconSlot(KEY_ARROW_LEFT, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_left_label),
+        IconSlot(KEY_ARROW_UP, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_up_label),
+        IconSlot(KEY_ARROW_DOWN, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_down_label),
+        IconSlot(KEY_ARROW_RIGHT, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_right_label),
     )
 
     private val chromeSlots: List<IconSlot> = listOf(

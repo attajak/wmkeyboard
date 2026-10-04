@@ -45,6 +45,11 @@
     <!-- The key that opens the system list of keyboards on the device. -->
     <string name="core_icons_slot_input_method_picker_label">Switch keyboard</string>
     <string name="core_icons_slot_emoji_key_label">Emoji key</string>
+    <!-- The four keys of the optional arrow keys row under the keyboard. -->
+    <string name="core_icons_slot_arrow_left_label">Arrow left</string>
+    <string name="core_icons_slot_arrow_up_label">Arrow up</string>
+    <string name="core_icons_slot_arrow_down_label">Arrow down</string>
+    <string name="core_icons_slot_arrow_right_label">Arrow right</string>
 
     <!-- ================================================================== -->
     <!-- Toolbar icons.                                                     -->

@@ -274,6 +274,11 @@ object IconDefaults {
         put(IconSlots.KEY_GLOBE, Icons.Outlined.Language)
         put(IconSlots.KEY_INPUT_METHOD_PICKER, Icons.Outlined.Keyboard)
         put(IconSlots.KEY_EMOJI, Icons.Outlined.EmojiEmotions)
+        // The same glyphs the cursor tools wear, so the row and the toolbox agree.
+        put(IconSlots.KEY_ARROW_LEFT, Icons.AutoMirrored.Outlined.KeyboardArrowLeft)
+        put(IconSlots.KEY_ARROW_UP, Icons.Outlined.KeyboardArrowUp)
+        put(IconSlots.KEY_ARROW_DOWN, Icons.Outlined.KeyboardArrowDown)
+        put(IconSlots.KEY_ARROW_RIGHT, Icons.AutoMirrored.Outlined.KeyboardArrowRight)
         for (action in EnterAction.entries) {
             val slot = enterActionSlot(action) ?: continue
             put(slot, forEnterAction(action))
