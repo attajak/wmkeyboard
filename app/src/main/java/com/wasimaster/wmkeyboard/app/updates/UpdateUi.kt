@@ -441,6 +441,7 @@ internal fun UpdateSettings(settings: LiveSettings) {
     // These settings live in SharedPreferences, not in the settings DataStore,
     // so they are not snapshot state and a write would not recompose anything
     // on its own. Each switch keeps its own copy and writes through.
+    val autoCheck = remember { mutableStateOf(updater.autoCheck) }
     val autoPrompt = remember { mutableStateOf(updater.autoPrompt) }
     val prereleases = remember { mutableStateOf(updater.includePrereleases) }
 
@@ -451,6 +452,18 @@ internal fun UpdateSettings(settings: LiveSettings) {
         item(visible = !switching) { UpdateRow(state, updater, settings) }
         (state as? UpdateState.Available)?.releaseUrl?.takeUnless { switching }?.let { url ->
             item { ReleasePageRow(url) }
+        }
+        item {
+            ToggleSetting(
+                R.string.update_row_auto_check_title,
+                stringResource(R.string.update_row_auto_check_subtitle),
+                checked = autoCheck.value,
+                default = UpdatePrefs.DEFAULT_AUTO_CHECK,
+                onChange = {
+                    autoCheck.value = it
+                    updater.autoCheck = it
+                },
+            )
         }
         item {
             ToggleSetting(

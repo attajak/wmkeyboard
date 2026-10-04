@@ -86,8 +86,16 @@ internal class FdroidAppUpdater(
             prefs.autoPrompt = value
         }
 
+    override var autoCheck: Boolean
+        get() = prefs.autoCheck
+        set(value) {
+            prefs.autoCheck = value
+        }
+
     override fun check(userAsked: Boolean) {
         if (running?.isActive == true) return
+        // The user's switch first: off, a resume never asks F-Droid (#507).
+        if (!userAsked && !prefs.autoCheck) return
         if (!userAsked &&
             !UpdateCheckGate.shouldAutoCheck(
                 now = now(),

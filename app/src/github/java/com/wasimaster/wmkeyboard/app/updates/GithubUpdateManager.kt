@@ -129,6 +129,9 @@ internal object GithubUpdateManager {
             prefs.clearCandidate()
             _switching.value = false
         }
+        // The user's switch first, then the interval: with automatic checks
+        // off, a resume must not reach the network at all (#507).
+        if (!userAsked && !prefs.autoCheck) return
         if (!userAsked &&
             !UpdateCheckGate.shouldAutoCheck(
                 now = System.currentTimeMillis(),

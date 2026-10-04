@@ -42,6 +42,18 @@ internal class UpdatePrefs(context: Context) {
         set(value) = prefs.edit { putBoolean(KEY_AUTO_PROMPT, value) }
 
     /**
+     * Whether the app may look for a new version on its own when the settings
+     * app opens. Off, nothing reaches the network until "Check for updates" is
+     * pressed (#507): someone who updates through Obtainium or a store has no
+     * use for the app asking GitHub as well, and the network log should bear
+     * that out. Independent of [autoPrompt], which only decides whether a
+     * version a check found is put in front of the user.
+     */
+    var autoCheck: Boolean
+        get() = prefs.getBoolean(KEY_AUTO_CHECK, DEFAULT_AUTO_CHECK)
+        set(value) = prefs.edit { putBoolean(KEY_AUTO_CHECK, value) }
+
+    /**
      * Whether to offer pre-releases. Off by default, and only the GitHub
      * channel has any to offer.
      */
@@ -191,6 +203,9 @@ internal class UpdatePrefs(context: Context) {
          */
         const val DEFAULT_AUTO_PROMPT = true
 
+        /** What [autoCheck] is worth before anyone touches it. */
+        const val DEFAULT_AUTO_CHECK = true
+
         /** What [includePrereleases] is worth before anyone touches it. */
         const val DEFAULT_PRERELEASES = false
 
@@ -199,6 +214,7 @@ internal class UpdatePrefs(context: Context) {
 
         private const val FILE_NAME = "app_updates"
         private const val KEY_AUTO_PROMPT = "auto_prompt"
+        private const val KEY_AUTO_CHECK = "auto_check"
         private const val KEY_PRERELEASES = "include_prereleases"
         private const val KEY_SNOOZED_VERSION = "snoozed_version"
         private const val KEY_SNOOZED_AT = "snoozed_at"

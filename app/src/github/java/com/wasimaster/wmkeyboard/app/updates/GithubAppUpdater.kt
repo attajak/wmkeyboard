@@ -135,6 +135,12 @@ internal class GithubAppUpdater(
             prefs.autoPrompt = value
         }
 
+    override var autoCheck: Boolean
+        get() = prefs.autoCheck
+        set(value) {
+            prefs.autoCheck = value
+        }
+
     override val installGrant: SpecialAccess?
         get() = if (needsInstallGrant()) SpecialAccess.INSTALL_UPDATES else null
 

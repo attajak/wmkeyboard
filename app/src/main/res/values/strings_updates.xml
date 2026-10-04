@@ -93,6 +93,8 @@
     <string name="update_row_release_page_title">Release page</string>
     <string name="update_row_release_page_subtitle">Read the notes, or download the file yourself</string>
 
+    <string name="update_row_auto_check_title">Check for updates automatically</string>
+    <string name="update_row_auto_check_subtitle">Look for a new version when you open this app. Off, nothing is sent until you press Check for updates</string>
     <string name="update_row_prompts_title">Ask me about updates</string>
     <string name="update_row_prompts_subtitle">Offer a new version when you open this app</string>
     <string name="update_row_prereleases_title">Include pre-releases</string>

@@ -123,15 +123,17 @@ The download goes to the app's own storage and shows up on the [storage screen](
 
 Android asks you to confirm the first update this way. After that, your phone knows this app is the one that updates itself and may skip its confirmation screen, so the update installs when you press **Install** and nothing else appears. That's why the button warns you: installing closes the app and restarts your keyboard, so the moment is yours to pick rather than something that happens mid-sentence. The next time you open the app it shows an **Updated to** card once, so a quiet update still leaves a trace. Some phones, Xiaomi and Oppo among them, show their own confirmation every time regardless.
 
-### The two switches
+### The three switches
+
+**Check for updates automatically**, on by default, is what lets the app look for a new version when you open it. Turn it off and the app sends nothing until you press **Check for updates** yourself: no request to GitHub, F-Droid or Play, and nothing in the [network log](/privacy/network/). It's the switch for anyone who updates through Obtainium, a store or by hand and doesn't want a second checker running.
 
 **Ask me about updates**, on by default, lets the app put a new version in front of you when you open it. Turn it off and nothing arrives uninvited: the card on the home screen and this row are still there when you go looking. The app never downloads anything without being asked either way.
 
 **Include pre-releases** appears on GitHub builds only, and is off. Turn it on to be offered test versions before they're finished.
 
-Both live in their own small preferences file rather than in the main settings store, so they don't travel in a settings export or a theme share. They still reset like any other row.
+All three live in their own small preferences file rather than in the main settings store, so they don't travel in a settings export or a theme share. They still reset like any other row.
 
-Automatic checks happen at most once every six hours, and only while you have the settings app open. There's no background check and no notification. A check sends nothing but a request for the list of releases, and the app asks for it conditionally, so an unchanged list costs no data and doesn't count against the limit GitHub applies to everyone sharing your IP address.
+Automatic checks happen at most once every six hours, only while **Check for updates automatically** is on, and only while you have the settings app open. There's no background check and no notification. A check sends nothing but a request for the list of releases, and the app asks for it conditionally, so an unchanged list costs no data and doesn't count against the limit GitHub applies to everyone sharing your IP address.
 
 ## Seeing what the app is using
 
@@ -219,6 +221,7 @@ There are only four switches and one picker in this whole tree. Everything else 
 
 | Setting | Control | Default |
 |---|---|---|
+| Check for updates automatically | Toggle | **On** |
 | Ask me about updates | Toggle | **On** |
 | Include pre-releases | Toggle | **Off** (GitHub builds only) |
 

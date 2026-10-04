@@ -373,6 +373,7 @@ internal object SettingsRowIcons {
         put(R.string.update_row_downloading_title) { Icons.Outlined.SystemUpdate }
         put(R.string.update_row_install_title) { Icons.Outlined.SystemUpdate }
         put(R.string.update_row_installing_title) { Icons.Outlined.SystemUpdate }
+        put(R.string.update_row_auto_check_title) { Icons.Outlined.Autorenew }
         put(R.string.update_row_prompts_title) { Icons.Outlined.Notifications }
         put(R.string.update_row_prereleases_title) { Icons.Outlined.Science }
         put(R.string.update_row_release_page_title) { Icons.AutoMirrored.Outlined.OpenInNew }

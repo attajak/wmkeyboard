@@ -126,6 +126,13 @@ internal interface AppUpdater {
     var autoPrompt: Boolean
 
     /**
+     * Whether the app may check for a new version on its own when it opens,
+     * or only when the row is pressed. The user's setting; see
+     * [UpdatePrefs.autoCheck]. Off, [check] with `userAsked = false` does nothing.
+     */
+    var autoCheck: Boolean
+
+    /**
      * The grant Android needs before [install] can do anything, or null when
      * it already has it. The UI shows its disclosure and opens the switch;
      * [install] records that it was pressed and picks up again on the way back.
@@ -190,6 +197,9 @@ internal object NoAppUpdater : AppUpdater {
         get() = false
         set(@Suppress("UNUSED_PARAMETER") value) = Unit
     override var autoPrompt: Boolean
+        get() = false
+        set(@Suppress("UNUSED_PARAMETER") value) = Unit
+    override var autoCheck: Boolean
         get() = false
         set(@Suppress("UNUSED_PARAMETER") value) = Unit
     override fun check(userAsked: Boolean) = Unit

@@ -1876,6 +1876,11 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
             null
         },
         if (UpdateChannel.ANY) {
+            about(R.string.update_row_auto_check_title, R.string.update_row_auto_check_subtitle)
+        } else {
+            null
+        },
+        if (UpdateChannel.ANY) {
             about(R.string.update_row_prompts_title, R.string.update_row_prompts_subtitle)
         } else {
             null

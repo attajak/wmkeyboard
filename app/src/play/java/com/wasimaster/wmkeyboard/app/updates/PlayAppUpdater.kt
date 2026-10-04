@@ -172,6 +172,8 @@ internal class PlayAppUpdater(
     }
 
     override fun check(userAsked: Boolean) {
+        // Off, the resume asks Play nothing; the row still does (#507).
+        if (!userAsked && !prefs.autoCheck) return
         if (userAsked) _state.value = UpdateState.Checking
         manager.appUpdateInfo
             .addOnSuccessListener { info -> onInfo(info, userAsked) }
@@ -225,6 +227,12 @@ internal class PlayAppUpdater(
         get() = prefs.autoPrompt
         set(value) {
             prefs.autoPrompt = value
+        }
+
+    override var autoCheck: Boolean
+        get() = prefs.autoCheck
+        set(value) {
+            prefs.autoCheck = value
         }
 
     override val sourceNameRes: Int = R.string.update_source_play
