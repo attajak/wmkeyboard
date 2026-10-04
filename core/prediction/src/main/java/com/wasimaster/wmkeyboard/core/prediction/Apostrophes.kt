@@ -125,15 +125,43 @@ object Apostrophes {
     )
 
     /**
-     * Whether [languageId] is the language this table is written for.
+     * German's *es* worn down to *'s* on the verb in front of it: `gehts` is
+     * *geht's*, `gibts` is *gibt's*, `habs` is *hab's* (#518).
      *
-     * English, and only English — the table is English grammar spelled out.
-     * Asked by [SuggestionEngine] the way [Elisions.rulesFor] is, so the two
-     * apostrophe routes are chosen in one place and a language reaches at
-     * most one of them.
+     * Every list holds the fused spelling, and far more often than the one
+     * with the apostrophe (`gehts` 4,057 against `geht's` 145 in the German
+     * list), so the lists cannot ask for the repair any more than they can in
+     * English. Swept against that list: no spelling here is a German word of
+     * its own. Left out for that reason: *wies* (of weisen), *nichts*,
+     * *ichs* (the ego, plural), *sos*, *ers*, *obs*. Left out because they are
+     * written without the apostrophe as a rule: *aufs*, *ins*, *ans*, *ums*,
+     * *fürs*, *durchs*, *vors*, *übers*.
      */
-    fun servesLanguage(languageId: String): Boolean =
-        languageId.substringBefore('-').substringBefore('_') == "en"
+    private val GERMAN: Map<String, String> = listOf(
+        "bin", "bleibt", "braucht", "fehlt", "gab", "gefällt", "geht", "gibt",
+        "ging", "hab", "hat", "hilft", "hört", "ist", "kann", "klappt", "kommt",
+        "kriegt", "läuft", "lohnt", "mach", "macht", "mag", "nimmt", "passt",
+        "regnet", "reicht", "sag", "soll", "steht", "stimmt", "tut", "versuch",
+        "war", "wär", "will", "wird", "zeig",
+    ).associate { verb -> verb + "s" to "$verb's" }
+
+    /** The table [languageId] repairs from, or null for a language with none. */
+    private fun tableFor(languageId: String): Map<String, String>? =
+        when (languageId.substringBefore('-').substringBefore('_')) {
+            "en" -> CONTRACTIONS
+            "de" -> GERMAN
+            else -> null
+        }
+
+    /**
+     * Whether [languageId] has a table here: English and German.
+     *
+     * Each table is one language's grammar spelled out. Asked by
+     * [SuggestionEngine] the way [Elisions.rulesFor] is, so the two apostrophe
+     * routes are chosen in one place and a language reaches at most one of
+     * them.
+     */
+    fun servesLanguage(languageId: String): Boolean = tableFor(languageId) != null
 
     /**
      * The corrected word, or null when [word] needs no fixing. The typed
@@ -141,6 +169,10 @@ object Apostrophes {
      * fix itself capitalizes (im → I'm) stay capitalized regardless.
      */
     fun fix(word: String): String? = fix(word, CONTRACTIONS)
+
+    /** [fix] from [languageId]'s own table: `gehts` → *geht's* in German. */
+    fun fix(word: String, languageId: String): String? =
+        tableFor(languageId)?.let { fix(word, it) }
 
     /**
      * The contraction [word] spells when the user has said an apostrophe belongs
@@ -166,6 +198,10 @@ object Apostrophes {
      */
     fun offer(word: String): String? = fix(word, DECLARED)
 
+    /** [offer] for [languageId]: only English has spellings that are also words. */
+    fun offer(word: String, languageId: String): String? =
+        if (tableFor(languageId) === CONTRACTIONS) offer(word) else null
+
     /**
      * Every spelling either table can hand back.
      *
@@ -179,6 +215,9 @@ object Apostrophes {
      * `doesn't`. The ambiguous forms [offer] shows are not among them.
      */
     fun repairs(): Map<String, String> = CONTRACTIONS
+
+    /** [repairs] for [languageId]; empty for a language with no table. */
+    fun repairs(languageId: String): Map<String, String> = tableFor(languageId).orEmpty()
 
     fun everyFix(): List<String> = (CONTRACTIONS.values + DECLARED.values).distinct()
 

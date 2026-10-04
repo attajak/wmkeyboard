@@ -1445,7 +1445,8 @@ class SuggestionEngine(
         if (!apostropheFixes || mixLanguageIds().none(Apostrophes::servesLanguage)) return emptyList()
         val stamp = generation.get()
         val cached = glideContractions?.takeIf { it.first == stamp }?.second ?: run {
-            val entries = Apostrophes.repairs().mapNotNull { (bare, fixed) ->
+            val repairs = mixLanguageIds().flatMap { Apostrophes.repairs(it).entries }
+            val entries = repairs.mapNotNull { (bare, fixed) ->
                 if (inDictionaries(bare)) return@mapNotNull null
                 dictionaryFrequencyOf(fixed.lowercase()).takeIf { it > 0 }?.let { bare to it }
             }
@@ -3632,7 +3633,8 @@ class SuggestionEngine(
      */
     private fun contractionReading(lower: String, langId: String): ElisionReading? {
         if (!Apostrophes.servesLanguage(langId)) return null
-        val fixed = Apostrophes.fix(lower) ?: return declaredReading(lower)
+        val fixed = Apostrophes.fix(lower, langId)
+            ?: return declaredReading(lower, Apostrophes.offer(lower, langId))
         // A repair the user took back with backspace is held back the way any
         // undone correction is (#402): offered on the strip behind what was
         // typed, never committed over it, for as long as the undo memory says.
@@ -3647,14 +3649,15 @@ class SuggestionEngine(
             -> true
             CorrectionStats.Penalty.NONE -> false
         }
-        if (undone || wordOfWrittenLanguage(lower)) return declaredReading(lower, fixed)
+        if (undone || wordOfWrittenLanguage(lower, langId)) return declaredReading(lower, fixed)
         val scored = maxOf(finiteScore(fixed.lowercase()), finiteScore(lower))
         return ElisionReading(fixed, scored + CONTRACTION_LEAD, shadowed = true)
     }
 
     /**
      * Whether [lower] is a word of the language the field is being written
-     * in, when that language is not English: `im` typed into German (#425).
+     * in, when that language is not [tableLang], the one whose table made the
+     * repair: `im` typed into German (#425), `wars` typed into English (#518).
      *
      * The written language rather than every language of the mix, so an
      * English keyboard carrying German as a secondary still repairs `im`
@@ -3662,11 +3665,13 @@ class SuggestionEngine(
      * field has turned German. Only that language's own words count — the
      * classification the field mix itself makes ([languagesOwning]).
      */
-    private fun wordOfWrittenLanguage(lower: String): Boolean {
+    private fun wordOfWrittenLanguage(lower: String, tableLang: String): Boolean {
         val written = detectedLanguageId()
-        if (written.isEmpty() || Apostrophes.servesLanguage(written)) return false
+        if (written.isEmpty() || baseLanguage(written) == baseLanguage(tableLang)) return false
         return written in languagesOwning(lower)
     }
+
+    private fun baseLanguage(id: String): String = id.substringBefore('-').substringBefore('_')
 
     /**
      * [lower] read as the contraction it spells when it is also a word of its
