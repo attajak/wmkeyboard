@@ -144,6 +144,9 @@
     <!-- What the keyboard does when a snippet it expands has more than one
          text to insert, or points at other snippets. -->
     <string name="expander_behaviour_title">Behaviour</string>
+    <string name="expander_grid_columns_title">Panel columns</string>
+    <string name="expander_grid_columns_subtitle">How many snippet tiles sit side by side in the keyboard\'s panel</string>
+    <string name="expander_grid_columns_info">More columns show more snippets at once, which suits short labels. Fewer give each tile more room for its text. Folders use the same grid. The default is 2.</string>
     <string name="expander_multi_expand_title">When a snippet has several expansions</string>
     <string name="expander_multi_expand_subtitle">What happens after you type the trigger</string>
     <string name="expander_multi_expand_info">A snippet can hold more than one text, and can point at other snippets. Chips only: the suggestion bar offers all of them and nothing goes in until you press one. Insert first: the keyboard inserts the default straight away and offers the rest, so pressing one swaps what it put in. Each snippet can answer this on its own.</string>

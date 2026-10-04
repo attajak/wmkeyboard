@@ -570,6 +570,11 @@
     <string name="ime_snippets_empty">No snippets yet.\nVariables: {date} {time} {datetime} {clip}</string>
     <string name="ime_snippets_variables">Variables: {date} {time} {datetime} {clip}</string>
     <string name="ime_snippets_settings_desc">Snippet settings</string>
+    <!-- The search in the snippets panel's header. -->
+    <string name="ime_snippets_search_desc">Search snippets</string>
+    <string name="ime_snippets_search_hint">Search snippets…</string>
+    <string name="ime_snippets_search_clear_desc">Clear the search</string>
+    <string name="ime_snippets_no_match">No snippets match “%1$s”.</string>
 
     <!-- Shown on a snippet that expands from a pattern instead of one word.
          %1$s is the pattern itself, for example ^hello (.+)$ — leave it as is. -->

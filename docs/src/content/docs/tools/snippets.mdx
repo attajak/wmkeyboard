@@ -24,7 +24,9 @@ Each snippet shows as a card in a two-column grid: its label in bold on top, the
 
 If you've made any [folders](#folders), the panel opens on them instead: folder tiles first, then whatever you've filed in no folder at all, in the same grid. Tap a folder to go inside it, and the header takes the folder's name while you're there. Back (the header arrow, the system Back gesture, or Esc on a hardware keyboard) climbs out of the folder before it closes the panel. Press and hold a folder tile to switch its automatic expansion on or off without leaving the app. With no folders anywhere the panel is exactly the flat grid it always was.
 
-The panel re-reads the snippet file every time you open it. Settings and the keyboard share that file, so an edit you make in Settings shows up the next time you switch to this panel, not while it's already open. Unlike [Clipboard](/tools/clipboard/), there's no search inside the panel, so keep labels short and distinct if your list grows.
+The panel re-reads the snippet file every time you open it. Settings and the keyboard share that file, so an edit you make in Settings shows up the next time you switch to this panel, not while it's already open.
+
+The magnifier in the panel's header opens a **search**. The keys come back under the collapsed panel, and as you type the grid narrows to the snippets whose label, text or trigger contains what you typed, from every folder at once. The × in the search, or Back, closes it and brings the full list and the folders back. **Panel columns** under [Options](#options) sets how many tiles sit side by side, two unless you change it.
 
 ## Auto-expanding as you type
 
@@ -239,6 +241,8 @@ The tool page carries only what belongs to the button:
 - **Enabled**: which way this starts depends on how you answered the setup wizard. Snippets is in the "recommended" and "show me everything" starter sets, so only the simplest answer leaves it switched off. Turning it off removes Snippets from both the toolbar and the toolbox.
 - **Icon colour**: only shown if [colorful tool icons](/tools/overview/) is turned on globally. Overrides just this tool's icon color.
 - **Keyword shortcut**: the words that make the [Smart chips](/smart/chips/) suggestion offer to open this panel. "Snippet" and "snippets" out of the box, editable or clearable here. This only controls opening the panel, and it's unrelated to a snippet's own trigger word (above).
+
+Back on the Text expansion screen, under **Behaviour**, **Panel columns** (1 to 4, default 2) sets how many snippet tiles the keyboard's panel draws side by side. Folders use the same grid.
 
 Beyond that, there's nothing global to configure about expansion. There's no on/off switch separate from the tool. How matching works is set per snippet instead, on the editor screen: word or pattern, how far back a pattern may reach, and whether it expands on its own or asks first. The nearest thing to a group switch is a [folder](#folders), which arms and disarms everything filed in it together. Having no pattern snippets at all is what keeps the matching machinery out of the typing path entirely.
 

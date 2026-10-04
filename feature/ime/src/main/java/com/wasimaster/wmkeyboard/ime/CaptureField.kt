@@ -332,6 +332,8 @@ enum class CaptureTarget(
     CLIPBOARD_SEARCH(takesWords = true),
     /** The clipboard panel's clip editor: free text, newlines and all. */
     CLIP_EDIT(takesWords = true),
+    /** The snippets panel's search pill (#471). */
+    SNIPPET_SEARCH(takesWords = true),
     ;
 
     /**
@@ -355,7 +357,7 @@ enum class CaptureTarget(
      */
     val isSearch: Boolean
         get() = this == EMOJI_SEARCH || this == MEDIA_SEARCH || this == DICTIONARY_SEARCH ||
-            this == CLIPBOARD_SEARCH || this == FIND_QUERY
+            this == CLIPBOARD_SEARCH || this == FIND_QUERY || this == SNIPPET_SEARCH
 }
 
 /**

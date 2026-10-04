@@ -5478,6 +5478,8 @@ open class WMKeyboardService : InputMethodService() {
                 dictionarySearchActive = false,
                 clipboardSearchActive = false,
                 clipboardQuery = "",
+                snippetSearchActive = false,
+                snippetQuery = "",
                 // A clip half-edited survives the same field restarting, the
                 // way a selection mode does; another field closes the editor.
                 clipEdit = if (restarting) it.clipEdit else null,
@@ -7947,7 +7949,7 @@ open class WMKeyboardService : InputMethodService() {
                 } else {
                     runMediaSearch()
                 }
-            CaptureTarget.EMOJI_SEARCH, CaptureTarget.CLIPBOARD_SEARCH -> Unit
+            CaptureTarget.EMOJI_SEARCH, CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.SNIPPET_SEARCH -> Unit
             // A clip is free text, so Enter is a line break in it; saving is
             // the editor's own button.
             CaptureTarget.CLIP_EDIT -> captureTyped("\n")
@@ -8162,6 +8164,7 @@ open class WMKeyboardService : InputMethodService() {
                 CaptureTarget.DICTIONARY_SEARCH -> updateQuery { it.copy(dictionaryQuery = after.text) }
                 CaptureTarget.CLIPBOARD_SEARCH -> updateQuery { it.copy(clipboardQuery = after.text) }
                 CaptureTarget.CLIP_EDIT -> clipEditDraft { after.text }
+                CaptureTarget.SNIPPET_SEARCH -> updateQuery { it.copy(snippetQuery = after.text) }
             }
         }
         val written = _uiState.value.captureBuffer()
@@ -19585,6 +19588,8 @@ open class WMKeyboardService : InputMethodService() {
                 // is a panel that looks broken. Same for a held tile's list.
                 snippetFolderOpen = null,
                 snippetPicker = null,
+                snippetSearchActive = false,
+                snippetQuery = "",
                 // The strip is behind the panel, so its chips go with it for
                 // the reason [smart] does.
                 snippetOffers = null,
@@ -25557,6 +25562,21 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(dictionarySearchActive = !it.dictionarySearchActive) }
     }
 
+    /** Snippets panel search tapped (#471): route keys into [KeyboardUiState.snippetQuery]. */
+    fun onSnippetSearchToggle() {
+        vibrate()
+        _uiState.update {
+            val active = !it.snippetSearchActive
+            // Closing the search clears it, so the folders and the whole list
+            // are back the way the panel opened.
+            it.copy(
+                snippetSearchActive = active,
+                snippetQuery = if (active) it.snippetQuery else "",
+                panelFocus = null,
+            )
+        }
+    }
+
     /** Clipboard panel search bar tapped: route keys into [clipboardQuery]. */
     fun onClipboardSearchToggle() {
         vibrate()
@@ -29311,6 +29331,7 @@ open class WMKeyboardService : InputMethodService() {
             onPickerPick = ::onSnippetPickerPick,
             onPickerDrill = ::onSnippetPickerDrill,
             onPickerBack = ::onSnippetPickerBack,
+            onSearchToggle = ::onSnippetSearchToggle,
         )
     }
 

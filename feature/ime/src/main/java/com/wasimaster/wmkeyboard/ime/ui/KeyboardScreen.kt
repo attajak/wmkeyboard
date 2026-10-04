@@ -10533,23 +10533,39 @@ private fun KeyboardBody(
                 // the same back the hardware key and the system key perform.
                 PanelMode.SNIPPETS -> {
                     val openFolder = state.openSnippetFolder()
+                    // The search takes the header's width while it is typing
+                    // (#471), the way the dictionary's does, and the panel
+                    // collapses to its header so the keys fit under it.
+                    val searching = state.snippetSearchActive
                     FullBleedTool(
                         state,
-                        openFolder?.name ?: stringResource(R.string.ime_tool_snippets),
+                        if (searching) "" else openFolder?.name ?: stringResource(R.string.ime_tool_snippets),
                         onClose = {
-                            if (openFolder == null) {
-                                onPanelChange(PanelMode.SNIPPETS)
-                            } else {
-                                snippetPanel.onFolderOpen(null)
+                            when {
+                                searching -> snippetPanel.onSearchToggle()
+                                openFolder == null -> onPanelChange(PanelMode.SNIPPETS)
+                                else -> snippetPanel.onFolderOpen(null)
                             }
                         },
+                        compact = searching,
+                        compactHeight = 44.dp,
                         headerActions = {
-                            ToolCircle(
-                                slot = IconSlots.forTool(ToolbarTool.SETTINGS),
-                                description = stringResource(R.string.ime_snippets_settings_desc),
-                                active = false,
-                                onClick = { onOpenToolSettings(ToolbarTool.SNIPPETS) },
-                            )
+                            if (searching) {
+                                SnippetHeaderSearchBar(state, snippetPanel.onSearchToggle)
+                            } else {
+                                ToolCircle(
+                                    slot = IconSlots.EMOJI_TAB_SEARCH,
+                                    description = stringResource(R.string.ime_snippets_search_desc),
+                                    active = false,
+                                    onClick = snippetPanel.onSearchToggle,
+                                )
+                                ToolCircle(
+                                    slot = IconSlots.forTool(ToolbarTool.SETTINGS),
+                                    description = stringResource(R.string.ime_snippets_settings_desc),
+                                    active = false,
+                                    onClick = { onOpenToolSettings(ToolbarTool.SNIPPETS) },
+                                )
+                            }
                         },
                     ) {
                         SnippetsPanel(
@@ -17914,6 +17930,7 @@ internal fun keyRowsUnderPanel(state: KeyboardUiState): Boolean = when (state.ca
     CaptureTarget.CLIPBOARD_SEARCH, CaptureTarget.CLIP_EDIT -> barClipboardSearching(state)
     CaptureTarget.DICTIONARY_SEARCH -> state.panel == PanelMode.DICTIONARY
     CaptureTarget.MEDIA_SEARCH -> state.panel.hasMediaSearch
+    CaptureTarget.SNIPPET_SEARCH -> state.panel == PanelMode.SNIPPETS
     else -> true
 }
 
@@ -23170,6 +23187,8 @@ data class SnippetPanelCallbacks(
     val onPickerDrill: (Int) -> Unit = {},
     /** Back out of the list, one level at a time. */
     val onPickerBack: () -> Unit = {},
+    /** The header's search was tapped: open it, or close and clear it (#471). */
+    val onSearchToggle: () -> Unit = {},
 )
 
 /**
@@ -23200,10 +23219,15 @@ private fun SnippetsPanel(
     Column(modifier = Modifier.fillMaxSize()) {
         val folders = state.snippetFolders
         val open = state.openSnippetFolder()
+        val query = state.snippetQuery.trim()
         // Only at the top level, and only when there are folders to draw: inside
-        // a folder the tiles are all snippets, as they were before folders.
-        val tiles = if (open == null) folders else emptyList()
+        // a folder the tiles are all snippets, as they were before folders. A
+        // search lists snippets from every folder, so it draws no folders.
+        val tiles = if (open == null && query.isEmpty()) folders else emptyList()
         val shown = state.snippetsShown()
+        // How many tiles sit side by side (#471): two, as always, unless the
+        // setting asks for more or fewer.
+        val columns = state.settings.suggestionStrip.snippetGridColumns.coerceIn(1, 4)
         if (shown.isEmpty() && tiles.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -23211,22 +23235,22 @@ private fun SnippetsPanel(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    stringResource(
-                        if (open == null) {
-                            R.string.ime_snippets_empty
-                        } else {
-                            R.string.ime_snippets_folder_empty
-                        },
-                    ),
+                    when {
+                        query.isNotEmpty() -> stringResource(R.string.ime_snippets_no_match, query)
+                        open == null -> stringResource(R.string.ime_snippets_empty)
+                        else -> stringResource(R.string.ime_snippets_folder_empty)
+                    },
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(10.dp))
-                ToolPanelChip(
-                    stringResource(R.string.ime_snippets_settings_desc),
-                    selected = true,
-                    onClick = onOpenSettings,
-                )
+                if (query.isEmpty()) {
+                    ToolPanelChip(
+                        stringResource(R.string.ime_snippets_settings_desc),
+                        selected = true,
+                        onClick = onOpenSettings,
+                    )
+                }
             }
             return@Column
         }
@@ -23245,7 +23269,7 @@ private fun SnippetsPanel(
         PanelFocusTarget(
             panel = PanelMode.SNIPPETS,
             count = tiles.size + shown.size,
-            columns = 2,
+            columns = columns,
             onActivate = { index ->
                 val folder = tiles.getOrNull(index)
                 if (folder != null) {
@@ -23260,7 +23284,7 @@ private fun SnippetsPanel(
         ScrollFocusIntoView(focused) { gridState.animateScrollToItem(it) }
         LazyVerticalGrid(
             state = gridState,
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(columns),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -23290,6 +23314,51 @@ private fun SnippetsPanel(
                     onHold = { callbacks.onSnippetHold(snippet) },
                 ) { callbacks.onSnippet(snippet) }
             }
+        }
+    }
+}
+
+/**
+ * The header-row search field of the snippets panel while it is searching
+ * (#471): the dictionary's shape, taking the row's free width beside the back
+ * button, with a clear button that closes the search and empties it. Typing
+ * lands here through the capture ladder ([CaptureTarget.SNIPPET_SEARCH]).
+ */
+@Composable
+private fun RowScope.SnippetHeaderSearchBar(state: KeyboardUiState, onToggle: () -> Unit) {
+    val kb = LocalKbTheme.current
+    Row(
+        modifier = Modifier
+            .weight(1f)
+            .padding(start = 6.dp, end = 4.dp)
+            .clip(RoundedCornerShape(18.dp))
+            .background(kb.chip)
+            .padding(start = 12.dp, end = 4.dp, top = 2.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            Icons.Outlined.Search,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp),
+            tint = kb.toolbarIcon,
+        )
+        Spacer(Modifier.width(8.dp))
+        SearchQueryText(
+            query = state.snippetQuery,
+            placeholder = stringResource(R.string.ime_snippets_search_hint),
+            active = true,
+            textColor = kb.modifierKeyText,
+            placeholderColor = kb.toolbarIcon,
+            fontSize = 13.sp,
+            modifier = Modifier.weight(1f),
+        )
+        IconButton(onClick = onToggle, modifier = Modifier.size(30.dp)) {
+            Icon(
+                Icons.Outlined.Close,
+                contentDescription = stringResource(R.string.ime_snippets_search_clear_desc),
+                modifier = Modifier.size(16.dp),
+                tint = kb.toolbarIcon,
+            )
         }
     }
 }

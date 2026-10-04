@@ -798,6 +798,7 @@ internal object SettingsRowIcons {
 
         // ---- Text expander ----
         put(R.string.expander_multi_expand_title) { Icons.Outlined.AltRoute }
+        put(R.string.expander_grid_columns_title) { Icons.Outlined.GridView }
         put(R.string.rows_snippet_multi_expand_label) { Icons.Outlined.AltRoute }
 
         // ---- Typing ----

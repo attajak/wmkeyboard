@@ -447,6 +447,17 @@ internal fun SnippetSettings(
                 },
             ) { scope.launch { repository.setSnippetMultiExpand(it) } }
         }
+        item {
+            SliderSetting(
+                R.string.expander_grid_columns_title,
+                subtitle = stringResource(R.string.expander_grid_columns_subtitle),
+                value = settings.watch { it.suggestionStrip.snippetGridColumns }.toFloat(),
+                range = 1f..4f,
+                display = { it.toInt().toString() },
+                info = stringResource(R.string.expander_grid_columns_info),
+                default = SettingsDefaults.suggestionStrip.snippetGridColumns.toFloat(),
+            ) { scope.launch { repository.setSnippetGridColumns(it.toInt()) } }
+        }
     }
     Spacer(Modifier.height(12.dp))
     RegisterAddFab(stringResource(R.string.expander_add_action)) { onNavigate("expander/edit/0") }

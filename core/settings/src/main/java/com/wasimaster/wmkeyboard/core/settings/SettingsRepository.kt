@@ -7194,6 +7194,12 @@ data class SuggestionStripSettings(
      */
     val snippetMultiExpand: MultiExpandMode = MultiExpandMode.CHIPS_ONLY,
     /**
+     * Columns of tiles in the snippets panel's grid, 1 to 4 (#471). Two, as
+     * the panel has always drawn; a wide screen or short labels suit more.
+     * Beside [snippetMultiExpand] for the same field-ceiling reason.
+     */
+    val snippetGridColumns: Int = 2,
+    /**
      * Show the system's smart replies ("On my way!") beside the word
      * candidates. They arrive down the same inline-suggestions API as
      * password-manager chips but from Android System Intelligence rather than
@@ -8057,6 +8063,7 @@ class SettingsRepository(private val context: Context) {
         private val EXPAND_USER_DICT_SHORTCUTS = booleanPreferencesKey("expand_user_dict_shortcuts")
         private val USE_SYSTEM_DICTIONARY = booleanPreferencesKey("use_system_dictionary")
         private val SNIPPET_MULTI_EXPAND = stringPreferencesKey("snippet_multi_expand")
+        private val SNIPPET_GRID_COLUMNS = intPreferencesKey("snippet_grid_columns")
         private val SYSTEM_SMART_REPLIES = booleanPreferencesKey("system_smart_replies")
         private val SMART_HIT_DETECTION = booleanPreferencesKey("smart_hit_detection")
         private val AUTOPILOT_STRENGTH = intPreferencesKey("autopilot_strength")
@@ -9871,6 +9878,8 @@ class SettingsRepository(private val context: Context) {
             snippetMultiExpand = p[SNIPPET_MULTI_EXPAND]
                 ?.let { runCatching { MultiExpandMode.valueOf(it) }.getOrNull() }
                 ?: defaults.suggestionStrip.snippetMultiExpand,
+            snippetGridColumns = p[SNIPPET_GRID_COLUMNS]?.coerceIn(1, 4)
+                ?: defaults.suggestionStrip.snippetGridColumns,
             systemSmartReplies = p[SYSTEM_SMART_REPLIES]
                 ?: defaults.suggestionStrip.systemSmartReplies,
             registerPriors = p[REGISTER_PRIORS]
@@ -14272,6 +14281,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSnippetMultiExpand(value: MultiExpandMode) =
         editPrefs { it[SNIPPET_MULTI_EXPAND] = value.name }
+
+    suspend fun setSnippetGridColumns(value: Int) =
+        editPrefs { it[SNIPPET_GRID_COLUMNS] = value.coerceIn(1, 4) }
 
     suspend fun setSystemSmartReplies(value: Boolean) =
         editPrefs { it[SYSTEM_SMART_REPLIES] = value }

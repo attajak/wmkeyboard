@@ -2921,6 +2921,13 @@ data class KeyboardUiState(
      */
     val snippetFolderOpen: Long? = null,
     /**
+     * The snippets panel's search text (#471), matched against every snippet's
+     * label, text and triggers, folders or not. Empty when not searching.
+     */
+    val snippetQuery: String = "",
+    /** Typing edits [snippetQuery]; the panel collapses so the keys fit under it. */
+    val snippetSearchActive: Boolean = false,
+    /**
      * The picker a held snippet tile opened, or null while the panel is showing
      * tiles. Panel state for the same reason [snippetFolderOpen] is: back has to
      * leave it before it leaves the folder.
@@ -3486,6 +3493,7 @@ data class KeyboardUiState(
         mediaSearchActive && panel.hasMediaSearch -> CaptureTarget.MEDIA_SEARCH
         dictionarySearchActive -> CaptureTarget.DICTIONARY_SEARCH
         clipboardSearchActive -> CaptureTarget.CLIPBOARD_SEARCH
+        snippetSearchActive -> CaptureTarget.SNIPPET_SEARCH
         else -> null
     }
 
@@ -3520,6 +3528,7 @@ data class KeyboardUiState(
         CaptureTarget.DICTIONARY_SEARCH -> dictionaryQuery
         CaptureTarget.CLIPBOARD_SEARCH -> clipboardQuery
         CaptureTarget.CLIP_EDIT -> clipEdit?.draft.orEmpty()
+        CaptureTarget.SNIPPET_SEARCH -> snippetQuery
     }
 
     /**
@@ -3569,12 +3578,26 @@ data class KeyboardUiState(
      * With no folders anywhere this is every snippet, which is what makes the
      * panel identical to its pre-folder self for anyone who never makes one.
      */
-    fun snippetsShown(): List<Snippet> = when {
-        snippetFolders.isEmpty() -> snippets
-        openSnippetFolder() != null -> snippets.filter { it.folderId == snippetFolderOpen }
-        else -> snippets.filter { it.folderId == 0L }
+    fun snippetsShown(): List<Snippet> {
+        // A search looks through every snippet, whatever folder it is filed
+        // in (#471): the point of typing a name is not having to remember
+        // where it was put.
+        val query = snippetQuery.trim()
+        if (query.isNotEmpty()) return snippets.filter { it.matchesQuery(query) }
+        return when {
+            snippetFolders.isEmpty() -> snippets
+            openSnippetFolder() != null -> snippets.filter { it.folderId == snippetFolderOpen }
+            else -> snippets.filter { it.folderId == 0L }
+        }
     }
 }
+
+/** Whether [query] appears in this snippet's label, its text, or any of its triggers. */
+private fun Snippet.matchesQuery(query: String): Boolean =
+    label.contains(query, ignoreCase = true) ||
+        text.contains(query, ignoreCase = true) ||
+        trigger?.contains(query, ignoreCase = true) == true ||
+        aliases.any { it.contains(query, ignoreCase = true) }
 
 /**
  * What the Plugins panel is showing.
