@@ -4533,6 +4533,12 @@ data class CjkSettings(
     val pinyinFuzzyPairs: Set<String> = PinyinFuzzy.ALL_PAIRS,
     /** Chinese: the Double Pinyin scheme, or OFF for full pinyin. */
     val pinyinDoublePinyin: DoublePinyinScheme = DoublePinyinScheme.OFF,
+    /**
+     * Chinese: the user's own Double Pinyin scheme, as text in fcitx's sp.dat
+     * format (see `DoublePinyinProfile`), typed with when [pinyinDoublePinyin]
+     * is CUSTOM (#502). Empty until they write one.
+     */
+    val pinyinDoublePinyinCustom: String = "",
     /** Convert candidate output to Traditional characters (Taiwan, Hong Kong). */
     val traditionalOutput: Boolean = false,
     /**
@@ -8457,6 +8463,7 @@ class SettingsRepository(private val context: Context) {
         private val PINYIN_FUZZY = booleanPreferencesKey("pinyin_fuzzy")
         private val PINYIN_FUZZY_PAIRS = stringSetPreferencesKey("pinyin_fuzzy_pairs")
         private val PINYIN_DOUBLE_PINYIN = stringPreferencesKey("pinyin_double_pinyin")
+        private val PINYIN_DOUBLE_PINYIN_CUSTOM = stringPreferencesKey("pinyin_double_pinyin_custom")
         private val CJK_TRADITIONAL_OUTPUT = booleanPreferencesKey("cjk_traditional_output")
         private val JYUTPING_LAZY = booleanPreferencesKey("jyutping_lazy")
         private val KANA_LOOSE_MARKS = booleanPreferencesKey("kana_loose_marks")
@@ -9952,6 +9959,7 @@ class SettingsRepository(private val context: Context) {
             pinyinDoublePinyin = p[PINYIN_DOUBLE_PINYIN]
                 ?.let { runCatching { DoublePinyinScheme.valueOf(it) }.getOrNull() }
                 ?: defaults.cjk.pinyinDoublePinyin,
+            pinyinDoublePinyinCustom = p[PINYIN_DOUBLE_PINYIN_CUSTOM] ?: defaults.cjk.pinyinDoublePinyinCustom,
             traditionalOutput = p[CJK_TRADITIONAL_OUTPUT] ?: defaults.cjk.traditionalOutput,
             jyutpingLazy = p[JYUTPING_LAZY] ?: defaults.cjk.jyutpingLazy,
             kanaLooseMarks = p[KANA_LOOSE_MARKS] ?: defaults.cjk.kanaLooseMarks,
@@ -15748,6 +15756,16 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setPinyinDoublePinyin(value: DoublePinyinScheme) =
         editPrefs { it[PINYIN_DOUBLE_PINYIN] = value.name }
+
+    /**
+     * Saves the custom Double Pinyin scheme's text, and with [select] also
+     * switches to it, in the one write so the keyboard never sees the scheme
+     * chosen with its old text.
+     */
+    suspend fun setPinyinDoublePinyinCustom(text: String, select: Boolean = false) = editPrefs {
+        it[PINYIN_DOUBLE_PINYIN_CUSTOM] = text
+        if (select) it[PINYIN_DOUBLE_PINYIN] = DoublePinyinScheme.CUSTOM.name
+    }
 
     suspend fun setCjkTraditionalOutput(value: Boolean) =
         editPrefs { it[CJK_TRADITIONAL_OUTPUT] = value }

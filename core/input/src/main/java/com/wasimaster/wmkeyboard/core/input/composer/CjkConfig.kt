@@ -56,6 +56,29 @@ object CjkConfig {
         set(value) { field = value; CjkDictionaries.invalidate() }
 
     /**
+     * The user's own Double Pinyin scheme as they wrote it, in the
+     * [DoublePinyinProfile] format (#502). Read when [doublePinyin] is
+     * [DoublePinyinScheme.CUSTOM].
+     *
+     * Parsed here, once per change of the text, rather than by the composer:
+     * the service assigns this on every settings emission, and re-reading the
+     * scheme on each of those would also throw away every cached ranking.
+     */
+    @Volatile
+    var customDoublePinyin: String = ""
+        set(value) {
+            if (value == field) return
+            field = value
+            customDoublePinyinTable = if (value.isBlank()) null else DoublePinyinProfile.parse(value).table
+            CjkDictionaries.invalidate()
+        }
+
+    /** [customDoublePinyin], parsed; null while it is empty. */
+    @Volatile
+    var customDoublePinyinTable: DoublePinyin.Table? = null
+        private set
+
+    /**
      * Convert candidate output to Traditional characters. Read by [HanVariant]
      * inside each composer's ranking, never applied to a finished candidate list —
      * see [HanVariant] for why that distinction is load-bearing.
@@ -98,4 +121,7 @@ enum class DoublePinyinScheme(@StringRes val displayNameRes: Int) {
     XIAOHE(R.string.core_input_double_pinyin_xiaohe_label),
     ZIRANMA(R.string.core_input_double_pinyin_ziranma_label),
     PINYINPP(R.string.core_input_double_pinyin_pinyinpp_label),
+
+    /** The user's own key table, [CjkConfig.customDoublePinyin] (#502). */
+    CUSTOM(R.string.core_input_double_pinyin_custom_label),
 }

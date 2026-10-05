@@ -1751,6 +1751,11 @@ private fun SettingsNavGraph(
                 )
             }
         }
+        // The custom Double Pinyin scheme (#502). Its own Scaffold, like the
+        // layout JSON editor: the scheme is a page of text and needs the height.
+        composable(DOUBLE_PINYIN_CUSTOM_ROUTE) {
+            DoublePinyinSchemeScreen(repository, settings) { navController.popBackStack() }
+        }
         // One segment longer than "language/{langId}", so the two patterns
         // cannot match each other's URLs.
         composable("language/{langId}/more") { backStackEntry ->

@@ -1379,6 +1379,7 @@ internal object SettingsRowIcons {
         put(R.string.languages_phonetic_guide_title) { Icons.AutoMirrored.Outlined.MenuBook }
         put(R.string.langemoji_emoji_panel_title) { Icons.Outlined.GridView }
         put(R.string.languages_cjk_double_pinyin_title) { Icons.Outlined.Keyboard }
+        put(R.string.languages_cjk_double_pinyin_custom_title) { Icons.Outlined.EditNote }
         put(R.string.languages_cjk_region_title) { Icons.Outlined.Public }
         put(R.string.layout_one_handed_group_title) { Icons.Outlined.PanTool }
         put(R.string.layout_size_position_title) { Icons.Outlined.FormatSize }

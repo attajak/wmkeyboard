@@ -49,5 +49,7 @@
     <string name="core_input_double_pinyin_xiaohe_label" translatable="false">Xiaohe (小鹤)</string>
     <string name="core_input_double_pinyin_ziranma_label" translatable="false">Ziranma (自然码)</string>
     <string name="core_input_double_pinyin_pinyinpp_label" translatable="false">Pinyin++ (拼音加加)</string>
+    <!-- A Double Pinyin scheme whose keys the user sets themselves. -->
+    <string name="core_input_double_pinyin_custom_label">Custom</string>
 
 </resources>

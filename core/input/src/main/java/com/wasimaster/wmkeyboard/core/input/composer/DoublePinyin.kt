@@ -12,11 +12,25 @@ package com.wasimaster.wmkeyboard.core.input.composer
  */
 object DoublePinyin {
 
-    /** A scheme's key maps: first-key → initial, and final-key → candidate finals. */
+    /**
+     * A scheme's key maps: first-key → initial, and final-key → candidate finals.
+     *
+     * [zeroLeads] are the first keys that start a zero-initial syllable, with
+     * the final key after them (`oj` = an under Microsoft). a, e and o by
+     * default, which is what every shipped table has always used. [codes] spell
+     * a whole syllable from two keys outright and are tried before the key maps:
+     * that is how a scheme like Xiaohe types ang as `ah`, and how a custom
+     * scheme pins a pair the maps would read some other way.
+     */
     data class Table(
         val initials: Map<Char, String>,
         val finals: Map<Char, List<String>>,
+        val zeroLeads: Set<Char> = DEFAULT_ZERO_LEADS,
+        val codes: Map<String, String> = emptyMap(),
     )
+
+    /** The zero-initial lead keys of every shipped scheme. */
+    val DEFAULT_ZERO_LEADS: Set<Char> = setOf('a', 'e', 'o')
 
     private val TABLES: Map<DoublePinyinScheme, Table> = mapOf(
         DoublePinyinScheme.MICROSOFT to MICROSOFT,
@@ -26,7 +40,13 @@ object DoublePinyin {
         DoublePinyinScheme.PINYINPP to PINYINPP,
     )
 
-    fun tableFor(scheme: DoublePinyinScheme): Table? = TABLES[scheme]
+    /**
+     * The key maps for [scheme]. [DoublePinyinScheme.CUSTOM] is the user's own
+     * scheme from [CjkConfig.customDoublePinyin], null while that is empty, so
+     * typing falls back to full Pinyin rather than to some other scheme.
+     */
+    fun tableFor(scheme: DoublePinyinScheme): Table? =
+        if (scheme == DoublePinyinScheme.CUSTOM) CjkConfig.customDoublePinyinTable else TABLES[scheme]
 
     /**
      * The syllables of a Double Pinyin key [buffer], each spanning exactly two
@@ -81,11 +101,12 @@ object DoublePinyin {
     }
 
     private fun syllableFor(c1: Char, c2: Char, table: Table, valid: Set<String>): String {
+        if (table.codes.isNotEmpty()) table.codes["$c1$c2"]?.let { return it }
         val finals = table.finals[c2] ?: listOf(c2.toString())
         val cands = LinkedHashSet<String>()
         table.initials[c1]?.let { init -> finals.forEach { cands.add(init + it) } }
-        // a/e/o as a first key mean a zero-initial syllable (an, ang, ai, e, ou…).
-        if (c1 == 'a' || c1 == 'e' || c1 == 'o') finals.forEach { cands.add(it) }
+        // A lead key first means a zero-initial syllable (an, ang, ai, e, ou…).
+        if (c1 in table.zeroLeads) finals.forEach { cands.add(it) }
         cands.firstOrNull { it in valid }?.let { return it }
         // Nothing valid yet (mid-typing or unknown code): best-effort literal.
         return (table.initials[c1] ?: c1.toString()) + (finals.firstOrNull() ?: c2.toString())

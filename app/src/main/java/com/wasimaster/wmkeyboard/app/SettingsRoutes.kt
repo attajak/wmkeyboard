@@ -141,6 +141,7 @@ internal object SettingsRoutes {
         "add_language",
         "language/{langId}",
         "language/{langId}/more",
+        "double_pinyin_custom",
         "emoji",
         "emoji/panel",
         "voice",

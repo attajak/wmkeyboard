@@ -53,6 +53,38 @@ Cantonese is a separate language entry (not a Chinese sub-option) with one layou
 
 For Pinyin typists who want fewer keystrokes, Double Pinyin encodes every syllable as exactly two keys (one for the initial, one for the final), which the composer expands to full Pinyin before segmenting as usual. Five real schemes are available: Microsoft, Sogou (identical key table to Microsoft), Xiaohe (小鹤), Ziranma, and Pinyin++. Turning one on replaces the syllable-typing rules on the same Pinyin layout. It isn't a separate keyboard.
 
+### Your own scheme
+
+Pick **Custom** in the scheme list, or open **Custom Double Pinyin scheme** below it, to set every key yourself:
+
+<SettingsPath path="Languages & layouts / Chinese / Custom Double Pinyin scheme" />
+
+The first time you pick Custom, the editor opens on a copy of the scheme you were typing with (Xiaohe if you were on full Pinyin), so you change a working table rather than start from nothing. **Start from a scheme** in the menu swaps in another built-in table the same way. Nothing changes on the keyboard until you press **Save**, and saving also switches you to Custom. While the custom scheme is empty you type full Pinyin.
+
+The scheme is plain text in the same format as fcitx's `sp.dat`, so a scheme file written for fcitx works here unchanged, and one you export works in fcitx. The menu has **Copy** and **Paste** for sharing it as text, and **Import** and **Export** for files. One line per key:
+
+```
+方案名称=My scheme
+[声母]
+zh=v
+ch=i
+sh=u
+[韵母]
+iu=q
+ing=k
+uai=k
+[零声母]
+=aeo
+ang=ah
+```
+
+- `pinyin=K` puts an initial or a final on key K. Several finals can share a key, and the one that makes a real syllable wins. The one-letter initials (b, p, m and so on) stay on their own keys unless a line moves them, so you only have to say where zh, ch and sh go.
+- `=keys` lists the keys that start a syllable with no initial, followed by the final's key, so `oj` is *an* when `o` is listed. A `*` among them is fcitx's rule for schemes without such a key: a one-letter final is typed twice (`aa`), a two-letter one as itself (`ai`), and a longer one as its first letter and its own key (`ah`). With no `=` line, a, e and o are the lead keys, as in the built-in schemes.
+- `pinyin=KK`, with two keys, spells one whole syllable and wins over everything else.
+- `#` starts a comment, lines in square brackets are only headings, case doesn't matter, and `ü` can be written `v`.
+
+Under the text, a status line names the first line the scheme skips and why (tap it to select that line), or else every initial and final that no key types yet. Only the first scheme in a file is read: fcitx's own `sp.dat` holds several in a row, each opened by its `方案名称=` line, so delete the ones you don't want or let the first one stand.
+
 ## Jianpin (简拼): initials are enough
 
 Nobody types 中国人民 as `zhongguorenmin`. **Jianpin** lets a syllable be its first letter alone, so `zgrm` reaches the same word, `wm` finds 我们 and `bj` finds 北京. It's on by default, the way every desktop and phone Pinyin IME has it, and it's a switch on the Chinese screen if you'd rather not.
@@ -179,6 +211,7 @@ Opening a Chinese, Cantonese, or Japanese entry from the Languages screen shows 
 | Fuzzy Pinyin | Off | Chinese only |
 | The eleven fuzzy pairs, one row each | All on | Chinese only, shown while Fuzzy Pinyin is on |
 | Double Pinyin scheme | Off (full Pinyin) | Chinese only |
+| Custom Double Pinyin scheme | Empty | Chinese only, used when the scheme above is Custom |
 
 To clear everything the keyboard has learned from your CJK picks:
 

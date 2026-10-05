@@ -118,6 +118,7 @@
     <string name="search_kw_langemoji_emoji_sticker">sticker png</string>
     <string name="search_kw_langemoji_lang_os_switcher">ime subtype</string>
     <string name="search_kw_languages_cjk_jianpin">mandarin abbreviated pinyin initials shorthand 简拼</string>
+    <string name="search_kw_languages_cjk_double_pinyin_custom">shuangpin 双拼 mandarin chinese scheme key table fcitx sp.dat import export</string>
     <string name="search_kw_languages_cjk_fuzzy">mandarin putonghua</string>
     <string name="search_kw_languages_cjk_lazy">cantonese jyutping</string>
     <string name="search_kw_languages_cjk_full_width_space">japanese chinese zenkaku ideographic double wide u3000</string>

@@ -418,6 +418,34 @@
     <string name="languages_cjk_pinyin_group_title">Pinyin</string>
     <string name="languages_cjk_double_pinyin_title">Double Pinyin scheme</string>
     <string name="languages_cjk_double_pinyin_info">Double Pinyin: type each syllable with exactly two keys. It needs the Pinyin dictionary above.</string>
+    <!-- Row, and the title of its editor screen, for a Double Pinyin scheme the
+         user writes themselves. -->
+    <string name="languages_cjk_double_pinyin_custom_title">Custom Double Pinyin scheme</string>
+    <!-- fcitx is the name of a Linux input method and stays as it is. -->
+    <string name="languages_cjk_double_pinyin_custom_subtitle">Set your own keys. Copy, paste, import or export the scheme, in the same format as fcitx</string>
+    <!-- Menu item and dialog title: replace the editor's text with the key table
+         of one of the built-in schemes, to edit from there. -->
+    <string name="double_pinyin_editor_start_from">Start from a scheme</string>
+    <string name="double_pinyin_editor_start_from_body">This replaces the text in the editor with that scheme\'s keys. Nothing is saved until you press Save.</string>
+    <string name="double_pinyin_editor_saved">Saved. The keyboard now types with this scheme.</string>
+    <string name="double_pinyin_editor_read_in">File read in. Press Save to type with it.</string>
+    <string name="double_pinyin_editor_read_failed">That file could not be read</string>
+    <string name="double_pinyin_editor_exported">Scheme exported</string>
+    <string name="double_pinyin_editor_export_failed">The file could not be written</string>
+    <!-- Status line under the editor. -->
+    <string name="double_pinyin_status_empty">No scheme yet. Write one, paste one, or start from a built-in scheme in the menu. While this is empty, you type full Pinyin.</string>
+    <!-- %1$s lists Pinyin initials and finals, such as "zh, iong". -->
+    <string name="double_pinyin_status_unmapped">No key types: <xliff:g id="pinyin" example="zh, iong">%1$s</xliff:g></string>
+    <string name="double_pinyin_status_complete">Every initial and final has a key</string>
+    <!-- %1$d lines of the scheme were skipped; %2$d is the number of the first
+         one, and %3$s says what is wrong with it. Tapping the line selects it. -->
+    <plurals name="double_pinyin_status_problems">
+        <item quantity="one"><xliff:g id="count" example="1">%1$d</xliff:g> line skipped. Line <xliff:g id="line" example="12">%2$d</xliff:g>: <xliff:g id="reason" example="not a Pinyin initial, final or syllable">%3$s</xliff:g></item>
+        <item quantity="other"><xliff:g id="count" example="3">%1$d</xliff:g> lines skipped. First, line <xliff:g id="line" example="12">%2$d</xliff:g>: <xliff:g id="reason" example="not a Pinyin initial, final or syllable">%3$s</xliff:g></item>
+    </plurals>
+    <string name="double_pinyin_problem_not_pinyin">before the = is not a Pinyin initial, final or syllable</string>
+    <string name="double_pinyin_problem_not_a_letter">keys must be the letters a to z</string>
+    <string name="double_pinyin_problem_not_a_mapping">not in the form pinyin=key</string>
 
     <!-- Button that takes a language off the list. %1$s is its English name. -->
     <string name="languages_remove_action">Remove <xliff:g id="language" example="Bengali">%1$s</xliff:g></string>

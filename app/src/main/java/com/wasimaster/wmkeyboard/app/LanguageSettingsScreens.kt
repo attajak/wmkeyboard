@@ -64,6 +64,8 @@ import com.wasimaster.wmkeyboard.core.input.composer.CjkDictCatalog
 import com.wasimaster.wmkeyboard.core.input.composer.FlexLanguagePack
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictDownloadManager
 import com.wasimaster.wmkeyboard.core.input.composer.CjkDictPack
+import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyin
+import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinProfile
 import com.wasimaster.wmkeyboard.core.input.composer.DoublePinyinScheme
 import com.wasimaster.wmkeyboard.core.input.composer.PinyinFuzzy
 import com.wasimaster.wmkeyboard.core.input.composer.HanVariant
@@ -1243,7 +1245,7 @@ internal fun LanguageDetailScreen(
     // Chinese/Japanese get a downloadable large conversion dictionary; Chinese
     // also gets fuzzy + Double Pinyin, all in one "… options" group.
     if (CjkDictCatalog.forLang(langId).isNotEmpty()) {
-        CjkDictPackManager(langId, repository, settings)
+        CjkDictPackManager(langId, repository, settings, onNavigate)
     }
 
     // Removing the only language would leave nothing to type in, so it is only
@@ -1408,6 +1410,7 @@ private fun CjkDictPackManager(
     langId: String,
     repository: SettingsRepository,
     settings: LiveSettings,
+    onNavigate: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val filesDir = context.filesDir
@@ -1680,12 +1683,44 @@ private fun CjkDictPackManager(
                 }
             }
             item {
+                val current = settings.watch { it.cjk.pinyinDoublePinyin }
+                val customText = settings.watch { it.cjk.pinyinDoublePinyinCustom }
                 ChoiceSetting(
                     R.string.languages_cjk_double_pinyin_title,
                     options = DoublePinyinScheme.entries.map { it to stringResource(it.displayNameRes) },
-                    selected = settings.watch { it.cjk.pinyinDoublePinyin },
+                    selected = current,
                     default = SettingsDefaults.cjk.pinyinDoublePinyin,
-                ) { scheme -> scope.launch { repository.setPinyinDoublePinyin(scheme) } }
+                ) { scheme ->
+                    scope.launch {
+                        if (scheme == DoublePinyinScheme.CUSTOM && customText.isBlank()) {
+                            // Nothing written yet (#502): open the editor on the
+                            // scheme the user types with now, a working table to
+                            // change, rather than on an empty page that would
+                            // leave the keyboard typing full Pinyin.
+                            val base = current.takeIf { DoublePinyin.tableFor(it) != null } ?: DoublePinyinScheme.XIAOHE
+                            val start = doublePinyinStartText(base, context.getString(base.displayNameRes)).orEmpty()
+                            repository.setPinyinDoublePinyinCustom(start, select = true)
+                            onNavigate(DOUBLE_PINYIN_CUSTOM_ROUTE)
+                        } else {
+                            repository.setPinyinDoublePinyin(scheme)
+                        }
+                    }
+                }
+            }
+            // Always offered, not only once Custom is picked: importing a scheme
+            // file is as likely a first step as choosing the entry above, and
+            // saving in the editor picks it.
+            item {
+                val customName = settings.watch { all ->
+                    all.cjk.pinyinDoublePinyinCustom.takeIf { it.isNotBlank() }
+                        ?.let { DoublePinyinProfile.parse(it).name }
+                }
+                NavRow(
+                    R.string.languages_cjk_double_pinyin_custom_title,
+                    subtitle = stringResource(R.string.languages_cjk_double_pinyin_custom_subtitle),
+                    value = customName,
+                    route = DOUBLE_PINYIN_CUSTOM_ROUTE,
+                ) { onNavigate(DOUBLE_PINYIN_CUSTOM_ROUTE) }
             }
         }
     }

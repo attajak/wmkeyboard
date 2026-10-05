@@ -111,10 +111,11 @@ object PinyinComposer : Composer {
     /**
      * Jianpin's index while it applies: full pinyin with the switch on. Under
      * Double Pinyin a syllable is always two keys, so there is nothing to
-     * abbreviate and the index is left out of the segmentation entirely.
+     * abbreviate and the index is left out of the segmentation entirely. An
+     * empty custom scheme types full pinyin, so it keeps Jianpin too.
      */
     private fun jianpin(): Jianpin.Index? =
-        if (CjkConfig.jianpin && CjkConfig.doublePinyin == DoublePinyinScheme.OFF) Jianpin.index else null
+        if (CjkConfig.jianpin && doublePinyinTable() == null) Jianpin.index else null
 
     /**
      * Syllables of [buffer] with per-syllable input spans, in the active input

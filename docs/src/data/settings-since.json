@@ -7,6 +7,7 @@
 	"routes": {
 		"automation": "0.5.12",
 		"backup/sync": "0.5.12",
+		"double_pinyin_custom": "0.5.14",
 		"emojicategories": "0.5.9",
 		"emojiorder/{category}": "0.5.9",
 		"expander/folder/{folderId}": "0.5.4",
@@ -140,6 +141,7 @@
 		"langemoji_strip_shortcut_title": "0.5.14",
 		"languages_ansi_allowed_title": "0.5.13",
 		"languages_ansi_version_title": "0.5.13",
+		"languages_cjk_double_pinyin_custom_title": "0.5.14",
 		"languages_cjk_full_width_space_title": "0.5.12",
 		"languages_cjk_jianpin_title": "0.5.13",
 		"languages_cjk_loose_marks_title": "0.5.11",
