@@ -577,6 +577,7 @@ internal fun ClipboardSettings(
     val swipeToDelete = settings.watch { it.clipboard.swipeToDelete }
     val detectEntities = settings.watch { it.clipboard.detectEntities }
     val sensitiveHandling = settings.watch { it.clipboard.sensitiveHandling }
+    val clipSearch = settings.watch { it.clipboard.search }
     // The slider readouts are plain lambdas, so their format strings are
     // resolved here and captured. The format also puts the number through the
     // locale, which is what gives Bengali or Arabic digits.
@@ -1021,7 +1022,7 @@ internal fun ClipboardSettings(
                 default = SettingsDefaults.clipboard.search,
             ) { scope.launch { repository.setClipboardSearch(it) } }
         }
-        item(visible = settings.watch { it.clipboard.search }) {
+        item(visible = clipSearch) {
             ToggleSetting(
                 R.string.clipboard_search_regex_title,
                 stringResource(R.string.clipboard_search_regex_subtitle),
