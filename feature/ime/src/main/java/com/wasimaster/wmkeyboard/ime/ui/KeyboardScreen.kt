@@ -19833,7 +19833,7 @@ private fun AlternatesPopup(
         firstEntry.value = FirstAlternate(firstProbe[0] + firstProbe[1], mirror)
     }
     // The highlight slides from the entry it leaves to the one the finger
-    // reaches, on a quick spring that overshoots a little and settles, the way
+    // reaches, on a spring fast enough to keep up with the finger, the way
     // Gboard's does, rather than vanishing from one and appearing on the other.
     // Drawn once behind the whole grid instead of by each entry, so there is one
     // of it to move. The entries' rects are mirrored into state for this alone:
@@ -20466,12 +20466,14 @@ private fun Modifier.alternateMagnify(index: Int, hold: AlternatesHold?): Modifi
 }
 
 /**
- * The highlight's slide between alternates: quick, with a little overshoot that
- * settles, so it reads as the highlight moving rather than as a flicker.
+ * The highlight's slide between alternates: settled in about 60 ms, as near
+ * instant as Gboard's, with just enough travel and a trace of overshoot that it
+ * reads as the highlight moving rather than as a flicker. The first cut (900,
+ * 0.62) took a quarter of a second and trailed a fast finger.
  */
 private val AlternatesHighlightSpring = spring(
-    dampingRatio = 0.62f,
-    stiffness = 900f,
+    dampingRatio = 0.8f,
+    stiffness = 6000f,
     visibilityThreshold = Rect(0.5f, 0.5f, 0.5f, 0.5f),
 )
 
