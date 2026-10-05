@@ -693,6 +693,12 @@ private fun KeyboardMode.pinnedOver(base: List<ToolbarTool>): List<ToolbarTool> 
 fun KeyboardSettings.applyMode(mode: KeyboardMode?): KeyboardSettings {
     if (mode == null) return this
     val pinned = mode.pinnedOver(toolbarTools)
+    // Only the pins the *mode* names. `pinned` falls back to the user's own
+    // toolbar when the mode says nothing about tools, and force-enabling that
+    // list would switch every tool they had turned off back on for as long as
+    // any mode was active — a tool stays pinned when it is disabled, so Voice
+    // came back in every chat app the moment the chat mode matched.
+    val modePinned = mode.toolbarTools?.filter(::isSupportedTool).orEmpty()
     return copy(
         emojiBarMode = mode.emojiBarMode ?: emojiBarMode,
         keyboardThemeId = mode.themeId ?: keyboardThemeId,
@@ -704,7 +710,7 @@ fun KeyboardSettings.applyMode(mode: KeyboardMode?): KeyboardSettings {
         toolbarTools = pinned,
         // A tool the mode pins has to be visible, even when the user left it
         // switched off globally — otherwise the mode silently pins nothing.
-        enabledTools = enabledTools + (pinned - enabledTools.toSet()),
+        enabledTools = enabledTools + (modePinned - enabledTools.toSet()),
         toolboxOrder = mode.toolboxOrder
             ?.let { front -> front + (toolboxOrder - front.toSet()) }
             ?: toolboxOrder,

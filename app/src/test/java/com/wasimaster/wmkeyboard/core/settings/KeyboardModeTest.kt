@@ -364,6 +364,33 @@ class KeyboardModeTest {
     }
 
     @Test
+    fun `a mode that pins nothing leaves a switched-off tool switched off`() {
+        // Switching a tool off leaves it on the toolbar list, so a mode that
+        // inherits that list must not read it as "the mode pins this" and turn
+        // it back on: Voice came back in every chat app that way.
+        val base = KeyboardSettings(
+            toolbarTools = listOf(ToolbarTool.EMOJI, ToolbarTool.VOICE),
+            enabledTools = listOf(ToolbarTool.EMOJI),
+        )
+        val applied = base.applyMode(browser)
+        assertEquals(listOf(ToolbarTool.EMOJI, ToolbarTool.VOICE), applied.toolbarTools)
+        assertEquals(listOf(ToolbarTool.EMOJI), applied.enabledTools)
+    }
+
+    @Test
+    fun `an appending mode enables only what it pins itself`() {
+        val base = KeyboardSettings(
+            toolbarTools = listOf(ToolbarTool.EMOJI, ToolbarTool.VOICE),
+            enabledTools = listOf(ToolbarTool.EMOJI),
+        )
+        val applied = base.applyMode(chat)
+        assertEquals(
+            listOf(ToolbarTool.EMOJI, ToolbarTool.GIF, ToolbarTool.STICKER),
+            applied.enabledTools,
+        )
+    }
+
+    @Test
     fun `replace mode swaps the pins outright`() {
         val base = KeyboardSettings(toolbarTools = listOf(ToolbarTool.EMOJI, ToolbarTool.GIF))
         val applied = base.applyMode(chat.copy(toolbarToolsAppend = false))
