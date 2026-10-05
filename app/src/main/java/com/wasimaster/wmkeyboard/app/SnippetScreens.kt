@@ -81,7 +81,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.wasimaster.wmkeyboard.core.util.requireInputStream
+import com.wasimaster.wmkeyboard.core.util.readBytesCapped
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import kotlinx.coroutines.Dispatchers
@@ -292,9 +292,8 @@ internal fun SnippetSettings(
             val name = WMFileTypes.displayName(context, uri)
             val parsed = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri).use {
-                        SnippetPayload.read(it.readBytes(), name)
-                    }
+                    context.contentResolver.readBytesCapped(uri)
+                        ?.let { SnippetPayload.read(it, name) }
                 }.getOrNull()
             }
             when {

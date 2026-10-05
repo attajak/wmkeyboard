@@ -31956,7 +31956,14 @@ open class WMKeyboardService : InputMethodService() {
     private fun transcodeToPng(file: File): File? = runCatching {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val source = android.graphics.ImageDecoder.createSource(file)
-            val drawable = android.graphics.ImageDecoder.decodeDrawable(source)
+            // Nothing here is drawn — whether the source animates is the whole
+            // question — so the decode is asked for the smallest bitmap it
+            // will produce. Without this it decoded the picture whole, and for
+            // an animated source that is every frame of it, to throw the lot
+            // away. Same idiom as `gifIsAnimated` in AnimatedImages.
+            val drawable = android.graphics.ImageDecoder.decodeDrawable(source) { decoder, _, _ ->
+                decoder.setTargetSampleSize(ANIMATION_PROBE_SAMPLE)
+            }
             if (drawable is android.graphics.drawable.AnimatedImageDrawable) return null
         }
         val bitmap = android.graphics.BitmapFactory.decodeFile(file.absolutePath) ?: return null
@@ -35134,6 +35141,13 @@ fun compositionCannotPrecedeCaret(
  * down is not holding a language model.
  */
 private const val IDLE_RELEASE_MS = 120_000L
+
+/**
+ * The largest sample [android.graphics.ImageDecoder] accepts, i.e. the
+ * cheapest decode it will do. Used where only the *kind* of an image is in
+ * question and no pixel of it is drawn.
+ */
+private const val ANIMATION_PROBE_SAMPLE = 32
 
 private const val LAUNCHER_ICON_MIN_BUDGET = 2L * 1024 * 1024
 private const val LAUNCHER_ICON_MAX_BUDGET = 6L * 1024 * 1024

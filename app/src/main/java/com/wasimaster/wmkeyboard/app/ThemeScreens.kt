@@ -207,6 +207,7 @@ import com.wasimaster.wmkeyboard.core.theme.themeName
 import com.wasimaster.wmkeyboard.core.theme.withFreshIds
 import com.wasimaster.wmkeyboard.core.theme.withEmbeddedImages
 import com.wasimaster.wmkeyboard.core.theme.withExtractedImages
+import com.wasimaster.wmkeyboard.core.util.readTextCapped
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import kotlinx.coroutines.Dispatchers
@@ -973,8 +974,7 @@ fun ThemesScreen(
         scope.launch {
             val text = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri)
-                        .use { it.readBytes().decodeToString() }
+                    context.contentResolver.readTextCapped(uri)
                 }.getOrNull()
             }
             val parsed = text?.let { ThemeCodec.decode(it) }
@@ -1089,8 +1089,7 @@ fun ThemesScreen(
         scope.launch {
             val text = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri)
-                        .use { it.readBytes().decodeToString() }
+                    context.contentResolver.readTextCapped(uri)
                 }.getOrNull()
             }
             applyHeliTheme(text)

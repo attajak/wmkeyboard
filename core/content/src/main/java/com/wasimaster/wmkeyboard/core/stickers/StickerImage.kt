@@ -41,6 +41,12 @@ object StickerImage {
     /** WhatsApp's sticker canvas. */
     const val TARGET_SIZE = 512
 
+    /**
+     * The largest sample [ImageDecoder] accepts, i.e. the cheapest decode it
+     * will do — for the animation probe, which draws nothing.
+     */
+    private const val ANIMATION_PROBE_SAMPLE = 32
+
     /** WhatsApp's static sticker budget. */
     const val TARGET_BYTES = 100 * 1024
 
@@ -248,7 +254,14 @@ object StickerImage {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return MediaMime.GIF
             val animated = runCatching {
                 val source = ImageDecoder.createSource(java.nio.ByteBuffer.wrap(bytes))
-                ImageDecoder.decodeDrawable(source) is AnimatedImageDrawable
+                // Sampled as hard as the decoder allows: the frame count is the
+                // whole question and nothing here is drawn. Left unsampled this
+                // decoded an imported GIF at full size — every frame of it — to
+                // answer a yes-or-no. Same idiom as `gifIsAnimated` in
+                // AnimatedImages, and as the sampling [decodeStill] already does.
+                ImageDecoder.decodeDrawable(source) { decoder, _, _ ->
+                    decoder.setTargetSampleSize(ANIMATION_PROBE_SAMPLE)
+                } is AnimatedImageDrawable
             }.getOrDefault(true)
             return if (animated) MediaMime.GIF else null
         }

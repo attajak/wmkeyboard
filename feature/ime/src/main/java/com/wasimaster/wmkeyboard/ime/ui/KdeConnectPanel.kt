@@ -574,9 +574,7 @@ private fun MediaTab(kb: KbTheme, device: KdeDevice, engine: KdeConnectEngine) {
                 CenterNotice(kb, Icons.Outlined.Computer, stringResource(R.string.ime_kde_media_empty_title), stringResource(R.string.ime_kde_media_empty_body))
             } else {
                 val art = remember(player.albumArtUrl, mpris.artRevision) {
-                    engine.mpris.art(player.albumArtUrl)?.let { bytes ->
-                        runCatching { BitmapFactory.decodeByteArray(bytes, 0, bytes.size) }.getOrNull()
-                    }
+                    engine.mpris.art(player.albumArtUrl)?.let(::decodeAlbumArt)
                 }
                 val snapshot = remember(player, art) { player.toSnapshot(device.name, art) }
                 NowPlaying(
@@ -1011,3 +1009,31 @@ private const val NOTICE_MS = 3_500L
 private const val ECHO_CHARS = 120
 private const val OUTPUT_LINES_SHOWN = 200
 private const val FINGERPRINT_SHOWN = 47
+
+/** Longest edge album art is decoded at. A panel never draws one bigger. */
+private const val ALBUM_ART_MAX_PX = 512
+
+/**
+ * Album art from the paired computer, sampled down on the way in.
+ *
+ * The bytes come off another machine and are allowed to be up to six megabytes
+ * of compressed image (`MprisPlugin.MAX_ART_BYTES`). Decoding that whole is
+ * `width * height * 4` — tens of megabytes, and for a large cover hundreds —
+ * inside the keyboard's process, to draw a square a couple of hundred dp wide.
+ * The sample stops while the long edge still covers [ALBUM_ART_MAX_PX], so
+ * nothing visible changes.
+ */
+private fun decodeAlbumArt(bytes: ByteArray): android.graphics.Bitmap? = runCatching {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    val longest = maxOf(bounds.outWidth, bounds.outHeight)
+    if (longest <= 0) return@runCatching null
+    var sample = 1
+    while (longest / (sample * 2) >= ALBUM_ART_MAX_PX) sample *= 2
+    BitmapFactory.decodeByteArray(
+        bytes,
+        0,
+        bytes.size,
+        BitmapFactory.Options().apply { inSampleSize = sample },
+    )
+}.getOrNull()

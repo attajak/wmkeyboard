@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.core.util
 
 import android.content.ContentResolver
 import android.net.Uri
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -32,3 +33,47 @@ fun ContentResolver.requireInputStream(uri: Uri): InputStream =
  */
 fun ContentResolver.requireOutputStream(uri: Uri, mode: String = "wt"): OutputStream =
     openOutputStream(uri, mode) ?: throw IOException("Cannot open $uri for writing")
+
+/**
+ * The most an imported document may be. Matches the dictionary importer's
+ * own ceiling (`CustomDictionaries.MAX_BYTES`), which is the largest thing this
+ * app ever asks a user to pick.
+ */
+const val MAX_IMPORT_BYTES = 32L * 1024 * 1024
+
+/**
+ * At most [maxBytes] of [uri], or null when it is larger than that.
+ *
+ * The importers used to `readBytes()` whatever the picker handed back, with no
+ * ceiling at all. Picking the wrong file in the document picker could
+ * therefore take the process down instead of showing an import error, and on a
+ * keyboard that process is the keyboard.
+ *
+ * Counting as it reads rather than trusting a reported length: a content
+ * provider is free to give no size at all, and `available()` is not one.
+ */
+fun ContentResolver.readBytesCapped(uri: Uri, maxBytes: Long = MAX_IMPORT_BYTES): ByteArray? =
+    requireInputStream(uri).use { input ->
+        val out = ByteArrayOutputStream()
+        val buffer = ByteArray(COPY_BUFFER)
+        var total = 0L
+        while (true) {
+            val n = input.read(buffer)
+            if (n < 0) break
+            total += n
+            if (total > maxBytes) return null
+            out.write(buffer, 0, n)
+        }
+        out.toByteArray()
+    }
+
+/**
+ * [readBytesCapped] decoded as text.
+ *
+ * The cap matters twice over here: a Kotlin string is UTF-16, so an ASCII
+ * document costs its bytes again on the way to a `String`.
+ */
+fun ContentResolver.readTextCapped(uri: Uri, maxBytes: Long = MAX_IMPORT_BYTES): String? =
+    readBytesCapped(uri, maxBytes)?.decodeToString()
+
+private const val COPY_BUFFER = 64 * 1024
