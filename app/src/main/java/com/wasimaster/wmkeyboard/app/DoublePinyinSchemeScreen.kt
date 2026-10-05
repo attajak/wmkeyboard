@@ -108,15 +108,20 @@ internal fun DoublePinyinSchemeScreen(
     val snackbar = remember { SnackbarHostState() }
     val title = stringResource(R.string.languages_cjk_double_pinyin_custom_title)
     val saved = settings.watch { it.cjk.pinyinDoublePinyinCustom }
+    // The editor always opens on the format's three comment lines, even for a
+    // scheme saved or pasted without them.
+    val savedText = remember(saved) { DoublePinyinProfile.withHeader(saved) }
     val selected = settings.watch { it.cjk.pinyinDoublePinyin }
     val editor = rememberCodeEditorState(DOUBLE_PINYIN_CUSTOM_ROUTE, DoublePinyinCode.smartRules, keepHistory = true) {
-        saved
+        savedText
     }
     // Picking Custom in the list writes a starting table and opens this screen
     // in the same breath, and the write can land a frame after the editor has
     // already opened on the empty text it replaced.
-    LaunchedEffect(saved) {
-        if (editor.text.isEmpty() && saved.isNotEmpty() && !editor.canUndo) editor.replace(saved)
+    LaunchedEffect(savedText) {
+        if (DoublePinyinProfile.isEmpty(editor.text) && !DoublePinyinProfile.isEmpty(saved) && !editor.canUndo) {
+            editor.replace(savedText)
+        }
     }
     val colors = rememberCodeColors()
     val text = editor.text
@@ -134,7 +139,7 @@ internal fun DoublePinyinSchemeScreen(
     }
     var menuOpen by remember { mutableStateOf(false) }
     var startOpen by rememberSaveable { mutableStateOf(false) }
-    val dirty = text != saved || selected != DoublePinyinScheme.CUSTOM
+    val dirty = text != savedText || selected != DoublePinyinScheme.CUSTOM
 
     val savedMessage = stringResource(R.string.double_pinyin_editor_saved)
     val readMessage = stringResource(R.string.double_pinyin_editor_read_in)
@@ -153,7 +158,7 @@ internal fun DoublePinyinSchemeScreen(
             } else {
                 // Into the draft, like a paste: the file may be someone else's
                 // scheme for a different keyboard, worth a look before it types.
-                editor.replace(body)
+                editor.replace(DoublePinyinProfile.withHeader(body))
                 snackbar.showSnackbar(readMessage)
             }
         }
@@ -171,7 +176,9 @@ internal fun DoublePinyinSchemeScreen(
         }
     }
     val save: () -> Unit = {
-        val body = editor.text
+        // Comments alone are no scheme: stored empty, so typing falls back to
+        // full pinyin rather than a table with no finals.
+        val body = editor.text.takeUnless(DoublePinyinProfile::isEmpty).orEmpty()
         scope.launch {
             repository.setPinyinDoublePinyinCustom(body, select = true)
             snackbar.showSnackbar(savedMessage)
@@ -213,7 +220,7 @@ internal fun DoublePinyinSchemeScreen(
                             }
                             SchemeMenuItem(stringResource(CommonR.string.common_paste), Icons.Outlined.ContentPaste) {
                                 menuOpen = false
-                                pasteCode(context)?.let(editor::replace)
+                                pasteCode(context)?.let { editor.replace(DoublePinyinProfile.withHeader(it)) }
                             }
                             SchemeMenuItem(stringResource(CommonR.string.common_import), Icons.Outlined.FileDownload) {
                                 menuOpen = false
@@ -244,7 +251,7 @@ internal fun DoublePinyinSchemeScreen(
                 reduceMotion = reduceMotion,
             )
             HorizontalDivider()
-            SchemeStatus(parsed, text.isBlank()) { line ->
+            SchemeStatus(parsed, DoublePinyinProfile.isEmpty(text)) { line ->
                 editor.select(lineRange(text, lineStarts, line - 1))
             }
         }

@@ -177,9 +177,7 @@ object DoublePinyinProfile {
      * default; everything else is written, a final key at a time.
      */
     fun write(table: DoublePinyin.Table, name: String): String = buildString {
-        append("# Double Pinyin scheme, in fcitx's sp.dat format.\n")
-        append("# pinyin=key places an initial or a final; pinyin=two keys spells a whole syllable.\n")
-        append("# =keys names the keys that start a syllable with no initial.\n")
+        append(HEADER)
         append(NAME_PREFIX).append(name).append('\n')
         append("[声母]\n")
         for ((key, initial) in table.initials.entries.sortedBy { INITIALS.indexOf(it.value) }) {
@@ -201,6 +199,25 @@ object DoublePinyinProfile {
             append(syllable).append('=').append(code).append('\n')
         }
     }
+
+    /**
+     * The three comment lines every scheme in the editor opens with, saying
+     * what the format is. fcitx skips them like any `#` line.
+     */
+    const val HEADER: String =
+        "# Double Pinyin scheme, in fcitx's sp.dat format.\n" +
+            "# pinyin=key places an initial or a final; pinyin=two keys spells a whole syllable.\n" +
+            "# =keys names the keys that start a syllable with no initial.\n"
+
+    /**
+     * [text] opening with [HEADER]: as it is when it already does, else with the
+     * header put in front, so a scheme pasted or imported from fcitx, or an empty
+     * one, still starts with the lines that explain it.
+     */
+    fun withHeader(text: String): String = if (text.startsWith(HEADER)) text else HEADER + text
+
+    /** Whether [text] holds nothing but comments and blank lines. */
+    fun isEmpty(text: String): Boolean = text.lines().all { it.isBlank() || it.trimStart().startsWith('#') }
 
     /** What no key of [table] types: initials first, then finals. */
     fun unmapped(table: DoublePinyin.Table): List<String> {
