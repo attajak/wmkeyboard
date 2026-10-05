@@ -416,6 +416,16 @@ class SuggestionEngine(
     @Volatile
     var phoneticFixedStrip: PhoneticStripSource? = null
 
+    /**
+     * Where each phonetic language shows desktop Avro's candidate list
+     * ([PhoneticCandidates]), by language id; a language with no entry shows
+     * none. Only [PhoneticCandidateList.STRIP] changes what [suggest] returns:
+     * the bar is drawn from [phoneticCandidates] by the caller. The head of the
+     * strip, and so what a space commits, never moves. Not part of the walk.
+     */
+    @Volatile
+    var phoneticCandidateLists: Map<String, PhoneticCandidateList> = emptyMap()
+
     /** The spellings the user has overruled the script of; see [recordScriptChoice]. */
     @Volatile
     var scriptChoices: PhoneticScriptChoices = PhoneticScriptChoices()
@@ -1743,6 +1753,9 @@ class SuggestionEngine(
         /** Chips a strip is assumed to show when the caller does not say. */
         const val DEFAULT_PHONETIC_SLOTS = 3
 
+        /** How deep the candidate list is read when it is folded into the strip. */
+        private const val PHONETIC_CANDIDATE_STRIP_DEPTH = 12
+
         /** How many completions [nativeCompletions] draws from each source before ranking. */
         private const val NATIVE_COMPLETION_POOL = 24
 
@@ -2133,7 +2146,7 @@ class SuggestionEngine(
                     backend, composing, previousWord, limit, phoneticSlots, source, latinCompletions,
                 )
             }
-            if (!phoneticMixing) return phoneticSuggestions(backend, composing, limit)
+            if (!phoneticMixing) return nativeReadings(backend, composing, limit)
             return phoneticStrip(backend, composing, previousWord, limit, phoneticSlots, latinCompletions)
         }
 
@@ -2767,6 +2780,29 @@ class SuggestionEngine(
     }
 
     /**
+     * Desktop Avro's candidate list for [composing] typed on [languageId]'s
+     * phonetic layout, at most [limit] words; see [PhoneticCandidates]. Empty
+     * when [languageId] has no phonetic scheme.
+     */
+    fun phoneticCandidates(languageId: String, composing: String, limit: Int): List<String> {
+        val backend = phoneticBackend(languageId) ?: return emptyList()
+        return PhoneticCandidates.build(backend, composing, limit, ::suppressed)
+    }
+
+    /**
+     * The layout's own words for the strip: [phoneticSuggestions], or — with
+     * the candidate list folded into the strip — its head (what a space
+     * commits) followed by the candidate list in Avro's order.
+     */
+    private fun nativeReadings(backend: PhoneticBackend, composing: String, limit: Int): List<String> {
+        val ours = phoneticSuggestions(backend, composing, limit)
+        if (phoneticCandidateLists[backend.scheme.languageId] != PhoneticCandidateList.STRIP) return ours
+        val depth = maxOf(limit, PHONETIC_CANDIDATE_STRIP_DEPTH)
+        val avro = PhoneticCandidates.build(backend, composing, depth, ::suppressed)
+        return (ours.take(1) + avro + ours).distinct().take(limit)
+    }
+
+    /**
      * What a space commits for [composing] on [languageId]'s phonetic layout,
      * and what it would have committed in the other script.
      *
@@ -3010,7 +3046,7 @@ class SuggestionEngine(
     ): List<String> {
         // Never empty: with every reading on the never-suggest list the rules'
         // own is still what a space commits, and the head has to say so.
-        val native = phoneticSuggestions(backend, composing, limit)
+        val native = nativeReadings(backend, composing, limit)
             .ifEmpty { listOf(backend.scheme.transliterate(composing)) }
         val literal = latinForm(composing)
         val latinLeads = scriptVerdict(backend, composing, previousWord).script == PhoneticScript.LATIN
@@ -3058,7 +3094,7 @@ class SuggestionEngine(
         val fixed = listOf(literal, reading).distinct()
         fun isFixed(word: String) = word == reading || word.equals(literal, ignoreCase = true)
         val want = limit + fixed.size
-        val native = { phoneticSuggestions(backend, composing, want).filterNot(::isFixed) }
+        val native = { nativeReadings(backend, composing, want).filterNot(::isFixed) }
         val english = { englishCompletions(composing, want, latinCompletions).filterNot(::isFixed) }
         val rest = when (source) {
             PhoneticStripSource.NATIVE -> native()

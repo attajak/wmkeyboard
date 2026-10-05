@@ -44,6 +44,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideShapeStore
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticStripSource
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticCandidateList
 import com.wasimaster.wmkeyboard.core.prediction.SuggestionEngine
 import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
 import com.wasimaster.wmkeyboard.prediction.R as PredictionR
@@ -7588,6 +7589,14 @@ data class SuggestionStripSettings(
      * font. On Bengali's own screen.
      */
     val bengaliAnsiAllowed: Boolean = false,
+    /**
+     * Where each phonetic language shows desktop Avro's candidate list — the
+     * words Avro drops down under the word being typed: folded into the strip,
+     * or a scrollable row above it. A language with no entry shows none, so
+     * the strip stays what it was until someone asks. Read it through
+     * [phoneticCandidateListFor].
+     */
+    val phoneticCandidateLists: Map<String, PhoneticCandidateList> = emptyMap(),
     /** Whether the Bengali layouts write ANSI right now: the strip button's state. */
     val bengaliAnsiOn: Boolean = false,
     /**
@@ -7667,6 +7676,10 @@ data class SuggestionStripSettings(
     /** Whether predictions read [langId]'s downloaded word-pair data. */
     fun wordPairsEnabledFor(langId: String): Boolean = langId !in wordPairsOffLangs
 }
+    /** Where [langId]'s phonetic layout shows its candidate list; OFF for no phonetic layout. */
+    fun phoneticCandidateListFor(langId: String?): PhoneticCandidateList =
+        langId?.let { phoneticCandidateLists[it] } ?: PhoneticCandidateList.OFF
+
 
 /**
  * DataStore-backed settings. Every option on the settings screens flows
@@ -8133,6 +8146,7 @@ class SettingsRepository(private val context: Context) {
         private val NUMBER_PREDICTION = booleanPreferencesKey("number_prediction")
         private val AUTOCORRECT_SPLITS = booleanPreferencesKey("autocorrect_splits")
         private val REGISTER_PRIORS = booleanPreferencesKey("register_priors")
+        private val PHONETIC_CANDIDATE_LISTS = stringSetPreferencesKey("phonetic_candidate_lists")
         private val TIMING_SIGNAL_STRENGTH = floatPreferencesKey("timing_signal_strength")
         private val CONTACT_SUGGESTIONS = booleanPreferencesKey("contact_suggestions")
         private val CONTACT_EMAIL_SUGGESTIONS =
@@ -10210,6 +10224,15 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.suggestionStrip.wordMenuItems,
             synonymSources = p[SYNONYM_SOURCES]?.let(SynonymSources::decode)
                 ?: defaults.suggestionStrip.synonymSources,
+            phoneticCandidateLists = p[PHONETIC_CANDIDATE_LISTS]
+                ?.mapNotNull { entry ->
+                    val lang = entry.substringBefore('=', "")
+                    val where = runCatching { PhoneticCandidateList.valueOf(entry.substringAfter('=')) }
+                        .getOrNull()
+                    if (lang.isEmpty() || where == null) null else lang to where
+                }
+                ?.toMap()
+                ?: defaults.suggestionStrip.phoneticCandidateLists,
             rankControl = p[WORD_RANK_CONTROL]
                 ?.let { runCatching { RankControl.valueOf(it) }.getOrNull() }
                 ?: defaults.suggestionStrip.rankControl,
@@ -14602,6 +14625,12 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAutoSpaceAfterSuggestion(value: Boolean) =
         editPrefs { it[AUTO_SPACE_AFTER_SUGGESTION] = value }
+    suspend fun setPhoneticCandidateList(langId: String, where: PhoneticCandidateList) =
+        editPrefs {
+            val others = it[PHONETIC_CANDIDATE_LISTS].orEmpty().filterNot { e -> e.substringBefore('=') == langId }
+            it[PHONETIC_CANDIDATE_LISTS] = others.toSet() + "$langId=${where.name}"
+        }
+
 
     suspend fun setExpandUserDictShortcuts(value: Boolean) =
         editPrefs { it[EXPAND_USER_DICT_SHORTCUTS] = value }

@@ -220,6 +220,7 @@ import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.topWords
 import com.wasimaster.wmkeyboard.core.prediction.PendingLearn
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticBackend
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticCandidateList
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticScheme
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticScript
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticScriptChoices
@@ -3882,6 +3883,7 @@ open class WMKeyboardService : InputMethodService() {
                 suggestionEngine?.fieldDetectionShift = fieldDetectionShift(settings)
                 syncPhoneticAutoEnglish(settings, activeSpec)
                 syncPhoneticFixedStrip(settings, activeSpec)
+                syncPhoneticCandidateLists(settings)
                 syncAnsiOutput(settings, activeSpec)
                 glideSourcesEpoch.update { it + 1 }
             }
@@ -4265,6 +4267,7 @@ open class WMKeyboardService : InputMethodService() {
                 phoneticFixedStrip = _uiState.value.let {
                     it.settings.suggestionStrip.phoneticFixedStripFor(it.composer.phoneticLanguage)
                 }
+                phoneticCandidateLists = _uiState.value.settings.suggestionStrip.phoneticCandidateLists
                 scriptChoices = this@WMKeyboardService.scriptChoices
                 fieldDetectionShift = fieldDetectionShift(_uiState.value.settings)
                 tuneGlide(_uiState.value.settings.gesture.glideTuning())
@@ -10186,6 +10189,19 @@ open class WMKeyboardService : InputMethodService() {
         ansiOutputVersion = BijoyAnsi.Version.of(strip.bengaliAnsiVersion)
             .takeIf { strip.bengaliAnsiFor(spec.language().id) }
         if (ansiOutputVersion == null) ansiConnection = null
+    }
+
+    /**
+     * Pushes where each phonetic language shows Avro's candidate list to the
+     * engine, and rebuilds the strip of a word being typed when it changed.
+     */
+    private fun syncPhoneticCandidateLists(settings: KeyboardSettings) {
+        val engine = suggestionEngine ?: return
+        val next = settings.suggestionStrip.phoneticCandidateLists
+        if (engine.phoneticCandidateLists == next) return
+        engine.phoneticCandidateLists = next
+        if (composing.isEmpty() || _uiState.value.composer.phoneticLanguage == null) return
+        refreshSuggestions()
     }
 
     /**
@@ -17204,6 +17220,9 @@ open class WMKeyboardService : InputMethodService() {
             // the strip and the keys still take the head they always took.
             val pagesOn = state.settings.suggestionStrip.swipeForMore && state.composer.completionLanguage == null
             val askDeep = if (pagesOn) maxOf(askFor, SUGGEST_PAGES_POOL) else askFor
+            // Desktop Avro's candidate list, for the row above the strip when
+            // the language is set to draw it there.
+            var candidateBar = emptyList<String>()
             val (results, emojis, bias, floating) = withContext(suggestionDispatcher) {
                 // A layout whose keys already spell the word (Khipro) is
                 // completed from what they spelled, not from the roman keys;
@@ -17226,6 +17245,12 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
                 val deep = deepAll.take(askFor)
+                state.composer.phoneticLanguage?.let { lang ->
+                    val where = state.settings.suggestionStrip.phoneticCandidateListFor(lang)
+                    if (typed.isNotEmpty() && where == PhoneticCandidateList.BAR) {
+                        candidateBar = engine.phoneticCandidates(lang, typed, PHONETIC_CANDIDATE_BAR_MAX)
+                    }
+                }
                 // The walk itself cannot be interrupted — the engine has no
                 // suspension point in it — but everything after it can be, and
                 // on a phonetic or autocorrecting board what follows is not
@@ -17480,6 +17505,7 @@ open class WMKeyboardService : InputMethodService() {
             _uiState.update {
                 it.copy(
                     suggestions = results,
+                    phoneticCandidates = candidateBar,
                     emojiSuggestions = shownEmojis,
                     punctuationSuggestions = punct,
                     nextLetterBias = bias,
@@ -35556,6 +35582,9 @@ private const val SUGGEST_PAGES_POOL = 24
  * [SuggestionEngine.phoneticFixedStrip]).
  */
 private const val FIXED_PHONETIC_CHIPS = 2
+/** The most words the candidate-list row above the strip holds. */
+private const val PHONETIC_CANDIDATE_BAR_MAX = 20
+
 
 /** U+3000, the full-width space Japanese and Chinese text is spaced with. */
 private const val IDEOGRAPHIC_SPACE = "\u3000"

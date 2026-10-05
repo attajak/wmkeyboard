@@ -2524,6 +2524,12 @@ data class KeyboardUiState(
     val expandedCandidates: List<String> = emptyList(),
     val suggestions: List<String> = emptyList(),
     /**
+     * Desktop Avro's candidate list for the word being typed, for the row
+     * above the strip; empty unless the phonetic language is set to show it
+     * there (`SuggestionStripSettings.phoneticCandidateLists`).
+     */
+    val phoneticCandidates: List<String> = emptyList(),
+    /**
      * The word the next commit will really put in, as opposed to the word
      * merely leading the strip. The strip colours that chip and no other, so
      * the colour is a promise the commit keeps.

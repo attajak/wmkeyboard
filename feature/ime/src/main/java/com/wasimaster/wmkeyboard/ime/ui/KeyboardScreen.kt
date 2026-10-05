@@ -410,6 +410,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeyPopupSettings
 import com.wasimaster.wmkeyboard.core.settings.KeyRepeatSettings
 import com.wasimaster.wmkeyboard.core.settings.TextEditingSettings
 import com.wasimaster.wmkeyboard.core.prediction.OctopusWord
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticCandidateList
 import com.wasimaster.wmkeyboard.core.settings.ArrowKey
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.OctopusPlacement
@@ -6733,6 +6734,59 @@ internal val FancyRowHeight = 40.dp
 /** Height of the dictionary bar (issue #51), the same strip shape as the fancy one. */
 internal val DictionaryRowHeight = 40.dp
 
+/** Height of the row holding desktop Avro's candidate list, the same strip shape again. */
+internal val PhoneticCandidateRowHeight = 40.dp
+
+/**
+ * Whether the row holding desktop Avro's candidate list is on screen: the
+ * layout being typed on is phonetic, and its language is set to show the list
+ * in a row of its own. It stays up, empty, between words, so the keyboard
+ * does not grow and shrink by a row with every word typed.
+ */
+internal fun phoneticCandidateBarShown(state: KeyboardUiState): Boolean =
+    state.settings.suggestions &&
+        state.settings.suggestionStrip.phoneticCandidateListFor(state.composer.phoneticLanguage) ==
+        PhoneticCandidateList.BAR
+
+/**
+ * Desktop Avro's candidate list for the word being typed, as a row above the
+ * strip that scrolls through every word of it. A tap writes the word the way
+ * a tap on the strip does. The word a space would write is in bold, the way
+ * Avro highlights the candidate it has selected.
+ */
+@Composable
+private fun PhoneticCandidateBar(state: KeyboardUiState, onPick: (String) -> Unit) {
+    val words = if (state.composingPreview.isEmpty()) emptyList() else state.phoneticCandidates
+    val committing = state.autocorrectWord ?: state.suggestions.firstOrNull()
+    val kb = LocalKbTheme.current
+    val listState = rememberLazyListState()
+    // A new word starts at the left edge, where its best candidates are.
+    LaunchedEffect(words) { listState.scrollToItem(0) }
+    LazyRow(
+        state = listState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(PhoneticCandidateRowHeight),
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(horizontal = 4.dp),
+    ) {
+        lazyRowItems(words) { word ->
+            Text(
+                text = word,
+                modifier = Modifier
+                    .padding(horizontal = 2.dp)
+                    .clip(kb.chipShape())
+                    .clickable { onPick(word) }
+                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                fontSize = 15.sp,
+                fontWeight = if (word == committing) FontWeight.Bold else null,
+                color = kb.suggestionText,
+                maxLines = 1,
+            )
+        }
+    }
+}
+
 /**
  * The Fancy Text style in force at draw time, or null outside the fancy
  * layout — the render-side twin of the service's own resolver, and the gate
@@ -9940,6 +9994,8 @@ internal fun fullBleedHiddenRows(
         // layout, which is why this takes the state and not just settings.
         (if (fancyStyleFor(state) != null) FancyRowHeight else 0.dp) +
         (if (state.settings.rows.dictionaryBarEnabled) DictionaryRowHeight else 0.dp) +
+        // Avro's candidate row rides above the strip, so it hides with it.
+        (if (phoneticCandidateBarShown(state)) PhoneticCandidateRowHeight else 0.dp) +
         // The macro row is state-driven, so unlike the on-demand tools row it
         // can be counted: whether it is on screen is in the ui state this
         // function already has.
@@ -10536,44 +10592,50 @@ private fun KeyboardBody(
                             // Compact dictation still takes it: that bar is the
                             // session's only status and its only way out.
                             state.settings.toolbarBehavior.stripHidden && !state.voice.strip -> {}
-                            else -> WithNetActivityDot(
-                                state.settings.networkLog.showOnKeyboard,
-                                state.settings.toolColorOverrides,
-                            ) { TopBar(
-                                state,
-                                toolsRowOpen = toolsRowOpen,
-                                onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
-                                onSuggestion = onSuggestion,
-                                suggestionHold = suggestionHold,
-                                onJoinSuggestion = onJoinSuggestion,
-                                onRevisionSuggestion = onRevisionSuggestion,
-                                onCandidate = onCandidate,
-                                onCandidatesExpand = onCandidatesExpand,
-                                onEmoji = onEmoji,
-                                onEmojiSuggestion = onEmojiSuggestion,
-                                onPunctuation = onPunctuation,
-                                onPanelChange = onPanelChange,
-                                onToolTap = onToolTap,
-                                drag = drag,
-                                onVoiceToggle = onVoiceToggle,
-                                onVoiceUndo = onVoiceUndo,
-                                onVoicePermissionRequest = onVoicePermissionRequest,
-                                onOpenVoiceSettings = onOpenVoiceSettings,
-                                onVoiceAction = onVoiceRailKey,
-                                onDismissInlineSuggestions = onDismissInlineSuggestions,
-                                onSmartAccept = onSmartAccept,
-                                onSmartOpen = onSmartOpen,
-                                vocab = toolHold.vocab,
-                                stickerOffer = toolHold.stickerOffer,
-                                onStripOfferAction = onStripOfferAction,
-                                onClipboardSuggestion = onClipboardItem,
-                                onClipboardSuggestionDismiss = onClipboardSuggestionDismiss,
-                                onClipboardEntity = onClipboardEntity,
-                                onOtpAccept = onOtpAccept,
-                                onOtpDismiss = onOtpDismiss,
-                                onEmojiRowShown = onEmojiRowShown,
-                                onSwipeDownHide = onHideKeyboard,
-                            ) }
+                            else -> {
+                                // Avro's candidate list, when the phonetic layout's
+                                // language asks for it in a row of its own, sits
+                                // directly over the strip it belongs to.
+                                if (phoneticCandidateBarShown(state)) PhoneticCandidateBar(state, onSuggestion)
+                                WithNetActivityDot(
+                                    state.settings.networkLog.showOnKeyboard,
+                                    state.settings.toolColorOverrides,
+                                ) { TopBar(
+                                    state,
+                                    toolsRowOpen = toolsRowOpen,
+                                    onToolsRowToggle = { toolsRowOpen = !toolsRowOpen },
+                                    onSuggestion = onSuggestion,
+                                    suggestionHold = suggestionHold,
+                                    onJoinSuggestion = onJoinSuggestion,
+                                    onRevisionSuggestion = onRevisionSuggestion,
+                                    onCandidate = onCandidate,
+                                    onCandidatesExpand = onCandidatesExpand,
+                                    onEmoji = onEmoji,
+                                    onEmojiSuggestion = onEmojiSuggestion,
+                                    onPunctuation = onPunctuation,
+                                    onPanelChange = onPanelChange,
+                                    onToolTap = onToolTap,
+                                    drag = drag,
+                                    onVoiceToggle = onVoiceToggle,
+                                    onVoiceUndo = onVoiceUndo,
+                                    onVoicePermissionRequest = onVoicePermissionRequest,
+                                    onOpenVoiceSettings = onOpenVoiceSettings,
+                                    onVoiceAction = onVoiceRailKey,
+                                    onDismissInlineSuggestions = onDismissInlineSuggestions,
+                                    onSmartAccept = onSmartAccept,
+                                    onSmartOpen = onSmartOpen,
+                                    vocab = toolHold.vocab,
+                                    stickerOffer = toolHold.stickerOffer,
+                                    onStripOfferAction = onStripOfferAction,
+                                    onClipboardSuggestion = onClipboardItem,
+                                    onClipboardSuggestionDismiss = onClipboardSuggestionDismiss,
+                                    onClipboardEntity = onClipboardEntity,
+                                    onOtpAccept = onOtpAccept,
+                                    onOtpDismiss = onOtpDismiss,
+                                    onEmojiRowShown = onEmojiRowShown,
+                                    onSwipeDownHide = onHideKeyboard,
+                                ) }
+                            }
                         }
                         BarRow.EMOJI -> if (showEmojiRow) {
                             EmojiBarStrip(

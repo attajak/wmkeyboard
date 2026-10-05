@@ -75,6 +75,7 @@ import com.wasimaster.wmkeyboard.core.layout.language
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticStripSource
+import com.wasimaster.wmkeyboard.core.prediction.PhoneticCandidateList
 import com.wasimaster.wmkeyboard.core.prediction.SpellingMap
 import com.wasimaster.wmkeyboard.core.script.ComposerType
 import com.wasimaster.wmkeyboard.core.script.DeviceLocales
@@ -1785,6 +1786,36 @@ private fun PhoneticStripGroup(
                         )
                     },
                 ) { scope.launch { repository.setPhoneticStripSource(langId, it) } }
+            }
+        }
+        // Avro's own feature, so on Avro's language: the list is built the
+        // way desktop Avro builds it, Bengali suffixes and all.
+        if (langId == PhoneticSchemes.BENGALI.languageId) {
+            item {
+                ChoiceSetting(
+                    R.string.languages_phonetic_candidates_title,
+                    subtitle = stringResource(R.string.languages_phonetic_candidates_subtitle),
+                    info = stringResource(R.string.languages_phonetic_candidates_info, languageName),
+                    options = listOf(
+                        PhoneticCandidateList.OFF to stringResource(R.string.languages_phonetic_candidates_off_label),
+                        PhoneticCandidateList.STRIP to
+                            stringResource(R.string.languages_phonetic_candidates_strip_label),
+                        PhoneticCandidateList.BAR to stringResource(R.string.languages_phonetic_candidates_bar_label),
+                    ),
+                    selected = settings.watch { it.suggestionStrip.phoneticCandidateListFor(langId) },
+                    default = SettingsDefaults.suggestionStrip.phoneticCandidateListFor(langId),
+                    detail = { where ->
+                        ChoiceDetail(
+                            stringResource(
+                                when (where) {
+                                    PhoneticCandidateList.OFF -> R.string.languages_phonetic_candidates_off_desc
+                                    PhoneticCandidateList.STRIP -> R.string.languages_phonetic_candidates_strip_desc
+                                    PhoneticCandidateList.BAR -> R.string.languages_phonetic_candidates_bar_desc
+                                },
+                            ),
+                        )
+                    },
+                ) { scope.launch { repository.setPhoneticCandidateList(langId, it) } }
             }
         }
     }

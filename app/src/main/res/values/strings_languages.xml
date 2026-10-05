@@ -207,6 +207,17 @@
     <!-- %1$s is the English name of the language, for example "Bengali". -->
     <string name="languages_phonetic_strip_source_native_desc">Only <xliff:g id="language" example="Bengali">%1$s</xliff:g> words from the word list and the known spellings</string>
     <string name="languages_phonetic_strip_source_english_desc">Only English words that start with what you typed</string>
+    <!-- Phonetic layouts: desktop Avro's candidate list (the words it shows under the word being typed). -->
+    <string name="languages_phonetic_candidates_title">Avro candidate list</string>
+    <string name="languages_phonetic_candidates_subtitle">The words desktop Avro shows under the word you type</string>
+    <!-- %1$s is the English name of the language, for example "Bengali". -->
+    <string name="languages_phonetic_candidates_info">Desktop Avro shows a short list under the word you type. The list is built the same way here. First comes the known spelling for what you typed, if there is one. Next come the <xliff:g id="language" example="Bengali">%1$s</xliff:g> dictionary words that sound like it, and the words made by adding an ending to one of them, such as বন্ধু + দের. The words closest to the letter-for-letter reading come first. Last is the letter-for-letter reading itself.\n\nIn the suggestion strip: the word that the space bar will write stays first, and the list follows it. Bar above the strip: the whole list goes in a row of its own above the strip, and you can scroll through it. The row stays while the layout is on, so the keyboard does not change height between words.\n\nThe space bar writes the same word with all three choices.</string>
+    <string name="languages_phonetic_candidates_off_label">Off</string>
+    <string name="languages_phonetic_candidates_strip_label">In the strip</string>
+    <string name="languages_phonetic_candidates_bar_label">Bar above</string>
+    <string name="languages_phonetic_candidates_off_desc">The strip shows its usual suggestions</string>
+    <string name="languages_phonetic_candidates_strip_desc">The strip shows the list after the word the space bar will write</string>
+    <string name="languages_phonetic_candidates_bar_desc">A row above the strip shows the whole list, and you can scroll it</string>
     <string name="languages_phonetic_english_switch_title">Switch on the suggestion strip</string>
     <string name="languages_phonetic_english_switch_subtitle">A small button beside the suggestions turns English words on and off as you type</string>
     <string name="languages_phonetic_english_switch_info">The button shows on this language\'s phonetic layout and is lit while English words are on. It is for the moment a word keeps coming out in the wrong script: tap it in the middle of the word and the word turns back before you press space.\n\nOff takes the button away and leaves the setting above exactly as you set it, so English words simply stay on. Shared by every language with a phonetic layout.</string>
