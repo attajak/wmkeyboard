@@ -575,7 +575,7 @@ class SuggestionEngineTest {
     }
 
     @Test fun `a split correction is never obvious`() {
-        val e = engine().apply { autocorrectSplits = true }
+        val e = splitEngine()
         val decision = e.decideCorrection("theworld")
         assertEquals("the world", decision.apply)
         // It changes how many words the sentence has. Nobody's finger did that.
@@ -1006,11 +1006,37 @@ class SuggestionEngineTest {
         assertNull(engine().shouldAutocorrect("theworld"))
     }
 
+    /** Split autocorrect on, with "the world" typed often enough to vouch for itself. */
+    private fun splitEngine(lexicon: UserLexicon = UserLexicon(null)): SuggestionEngine =
+        engine(lexicon.apply { repeat(2) { learnBigram("the", "world") } })
+            .apply { autocorrectSplits = true }
+
     @Test fun `split autocorrect inserts the missed space`() {
-        val e = engine().apply { autocorrectSplits = true }
+        val e = splitEngine()
         assertEquals("the world", e.shouldAutocorrect("theworld"))
         // Typed capitalization carries over to the split.
         assertEquals("The world", e.shouldAutocorrect("Theworld"))
+    }
+
+    @Test fun `an exact split needs a phrase the keyboard has seen`() {
+        // Both halves listed is not enough: nearly any unlisted word breaks
+        // into two listed fragments somewhere ("config" -> "con fig").
+        val lexicon = UserLexicon(null)
+        val e = engine(lexicon).apply { autocorrectSplits = true }
+        assertNull(e.shouldAutocorrect("theworld"))
+        assertTrue("the world" in e.suggest("theworld", previousWord = null))
+        // One sighting is what an applied-and-kept split leaves behind.
+        lexicon.learnBigram("the", "world")
+        assertNull(e.shouldAutocorrect("theworld"))
+        lexicon.learnBigram("the", "world")
+        assertEquals("the world", e.shouldAutocorrect("theworld"))
+    }
+
+    @Test fun `a word in the personal dictionary is never split`() {
+        val lexicon = UserLexicon(null)
+        val e = splitEngine(lexicon)
+        lexicon.learnWord("theworld")
+        assertNull(e.shouldAutocorrect("theworld"))
     }
 
     // ---- the fat-fingered spacebar ----
@@ -1027,7 +1053,7 @@ class SuggestionEngineTest {
         List(9) { i -> if (i == 3) TouchPoint(5f, 3f + bDrop) else null }
 
     @Test fun `split autocorrect drops a fat-fingered space letter`() {
-        val lexicon = UserLexicon(null).apply { learnBigram("the", "world") }
+        val lexicon = UserLexicon(null).apply { repeat(2) { learnBigram("the", "world") } }
         val e = bottomRowEngine(lexicon)
         val low = thebworldTaps(bDrop = 0.4f)
         assertEquals("the world", e.decideCorrection("thebworld", touch = low).apply)
@@ -1054,13 +1080,13 @@ class SuggestionEngineTest {
         // Never typed "the world": the strip may offer it, the field is not rewritten.
         assertNull(e.decideCorrection("thebworld", touch = low).apply)
         assertTrue("the world" in e.suggest("thebworld", null, touch = low))
-        lexicon.learnBigram("the", "world")
+        repeat(2) { lexicon.learnBigram("the", "world") }
         assertEquals("the world", e.decideCorrection("thebworld", touch = low).apply)
     }
 
     @Test fun `a word learned once does not anchor a split`() {
         val lexicon = UserLexicon(null).apply {
-            learnBigram("the", "wprld")
+            repeat(2) { learnBigram("the", "wprld") }
             learnWord("wprld")
         }
         val e = bottomRowEngine(lexicon).apply { learnedWordMinCount = 3 }
@@ -1081,7 +1107,7 @@ class SuggestionEngineTest {
     }
 
     @Test fun `reverted split never fires again`() {
-        val e = engine().apply { autocorrectSplits = true }
+        val e = splitEngine()
         assertEquals("the world", e.shouldAutocorrect("theworld"))
         e.rejectCorrection("theworld", "the world")
         assertNull(e.shouldAutocorrect("theworld"))

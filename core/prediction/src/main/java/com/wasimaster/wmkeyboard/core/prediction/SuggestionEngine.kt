@@ -1743,6 +1743,10 @@ class SuggestionEngine(
          * halves plus margin — below this, splits stay strip suggestions. */
         private const val SPLIT_AUTOCORRECT_MIN_LENGTH = 5
 
+        /** Times the user must have typed a pair themselves before it may
+         * vouch for a split autocorrect; see [knownPhrase]. */
+        private const val SPLIT_PAIR_MIN_USES = 2
+
         /**
          * Autocorrect fires only when the best candidate outscores the
          * runner-up by this factor; anything closer is ambiguous and only
@@ -2675,10 +2679,16 @@ class SuggestionEngine(
 
     /**
      * Whether [left] followed by [right] is a pair the keyboard has seen —
-     * in the user's own typing or the language's n-gram pack.
+     * in the language's n-gram pack, the bundled English seed pairs, or the
+     * user's own typing at least [SPLIT_PAIR_MIN_USES] times. Once is not
+     * enough on the user's side: a split the keyboard applied and the user
+     * let stand is learned as a pair too, so a single sighting would let one
+     * bad split vouch for every repeat of it.
      */
     private fun knownPhrase(left: String, right: String): Boolean =
-        userLexicon.bigramCount(left, right) > 0 || ngramPack.bigramCount(left, right) > 0
+        ngramPack.bigramCount(left, right) > 0 ||
+            (englishSources && seedBigrams.follows(left, right)) ||
+            userLexicon.bigramCount(left, right) >= SPLIT_PAIR_MIN_USES
 
     /**
      * The fixed-spelling map's answer for exactly [composing], or null.
@@ -4196,12 +4206,17 @@ class SuggestionEngine(
      * with halves of at least two letters. The committed text becomes two
      * words — the IME's learn/revert paths already handle multi-word commits.
      *
-     * A dropped-letter reading is applied only when its halves are a phrase
-     * the keyboard has seen together ([knownPhrase]). It deletes a letter the
-     * user typed and changes the sentence's word count on the strength of
-     * one low tap, and an unlisted word that happens to break into two listed
-     * ones is far commoner than a spacebar miss that lands between exactly
-     * those two. Until the pair is known it stays a strip suggestion.
+     * Either reading is applied only when its halves are a phrase the
+     * keyboard has seen together ([knownPhrase]). Two listed words are not
+     * evidence of two words meant: the lists carry every short fragment a
+     * corpus produced ("co", "fig", "ox", "zap"), so nearly any unlisted word
+     * — a name, a product, jargon — breaks into two of them somewhere, and
+     * that is far commoner than a missed spacebar that happens to fall
+     * exactly between two words. Until the pair is known the split stays a
+     * strip suggestion. The dropped-letter reading needs the low tap on top.
+     *
+     * A spelling already in the user's lexicon is theirs, established or
+     * not, and is never split.
      */
     private fun splitCorrection(
         lower: String,
@@ -4211,11 +4226,12 @@ class SuggestionEngine(
     ): String? {
         if (!autocorrectSplits) return null
         if (lower.length < SPLIT_AUTOCORRECT_MIN_LENGTH) return null
+        if (userLexicon.contains(lower)) return null
         val splits = splitCandidates(lower, touch)
             .filter { reading ->
                 val halves = reading.text.split(' ')
                 halves.all { it.length >= 2 && !suppressed(it) } &&
-                    (!reading.dropped || knownPhrase(halves[0], halves[1]))
+                    knownPhrase(halves[0], halves[1])
             }
             .sortedWith(compareByDescending<SplitReading> { it.score }.thenBy { it.text })
         val best = splits.firstOrNull() ?: return null
