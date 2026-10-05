@@ -559,6 +559,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19461,6 +19462,21 @@ internal class AlternatesHold(
      */
     var onCommit: (Int) -> Unit = {}
 
+    /**
+     * Where the finger is aiming, in the grid's own coordinates, once it is
+     * steering; null before that. Read in the draw phase alone, by each entry's
+     * [magnification], so the entries swell and shrink under a moving finger
+     * without recomposing anything.
+     */
+    val pointer = mutableStateOf<Offset?>(null)
+
+    /**
+     * How far sideways the finger's aim is moved from where the finger is, so
+     * that the spot the finger started on counts as the first entry's centre.
+     * Fixed when the finger starts steering; null until then.
+     */
+    private var shiftX: Float? = null
+
     /** The popup has just opened under this finger: pre-select the first entry. */
     fun open() {
         // Not the rects: a popup prepared ahead of the long press has already
@@ -19469,6 +19485,8 @@ internal class AlternatesHold(
         selected.intValue = 0
         anchor = null
         steering = false
+        shiftX = null
+        pointer.value = null
         gate.open = true
     }
 
@@ -19481,6 +19499,18 @@ internal class AlternatesHold(
      * a centred popup that is the middle one, not the first: a hold and release
      * would type a different character depending on how still the hand was.
      * Once the finger has left, it steers for the rest of the gesture.
+     *
+     * It steers from where it started rather than from where it is (#532). The
+     * popup puts its first entry over the key, but the finger is rarely on the
+     * key's exact centre, and a popup pushed in from the screen's edge cannot
+     * put it there at all. Matched where it stood, the first move past the
+     * steering distance jumped to whatever entry happened to be over the finger,
+     * often one or two along. So the aim is moved sideways by the gap between
+     * where the finger started and the first entry's centre, and a slide one
+     * entry wide moves the highlight one entry along, the way Gboard's does. The
+     * move is capped at one entry's width, which covers any press on the key
+     * itself; past that the popup is far from the key anyway, and an aim moved
+     * further would leave the entries at its far end out of reach.
      */
     fun moveTo(local: Offset, reachPx: Float, steerPx: Float) {
         val start = anchor ?: local.also { anchor = it }
@@ -19488,13 +19518,17 @@ internal class AlternatesHold(
             if ((local - start).getDistance() < steerPx) return
             steering = true
         }
-        selected.intValue = indexAt(local, reachPx)
+        val shift = shiftX ?: steeringShift(start)?.also { shiftX = it } ?: 0f
+        val index = indexAt(local, reachPx, shift)
+        selected.intValue = index
+        pointer.value = if (index < 0) null else aimInGrid(local, shift)
     }
 
     /** Commits what the finger is on and clears the highlight. */
     fun commit() {
         val index = selected.intValue
         selected.intValue = -1
+        pointer.value = null
         gate.open = false
         onCommit(index)
     }
@@ -19502,7 +19536,63 @@ internal class AlternatesHold(
     /** The gesture ended without choosing (a stolen pointer, or the key gone). */
     fun cancel() {
         selected.intValue = -1
+        pointer.value = null
         gate.open = false
+    }
+
+    /**
+     * How much bigger entry [index] draws than its neighbours at rest: the full
+     * [AlternatesMagnify] with the finger aimed at its centre, nothing at all
+     * from a whole entry away, and in between in proportion, so a finger
+     * sliding from one entry to the next shrinks the one it leaves as it grows
+     * the one it reaches. Before the finger steers, and for a selection moved by
+     * a remote's arrow keys, the selected entry is simply at full size.
+     */
+    fun magnification(index: Int): Float {
+        val chosen = selected.intValue
+        if (chosen < 0) return 1f
+        val at = pointer.value ?: return if (index == chosen) AlternatesMagnify else 1f
+        val rect = rects.getOrNull(index) ?: return 1f
+        if (rect.width <= 0f || rect.height <= 0f) return 1f
+        val dx = (at.x - rect.center.x) / rect.width
+        val dy = (at.y - rect.center.y) / rect.height
+        val near = (1f - hypot(dx, dy)).coerceIn(0f, 1f)
+        return 1f + (AlternatesMagnify - 1f) * near
+    }
+
+    /** Where the grid's origin sits in the keyboard window. */
+    private fun gridOrigin(): Offset =
+        Offset(popupOffset.x + gridOffset.x, popupOffset.y + gridOffset.y)
+
+    /**
+     * The sideways move [moveTo] gives the finger's aim, or null while the popup
+     * has not been measured (asked again on the next move). [start] is where the
+     * finger was, in the key's coordinates.
+     */
+    private fun steeringShift(start: Offset): Float? {
+        val first = rects.firstOrNull()?.takeIf { it.width > 0f } ?: return null
+        val centre = first.center.x + gridOrigin().x
+        return (centre - (cell.left + start.x)).coerceIn(-first.width, first.width)
+    }
+
+    /**
+     * The finger's aim in the grid's own coordinates, held inside the band the
+     * rows' centres span: a finger in the gap under the popup is aiming at the
+     * nearest row, not at a point below it.
+     */
+    private fun aimInGrid(local: Offset, shift: Float): Offset? {
+        val entries = rects
+        if (entries.isEmpty()) return null
+        val origin = gridOrigin()
+        val x = cell.left + local.x + shift - origin.x
+        val y = cell.top + local.y - origin.y
+        var lowest = Float.MAX_VALUE
+        var highest = -Float.MAX_VALUE
+        for (rect in entries) {
+            lowest = minOf(lowest, rect.center.y)
+            highest = max(highest, rect.center.y)
+        }
+        return Offset(x, y.coerceIn(lowest, highest))
     }
 
     /**
@@ -19515,14 +19605,18 @@ internal class AlternatesHold(
      * resting on the key must still be choosing the entry it pre-selected.
      * Further out than that is a deliberate move away, and cancels.
      *
+     * [shift] moves where the finger is aiming sideways ([moveTo]); whether it
+     * has strayed out of reach is still judged where it actually is.
+     *
      * With no rects yet — the popup opened this frame and has not been measured
      * — the answer is the first entry, which is what was pre-selected.
      */
-    fun indexAt(local: Offset, slopPx: Float): Int {
+    fun indexAt(local: Offset, slopPx: Float, shift: Float = 0f): Int {
         val entries = rects
         if (entries.isEmpty()) return 0
-        val origin = Offset(popupOffset.x + gridOffset.x, popupOffset.y + gridOffset.y)
-        val point = cell.topLeft + local
+        val origin = gridOrigin()
+        val finger = cell.topLeft + local
+        val point = Offset(finger.x + shift, finger.y)
         var best = -1
         var bestDistance = Float.MAX_VALUE
         // The popup's own bounds, grown entry by entry: Rect has no union.
@@ -19544,14 +19638,17 @@ internal class AlternatesHold(
                 best = index
             }
         }
-        if (bestDistance == 0f) return best
+        if (bestDistance == 0f && shift == 0f) return best
         val reachable = Rect(left, top, right, bottom).inflate(slopPx)
-        return if (reachable.contains(point)) best else -1
+        return if (reachable.contains(finger)) best else -1
     }
 }
 
 /** How far outside the popup and its key a finger may stray and still be choosing. */
 private val AlternatesReachDp = 24.dp
+
+/** How much bigger the alternate the finger is aimed at draws, as a share of its size. */
+private const val AlternatesMagnify = 1.35f
 
 /** How far the finger travels before it steers the popup instead of holding still. */
 private val AlternatesSteerDp = 12.dp
@@ -19639,7 +19736,18 @@ private fun AlternatesPopup(
     // key's bounds and where it put the popup, in the same coordinates, so it
     // records the point as it places the window, before the first frame draws.
     val growPivot = remember { mutableStateOf<Offset?>(null) }
-    val provider = remember(popupPosition, hold, marginPx) {
+    // The first entry goes over the key that opened the popup, as Gboard and
+    // AOSP put it, rather than the popup being centred there (#532). Centred,
+    // the first entry of five sat two to the left of the finger, and the
+    // finger had to travel there before it could choose anything else. Where
+    // the popup cannot open rightward from the key without running off the
+    // screen, its rows run leftward instead, so the first entry is still over
+    // the key. Measured as the grid lays out and read by the provider; null
+    // until the first layout, which then places the popup as it always was.
+    val firstEntry = remember { mutableStateOf<FirstAlternate?>(null) }
+    val mirrored = remember { mutableStateOf(false) }
+    val firstAt = firstEntry.value
+    val provider = remember(popupPosition, hold, marginPx, firstAt) {
         object : PopupPositionProvider {
             override fun calculatePosition(
                 anchorBounds: IntRect,
@@ -19649,10 +19757,55 @@ private fun AlternatesPopup(
             ): IntOffset {
                 val at = popupPosition
                     .calculatePosition(anchorBounds, windowSize, layoutDirection, popupContentSize)
-                val x = alternatesPopupX(at.x, windowSize.width - popupContentSize.width, marginPx)
                 val key = anchorBounds.center
+                val wanted = if (firstAt == null) {
+                    at.x
+                } else {
+                    val width = popupContentSize.width
+                    // The first entry's distance from whichever edge the rows
+                    // start at; the same in either direction, which is what
+                    // lets the choice below be made from either layout.
+                    val lead = (if (firstAt.mirrored) width - firstAt.x else firstAt.x).roundToInt()
+                    val (x, mirror) = alternatesAnchoredX(key.x, lead, width, windowSize.width, marginPx)
+                    mirrored.value = mirror
+                    x
+                }
+                val x = alternatesPopupX(wanted, windowSize.width - popupContentSize.width, marginPx)
                 growPivot.value = Offset((key.x - x).toFloat(), (key.y - at.y).toFloat())
                 return IntOffset(x, at.y).also { hold?.popupOffset = it }
+            }
+        }
+    }
+    // The grid's place in the popup window and its first entry's centre inside
+    // the grid, each reported from its own layout callback.
+    val firstProbe = remember { FloatArray(2) }
+    val mirror = mirrored.value
+    val publishFirst = {
+        firstEntry.value = FirstAlternate(firstProbe[0] + firstProbe[1], mirror)
+    }
+    // The highlight slides from the entry it leaves to the one the finger
+    // reaches, on a quick spring that overshoots a little and settles, the way
+    // Gboard's does, rather than vanishing from one and appearing on the other.
+    // Drawn once behind the whole grid instead of by each entry, so there is one
+    // of it to move. The entries' rects are mirrored into state for this alone:
+    // read in the effect below, never in composition.
+    val entryRects = remember { mutableStateOf(emptyList<Rect>()) }
+    val highlight = remember { Animatable(Rect.Zero, Rect.VectorConverter) }
+    val reduceMotion = kb.reduceMotion
+    if (hold != null) {
+        LaunchedEffect(hold, reduceMotion) {
+            var lit = false
+            snapshotFlow { hold.selected.intValue to entryRects.value }.collectLatest { (index, rects) ->
+                val target = rects.getOrNull(index)
+                when {
+                    target == null -> lit = false
+                    // Appearing, it is already where it belongs; only a move slides.
+                    !lit || reduceMotion -> {
+                        lit = true
+                        highlight.snapTo(target)
+                    }
+                    else -> highlight.animateTo(target, AlternatesHighlightSpring)
+                }
             }
         }
     }
@@ -19703,15 +19856,50 @@ private fun AlternatesPopup(
                 // setting says, and every other key follows the setting.
                 columns = key.alternateColumns.takeIf { it > 0 } ?: popup.alternatesColumns,
                 nearestFirst = popup.alternatesNearestFirst,
-                onRects = hold?.let { { rects: List<Rect> -> it.rects = rects } },
+                mirrored = mirror,
+                onRects = { rects ->
+                    hold?.rects = rects
+                    entryRects.value = rects
+                    firstProbe[1] = rects.firstOrNull()?.center?.x ?: 0f
+                    publishFirst()
+                },
                 modifier = Modifier
                     .widthIn(max = maxWidth)
                     .heightIn(max = maxHeight)
                     .verticalScroll(rememberScrollState())
+                    .padding(4.dp)
                     // Inside the scroll, so a scrolled popup reports where its
-                    // entries are now rather than where they started.
-                    .onGloballyPositioned { hold?.gridOffset = it.positionInWindow() }
-                    .padding(4.dp),
+                    // entries are now rather than where they started; and
+                    // inside the padding, which is the space the entries' rects
+                    // are measured in.
+                    .onGloballyPositioned {
+                        val at = it.positionInWindow()
+                        hold?.gridOffset = at
+                        firstProbe[0] = at.x
+                        publishFirst()
+                    }
+                    .then(
+                        if (hold == null) {
+                            Modifier
+                        } else {
+                            // The theme's Selected highlight, which the editor
+                            // row of that name promised and which, until issue
+                            // #504, this popup ignored for the pressed-key
+                            // colour. Read in the draw phase, so it moves by
+                            // repainting the popup and recomposes nothing.
+                            Modifier.drawBehind {
+                                if (hold.selected.intValue >= 0) {
+                                    val at = highlight.value
+                                    drawRoundRect(
+                                        color = kb.popupSelected,
+                                        topLeft = at.topLeft,
+                                        size = at.size,
+                                        cornerRadius = CornerRadius(kb.popupRadiusDp.dp.toPx()),
+                                    )
+                                }
+                            }
+                        },
+                    ),
             ) {
                 // One list, so the drawn order and the index the hold commits
                 // are the same statement rather than two that have to agree.
@@ -19724,9 +19912,7 @@ private fun AlternatesPopup(
                             fontSize = (18 * fontScale).sp,
                             modifier = Modifier
                                 .clickable { onText(entry.text) }
-                                .alternateHighlight(
-                                    index, hold, kb.popupSelected, kb.popupRadiusDp.dp,
-                                )
+                                .alternateMagnify(index, hold)
                                 .alternatePadding(entryPadding),
                         )
                         is AlternateEntry.Action -> AlternateAction(
@@ -19734,12 +19920,7 @@ private fun AlternatesPopup(
                             fontScale = fontScale,
                             padding = entryPadding,
                             tint = kb.popupText,
-                            modifier = Modifier.alternateHighlight(
-                                index = index,
-                                hold = hold,
-                                color = kb.popupSelected,
-                                radius = kb.popupRadiusDp.dp,
-                            ),
+                            modifier = Modifier.alternateMagnify(index, hold),
                         ) {
                             onAction(
                                 Key(
@@ -19848,10 +20029,18 @@ private fun AlternatesGrid(
     columns: Int,
     nearestFirst: Boolean,
     /**
+     * Runs every row right to left, so the first entry is at the right-hand end
+     * — what a popup opened from a key near the right edge needs to keep its
+     * first entry over that key (#532). The whole grid is mirrored, so fixed
+     * columns stay columns and a part-full row hugs the right instead.
+     */
+    mirrored: Boolean,
+    /**
      * Called with every entry's rect inside the grid, in content order, each
      * time the grid is placed. This is the only place those rects exist: the
      * packing decides them, and a hold-drag needs them to say which entry a
-     * finger in another window is on. Null when nothing is dragging.
+     * finger in another window is on, the popup needs the first one to put
+     * it over the key, and the highlight slides between them.
      */
     onRects: ((List<Rect>) -> Unit)?,
     modifier: Modifier = Modifier,
@@ -19905,7 +20094,8 @@ private fun AlternatesGrid(
                 var slot = rows.take(index).sumOf { it.size }
                 for (placeable in row) {
                     val lane = if (fitted > 0) cellWidth else placeable.width
-                    val left = x + (lane - placeable.width) / 2
+                    val laid = x + (lane - placeable.width) / 2
+                    val left = if (mirrored) width - laid - placeable.width else laid
                     val top = y + (rowHeight - placeable.height) / 2
                     placeable.place(left, top)
                     bounds[slot] = Rect(
@@ -20209,28 +20399,65 @@ private fun AlternateCharacter(
 }
 
 /**
- * Paints the hold-drag's highlight behind an alternate: the theme's Selected
- * highlight, which the editor row of that name promised and which, until
- * issue #504, this popup ignored in favour of the pressed-key colour.
- *
- * A draw modifier rather than a background: the selection is read in the draw
- * phase, so sliding the finger across a popup of twenty entries repaints it and
- * recomposes nothing. Placed before the entry's padding so the highlight covers
- * the whole touch target rather than only the glyph.
+ * Draws an alternate bigger the closer the finger is aimed at it
+ * ([AlternatesHold.magnification]). A layer scale about the entry's centre: read
+ * in the draw phase, so a finger sliding across the popup repaints the entries
+ * it passes and recomposes none of them, and a transform that moves nothing
+ * the hold-drag measures — the grid reports where its entries were placed, not
+ * where they are drawn.
  */
-private fun Modifier.alternateHighlight(
-    index: Int,
-    hold: AlternatesHold?,
-    color: Color,
-    radius: Dp,
-): Modifier = if (hold == null) {
+private fun Modifier.alternateMagnify(index: Int, hold: AlternatesHold?): Modifier = if (hold == null) {
     this
 } else {
-    drawBehind {
-        if (hold.selected.intValue == index) {
-            drawRoundRect(color, cornerRadius = CornerRadius(radius.toPx()))
-        }
+    graphicsLayer {
+        val scale = hold.magnification(index)
+        scaleX = scale
+        scaleY = scale
     }
+}
+
+/**
+ * The highlight's slide between alternates: quick, with a little overshoot that
+ * settles, so it reads as the highlight moving rather than as a flicker.
+ */
+private val AlternatesHighlightSpring = spring(
+    dampingRatio = 0.62f,
+    stiffness = 900f,
+    visibilityThreshold = Rect(0.5f, 0.5f, 0.5f, 0.5f),
+)
+
+/**
+ * Where the alternates grid's first entry is, as the grid last laid it out:
+ * [x] is its centre in the popup window, and [mirrored] whether the rows ran
+ * leftward when it was measured, which says which edge [x] is counted from.
+ */
+private data class FirstAlternate(val x: Float, val mirrored: Boolean)
+
+/**
+ * Where the alternates popup's left edge goes so its first entry sits over the
+ * key, and whether the rows run leftward to make that possible (#532).
+ *
+ * [keyX] is the key's centre, [lead] the first entry's centre measured from the
+ * edge its row starts at, [width] the popup's and [windowWidth] the display's,
+ * all in pixels. Rightward is preferred, being the order the entries are
+ * written in; leftward is taken only when rightward would run past [margin] of
+ * the right edge and leftward would not run past the left. When neither fits,
+ * the direction that overhangs less, and [alternatesPopupX] pulls it on screen.
+ */
+internal fun alternatesAnchoredX(
+    keyX: Int,
+    lead: Int,
+    width: Int,
+    windowWidth: Int,
+    margin: Int,
+): Pair<Int, Boolean> {
+    val rightward = keyX - lead
+    val rightOverhang = rightward + width - (windowWidth - margin)
+    if (rightOverhang <= 0) return rightward to false
+    val leftward = keyX + lead - width
+    val leftOverhang = margin - leftward
+    if (leftOverhang <= 0) return leftward to true
+    return if (rightOverhang <= leftOverhang) rightward to false else leftward to true
 }
 
 /** Clearance the alternates popup keeps from each edge of the display. */
