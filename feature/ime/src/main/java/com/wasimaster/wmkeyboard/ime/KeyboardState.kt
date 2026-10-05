@@ -282,6 +282,12 @@ data class LayoutSet(
     /** Keypad for the focused field kind; null for TEXT/EMAIL/URI. */
     val numeric: KeyboardLayout? = null,
     /**
+     * Whether the layout authored [numeric] itself rather than inheriting the
+     * shipped keypad. An authored one is drawn as laid out; a shipped one takes
+     * its backspace and enter from the user's own Numpad (issue #508).
+     */
+    val numericAuthored: Boolean = false,
+    /**
      * The layout's own Number layer, when it authored one; null inherits. What
      * the Numpad tool and a long press on ?123 draw (issue #55): before this
      * the panel had a pad of its own and a custom Number layer only ever

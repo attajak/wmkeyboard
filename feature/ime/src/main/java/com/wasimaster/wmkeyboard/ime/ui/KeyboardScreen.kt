@@ -17395,7 +17395,9 @@ private fun KeyboardLayout.questionMarkToLift(mark: String): String? {
 
 internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     if (numericPadActive(state)) {
-        state.layouts.numeric?.let { return it }
+        state.layouts.numeric?.let { pad ->
+            return if (state.layouts.numericAuthored) pad else pad.withNumpadActionKeys(state)
+        }
     }
     val grid = when (state.layoutMode) {
         LayoutMode.SYMBOLS -> state.layouts.symbols

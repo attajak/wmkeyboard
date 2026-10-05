@@ -53,6 +53,8 @@ The five numeric-pad field kinds each get their own 4-column keypad. Digits are 
 | Time | `:` (long-press `.`), space | `.` | `-` | Colon-led for `17:45` |
 | Date & time | `/` (long-press `.`), `:` | `-` | space | Date and time separators together |
 
+If you moved backspace or enter on the **Numpad** tool's own layout, these keypads follow you: each of the two keys trades places with whatever key of the pad sits where you put it on the tool, and everything else on the pad stays put. A Numpad you never edited changes nothing, and neither does a keypad a custom layout defines for itself.
+
 These five keypads are shared across every built-in layout. Only the default QWERTY layout defines them and every other language layout inherits the same set, but a custom `.wmlayout.json` can override any of the five with its own key rows.
 
 The keypad shows up whenever the field kind calls for it, with one exception. If focus has been rerouted to something that needs letters, such as an in-panel search box (emoji, dictionary, clipboard, media), a plugin's own text field, or the typing-test tool, the letter layout stays up instead. A digits-only pad would leave those impossible to type in.

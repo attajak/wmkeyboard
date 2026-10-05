@@ -106,6 +106,48 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
 }
 
 /**
+ * [this] shipped field keypad with its backspace and enter moved to where the
+ * user put them on their own Numpad (issue #508). A phone, number or date field
+ * opens its own pad rather than the Numpad tool's, and someone who swapped
+ * backspace and enter on the tool kept hitting the wrong one of the two the
+ * moment a dialer field opened the stock pad.
+ *
+ * Only the two action keys travel, each by trading places with whatever key of
+ * the pad sits where the user's has it; everything a field pad carries for its
+ * kind (the dialer's * # +, a date's separators) stays on the pad. A Numpad
+ * the user never laid out moves nothing, which keeps the Number pad's
+ * deliberately low backspace where it is, and a key placed outside the pad's
+ * four by four stays put too.
+ */
+internal fun KeyboardLayout.withNumpadActionKeys(state: KeyboardUiState): KeyboardLayout {
+    val numpad = state.panelLayout(PanelKind.NUMPAD)
+    if (numpad == BuiltInPanelLayouts.numpad(calculator = state.settings.numpadCalculatorLayout)) return this
+    val grid = rows.map { it.toMutableList() }
+    for (action in NumpadActionKeys) {
+        val (row, col) = numpad.grid.rows.positionOf(action) ?: continue
+        val (fromRow, fromCol) = grid.positionOf(action) ?: continue
+        if (row !in grid.indices || col !in grid[row].indices) continue
+        if (row == fromRow && col == fromCol) continue
+        val moving = grid[fromRow][fromCol]
+        grid[fromRow][fromCol] = grid[row][col]
+        grid[row][col] = moving
+    }
+    return if (grid == rows) this else copy(rows = grid)
+}
+
+/** The keys [withNumpadActionKeys] moves, backspace first. */
+private val NumpadActionKeys = listOf(KeyAction.Delete, KeyAction.Enter)
+
+/** Row and column of the first key here firing [action], or null. */
+private fun List<List<Key>>.positionOf(action: KeyAction): Pair<Int, Int>? {
+    forEachIndexed { r, row ->
+        val c = row.indexOfFirst { it.action == action }
+        if (c >= 0) return r to c
+    }
+    return null
+}
+
+/**
  * The theme the grid on screen asks for (issue #61, and #63's panels): with
  * no panel open, the typing grid's — a layer's, else its layout's — else
  * null for whatever the settings say. With a panel open, the panel layout's

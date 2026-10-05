@@ -68,6 +68,7 @@ fun compileLayoutSet(
         // layout an Fn layer that is really a second copy of the letters.
         fn = safe.layer(LayoutLayer.FN)?.let { safe.compile(LayoutLayer.FN) },
         numeric = fieldKind.numericLayer?.let(safe::compile),
+        numericAuthored = fieldKind.numericLayer?.let(safe::layer) != null,
         // Same "only when authored" rule as Fn: the Numpad panel draws its
         // own hardcoded pad otherwise, with the calculator-order setting.
         number = safe.layer(LayoutLayer.NUMBER)?.let { safe.compile(LayoutLayer.NUMBER) },
