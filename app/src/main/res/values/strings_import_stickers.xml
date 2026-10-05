@@ -34,6 +34,9 @@
     <!-- FUTO Keyboard is the name of another keyboard app; leave it as it is.
          Languages is the name of a screen in the settings app. -->
     <string name="import_futo_body">This is a FUTO Keyboard layout. The app adds its letter keys as a layout of yours; the symbol and number keys stay the ones you have. The layout stays off. To type with it, turn it on in Languages.</string>
+    <!-- Keys Cafe is the name of a Samsung app; leave it as it is.
+         Languages is the name of a screen in the settings app. -->
+    <string name="import_keyscafe_body">This is a Samsung Keyboard layout made in Keys Cafe. The app adds it as a layout of yours, laid out as it was there, bottom row included; the symbol keys stay the ones you have. The layout stays off. To type with it, turn it on in Languages.</string>
 
     <!-- ==== Backup files. ==== -->
 

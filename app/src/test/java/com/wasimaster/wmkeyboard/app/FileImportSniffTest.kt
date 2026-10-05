@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackFile
 import com.wasimaster.wmkeyboard.core.icons.IconPackFile
+import com.wasimaster.wmkeyboard.core.layout.KeysCafeLayouts
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackFile
@@ -125,6 +126,35 @@ class FileImportSniffTest {
         // wanted, and the one that means something is `rows:`.
         val yaml = "name: my-package\nversion: 1.0.0\ndependencies:\n  - thing\n"
         assertEquals(WMFileTypes.Opened.Unrecognized, WMFileTypes.textKindFor(yaml, "package.yaml"))
+    }
+
+    // ---- the encrypted format ----
+
+    @Test
+    fun `a Keys Cafe grid is a layout, told by its contents`() {
+        // The smallest share file: one letter row with a space bar and a
+        // delete key, wrapped the way the reader expects.
+        val model = """{"keyboards":[{"defaultKeyboard":{"elements":[{"ROW":{"rowType":1,"elements":[
+            {"KEY":{"keyAttribute":{"keyType":1},"normalKey":{"keyCodeLabel":{"keyCodes":[113],"keyLabel":"q"}},"size":{"width":0.08}}},
+            {"KEY":{"keyAttribute":{"keyType":65540},"normalKey":{"keyCodeLabel":{"keyCodes":[32],"keyLabel":""}},"size":{"width":0.4}}},
+            {"KEY":{"keyAttribute":{"keyType":4},"normalKey":{"keyCodeLabel":{"keyCodes":[-5],"keyLabel":""}},"size":{"width":0.12}}}
+        ]}}]}}]}"""
+        val share = """{"keyboardName":"Mine","languageCode":"en","countryCode":"US","model":${kotlinx.serialization.json.JsonPrimitive(model)}}"""
+        val kcf = KeysCafeLayouts.encode(share)
+        // The name says nothing: the file is told by what it decrypts to.
+        val opened = WMFileTypes.textKindFor(kcf, "Mine.kcf")
+        assertTrue("a Keys Cafe grid was not recognised", opened is WMFileTypes.Opened.KeysCafeLayout)
+        assertEquals("Mine", (opened as WMFileTypes.Opened.KeysCafeLayout).converted.layout.name)
+        assertTrue(WMFileTypes.textKindFor(kcf, "whatever.bin") is WMFileTypes.Opened.KeysCafeLayout)
+    }
+
+    @Test
+    fun `base64 that is not a Keys Cafe grid is not claimed`() {
+        // Looks the part and is not one: it has to fall through rather than be
+        // imported as an empty layout, whatever the extension says.
+        val blob = "QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVowMTIzNDU2Nzg5YWJjZGVmZ2hpamts"
+        assertEquals(WMFileTypes.Opened.Unrecognized, WMFileTypes.textKindFor(blob, "x.kcf"))
+        assertTrue(WMFileTypes.isEditableText(blob))
     }
 
     // ---- archives ----

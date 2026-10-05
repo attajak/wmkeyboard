@@ -89,6 +89,8 @@ internal fun ImportFilePreview(state: WMFileTypes.Opened, uri: Uri) {
 
         is WMFileTypes.Opened.FutoLayout -> LayoutFilePreview(state.converted.layout)
 
+        is WMFileTypes.Opened.KeysCafeLayout -> LayoutFilePreview(state.converted.layout)
+
         is WMFileTypes.Opened.KeymanPackageFile ->
             keymanLayoutOf(state.contents)?.let { LayoutFilePreview(it.layout) }
 

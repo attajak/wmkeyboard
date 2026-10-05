@@ -67,6 +67,13 @@ enum class ForeignSource {
      * inside it. The import screen dispatches on the file's shape instead.
      */
     KEYMAN_TOUCH_LAYOUT,
+
+    /**
+     * A Samsung Keyboard grid shared from Keys Cafe (`.kcf`). Read by
+     * [KeysCafeLayouts]. The one format that carries its own frame, so it is
+     * the one that does not get this app's put round it.
+     */
+    KEYS_CAFE,
 }
 
 /** A foreign layout after conversion, with everything that was lost on the way. */
@@ -219,6 +226,12 @@ object ForeignLayouts {
      *
      * [langId] is for a format that states its language. The other two do not,
      * and pass null so the guess from the letters stands.
+     *
+     * [numberRow] is a digit row the file wrote, for the layout's own
+     * number-row slot. [houseFrame] false keeps the grid exactly as the file
+     * laid it out — no shift, delete or bottom row added or moved — and marks
+     * the layer so the Bottom-row settings leave it alone too. Only a format
+     * that carries its whole frame may say so; see [KeysCafeLayouts].
      */
     internal fun assemble(
         rows: List<List<Key>>,
@@ -226,7 +239,9 @@ object ForeignLayouts {
         source: ForeignSource,
         report: Report,
         langId: String? = null,
-    ): ConvertedLayout? = finish(rows, name, source, report, langId)
+        numberRow: List<Key>? = null,
+        houseFrame: Boolean = true,
+    ): ConvertedLayout? = finish(rows, name, source, report, langId, numberRow, houseFrame)
 
     private fun finish(
         rows: List<List<Key>>,
@@ -234,6 +249,8 @@ object ForeignLayouts {
         source: ForeignSource,
         report: Report,
         declaredLangId: String? = null,
+        numberRow: List<Key>? = null,
+        houseFrame: Boolean = true,
     ): ConvertedLayout? {
         val kept = rows.filter { it.isNotEmpty() }
         if (kept.isEmpty()) return null
@@ -244,7 +261,16 @@ object ForeignLayouts {
             langId = "",
             // After the widths are in this app's unit, since the keys it adds
             // are written in it. See [withHouseStructure].
-            layers = mapOf(LayoutLayer.LETTERS.key to LayerSpec(rows = withHouseStructure(scaled))),
+            layers = mapOf(
+                LayoutLayer.LETTERS.key to LayerSpec(
+                    rows = if (houseFrame) withHouseStructure(scaled) else scaled,
+                    numberRow = numberRow,
+                    // A grid kept as laid out stays that way on screen as well:
+                    // the Bottom-row settings would otherwise move its 🌐 and
+                    // comma about (issue #420).
+                    bottomRowAsLaidOut = !houseFrame,
+                ),
+            ),
         )
         val repaired = layout.repair()
         return ConvertedLayout(
@@ -1016,6 +1042,13 @@ internal class Report(
     val droppedLabels: MutableList<String> = mutableListOf(),
     /** The file drew its own number row, which this app draws from a setting. */
     var numberRowDropped: Boolean = false,
+    /** The file's number row became the layout's own ([LayerSpec.numberRow]). */
+    var numberRowKept: Boolean = false,
+    /**
+     * Keys whose shifted press-and-hold letters were not simply the capitals
+     * of the unshifted ones. This keyboard holds one list per key.
+     */
+    var shiftedPopups: Int = 0,
 ) {
     fun notes(scaled: Boolean): List<LayoutMessage> = buildList {
         if (droppedLabels.isNotEmpty()) {
@@ -1081,8 +1114,20 @@ internal class Report(
                 ),
             )
         }
+        if (shiftedPopups > 0) {
+            add(
+                LayoutMessage(
+                    pluralsRes = R.plurals.core_lang_foreign_shifted_popups_dropped,
+                    quantity = shiftedPopups,
+                    args = listOf(shiftedPopups),
+                ),
+            )
+        }
         if (numberRowDropped) {
             add(LayoutMessage(stringRes = R.string.core_lang_foreign_number_row_dropped))
+        }
+        if (numberRowKept) {
+            add(LayoutMessage(stringRes = R.string.core_lang_foreign_number_row_kept))
         }
         if (scaled) add(LayoutMessage(stringRes = R.string.core_lang_foreign_widths_scaled))
     }

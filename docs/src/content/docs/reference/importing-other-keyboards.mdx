@@ -1,6 +1,6 @@
 ---
 title: "Importing from other keyboards"
-description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType, FUTO and Gboard: what converts, what doesn't, and why."
+description: "Bring layouts, themes and dictionaries over from FlorisBoard, HeliBoard, LeanType, FUTO, Samsung Keyboard (Keys Cafe) and Gboard: what converts, what doesn't, and why."
 sidebar:
   order: 6
 ---
@@ -8,7 +8,7 @@ sidebar:
 import SettingsPath from '@components/SettingsPath.astro';
 import KeyCap from '@components/KeyCap.astro';
 
-Switching keyboards usually means leaving your layouts, themes and dictionaries behind. WM Keyboard reads FlorisBoard, HeliBoard, LeanType and FUTO files directly and converts them into its own, so the grid you built, the theme you picked and the word list you collected come with you.
+Switching keyboards usually means leaving your layouts, themes and dictionaries behind. WM Keyboard reads FlorisBoard, HeliBoard, LeanType, FUTO and Samsung Keyboard (Keys Cafe) files directly and converts them into its own, so the grid you built, the theme you picked and the word list you collected come with you.
 
 Conversion is honest about being lossy. A layout import always ends on a confirm dialog that lists what changed and what could not be carried, and nothing is written until you accept it. A `.flex` theme opened from a file manager gets the same treatment. The **FlorisBoard** button inside Settings is the one route without a confirm step: it saves the theme straight away and then tells you what it saved. Saved is not switched on, so you still get to look first.
 
@@ -19,6 +19,7 @@ Conversion is honest about being lossy. A layout import always ends on a confirm
 | `.json` layout | FlorisBoard, HeliBoard | A custom layout |
 | `.txt` layout | HeliBoard | A custom layout |
 | `.yaml` layout | FUTO Keyboard | A custom layout |
+| `.kcf` layout | Samsung Keyboard, shared from Keys Cafe | A custom layout, kept exactly as it was laid out |
 | `.flex` theme | FlorisBoard 0.4 and later | One theme, one look per theme in the file |
 | `.flex` language pack | FlorisBoard | A Cangjie or stroke table for Chinese |
 | Colour theme text | HeliBoard, LeanType | One theme, from a file or from the clipboard |
@@ -60,7 +61,7 @@ What the file says still wins where it says something:
 - A bottom row the file wrote is read, not thrown away. Its comma and full stop keep their own characters and press-and-hold letters, so a Bengali `।`, an Urdu `۔` or an Arabic `،` comes across. A key the usual row has no place for, such as a tab key, keeps a place next to the spacebar. A letter on that row, such as an apostrophe or a ZWNJ key, moves up to the end of the last letter row.
 - A key the letter rows already have is not added twice. A PC-style grid with its enter key on the home row, or its comma and full stop beside the letters, gets no second one.
 
-HeliBoard's text format and FlorisBoard's character grids have no way to write any of these keys, so those layouts always get the whole frame. A layout with a key taller than one row keeps the shape its author gave it, because moving keys would slide them under the tall one. It still gets a delete, space and enter key if it has none, and the dialog names the ones it added.
+HeliBoard's text format and FlorisBoard's character grids have no way to write any of these keys, so those layouts always get the whole frame. A Keys Cafe layout is the opposite case and gets none of it; see [below](#samsung-keyboard-keys-cafe-layouts). A layout with a key taller than one row keeps the shape its author gave it, because moving keys would slide them under the tall one. It still gets a delete, space and enter key if it has none, and the dialog names the ones it added.
 
 ### Keys that cannot come across
 
@@ -133,6 +134,20 @@ Four things are worth knowing:
 - **The alternate pages are dropped and named.** `$alt0` and its siblings switch to a whole second grid, which has no slot here, and a key that switched to nothing would strand you on it. The symbols and number layers are this app's own for the same reason, and `layoutSetOverrides` names layouts by ids that mean nothing here.
 
 `$contextual` becomes the comma slot, which does the same job from the same signal: `/` in a web address, `@` in an email field.
+
+### Samsung Keyboard (Keys Cafe) layouts
+
+Keys Cafe is Samsung's Good Lock module for Samsung Keyboard, and its **Make your own keyboard** screen is a key-by-key editor for the whole grid. A keyboard made there is saved and shared as a `.kcf` file, which is what people trade on the Samsung community forums. Pick one with the same **Import from another keyboard** button, or tap it in a file manager: WM Keyboard claims the `.kcf` extension, and it also recognizes the file by its contents, so a renamed one still works.
+
+A `.kcf` is a layout and only a layout. Keys Cafe's **Style your own keyboard** colours and effects are a Samsung theme, not part of this file, and nothing of them comes across.
+
+This is the one format that carries the whole frame. Keys Cafe writes the shift and delete keys, the symbols key, the space bar, enter and the bottom row exactly where you put them, and a bottom row with a letter or two beside the space bar is often the point of the file. So the import adds nothing and moves nothing: the grid lands as laid out, and the layer is marked to keep its bottom row as drawn, so the Bottom row settings (the 🌐 key's place, comma and 🌐 swapped, the emoji key) leave it alone. Only a file whose author removed the space bar or the delete key gets WM Keyboard's frame put round what is left.
+
+- **The number row is kept** as this layout's own number row, digits and their fraction popups included. It shows while the number row is on under Layout & size, the same as any layout's.
+- **The corner symbol is the first press-and-hold entry**, so it stays the corner hint and a long press still types it, as it did on Samsung Keyboard. The key's other press-and-hold letters follow it. Samsung Keyboard keeps a second list for the shifted state; where that list is more than the capitals of the first, the dialog counts the key.
+- **The language is a fact, not a guess.** The file states a language and a country, and the picker starts from it.
+- **Widths follow the file.** A plain key is one unit, a wider shift or space bar keeps its proportion.
+- **A function key this app does not know is removed and named** by its code, the same as a HeliBoard key would be. One real export has been read, so the known codes are the delete, shift and symbols keys, space and enter. If the dialog names a code and you know what that key was, say so in an issue and it is one line to add.
 
 ### Letters are rewritten to one spelling
 

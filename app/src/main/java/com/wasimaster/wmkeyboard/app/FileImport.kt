@@ -60,6 +60,7 @@ import com.wasimaster.wmkeyboard.core.keyman.KeymanPackage
 import com.wasimaster.wmkeyboard.core.layout.ConvertedLayout
 import com.wasimaster.wmkeyboard.core.layout.FutoLayouts
 import com.wasimaster.wmkeyboard.core.layout.ImportedLayout
+import com.wasimaster.wmkeyboard.core.layout.KeysCafeLayouts
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
 import com.wasimaster.wmkeyboard.core.plugins.PluginFile
 import com.wasimaster.wmkeyboard.core.plugins.PluginImportResult
@@ -167,6 +168,10 @@ object WMFileTypes {
         // wants it here too. The apps that write the format keep their own
         // filter, and with one installed Android asks which app should open it.
         WaStickersFile.FILE_EXTENSION,
+        // A Samsung Keyboard grid shared from Keys Cafe, claimed for the same
+        // reason again: the file is somebody's own arrangement, and opening it
+        // is how they bring it over. Keys Cafe keeps its own filter.
+        KeysCafeLayouts.FILE_EXTENSION,
     )
 
     /**
@@ -198,6 +203,13 @@ object WMFileTypes {
          * be settled before the grid is stored.
          */
         data class FutoLayout(val converted: ConvertedLayout) : Opened
+
+        /**
+         * A Samsung Keyboard grid shared from Keys Cafe, already converted. Its
+         * own case for the reason [FutoLayout] is: the language is a guess to
+         * settle, and the body has to say that this one keeps its whole frame.
+         */
+        data class KeysCafeLayout(val converted: ConvertedLayout) : Opened
 
         /**
          * An Espanso match file: somebody else's text expander, read into
@@ -396,6 +408,13 @@ object WMFileTypes {
         // untagged one would have nothing left to be told apart by.
         if (name.endsWith(".${ThemeCodec.FILE_EXTENSION}", ignoreCase = true)) {
             ThemeCodec.decode(text)?.let { return Opened.Theme(it) }
+        }
+
+        // A Keys Cafe grid is base64 text, which no JSON or YAML document is,
+        // so it can sit here safely: the sniff is on the characters, and the
+        // conversion then has to decrypt to a grid or the file falls through.
+        if (KeysCafeLayouts.looksLikeKcf(text)) {
+            KeysCafeLayouts.convert(text, name)?.let { return Opened.KeysCafeLayout(it) }
         }
 
         // The two YAML formats, which are the two that can follow the branch
@@ -1023,6 +1042,21 @@ private fun rememberProposal(
                 // for the reason its own comment gives: a blank langId is
                 // migrated to English on the next read, which would give a
                 // Georgian grid an English dictionary with nothing to say why.
+                repository.upsertCustomLayout(
+                    state.converted.withLanguage(langId)
+                        .copy(id = "custom_${System.currentTimeMillis()}"),
+                )
+                context.getString(R.string.import_done_name, state.converted.layout.name)
+            },
+        )
+
+        is WMFileTypes.Opened.KeysCafeLayout -> ImportProposal(
+            titleRes = R.string.import_name_title,
+            titleArg = state.converted.layout.name,
+            body = context.getString(R.string.import_keyscafe_body),
+            repairs = state.converted.notes.map { it.format(context.resources) },
+            language = state.converted.guessedLangId,
+            applyWithLanguage = { langId ->
                 repository.upsertCustomLayout(
                     state.converted.withLanguage(langId)
                         .copy(id = "custom_${System.currentTimeMillis()}"),

@@ -69,6 +69,7 @@ import com.wasimaster.wmkeyboard.core.keyman.KeymanImport
 import com.wasimaster.wmkeyboard.core.layout.ForeignLayouts
 import com.wasimaster.wmkeyboard.core.layout.FutoLayouts
 import com.wasimaster.wmkeyboard.core.layout.ForeignSource
+import com.wasimaster.wmkeyboard.core.layout.KeysCafeLayouts
 import com.wasimaster.wmkeyboard.core.layout.ImportedLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutFile
 import com.wasimaster.wmkeyboard.core.layout.LayoutMessage
@@ -544,7 +545,11 @@ internal fun KeyLayoutsScreen(
                         // FlorisBoard reader would take one and return null
                         // rather than deferring, so order is the dispatch.
                         val text = bytes.decodeToString()
-                        when {
+                        // Keys Cafe before everything: its file is base64 text,
+                        // which none of the readers below could take for theirs.
+                        // The sniff can pass a HeliBoard text layout of plain
+                        // letters by accident, so a refusal falls through.
+                        KeysCafeLayouts.takeIf { it.looksLikeKcf(text) }?.convert(text, name) ?: when {
                             KeymanImport.looksLikeTouchLayout(text) ->
                                 KeymanImport.convert(text, name)
                             // FUTO before the JSON reader for the same reason:
@@ -937,6 +942,7 @@ internal fun KeyLayoutsScreen(
                                 ForeignSource.FUTO_YAML -> R.string.layout_editor_foreign_from_futo
                                 ForeignSource.KEYMAN_TOUCH_LAYOUT ->
                                     R.string.layout_editor_foreign_from_keyman
+                                ForeignSource.KEYS_CAFE -> R.string.layout_editor_foreign_from_keyscafe
                             },
                         ),
                     )
