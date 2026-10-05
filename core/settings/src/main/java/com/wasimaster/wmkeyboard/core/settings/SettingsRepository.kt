@@ -2908,6 +2908,19 @@ data class KeyboardSettings(
      */
     val globeRecentOrder: Boolean = false,
     /**
+     * Switching language in the middle of a word hands the roman letters
+     * already typed to the phonetic layout being switched to, so they are
+     * transliterated with the rest of the word instead of staying Latin
+     * (#522): "tu" typed on English, then a switch to Avro, reads তু and the
+     * "mi" after it finishes তুমি.
+     *
+     * On by default — a switch mid-word is almost always one the user meant to
+     * make earlier. What it costs is the other reading of the same keypress: a
+     * finished English word with no space after it ("hello", then a switch to
+     * write the next word in Bengali) is carried over too, and becomes হেল্লো.
+     */
+    val carryWordOnLanguageSwitch: Boolean = true,
+    /**
      * List each enabled layout as an Android input-method subtype, so the
      * system language switcher (the "Choose input method" sheet) lists them and
      * can switch between them. Off = the keyboard registers no subtypes and
@@ -8299,6 +8312,8 @@ class SettingsRepository(private val context: Context) {
         private val GLOBE_AS_EMOJI = booleanPreferencesKey("globe_as_emoji")
         private val SHOW_GLOBE_KEY = booleanPreferencesKey("show_globe_key")
         private val GLOBE_RECENT_ORDER = booleanPreferencesKey("globe_recent_order")
+        private val CARRY_WORD_ON_LANGUAGE_SWITCH =
+            booleanPreferencesKey("carry_word_on_language_switch")
         private val OS_LANGUAGE_SWITCHER = booleanPreferencesKey("os_language_switcher")
         private val SUBTYPE_APP_NAME_FIRST = booleanPreferencesKey("subtype_app_name_first")
         private val PER_APP_LANGUAGE_ENABLED = booleanPreferencesKey("per_app_language_enabled")
@@ -9261,6 +9276,8 @@ class SettingsRepository(private val context: Context) {
             globeAsEmoji = p[GLOBE_AS_EMOJI] ?: defaults.globeAsEmoji,
             showGlobeKey = p[SHOW_GLOBE_KEY] ?: defaults.showGlobeKey,
             globeRecentOrder = p[GLOBE_RECENT_ORDER] ?: defaults.globeRecentOrder,
+            carryWordOnLanguageSwitch = p[CARRY_WORD_ON_LANGUAGE_SWITCH]
+                ?: defaults.carryWordOnLanguageSwitch,
             osLanguageSwitcher = p[OS_LANGUAGE_SWITCHER] ?: defaults.osLanguageSwitcher,
             subtypeAppNameFirst = p[SUBTYPE_APP_NAME_FIRST] ?: defaults.subtypeAppNameFirst,
             perAppLanguage = readPerAppLanguage(p, defaults),
@@ -15428,6 +15445,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setGlobeRecentOrder(value: Boolean) =
         editPrefs { it[GLOBE_RECENT_ORDER] = value }
+
+    suspend fun setCarryWordOnLanguageSwitch(value: Boolean) =
+        editPrefs { it[CARRY_WORD_ON_LANGUAGE_SWITCH] = value }
 
     suspend fun setOsLanguageSwitcher(value: Boolean) =
         editPrefs { it[OS_LANGUAGE_SWITCHER] = value }

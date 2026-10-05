@@ -34,6 +34,11 @@
     <string name="langemoji_lang_keymaps_empty_subtitle">Make your own key grid, or start from a built-in one</string>
     <string name="langemoji_lang_keymaps_subtitle">Edit, add and delete layouts</string>
 
+    <string name="langemoji_lang_switching_title">Switching language</string>
+    <string name="langemoji_lang_carry_word_title">Carry the word over</string>
+    <string name="langemoji_lang_carry_word_subtitle">Switch to a phonetic layout mid-word and the letters that you typed convert too</string>
+    <string name="langemoji_lang_carry_word_info">Phonetic layouts such as Avro, Hindi phonetic and Khipro spell their script with roman letters. When you notice halfway through a word that you are still on your Latin keyboard, switching language now converts the letters that you already typed instead of leaving them as they are: type "tu", switch to Avro, and the word reads তু, so "mi" after it finishes তুমি. Turn this off if you often switch language right after an English word and before typing a space, because that word is carried over as well.</string>
+
     <string name="langemoji_lang_per_app_title">Per-app language</string>
     <string name="langemoji_lang_per_app_toggle_title">Remember language per app</string>
     <string name="langemoji_lang_per_app_toggle_subtitle">Open each app with the layout that you used there last</string>

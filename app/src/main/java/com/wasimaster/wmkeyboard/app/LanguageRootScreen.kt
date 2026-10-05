@@ -204,6 +204,17 @@ internal fun LanguageSettings(
             }
         }
     }
+    SettingsGroup(stringResource(R.string.langemoji_lang_switching_title)) {
+        item {
+            ToggleSetting(
+                R.string.langemoji_lang_carry_word_title,
+                stringResource(R.string.langemoji_lang_carry_word_subtitle),
+                settings.watch { it.carryWordOnLanguageSwitch },
+                info = stringResource(R.string.langemoji_lang_carry_word_info),
+                default = SettingsDefaults.carryWordOnLanguageSwitch,
+            ) { scope.launch { repository.setCarryWordOnLanguageSwitch(it) } }
+        }
+    }
     SettingsGroup(stringResource(R.string.langemoji_lang_per_app_title)) {
         item {
             ToggleSetting(

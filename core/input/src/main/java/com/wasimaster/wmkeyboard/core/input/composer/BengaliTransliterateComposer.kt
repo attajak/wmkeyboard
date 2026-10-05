@@ -16,6 +16,8 @@ object BengaliTransliterateComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
 
+    override val isRomanBuffer: Boolean get() = true
+
     override val phoneticLanguage: String get() = "bn"
 
     override fun composeBuffer(buffer: String): String = AvroPhonetic.transliterate(buffer)

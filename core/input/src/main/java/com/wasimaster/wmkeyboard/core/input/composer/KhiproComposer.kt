@@ -51,6 +51,8 @@ object KhiproComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
 
+    override val isRomanBuffer: Boolean get() = true
+
     override val completionLanguage: String get() = "bn"
 
     /** The desktop spec turns digits into Bengali ones, so they belong to the word there. */

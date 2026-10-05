@@ -50,6 +50,37 @@ internal fun composingResumable(composer: Composer, hasWordSources: Boolean): Bo
     hasWordSources && !composer.isTransliterating
 
 /**
+ * The word a language switch mid-word may hand to a transliterating layout as
+ * its roman buffer (#522), or null when [word] is not one it could have typed.
+ *
+ * Roman letters only. A buffer with a digit, an apostrophe or a hyphen in it is
+ * not a spelling any of the phonetic schemes takes, and a word read back out of
+ * the field could hold anything; letting one through would compose the
+ * transliterator's reading of characters it has no rule for.
+ *
+ * Lowercased, because the case says nothing about what the user meant. Avro and
+ * Hindi phonetic both spell the retroflexes and aspirates with capitals — `T`
+ * is ট — so carrying "Tu" as typed would transliterate a capital the keyboard
+ * armed itself at a sentence start, or one the user pressed for an English
+ * word, into a different consonant. Neither script has case of its own, so
+ * nothing is lost by dropping it.
+ */
+internal fun carriedRomanWord(word: String): String? {
+    if (word.isEmpty() || word.length > CARRIED_WORD_MAX) return null
+    if (!word.all { it in 'a'..'z' || it in 'A'..'Z' }) return null
+    return word.lowercase()
+}
+
+/**
+ * How long a word may be and still carry across a language switch. A run of
+ * letters longer than this behind the caret is not a word someone is in the
+ * middle of typing — it is a URL, a token, or an editor that handed back more
+ * than was asked for — and transliterating it would rewrite text the user never
+ * meant to convert.
+ */
+internal const val CARRIED_WORD_MAX = 32
+
+/**
  * Whether [c] is part of the word the composing buffer holds.
  *
  * `Char.isLetter()` answers this only for the scripts that spell a word out of

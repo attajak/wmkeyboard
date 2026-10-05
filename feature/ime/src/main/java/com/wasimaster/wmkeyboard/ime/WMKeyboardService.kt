@@ -11840,6 +11840,80 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Hands the word being typed to the layout being switched to as its roman
+     * buffer, and returns it — or null, which leaves the switch committing the
+     * word as it always has.
+     *
+     * Switching to Avro in the middle of "tumi" used to commit the "tu" as
+     * Latin, so the Bengali only started at the switch and the word had to be
+     * typed again from the beginning (#522). Carried instead, the roman letters
+     * become the new composer's buffer and read as তু, and the "mi" that
+     * follows extends the same word.
+     *
+     * Two places hold the letters. A board that composes has them in
+     * [composing], where the switch takes them straight over; a field typed
+     * into without composing (one that asked for no suggestions, or a board
+     * that commits every key) has them in the editor, and they are read back
+     * and marked as the composing region the way a caret landing on a word
+     * does ([restartSuggestionsAtCursor]) — which, like that resume, is
+     * abandoned when the editor refuses the region rather than inserting the
+     * word a second time.
+     *
+     * The costly reads are last: the gates above them are all field reads of
+     * state the service already has.
+     */
+    private fun carryWordForSwitch(ic: InputConnection, spec: LayoutSpec): String? {
+        val state = _uiState.value
+        if (!state.settings.carryWordOnLanguageSwitch) return null
+        // Only *into* a layout that spells its words in roman letters: Avro,
+        // Hindi phonetic, Khipro.
+        if (!composerFor(spec.script(), spec.composerType()).isRomanBuffer) return null
+        // And only *out of* a board whose letters are those same roman ones —
+        // a Latin keyboard, or another phonetic layout. Probhat's buffer is
+        // Bengali, Hangul's is jamo, a conversion reading stands for a choice
+        // of outputs, and a board with several letters to a key holds anchors
+        // that stand for other letters entirely: none of them is a spelling
+        // another transliterator could read.
+        if (!state.composer.isRomanBuffer && state.script.id != ScriptId.LATIN) return null
+        if (state.composer.isConversion || state.layouts.ambiguousKeys) return null
+        // Something else owns the keys or the field's text is not what it looks
+        // like: a keyboard-owned field composes in its own buffer, a Keyman
+        // engine keeps its own context, and ANSI output is Latin letters
+        // standing for Bengali glyphs.
+        if (state.captureTarget() != null || keymanSession != null) return null
+        if (ansiOutputVersion != null) return null
+        val buffered = composing.toString()
+        if (buffered.isNotEmpty()) {
+            return carriedRomanWord(buffered)?.also { carryComposing(it) }
+        }
+        // Nothing is being composed, so the word has to come out of the field.
+        // Never out of a password one: its text is the user's secret, and the
+        // keyboard has no business putting it back through a transliterator.
+        if (state.secureField) return null
+        val caret = expectedSelStart
+        if (caret < 0 || caret != expectedSelEnd) return null
+        val before = ic.getTextBeforeCursor(CARRIED_WORD_MAX + 1, 0)
+        val word = resumableWordAt(before, ic.getTextAfterCursor(1, 0))
+            ?.let { carriedRomanWord(it) }
+            ?: return null
+        if (word.length > caret) return null
+        if (!caretStillAt(ic, caret)) return null
+        if (!ic.setComposingRegion(caret - word.length, caret)) return null
+        carryComposing(word)
+        return word
+    }
+
+    /** The carried word becomes the composing buffer, with no history behind
+     * it: the taps were made on another board's keys, and the capitals it may
+     * have been typed with are gone ([carriedRomanWord]), so nothing about the
+     * spelling is the user's own. */
+    private fun carryComposing(word: String) {
+        suggestionJob?.cancel()
+        composing = StringBuilder(word)
+        composingCaseTrusted = false
+    }
+
+    /**
      * Spacebar swipe (or 🌐 cycle): switch to an explicit layout.
      *
      * [recordRecent] false keeps the switch out of the recently-used list: the
@@ -11849,7 +11923,15 @@ open class WMKeyboardService : InputMethodService() {
     fun onLayoutSelected(layoutId: String, recordRecent: Boolean = true) {
         val from = _uiState.value.layoutId
         val spec = resolveLayout(_uiState.value.settings.customLayouts, layoutId)
-        currentInputConnection?.let { commitComposing(it, autocorrect = false) }
+        // A word half-typed in roman letters carries into a transliterating
+        // layout rather than being committed as Latin, so switching to Avro
+        // in the middle of "tumi" converts the "tu" already typed instead of
+        // leaving it to be typed again (#522). Non-null means the buffer now
+        // belongs to the new layout and the commit is skipped; the composing
+        // region is rewritten in the new script by the [updateComposingText]
+        // below, once the state and the engine have followed the switch.
+        val carried = currentInputConnection?.let { carryWordForSwitch(it, spec) }
+        if (carried == null) currentInputConnection?.let { commitComposing(it, autocorrect = false) }
         // An explicit switch beats what the field asked for: the user can
         // see the box they are typing in, FORCE_ASCII and hintLocales are
         // only the app's guess.
@@ -11900,6 +11982,10 @@ open class WMKeyboardService : InputMethodService() {
         syncPhoneticAutoEnglish(_uiState.value.settings, spec)
         syncPhoneticFixedStrip(_uiState.value.settings, spec)
         syncAnsiOutput(_uiState.value.settings, spec)
+        // The carried word is still roman in the field; here is the first point
+        // the new composer, the engine and the phonetic flags are all in place,
+        // so this is where it becomes Bengali (or Devanagari) on screen.
+        if (carried != null) currentInputConnection?.let { updateComposingText(it) }
         refreshSuggestions()
         // The typing test follows the language: a prompt dealt in one
         // language cannot be typed on another's keys, so the switch re-deals.

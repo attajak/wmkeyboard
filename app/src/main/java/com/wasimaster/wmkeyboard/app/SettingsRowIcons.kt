@@ -612,6 +612,7 @@ internal object SettingsRowIcons {
         put(R.string.langemoji_lang_auto_download_title) { Icons.Outlined.CloudDownload }
         put(R.string.langemoji_lang_metered_title) { Icons.Outlined.SignalCellularAlt }
         put(R.string.langemoji_lang_autopair_title) { Icons.Outlined.Link }
+        put(R.string.langemoji_lang_carry_word_title) { Icons.Outlined.Translate }
         put(R.string.langemoji_lang_forget_apps_title) { Icons.Outlined.DeleteSweep }
         put(R.string.languages_conjunct_backspace_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.languages_numeral_system_title) { Icons.Outlined.Numbers }

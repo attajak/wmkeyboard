@@ -13,7 +13,7 @@ import Shot from '@components/Shot.astro';
 
 Once more than one layout is enabled, there are four ways to move between them on the touchscreen: swipe the spacebar, hold the spacebar and drag through a list, use a dedicated key, or reach for Android's own input-method switcher. All four call the same underlying switch. Pick whichever suits your hands, because nothing about what a switch *does* changes. A physical keyboard adds a fifth: its own language key, or <KeyCap>Ctrl</KeyCap>+<KeyCap>Space</KeyCap>. See [Hardware keyboards](/typing/hardware-keyboard/#switching-language) for those.
 
-However you make it, the switch lands right away. A half-typed word is committed as it stands, the keys redraw, and the suggestion strip refills from the new language's dictionary immediately, so you don't have to type a letter first to stop being offered words from the language you just left.
+However you make it, the switch lands right away. A half-typed word is committed as it stands (unless the new layout is a phonetic one and **Carry the word over** is on, see below), the keys redraw, and the suggestion strip refills from the new language's dictionary immediately, so you don't have to type a letter first to stop being offered words from the language you just left.
 
 <PhoneFrame caption="The resting spacebar shows the current language's name, with switch-direction arrows on either side.">
   <Shot id="languages/spacebar-resting-label" alt="The resting spacebar shows the current language's name, with switch-direction arrows on either side." />
@@ -173,6 +173,18 @@ A separate, unrelated toggle, **Remember language per app** (under Per-app langu
 
 **Link romanized languages automatically** sits in the same group and is on by default. It pairs a romanized language such as Banglish with the languages that share its script, so suggestions come from both. Adding a language only makes that language's own links, so a link you removed by hand between two languages already on your list stays removed. Turn it off and adding a language links nothing.
 
+## Switching mid-word onto a phonetic layout
+
+<SettingsPath path="Languages / Switching language / Carry the word over" />
+
+Phonetic layouts spell their script with roman letters: Avro and Khipro write Bengali, Hindi phonetic writes Devanagari. Which means the letters you type on your Latin keyboard are the very letters those layouts take, and noticing halfway through a word that you never switched no longer costs you the word. **Carry the word over** is on by default. Type `tu`, switch to Avro, and what you already typed becomes তু; the `mi` after it finishes তুমি. Without it the `tu` commits as Latin and only the `mi` is Bengali, so the whole word has to be typed again.
+
+The letters are converted whether they were still being composed or already sitting in the field, and their capitals are dropped on the way, because Avro and Hindi phonetic both spell retroflexes and aspirates with capitals and the `T` of a sentence-opening `Tumi` was not asked for as ট. A word with a digit, an apostrophe or a hyphen in it is left alone, as is anything longer than 32 letters, and so is a password field.
+
+One case argues the other way, and is why the setting exists: finishing an English word, *not* typing a space, and switching to write the next word in Bengali. That word is carried over too, so `hello` becomes হেল্লো. Nothing distinguishes it from the `tu` above — in both, the caret sits after a run of roman letters — so if that is how you switch, turn this off and switches commit the word as they always did.
+
+Only the phonetic layouts take a carried word. Switching to Probhat, Jatiya, a Latin keyboard or a Chinese or Japanese input method commits the word as it stands, since none of them spells with the letters you just typed.
+
 ## Switching from another app or a computer
 
 Automation apps such as Tasker, and `adb` on a computer, can switch too. They send an intent that names a layout or a language, or asks for the next or previous one, and the keyboard switches as if you had pressed 🌐. Only layouts you turned on can be reached this way. It is off until you turn on <SettingsPath path="Privacy / Let other apps control the keyboard" />. See [Automation: adb and Tasker](/reference/automation/) for the intents and a Tasker example.
@@ -197,6 +209,7 @@ Automation apps such as Tasker, and `adb` on a computer, can switch too. They se
 | Emoji key instead of 🌐 | Layout & size → Bottom row keys | On |
 | Comma key opens emoji | Layout & size → Bottom row keys | Off |
 | Your languages / Switch order | Languages | Seeded from your phone's language list, then QWERTY, capped at 4 layouts |
+| Carry the word over | Languages → Switching language | On |
 | Remember language per app | Languages → Per-app language | Off |
 | Forget remembered apps | Languages → Language data | A button, shown once apps are remembered |
 | Link romanized languages automatically | Languages → Language data | On |

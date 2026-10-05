@@ -250,6 +250,38 @@ class ComposingResumeTest {
         assertEquals("कि" to "या", caretWordAt("उसने कि", "या"))
     }
 
+    // --- carrying a word across a language switch (#522) -------------------
+
+    @Test
+    fun `roman letters carry, lowercased`() {
+        assertEquals("tu", carriedRomanWord("tu"))
+        // The capital is the sentence start's, or an English word's; Avro would
+        // read T as ট and spell a different word.
+        assertEquals("tumi", carriedRomanWord("Tumi"))
+    }
+
+    @Test
+    fun `anything but roman letters does not carry`() {
+        assertNull(carriedRomanWord(""))
+        assertNull(carriedRomanWord("don't"))
+        assertNull(carriedRomanWord("well-pai"))
+        assertNull(carriedRomanWord("tu2"))
+        assertNull(carriedRomanWord("তু"))
+        assertNull(carriedRomanWord("a".repeat(CARRIED_WORD_MAX + 1)))
+    }
+
+    @Test
+    fun `only the roman-spelled composers take a carried word`() {
+        for (spec in listOf(BuiltInLayouts.AVRO, BuiltInLayouts.PROBHAT, BuiltInLayouts.QWERTY)) {
+            val roman = composerOf(spec).isRomanBuffer
+            assertEquals(spec.id, spec.id == BuiltInLayouts.AVRO.id, roman)
+        }
+        // A reading that stands for a choice of outputs is not a spelling
+        // another transliterator could read.
+        assertFalse(PinyinComposer.isRomanBuffer)
+        assertFalse(JapaneseComposer.isRomanBuffer)
+    }
+
     // --- backspacing the resumed buffer ------------------------------------
 
     @Test

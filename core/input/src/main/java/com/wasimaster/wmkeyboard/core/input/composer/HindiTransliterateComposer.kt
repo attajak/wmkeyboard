@@ -22,6 +22,8 @@ object HindiTransliterateComposer : Composer {
 
     override val isTransliterating: Boolean get() = true
 
+    override val isRomanBuffer: Boolean get() = true
+
     override val phoneticLanguage: String get() = "hi"
 
     override fun composeBuffer(buffer: String): String = HindiPhonetic.transliterate(buffer)

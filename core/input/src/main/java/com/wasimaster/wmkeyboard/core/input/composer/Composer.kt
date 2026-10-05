@@ -49,6 +49,19 @@ interface Composer {
     val completionLanguage: String? get() = null
 
     /**
+     * Whether this composer spells its buffer in roman letters: Avro's, Hindi
+     * phonetic's, Khipro's.
+     *
+     * What lets a word half-typed on a Latin keyboard carry into the buffer
+     * when the language is switched mid-word (#522) — the letters already in
+     * the field are the very letters this composer would have taken. False for
+     * every composer whose keys are its own script (Hangul's jamo, 천지인,
+     * Cangjie's strokes, Zhuyin's bopomofo) and for the conversion IMEs, whose
+     * buffer stands for a choice of outputs rather than one reading.
+     */
+    val isRomanBuffer: Boolean get() = false
+
+    /**
      * A fixed complex-script layout (Probhat, and later Devanagari, Tamil …):
      * types script characters directly and shapes clusters / contextual vowel
      * forms. The registry-era replacement for `isFixedBengali`.
