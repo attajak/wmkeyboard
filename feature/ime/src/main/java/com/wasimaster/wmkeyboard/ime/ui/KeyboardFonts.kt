@@ -590,9 +590,35 @@ object KeyboardFonts {
         EmojiFontChoice.SYSTEM -> null
         EmojiFontChoice.NOTO -> notoEmojiTypeface(context)
         EmojiFontChoice.CUSTOM, EmojiFontChoice.INSTALLED ->
-            emojiFontFile(context, choice, installedId)
-                ?.let { runCatching { Typeface.createFromFile(it) }.getOrNull() }
+            emojiFontFile(context, choice, installedId)?.let(::customEmojiTypeface)
     }
+
+    /**
+     * The user's own emoji font, parsed once.
+     *
+     * A colour emoji font runs from eleven to twenty-five megabytes, and
+     * `Typeface.createFromFile` parses and maps the whole thing. Uncached, every
+     * "send as sticker" built another one and left the last to a finaliser —
+     * [notoEmojiTypeface] beside this has always been kept for the process, and
+     * there is no reason the user's own font should be the one that is not.
+     *
+     * One, not a map: a keyboard draws with one emoji font at a time, and
+     * holding the previous choice in case the user switches back is memory
+     * spent on a guess — the same call [com.wasimaster.wmkeyboard.core.feedback.KeySoundPlayer]
+     * makes about sound packs. Keyed on the file's stamp as well as its path,
+     * so replacing an installed font is picked up rather than drawn stale, as
+     * `EmojiFontShaping`'s coverage cache is.
+     */
+    private fun customEmojiTypeface(file: File): Typeface? {
+        val key = "${file.path}:${file.lastModified()}:${file.length()}"
+        customEmoji?.let { (cachedKey, typeface) -> if (cachedKey == key) return typeface }
+        val typeface = runCatching { Typeface.createFromFile(file) }.getOrNull() ?: return null
+        customEmoji = key to typeface
+        return typeface
+    }
+
+    @Volatile
+    private var customEmoji: Pair<String, Typeface>? = null
 
     private suspend fun notoEmojiTypeface(context: Context): Typeface? {
         notoEmoji?.let { return it }

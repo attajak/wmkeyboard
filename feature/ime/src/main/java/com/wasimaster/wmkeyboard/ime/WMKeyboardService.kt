@@ -383,6 +383,7 @@ import com.wasimaster.wmkeyboard.core.tools.DictionaryLookup
 import com.wasimaster.wmkeyboard.core.tools.DictionarySource
 import com.wasimaster.wmkeyboard.core.tools.GifItem
 import com.wasimaster.wmkeyboard.core.grammar.GrammarChecker
+import com.wasimaster.wmkeyboard.core.ocr.TesseractOcr
 import com.wasimaster.wmkeyboard.core.grammar.GrammarEdit
 import com.wasimaster.wmkeyboard.core.grammar.GrammarFix
 import com.wasimaster.wmkeyboard.core.grammar.GrammarLint
@@ -6602,6 +6603,11 @@ open class WMKeyboardService : InputMethodService() {
         // the first time somebody searched the emoji panel for one. Rebuilt by
         // the next such search.
         if (panel != PanelMode.EMOJI) UnicodeNames.release()
+        // The OCR engine's loaded language pack: tens of megabytes of native
+        // memory. The scanner panel frees it when it closes, so this is the
+        // backstop for the panel never getting the chance — and the lite build
+        // has no engine, where it is a no-op.
+        if (panel != PanelMode.OCR) TesseractOcr.release()
         // Harper's rule sets, one per dialect, built on the first lint and
         // until now never freed — and the spell-checker service lints in this
         // process too, so a user who never opened the grammar tool could still
