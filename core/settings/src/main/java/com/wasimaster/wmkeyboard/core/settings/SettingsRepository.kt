@@ -3861,6 +3861,14 @@ const val GLIDE_OUTCOMES_FILE = "learning/glide_outcomes.json"
 /** The most results one web or image search asks for: Brave's and Tavily's page size. */
 const val MAX_SEARCH_RESULTS = 20
 
+/**
+ * Rounds of tool calls one AI run may take (#470). One is "look something up,
+ * then answer"; the ceiling is low on purpose, because every round repeats
+ * every result found so far and a model that can loop freely is a model that
+ * can empty a search quota on one question.
+ */
+val AiToolRoundsRange = 1..5
+
 /** Addresses typed into email fields (see `TypedEmails` in :core:prediction). */
 const val TYPED_EMAILS_FILE = "learning/typed_emails.json"
 
@@ -4109,6 +4117,33 @@ data class AiSettings(
      * on every run, which is why it is a number and not simply raised.
      */
     val beforeCursorChars: Int = 4_000,
+    /**
+     * Let the model search the web when it needs to (#470).
+     *
+     * On by default, but only reachable once a search service is set up — the
+     * row is hidden otherwise, because a tool whose answer is always "search
+     * is not configured" costs tokens on every run and buys nothing. Turning
+     * it on sends the user's field text nowhere new: the search goes to the
+     * backend they already chose for the search tool, and only ever with the
+     * query the model wrote.
+     */
+    val toolWebSearch: Boolean = true,
+    /**
+     * Let the model open one web page and read it (#470).
+     *
+     * Off by default, unlike search. This one will fetch whatever address a
+     * model names, and that address can come from text in the field — so it
+     * is the one tool here that a prompt in the user's own document could
+     * point somewhere, and it waits to be asked for.
+     */
+    val toolWebFetch: Boolean = false,
+    /**
+     * How many rounds of tool calls one run may take before the model has to
+     * answer with what it found. Each round is another request and another
+     * replay of every result so far, so this is the setting that decides what
+     * a curious model can cost.
+     */
+    val toolMaxRounds: Int = 3,
 )
 
 /**
@@ -8991,6 +9026,9 @@ class SettingsRepository(private val context: Context) {
         private val AI_DOWNLOAD_UNMETERED = booleanPreferencesKey("ai_download_unmetered_only")
         private val AI_BEFORE_CURSOR_CHARS = intPreferencesKey("ai_before_cursor_chars")
         private val AI_DIFF_VIEW = booleanPreferencesKey("ai_diff_view")
+        private val AI_TOOL_WEB_SEARCH = booleanPreferencesKey("ai_tool_web_search")
+        private val AI_TOOL_WEB_FETCH = booleanPreferencesKey("ai_tool_web_fetch")
+        private val AI_TOOL_MAX_ROUNDS = intPreferencesKey("ai_tool_max_rounds")
         private val AI_DIFF_OPENS_FIRST = booleanPreferencesKey("ai_diff_opens_first")
         private val AI_CUSTOM_ACTIONS = stringPreferencesKey("ai_custom_actions")
         private val AI_ACTION_ORDER = stringPreferencesKey("ai_action_order")
@@ -10857,6 +10895,9 @@ class SettingsRepository(private val context: Context) {
             panelChat = p[AI_PANEL_CHAT] ?: defaults.ai.panelChat,
             beforeCursorChars = p[AI_BEFORE_CURSOR_CHARS]
                 ?: defaults.ai.beforeCursorChars,
+            toolWebSearch = p[AI_TOOL_WEB_SEARCH] ?: defaults.ai.toolWebSearch,
+            toolWebFetch = p[AI_TOOL_WEB_FETCH] ?: defaults.ai.toolWebFetch,
+            toolMaxRounds = p[AI_TOOL_MAX_ROUNDS] ?: defaults.ai.toolMaxRounds,
         )
 
     private fun readLauncher(p: Preferences, defaults: KeyboardSettings) =
@@ -14679,6 +14720,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAiBeforeCursorChars(value: Int) =
         editPrefs { it[AI_BEFORE_CURSOR_CHARS] = value.coerceIn(500, 32_000) }
+
+    suspend fun setAiToolWebSearch(value: Boolean) =
+        editPrefs { it[AI_TOOL_WEB_SEARCH] = value }
+
+    suspend fun setAiToolWebFetch(value: Boolean) =
+        editPrefs { it[AI_TOOL_WEB_FETCH] = value }
+
+    suspend fun setAiToolMaxRounds(value: Int) =
+        editPrefs { it[AI_TOOL_MAX_ROUNDS] = value.coerceIn(AiToolRoundsRange) }
 
     suspend fun setShiftCapsLockMs(value: Int) =
         editPrefs { it[SHIFT_CAPS_LOCK_MS] = value.coerceIn(ShiftCapsLockMsRange.first, ShiftCapsLockMsRange.last) }

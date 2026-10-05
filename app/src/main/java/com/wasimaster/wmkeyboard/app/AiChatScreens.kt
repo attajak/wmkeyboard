@@ -353,7 +353,7 @@ internal fun AiChatScreen(
                     val newest = index == messages.lastIndex
                     val regenerate: () -> Unit = {
                         choice?.let { picked ->
-                            AiChatController.regenerate(context, settings.value.ai, activeId, picked)
+                            AiChatController.regenerate(context, settings.value, activeId, picked)
                         }
                     }
                     val edit: () -> Unit = {
@@ -366,7 +366,7 @@ internal fun AiChatScreen(
                         message = message,
                         onRetry = retryFor(message, messages) {
                             choice?.let { picked ->
-                                AiChatController.retry(context, settings.value.ai, activeId, picked)
+                                AiChatController.retry(context, settings.value, activeId, picked)
                             }
                         },
                         onRegenerate = regenerate.takeIf {
@@ -421,7 +421,7 @@ internal fun AiChatScreen(
                     val id = activeId.takeIf { it >= 0 }
                         ?: store.newConversation(System.currentTimeMillis()).id
                             .also { activeId = it }
-                    AiChatController.send(context, settings.value.ai, id, picked, draft, draftAttachment)
+                    AiChatController.send(context, settings.value, id, picked, draft, draftAttachment)
                     draft = ""
                     draftAttachment = ""
                 },

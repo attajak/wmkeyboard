@@ -34,7 +34,8 @@ object TavilySearchClient {
      *
      * [advanced] is Tavily's deeper search, two credits instead of one (#470).
      * [answer] asks for the short answer Tavily writes from the results, which
-     * costs nothing more.
+     * costs nothing more. [source] is what the network log files the request
+     * under: the search tool, unless the AI tool ran the search itself (#470).
      */
     fun webSearch(
         query: String,
@@ -43,11 +44,12 @@ object TavilySearchClient {
         safe: Boolean,
         advanced: Boolean = false,
         answer: Boolean = false,
+        source: NetSource = NetSource.WEB_SEARCH,
     ): WebSearchPage {
         val body = post(
             requestBody(query, count, safe, images = false, advanced = advanced, answer = answer),
             apiKey,
-            NetSource.WEB_SEARCH,
+            source,
         )
         return WebSearchPage(parseWeb(body), if (answer) parseAnswer(body) else null)
     }

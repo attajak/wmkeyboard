@@ -13,10 +13,14 @@ import com.wasimaster.wmkeyboard.core.localllm.LocalLlmEngine
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmStore
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
 import com.wasimaster.wmkeyboard.core.settings.AiSettings
+import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiPhase
 import com.wasimaster.wmkeyboard.core.tools.AiPrompts
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
+import com.wasimaster.wmkeyboard.core.tools.AiToolLoop
+import com.wasimaster.wmkeyboard.core.tools.AiToolProtocol
+import com.wasimaster.wmkeyboard.core.tools.AiToolRunner
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
 import kotlinx.coroutines.withContext
@@ -160,7 +164,7 @@ object AiChatController {
      */
     fun send(
         context: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
         text: String,
@@ -194,7 +198,7 @@ object AiChatController {
      */
     fun retry(
         context: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
     ) {
@@ -217,7 +221,7 @@ object AiChatController {
      */
     fun regenerate(
         context: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
     ) {
@@ -264,7 +268,7 @@ object AiChatController {
 
     private fun launchGeneration(
         appContext: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
         user: String,
@@ -333,7 +337,7 @@ object AiChatController {
 
     private fun runOnDevice(
         context: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
         user: String,
@@ -343,14 +347,41 @@ object AiChatController {
             ?: throw java.io.IOException(
                 context.getString(R.string.ime_ai_chat_error_no_model),
             )
-        val chat = obtainSession(context, settings, conversationId, choice, modelFile)
+        val tools = AiToolRunner.enabled(settings)
+        // A local model has no function calling, so the sentinel protocol has
+        // to be part of the session's own system prompt — the session is built
+        // once and keeps it, which is why it is woven in here rather than per
+        // round. The one cost: the last round is still told about tools, so a
+        // model that will not stop calling them answers with nothing. The
+        // round limit is what keeps that rare.
+        val sessionSystem = AiPrompts.chatPrompt() + AiToolProtocol.instructions(tools)
+        val chat = obtainSession(context, settings.ai, conversationId, choice, modelFile, sessionSystem)
         var lastPartialAt = 0L
-        return chat.sendMessage(user) { partial ->
-            val now = System.currentTimeMillis()
-            if (seq != runSeq || now - lastPartialAt < AI_PARTIAL_INTERVAL_MS) return@sendMessage
-            lastPartialAt = now
-            postPartial(seq, partial)
-        }
+        return AiToolLoop.run(
+            // The round below ignores this: the session was built with its own
+            // prompt above and keeps it. Passing the bare one here is what
+            // stops the loop appending the protocol to it a second time.
+            system = AiPrompts.chatPrompt(),
+            turns = listOf(AiClient.ChatTurn(AiClient.ChatRole.USER, user)),
+            tools = tools,
+            native = false,
+            executor = AiToolRunner(context, settings)::run,
+            maxRounds = settings.ai.toolMaxRounds,
+            onPhase = { phase -> postPhase(seq, phase) },
+            onPartial = { partial ->
+                val now = System.currentTimeMillis()
+                if (seq == runSeq && now - lastPartialAt >= AI_PARTIAL_INTERVAL_MS) {
+                    lastPartialAt = now
+                    postPartial(seq, partial)
+                }
+            },
+            isActive = { seq == runSeq },
+        ) { _, roundTurns, _, roundPartial ->
+            // The session remembers every earlier round itself, so only the
+            // newest message is sent: the user's on round one, the tool
+            // results on the rounds after it.
+            AiClient.Completion(chat.sendMessage(roundTurns.last().text, roundPartial))
+        }.text
     }
 
     /**
@@ -365,9 +396,12 @@ object AiChatController {
         conversationId: Long,
         choice: ModelChoice,
         modelFile: File,
+        system: String,
     ): LocalLlmEngine.ChatSession = synchronized(this) {
+        // The system prompt is part of the key: turning a tool on changes it,
+        // and a session built before that would never hear about the tool.
         val key = "$conversationId|${modelFile.path}|${settings.localBackend}|" +
-            settings.localContextTokens
+            "${settings.localContextTokens}|${system.hashCode()}"
         session?.takeIf { sessionKey == key }?.let { return it }
         session?.close()
         val fresh = LocalLlmEngine.chatSession(
@@ -375,7 +409,7 @@ object AiChatController {
             modelFile,
             settings.localBackend,
             settings.localContextTokens,
-            AiPrompts.chatPrompt(),
+            system,
         )
         fresh.seed(transcriptOf(context, conversationId))
         session = fresh
@@ -404,7 +438,7 @@ object AiChatController {
     @Suppress("UnusedParameter")
     private fun runRemote(
         context: Context,
-        settings: AiSettings,
+        settings: KeyboardSettings,
         conversationId: Long,
         choice: ModelChoice,
         user: String,
@@ -412,7 +446,7 @@ object AiChatController {
     ): String {
         // The picker's provider stands in for the settings one, so chatting
         // with a different model never rewrites the keyboard's own selection.
-        val chosen = settings.copy(provider = choice.provider)
+        val chosen = settings.ai.copy(provider = choice.provider)
         val config = AiClient.config(chosen).copy(netSource = NetSource.AI_CHAT)
         val turns = store(context).get(conversationId)?.messages.orEmpty()
             .filter { !it.failed }
@@ -427,15 +461,15 @@ object AiChatController {
                 )
             }
         var lastPartialAt = 0L
-        val completion = AiClient.completeStreaming(
+        val completion = AiClient.completeWithTools(
             config = config,
             system = AiPrompts.chatPrompt(),
             turns = turns,
             maxTokens = AiClient.effectiveMaxTokens(chosen),
-            onPhase = { phase ->
-                if (seq == runSeq) _run.value = _run.value
-                    ?.takeIf { it.seq == seq }?.copy(phase = phase)
-            },
+            tools = AiToolRunner.enabled(settings),
+            executor = AiToolRunner(context, settings)::run,
+            maxRounds = settings.ai.toolMaxRounds,
+            onPhase = { phase -> postPhase(seq, phase) },
             onPartial = { partial ->
                 val now = System.currentTimeMillis()
                 if (seq == runSeq && now - lastPartialAt >= AI_PARTIAL_INTERVAL_MS) {
@@ -446,6 +480,11 @@ object AiChatController {
             isActive = { seq == runSeq },
         )
         return completion.text
+    }
+
+    private fun postPhase(seq: Int, phase: AiPhase) {
+        if (seq != runSeq) return
+        _run.value = _run.value?.takeIf { it.seq == seq }?.copy(phase = phase)
     }
 
     private fun postPartial(seq: Int, partial: String) {

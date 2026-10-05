@@ -162,6 +162,24 @@
     <string name="toolai_ai_diff_first_subtitle">The panel starts on the changes instead of the plain result</string>
 
     <!--
+      Tool calling (#470): letting the model search the web, or read one page,
+      before it answers.
+    -->
+    <string name="toolai_ai_tools_group_title">What the model can do</string>
+    <string name="toolai_ai_tools_info">The model can ask the keyboard to look something up before it answers. It only ever does so when it needs to, and you see each request in the network activity log under "AI tool use".</string>
+    <string name="toolai_ai_tools_info_fallback">This provider has no built-in support for tools, so the keyboard explains them to the model in words instead. It works, but a small model often ignores them or gets the format wrong. A provider with real tool support is far more reliable.</string>
+    <string name="toolai_ai_tool_search_title">Let the model search the web</string>
+    <string name="toolai_ai_tool_search_subtitle">It writes its own search and reads the results. Searches go to whichever service the search tool uses, and count against that service's quota.</string>
+    <string name="toolai_ai_tool_search_needs_setup_title">Let the model search the web</string>
+    <string name="toolai_ai_tool_search_needs_setup_subtitle">Set up a search service first — the model has nothing to search with</string>
+    <string name="toolai_ai_tool_fetch_title">Let the model read a web page</string>
+    <string name="toolai_ai_tool_fetch_subtitle">It opens one address and reads the text on it. Needs no search service.</string>
+    <string name="toolai_ai_tool_fetch_info">This is the one tool that will open an address it found in your own text, so it is off until you ask for it. The page is read as plain text and cut short; no scripts run, and nothing is sent to the page.</string>
+    <string name="toolai_ai_tool_rounds_title">Lookups per answer</string>
+    <string name="toolai_ai_tool_rounds_subtitle">How many times the model may look something up before it has to answer</string>
+    <string name="toolai_ai_tool_rounds_info">Each round is another request to the model, carrying everything it has found so far. Higher digs deeper into a question and costs more; lower keeps one answer cheap and quick.</string>
+
+    <!--
       The chat screen in the settings app. The words it shares with the chat on
       the keyboard's AI panel are in :feature:ime (ime_ai_chat_*); these are the
       ones only this screen draws.

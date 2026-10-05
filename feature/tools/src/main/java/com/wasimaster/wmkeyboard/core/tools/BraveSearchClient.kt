@@ -18,13 +18,24 @@ import kotlinx.serialization.json.jsonPrimitive
  */
 object BraveSearchClient {
 
-    /** Blocking; call on an IO dispatcher. Throws on failure. */
-    fun webSearch(query: String, apiKey: String, count: Int, safe: Boolean): List<WebResult> {
+    /**
+     * Blocking; call on an IO dispatcher. Throws on failure.
+     *
+     * [source] is what the network log files the request under. It is the
+     * search tool unless the AI tool ran the search itself (#470).
+     */
+    fun webSearch(
+        query: String,
+        apiKey: String,
+        count: Int,
+        safe: Boolean,
+        source: NetSource = NetSource.WEB_SEARCH,
+    ): List<WebResult> {
         val url = ServiceEndpoints.base(ServiceEndpoint.BRAVE_SEARCH) + "/res/v1/web/search" +
             "?q=${ToolHttp.encode(query.trim())}" +
             "&count=${count.coerceIn(1, 20)}" +
             "&safesearch=${if (safe) "moderate" else "off"}"
-        return parseWeb(ToolHttp.get(url, headers = headers(apiKey), source = NetSource.WEB_SEARCH, route = "/res/v1/web/search"))
+        return parseWeb(ToolHttp.get(url, headers = headers(apiKey), source = source, route = "/res/v1/web/search"))
     }
 
     /** Blocking; call on an IO dispatcher. Throws on failure. */

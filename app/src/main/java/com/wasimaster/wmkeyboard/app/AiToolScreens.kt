@@ -44,10 +44,14 @@ import com.wasimaster.wmkeyboard.core.tools.BuiltInAiActions
 import com.wasimaster.wmkeyboard.core.tools.orderedAiActions
 import com.wasimaster.wmkeyboard.core.tools.visibleAiActions
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
+import com.wasimaster.wmkeyboard.core.settings.AiToolRoundsRange
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
+import com.wasimaster.wmkeyboard.core.settings.hasSearchKey
 import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiPrompts
 import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
+import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -68,6 +72,12 @@ internal fun AiToolSettings(
     // own value.
     val aiProvider = settings.watch { it.ai.provider }
     val diffView = settings.watch { it.ai.diffView }
+    // Tool calling (#470). The search row only appears once a search service
+    // is set up — a tool whose every answer is "search is not configured"
+    // would cost tokens on every run and do nothing.
+    val searchReady = settings.watch { hasSearchKey(it) }
+    val toolSearch = settings.watch { it.ai.toolWebSearch }
+    val toolFetch = settings.watch { it.ai.toolWebFetch }
     // What the chosen provider needs, and where the text goes, both ride on
     // the heading's "?" rather than as paragraphs between the controls.
     val setupNote = when (aiProvider) {
@@ -383,6 +393,55 @@ internal fun AiToolSettings(
                 settings.watch { it.ai.diffOpensFirst },
                 default = SettingsDefaults.ai.diffOpensFirst,
             ) { scope.launch { repository.setAiDiffOpensFirst(it) } }
+        }
+    }
+    SettingsGroup(
+        stringResource(R.string.toolai_ai_tools_group_title),
+        info = stringResource(
+            if (AiClient.supportsNativeTools(aiProvider)) {
+                R.string.toolai_ai_tools_info
+            } else {
+                // Brave and an on-device model are told about tools in the
+                // prompt instead, which smaller models follow badly. Say so
+                // here rather than letting it read as a bug.
+                R.string.toolai_ai_tools_info_fallback
+            },
+        ),
+    ) {
+        item(visible = searchReady) {
+            ToggleSetting(
+                R.string.toolai_ai_tool_search_title,
+                stringResource(R.string.toolai_ai_tool_search_subtitle),
+                toolSearch,
+                default = SettingsDefaults.ai.toolWebSearch,
+            ) { scope.launch { repository.setAiToolWebSearch(it) } }
+        }
+        item(visible = !searchReady) {
+            NavRow(
+                title = R.string.toolai_ai_tool_search_needs_setup_title,
+                subtitle = stringResource(R.string.toolai_ai_tool_search_needs_setup_subtitle),
+                onClick = { onNavigate(toolRoute(ToolbarTool.WEB_SEARCH)) },
+            )
+        }
+        item {
+            ToggleSetting(
+                R.string.toolai_ai_tool_fetch_title,
+                stringResource(R.string.toolai_ai_tool_fetch_subtitle),
+                toolFetch,
+                info = stringResource(R.string.toolai_ai_tool_fetch_info),
+                default = SettingsDefaults.ai.toolWebFetch,
+            ) { scope.launch { repository.setAiToolWebFetch(it) } }
+        }
+        item(visible = toolFetch || (toolSearch && searchReady)) {
+            SliderSetting(
+                R.string.toolai_ai_tool_rounds_title,
+                subtitle = stringResource(R.string.toolai_ai_tool_rounds_subtitle),
+                value = settings.watch { it.ai.toolMaxRounds }.toFloat(),
+                range = AiToolRoundsRange.first.toFloat()..AiToolRoundsRange.last.toFloat(),
+                display = { numberFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.toolai_ai_tool_rounds_info),
+                default = SettingsDefaults.ai.toolMaxRounds.toFloat(),
+            ) { scope.launch { repository.setAiToolMaxRounds(it.roundToInt()) } }
         }
     }
     SettingsGroup(stringResource(R.string.toolai_ai_chat_group_title)) {

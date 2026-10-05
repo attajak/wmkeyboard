@@ -430,6 +430,9 @@ import com.wasimaster.wmkeyboard.core.localllm.LocalLlmEngine
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmStore
 import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiPrompts
+import com.wasimaster.wmkeyboard.core.tools.AiToolLoop
+import com.wasimaster.wmkeyboard.core.tools.AiToolRunner
+import com.wasimaster.wmkeyboard.core.tools.AiToolSpec
 import com.wasimaster.wmkeyboard.core.tools.AiMarkdown
 import com.wasimaster.wmkeyboard.core.tools.AiPhase
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
@@ -25150,10 +25153,10 @@ open class WMKeyboardService : InputMethodService() {
             AiChatAction.Send -> aiChatSend()
             AiChatAction.Stop -> AiChatController.stop(this)
             AiChatAction.Retry -> aiChatChoice()?.let {
-                AiChatController.retry(this, state.settings.ai, chat.conversationId, it)
+                AiChatController.retry(this, state.settings, chat.conversationId, it)
             }
             AiChatAction.Regenerate -> aiChatChoice()?.let {
-                AiChatController.regenerate(this, state.settings.ai, chat.conversationId, it)
+                AiChatController.regenerate(this, state.settings, chat.conversationId, it)
             }
             AiChatAction.EditLast -> {
                 val taken = AiChatController.editLast(this, chat.conversationId) ?: return
@@ -25275,7 +25278,7 @@ open class WMKeyboardService : InputMethodService() {
         // chat opened and left leaves no row behind.
         val id = chat.conversationId.takeIf { it >= 0 && store.get(it) != null }
             ?: store.newConversation(System.currentTimeMillis(), ephemeral = state.incognitoOn).id
-        AiChatController.send(this, state.settings.ai, id, choice, text, chat.attachment?.text.orEmpty())
+        AiChatController.send(this, state.settings, id, choice, text, chat.attachment?.text.orEmpty())
         _uiState.update {
             it.copy(
                 aiChat = it.aiChat.copy(
@@ -25392,6 +25395,14 @@ open class WMKeyboardService : InputMethodService() {
         }
         aiJob = serviceScope.launch {
             val settings = _uiState.value.settings
+            // Tools reach the network on their own account (#470), so a user
+            // who is holding web search back on mobile data is holding the
+            // model's searches back with it — the run itself still goes.
+            val tools = if (dataSaverStatus.decide(MeteredFeature.WEB_SEARCH) == MeteredDecision.ALLOWED) {
+                AiToolRunner.enabled(settings)
+            } else {
+                emptyList()
+            }
             val system = when {
                 // Writing from nothing: the request rides in the user message,
                 // so the system prompt only has to frame it. No injection guard
@@ -25406,16 +25417,19 @@ open class WMKeyboardService : InputMethodService() {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
                     if (config.provider == AiProvider.ON_DEVICE || offlineFirst) {
-                        runAiOnDevice(seq, action, source, system, settings, generated, fromSelection)
+                        runAiOnDevice(seq, action, source, system, settings, generated, fromSelection, tools)
                     } else {
-                        runAiRemote(seq, action, source, system, settings, config, startedAt, generated, fromSelection)
+                        runAiRemote(
+                            seq, action, source, system, settings, config,
+                            startedAt, generated, fromSelection, tools,
+                        )
                     }
                 }.recoverCatching { e ->
                     // Only a server that could not be reached, and only when a
                     // run on the device was not already the one that failed.
                     if (!localStandIn || fellBack || seq != aiRunSeq || !ToolHttp.isUnreachable(e)) throw e
                     fellBack = true
-                    runAiOnDevice(seq, action, source, system, settings, generated, fromSelection)
+                    runAiOnDevice(seq, action, source, system, settings, generated, fromSelection, tools)
                 }
             }
             // A superseded or cancelled run never gets past here, so it is
@@ -25562,6 +25576,7 @@ open class WMKeyboardService : InputMethodService() {
         settings: KeyboardSettings,
         generated: Boolean,
         fromSelection: Boolean = false,
+        tools: List<AiToolSpec> = emptyList(),
     ): AiClient.Completion {
         val modelId = effectiveLocalModelId(settings)
         val modelFile = effectiveLocalModelFile(settings)
@@ -25569,23 +25584,61 @@ open class WMKeyboardService : InputMethodService() {
         val implicitThink = isReasoningModel(modelId)
         val startedAt = SystemClock.uptimeMillis()
         var lastPartialAt = 0L
-        val text = LocalLlmEngine.generate(
-            context = applicationContext,
-            modelFile = modelFile,
-            backend = settings.ai.localBackend,
-            contextTokens = settings.ai.localContextTokens,
+        val runner = AiToolRunner(applicationContext, settings)
+        val text = AiToolLoop.run(
             system = system,
-            user = source,
-        ) { raw ->
-            val now = SystemClock.uptimeMillis()
-            if (seq != aiRunSeq || now - lastPartialAt < AI_PARTIAL_INTERVAL_MS) return@generate
-            lastPartialAt = now
-            applyAiPartial(seq, action, source, raw, settings, implicitThink, startedAt, generated, fromSelection)
-        }
+            turns = listOf(AiClient.ChatTurn(AiClient.ChatRole.USER, source)),
+            tools = tools,
+            // No on-device runtime offers function calling, so a local model
+            // can only be told about tools in prose; see AiToolProtocol.
+            native = false,
+            executor = runner::run,
+            maxRounds = settings.ai.toolMaxRounds,
+            onPhase = { phase -> applyAiPhase(seq, phase) },
+            onPartial = { raw ->
+                val now = SystemClock.uptimeMillis()
+                if (seq == aiRunSeq && now - lastPartialAt >= AI_PARTIAL_INTERVAL_MS) {
+                    lastPartialAt = now
+                    applyAiPartial(
+                        seq, action, source, raw, settings,
+                        implicitThink, startedAt, generated, fromSelection,
+                    )
+                }
+            },
+            isActive = { seq == aiRunSeq },
+        ) { roundSystem, roundTurns, _, roundPartial ->
+            AiClient.Completion(
+                LocalLlmEngine.generate(
+                    context = applicationContext,
+                    modelFile = modelFile,
+                    backend = settings.ai.localBackend,
+                    contextTokens = settings.ai.localContextTokens,
+                    system = roundSystem,
+                    // The engine takes one user string, so a loop that has
+                    // run a tool folds its rounds into a transcript.
+                    user = AiClient.foldedPrompt("", roundTurns),
+                    onPartial = roundPartial,
+                ),
+            )
+        }.text
         // The on-device engine reports no stop reason, so an answer that ran out
         // of context window looks the same as one that finished. Never claim it
         // was cut off, rather than claiming it wrongly either way.
         return AiClient.Completion(text)
+    }
+
+    /**
+     * Moves a still-loading run to [phase]. A partial may already have
+     * promoted it to Ready, and a late phase report must not drag it back to
+     * a spinner — which is also what makes "Using a tool" invisible once the
+     * model has begun writing, correctly: the answer is more use than the step.
+     */
+    private fun applyAiPhase(seq: Int, phase: AiPhase) {
+        if (seq != aiRunSeq) return
+        _uiState.update {
+            val loading = it.ai as? AiUi.Loading
+            if (loading == null) it else it.copy(ai = loading.copy(phase = phase))
+        }
     }
 
     /**
@@ -25603,24 +25656,18 @@ open class WMKeyboardService : InputMethodService() {
         startedAt: Long,
         generated: Boolean,
         fromSelection: Boolean = false,
+        tools: List<AiToolSpec> = emptyList(),
     ): AiClient.Completion {
         var lastPartialAt = 0L
-        return AiClient.completeStreaming(
+        return AiClient.completeWithTools(
             config = config,
             system = system,
-            user = source,
+            turns = listOf(AiClient.ChatTurn(AiClient.ChatRole.USER, source)),
             maxTokens = AiClient.effectiveMaxTokens(settings.ai),
-            onPhase = { phase ->
-                if (seq == aiRunSeq) {
-                    _uiState.update {
-                        // Only advance a still-loading run: a partial may
-                        // already have promoted this to Ready, and a late
-                        // phase report must not drag it back to a spinner.
-                        val loading = it.ai as? AiUi.Loading
-                        if (loading == null) it else it.copy(ai = loading.copy(phase = phase))
-                    }
-                }
-            },
+            tools = tools,
+            executor = AiToolRunner(applicationContext, settings)::run,
+            maxRounds = settings.ai.toolMaxRounds,
+            onPhase = { phase -> applyAiPhase(seq, phase) },
             onPartial = { raw ->
                 val now = SystemClock.uptimeMillis()
                 if (seq == aiRunSeq && now - lastPartialAt >= AI_PARTIAL_INTERVAL_MS) {

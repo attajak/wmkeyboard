@@ -112,6 +112,7 @@ private fun texts(source: NetSource): Pair<Int, Int> = when (source) {
     NetSource.OCR_ONLINE -> R.string.netlog_source_ocr_online to R.string.netlog_sent_ocr_online
     NetSource.AI -> R.string.netlog_source_ai to R.string.netlog_sent_ai
     NetSource.AI_CHAT -> R.string.netlog_source_ai_chat to R.string.netlog_sent_ai_chat
+    NetSource.AI_TOOLS -> R.string.netlog_source_ai_tools to R.string.netlog_sent_ai_tools
     NetSource.TRANSCRIPTION -> R.string.netlog_source_transcription to R.string.netlog_sent_transcription
     NetSource.WIKIPEDIA -> R.string.netlog_source_wikipedia to R.string.netlog_sent_wikipedia
     NetSource.DICTIONARY -> R.string.netlog_source_dictionary to R.string.netlog_sent_dictionary

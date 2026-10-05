@@ -86,7 +86,7 @@ class AiClientBraveTest {
 
     @Test
     fun `a chat is folded into a transcript that ends on the latest message`() {
-        val prompt = AiClient.braveFoldedPrompt(
+        val prompt = AiClient.foldedPrompt(
             "Be kind.",
             listOf(
                 ChatTurn(ChatRole.USER, "Who won?"),

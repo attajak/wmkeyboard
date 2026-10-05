@@ -15,6 +15,7 @@ import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -41,10 +42,35 @@ object AiClient {
         val netSource: NetSource = NetSource.AI,
     )
 
-    /** One prior message of a multi-turn chat, oldest first. */
-    data class ChatTurn(val role: ChatRole, val text: String)
+    /**
+     * One prior message of a multi-turn chat, oldest first.
+     *
+     * [toolCalls] is set on the assistant turn that ended by asking for tools,
+     * and [toolResult] on the [ChatRole.TOOL] turn carrying one answer back.
+     * Both are empty for every ordinary message, which is every message until
+     * the user turns a tool on (#470).
+     */
+    data class ChatTurn(
+        val role: ChatRole,
+        val text: String,
+        val toolCalls: List<AiToolCall> = emptyList(),
+        val toolResult: AiToolResult? = null,
+    ) {
+        /**
+         * Part of a tool exchange rather than something a person wrote. These
+         * turns are passed through [normalizedTurns] untouched: they may be
+         * blank, they may repeat a role, and the conversation may end on one.
+         */
+        val isToolExchange: Boolean get() = toolCalls.isNotEmpty() || toolResult != null
+    }
 
-    enum class ChatRole { USER, ASSISTANT }
+    /**
+     * [TOOL] is not a role any provider spells the same way — OpenAI has a
+     * `tool` message, Anthropic a user message of `tool_result` blocks, Gemini
+     * a user part of `functionResponse`. It is one role here and becomes each
+     * of those in the body builders.
+     */
+    enum class ChatRole { USER, ASSISTANT, TOOL }
 
     /**
      * One finished response.
@@ -54,7 +80,12 @@ object AiClient {
      * is indistinguishable from a complete one, which is how a long "Improve"
      * used to come back missing its last paragraphs with nothing to say so.
      */
-    data class Completion(val text: String, val truncated: Boolean = false)
+    data class Completion(
+        val text: String,
+        val truncated: Boolean = false,
+        /** What the model asked to call instead of, or as well as, answering. */
+        val toolCalls: List<AiToolCall> = emptyList(),
+    )
 
     /**
      * Model each provider falls back to when its settings field is blank.
@@ -264,6 +295,26 @@ object AiClient {
         }
 
     /**
+     * Whether this provider has real function calling, as opposed to being
+     * told about tools in prose (#470).
+     *
+     * Everything that speaks the OpenAI shape counts, including the user's own
+     * gateway: carrying `tools` is most of what "OpenAI-compatible" means, and
+     * a server that ignores the field simply never calls anything, which is
+     * the same place the prose fallback ends up for a model that cannot
+     * follow it. The two that are out are out for structural reasons —
+     * Brave's Answers API takes a single user message and nothing else, and an
+     * on-device model is not reached over HTTP at all.
+     */
+    fun supportsNativeTools(provider: AiProvider): Boolean = when (provider) {
+        AiProvider.ANTHROPIC, AiProvider.GEMINI, AiProvider.OLLAMA,
+        AiProvider.OPENAI, AiProvider.LM_STUDIO, AiProvider.XAI,
+        AiProvider.DEEPSEEK, AiProvider.OPENAI_COMPATIBLE,
+        -> true
+        AiProvider.BRAVE, AiProvider.ON_DEVICE -> false
+    }
+
+    /**
      * Runs one system+user exchange as a *stream*, returning the assembled
      * text. [onPhase] reports how far the request has got and [onPartial] the
      * response so far, so the panel can show the answer forming instead of a
@@ -287,7 +338,7 @@ object AiClient {
         isActive: () -> Boolean = { true },
     ): Completion = completeStreaming(
         config, system, listOf(ChatTurn(ChatRole.USER, user)),
-        maxTokens, onPhase, onPartial, isActive,
+        maxTokens, emptyList(), onPhase, onPartial, isActive,
     )
 
     /**
@@ -304,27 +355,90 @@ object AiClient {
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean = { true },
+    ): Completion = completeStreaming(
+        config, system, turns, maxTokens, emptyList(), onPhase, onPartial, isActive,
+    )
+
+    /**
+     * The form that offers [tools]. An empty list is an ordinary request, so
+     * nothing about a run with tools turned off changes at all — no field is
+     * added to the body and no provider is told that tools exist.
+     *
+     * One round only: the model may answer, or it may come back asking for a
+     * tool, and [Completion.toolCalls] is how it says which. Driving that to
+     * an answer is [AiToolLoop]'s job, not this function's.
+     */
+    fun completeStreaming(
+        config: Config,
+        system: String,
+        turns: List<ChatTurn>,
+        maxTokens: Int?,
+        tools: List<AiToolSpec>,
+        onPhase: (AiPhase) -> Unit,
+        onPartial: (String) -> Unit,
+        isActive: () -> Boolean = { true },
     ): Completion {
         val chat = normalizedTurns(turns)
         require(chat.isNotEmpty()) { "No user message to answer" }
         return when (config.provider) {
             AiProvider.ANTHROPIC ->
-                anthropicStream(config, system, chat, maxTokens, onPhase, onPartial, isActive)
+                anthropicStream(config, system, chat, maxTokens, tools, onPhase, onPartial, isActive)
             AiProvider.GEMINI ->
-                geminiStream(config, system, chat, maxTokens, onPhase, onPartial, isActive)
+                geminiStream(config, system, chat, maxTokens, tools, onPhase, onPartial, isActive)
             AiProvider.OLLAMA ->
-                ollamaStream(config, system, chat, maxTokens, onPhase, onPartial, isActive)
+                ollamaStream(config, system, chat, maxTokens, tools, onPhase, onPartial, isActive)
+            // Brave takes one user message and no tool field; see braveStream.
             AiProvider.BRAVE ->
                 braveStream(config, system, chat, maxTokens, onPhase, onPartial, isActive)
             AiProvider.OPENAI, AiProvider.LM_STUDIO, AiProvider.XAI,
             AiProvider.DEEPSEEK, AiProvider.OPENAI_COMPATIBLE,
             -> openAiCompatibleStream(
                 openAiCompatibleUrl(config),
-                config, system, chat, maxTokens, onPhase, onPartial, isActive,
+                config, system, chat, maxTokens, tools, onPhase, onPartial, isActive,
             )
             AiProvider.ON_DEVICE ->
                 error("On-device models run locally, not over HTTP")
         }
+    }
+
+    /**
+     * [completeStreaming], driven round after round until the model stops
+     * asking for tools and answers (#470).
+     *
+     * This is the one call site worth using when tools are on: it picks the
+     * native or the sentinel mechanism from the provider, keeps the rounds
+     * bounded, and streams the whole run — earlier rounds' text included — as
+     * one growing answer, so the panel never appears to restart.
+     */
+    @Suppress("LongParameterList")
+    fun completeWithTools(
+        config: Config,
+        system: String,
+        turns: List<ChatTurn>,
+        maxTokens: Int?,
+        tools: List<AiToolSpec>,
+        executor: AiToolLoop.Executor,
+        maxRounds: Int = AiTools.DEFAULT_MAX_ROUNDS,
+        onPhase: (AiPhase) -> Unit,
+        onPartial: (String) -> Unit,
+        onToolCall: (AiToolCall) -> Unit = {},
+        isActive: () -> Boolean = { true },
+    ): Completion = AiToolLoop.run(
+        system = system,
+        turns = turns,
+        tools = tools,
+        native = supportsNativeTools(config.provider),
+        executor = executor,
+        maxRounds = maxRounds,
+        onPhase = onPhase,
+        onPartial = onPartial,
+        onToolCall = onToolCall,
+        isActive = isActive,
+    ) { roundSystem, roundTurns, roundTools, roundPartial ->
+        completeStreaming(
+            config, roundSystem, roundTurns, maxTokens, roundTools,
+            onPhase, roundPartial, isActive,
+        )
     }
 
     /**
@@ -336,19 +450,32 @@ object AiClient {
     internal fun normalizedTurns(turns: List<ChatTurn>): List<ChatTurn> {
         val result = ArrayList<ChatTurn>(turns.size)
         for (turn in turns) {
+            // A tool exchange is machinery, not conversation: it may be blank
+            // (a model that only called a tool wrote no text), it may repeat a
+            // role, and it must stay exactly where it is or the ids stop
+            // lining up with the calls they answer.
+            if (turn.isToolExchange) {
+                result.add(turn)
+                continue
+            }
             val text = turn.text.trim()
             if (text.isEmpty()) continue
-            if (result.isEmpty() && turn.role == ChatRole.ASSISTANT) continue
+            if (result.isEmpty() && turn.role != ChatRole.USER) continue
             val last = result.lastOrNull()
-            if (last != null && last.role == turn.role) {
+            if (last != null && last.role == turn.role && !last.isToolExchange) {
                 result[result.lastIndex] = last.copy(text = last.text + "\n\n" + text)
             } else {
-                result.add(ChatTurn(turn.role, text))
+                result.add(turn.copy(text = text))
             }
         }
-        // A conversation must end on the user message being answered; a
-        // trailing assistant turn would ask the model to continue itself.
-        while (result.isNotEmpty() && result.last().role == ChatRole.ASSISTANT) {
+        // A conversation must end on the message being answered; a trailing
+        // assistant turn would ask the model to continue itself. A trailing
+        // tool exchange is the opposite: it is precisely what the next
+        // response has to read.
+        while (result.isNotEmpty() &&
+            result.last().role == ChatRole.ASSISTANT &&
+            !result.last().isToolExchange
+        ) {
             result.removeAt(result.lastIndex)
         }
         return result
@@ -424,6 +551,21 @@ object AiClient {
         private var inThink = false
 
         /**
+         * Calls whose arguments stream in fragment by fragment, keyed by the
+         * index the provider numbers them with. OpenAI and Anthropic both work
+         * this way: the name arrives first and the JSON of the arguments
+         * arrives in pieces that mean nothing until the last one lands.
+         */
+        private val streamedCalls = LinkedHashMap<Int, PartialCall>()
+
+        /** Calls that arrive whole in one event: Gemini and Ollama. */
+        private val wholeCalls = ArrayList<AiToolCall>()
+
+        private class PartialCall(var id: String, var name: String) {
+            val arguments = StringBuilder()
+        }
+
+        /**
          * The provider said it stopped because it ran out of room. Set from a
          * stop-reason event rather than guessed from the text, because a
          * sentence that ends mid-word and one that ends on a full stop are
@@ -454,6 +596,38 @@ object AiClient {
             text.append(chunk)
         }
 
+        /** A call announced ahead of its arguments; see [streamedCalls]. */
+        fun toolCallStart(index: Int, id: String, name: String) {
+            val call = streamedCalls.getOrPut(index) { PartialCall(id, name) }
+            if (id.isNotEmpty()) call.id = id
+            if (name.isNotEmpty()) call.name = name
+        }
+
+        /** The next fragment of one call's argument JSON. */
+        fun toolCallArguments(index: Int, fragment: String) {
+            if (fragment.isEmpty()) return
+            streamedCalls.getOrPut(index) { PartialCall("", "") }.arguments.append(fragment)
+        }
+
+        /** A call that came complete in one event. */
+        fun toolCall(id: String, name: String, arguments: String) {
+            if (name.isEmpty()) return
+            wholeCalls.add(AiToolCall(id, name, arguments.ifBlank { "{}" }))
+        }
+
+        /**
+         * The calls so far. A provider uses one mechanism or the other, never
+         * both, so concatenating them cannot interleave anything.
+         */
+        val toolCalls: List<AiToolCall>
+            get() = wholeCalls + streamedCalls.values.mapNotNull { call ->
+                call.name.takeIf { it.isNotEmpty() }?.let {
+                    AiToolCall(call.id, it, call.arguments.toString().ifBlank { "{}" })
+                }
+            }
+
+        val hasToolCalls: Boolean get() = wholeCalls.isNotEmpty() || streamedCalls.isNotEmpty()
+
         /** The stream so far — an unclosed think block reads as "still thinking". */
         val partial: String get() = text.toString()
 
@@ -469,7 +643,7 @@ object AiClient {
                 text.append(THINK_CLOSE)
                 inThink = false
             }
-            return Completion(text.toString(), truncated)
+            return Completion(text.toString(), truncated, toolCalls)
         }
 
         private companion object {
@@ -527,7 +701,10 @@ object AiClient {
             if (buffer.partial != before) onPartial(buffer.partial)
             isActive()
         }
-        if (!buffer.isEmpty) return buffer.finish()
+        // A round that asked for a tool and wrote nothing else is a real,
+        // complete response: without the second test it would read as "nothing
+        // streamed" and be re-parsed as a plain body, losing the calls.
+        if (!buffer.isEmpty || buffer.hasToolCalls) return buffer.finish()
         return runCatching { fallback(collected.toString()) }.getOrDefault(Completion(""))
     }
 
@@ -536,6 +713,7 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec>,
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean,
@@ -544,14 +722,14 @@ object AiClient {
         // "let the service decide" has to become a number here.
         val asked = maxTokens ?: ANTHROPIC_PROVIDER_MAXIMUM
         return try {
-            anthropicStreamOnce(config, system, turns, asked, onPhase, onPartial, isActive)
+            anthropicStreamOnce(config, system, turns, asked, tools, onPhase, onPartial, isActive)
         } catch (e: ToolHttpException) {
             // Asking for more output than the chosen model allows is a hard 400
             // rather than a clamp, and the error names the real ceiling. Retry
             // at that number: nothing has streamed yet, because the status is
             // read before the first byte of the body.
             val ceiling = anthropicModelCeiling(e)?.takeIf { it < asked } ?: throw e
-            anthropicStreamOnce(config, system, turns, ceiling, onPhase, onPartial, isActive)
+            anthropicStreamOnce(config, system, turns, ceiling, tools, onPhase, onPartial, isActive)
         }
     }
 
@@ -560,31 +738,98 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int,
+        tools: List<AiToolSpec> = emptyList(),
     ): String = buildJsonObject {
         put("model", config.model)
         put("max_tokens", maxTokens)
         put("system", system)
         put("stream", true)
-        put("messages", buildJsonArray {
-            for (turn in turns) {
+        if (tools.isNotEmpty()) {
+            put("tools", buildJsonArray {
+                for (tool in tools) {
+                    add(buildJsonObject {
+                        put("name", tool.name)
+                        put("description", tool.description)
+                        // Anthropic's name for the schema every other provider
+                        // calls "parameters".
+                        put("input_schema", tool.parameters)
+                    })
+                }
+            })
+        }
+        put("messages", anthropicMessages(turns))
+    }.toString()
+
+    /**
+     * Anthropic's messages, where a tool exchange is content blocks rather
+     * than roles of its own: the model's request is a `tool_use` block on its
+     * assistant message, and the answers come back as `tool_result` blocks on
+     * a *user* message. Consecutive results are therefore gathered into one
+     * message — two user messages in a row is one of the three things
+     * Anthropic rejects outright.
+     */
+    private fun anthropicMessages(turns: List<ChatTurn>): JsonArray = buildJsonArray {
+        var index = 0
+        while (index < turns.size) {
+            val turn = turns[index]
+            if (turn.role == ChatRole.TOOL) {
+                val group = ArrayList<ChatTurn>()
+                while (index < turns.size && turns[index].role == ChatRole.TOOL) {
+                    group.add(turns[index])
+                    index++
+                }
+                add(buildJsonObject {
+                    put("role", "user")
+                    put("content", buildJsonArray {
+                        for (result in group) {
+                            add(buildJsonObject {
+                                put("type", "tool_result")
+                                put("tool_use_id", result.toolResult?.call?.id.orEmpty())
+                                put("content", result.text)
+                            })
+                        }
+                    })
+                })
+                continue
+            }
+            index++
+            if (turn.toolCalls.isEmpty()) {
                 add(buildJsonObject {
                     put("role", if (turn.role == ChatRole.USER) "user" else "assistant")
                     put("content", turn.text)
                 })
+                continue
             }
-        })
-    }.toString()
+            add(buildJsonObject {
+                put("role", "assistant")
+                put("content", buildJsonArray {
+                    if (turn.text.isNotBlank()) {
+                        add(buildJsonObject { put("type", "text"); put("text", turn.text) })
+                    }
+                    for (call in turn.toolCalls) {
+                        add(buildJsonObject {
+                            put("type", "tool_use")
+                            put("id", call.id)
+                            put("name", call.name)
+                            put("input", argumentsObject(call))
+                        })
+                    }
+                })
+            })
+        }
+    }
 
     private fun anthropicStreamOnce(
         config: Config,
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int,
+        tools: List<AiToolSpec>,
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean,
     ): Completion {
-        val body = anthropicBody(config, system, turns, maxTokens)
+        val body = anthropicBody(config, system, turns, maxTokens, tools)
         return runStream(
             source = config.netSource,
             url = ServiceEndpoints.base(ServiceEndpoint.ANTHROPIC) + "/v1/messages",
@@ -606,11 +851,20 @@ object AiClient {
     internal fun applyAnthropicEvent(data: String, buffer: StreamBuffer) {
         val event = data.asJsonObject() ?: return
         when (event["type"]?.jsonPrimitive?.contentOrNull) {
+            // A tool_use block names the call up front; its arguments then
+            // arrive as input_json_delta fragments against the same index.
+            "content_block_start" -> {
+                val block = event["content_block"]?.jsonObject ?: return
+                if (block.text("type") != "tool_use") return
+                buffer.toolCallStart(event.index(), block.text("id"), block.text("name"))
+            }
             "content_block_delta" -> {
                 val delta = event["delta"]?.jsonObject ?: return
                 when (delta["type"]?.jsonPrimitive?.contentOrNull) {
                     "text_delta" -> buffer.answer(delta.text("text"))
                     "thinking_delta" -> buffer.reasoning(delta.text("thinking"))
+                    "input_json_delta" ->
+                        buffer.toolCallArguments(event.index(), delta.text("partial_json"))
                 }
             }
             // The stop reason rides on the final message_delta, not on any
@@ -630,6 +884,7 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec> = emptyList(),
     ): String = buildJsonObject {
         if (config.model.isNotBlank()) put("model", config.model)
         // Left out entirely for "provider maximum": every OpenAI-shaped
@@ -637,16 +892,64 @@ object AiClient {
         // for. Sending a huge number instead would be rejected by some.
         if (maxTokens != null) put("max_tokens", maxTokens)
         put("stream", true)
+        if (tools.isNotEmpty()) put("tools", openAiTools(tools))
         put("messages", buildJsonArray {
             add(buildJsonObject { put("role", "system"); put("content", system) })
-            for (turn in turns) {
-                add(buildJsonObject {
-                    put("role", if (turn.role == ChatRole.USER) "user" else "assistant")
-                    put("content", turn.text)
-                })
-            }
+            for (turn in turns) add(openAiMessage(turn))
         })
     }.toString()
+
+    /** The `tools` array OpenAI, Ollama and everything OpenAI-shaped reads. */
+    private fun openAiTools(tools: List<AiToolSpec>): JsonArray = buildJsonArray {
+        for (tool in tools) {
+            add(buildJsonObject {
+                put("type", "function")
+                putJsonObject("function") {
+                    put("name", tool.name)
+                    put("description", tool.description)
+                    put("parameters", tool.parameters)
+                }
+            })
+        }
+    }
+
+    /**
+     * One message in the OpenAI shape. A tool answer is its own `tool` role
+     * quoting the call's id; the assistant turn that asked carries the calls
+     * alongside whatever text it wrote first.
+     */
+    private fun openAiMessage(turn: ChatTurn): JsonObject = buildJsonObject {
+        when {
+            turn.role == ChatRole.TOOL -> {
+                put("role", "tool")
+                put("tool_call_id", turn.toolResult?.call?.id.orEmpty())
+                put("name", turn.toolResult?.call?.name.orEmpty())
+                put("content", turn.text)
+            }
+            turn.toolCalls.isNotEmpty() -> {
+                put("role", "assistant")
+                put("content", turn.text)
+                put("tool_calls", buildJsonArray {
+                    for (call in turn.toolCalls) {
+                        add(buildJsonObject {
+                            put("id", call.id)
+                            put("type", "function")
+                            putJsonObject("function") {
+                                put("name", call.name)
+                                // A string of JSON, not an object: this one
+                                // field is quoted in OpenAI's wire format.
+                                put("arguments", call.arguments)
+                            }
+                        })
+                    }
+                })
+            }
+            else -> {
+                put("role", if (turn.role == ChatRole.USER) "user" else "assistant")
+                put("content", turn.text)
+            }
+        }
+    }
 
     private fun openAiCompatibleStream(
         url: String,
@@ -654,11 +957,12 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec>,
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean,
     ): Completion {
-        val body = openAiCompatibleBody(config, system, turns, maxTokens)
+        val body = openAiCompatibleBody(config, system, turns, maxTokens, tools)
         val headers = if (config.apiKey.isNotBlank()) {
             mapOf("Authorization" to "Bearer ${config.apiKey}")
         } else {
@@ -691,6 +995,17 @@ object AiClient {
         // others just reasoning.
         buffer.reasoning(delta.text("reasoning_content").ifEmpty { delta.text("reasoning") })
         buffer.answer(delta.text("content"))
+        // Tool calls stream as fragments keyed by index: the id and name come
+        // on the first chunk for a given index, the argument JSON in pieces
+        // after it. A fragment on its own is not valid JSON, which is why the
+        // buffer has to hold them rather than parse as it goes.
+        delta["tool_calls"]?.jsonArray?.forEach { element ->
+            val entry = element.jsonObject
+            val index = (entry["index"] as? JsonPrimitive)?.intOrNull ?: 0
+            val function = entry["function"]?.jsonObject
+            buffer.toolCallStart(index, entry.text("id"), function?.text("name").orEmpty())
+            function?.text("arguments")?.let { buffer.toolCallArguments(index, it) }
+        }
         // The last chunk of a cut-off answer carries this instead of "stop".
         val choice = event["choices"]?.jsonArray?.firstOrNull()?.jsonObject
         if (choice?.text("finish_reason") == "length") buffer.markTruncated()
@@ -700,18 +1015,30 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec> = emptyList(),
     ): String = buildJsonObject {
         putJsonObject("system_instruction") {
             put("parts", buildJsonArray { add(buildJsonObject { put("text", system) }) })
         }
-        put("contents", buildJsonArray {
-            for (turn in turns) {
+        if (tools.isNotEmpty()) {
+            // One entry holding every declaration, which is how Gemini spells
+            // it — not one entry per tool.
+            put("tools", buildJsonArray {
                 add(buildJsonObject {
-                    // Gemini's name for the assistant role is "model".
-                    put("role", if (turn.role == ChatRole.USER) "user" else "model")
-                    put("parts", buildJsonArray { add(buildJsonObject { put("text", turn.text) }) })
+                    put("functionDeclarations", buildJsonArray {
+                        for (tool in tools) {
+                            add(buildJsonObject {
+                                put("name", tool.name)
+                                put("description", tool.description)
+                                put("parameters", tool.parameters)
+                            })
+                        }
+                    })
                 })
-            }
+            })
+        }
+        put("contents", buildJsonArray {
+            for (turn in turns) add(geminiContent(turn))
         })
         // Left out entirely for "provider maximum", so Gemini writes up to
         // the model's own output limit. This is the setting that used to cut
@@ -721,16 +1048,59 @@ object AiClient {
         }
     }.toString()
 
+    /**
+     * One Gemini content. A tool answer is a *user* part of `functionResponse`
+     * — Gemini has no tool role — and is matched to its call by name rather
+     * than by an id, which is why [AiToolCall.id] is left blank here.
+     */
+    private fun geminiContent(turn: ChatTurn): JsonObject = buildJsonObject {
+        when {
+            turn.role == ChatRole.TOOL -> {
+                put("role", "user")
+                put("parts", buildJsonArray {
+                    add(buildJsonObject {
+                        putJsonObject("functionResponse") {
+                            put("name", turn.toolResult?.call?.name.orEmpty())
+                            putJsonObject("response") { put("result", turn.text) }
+                        }
+                    })
+                })
+            }
+            turn.toolCalls.isNotEmpty() -> {
+                put("role", "model")
+                put("parts", buildJsonArray {
+                    if (turn.text.isNotBlank()) {
+                        add(buildJsonObject { put("text", turn.text) })
+                    }
+                    for (call in turn.toolCalls) {
+                        add(buildJsonObject {
+                            putJsonObject("functionCall") {
+                                put("name", call.name)
+                                put("args", argumentsObject(call))
+                            }
+                        })
+                    }
+                })
+            }
+            else -> {
+                // Gemini's name for the assistant role is "model".
+                put("role", if (turn.role == ChatRole.USER) "user" else "model")
+                put("parts", buildJsonArray { add(buildJsonObject { put("text", turn.text) }) })
+            }
+        }
+    }
+
     private fun geminiStream(
         config: Config,
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec>,
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean,
     ): Completion {
-        val body = geminiBody(system, turns, maxTokens)
+        val body = geminiBody(system, turns, maxTokens, tools)
         return runStream(
             source = config.netSource,
             url = ServiceEndpoints.base(ServiceEndpoint.GEMINI) + "/v1beta/models/" +
@@ -757,6 +1127,15 @@ object AiClient {
         val parts = candidate?.get("content")?.jsonObject?.get("parts")?.jsonArray ?: return
         for (element in parts) {
             val part = element.jsonObject
+            // Gemini sends a whole call in one part, arguments already parsed
+            // — no fragments to reassemble, unlike OpenAI and Anthropic.
+            part["functionCall"]?.jsonObject?.let { call ->
+                buffer.toolCall(
+                    id = "",
+                    name = call.text("name"),
+                    arguments = (call["args"] as? JsonObject)?.toString().orEmpty(),
+                )
+            }
             val text = part.text("text")
             if (text.isEmpty()) continue
             // Gemini flags a reasoning part rather than sending it separately.
@@ -789,9 +1168,11 @@ object AiClient {
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec> = emptyList(),
     ): String = buildJsonObject {
         put("model", config.model)
         put("stream", true)
+        if (tools.isNotEmpty()) put("tools", openAiTools(tools))
         // Ollama spells the ceiling num_predict, and it sits under options
         // rather than at the top level. Left out for "provider maximum",
         // which is what this request always did before the setting reached
@@ -801,25 +1182,51 @@ object AiClient {
         }
         put("messages", buildJsonArray {
             add(buildJsonObject { put("role", "system"); put("content", system) })
-            for (turn in turns) {
-                add(buildJsonObject {
-                    put("role", if (turn.role == ChatRole.USER) "user" else "assistant")
-                    put("content", turn.text)
-                })
-            }
+            // Ollama reads the OpenAI message shape, with one difference the
+            // builder below handles: its tool_calls carry the arguments as an
+            // object rather than as a string of JSON.
+            for (turn in turns) add(ollamaMessage(turn))
         })
     }.toString()
+
+    /** [openAiMessage], but with object-valued tool arguments. */
+    private fun ollamaMessage(turn: ChatTurn): JsonObject = when {
+        turn.role == ChatRole.TOOL -> buildJsonObject {
+            put("role", "tool")
+            put("tool_name", turn.toolResult?.call?.name.orEmpty())
+            put("content", turn.text)
+        }
+        turn.toolCalls.isNotEmpty() -> buildJsonObject {
+            put("role", "assistant")
+            put("content", turn.text)
+            put("tool_calls", buildJsonArray {
+                for (call in turn.toolCalls) {
+                    add(buildJsonObject {
+                        putJsonObject("function") {
+                            put("name", call.name)
+                            put("arguments", argumentsObject(call))
+                        }
+                    })
+                }
+            })
+        }
+        else -> buildJsonObject {
+            put("role", if (turn.role == ChatRole.USER) "user" else "assistant")
+            put("content", turn.text)
+        }
+    }
 
     private fun ollamaStream(
         config: Config,
         system: String,
         turns: List<ChatTurn>,
         maxTokens: Int?,
+        tools: List<AiToolSpec>,
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         isActive: () -> Boolean,
     ): Completion {
-        val body = ollamaBody(config, system, turns, maxTokens)
+        val body = ollamaBody(config, system, turns, maxTokens, tools)
         return runStream(
             source = config.netSource,
             url = "${config.baseUrl.trimEnd('/')}/api/chat",
@@ -847,6 +1254,19 @@ object AiClient {
         val message = event["message"]?.jsonObject ?: return
         buffer.reasoning(message.text("thinking"))
         buffer.answer(message.text("content"))
+        message["tool_calls"]?.jsonArray?.forEach { element ->
+            val function = element.jsonObject["function"]?.jsonObject ?: return@forEach
+            buffer.toolCall(
+                id = "",
+                name = function.text("name"),
+                // An object here, not the quoted JSON OpenAI sends.
+                arguments = when (val args = function["arguments"]) {
+                    null -> ""
+                    is JsonPrimitive -> args.content
+                    else -> args.toString()
+                },
+            )
+        }
     }
 
     // ---- Brave ----
@@ -856,7 +1276,7 @@ object AiClient {
      * differences that matter here. It searches the web before it answers, so
      * every request costs a search as well as tokens. It takes exactly one user
      * message: no system role and no history, so both are folded into that one
-     * message by [braveFoldedPrompt]. And it writes metadata into the answer
+     * message by [foldedPrompt]. And it writes metadata into the answer
      * text itself as `<usage>…</usage>` (and `<citation>…</citation>` when
      * citations are on), which [BraveTagFilter] strips before anyone sees it.
      */
@@ -902,18 +1322,24 @@ object AiClient {
         put("messages", buildJsonArray {
             add(buildJsonObject {
                 put("role", "user")
-                put("content", braveFoldedPrompt(system, turns))
+                put("content", foldedPrompt(system, turns))
             })
         })
     }.toString()
 
     /**
-     * The whole exchange as the single user message Brave accepts. A one-turn
-     * request is the instructions followed by the text; a longer chat is laid
-     * out as a transcript, so the model can still tell what was already said
-     * from what it is being asked now.
+     * The whole exchange as one message, for the two places that can only
+     * take one: Brave's Answers API, which has no system role and no history,
+     * and an on-device model mid-way through a tool loop, whose engine call
+     * takes a single user string.
+     *
+     * A one-turn request is the instructions followed by the text, so nothing
+     * about an ordinary run changes; a longer exchange is laid out as a
+     * transcript, so the model can still tell what was already said from what
+     * it is being asked now. Pass a blank [system] when the caller has its own
+     * way to send one.
      */
-    internal fun braveFoldedPrompt(system: String, turns: List<ChatTurn>): String {
+    fun foldedPrompt(system: String, turns: List<ChatTurn>): String {
         val last = turns.last().text
         val earlier = turns.dropLast(1)
         return buildString {
@@ -1033,4 +1459,17 @@ object AiClient {
     /** A string member, or "" when absent, null, or not a string. */
     private fun JsonObject.text(key: String): String =
         (this[key] as? JsonPrimitive)?.takeIf { it.isString }?.content.orEmpty()
+
+    /** The `index` an Anthropic stream event names its content block by. */
+    private fun JsonObject.index(): Int = (this["index"] as? JsonPrimitive)?.intOrNull ?: 0
+
+    /**
+     * A call's arguments as an object, for the providers that want one rather
+     * than a string of JSON. A model that wrote something that does not parse
+     * sends an empty object: the tool then reports its argument missing, which
+     * the model can act on, where a malformed body would only 400.
+     */
+    private fun argumentsObject(call: AiToolCall): JsonObject =
+        runCatching { json.parseToJsonElement(call.arguments).jsonObject }
+            .getOrDefault(JsonObject(emptyMap()))
 }

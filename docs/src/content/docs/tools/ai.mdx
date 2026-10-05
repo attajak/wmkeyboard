@@ -195,6 +195,37 @@ Write `{target}` anywhere in a prompt and it becomes the translate target langua
 Prompts you'd already customised carry over automatically, and the app checks its own work. A prompt it recognises is unpicked back into a task. Anything it doesn't recognise is kept verbatim under this switch rather than guessed at.
 :::
 
+## Letting the model look things up
+
+<SettingsPath path="Tools / AI writing tools / What the model can do" />
+
+A model answers from what it was trained on, which is a fixed moment in the past. Turn one of these on and it can stop guessing: before it answers, it asks the keyboard to go and find out.
+
+- **Let the model search the web** — on by default, but the row only appears once you've set up a search service. The model writes its own search (usually a better one than the question you asked), reads the results, and answers from them. Searches go through whatever backend the [search tool](/tools/search/) already uses — your SearXNG instance, your Tavily key, or Brave — and count against that service's quota like any other search.
+- **Let the model read a web page** — off by default. The model gives one address and gets the text of that page back. It needs no search service, so it works on its own: paste a link, ask "what does this say?", and the model fetches it.
+- **Lookups per answer** — 1 to 5, default **3**. How many times the model may go and look something up before it has to answer with what it has. Each round is another request carrying everything found so far, so this is the setting that decides what a curious model costs you.
+
+Both tools work in the panel's actions and in [AI chat](/tools/ai-chat/). While one runs, the progress readout says **Using a tool**.
+
+### Why page reading is the one that's off
+
+**Let the model search the web** sends a query the model wrote. **Let the model read a web page** opens an address, and that address can have come from the text you were typing — a link in a document someone sent you, say. That makes it the one tool here that something in your own field could point somewhere, so it waits until you ask for it.
+
+When it does run, the page is fetched as plain text and cut short at about 6,000 characters. No scripts run, nothing is sent *to* the page, and only `http://` and `https://` addresses are opened at all — a model that invents a `file://` or `content://` address gets a refusal, not your storage.
+
+### What your provider needs to support
+
+Most providers do tool calling properly, as part of their API: Claude, OpenAI, Gemini, Grok, DeepSeek, Ollama, LM Studio and any other OpenAI-compatible service. Two can't:
+
+- **Brave** takes a single message with no system prompt and has no tool field at all.
+- **On-device models** have no tool API in the local runtime.
+
+For those two the keyboard falls back to explaining the tools to the model in words and watching its answer for a reply in the agreed format. It genuinely works, and a capable local model will use it — but a small one often ignores the format, or describes it instead of using it. The settings group says so when you're on one of those providers. If lookups matter to you, a provider with real tool support is far more reliable.
+
+### Seeing what it looked up
+
+Every search and every page fetch is a row in the [network activity log](/privacy/network-activity/), filed under **AI tool use** rather than **Web search** — you didn't run that search, the model did, and the log should say which.
+
 ## Chatting instead of transforming
 
 <SettingsPath path="Tools / AI writing tools / Chat with the model" />
@@ -235,6 +266,7 @@ Like every tool, AI has an **Enabled** toggle (on by default) and, if [colorful 
 - **Show model reasoning**: off by default. Turning it on streams a reasoning model's raw `<think>` passages instead of the step-by-step progress readout.
 - **Model picker on the panel**: on by default. Adds a horizontally-scrolling row to the panel itself for switching between every configured provider and downloaded local model in one tap. It's hidden automatically whenever there are fewer than two to choose from.
 - **Show a changes view**: on by default, see [Seeing what changed](#seeing-what-changed). **Open a result on the changes** below it is off.
+- **Let the model search the web**: on by default, and only shown once a search service is set up. **Let the model read a web page** below it is off, and **Lookups per answer** defaults to 3. See [Letting the model look things up](#letting-the-model-look-things-up).
 - **Chat with the model**: opens the conversation screen, see [AI chat](/tools/ai-chat/).
 - **Enter sends the message**: off by default. In the chat on the keyboard, Enter starts a new line and the send button sends. Turn this on to send with Enter instead.
 - **Actions on the panel**: the whole action list, see [Your own actions](#your-own-actions).
@@ -276,6 +308,7 @@ The panel itself sends nothing until you actually tap an action chip: opening th
 - **Any other provider** (cloud or self-hosted): the text you run an action on is sent to that provider, only at the moment you tap the action. API keys and server addresses are stored on the device, not in any WM Keyboard service. See [Privacy at a glance](/privacy/overview/) for how this fits the keyboard's broader per-tool approach to anything that leaves the device.
 - **Report**: builds a draft in your mail app and hands it over. The app has no reporting server and sends nothing itself, so a report only exists if you send the mail. API keys are never part of it.
 - **History**: goes nowhere. It's a file in the app's private storage, off unless you turn it on, never written from a password field or in incognito, and deleted when you turn it off. It's deliberately left out of the backup file too, so it can't ride along in something you export and mail to yourself. There's no section for it to travel in, unlike the learned dictionary, which is a section of its own that you tick or leave alone. See [Your data](/privacy/data/).
+- **A lookup the model asked for**: goes to the service that answers it, and only when the model actually asks. A search carries the query the model wrote — not your field text — to whichever search backend you set up. A page fetch carries nothing but the request for that page. Both show in the [network activity log](/privacy/network-activity/) under **AI tool use**, and both are off entirely while [Data saver](/privacy/data-saver/) is holding web search back.
 - **The changes view**: is computed on your phone. Comparing two pieces of text is arithmetic, not a request, so nothing is sent to build it.
 
 ## Details & edge cases
@@ -291,5 +324,10 @@ The panel itself sends nothing until you actually tap an action chip: opening th
 - **The changes view can't spot moved text.** A paragraph the model relocated reads as a deletion where it was and an insertion where it went. Detecting moves properly needs a second pass that git only does on request. The actions that move text, Summarize and Rewrite, reword it at the same time, so that pass would fire rarely and mislead when it did.
 - **Comparisons drop to whole characters for scripts without spaces** (Chinese, Japanese, Thai, and others). Word-sized pieces would make an entire sentence a single highlight there. Mixed text uses characters throughout, which is noisier but never wrong.
 - **Local models are advisory about RAM, never a hard gate.** A phone under a model's stated minimum can still download and run it. You get a warning in the catalog first.
+- **A model that will not stop looking things up still answers.** When it has used up its **Lookups per answer**, the last request is sent with no tools offered at all, so the model has to write something with what it found. It isn't shown an error.
+- **The round limit is a ceiling, not a target.** Most answers use none. A model only calls a tool when it decides it needs to, and nothing is sent anywhere on a run where it doesn't.
+- **A failed lookup is handed to the model, not to you.** A search with no backend, a page that 404s, an address that isn't one: the model is told in a sentence and carries on, usually by saying it couldn't check. A broken page doesn't fail the whole answer.
+- **What a lookup found isn't kept in a chat's transcript.** Only the model's answer is saved. Ask a follow-up and the model has its own earlier reply to go on, not the search results behind it — so it may look again, which is usually what you'd want anyway.
+- **Tools are off on a local model mid-conversation until the chat restarts.** A local chat session carries its instructions from the moment it opened, so turning a tool on part-way through takes effect on the next conversation rather than the next message.
 - **No shared or built-in key for any cloud provider.** Claude, OpenAI, Gemini, Grok, DeepSeek and Brave each need your own API key. There's no free built-in quota here, the way some of the other network tools offer one.
 - **A model download dies with the app's process.** It resumes rather than restarting, but it isn't a foreground service, so backgrounding the app for long enough can stop it. That hasn't changed. The panel just shows you it's happening now.

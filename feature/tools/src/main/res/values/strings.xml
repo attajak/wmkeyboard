@@ -15,4 +15,24 @@
          403 from one nearly always means its JSON format is off, which is one
          line of its settings.yml, so say that rather than "Forbidden". -->
     <string name="ftools_search_error_json_disabled">This SearXNG instance has not enabled its JSON API. Add <![CDATA[<b>json</b>]]> to <![CDATA[<b>search.formats</b>]]> in its settings.yml, or use another instance.</string>
+
+    <!-- AI tool calling (#470). These are not shown to the user: they are
+         handed back to the model as the result of the tool it asked for, so
+         it can say what went wrong in its own answer, in the user's language.
+         Translated all the same, because a model answers better when the
+         failure it is reading is in the language it is writing. -->
+    <!-- The model asked to read a page but gave something that is not a web address. -->
+    <string name="ftools_web_fetch_bad_url">That is not a web address this keyboard will open. Give a full http:// or https:// address.</string>
+    <!-- The model asked to search but the user has set up no search service. -->
+    <string name="ftools_ai_tool_no_search">Web search is not set up in this keyboard, so searching is not possible. Answer from what you already know and say that you could not search.</string>
+    <!-- A tool ran and failed; the model is told so it can answer anyway. -->
+    <string name="ftools_ai_tool_failed">The tool failed: %1$s. Do not call it again with the same input.</string>
+    <!-- The model asked for a tool that does not exist. -->
+    <string name="ftools_ai_tool_unknown">There is no tool called %1$s.</string>
+    <!-- A required argument was missing from the call. -->
+    <string name="ftools_ai_tool_missing_argument">The call left out the required \"%1$s\" value.</string>
+    <!-- A search that ran but matched nothing. -->
+    <string name="ftools_ai_tool_no_results">No results.</string>
+    <!-- Appended to a fetched page that was cut at the character budget. -->
+    <string name="ftools_ai_tool_truncated">[the page continues past this point and was cut]</string>
 </resources>

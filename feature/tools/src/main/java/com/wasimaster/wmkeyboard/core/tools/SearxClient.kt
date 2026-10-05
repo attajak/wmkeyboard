@@ -29,9 +29,20 @@ import kotlinx.serialization.json.jsonPrimitive
  */
 object SearxClient {
 
-    /** Blocking; call on an IO dispatcher. Throws on failure. */
-    fun webSearch(query: String, instance: String, count: Int, safe: Boolean): WebSearchPage {
-        val body = get(searchUrl(instance, query, categories = "general", safe = safe), NetSource.WEB_SEARCH)
+    /**
+     * Blocking; call on an IO dispatcher. Throws on failure.
+     *
+     * [source] is what the network log files the request under. It is the
+     * search tool unless the AI tool ran the search itself (#470).
+     */
+    fun webSearch(
+        query: String,
+        instance: String,
+        count: Int,
+        safe: Boolean,
+        source: NetSource = NetSource.WEB_SEARCH,
+    ): WebSearchPage {
+        val body = get(searchUrl(instance, query, categories = "general", safe = safe), source)
         return WebSearchPage(parseWeb(body).take(count.coerceIn(1, 50)), parseAnswer(body))
     }
 

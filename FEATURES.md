@@ -2306,6 +2306,14 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
   - What the action reads `uncommon` — selection wins over everything; otherwise whole field, or text before cursor for append-style actions
     - Chips grey out on an empty field — aiHasText re-read on panel open and on every cursor/text change
     - Empty field switches to generation mode — the task (or typed instruction) becomes the user message and the model writes new text
+  - Tool calling `RARE` — the model can search the web or read one page before it answers, in the panel and in chat
+    - Two tools, opted into separately — web_search (on, hidden until a search backend exists) and web_fetch (off: it is the one tool an address in the user's own field could point)
+    - Native function calling where the provider has it — OpenAI/Anthropic/Gemini/Ollama wire shapes, tool_use and tool_result turns carried through the chat history
+    - Prompt-sentinel fallback where it does not — Brave and on-device models are told the protocol in prose and their stream is filtered for `<tool_call>` before anything is shown
+    - Bounded rounds, never an error — 1-5 lookups per answer; the last round is sent with no tools offered so the model has to answer with what it found
+    - Searches reuse the search tool's backend — SearXNG > Tavily > Brave, 5 results, logged under its own AI tool use network source
+    - Pages are read as text and cut — markup, scripts and styles stripped, ~6000 characters, http/https only so an invented file:// address is refused
+    - A failed tool answers the model, not the user — no backend, a 404, a bad address: the model is told in a sentence and carries on
   - Streaming result view `uncommon` — answer renders as it forms for every provider including on-device
     - Replace and Insert commit — Replace appends instead of overwriting for append-mode actions
     - Markdown stripping checkbox — detects headings, bullets, quotes, fences, links, bold/italic; on by default when markdown is present, reformats the preview too

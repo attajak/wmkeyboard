@@ -1324,6 +1324,10 @@ internal object SettingsRowIcons {
         put(R.string.toolai_ai_actions_title) { Icons.Outlined.AutoAwesome }
         put(R.string.toolai_ai_diff_title) { Icons.Outlined.Difference }
         put(R.string.toolai_ai_diff_first_title) { Icons.Outlined.Difference }
+        put(R.string.toolai_ai_tool_search_title) { Icons.Outlined.TravelExplore }
+        put(R.string.toolai_ai_tool_search_needs_setup_title) { Icons.Outlined.TravelExplore }
+        put(R.string.toolai_ai_tool_fetch_title) { Icons.AutoMirrored.Outlined.Article }
+        put(R.string.toolai_ai_tool_rounds_title) { Icons.Outlined.Repeat }
         put(R.string.toolai_ai_chat_nav_title) { Icons.AutoMirrored.Outlined.Chat }
         put(R.string.toolai_ai_history_title) { Icons.Outlined.History }
         put(R.string.toolai_ai_history_nav_title) { Icons.Outlined.History }

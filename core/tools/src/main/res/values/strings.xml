@@ -45,6 +45,8 @@
     <string name="core_tools_ai_phase_waiting">Waiting for the model</string>
     <!-- The model writes its reasoning first. The answer has not started. -->
     <string name="core_tools_ai_phase_thinking">Reasoning</string>
+    <!-- The model asked to search the web or read a page, and that is running. -->
+    <string name="core_tools_ai_phase_using_tool">Using a tool</string>
 
     <!-- ================================================================== -->
     <!-- AI tool: the writing actions that ship with the keyboard. Each one  -->
