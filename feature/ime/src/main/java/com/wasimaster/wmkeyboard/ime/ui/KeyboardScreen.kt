@@ -13787,6 +13787,7 @@ private fun rememberKeyGrid(
     extraRow: List<Key>?,
     palette: KeyPalette,
     gridWeight: Float,
+    stretchDp: Int = 0,
 ): Pair<KeyRowVisual?, List<KeyGridBlock>> {
     val settings = state.settings
     val split = settings.splitKeyboard
@@ -13798,7 +13799,7 @@ private fun rememberKeyGrid(
     // keyRowsHeight adds the same delta so the reserved height matches.
     val bottomRowHeightDp = settings.layoutBehavior.bottomRowHeightDp
     return remember(
-        bodyRows, extraRow, layout, palette, settings, gridWeight,
+        bodyRows, extraRow, layout, palette, settings, gridWeight, stretchDp,
         state.shiftState, state.modifiers, state.effectiveEnterAction,
         // The field's own action as well as the live one: the Enter key's
         // corner draws whichever of the two its face is not (see
@@ -13838,7 +13839,13 @@ private fun rememberKeyGrid(
                 settings.keyHeightDp, layout.rowHeights?.getOrNull(index),
             )
             val bottomRow = index == bodyRows.lastIndex && layout.rowHeights == null
-            if (bottomRowHeightDp > 0 && bottomRow) bottomRowHeightDp else perRowHeight
+            when {
+                bottomRowHeightDp > 0 && bottomRow -> bottomRowHeightDp
+                // A layer shorter than the reserved span grows every row but
+                // the bottom one into the room (see the render loop).
+                index != bodyRows.lastIndex -> perRowHeight + stretchDp
+                else -> perRowHeight
+            }
         }
         // Split mode cuts every row at its own midpoint, which a key belonging to
         // two rows cannot survive: the halves would part company under it. So a
@@ -15954,8 +15961,31 @@ private fun KeyRows(
             // Hoisted out of the render loop so the digit row resolves in the
             // same pass as the body rows below; null when it is not shown.
             val extraRow = if (numberRow) rememberExtraRow(state, fillRow) else null
+            // Layers shorter than the reserved span (the symbols pages under a
+            // six-row alphabet, a keypad under a five-row board) fill it the way
+            // Gboard's do: every row but the bottom one grows by an equal share,
+            // so space and enter stay under the thumb at the same height on
+            // every layer, and no band of empty keyboard opens above the keys.
+            // Padding at the top was the first answer and left up to three rows
+            // of nothing. Whole dp per row, to match the grid's rounding; the
+            // odd fraction left over still pads at the top. A layout with its
+            // own row heights, and the octopus's lanes, keep the padding.
+            val padRows = reservedRowSpan(state) - bodyRows.size
+            val lane = octopusLane(state)
+            val padHeight = if (padRows > 0) {
+                (state.settings.keyHeightDp.dp + keyGapV(state.settings) * 2 + lane) * padRows
+            } else {
+                0.dp
+            }
+            val stretchRows = bodyRows.size - 1
+            val stretchDp = if (padRows > 0 && lane == 0.dp && layout.rowHeights == null && stretchRows > 0) {
+                (padHeight.value / stretchRows).toInt()
+            } else {
+                0
+            }
+            val padLeft = padHeight - (stretchDp * stretchRows).dp
             val (numberRowVisual, bodyBlocks) =
-                rememberKeyGrid(gridState, layout, bodyRows, extraRow, palette, gridWeight)
+                rememberKeyGrid(gridState, layout, bodyRows, extraRow, palette, gridWeight, stretchDp)
             if (numberRowVisual != null) {
                 KeyRow(
                     row = numberRowVisual,
@@ -15973,22 +16003,9 @@ private fun KeyRows(
                     onBurst = onBurst,
                 )
             }
-            // Layers shorter than the reserved span pad at the top rather than
-            // stretching. The bottom row — space and enter — has to stay under
-            // the thumb at the same height on every layer, and growing the keys
-            // to fill instead would change a target size the user has learned,
-            // mid-sentence. Without this the panels, sized to rowSpan, would be
-            // taller than the keys.
-            val padRows = reservedRowSpan(state) - bodyRows.size
-            val lane = octopusLane(state)
-            if (padRows > 0) {
-                Spacer(
-                    modifier = Modifier.height(
-                        (state.settings.keyHeightDp.dp + keyGapV(state.settings) * 2 + lane) *
-                            padRows,
-                    ),
-                )
-            }
+            // Whatever the stretch above did not take. Without it the panels,
+            // sized to rowSpan, would be taller than the keys.
+            if (padLeft > 0.dp) Spacer(modifier = Modifier.height(padLeft))
             for (block in bodyBlocks) {
                 if (lane > 0.dp) {
                     // A band stands for several rows, so it reserves several
