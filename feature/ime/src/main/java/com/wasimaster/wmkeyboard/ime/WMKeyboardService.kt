@@ -17922,10 +17922,13 @@ open class WMKeyboardService : InputMethodService() {
         // Normally the pick lands at the end of the text and earns a trailing
         // space to start the next word. But a word resumed mid-sentence (the
         // caret moved back onto it) already has a space after it — appending
-        // another would leave a double gap, so skip it when one is there. The
-        // trailing space itself is opt-out (A26): off commits the word bare.
+        // another would leave a double gap, so the pick steps the caret over
+        // that one instead, and the next word starts after it rather than
+        // running into this one (#508). The trailing space itself is opt-out
+        // (A26): off commits the word bare and leaves the caret on it.
         val autoSpace = _uiState.value.settings.suggestionStrip.autoSpaceAfterSuggestion
-        val tail = if (autoSpace && !spacedAfterCaret(ic.getTextAfterCursor(1, 0))) " " else ""
+        val spaced = autoSpace && spacedAfterCaret(ic.getTextAfterCursor(1, 0))
+        val tail = if (autoSpace && !spaced) " " else ""
         // Commit in the case the strip is showing: a shift held over the strip
         // capitalizes the word the user is about to pick, matching the chip.
         // Under that, the capitals of the word being replaced: a pick that
@@ -17943,7 +17946,7 @@ open class WMKeyboardService : InputMethodService() {
                 cased
             }
         }
-        ic.commitText(committed + tail, 1)
+        ic.commitText(committed + tail, pickCaretOffset(spaced))
         // That space is the keyboard's, so a mark typed next takes it back and
         // hugs the word — "word:" and not "word :" (issue #34). Same one-shot a
         // glide's space gets, and it needs the same guard: without it the
@@ -18027,6 +18030,18 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Where a picked word leaves the caret, as [InputConnection.commitText]'s
+     * `newCursorPosition`: 1 is right after the word, 2 is one past it. A pick
+     * landing in front of a space that is already there ([spaced]) takes the 2,
+     * so the caret ends up after that space the way it would after one the pick
+     * had typed itself. Left in front of it, the next word ran straight into the
+     * picked one: "auto⌶ space", pick "automatic", type on, and the field read
+     * "automaticword space" (#508). The space is the user's own, so nothing arms
+     * the take-back a typed one gets — a comma next lands after it.
+     */
+    private fun pickCaretOffset(spaced: Boolean): Int = if (spaced) 2 else 1
+
+    /**
      * A word taken off the keys (discussion #102), by a flick up or by a tap on
      * the word itself.
      *
@@ -18054,9 +18069,10 @@ open class WMKeyboardService : InputMethodService() {
         vibrate()
         val state = _uiState.value
         val autoSpace = state.settings.suggestionStrip.autoSpaceAfterSuggestion
-        val tail = if (autoSpace && !spacedAfterCaret(ic.getTextAfterCursor(1, 0))) " " else ""
+        val spaced = autoSpace && spacedAfterCaret(ic.getTextAfterCursor(1, 0))
+        val tail = if (autoSpace && !spaced) " " else ""
         val committed = displayCaseForShift(word, state.shiftState)
-        ic.commitText(committed + tail, 1)
+        ic.commitText(committed + tail, pickCaretOffset(spaced))
         if (tail.isNotEmpty()) {
             // The keyboard's own space, so a mark typed next takes it back and
             // hugs the word (#34); the guard keeps the commit's selection echo
