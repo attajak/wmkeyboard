@@ -10561,6 +10561,11 @@ open class WMKeyboardService : InputMethodService() {
         // out of the field can be spelled back into keys and so takes the
         // region. The panel's own tap is unaffected either way, because a
         // resume is blocked while a panel owns the screen.
+        //
+        // The job outlives the last character on purpose: the echoes of a
+        // batch are delivered after it, and a run that ended first left the
+        // caret of its own finished code to be read as a word (see
+        // [CODE_ECHO_SETTLE_MS]).
         if (codeEntryJob?.isActive == true) {
             refreshSmartSuggestion()
             return
@@ -12408,6 +12413,12 @@ open class WMKeyboardService : InputMethodService() {
                     rest.endBatchEdit()
                 }
             }
+            // Every commit above echoes back as a caret move, and the batch's
+            // echoes are all delivered after it — that is, after the last
+            // character is in the field and this loop is done. The run stays in
+            // flight until they have landed, or the resume reads one of them as
+            // the user having come back to the code (see [CODE_ECHO_SETTLE_MS]).
+            delay(CODE_ECHO_SETTLE_MS)
         }
     }
 
@@ -35032,6 +35043,22 @@ open class WMKeyboardService : InputMethodService() {
 
         /** Poll step while a code waits on the field, about a frame. */
         private const val CODE_ENTRY_POLL_MS = 16L
+
+        /**
+         * How long a code run stays in flight after its last character, so the
+         * editor's echoes of those commits land while it is still going (see
+         * [commitCodeToField]).
+         *
+         * A selection update is delivered a frame or two after the edit that
+         * caused it, and the run's own last characters go in as one batch: the
+         * echoes of them are all posted at once and arrive after the loop has
+         * finished. Read then, the caret of a finished run is a word the user
+         * appears to have come back to, and the resume takes a composing region
+         * over the code's last characters — which the next key replaces. So the
+         * run is held open past its own commits, and the guard in
+         * [restartSuggestionsAtCursor] covers them the way it covers the rest.
+         */
+        private const val CODE_ECHO_SETTLE_MS = 64L
         /**
          * How recently a code must have been copied to be offered as a chip in
          * a code field (see [maybeShowCopiedCodeSuggestion]). A code goes stale
