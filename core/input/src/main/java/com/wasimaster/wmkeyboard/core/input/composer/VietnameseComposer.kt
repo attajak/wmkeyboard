@@ -316,8 +316,10 @@ internal object VietnameseEngine {
      *
      * Only a letter that leaves the word one Vietnamese could still spell
      * counts ([VietnameseOrthography.isSyllablePrefix]), which is what keeps
-     * `hello` and `banana` out of it: they have no letter this key could mark
-     * and still be a word's beginning.
+     * `hello` out of it: it has no letter this key could mark and still be a
+     * word's beginning. `banana` does (`bân` begins a syllable), so its second
+     * `a` is reached and the word reads `bânna`; only the strict rule
+     * ([VietnameseConfig.strictTones]) hands it back as typed.
      */
     private fun distantMarkTarget(letters: List<VLetter>, base: Char, mark: VMark): Int {
         for (i in letters.indices.reversed()) {

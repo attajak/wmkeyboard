@@ -40,4 +40,20 @@ class VietnameseSettingsTest {
         repository.setVietnameseStrictTones(false)
         assertFalse(repository.settings.first().vietnamese.strictTones)
     }
+
+    @Test
+    fun `restoring marks is off until it is asked for`() = runBlocking {
+        assertFalse(repository().settings.first().vietnamese.restoreMarks)
+    }
+
+    @Test
+    fun `restoring marks survives the trip through storage`() = runBlocking {
+        val repository = repository()
+        repository.setVietnameseRestoreMarks(true)
+        assertTrue(repository.settings.first().vietnamese.restoreMarks)
+        // The two switches are stored apart: turning one on leaves the other.
+        assertFalse(repository.settings.first().vietnamese.strictTones)
+        repository.setVietnameseRestoreMarks(false)
+        assertFalse(repository.settings.first().vietnamese.restoreMarks)
+    }
 }

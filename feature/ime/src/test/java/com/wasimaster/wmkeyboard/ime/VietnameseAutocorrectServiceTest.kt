@@ -11,6 +11,7 @@ import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.VietnameseSettings
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -69,13 +70,18 @@ class VietnameseAutocorrectServiceTest {
 
     /**
      * The Vietnamese Telex layout over the engine above, with correction on as
-     * it ships. The composer is planted rather than derived from a layout id —
+     * it ships and [restoreMarks] (`VietnameseSettings.restoreMarks`, off as it
+     * ships) on unless a test asks otherwise. The composer is planted rather than derived from a layout id —
      * the asset layouts are loaded from the APK's assets, which this module's
      * Robolectric tests do not carry — and it is the same object
      * `composerFor(LATIN, TELEX)` gives the running keyboard, which is what the
      * service asks by identity.
      */
-    private fun keyboardOn(editor: RecordingEditor, withWords: Boolean = true): GlideKeyboard {
+    private fun keyboardOn(
+        editor: RecordingEditor,
+        withWords: Boolean = true,
+        restoreMarks: Boolean = true,
+    ): GlideKeyboard {
         val service = GlideKeyboard(editor)
         plantPersonalStores(service)
         val engine = WMKeyboardService::class.java.getDeclaredField("suggestionEngine")
@@ -88,7 +94,10 @@ class VietnameseAutocorrectServiceTest {
                 // learnFromTyping = false for the harness's reason: the commit
                 // reaches a lexicon only onCreate assigns otherwise, and the
                 // job that dies there dies silently.
-                settings = KeyboardSettings(learnFromTyping = false),
+                settings = KeyboardSettings(
+                    learnFromTyping = false,
+                    vietnamese = VietnameseSettings(restoreMarks = restoreMarks),
+                ),
                 fieldNoSuggestions = false,
             ).copy(
                 language = LanguageRegistry.byId("vi"),
@@ -209,5 +218,24 @@ class VietnameseAutocorrectServiceTest {
         type(service, "tieng")
         space(service)
         assertEquals("ngiêng tieng ", editor.text.toString())
+    }
+
+    /**
+     * The switch is the user's: autocorrect on and the list on the device are
+     * not enough by themselves, because typing without marks is something
+     * people do on purpose. Off, the composer's reading lands as it did before
+     * the list was ever asked.
+     */
+    @Test
+    fun `with restore marks off the composed word lands untouched`() {
+        val editor = RecordingEditor()
+        val service = keyboardOn(editor, restoreMarks = false)
+
+        type(service, "tieng")
+        space(service)
+        type(service, "ngieeng")
+        space(service)
+
+        assertEquals("tieng ngiêng ", editor.text.toString())
     }
 }

@@ -238,7 +238,8 @@ object VietnameseOrthography {
         else -> c
     }
 
-    private fun onsetOf(base: String): String {        for (candidate in LONG_ONSETS) {
+    private fun onsetOf(base: String): String {
+        for (candidate in LONG_ONSETS) {
             if (!base.startsWith(candidate)) continue
             // `gi` is the one ambiguous onset: before another vowel it is the
             // onset (gió, giúp), but in `gì` and `gìn` the i *is* the nucleus

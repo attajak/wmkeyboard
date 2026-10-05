@@ -169,6 +169,9 @@
     <string name="languages_vietnamese_strict_tones_title">Only tone real syllables</string>
     <string name="languages_vietnamese_strict_tones_subtitle">A tone key is a letter unless the word is one the language spells</string>
     <string name="languages_vietnamese_strict_tones_info">Telex and VNI mark a tone whenever the vowels allow it, so typing fas gives fá even though f is not a Vietnamese onset and there is no word there. With this on, a tone key that would land on something that is not a word is typed as the letter it is drawn as instead, and only a syllable the language actually spells takes a tone. mix is still mĩ, because that is a word.</string>
+    <string name="languages_vietnamese_restore_marks_title">Fill in left-out marks</string>
+    <string name="languages_vietnamese_restore_marks_subtitle">With the Vietnamese word list, tieng becomes tiếng when it can only be one word</string>
+    <string name="languages_vietnamese_restore_marks_info">Telex and VNI type only the marks you spell. With this on, a word you finish without one of its marks gets it from the Vietnamese word list, but only when the list has one way to read it: tieng becomes tiếng and duong becomes đường. A word the list already has is never changed, and a spelling like toan, which can be toàn, toán or toản, stays as you typed it. One backspace takes the change back. This needs autocorrect on and the Vietnamese word list on the device.</string>
     <string name="languages_numeral_system_title">Numeral system</string>
     <!-- %1$s is the English name of the language, for example "Arabic". -->
     <string name="languages_numeral_system_subtitle">The digits that the number row and the keypad show while you type <xliff:g id="language" example="Arabic">%1$s</xliff:g></string>

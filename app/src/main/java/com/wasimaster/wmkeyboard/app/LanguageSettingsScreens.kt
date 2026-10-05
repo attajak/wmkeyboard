@@ -980,6 +980,15 @@ internal fun LanguageDetailScreen(
                     default = SettingsDefaults.vietnamese.strictTones,
                 ) { scope.launch { repository.setVietnameseStrictTones(it) } }
             }
+            item {
+                ToggleSetting(
+                    R.string.languages_vietnamese_restore_marks_title,
+                    stringResource(R.string.languages_vietnamese_restore_marks_subtitle),
+                    settings.watch { it.vietnamese.restoreMarks },
+                    info = stringResource(R.string.languages_vietnamese_restore_marks_info),
+                    default = SettingsDefaults.vietnamese.restoreMarks,
+                ) { scope.launch { repository.setVietnameseRestoreMarks(it) } }
+            }
         }
     }
 

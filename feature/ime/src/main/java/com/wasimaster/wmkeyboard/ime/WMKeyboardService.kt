@@ -12783,8 +12783,11 @@ open class WMKeyboardService : InputMethodService() {
             // text, because the buffer holds keystrokes ("tieengs") that no list
             // has heard of. A word the list does hold is protected from
             // correction, so a real word is committed as the user wrote it.
-            vietnameseComposed != null && autocorrect && state.allowsTypingIntelligence &&
-                !gluedToWord -> {
+            // Asked for separately (VietnameseSettings.restoreMarks): typing
+            // without marks is a choice people make, and autocorrect being on
+            // for their other languages does not say they want marks added.
+            vietnameseComposed != null && autocorrect && state.settings.vietnamese.restoreMarks &&
+                state.allowsTypingIntelligence && !gluedToWord -> {
                 val decision = suggestionEngine?.decideCorrection(
                     vietnameseComposed,
                     timingMultiplier = timingMultiplier(),
