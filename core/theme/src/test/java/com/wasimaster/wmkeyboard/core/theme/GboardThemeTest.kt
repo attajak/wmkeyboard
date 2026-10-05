@@ -204,6 +204,7 @@ class GboardThemeTest {
         assertEquals(KeyShapeKind.ROUNDED, spec.keyShape)
         assertEquals(8, spec.keyCornerRadiusDp)
         assertEquals(1f, spec.keyElevationDp)
+        assertEquals(0x80000000L, spec.keyShadowColor)
     }
 
     @Test
@@ -256,7 +257,6 @@ class GboardThemeTest {
                 GboardUnsupported.KEY_ICONS,
                 GboardUnsupported.KEY_SPACING,
                 GboardUnsupported.FONT,
-                GboardUnsupported.SHADOW_COLOR,
                 GboardUnsupported.PER_CORNER_RADIUS,
                 GboardUnsupported.EXTRA_IMAGES,
             ),

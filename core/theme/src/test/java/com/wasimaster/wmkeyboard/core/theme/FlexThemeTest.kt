@@ -271,6 +271,7 @@ class FlexThemeTest {
                 "background": "#2C2C34",
                 "foreground": "#FFFFFF",
                 "shadow-elevation": "4dp",
+                "shadow-color": "#FF0000",
                 "margin": "2dp",
                 "shape": "rounded-corner(12dp, 4dp, 12dp, 4dp)"
               },
@@ -287,8 +288,9 @@ class FlexThemeTest {
         assertTrue(FlexUnsupported.PER_ELEMENT_SPACING in result.dropped)
         assertTrue(FlexUnsupported.PER_CORNER_RADIUS in result.dropped)
         assertTrue(FlexUnsupported.UNKNOWN_ELEMENT in result.dropped)
-        // The lift itself is carried now, so it is no longer reported as lost.
+        // The lift and its colour are carried now, so neither is reported as lost.
         assertEquals(4f, result.themes[0].theme.keyElevationDp, 0.001f)
+        assertEquals(0xFFFF0000L, result.themes[0].theme.keyShadowColor)
         assertTrue(FlexUnsupported.SHADOW_COLOR !in result.dropped)
     }
 

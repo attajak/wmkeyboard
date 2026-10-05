@@ -100,6 +100,7 @@ internal class SnyggMapper(private val style: Stylesheet) {
             keyBorderColor = color(key, PROP_BORDER_COLOR),
             keyBorderWidthDp = snyggDp(key?.value(PROP_BORDER_WIDTH)) ?: 0f,
             keyElevationDp = elevationOf(key) ?: 0f,
+            keyShadowColor = color(key, PROP_SHADOW_COLOR)?.takeIf { it.isVisible() },
             keyShape = shape ?: KeyShapeKind.ROUNDED,
             keyCornerRadiusDp = radius,
             boldKeyLabels = key?.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),

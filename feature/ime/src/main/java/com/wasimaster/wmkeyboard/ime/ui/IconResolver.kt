@@ -2,6 +2,9 @@ package com.wasimaster.wmkeyboard.ime.ui
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -32,6 +35,7 @@ import com.wasimaster.wmkeyboard.core.settings.IconSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import kotlin.math.ceil
 
 /**
  * A resolved icon: what to draw, and whether the caller's tint applies.
@@ -180,7 +184,7 @@ fun buildIconSet(settings: IconSettings, store: IconPackStore): IconSet {
     // picked, but the icon pack and the per-slot picks are standing choices
     // about the whole keyboard, and a theme must not quietly undo one.
     for ((slot, path) in themeIcons) {
-        readIconFile(path)?.toResolvedIcon(slot)?.let { resolved[slot] = it }
+        readIconFile(path)?.toResolvedIcon(slot, fitGlyph = true)?.let { resolved[slot] = it }
     }
     // Then the active pack, so a per-slot override written afterwards wins.
     if (activePackId.isNotEmpty()) {
@@ -234,13 +238,14 @@ private fun readIconFile(path: String): IconArt? {
  * null here leaves the slot to [IconDefaults], so the failure shows up as "this
  * one icon didn't change" instead of a crash on the frame that first drew it.
  */
-private fun IconArt.toResolvedIcon(slot: String): ResolvedIcon? = when (this) {
+private fun IconArt.toResolvedIcon(slot: String, fitGlyph: Boolean = false): ResolvedIcon? = when (this) {
     is IconArt.Vector ->
         runCatching { ResolvedIcon(vector = doc.toImageVector(slot), monochrome = doc.monochrome) }
             .getOrNull()
 
     is IconArt.Raster -> runCatching {
-        val bitmap = decodeIcon(bytes) ?: return null
+        val decoded = decodeIcon(bytes) ?: return null
+        val bitmap = if (fitGlyph) decoded.fittedLikeMaterial() else decoded
         // The pixel verdict, which the header could not give: a glyph drawn in
         // one colour on transparency is a mask and takes the theme's tint, and
         // anything with more than one colour in it was painted deliberately.
@@ -304,6 +309,56 @@ private fun Bitmap.looksLikeMask(): Boolean {
     // tinted would put a solid block of the theme's colour on the key.
     return seen != -1
 }
+
+/**
+ * This glyph trimmed to what it draws and centred in a square with the margin a
+ * Material icon leaves, so it comes out the size of the icon it replaces.
+ *
+ * A Gboard theme's key glyphs are PNGs cropped tight to their edges, or nearly,
+ * and a Material icon's glyph covers about three quarters of its 24 dp box. Drawn
+ * into the same box, the theme's delete and enter came out a third bigger than
+ * the stock ones beside them. Trimming first makes the result the same whatever
+ * margin the file happened to carry.
+ */
+private fun Bitmap.fittedLikeMaterial(): Bitmap {
+    var left = width
+    var top = height
+    var right = -1
+    var bottom = -1
+    val row = IntArray(width)
+    for (y in 0 until height) {
+        getPixels(row, 0, width, 0, y, width, 1)
+        for (x in 0 until width) {
+            if ((row[x] ushr 24) > TRIM_MAX_ALPHA) {
+                if (x < left) left = x
+                if (x > right) right = x
+                if (y < top) top = y
+                if (y > bottom) bottom = y
+            }
+        }
+    }
+    // Nothing visible: leave it to the mask test, which refuses an empty file.
+    if (right < 0) return this
+    val glyphWidth = right - left + 1
+    val glyphHeight = bottom - top + 1
+    val side = ceil(maxOf(glyphWidth, glyphHeight) / MATERIAL_GLYPH_SHARE).toInt()
+    val out = Bitmap.createBitmap(side, side, Bitmap.Config.ARGB_8888)
+    val x = (side - glyphWidth) / 2
+    val y = (side - glyphHeight) / 2
+    Canvas(out).drawBitmap(
+        this,
+        Rect(left, top, right + 1, bottom + 1),
+        Rect(x, y, x + glyphWidth, y + glyphHeight),
+        Paint(Paint.FILTER_BITMAP_FLAG),
+    )
+    return out
+}
+
+/** How much of its box a Material icon's glyph covers along its longer side. */
+private const val MATERIAL_GLYPH_SHARE = 0.75f
+
+/** At or below this alpha a pixel is margin, not glyph: the faintest anti-aliasing. */
+private const val TRIM_MAX_ALPHA = 0x08
 
 /** Longest edge an icon is decoded at; see [decodeIcon]. */
 private const val MAX_ICON_PX = 192

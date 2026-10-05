@@ -280,6 +280,8 @@
 
     <!-- Theme editor: shadows, the popup selection and the one-handed rail. -->
     <string name="theme_key_elevation_title">Key shadow</string>
+    <string name="theme_key_shadow_color_title">Key shadow colour</string>
+    <string name="theme_key_shadow_color_body">The colour of the shadow under each key. Leave it unset for the usual black, or pick a colour and lower its alpha for a soft glow. Android 8 and older draw every shadow black.</string>
     <string name="theme_key_elevation_body">How far the keys are lifted off the board. Some key shapes cannot draw a shadow and stay flat, and so does a key whose colour you can see through.</string>
     <string name="theme_popup_elevation_title">Popup shadow</string>
     <string name="theme_popup_selected_title">Selected highlight</string>

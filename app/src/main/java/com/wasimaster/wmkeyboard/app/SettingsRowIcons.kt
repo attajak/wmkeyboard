@@ -1418,6 +1418,7 @@ internal object SettingsRowIcons {
         put(R.string.theme_key_border_title) { Icons.Outlined.BorderStyle }
         put(R.string.theme_border_width_title) { Icons.Outlined.LineWeight }
         put(R.string.theme_key_elevation_title) { Icons.Outlined.Layers }
+        put(R.string.theme_key_shadow_color_title) { Icons.Outlined.ColorLens }
         put(R.string.theme_texture_opacity_title) { Icons.Outlined.Texture }
         put(R.string.theme_key_radius_title) { Icons.Outlined.RoundedCorner }
         put(R.string.theme_key_height_title) { Icons.Outlined.Height }

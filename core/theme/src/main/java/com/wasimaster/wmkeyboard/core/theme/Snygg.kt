@@ -410,9 +410,8 @@ internal class Stylesheet(
             // font had been dropped from a theme that never named one.
             if (value != null && value.trim().equals(INHERIT, ignoreCase = true)) return
             when {
-                // The lift itself now lands; only a shadow *colour* has nowhere
-                // to go, and below Android 9 the platform ignores one anyway.
-                property.contains("shadow color") -> dropped += FlexUnsupported.SHADOW_COLOR
+                // Both halves of a shadow land now: the lift and, on the keys,
+                // its colour (ThemeSpec.keyShadowColor).
                 property.contains("margin") || property.contains("padding") ->
                     dropped += FlexUnsupported.PER_ELEMENT_SPACING
                 // `font family` is deliberately absent: whether the font is a
@@ -646,6 +645,7 @@ internal class Stylesheet(
             put("font weight", PROP_FONT_WEIGHT)
             put("font size", PROP_FONT_SIZE)
             for (name in listOf("shadow elevation", "elevation")) put(name, PROP_ELEVATION)
+            put("shadow color", PROP_SHADOW_COLOR)
             for (name in listOf("background image", "image")) put(name, PROP_IMAGE)
             put("content scale", PROP_CONTENT_SCALE)
         }
@@ -769,6 +769,7 @@ internal const val PROP_BORDER_WIDTH = "borderWidth"
 internal const val PROP_FONT_WEIGHT = "fontWeight"
 internal const val PROP_FONT_SIZE = "fontSize"
 internal const val PROP_ELEVATION = "elevation"
+internal const val PROP_SHADOW_COLOR = "shadowColor"
 internal const val PROP_IMAGE = "image"
 internal const val PROP_CONTENT_SCALE = "contentScale"
 

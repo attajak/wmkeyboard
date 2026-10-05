@@ -229,7 +229,7 @@ Colours mostly land. These all have somewhere to go:
 - The panel cards, the bottom sheets, the navigation bar band and the glide trail.
 - Key and hint text sizes, bold labels, and the corner shape of keys, popups, chips, cards and menus.
 - **The shape of a single key.** A theme that makes only the enter key round keeps it round here.
-- **Shadows.** The lift under the keys, the popup, the panel cards and the toolbar tools. Nearly every bordered theme raises its keys 2 dp, and without this they came across flat.
+- **Shadows.** The lift under the keys, the popup, the panel cards and the toolbar tools. Nearly every bordered theme raises its keys 2 dp, and without this they came across flat. The keys' `shadow-color` comes across too, as **Key shadow colour**.
 - **The selected highlight** in a popup: the colour behind the letter your finger is on when you hold a key, and behind the selected row of the language list.
 - **The one-handed rail** beside the keyboard, which had no way to differ from the board before.
 - The floating keyboard's handle, which takes the toolbar's own colours here.
@@ -251,7 +251,6 @@ FlorisBoard styles a much larger set of keyboard parts than this app draws, so t
 - **Per-corner radii.** Keys here have a single corner size.
 - **Spacing on single elements.** The key gap is set for the whole keyboard.
 - **A font the theme only names.** Some themes name a font family without shipping it. There is nothing to install in that case, so install the font yourself and pick it in the theme editor. A theme that sets `font-family: inherit`, which is what both of the big theme packs do on every rule, is asking for no font change at all, so nothing is reported for it.
-- **Shadow colours.** The lift carries, the colour it is drawn in does not, and Android ignores one below version 9 anyway.
 - **Text wrapping and alignment.** How many lines a label may take, where it is cut and how it is aligned are set by this app, not by the theme.
 - **The landscape text editor.** When a field fills the screen in landscape, Android draws that editor, not this app, so a theme cannot colour it here. The dialog names the parts it could not use rather than saying only that there were some, and for the usual theme packs this editor is most of that list.
 
@@ -301,10 +300,10 @@ What lands:
 
 - The board colour, the bar above the keys, and the navigation bar band.
 - The keys, the pressed key, the function keys and the enter key, including the round badge Gboard draws behind the enter icon in a borderless theme. The space bar's own colour and label become a per-key style.
-- Key outlines and their width, the corner size (a large one becomes a pill, and an empty shape means no key face at all), and the lift under the keys.
+- Key outlines and their width, the corner size (a large one becomes a pill, and an empty shape means no key face at all), and the lift under the keys with the colour of its shadow.
 - Key text, the corner hint, the suggestion text and its dividers, the toolbar icons, the popup and its selected highlight, the glide trail and the accent. The face Gboard draws behind a suggestion becomes a chip colour here.
 - The background photo, and a separate landscape photo when the theme has one. A picture on the keys becomes a key texture.
-- **The theme's own key glyphs.** More than half the themes in the Rboard repository replace the delete, shift and enter pictures with PNGs of their own, and for those themes the glyphs *are* the theme. They arrive as part of the theme and draw on the keys the moment you wear it — delete, shift in each of its three states, the emoji key, the globe, and enter in each of its wordings. A glyph drawn in a single colour on a transparent background (three quarters of them are) follows your theme's colour the way a built-in icon does; one with real artwork in it draws as its author painted it. See [the note on icon packs](#theme-glyphs-and-icon-packs) below.
+- **The theme's own key glyphs.** More than half the themes in the Rboard repository replace the delete, shift and enter pictures with PNGs of their own, and for those themes the glyphs *are* the theme. They arrive as part of the theme and draw on the keys the moment you wear it — delete, shift in each of its three states, the emoji key, the globe, and enter in each of its wordings. A glyph drawn in a single colour on a transparent background (three quarters of them are) follows your theme's colour the way a built-in icon does; one with real artwork in it draws as its author painted it. Each glyph is trimmed to what it actually draws and sized like the built-in icons, so a picture cropped tight to its edges no longer comes out bigger than the icon it replaces. See [the note on icon packs](#theme-glyphs-and-icon-packs) below.
 - **How faded a part is.** Gboard sets an element's opacity separately from its colour, and nearly every theme uses it to quiet the function keys' glyphs. Read without it they came across at full strength, which was the most visible difference between a converted theme and the original.
 - Light or dark, from the theme's own flag.
 
@@ -314,7 +313,6 @@ Gboard styles far more than this app has, so most of a theme's rules name things
 - **A glyph for a key this keyboard has not got.** The space bar's branding and Gboard's own logo key are the two of these; the rest of a theme's glyphs now come across. A theme whose glyphs all land is not told anything was dropped.
 - **The space inside each key.** Gboard pads each key separately; here one gap is set for the whole keyboard.
 - **Fonts.** A Gboard theme names a font and never carries the file.
-- **Shadow colours.** The lift comes across, the colour of the shadow does not.
 - **Corners rounded one at a time**, usually the top of the keyboard.
 - **Pictures on other parts** of the keyboard, such as the bar's tabs.
 - **Unreadable text.** A key, function-key or popup text colour too close to what sits behind it is replaced with a readable one, and the dialog says so. The enter icon and the space bar label are exempt from the line: most community themes draw the first as a picture and hide the second on purpose, so a colour there is often the key's own and was never meant to be read.

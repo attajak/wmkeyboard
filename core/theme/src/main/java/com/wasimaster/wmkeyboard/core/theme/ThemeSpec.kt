@@ -313,6 +313,14 @@ data class ThemeSpec(
      * either, since a shadow under nothing is just a smudge.
      */
     val keyElevationDp: Float = 0f,
+    /**
+     * Colour of that shadow, alpha honoured. Null draws the platform's own
+     * black. Gboard (`shadow_color` on the key top) and FlorisBoard
+     * (`shadow-color`) themes both carry one, and a coloured glow under each
+     * key is half of what some of them look like. The platform ignores it
+     * below Android 9, where every shadow is black.
+     */
+    val keyShadowColor: Long? = null,
     // Accent (shift-on tint, gesture trail, active tools, links/buttons in panels)
     val accent: Long = 0xFF8AB4F8,
     /**

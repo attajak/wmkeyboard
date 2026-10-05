@@ -2179,6 +2179,7 @@ fun ThemeEditorScreen(
     val landscapePhotoCredit = look.watch { it.backgroundPhotoLandscape }
     val hasOneHandedFill = look.watch { it.oneHandedPanelBackground != null }
     val hasKeyBorder = look.watch { it.keyBorderColor != null }
+    val hasKeyShadow = look.watch { it.keyElevationDp > 0f }
     val texturedSlots = look.watch { t -> KeyTextureSlot.entries.filter { it.pathIn(t) != null }.toSet() }
     val overrideIds = look.watch { it.keyOverrides.keys.sorted() }
     val decals = look.watch { it.decals }
@@ -2986,6 +2987,17 @@ fun ThemeEditorScreen(
                 display = { "%.1f dp".format(it) },
                 info = stringResource(R.string.theme_key_elevation_body),
             ) { update { t -> t.copy(keyElevationDp = (it * 10).toInt() / 10f) } }
+        }
+        item(visible = hasKeyShadow) {
+            // Unset is the platform's own black. Alpha counts: a soft coloured
+            // glow is most of what the themes that set one are after.
+            NullableColorRow(
+                R.string.theme_key_shadow_color_title,
+                look.watch { it.keyShadowColor }, fallback = 0xFF000000,
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_key_shadow_color_body),
+                onChange = { update { t -> t.copy(keyShadowColor = it) } },
+            )
         }
     }
 

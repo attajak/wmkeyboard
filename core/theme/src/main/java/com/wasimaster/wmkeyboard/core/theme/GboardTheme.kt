@@ -453,7 +453,7 @@ enum class GboardUnsupported {
     /** A font asked for by name. Gboard themes never carry the file. */
     FONT,
 
-    /** The key shadows' own colour; the lift itself comes across. */
+    /** No longer reported: the key shadows' colour comes across with the lift. Kept for old saved results. */
     SHADOW_COLOR,
 
     /** Corners rounded one by one — Gboard's rounded board top, usually. */
@@ -579,6 +579,7 @@ internal class GboardMapper(
             keyBorderColor = if (edgeWidth != null) edgeColor else null,
             keyBorderWidthDp = if (edgeColor != null) edgeWidth?.coerceAtMost(MAX_EDGE_DP) ?: 0f else 0f,
             keyElevationDp = style.number(KEY, ELEVATION)?.takeIf { it > 0f }?.coerceAtMost(MAX_ELEVATION_DP) ?: 0f,
+            keyShadowColor = style.color(KEY, SHADOW_COLOR)?.takeIf { it.isVisible() },
             keyShape = shape,
             keyCornerRadiusDp = radius,
             accent = accent,
@@ -739,9 +740,6 @@ internal class GboardMapper(
             if (props.keys.any { it != RADIUS && CORNER in it }) dropped += GboardUnsupported.PER_CORNER_RADIUS
             if (KEYTOP in classes) {
                 if (props.keys.any { it.startsWith(PADDING) }) dropped += GboardUnsupported.KEY_SPACING
-                if (gboardColor(style.resolve(props[SHADOW_COLOR]))?.isVisible() == true) {
-                    dropped += GboardUnsupported.SHADOW_COLOR
-                }
             }
             if (classes.none { it in glyphs } &&
                 GboardTheme.imageBytes(files, gboardString(style.resolve(props[ICON_IMAGE]))) != null

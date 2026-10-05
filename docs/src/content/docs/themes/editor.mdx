@@ -165,6 +165,8 @@ Slanted is the one shape that draws slightly outside its key. A parallelogram ke
 
 **Key shadow** lifts every key off the board, 0 to 16 dp. It's drawn by the platform from the key's own outline, so it follows whatever shape you picked.
 
+**Key shadow colour** shows up once there is a shadow. Unset, it's the usual black; pick any colour, and lower its opacity for a soft glow rather than a hard edge. Themes imported from Gboard and FlorisBoard bring their own. Android 8 and older draw every shadow black whatever this says.
+
 Two shapes stay flat however far you push it. Scallop and Ticket are concave, and Android tessellates a concave shadow through a path that pins the render thread hard enough for the system to kill the keyboard, so they keep the shape and lose the shadow. A key you can see through stays flat too, since a shadow under nothing is just a smudge on the board. That's what keeps a borderless theme looking borderless.
 
 #### No key shape

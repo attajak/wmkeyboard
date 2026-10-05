@@ -27,6 +27,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.expandVertically
@@ -19203,7 +19204,10 @@ internal fun KeyButton(
             // already 0 for a shape or a fill that must not cast one.
             .then(
                 if (keyElevation > 0.dp) {
-                    Modifier.shadow(keyElevation, keyShape, clip = false)
+                    // The theme's shadow colour, where it has one; both halves
+                    // of the platform shadow take it (Android 9 and up).
+                    val shadow = kb.keyShadow ?: DefaultShadowColor
+                    Modifier.shadow(keyElevation, keyShape, clip = false, ambientColor = shadow, spotColor = shadow)
                 } else {
                     Modifier
                 }

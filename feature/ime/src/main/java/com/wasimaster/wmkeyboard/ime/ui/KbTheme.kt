@@ -196,6 +196,8 @@ data class KbTheme(
     val keyBorderWidthDp: Float,
     /** Lift under each key; already 0 for a shape that must not cast one. */
     val keyElevation: Dp,
+    /** Colour of that lift's shadow; null draws the platform's black. */
+    val keyShadow: Color?,
     val accent: Color,
     /** Colour of the glide-typing trail; defaults to [accent] when a theme leaves it unset. */
     val gestureTrail: Color,
@@ -597,6 +599,7 @@ internal fun defaultKbTheme(
         keyBorder = null,
         keyBorderWidthDp = 0f,
         keyElevation = 0.dp,
+        keyShadow = null,
         accent = scheme.primary,
         gestureTrail = scheme.primary,
         popup = popup,
@@ -753,6 +756,7 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
             spec.keyShape,
             spec.keyElevationDp.coerceIn(0f, MAX_ELEVATION_DP).dp,
         ).takeIf { keyCastsShadow(spec) } ?: 0.dp,
+        keyShadow = spec.keyShadowColor?.let(::colorOf),
         accent = accent,
         gestureTrail = spec.gestureTrailColor?.let(::colorOf) ?: accent,
         // A light theme's keyText is dark, so a heavy blend produced a dark
@@ -1396,6 +1400,7 @@ private fun lerpKbTheme(a: KbTheme, b: KbTheme, t: Float): KbTheme {
         keyBorder = lerpColorOrNull(a.keyBorder, b.keyBorder, t),
         keyBorderWidthDp = lerpF(a.keyBorderWidthDp, b.keyBorderWidthDp, t),
         keyElevation = lerpDp(a.keyElevation, b.keyElevation, t),
+        keyShadow = lerpColorOrNull(a.keyShadow, b.keyShadow, t),
         accent = lerp(a.accent, b.accent, t),
         gestureTrail = lerp(a.gestureTrail, b.gestureTrail, t),
         popup = lerp(a.popup, b.popup, t),
