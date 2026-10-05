@@ -109,7 +109,7 @@
 
     <!-- %1$s is the id of the icon, for example key.shift. Ids are not
          translated: they are the same in every language. -->
-    <string name="core_icons_repair_svg_unreadable">The app dropped \"<xliff:g id="slot" example="key.shift">%1$s</xliff:g>\". The app cannot read its SVG file.</string>
+    <string name="core_icons_repair_svg_unreadable">The app dropped \"<xliff:g id="slot" example="key.shift">%1$s</xliff:g>\". Its file is not an SVG or a picture the app can read.</string>
 
     <!-- %1$s is the id of the icon, for example key.shift. -->
     <string name="core_icons_repair_not_saved">The app dropped \"<xliff:g id="slot" example="key.shift">%1$s</xliff:g>\". The app cannot save it.</string>

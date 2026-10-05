@@ -103,6 +103,9 @@ internal class SnyggMapper(private val style: Stylesheet) {
             keyShape = shape ?: KeyShapeKind.ROUNDED,
             keyCornerRadiusDp = radius,
             boldKeyLabels = key?.value(PROP_FONT_WEIGHT)?.contains(BOLD, ignoreCase = true),
+            // How the key's own picture fits it. Only meaningful beside one, so
+            // it is read off the same rule the picture came from.
+            keyTextureScale = snyggContentScale(key?.value(PROP_CONTENT_SCALE)),
             fontScale = scaleFrom(key?.value(PROP_FONT_SIZE), DEFAULT_KEY_SP, KeyFontScaleBounds),
             // The corner hint. A fully transparent hint colour is the sheet
             // saying "no hint tint", which is the derived default here, so it
@@ -323,11 +326,15 @@ internal class SnyggMapper(private val style: Stylesheet) {
     // ---- per-key styles ----
 
     /**
-     * Per-key styles, from the rules that name keys by their codes.
+     * Per-key styles, from the rules that name one key and nothing else.
      *
-     * This is where snygg's `key[code=…]` selectors belong: without it they
-     * would all collapse onto the one modifier colour, and a theme that paints
-     * six keys differently would come across painting one.
+     * This is where snygg's `key[code=…]` and `key[output=…]` selectors belong:
+     * without them they would all collapse onto the one modifier colour, and a
+     * theme that paints six keys differently would come across painting one.
+     *
+     * Both spellings are read. A sheet that writes both for the same key is
+     * agreeing with itself, and the code wins the tie — it is the older form
+     * and the one every dialect has written.
      *
      * Only the resting style of a key is read. A rule carrying a state
      * (`key[code=10]:pressed`) or another attribute (`key[code=-11][shiftstate=
@@ -337,10 +344,18 @@ internal class SnyggMapper(private val style: Stylesheet) {
         keyBackground: Long,
         board: Long,
         dropped: MutableSet<FlexUnsupported>,
-    ): Map<String, KeyOverride> =
-        style.styledCodes(EL_KEY).mapNotNull { code ->
-            val rule = style.forCode(EL_KEY, code) ?: return@mapNotNull null
-            val id = overrideIdFor(code) ?: return@mapNotNull null
+    ): Map<String, KeyOverride> {
+        val byCode = style.styledCodes(EL_KEY).map { code ->
+            overrideIdFor(code) to style.forCode(EL_KEY, code)
+        }
+        // The v2 way of naming the same keys. Second, so a sheet that writes
+        // both says the same thing twice rather than disagreeing with itself,
+        // and the code — the older, more widely written form — wins a tie.
+        val byOutput = style.styledOutputs(EL_KEY).map { output ->
+            overrideIdForOutput(output) to style.forOutput(EL_KEY, output)
+        }
+        return (byOutput + byCode).mapNotNull { (id, rule) ->
+            if (id == null || rule == null) return@mapNotNull null
             val fill = color(rule, PROP_BACKGROUND)
             val surface = composite(fill ?: keyBackground, board)
             val override = KeyOverride(
@@ -356,6 +371,7 @@ internal class SnyggMapper(private val style: Stylesheet) {
             )
             if (override.isEmpty) null else id to override
         }.toMap()
+    }
 
     /**
      * The rule that styles the function keys, or null.
@@ -372,8 +388,18 @@ internal class SnyggMapper(private val style: Stylesheet) {
             }
         }
 
+    /**
+     * The rule that styles the enter key, by code or by output.
+     *
+     * Codes first because every dialect has written them and a sheet that uses
+     * both agrees with itself. The output is what a sheet written against snygg
+     * v2 alone names it by — FlorisBoard's own default themes carry
+     * `key[output=`@k3:action/enter`]` beside `key[code=10]` — and reading only
+     * the code left such a theme with no enter colour at all.
+     */
     private fun enterRule(): SnyggRule? =
         ENTER_CODES.firstNotNullOfOrNull { style.forCode(EL_KEY, it) }
+            ?: style.forOutput(EL_KEY, OUTPUT_ENTER)
 
     private companion object {
 
@@ -409,6 +435,41 @@ internal class SnyggMapper(private val style: Stylesheet) {
         /** In the order a sheet is worth asking what a function key looks like. */
         val MODIFIER_CODES = listOf(-11, -7, -201, -202, -203, -13)
         val ENTER_CODES = listOf(10, 13)
+
+        /** The one output id read outside the override table; see [enterRule]. */
+        const val OUTPUT_ENTER = "action/enter"
+
+        /**
+         * A snygg v2 `output=` id as a [ThemeSpec.keyOverrides] key.
+         *
+         * The ids are FlorisBoard's own (`ImeActions`), with the extension
+         * namespace already off — see [snyggOutputId]. Only the ones with a
+         * genuine counterpart here are listed; an action this keyboard has no
+         * key for costs its rule, which is the same rule [overrideIdFor]
+         * follows for codes.
+         *
+         * `action/` is not the only shape an output takes: a character key's
+         * output is the character, so a one-character value styles that letter
+         * across every layout, exactly as a printable code does.
+         */
+        fun overrideIdForOutput(output: String): String? = when (output) {
+            "action/enter" -> "ENTER"
+            "action/backspace", "action/delete", "action/backspace_word", "action/delete_word" ->
+                "DELETE"
+            "action/show_input_method_picker" -> "INPUTMETHODPICKER"
+            "action/switch_to_next_subtype", "action/switch_to_prev_subtype",
+            "action/switch_to_next_input_method", "action/switch_to_prev_input_method",
+            -> "LANGUAGESWITCH"
+            "action/show_media_panel" -> "EMOJI"
+            " " -> "SPACE"
+            else -> when {
+                output.startsWith("action/") || output.isEmpty() -> null
+                // One character, which is the only literal output a per-key
+                // style can follow across layouts.
+                output.codePointCount(0, output.length) == 1 -> output.lowercase()
+                else -> null
+            }
+        }
 
         /**
          * The name a [ThemeSpec.keyOverrides] entry uses, for a foreign key code.
@@ -465,6 +526,7 @@ internal val SNYGG_CONSUMED: Map<String, Set<String>> = mapOf(
     EL_KEY to setOf(
         PROP_BACKGROUND, PROP_FOREGROUND, PROP_SHAPE, PROP_BORDER_COLOR,
         PROP_BORDER_WIDTH, PROP_FONT_WEIGHT, PROP_FONT_SIZE, PROP_IMAGE, PROP_ELEVATION,
+        PROP_CONTENT_SCALE,
     ),
     EL_HINT to setOf(PROP_FOREGROUND, PROP_FONT_SIZE),
     EL_POPUP to setOf(

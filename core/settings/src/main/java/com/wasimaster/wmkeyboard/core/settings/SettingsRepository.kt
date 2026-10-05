@@ -6425,9 +6425,10 @@ fun GestureSettings.glideTuning(): GlideBeam.Tuning = GlideBeam.Tuning.DEFAULT.c
  * constructor is at the JVM's 255-argument ceiling (see [ToolbarBehavior]).
  * Both fields still persist under their own DataStore key.
  *
- * Resolution order is [overrides], then [activePackId], then the built-in
- * glyph — a single icon the user picked by hand outranks the pack they
- * installed, which outranks the app's own default. See
+ * Resolution order is [overrides], then [activePackId], then [themeIcons], then
+ * the built-in glyph — a single icon the user picked by hand outranks the pack
+ * they installed, which outranks the icons that came with the theme they are
+ * wearing, which outranks the app's own default. See
  * `com.wasimaster.wmkeyboard.core.icons.IconSlots` for the slot ids and
  * `ime/ui/IconResolver.kt` for the lookup itself.
  */
@@ -6446,6 +6447,17 @@ data class IconSettings(
      * falls back to the default rather than drawing nothing.
      */
     val overrides: Map<String, String> = emptyMap(),
+    /**
+     * Slot id → local file, for the icons the *active theme* carries.
+     *
+     * Never persisted and never written by the user: [applyThemeOverrides] lays
+     * it on from [ThemeSpec.keyIcons] the same way it lays on the theme's key
+     * height, so a theme's glyphs reach the keyboard through the one chain every
+     * other theme override already travels and switching theme switches them.
+     *
+     * The weakest layer of the three, deliberately — see the class comment.
+     */
+    val themeIcons: Map<String, String> = emptyMap(),
 )
 
 /**

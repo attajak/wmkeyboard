@@ -147,13 +147,64 @@ class HeliThemeTest {
 
     @Test
     fun `the count says how much of the theme landed`() {
+        // KEY_TEXT and KEY_ICON both answer "what colour is a key's label",
+        // and only the first present one is read — so three roles are stated
+        // and two are used, and the dialog can say so honestly. The count used
+        // to be "roles this app knows of", which called this three of three.
         val result = converted(
-            """{"MAIN_BACKGROUND":-1,"KEY_BACKGROUND":-1118482,"EMOJI_SEARCH_TEXT":-1}""",
+            """{"MAIN_BACKGROUND":-1,"KEY_TEXT":-16777216,"KEY_ICON":-7829368}""",
         )
         assertEquals(3, result.coloursRead)
-        // The emoji search field is a colour this app does not have, so it is
-        // read and not used, and the dialog can say so honestly.
         assertEquals(2, result.coloursUsed)
+        assertTrue(HeliUnsupported.UNUSED_COLOURS in result.dropped)
+    }
+
+    @Test
+    fun `the emoji board's colours land now that there are fields for them`() {
+        // All seven of these were read and then thrown away: the import knew
+        // the roles but named no field for any of them.
+        val result = converted(
+            """{"MAIN_BACKGROUND":-1,"EMOJI_SEARCH_BACKGROUND":-1118482,
+                "EMOJI_SEARCH_TEXT":-16777216,"EMOJI_KEY_TEXT":-16777216,
+                "EMOJI_CATEGORY":-7829368,"REMOVE_SUGGESTION_ICON":-7829368,
+                "ACTION_KEY_POPUP_KEYS_BACKGROUND":-3355444}""",
+        )
+        assertEquals(7, result.coloursRead)
+        assertEquals(7, result.coloursUsed)
+        assertFalse(HeliUnsupported.UNUSED_COLOURS in result.dropped)
+        val theme = result.theme
+        assertEquals(0xFFEEEEEE, theme.chipBackground)
+        assertEquals(0xFF000000, theme.chipText)
+        assertEquals(0xFF000000, theme.suggestionText)
+        assertEquals(0xFF888888, theme.secondaryText)
+        assertEquals(0xFF888888, theme.toolbarIcon)
+        assertEquals(0xFFCCCCCC, theme.popupBackground)
+    }
+
+    @Test
+    fun `a theme that leaves colours to the keyboard says so`() {
+        val result = converted(
+            """{"name":"Half","moreColors":0,"colors":{
+                 "background":[-16777216,false],
+                 "keys":[null,true],
+                 "text":[-1,false]
+               }}""",
+        )
+        assertTrue(HeliUnsupported.DERIVED_COLOURS in result.dropped)
+    }
+
+    @Test
+    fun `every role the reader knows reaches a field`() {
+        // The guard on the gap this batch closed. A role added to the table
+        // without a home in one of the lists is a colour read off the user's
+        // file and dropped on the floor, which is exactly what happened to the
+        // emoji board's seven.
+        val homeless = HeliTheme.AllColours - HeliTheme.Landing
+        assertTrue("no field reads $homeless", homeless.isEmpty())
+        assertTrue(
+            "no field reads ${HeliTheme.NamedColours - HeliTheme.Landing}",
+            (HeliTheme.NamedColours - HeliTheme.Landing).isEmpty(),
+        )
     }
 
     // ---- what is not a theme ----

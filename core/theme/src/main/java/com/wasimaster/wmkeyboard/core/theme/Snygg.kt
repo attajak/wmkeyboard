@@ -133,6 +133,33 @@ internal class Stylesheet(
     fun styledCodes(element: String): List<Int> =
         byCode(element).flatMap { it.codes }.distinct()
 
+    /**
+     * Rules that style one element by what the key *outputs* and nothing else.
+     *
+     * The snygg v2 way of naming a key: `key[output=`@k3:action/enter`]` beside
+     * (or instead of) the older `key[code=10]`. FlorisBoard's own default themes
+     * write both, but a theme written against v2 alone names only the output,
+     * and reading only codes is how such a theme used to come across with no
+     * enter key colour at all.
+     *
+     * Narrowed the same way [byCode] is, and for the same reason: a rule
+     * carrying another attribute describes a situation rather than a key.
+     */
+    fun byOutput(element: String, state: String? = null): List<SnyggRule> =
+        rules.filter {
+            it.element == element && it.state == state &&
+                it.attributes.keys == setOf(ATTR_OUTPUT)
+        }
+
+    /** The style a rule gives one output id, merged in file order. */
+    fun forOutput(element: String, output: String, state: String? = null): SnyggRule? =
+        byOutput(element, state).filter { output in it.outputs }
+            .reduceOrNull { acc, rule -> acc.mergedWith(rule) }
+
+    /** Every output the sheet styles individually, in the order it names them. */
+    fun styledOutputs(element: String): List<String> =
+        byOutput(element).flatMap { it.outputs }.distinct()
+
     companion object {
 
         fun parse(text: String, palette: SnyggPalette, night: Boolean): Stylesheet? {
@@ -418,8 +445,10 @@ internal class Stylesheet(
          */
         @Suppress("LongMethod")
         private val ELEMENTS: Map<String, String> = buildMap {
-            // The board itself. `keyboard` is the 0.4 name, `window` the 0.5 one.
-            for (name in listOf("window", "keyboard", "root")) put(name, EL_BOARD)
+            // The board itself. `keyboard` is the 0.4 name, `window` the 0.5
+            // one, and `window-inner` is the area inside a floating window's
+            // own frame — the board again, as far as anything here draws.
+            for (name in listOf("window", "window inner", "keyboard", "root")) put(name, EL_BOARD)
             put("system nav bar", EL_NAV_BAR)
             for (name in listOf("one handed panel", "one handed panel button")) put(name, EL_ONE_HANDED)
             // The floating keyboard's own furniture. This keyboard draws its
@@ -427,7 +456,7 @@ internal class Stylesheet(
             // land rather than in fields of their own.
             for (name in listOf(
                 "window move handle", "window resize handle", "window resize action",
-                "floating dock to fixed indicator",
+                "window resize overlay fixed", "floating dock to fixed indicator",
             )) {
                 put(name, EL_TOOL_TOGGLE)
             }
@@ -447,7 +476,14 @@ internal class Stylesheet(
             // The bar above the keys. 0.4 called the tool buttons `smartbar-key`
             // and `smartbar-quick-action`; 0.5 calls them `smartbar-action-key`.
             put("smartbar", EL_TOOLBAR)
-            for (name in listOf("smartbar primary row", "smartbar secondary row", "smartbar action row")) {
+            for (name in listOf(
+                "smartbar primary row", "smartbar secondary row", "smartbar action row",
+                // The v2 spellings, taken from FlorisBoard's own `FlorisImeUi`.
+                // The rows had been guessed at from the 0.4 names and the two
+                // sets never overlapped, so a v2 sheet's toolbar fill was read
+                // from nothing at all.
+                "smartbar shared actions row", "smartbar extended actions row",
+            )) {
                 put(name, EL_TOOLBAR)
             }
             for (name in listOf(
@@ -470,7 +506,9 @@ internal class Stylesheet(
             )) {
                 put(name, EL_CANDIDATE)
             }
-            put("smartbar candidate row", EL_CANDIDATE)
+            // `smartbar-candidates-row` is the spelling upstream actually ships;
+            // the singular was a guess and matched no sheet ever written.
+            put("smartbar candidates row", EL_CANDIDATE)
             put("smartbar candidate spacer", EL_DIVIDER)
 
             // The quieter text beside the main text. Upstream splits it across
@@ -500,7 +538,6 @@ internal class Stylesheet(
                 "smartbar candidate clip text",
                 "smartbar candidate clip icon",
                 "clipboard filter chip text",
-                "clipboard filter chip icon",
             )) {
                 put(name, EL_CHIP)
             }
@@ -541,6 +578,9 @@ internal class Stylesheet(
                 "smartbar actions editor", "subtype panel", "clipboard grid", "clipboard filter row",
                 "clipboard content", "clipboard clear all dialog", "clipboard clear all dialog buttons",
                 "media", "media bottom row",
+                // The panel the overflow toggle opens; the same kind of surface
+                // as the actions editor beside it.
+                "smartbar actions overflow",
             )) {
                 put(name, EL_SHEET)
             }
@@ -559,7 +599,7 @@ internal class Stylesheet(
             // The body of those notices is the quieter text (`onSurfaceVariant`).
             for (name in listOf(
                 "clipboard history disabled message", "clipboard history locked message",
-                "clipboard clear all dialog message",
+                "clipboard clear all dialog message", "smartbar actions editor subheader",
             )) {
                 put(name, EL_SECONDARY_TEXT)
             }
@@ -607,6 +647,7 @@ internal class Stylesheet(
             put("font size", PROP_FONT_SIZE)
             for (name in listOf("shadow elevation", "elevation")) put(name, PROP_ELEVATION)
             for (name in listOf("background image", "image")) put(name, PROP_IMAGE)
+            put("content scale", PROP_CONTENT_SCALE)
         }
     }
 }
@@ -654,6 +695,18 @@ internal data class SnyggRule(
         }
     }
 
+    /**
+     * The outputs this rule names, namespaces stripped.
+     *
+     * `@k3:action/enter`, `@floris:action/noop_spacer` and `@fl:action/...` are
+     * the same ids under three extension namespaces, which have changed between
+     * releases; what stays put is the part after the colon. A literal output —
+     * a character the key types — is kept as it stands.
+     */
+    val outputs: List<String> by lazy {
+        attributes[ATTR_OUTPUT].orEmpty().map(::snyggOutputId)
+    }
+
     private companion object {
         const val RANGE = ".."
 
@@ -662,7 +715,22 @@ internal data class SnyggRule(
     }
 }
 
+/**
+ * An `output=` value with its extension namespace taken off; see
+ * [SnyggRule.outputs].
+ *
+ * Quotes come off, whitespace does not: the space bar's rule is
+ * ``key[output=` `]`` and trimming it leaves nothing to match on.
+ */
+internal fun snyggOutputId(raw: String): String {
+    val text = raw.trim('`', '\'', '"')
+    if (!text.startsWith('@')) return text
+    val colon = text.indexOf(':')
+    return if (colon < 0) text else text.substring(colon + 1)
+}
+
 internal const val ATTR_CODE = "code"
+internal const val ATTR_OUTPUT = "output"
 
 internal const val EL_BOARD = "board"
 internal const val EL_NAV_BAR = "navBar"
@@ -702,6 +770,23 @@ internal const val PROP_FONT_WEIGHT = "fontWeight"
 internal const val PROP_FONT_SIZE = "fontSize"
 internal const val PROP_ELEVATION = "elevation"
 internal const val PROP_IMAGE = "image"
+internal const val PROP_CONTENT_SCALE = "contentScale"
+
+/**
+ * Snygg's `content-scale` as the fit this app stores on [ThemeSpec.keyTextureScale].
+ *
+ * Seven values upstream against three here, so several collapse. `fill-bounds`
+ * is the only one that distorts the picture, which is what `STRETCH` means;
+ * every other value preserves the aspect ratio one way or another, and `CROP`
+ * — fill the box and clip the overflow — is the nearest of the three to all of
+ * them. `TILE` has no counterpart upstream at all, so it is never the answer.
+ */
+internal fun snyggContentScale(raw: String?): String? = when (raw?.trim()?.lowercase()) {
+    null -> null
+    "fill-bounds", "fill_bounds", "fill-width", "fill-height" -> KeyTextureScale.STRETCH.name
+    "crop", "fit", "inside", "none" -> KeyTextureScale.CROP.name
+    else -> null
+}
 
 /**
  * A snygg colour as ARGB, or null when the value is not a colour this

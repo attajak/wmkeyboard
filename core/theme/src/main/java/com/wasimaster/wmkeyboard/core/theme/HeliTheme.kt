@@ -90,24 +90,29 @@ object HeliTheme {
         val colors = root["colors"] as? JsonObject ?: return null
         val picked = LinkedHashMap<String, Long>()
         var read = 0
+        var derived = 0
         for ((key, value) in colors) {
             val pair = value as? JsonArray ?: return null
             if (pair.size != PAIR_SIZE) return null
             read++
             val auto = (pair[1] as? JsonPrimitive)?.content?.toBooleanStrictOrNull() ?: false
-            val argb = (pair[0] as? JsonPrimitive)?.content?.toIntOrNull() ?: continue
+            val argb = (pair[0] as? JsonPrimitive)?.content?.toIntOrNull()
             // A colour the other keyboard derived is left for this one to
             // derive: see the class comment.
-            if (!auto) picked[key] = argb.toArgbLong()
+            if (auto || argb == null) {
+                derived++
+                continue
+            }
+            picked[key] = argb.toArgbLong()
         }
         if (read == 0) return null
         val name = (root["name"] as? JsonPrimitive)?.content?.takeIf { it.isNotBlank() }
         return convert(
             name = name ?: DEFAULT_NAME,
             colours = picked.mapKeys { (key, _) -> key.lowercase() },
-            table = NamedColours,
             read = read,
             shape = HeliShape.NAMED,
+            derived = derived,
         )
     }
 
@@ -139,7 +144,6 @@ object HeliTheme {
         return convert(
             name = name?.takeIf { it.isNotBlank() } ?: DEFAULT_NAME,
             colours = picked,
-            table = AllColours,
             read = read,
             shape = HeliShape.ALL,
         )
@@ -173,11 +177,26 @@ object HeliTheme {
     private fun convert(
         name: String,
         colours: Map<String, Long>,
-        table: Set<String>,
         read: Int,
         shape: HeliShape,
+        derived: Int = 0,
     ): HeliResult {
-        fun of(roles: List<String>): Long? = roles.firstNotNullOfOrNull { colours[it] }
+        val dropped = linkedSetOf<HeliUnsupported>()
+        if (derived > 0) dropped += HeliUnsupported.DERIVED_COLOURS
+        // Which roles actually reached a field, rather than which ones *could*.
+        // The count used to be "how many of the file's roles are named in any
+        // of the lists below", which over-reported: `KEY_TEXT` and `KEY_ICON`
+        // are both named by [KeyTextRoles] and only the first present one is
+        // read, so a theme stating both was told it used both.
+        val landed = linkedSetOf<String>()
+        fun of(roles: List<String>): Long? {
+            for (role in roles) {
+                val colour = colours[role] ?: continue
+                landed += role
+                return colour
+            }
+            return null
+        }
 
         val board = of(BoardRoles) ?: return HeliResult.NotATheme
         val key = of(KeyRoles) ?: board
@@ -197,7 +216,7 @@ object HeliTheme {
             dark = night,
             boardBackground = board,
             keyBackground = key,
-            keyText = of(KeyTextRoles)?.legibleOn(keySurface) ?: onColorFor(keySurface),
+            keyText = of(KeyTextRoles)?.legibleOn(keySurface, dropped) ?: onColorFor(keySurface),
             modifierKeyBackground = of(ModifierRoles) ?: key,
             modifierKeyText = of(ModifierTextRoles),
             enterKeyBackground = enterBackground ?: key,
@@ -228,19 +247,26 @@ object HeliTheme {
                 if (shiftIcon != null) put(KEY_SHIFT, KeyOverride(text = shiftIcon))
             },
         )
+        // A colour the file states that no field here read. Said plainly
+        // rather than left to the user to work out from "N of M": the two
+        // numbers never explained *which* colours.
+        if (landed.size < colours.size) dropped += HeliUnsupported.UNUSED_COLOURS
         return HeliResult.Converted(
             theme = theme,
             shape = shape,
             coloursRead = read,
-            coloursUsed = table.count { colours.containsKey(it) && it in Landing },
+            coloursUsed = landed.size,
+            dropped = dropped.toList(),
         )
     }
 
     /** A scraped text colour, unless it is unreadable where it landed. */
-    private fun Long.legibleOn(background: Long): Long? {
+    private fun Long.legibleOn(background: Long, dropped: MutableSet<HeliUnsupported>): Long? {
         if (!isVisible()) return null
         val seen = composite(this, background)
-        return if (contrastRatio(seen, background) >= Readability.POOR_CONTRAST) this else null
+        if (contrastRatio(seen, background) >= Readability.POOR_CONTRAST) return this
+        dropped += HeliUnsupported.LOW_CONTRAST_FALLBACK
+        return null
     }
 
     private fun Int.toArgbLong(): Long = toLong() and ARGB_MASK
@@ -342,16 +368,33 @@ object HeliTheme {
     private val HintRoles = listOf(R_KEY_HINT_TEXT, C_HINT)
     private val PopupRoles = listOf(
         R_POPUP_KEYS_BACKGROUND, R_KEY_PREVIEW_BACKGROUND, R_MORE_SUGGESTIONS_BACKGROUND,
+        // The enter key's own long-press sheet. The same bubble here, and the
+        // only role a theme that styles nothing but the action key will state.
+        R_ACTION_KEY_POPUP_KEYS_BACKGROUND,
     )
     private val PopupTextRoles = listOf(R_POPUP_KEY_TEXT, R_POPUP_KEY_ICON, R_KEY_PREVIEW_TEXT)
     private val StripRoles = listOf(R_STRIP_BACKGROUND)
-    private val SuggestionRoles = listOf(R_SUGGESTION_TYPED_WORD, R_SUGGESTED_WORD, C_SUGGESTION)
-    private val SecondaryRoles = listOf(R_MORE_SUGGESTIONS_HINT, R_SUGGESTION_VALID_WORD)
-    private val ToolRoles = listOf(R_TOOL_BAR_KEY, R_TOOL_BAR_EXPAND_KEY)
+    private val SuggestionRoles = listOf(
+        R_SUGGESTION_TYPED_WORD, R_SUGGESTED_WORD, C_SUGGESTION, R_EMOJI_KEY_TEXT,
+    )
+    private val SecondaryRoles = listOf(
+        R_MORE_SUGGESTIONS_HINT, R_SUGGESTION_VALID_WORD, R_EMOJI_CATEGORY,
+    )
+    private val ToolRoles = listOf(R_TOOL_BAR_KEY, R_TOOL_BAR_EXPAND_KEY, R_REMOVE_SUGGESTION_ICON)
     private val ToolBackgroundRoles = listOf(R_TOOL_BAR_EXPAND_KEY_BACKGROUND)
     private val ToolActiveRoles = listOf(R_TOOL_BAR_KEY_ENABLED_BACKGROUND)
-    private val ChipRoles = listOf(R_CLIPBOARD_SUGGESTION_BACKGROUND, R_AUTOFILL_BACKGROUND_CHIP)
-    private val ChipTextRoles = listOf(R_CLIPBOARD_SUGGESTION_ICON, R_CLIPBOARD_PIN)
+    // The emoji board's own roles answer here too. This keyboard draws the
+    // emoji search field as a chip and its glyphs as suggestion text, so a
+    // theme that states them has stated those surfaces — and HeliBoard's
+    // all-colours export always does, which is why seven of its roles used to
+    // be read and then thrown away.
+    private val ChipRoles = listOf(
+        R_CLIPBOARD_SUGGESTION_BACKGROUND, R_AUTOFILL_BACKGROUND_CHIP,
+        R_EMOJI_SEARCH_BACKGROUND, R_MORE_SUGGESTIONS_WORD_BACKGROUND,
+    )
+    private val ChipTextRoles = listOf(
+        R_CLIPBOARD_SUGGESTION_ICON, R_CLIPBOARD_PIN, R_EMOJI_SEARCH_TEXT,
+    )
     private val ChipActiveRoles = listOf(R_EMOJI_CATEGORY_SELECTED)
     private val NavBarRoles = listOf(R_NAVIGATION_BAR)
     private val OneHandedRoles = listOf(R_ONE_HANDED_MODE_BUTTON)
@@ -361,8 +404,16 @@ object HeliTheme {
     private val SpaceTextRoles = listOf(R_SPACE_BAR_TEXT, C_SPACEBAR_TEXT)
     private val ShiftRoles = listOf(R_SHIFT_KEY_ICON)
 
-    /** Every role that reaches a field, for the "N of M colours" count. */
-    private val Landing: Set<String> = listOf(
+    /**
+     * Every role any list above names.
+     *
+     * Not the count any more — that is now the roles a conversion actually
+     * read, which is a different and smaller number (see `convert`). Kept as
+     * the thing `HeliRoleCoverageTest` holds the tables to: a role in
+     * [AllColours] that appears in none of the lists is one the import silently
+     * throws away, which is how seven of them went unnoticed.
+     */
+    internal val Landing: Set<String> = listOf(
         BoardRoles, KeyRoles, KeyTextRoles, ModifierRoles, ModifierTextRoles, EnterRoles,
         EnterTextRoles, HintRoles, PopupRoles, PopupTextRoles, StripRoles, SuggestionRoles,
         SecondaryRoles, ToolRoles, ToolBackgroundRoles, ToolActiveRoles, ChipRoles,
@@ -393,10 +444,39 @@ sealed interface HeliResult {
         val coloursRead: Int,
         /** How many of them had somewhere to go here. */
         val coloursUsed: Int,
+        /** What the file asked for that did not come across whole. */
+        val dropped: List<HeliUnsupported> = emptyList(),
     ) : HeliResult
 
     /** Not one of the two shapes, or a colour object with nothing in it. */
     data object NotATheme : HeliResult
+}
+
+/**
+ * Something a HeliBoard theme asked for that did not come across whole.
+ *
+ * The `.flex` and Gboard imports have said this from the start and this one
+ * never did — it showed "N of M colours" and left the user to work out which
+ * M − N, which for the all-colours export is nearly always the emoji board and
+ * for the named export is nearly always nothing at all.
+ */
+enum class HeliUnsupported {
+
+    /**
+     * The file left colours for the keyboard to work out, which is what the
+     * other keyboard's "auto" flag means, and what this one does with them.
+     *
+     * Not a loss so much as a thing worth saying: the user sees a theme with
+     * colours they did not choose, and the honest explanation is that their
+     * file did not choose them either.
+     */
+    DERIVED_COLOURS,
+
+    /** The file states colours for parts of that keyboard this one has not. */
+    UNUSED_COLOURS,
+
+    /** A scraped text colour was unreadable on its background and was dropped. */
+    LOW_CONTRAST_FALLBACK,
 }
 
 /** Which of the other keyboard's two export shapes a theme arrived in. */

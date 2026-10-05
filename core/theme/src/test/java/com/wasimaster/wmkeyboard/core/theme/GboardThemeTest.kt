@@ -240,12 +240,12 @@ class GboardThemeTest {
                     metadata(sheets = "\"style_sheet_md2.css\", \"style_sheet_rules.binarypb\""),
                     "style_sheet_md2.css" to (
                         String(mainSheet) + """
-                        .icon_key_del { image_ref: "icon_del.png"; }
+                        .icon.for-space-branding { image_ref: "icon_space.png"; }
                         .keyboard-body-area { background_corner_radius_top_left: 14; }
                         .tab.in-keyboard-header-area { background_image_ref: "tab.png"; }
                         """.trimIndent()
                         ).toByteArray(),
-                    "icon_del.png" to png,
+                    "icon_space.png" to png,
                     "tab.png" to png,
                 ),
             ),
@@ -262,6 +262,102 @@ class GboardThemeTest {
             ),
             converted.dropped.toSet(),
         )
+    }
+
+    // ---- key glyphs ----
+
+    @Test
+    fun `the theme's own key glyphs come across`() {
+        val converted = theme(
+            read(
+                zip(
+                    metadata(flavors = ""),
+                    "style_sheet_md2.css" to (
+                        String(mainSheet) + """
+                        .icon_key_del { image_ref: "icon_del.png"; image_height: 25; }
+                        .icon_key_shift_off { image_ref: "icon_shift_off.png"; }
+                        .icon_key_ime_action_send { image_ref: "icon_send.png"; }
+                        """.trimIndent()
+                        ).toByteArray(),
+                    "icon_del.png" to png,
+                    "icon_shift_off.png" to png,
+                    "icon_send.png" to png,
+                ),
+            ),
+        )
+        val images = converted.looks.first().converted.images
+        assertEquals(
+            setOf("keyIcon:key.backspace", "keyIcon:key.shift", "keyIcon:key.enter_send"),
+            images.keys.filter { it.startsWith(ASSET_KEY_ICON_PREFIX) }.toSet(),
+        )
+        // Nothing was lost, so nothing is claimed to have been. The dialog used
+        // to say "the app cannot use the icons" of every one of these themes.
+        assertFalse(GboardUnsupported.KEY_ICONS in converted.dropped)
+    }
+
+    @Test
+    fun `a glyph named without its extension still resolves`() {
+        // `image_ref: "icon_emoticon"` is how Gboard names its own drawables,
+        // and the file in the archive carries the extension.
+        val converted = theme(
+            read(
+                zip(
+                    metadata(flavors = ""),
+                    "style_sheet_md2.css" to (
+                        String(mainSheet) +
+                            "\n.icon_key_main_category_smiley_dark_theme { image_ref: \"icon_emoticon\"; }"
+                        ).toByteArray(),
+                    "icon_emoticon.png" to png,
+                ),
+            ),
+        )
+        val images = converted.looks.first().converted.images
+        assertTrue("keyIcon:key.emoji" in images)
+    }
+
+    @Test
+    fun `a glyph this keyboard has no key for is still reported`() {
+        val converted = theme(
+            read(
+                zip(
+                    metadata(flavors = ""),
+                    "style_sheet_md2.css" to (
+                        String(mainSheet) + "\n.icon_g_icon { image_ref: \"g.png\"; }"
+                        ).toByteArray(),
+                    "g.png" to png,
+                ),
+            ),
+        )
+        assertTrue(GboardUnsupported.KEY_ICONS in converted.dropped)
+    }
+
+    @Test
+    fun `an element's alpha fades the colour it draws`() {
+        val converted = theme(
+            read(
+                zip(
+                    metadata(flavors = ""),
+                    "style_sheet_md2.css" to (
+                        String(mainSheet) +
+                            "\n.label.for-function-key { color: #FFFFFF; alpha: 0.5; }"
+                        ).toByteArray(),
+                ),
+            ),
+        )
+        // Half of 0xFF is 0x80, and reading the alpha is the difference between
+        // a faded modifier glyph and a glaring one.
+        assertEquals(0x80FFFFFFL, converted.looks.first().converted.theme.modifierKeyText)
+    }
+
+    @Test
+    fun `the long spelling of the enter glyph's colour is read`() {
+        val sheet = String(mainSheet)
+            .replace(".icon.for-action-key { color: #000; }", "") +
+            "\n.icon.for-action-key.for-action-default-key { color: #112233; }"
+        val converted = theme(
+            read(zip(metadata(flavors = ""), "style_sheet_md2.css" to sheet.toByteArray())),
+        )
+        assertEquals(0xFF112233L, converted.looks.first().converted.theme.enterKeyText)
     }
 
     @Test

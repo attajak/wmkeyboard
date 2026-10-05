@@ -178,10 +178,107 @@ class IconPipelineTest {
     fun `the parse cache refreshes when an icon changes`() {
         val pack = store.createPack("Rounded")!!
         store.setIcon(pack.id, IconSlots.KEY_SHIFT, monochrome)
-        assertTrue(store.docs(pack.id).getValue(IconSlots.KEY_SHIFT).monochrome)
+        assertTrue(store.art(pack.id).getValue(IconSlots.KEY_SHIFT).monochrome)
 
         store.setIcon(pack.id, IconSlots.KEY_SHIFT, coloured)
-        assertFalse(store.docs(pack.id).getValue(IconSlots.KEY_SHIFT).monochrome)
+        assertFalse(store.art(pack.id).getValue(IconSlots.KEY_SHIFT).monochrome)
+    }
+
+    // ---- raster icons (#504) ----
+
+    /** A 10x10 PNG header — enough for the sniff, not for a decoder. */
+    private val pngBytes: ByteArray = byteArrayOf(
+        0x89.toByte(), 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+        0, 0, 0, 0x0D, 0x49, 0x48, 0x44, 0x52,
+        0, 0, 0, 10, 0, 0, 0, 10, 8, 6, 0, 0, 0,
+    )
+
+    @Test
+    fun `a png is stored under its own extension and read back as raster`() {
+        val pack = store.createPack("Rounded")!!
+        assertTrue(store.setIcon(pack.id, IconSlots.KEY_SHIFT, pngBytes))
+
+        val file = store.fileFor(pack.id, IconSlots.KEY_SHIFT)!!
+        assertEquals("${IconSlots.KEY_SHIFT}.png", file.name)
+        val art = store.art(pack.id).getValue(IconSlots.KEY_SHIFT)
+        assertTrue(art is IconArt.Raster)
+        assertEquals(10, (art as IconArt.Raster).width)
+    }
+
+    @Test
+    fun `replacing a vector with a picture leaves only one file behind`() {
+        val pack = store.createPack("Rounded")!!
+        store.setIcon(pack.id, IconSlots.KEY_SHIFT, monochrome)
+        store.setIcon(pack.id, IconSlots.KEY_SHIFT, pngBytes)
+
+        // The stale SVG would otherwise shadow the PNG — vectors are tried
+        // first — and come back in the next export.
+        val dir = store.fileFor(pack.id, IconSlots.KEY_SHIFT)!!.parentFile!!
+        assertEquals(
+            listOf("${IconSlots.KEY_SHIFT}.png"),
+            dir.list()!!.sorted(),
+        )
+        assertTrue(store.art(pack.id).getValue(IconSlots.KEY_SHIFT) is IconArt.Raster)
+    }
+
+    @Test
+    fun `the extension comes from the bytes, not from the name`() {
+        val pack = store.createPack("Rounded")!!
+        // An archive entry calling an SVG a PNG, which is what deciding by
+        // name would have stored wrongly.
+        assertEquals(IconSlots.KEY_SHIFT, IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.png"))
+        store.setIcon(pack.id, IconSlots.KEY_SHIFT, monochrome.toByteArray())
+        assertEquals("${IconSlots.KEY_SHIFT}.svg", store.fileFor(pack.id, IconSlots.KEY_SHIFT)!!.name)
+    }
+
+    @Test
+    fun `a raster slot survives a reload`() {
+        val pack = store.createPack("Rounded")!!
+        store.setIcon(pack.id, IconSlots.KEY_SHIFT, pngBytes)
+
+        store.reload()
+        assertEquals(listOf(IconSlots.KEY_SHIFT), store.pack(pack.id)!!.slots)
+        assertTrue(store.fileFor(pack.id, IconSlots.KEY_SHIFT)!!.isFile)
+    }
+
+    @Test
+    fun `a theme's own icons sit under the pack and the overrides`() {
+        // An SVG rather than the PNG above: resolving a raster needs a real
+        // bitmap decoder, which a plain JVM test has not got. What this is
+        // about is the precedence, which is the same either way.
+        val file = temp.newFile("themeicon.img").apply { writeText(coloured) }
+        val pack = store.createPack("Rounded")!!
+        store.setIcon(pack.id, IconSlots.KEY_SHIFT, monochrome)
+
+        // Alone, the theme dresses the slot.
+        val themeOnly = buildIconSet(
+            IconSettings(themeIcons = mapOf(IconSlots.KEY_SHIFT to file.absolutePath)),
+            store,
+        )
+        assertNotNull(themeOnly.resolve(IconSlots.KEY_SHIFT))
+
+        assertFalse(themeOnly.resolve(IconSlots.KEY_SHIFT)!!.monochrome)
+
+        // With a pack installed, the pack wins: it is a standing choice about
+        // the whole keyboard and a theme must not quietly undo one. The pack's
+        // icon is the monochrome one, so the flag says which came through.
+        val withPack = buildIconSet(
+            IconSettings(
+                activePackId = pack.id,
+                themeIcons = mapOf(IconSlots.KEY_SHIFT to file.absolutePath),
+            ),
+            store,
+        )
+        assertTrue(withPack.resolve(IconSlots.KEY_SHIFT)!!.monochrome)
+    }
+
+    @Test
+    fun `a theme icon pointing at nothing leaves the slot alone`() {
+        val set = buildIconSet(
+            IconSettings(themeIcons = mapOf(IconSlots.KEY_SHIFT to "/does/not/exist.png")),
+            store,
+        )
+        assertNull(set.resolve(IconSlots.KEY_SHIFT))
     }
 
     @Test

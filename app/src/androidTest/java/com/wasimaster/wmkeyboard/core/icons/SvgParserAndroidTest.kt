@@ -69,7 +69,7 @@ class SvgParserAndroidTest {
             val pack = (result as IconImportResult.Imported).pack
             assertTrue("no slots survived", pack.slots.isNotEmpty())
             // And the parsed form the keyboard renders from is populated.
-            assertTrue("nothing parsed back out", store.docs(pack.id).isNotEmpty())
+            assertTrue("nothing parsed back out", store.art(pack.id).isNotEmpty())
         } finally {
             dir.deleteRecursively()
         }

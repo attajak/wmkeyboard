@@ -411,6 +411,108 @@ class FlexThemeTest {
         assertFalse(FlexUnsupported.FONT in converted.dropped)
     }
 
+    // ---- the v2 way of naming a key ----
+
+    @Test
+    fun `a key named by its output is read like one named by its code`() {
+        // snygg v2's own spelling, which FlorisBoard's default themes carry
+        // beside `key[code=10]`. A theme written against v2 alone names only
+        // this, and reading codes only left it with no enter colour at all.
+        val converted = converted(
+            read(
+                manifest(dayEntry),
+                "stylesheets/day.json" to sheet(
+                    """
+                    {
+                      "window": { "background": "#101014" },
+                      "key": { "background": "#2C2C34", "foreground": "#FFFFFF" },
+                      "key[output=`@k3:action/enter`]": {
+                        "background": "#4CAF50", "foreground": "#000000"
+                      },
+                      "key[output=`@floris:action/backspace`]": { "background": "#222222" },
+                      "key[output=` `]": { "background": "#333333" }
+                    }
+                    """,
+                ),
+            ),
+        )
+        val theme = converted.themes.single().theme
+        assertEquals(0xFF4CAF50L, theme.enterKeyBackground)
+        assertEquals(0xFF000000L, theme.enterKeyText)
+        // The namespace in front of the id changes between releases, so it is
+        // stripped: `@k3:`, `@floris:` and `@fl:` all name the same actions.
+        assertEquals(0xFF222222L, theme.keyOverrides.getValue("DELETE").background)
+        assertEquals(0xFF333333L, theme.keyOverrides.getValue("SPACE").background)
+    }
+
+    @Test
+    fun `a code and an output naming the same key do not fight`() {
+        val converted = converted(
+            read(
+                manifest(dayEntry),
+                "stylesheets/day.json" to sheet(
+                    """
+                    {
+                      "window": { "background": "#101014" },
+                      "key": { "background": "#2C2C34" },
+                      "key[code=10]": { "background": "#4CAF50" },
+                      "key[output=`@k3:action/enter`]": { "background": "#FF0000" }
+                    }
+                    """,
+                ),
+            ),
+        )
+        // The code wins: it is the older and more widely written form, and a
+        // sheet carrying both is saying the same thing twice.
+        val theme = converted.themes.single().theme
+        assertEquals(0xFF4CAF50L, theme.enterKeyBackground)
+        assertEquals(0xFF4CAF50L, theme.keyOverrides.getValue("ENTER").background)
+    }
+
+    @Test
+    fun `the v2 element names upstream actually ships are read`() {
+        val converted = converted(
+            read(
+                manifest(dayEntry),
+                "stylesheets/day.json" to sheet(
+                    """
+                    {
+                      "window-inner": { "background": "#101014" },
+                      "key": { "background": "#2C2C34" },
+                      "smartbar-shared-actions-row": { "background": "#181820" },
+                      "smartbar-candidates-row": { "foreground": "#DDDDEE" }
+                    }
+                    """,
+                ),
+            ),
+        )
+        val theme = converted.themes.single().theme
+        // `window-inner` is the board; the row names were guessed at from the
+        // 0.4 spellings and matched no sheet ever written.
+        assertEquals(0xFF101014L, theme.boardBackground)
+        assertEquals(0xFF181820L, theme.suggestionBarBackground)
+        assertEquals(0xFFDDDDEEL, theme.suggestionText)
+        assertFalse(FlexUnsupported.UNKNOWN_ELEMENT in converted.dropped)
+    }
+
+    @Test
+    fun `content scale says how a key's picture fits it`() {
+        val converted = converted(
+            read(
+                manifest(dayEntry),
+                "stylesheets/day.json" to sheet(
+                    """
+                    {
+                      "window": { "background": "#101014" },
+                      "key": { "background": "#2C2C34", "content-scale": "fill-bounds" }
+                    }
+                    """,
+                ),
+            ),
+        )
+        assertEquals("STRETCH", converted.themes.single().theme.keyTextureScale)
+    }
+
     @Test
     fun `an inherited font family is not a font at all`() {
         val result = read(

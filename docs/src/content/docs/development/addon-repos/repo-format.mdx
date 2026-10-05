@@ -223,7 +223,7 @@ into your repo.
 | `snippets` | `*.wmsnippets.json` | `{ "format":"wmkeyboard-snippets", "version":1, "snippets":[ { "id":1, "label":"…", "text":"…", "trigger":"…"?, "triggerPattern":"…"?, "triggerWords":3?, "confirm":true? }, … ] }`. Ids are reassigned on import. `trigger` is one exact word. `triggerPattern` is an anchored regular expression over the last `triggerWords` words before the cursor (default 3, max 8), whose captures reach `text` as `$1`…`$9`. See [Snippets](/tools/snippets/#pattern-triggers). A snippet carrying both keeps the word. `confirm` makes the trigger offer itself as a suggestion-bar chip instead of rewriting what the user typed, which is what a pack of canned replies should do. See [Ask before it expands](/tools/snippets/#ask-before-it-expands). `triggerPattern`, `triggerWords` and `confirm` are written only when set, so a pack of plain snippets looks exactly as it always did. Installing a pack puts every one of its snippets into a [folder](/tools/snippets/#folders) named after the addon's `name`, so the user can silence or find the whole pack in one gesture. The envelope's own optional `folders` array is honoured on a hand-imported file but flattened into the pack folder on install, because folders are one level deep. Pick a `name` that reads well as a folder. |
 | `espanso` | `*.yml`, `*.yaml`, `*.zip` | A match file or a package archive in [Espanso](https://espanso.org)'s own format, converted on the way in. A match file is YAML with a top-level `matches:` list; an archive holds `package.yml` and `_manifest.yml`, in either the layout the Espanso Hub publishes or the one you get by zipping a package directory. Serve a Hub package as it stands, with no conversion step. It installs into a folder exactly as `snippets` does, and uninstalls by the same rules. What the format cannot carry across is listed in [Importing from Espanso](/reference/importing-from-espanso/), and the app shows that list in the preview before the install button rather than after. `shell` and `script` variables are dropped and never run. The two types are deliberately separate so a mistyped entry is a clear rejection rather than a guess; a `.yml` filed as `snippets` is refused. To a user both browse under Snippets. |
 | `stickers` | `*.wmstickers` | ZIP archive containing a `pack.json` envelope (`"format":"wmkeyboard-stickers"`, `"version":1`, `pack` metadata with its `stickers[]`) and the image files under `stickers/`. See [Sticker packs](#sticker-packs). |
-| `icon_pack` | `*.wmicons` | ZIP archive containing a `pack.json` envelope (`"format":"wmkeyboard-icons"`, `"version":1`, `pack` metadata) and one SVG per replaced icon under `icons/`, named for its slot. See [Icon packs](#icon-packs). |
+| `icon_pack` | `*.wmicons` | ZIP archive containing a `pack.json` envelope (`"format":"wmkeyboard-icons"`, `"version":1`, `pack` metadata) and one icon per replaced slot under `icons/`, named for its slot — an SVG, or a PNG, WebP, JPEG or GIF. See [Icon packs](#icon-packs). |
 | `font` | `*.ttf`, `*.otf` | Standard TrueType or OpenType font file used for keyboard key labels and text typography. Declare `langIds` when the face only covers some scripts. |
 | `emoji_font` | `*.ttf`, `*.otf` | A font whose glyphs are emoji, like Twemoji or OpenMoji. Same file format as `font`, kept a separate type because it is chosen in a different place (Emoji settings, not the key-label pickers) and because a colour emoji font on the key labels is not a choice anyone makes on purpose. Colour builds (`COLR`/`CBDT`) draw in colour on Android 8+. A monochrome outline build takes the keyboard's text colour. There is exactly one emoji slot, and the app offers to fill it once the font is installed. |
 | `sound` | `*.mp3` | A single short key-press sound. Keep it under ~300 ms and a few tens of KB: it is loaded into a `SoundPool` and replayed on every keystroke. |
@@ -343,6 +343,7 @@ informational and import ignores them. Both are optional in a hand-built pack.
   - pack.json
   - icons/
     - tool.clipboard.svg one file per replaced slot
+    - key.shift.png vector or picture, either way
 
 </FileTree>
 
@@ -367,7 +368,10 @@ informational and import ignores them. Both are optional in a hand-built pack.
 informational and import ignores them. Both are optional in a hand-built pack.
 
 **Slot ids are the file names.** An icon for `tool.clipboard` is
-`icons/tool.clipboard.svg`. The four slot groups are:
+`icons/tool.clipboard.svg`, or `icons/tool.clipboard.png` for a raster one. The
+extension only says where the slot id ends; the app decides what the file
+actually is by reading its first bytes, and stores it under the extension that
+answer gives. The four slot groups are:
 
 | Group | Ids | Count |
 |---|---|---|
@@ -388,19 +392,30 @@ assembled by hand still works if the manifest is out of date. Files naming a
 slot the installed version has no idea about are dropped and reported, never
 stored.
 
-**Colour.** An SVG that declares no colours (`fill="none"`, `currentColor`, or
+**Vector or raster.** An icon may be an SVG or a PNG, WebP, JPEG or GIF.
+Prefer a vector: it scales to any key height and costs a few hundred bytes.
+Raster is there for icons drawn outside a vector editor, and because it is the
+only form a Gboard theme's own key glyphs come in.
+
+**Colour.** An icon that declares no colours (`fill="none"`, `currentColor`, or
 nothing at all) is drawn in the theme's colour and picks up the per-tool accent
-colours, exactly like a built-in icon. An SVG that sets real colours keeps them
+colours, exactly like a built-in icon. One that sets real colours keeps them
 and stops following the theme. Prefer the first unless the pack is deliberately
-a colour set.
+a colour set. A raster icon counts as declaring no colours when every pixel
+above half alpha is the same RGB — a glyph stencilled on transparency — which
+is judged from the pixels rather than from anything the file says.
 
 **Supported SVG.** `<path>`, `<rect>`, `<circle>`, `<ellipse>`, `<line>`,
 `<polyline>`, `<polygon>`, `<g transform>` (translate/scale/rotate/matrix/skew),
 presentation attributes and inline `style`, and `#rgb`/`#rrggbb`/`#rrggbbaa`/
 `rgb()`/named colours. Text, embedded images, `<use>`, gradients, filters, masks
 and CSS `<style>` blocks are skipped. An icon that leans on them renders as
-whatever is left rather than failing to import. Each SVG must be under 256 KB,
-and the archive under 8 MB with at most 400 entries.
+whatever is left rather than failing to import.
+
+**Limits.** An SVG must be under 256 KB. A raster icon must be under 512 KB and
+no more than 2048 px on its longest edge, which is checked by reading the
+header rather than by decoding the image. The archive must be under 24 MB with
+at most 400 entries.
 
 :::danger[No DOCTYPE declarations]
 A DOCTYPE causes the file to be **rejected outright**: packs are untrusted

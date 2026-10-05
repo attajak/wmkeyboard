@@ -118,7 +118,7 @@
     <!-- Icons: the screen that replaces one icon or a whole pack.          -->
     <!-- ================================================================== -->
 
-    <string name="plugins_icons_intro_info">You can replace any keyboard icon with a different built-in icon or with your own SVG. The built-in set is Material Symbols from Google, outlined style. An icon that sets no colours of its own follows the theme and the accent colour of the tool. An icon that sets its own colours keeps them.</string>
+    <string name="plugins_icons_intro_info">You can replace any keyboard icon with a different built-in icon or with a picture of your own, as an SVG or a PNG. The built-in set is Material Symbols from Google, outlined style. An icon that sets no colours of its own follows the theme and the accent colour of the tool — a PNG counts as one when every visible pixel is the same colour, which is what a glyph drawn on a transparent background looks like. An icon that sets its own colours keeps them.</string>
 
     <string name="plugins_icons_pack_title">Icon pack</string>
     <string name="plugins_icons_pack_builtin_name">Built-in icons</string>
@@ -155,7 +155,7 @@
     <string name="plugins_icons_slot_custom_message">The app set a custom icon for %1$s.</string>
     <!-- %1$d is the largest size of an SVG file, in kilobytes. "KB" is a unit
          symbol, not a countable noun: it does not inflect. -->
-    <string name="plugins_icons_slot_svg_error" tools:ignore="PluralsCandidate">The app cannot use that file as an icon. The file must be an SVG smaller than %1$d KB.</string>
+    <string name="plugins_icons_slot_svg_error" tools:ignore="PluralsCandidate">The app cannot use that file as an icon. The file must be an SVG, PNG, WebP, JPEG or GIF smaller than %1$d KB.</string>
 
     <!-- Row subtitle: this icon comes from a pack. %1$s is the name of the pack. -->
     <string name="plugins_icons_source_from_pack">From %1$s</string>
@@ -190,7 +190,7 @@
     <string name="plugins_icons_picker_search_hint">Search Material Symbols</string>
     <!-- %1$s is what the user typed in the search box. The quotation marks are part of the message. -->
     <string name="plugins_icons_picker_no_match">No icon matches “%1$s”.</string>
-    <string name="plugins_icons_picker_use_svg_action">Use my own SVG…</string>
+    <string name="plugins_icons_picker_use_svg_action">Use my own picture…</string>
     <string name="plugins_icons_picker_use_default_action">Use the default</string>
 
 </resources>

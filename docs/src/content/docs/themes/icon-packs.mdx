@@ -33,19 +33,25 @@ One thing icon packs deliberately don't touch: the per-key glyphs a language lay
 
 **Colour.** An icon that sets no colour of its own (`none`, `currentColor`, or nothing at all) is drawn in the current theme's colour, and picks up that tool's own accent colour if **Colorful tool icons** (under <SettingsPath path="Tools" />) is on. An icon that sets real colours draws exactly as authored and stops following the theme. Most packs should lean on the first behaviour; only go colourful on purpose.
 
-These are ordinary SVGs, read by a small built-in parser rather than a full SVG engine. It supports paths, basic shapes, and simple color and transform attributes. Gradients, filters, embedded images, and `<use>` references are skipped quietly rather than rejected. A `<!DOCTYPE>` is the one thing that isn't forgiven: that file is refused, dropped from the pack with a note saying so, and the rest of the pack installs around it. See [Icon packs](/development/addon-repos/repo-format/#icon-packs) in the addon repository format for the exact supported subset, the size limits, and why the declaration is refused.
+**Vector or picture.** An icon can be an SVG or a picture — PNG, WebP, JPEG or GIF (issue #504). A vector is the better of the two where you have one: it scales to any key height, recolours cleanly and costs a few hundred bytes. A picture is what you have when you drew the icon in anything but a vector editor, and it is the only form a [Gboard theme's own key glyphs](/reference/importing-other-keyboards/#theme-glyphs-and-icon-packs) ever come in. The two behave the same everywhere else in this page, including which slot they fill and whether they follow the theme's colour; a picture counts as "sets no colour of its own" when every visible pixel in it is the same colour, which is what a glyph drawn on a transparent background looks like. A picture may be up to 512 KB and 2048 px on its longest edge; an SVG may be up to 256 KB.
+
+A pack decides which of the two a file is by reading its first bytes, not by its name, so an SVG in a file called `.png` is stored and drawn as the SVG it is.
+
+SVGs are read by a small built-in parser rather than a full SVG engine. It supports paths, basic shapes, and simple color and transform attributes. Gradients, filters, embedded images, and `<use>` references are skipped quietly rather than rejected. A `<!DOCTYPE>` is the one thing that isn't forgiven: that file is refused, dropped from the pack with a note saying so, and the rest of the pack installs around it. See [Icon packs](/development/addon-repos/repo-format/#icon-packs) in the addon repository format for the exact supported subset, the size limits, and why the declaration is refused.
 
 ## Replacing a single icon
 
 <SettingsPath path="Appearance / Icons" />
 
-Tap any slot in the list to open its picker. Choose an icon from the built-in Material Symbols set, or tap **Use my own SVG…** to import a file of your own (under 256 KB).
+Tap any slot in the list to open its picker. Choose an icon from the built-in Material Symbols set, or tap **Use my own picture…** to import a file of your own — an SVG, or a PNG, WebP, JPEG or GIF.
+
+Shift is three separate slots (off, armed, locked) and Enter is one per wording, so "a different picture when caps lock is on" is a matter of filling two slots rather than one.
 
 <PhoneFrame caption="Picking a replacement for the Shift icon: built-in alternatives, or an SVG of your own.">
   ![Picking a replacement for the Shift icon: built-in alternatives, or an SVG of your own.](@assets/screens/themes/icons-slot-picker.webp)
 </PhoneFrame>
 
-A single icon you import this way goes into a reserved pack called **My icons**, and that slot is pinned to pull from it. Pick custom SVGs for a few more slots and they land in the same pack, so "My icons" quietly becomes a real, exportable pack as you go. See [Making your own pack](#making-your-own-pack) below.
+A single icon you import this way goes into a reserved pack called **My icons**, and that slot is pinned to pull from it. Pick files for a few more slots and they land in the same pack, so "My icons" quietly becomes a real, exportable pack as you go. See [Making your own pack](#making-your-own-pack) below.
 
 **Reset all icons** turns off the active pack and clears every per-slot choice in one tap. It's a full reset, not only the single-icon changes. Installed packs stay on the device, so delete a pack separately if you want it gone.
 
@@ -61,15 +67,15 @@ A pack can come from two places, and both end up in the same list of installed p
 
 **Importing a file directly.** You don't need a repository at all: **Import an icon pack** on the Icons screen opens a file picker for any `.wmicons` file, the same format a repository ships. This is the flow for a pack a friend sent you directly rather than one hosted anywhere. Importing switches to the pack immediately, since installing one and not using it isn't usually what you wanted.
 
-Either way, the device holds at most 20 icon packs at once (the reserved "My icons" pack counts toward that total too), and every SVG inside a pack is still limited to 256 KB.
+Either way, the device holds at most 20 icon packs at once (the reserved "My icons" pack counts toward that total too). Inside a pack, an SVG is limited to 256 KB and a picture to 512 KB, and the whole archive to 24 MB.
 
 ## Making your own pack
 
 There are two ways to end up with a pack of your own. One suits a pack you're building for yourself. The other suits one you mean to publish.
 
-**Build it in the app.** Pick custom SVGs slot by slot from the per-slot picker described above. They accumulate into the reserved "My icons" pack on their own. When you're happy with it, tap the export icon on that pack's row on the Icons screen to save it as a real `.wmicons` file through the system file picker. There's no manifest to write by hand, which makes this the fastest way to get a working pack you can keep or hand on.
+**Build it in the app.** Pick files slot by slot from the per-slot picker described above. They accumulate into the reserved "My icons" pack on their own. When you're happy with it, tap the export icon on that pack's row on the Icons screen to save it as a real `.wmicons` file through the system file picker. There's no manifest to write by hand, which makes this the fastest way to get a working pack you can keep or hand on.
 
-**Hand-author a manifest for a repository.** A `.wmicons` file is a renamed ZIP: a `pack.json` manifest plus one SVG per replaced slot, named after the slot id (`icons/tool.clipboard.svg`, `icons/key.shift.svg`, and so on). The full manifest shape, the slot-id table, and the supported SVG subset are documented once, in [Icon packs](/development/addon-repos/repo-format/#icon-packs) under the addon repository format. Follow that spec when you publish a pack into a repository. Export a pack from the app first, as above, and you have a real seed file to edit by hand.
+**Hand-author a manifest for a repository.** A `.wmicons` file is a renamed ZIP: a `pack.json` manifest plus one file per replaced slot, named after the slot id (`icons/tool.clipboard.svg`, `icons/key.shift.png`, and so on). The extension in the entry name only says where the slot id ends; what the file *is* comes from its bytes. The full manifest shape, the slot-id table, and the supported SVG subset are documented once, in [Icon packs](/development/addon-repos/repo-format/#icon-packs) under the addon repository format. Follow that spec when you publish a pack into a repository. Export a pack from the app first, as above, and you have a real seed file to edit by hand.
 
 ## Options
 
@@ -79,9 +85,9 @@ There are two ways to end up with a pack of your own. One suits a pack you're bu
 - **Per-slot overrides** are the icons you've set one at a time from the slot picker. None by default.
 - **Import an icon pack** opens a `.wmicons` file someone shared, without going through a repository.
 - **Reset all icons** turns off the active pack and drops every per-slot override in one step. Installed packs stay on the device.
-- **Use my own SVG…** sets one slot from an SVG file of your own, from inside that slot's picker.
+- **Use my own picture…** sets one slot from a file of your own — SVG, PNG, WebP, JPEG or GIF — from inside that slot's picker.
 
-When a slot could be filled three different ways, a single icon you picked by hand wins over an active pack, and an active pack wins over the app's own default. Overriding one icon from a pack you've installed sticks even after the pack updates or gets swapped out.
+When a slot could be filled four different ways, a single icon you picked by hand wins over an active pack, an active pack wins over the glyphs the theme you are wearing brought with it, and those win over the app's own default. Overriding one icon from a pack you've installed sticks even after the pack updates or gets swapped out.
 
 A related setting worth knowing about: <SettingsPath path="Tools" /> has **Colorful tool icons** (on by default), which is what makes a monochrome tool icon (built-in or from a pack) pick up that tool's own accent colour instead of a flat theme colour.
 
@@ -91,4 +97,5 @@ A related setting worth knowing about: <SettingsPath path="Tools" /> has **Color
 - **Deleting the active pack turns off the "active pack" setting** as well as removing it from the list. Any slot that was relying on it, and wasn't separately overridden, reverts to the built-in icon.
 - **No edition restriction.** Icon packs work the same way on both editions of the app; nothing here is limited to one.
 - **Icon packs travel with backups.** They're one of the sections you can choose to include in a full settings export (off by default, since the SVGs add to the file size), so a restore on another phone can bring your custom icons along too.
+- **Replacing a slot's icon replaces its file.** Put a PNG on a slot that held an SVG and the SVG is removed, so the slot never has two files and an export never carries the one you replaced.
 - **A pack's own `slots` list is advisory, not authoritative.** The app looks at what's actually inside the archive and keeps anything that matches a slot it recognizes, so a pack assembled by hand still installs correctly even if its manifest is out of date.

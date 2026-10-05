@@ -168,6 +168,10 @@
     <string name="import_heli_unreadable_body">The app cannot read that as a HeliBoard theme. Copy the whole line of text from the menu at the top of the colour screen in HeliBoard or LeanType.</string>
     <string name="import_heli_clipboard_empty_body">The clipboard is empty.</string>
 
+    <!-- Lines in the "what the app changed" list of a HeliBoard import. -->
+    <string name="import_heli_dropped_derived">The file leaves some colours for the keyboard to work out. This app works them out in its own way, so those parts may not match what you saw in HeliBoard.</string>
+    <string name="import_heli_dropped_unused">The file sets colours for parts of HeliBoard that this keyboard does not have, such as its emoji board. Those colours have nowhere to go.</string>
+
     <!-- Lines in the "what the app changed" list of a FlorisBoard import. -->
     <string name="import_floris_dropped_shadow_color">The file picks a colour for the shadows under the keys. The shadows come across, but this app draws them in its own colour.</string>
     <string name="import_floris_dropped_corners">The file rounds some corners more than others. This app uses one corner size per key, and takes the first of them.</string>

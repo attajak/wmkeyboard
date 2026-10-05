@@ -52,6 +52,7 @@ import com.wasimaster.wmkeyboard.core.icons.IconPackStore
 import com.wasimaster.wmkeyboard.core.icons.IconSlot
 import com.wasimaster.wmkeyboard.core.icons.IconSlotGroup
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
+import com.wasimaster.wmkeyboard.core.icons.RasterIcons
 import com.wasimaster.wmkeyboard.core.icons.SvgParser
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -151,8 +152,8 @@ internal fun IconsScreen(
         }
     }
 
-    // The one-slot SVG picker. The slot is parked the same way the export pack
-    // is, because OpenDocument carries no payload either.
+    // The one-slot picture picker. The slot is parked the same way the export
+    // pack is, because OpenDocument carries no payload either.
     var pendingSlot by remember { mutableStateOf<IconSlot?>(null) }
     val svgLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument(),
@@ -168,9 +169,11 @@ internal fun IconsScreen(
                         // Reads one byte past the cap: an oversized file is
                         // then rejected by setIcon rather than silently
                         // truncated into something that happens to parse.
-                        input.readBoundedBytes(SvgParser.MAX_SOURCE_BYTES + 1)
+                        input.readBoundedBytes(ICON_FILE_CAP + 1)
                     }
-                    store.setIcon(mine.id, slot.id, bytes.decodeToString())
+                    // The bytes decide what the file is, so one call covers a
+                    // vector and a picture (issue #504).
+                    store.setIcon(mine.id, slot.id, bytes)
                 }.getOrDefault(false)
             }
             revision++
@@ -183,10 +186,7 @@ internal fun IconsScreen(
                     slotLabel(context, slot),
                 )
             } else {
-                context.getString(
-                    R.string.plugins_icons_slot_svg_error,
-                    SvgParser.MAX_SOURCE_BYTES / 1024,
-                )
+                context.getString(R.string.plugins_icons_slot_svg_error, ICON_FILE_CAP / 1024)
             }
         }
     }
@@ -321,7 +321,7 @@ internal fun IconsScreen(
             onImportSvg = {
                 pendingSlot = slot
                 picking = null
-                svgLauncher.launch(arrayOf("image/svg+xml", "text/xml", "text/plain", "application/octet-stream"))
+                svgLauncher.launch(ICON_PICKER_MIME_TYPES)
             },
             onReset = {
                 // An SVG the user imported for this slot lives in "My icons".
@@ -384,6 +384,22 @@ internal fun IconsScreen(
         )
     }
 }
+
+/**
+ * What the one-slot picker offers: a vector, a picture, and the catch-alls a
+ * provider reports an unusual extension as.
+ *
+ * Permissive on purpose for the same reason every other importer here is — the
+ * real check is what the bytes turn out to be, in `IconPackStore.setIcon`.
+ */
+private val ICON_PICKER_MIME_TYPES: Array<String> = arrayOf("image/svg+xml") +
+    RasterIcons.IMPORT_MIME_TYPES + arrayOf("text/xml", "text/plain", "application/octet-stream")
+
+/**
+ * The largest file the picker will read, whichever kind it is. The store
+ * applies the per-kind cap itself; this one only bounds the read.
+ */
+private val ICON_FILE_CAP = maxOf(SvgParser.MAX_SOURCE_BYTES, RasterIcons.MAX_SOURCE_BYTES)
 
 /**
  * A tool slot uses the tool's own settings wording, so the two agree.

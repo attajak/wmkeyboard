@@ -91,6 +91,7 @@ import com.wasimaster.wmkeyboard.core.theme.ConvertedFont
 import com.wasimaster.wmkeyboard.core.theme.FlexUnsupported
 import com.wasimaster.wmkeyboard.core.theme.GboardResult
 import com.wasimaster.wmkeyboard.core.theme.GboardTheme
+import com.wasimaster.wmkeyboard.core.theme.HeliUnsupported
 import com.wasimaster.wmkeyboard.core.theme.ThemeCodec
 import com.wasimaster.wmkeyboard.core.theme.ThemeSpec
 import com.wasimaster.wmkeyboard.core.theme.groupAsFamily
@@ -1662,6 +1663,22 @@ private fun florisDroppedLine(
 
 /** Enough to recognise the file, short enough to stay one line of prose. */
 private const val MAX_NAMED_ELEMENTS = 4
+
+/**
+ * One line of the "what will change" list, for a HeliBoard theme.
+ *
+ * The contrast line is the FlorisBoard one word for word, because it is the
+ * same thing happening — the same guard, in the same place, for the same
+ * reason.
+ */
+internal fun heliDroppedLine(context: android.content.Context, dropped: HeliUnsupported): String =
+    context.getString(
+        when (dropped) {
+            HeliUnsupported.DERIVED_COLOURS -> R.string.import_heli_dropped_derived
+            HeliUnsupported.UNUSED_COLOURS -> R.string.import_heli_dropped_unused
+            HeliUnsupported.LOW_CONTRAST_FALLBACK -> R.string.import_floris_dropped_contrast
+        },
+    )
 
 private fun florisDroppedRes(dropped: FlexUnsupported): Int = when (dropped) {
     FlexUnsupported.SHADOW_COLOR -> R.string.import_floris_dropped_shadow_color

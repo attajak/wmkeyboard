@@ -346,10 +346,34 @@ object GboardTheme {
     }
 
     /** An image the theme names, when the archive has it and it is one. */
-    internal fun imageBytes(files: Map<String, ByteArray>, name: String?): ByteArray? {
+    internal fun imageBytes(
+        files: Map<String, ByteArray>,
+        name: String?,
+        maxBytes: Int = MAX_IMAGE_BYTES,
+    ): ByteArray? {
         val path = name?.takeIf { it.isNotBlank() } ?: return null
-        return FlexTheme.lookUp(files, path)
-            ?.takeIf { it.size <= MAX_IMAGE_BYTES && looksLikeImage(it) }
+        return lookUpImage(files, path)?.takeIf { it.size <= maxBytes && looksLikeImage(it) }
+    }
+
+    /**
+     * An entry by the name a sheet gave it, then by that name with any
+     * extension.
+     *
+     * `image_ref: "icon_emoticon"` is a real declaration in shipped themes —
+     * Gboard names its own drawables without one, and the file in the archive
+     * is `icon_emoticon.png`. Matched on the stem, and only when exactly one
+     * entry has it, so a theme carrying both `logo.png` and `logo.jpg` is
+     * ambiguous and resolves to neither rather than to whichever hashed first.
+     */
+    private fun lookUpImage(files: Map<String, ByteArray>, path: String): ByteArray? {
+        FlexTheme.lookUp(files, path)?.let { return it }
+        if ('.' in path.substringAfterLast('/')) return null
+        val stem = path.substringAfterLast('/').substringAfterLast('\\')
+        if (stem.isEmpty()) return null
+        return files.entries
+            .filter { it.key.substringAfterLast('/').substringBeforeLast('.') == stem }
+            .singleOrNull()
+            ?.value
     }
 
     private val json = Json { isLenient = true; ignoreUnknownKeys = true }
@@ -414,7 +438,13 @@ enum class GboardUnsupported {
     /** A listed stylesheet is compiled (`.binarypb`) or missing from the archive. */
     UNREADABLE_STYLESHEET,
 
-    /** Gboard's own icons for shift, delete and enter, replaced by pictures in the file. */
+    /**
+     * A glyph the theme replaces that has no slot here.
+     *
+     * The ones that do land are carried as [ThemeSpec.keyIcons] — see
+     * [GboardIcons]. What is left is the space bar's branding and Gboard's own
+     * logo key, neither of which this keyboard draws at all.
+     */
     KEY_ICONS,
 
     /** Padding inside each key, which Gboard sets per key and this app sets once. */
@@ -517,6 +547,11 @@ internal class GboardMapper(
         texture(FUNCTION_KEY, ASSET_KEY_TEXTURE_MODIFIER, images)
         texture(ENTER, ASSET_KEY_TEXTURE_ENTER, images)
         texture(SPACE, ASSET_KEY_TEXTURE_SPACE, images)
+        // The theme's own key glyphs. They ride in `images` under the asset
+        // prefix, so the storing side needs nothing new: `withExtractedImages`
+        // already writes every asset slot out and this one names a `keyIcons`
+        // entry when it lands.
+        val glyphs = keyIcons(images)
 
         val keyText = textOn(style.color(LABEL, FG), keySeen, dropped)
         val spaceText = readableOn(style.color(SPACE_LABEL, FG), composite(space ?: key, boardSeen))
@@ -555,6 +590,9 @@ internal class GboardMapper(
             suggestionText = style.color(CANDIDATE, FG)?.takeIf { it.isVisible() },
             dividerColor = style.color(DIVIDER, FG)?.takeIf { it.isVisible() },
             toolbarIcon = style.color(TOOL_ICON, FG)?.takeIf { it.isVisible() },
+            // Gboard gives a suggestion its own key face, and this keyboard
+            // draws suggestions on chips, so the two are the same surface.
+            chipBackground = style.color(CANDIDATE_KEY, BG)?.takeIf { it != strip && it != board },
             keyOverrides = buildMap {
                 val spaceFill = space?.takeIf { it != key }
                 if (spaceFill != null || spaceText != null) {
@@ -562,9 +600,51 @@ internal class GboardMapper(
                 }
             },
         )
-        noteLosses(dropped)
+        noteLosses(dropped, glyphs)
         val rules = style.themeRules
         return ConvertedTheme(theme, images) to (rules.size to rules.count { style.lands(it) })
+    }
+
+    /**
+     * The theme's own key glyphs, written into [images] under
+     * [ASSET_KEY_ICON_PREFIX]; the class names that landed come back, so
+     * [noteLosses] can report only the ones that did not.
+     *
+     * A slot is filled once: [GboardIcons.SLOTS] lists two spellings for
+     * several keys and the first one the theme states is the one it meant.
+     */
+    private fun keyIcons(images: MutableMap<String, ByteArray>): Set<String> {
+        // The glyph classes the theme actually writes, under the table's own
+        // spelling. Walked rather than queried because a theme may write
+        // `.icon_key_main_category_smiley_dark_theme`, and a cascade query can
+        // only ask about classes an element literally carries.
+        val present = LinkedHashMap<String, MutableList<String>>()
+        for (rule in style.themeRules) {
+            if (ICON_IMAGE !in rule.properties) continue
+            val selector = rule.selector ?: continue
+            if (selector.state != null) continue
+            val className = selector.classes.singleOrNull() ?: continue
+            val normalized = GboardIcons.normalize(className)
+            if (normalized !in GboardIcons.CLASSES) continue
+            present.getOrPut(normalized) { ArrayList() }.let { if (className !in it) it += className }
+        }
+        val landed = linkedSetOf<String>()
+        for ((className, slot) in GboardIcons.SLOTS) {
+            val key = ASSET_KEY_ICON_PREFIX + slot
+            if (key in images) continue
+            for (written in present[className].orEmpty()) {
+                // Through the cascade rather than off the rule, so a theme that
+                // states the same glyph twice gets the one Gboard would draw —
+                // and so the rule counts as read in the "N of M" the import
+                // shows (see [GboardStyle.lands]).
+                val ref = gboardString(style.value(setOf(written), ICON_IMAGE)) ?: continue
+                val bytes = GboardTheme.imageBytes(files, ref, GboardIcons.MAX_ICON_BYTES) ?: continue
+                images[key] = bytes
+                landed += written
+                break
+            }
+        }
+        return landed
     }
 
     /**
@@ -643,8 +723,15 @@ internal class GboardMapper(
         return color.takeIf { contrastRatio(seen, background) >= Readability.POOR_CONTRAST }
     }
 
-    /** The named losses, read off every rule of the theme's own sheets. */
-    private fun noteLosses(dropped: MutableSet<GboardUnsupported>) {
+    /**
+     * The named losses, read off every rule of the theme's own sheets.
+     *
+     * [glyphs] names the key-glyph classes that *did* come across, so a theme
+     * whose icons all landed is not told its icons were dropped — which is what
+     * it used to be told, because carrying them was impossible until the icon
+     * system learned to draw a raster (issue #504).
+     */
+    private fun noteLosses(dropped: MutableSet<GboardUnsupported>, glyphs: Set<String>) {
         for (rule in style.themeRules) {
             val props = rule.properties
             val classes = rule.selector?.classes.orEmpty()
@@ -656,7 +743,9 @@ internal class GboardMapper(
                     dropped += GboardUnsupported.SHADOW_COLOR
                 }
             }
-            if (GboardTheme.imageBytes(files, gboardString(style.resolve(props[ICON_IMAGE]))) != null) {
+            if (classes.none { it in glyphs } &&
+                GboardTheme.imageBytes(files, gboardString(style.resolve(props[ICON_IMAGE]))) != null
+            ) {
                 dropped += GboardUnsupported.KEY_ICONS
             }
             val picture = GboardTheme.imageBytes(files, gboardString(style.resolve(props[IMAGE])))
@@ -696,18 +785,29 @@ internal class GboardMapper(
         val LABEL = setOf("label")
         val FUNCTION_LABEL = setOf("label", "for-function-key")
         val FUNCTION_ICON = setOf("icon", "for-function-key")
-        val ENTER_ICON = setOf("icon", "for-action-key")
+        // Every class the element carries, not just the ones that name it.
+        // A query only matches a rule whose classes it *contains*, so
+        // `.icon.for-action-key.for-action-default-key` — which 736 of the
+        // rules in the Rboard corpus are written as, more than are written the
+        // short way — matched nothing at all until `for-action-default-key` was
+        // listed here, and every such theme lost its enter glyph's colour.
+        val ENTER_ICON = setOf("icon", "for-action-key", "for-action-default-key")
         val ENTER_BADGE = setOf("background-icon", "for-action-key")
         val SPACE_LABEL = setOf("label", "for-space-key")
         val HINT = setOf("label", "secondary")
         val CANDIDATE = setOf("label", "for-candidate-key")
+
+        /** The face behind a suggestion, which this keyboard draws as a chip. */
+        val CANDIDATE_KEY = setOf(KEYTOP, "for-candidate-key")
         val POPUP = setOf("popup")
         val POPUP_ITEM = setOf("popup-item")
         val POPUP_LABEL = setOf("label", "for-popup-item")
         val TRACK = setOf("track", "for-gesture")
         val NAVBAR = setOf("navbar")
         val DIVIDER = setOf("divider", "vertical", "for-candidate-key")
-        val TOOL_ICON = setOf("icon", "for-access-point-icon")
+        // `v2` for the same reason `for-action-default-key` is on [ENTER_ICON]:
+        // the newer themes write `.icon.for-access-point-icon.v2`.
+        val TOOL_ICON = setOf("icon", "for-access-point-icon", "v2")
 
         /** The elements whose pictures do land: the board and the four key classes. */
         val IMAGE_ELEMENTS = setOf(BACKGROUND, BODY, KEY, FUNCTION_KEY, ENTER, setOf(KEYTOP, "for-space-bar"), setOf("space_bar"))

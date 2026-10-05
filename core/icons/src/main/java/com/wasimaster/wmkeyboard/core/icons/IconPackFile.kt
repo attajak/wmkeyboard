@@ -16,7 +16,7 @@ import java.util.zip.ZipOutputStream
  * ```
  * mypack.wmicons
  * ├── pack.json
- * └── icons/<slotId>.svg
+ * └── icons/<slotId>.<svg|png|webp|jpg|gif>
  * ```
  *
  * `pack.json` is the same versioned envelope the layout and sticker formats
@@ -46,15 +46,17 @@ import java.util.zip.ZipOutputStream
  * archive streams entry by entry.
  *
  * Slot ids are the file names — an icon for `tool.clipboard` is
- * `icons/tool.clipboard.svg`. The list in `slots` is advisory; the import
- * walks the archive's entries and keeps every one whose name matches a slot
- * [IconSlots] knows, so a pack hand-assembled without a careful manifest still
- * works.
+ * `icons/tool.clipboard.svg`, or `.png` for a raster one (issue #504). The list
+ * in `slots` is advisory; the import walks the archive's entries and keeps every
+ * one whose name matches a slot [IconSlots] knows, so a pack hand-assembled
+ * without a careful manifest still works.
  *
  * **Entry names are never used as paths.** An entry is matched against the
- * known slot ids and then written to a name derived from *that id*, so neither
- * `../` in an entry name nor anything in the manifest can escape the pack
- * directory. Icons the app has no slot for are dropped, not stored.
+ * known slot ids and then written to a name derived from *that id* and from the
+ * format its own bytes turn out to be, so neither `../` in an entry name nor
+ * anything in the manifest can escape the pack directory, and a `.png` that is
+ * really an SVG is stored as what it is. Icons the app has no slot for are
+ * dropped, not stored.
  */
 object IconPackFile {
 
@@ -77,9 +79,17 @@ object IconPackFile {
     const val MANIFEST = "pack.json"
     private const val ICON_DIR = "icons/"
 
-    /** Zip-bomb guards: a full pack is ~90 small SVGs, so nothing legitimate is near these. */
+    /**
+     * Zip-bomb guards: a full pack is ~90 small files, so nothing legitimate is
+     * near these. The total is sized for a raster pack — ninety PNGs at the
+     * per-file cap would not fit in the old 8 MB, and a pack of photographs is
+     * not what either number is defending against.
+     */
     private const val MAX_ENTRIES = 400
-    private const val MAX_TOTAL_BYTES = 8L * 1024 * 1024
+    private const val MAX_TOTAL_BYTES = 24L * 1024 * 1024
+
+    /** The largest a single icon may be, whichever kind it is. */
+    private val MAX_ICON_BYTES = maxOf(SvgParser.MAX_SOURCE_BYTES, RasterIcons.MAX_SOURCE_BYTES)
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true; prettyPrint = true }
 
@@ -129,7 +139,10 @@ object IconPackFile {
             zip.closeEntry()
             for (slot in present) {
                 val file = fileFor(slot) ?: continue
-                zip.putNextEntry(ZipEntry(ICON_DIR + IconPackStore.fileNameFor(slot)))
+                // The extension the file actually has on disk, so a raster icon
+                // does not travel claiming to be an SVG.
+                val extension = file.name.substringAfterLast('.', "svg")
+                zip.putNextEntry(ZipEntry(ICON_DIR + IconPackStore.fileNameFor(slot, extension)))
                 file.inputStream().use { it.copyTo(zip) }
                 zip.closeEntry()
             }
@@ -180,7 +193,9 @@ object IconPackFile {
                             if (skipped.size < 8) skipped += name.substringAfterLast('/')
                             continue
                         }
-                        val target = File(staging, "e$count.svg")
+                        // `.bin`, because what the bytes turn out to be is not
+                        // known until they have all been read.
+                        val target = File(staging, "e$count.bin")
                         var written = 0L
                         target.outputStream().buffered().use { sink ->
                             val buffer = ByteArray(16 * 1024)
@@ -189,11 +204,11 @@ object IconPackFile {
                                 if (n <= 0) break
                                 written += n
                                 total += n
-                                if (written > SvgParser.MAX_SOURCE_BYTES || total > MAX_TOTAL_BYTES) break
+                                if (written > MAX_ICON_BYTES || total > MAX_TOTAL_BYTES) break
                                 sink.write(buffer, 0, n)
                             }
                         }
-                        if (written > SvgParser.MAX_SOURCE_BYTES || total > MAX_TOTAL_BYTES) {
+                        if (written > MAX_ICON_BYTES || total > MAX_TOTAL_BYTES) {
                             target.delete()
                             if (total > MAX_TOTAL_BYTES) break
                         } else {
@@ -229,13 +244,14 @@ object IconPackFile {
                 staged.keys.filter { it !in envelope.pack.slots }
             for (slot in order.distinct()) {
                 val source = staged[slot] ?: continue
-                val svg = runCatching { source.readText() }.getOrNull()
-                if (svg == null || SvgParser.parse(svg) == null) {
+                val bytes = runCatching { source.readBytes() }.getOrNull()
+                val extension = bytes?.let(::extensionOf)
+                if (extension == null) {
                     repairs += IconText(R.string.core_icons_repair_svg_unreadable, args = listOf(slot))
                     continue
                 }
                 val ok = runCatching {
-                    File(packDir, IconPackStore.fileNameFor(slot)).writeText(svg)
+                    File(packDir, IconPackStore.fileNameFor(slot, extension)).writeBytes(bytes)
                     true
                 }.getOrDefault(false)
                 if (!ok) {
@@ -267,13 +283,33 @@ object IconPackFile {
     /**
      * `icons/tool.clipboard.svg` → `tool.clipboard`, or null when the entry
      * names no slot this version knows. Accepts the file at the archive root
-     * too, since that is how a pack assembled by hand often ends up.
+     * too, since that is how a pack assembled by hand often ends up, and any of
+     * the raster extensions as well as `.svg`.
+     *
+     * The extension is only used to find where the slot id ends. What the file
+     * actually *is* comes from [extensionOf], reading the bytes.
      */
     fun slotForEntry(entryName: String): String? {
         val base = entryName.substringAfterLast('/').substringAfterLast('\\')
-        if (!base.endsWith(".svg", ignoreCase = true)) return null
-        val slot = base.dropLast(4).lowercase()
+        val extension = RasterIcons.FILE_EXTENSIONS
+            .firstOrNull { base.endsWith(".$it", ignoreCase = true) } ?: return null
+        val slot = base.dropLast(extension.length + 1).lowercase()
         if (!IconSlots.isWellFormed(slot)) return null
         return IconSlots.byId(slot)?.let { slot }
+    }
+
+    /**
+     * The extension [bytes] should be stored under, or null when they are not
+     * an icon this can draw.
+     *
+     * The same judgement [IconPackStore.setIcon] makes, and deliberately made
+     * from the content: an archive is a stranger's file, and its entry names
+     * are only ever a hint about which slot was meant.
+     */
+    private fun extensionOf(bytes: ByteArray): String? {
+        RasterIcons.read(bytes)?.let { return it.format.extension }
+        if (bytes.size > SvgParser.MAX_SOURCE_BYTES) return null
+        val text = runCatching { bytes.decodeToString() }.getOrNull() ?: return null
+        return if (SvgParser.parse(text) != null) "svg" else null
     }
 }

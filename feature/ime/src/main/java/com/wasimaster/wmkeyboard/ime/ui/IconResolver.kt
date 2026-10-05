@@ -1,5 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
@@ -16,26 +18,40 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import com.wasimaster.wmkeyboard.core.icons.IconArt
 import com.wasimaster.wmkeyboard.core.icons.IconOverrides
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
-import com.wasimaster.wmkeyboard.core.icons.SvgDoc
+import com.wasimaster.wmkeyboard.core.icons.RasterIcons
+import com.wasimaster.wmkeyboard.core.icons.SvgParser
 import com.wasimaster.wmkeyboard.core.settings.IconSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
- * A resolved icon: the vector to draw, and whether the caller's tint applies.
+ * A resolved icon: what to draw, and whether the caller's tint applies.
  *
  * A monochrome icon declared no colours of its own and is recoloured to match
  * the theme (and the per-tool accent colour). One that did is drawn as its
  * author painted it, which is why the tint has to be dropped for it rather
  * than flattening it to a single colour.
+ *
+ * Exactly one of [vector] and [bitmap] is set. A pack's icon may be either
+ * since issue #504 — a vector where the author drew one, a raster where they
+ * had a PNG, or where it came out of a Gboard theme, which is the only form
+ * those ship their key glyphs in.
  */
 @Immutable
-data class ResolvedIcon(val vector: ImageVector, val monochrome: Boolean)
+data class ResolvedIcon(
+    val vector: ImageVector? = null,
+    val bitmap: ImageBitmap? = null,
+    val monochrome: Boolean = true,
+)
 
 /**
  * Every icon the user has replaced, already parsed and ready to draw.
@@ -92,14 +108,16 @@ fun SlotIcon(
     brush: Brush? = null,
 ) {
     val resolved = LocalIconSet.current.resolve(slot)
-    val vector = resolved?.vector ?: IconDefaults.forSlot(slot) ?: return
     val recolourable = resolved == null || resolved.monochrome
-    Icon(
-        imageVector = vector,
-        contentDescription = contentDescription,
-        modifier = if (brush != null && recolourable) modifier.paintedWith(brush) else modifier,
-        tint = if (recolourable) tint else Color.Unspecified,
-    )
+    val painted = if (brush != null && recolourable) modifier.paintedWith(brush) else modifier
+    val shade = if (recolourable) tint else Color.Unspecified
+    val bitmap = resolved?.bitmap
+    if (bitmap != null) {
+        Icon(bitmap = bitmap, contentDescription = contentDescription, modifier = painted, tint = shade)
+        return
+    }
+    val vector = resolved?.vector ?: IconDefaults.forSlot(slot) ?: return
+    Icon(imageVector = vector, contentDescription = contentDescription, modifier = painted, tint = shade)
 }
 
 /**
@@ -152,22 +170,31 @@ fun buildIconSet(settings: IconSettings, store: IconPackStore): IconSet {
     IconDefaults.warm()
 
     val activePackId = settings.activePackId
-    if (activePackId.isEmpty() && settings.overrides.isEmpty()) return IconSet.Builtin
+    val themeIcons = settings.themeIcons
+    if (activePackId.isEmpty() && settings.overrides.isEmpty() && themeIcons.isEmpty()) {
+        return IconSet.Builtin
+    }
 
     val resolved = HashMap<String, ResolvedIcon>()
-    // The active pack first, so a per-slot override written afterwards wins.
+    // The theme's own icons are the weakest layer: they dress a board the user
+    // picked, but the icon pack and the per-slot picks are standing choices
+    // about the whole keyboard, and a theme must not quietly undo one.
+    for ((slot, path) in themeIcons) {
+        readIconFile(path)?.toResolvedIcon(slot)?.let { resolved[slot] = it }
+    }
+    // Then the active pack, so a per-slot override written afterwards wins.
     if (activePackId.isNotEmpty()) {
-        for ((slot, doc) in store.docs(activePackId)) {
-            resolved[slot] = doc.toResolvedIcon(slot) ?: continue
+        for ((slot, art) in store.art(activePackId)) {
+            resolved[slot] = art.toResolvedIcon(slot) ?: continue
         }
     }
     for ((slot, source) in settings.overrides) {
         val icon = when {
             source.startsWith(IconOverrides.BUILTIN_PREFIX) ->
                 BuiltinIcons.byName(source.removePrefix(IconOverrides.BUILTIN_PREFIX))
-                ?.let { ResolvedIcon(it, monochrome = true) }
+                ?.let { ResolvedIcon(vector = it, monochrome = true) }
             source.startsWith(IconOverrides.PACK_PREFIX) ->
-                store.docs(source.removePrefix(IconOverrides.PACK_PREFIX))[slot]
+                store.art(source.removePrefix(IconOverrides.PACK_PREFIX))[slot]
                 ?.toResolvedIcon(slot)
             else -> null
         }
@@ -180,15 +207,109 @@ fun buildIconSet(settings: IconSettings, store: IconPackStore): IconSet {
 }
 
 /**
- * Builds the drawable form of a parsed icon, or null when it cannot be built.
+ * A theme's icon file as art, or null when it has gone or is not one.
  *
- * The parser is lenient by design and the vector builder is not: a document it
- * accepted can still fail to become an [ImageVector] — unusable path data,
- * geometry that overflows, a shape Compose's builder rejects. Every one of
- * those is a stranger's file, and none of them is worth taking the keyboard
- * down for. A null here leaves the slot to [IconDefaults], so the failure shows
- * up as "this one icon didn't change" instead of a crash on the frame that
- * first drew it.
+ * A theme points at app-private files `withExtractedImages` wrote, so the path
+ * is ours; the caps still apply, because the theme itself may have come from a
+ * stranger. Bounded the same way a pack's own file is — see
+ * `IconPackStore.readArt`, which this deliberately mirrors.
  */
-private fun SvgDoc.toResolvedIcon(slot: String): ResolvedIcon? =
-    runCatching { ResolvedIcon(toImageVector(slot), monochrome) }.getOrNull()
+private fun readIconFile(path: String): IconArt? {
+    val file = File(path)
+    if (!file.isFile || file.length() > RasterIcons.MAX_SOURCE_BYTES) return null
+    val bytes = runCatching { file.readBytes() }.getOrNull() ?: return null
+    RasterIcons.read(bytes)?.let { return it }
+    if (bytes.size > SvgParser.MAX_SOURCE_BYTES) return null
+    return runCatching { SvgParser.parse(bytes.decodeToString()) }.getOrNull()?.let(IconArt::Vector)
+}
+
+/**
+ * Builds the drawable form of an icon, or null when it cannot be built.
+ *
+ * The readers are lenient by design and the drawing side is not: a document the
+ * SVG parser accepted can still fail to become an [ImageVector] — unusable path
+ * data, geometry that overflows, a shape Compose's builder rejects — and a
+ * raster whose header read fine can still fail to decode. Every one of those is
+ * a stranger's file, and none of them is worth taking the keyboard down for. A
+ * null here leaves the slot to [IconDefaults], so the failure shows up as "this
+ * one icon didn't change" instead of a crash on the frame that first drew it.
+ */
+private fun IconArt.toResolvedIcon(slot: String): ResolvedIcon? = when (this) {
+    is IconArt.Vector ->
+        runCatching { ResolvedIcon(vector = doc.toImageVector(slot), monochrome = doc.monochrome) }
+            .getOrNull()
+
+    is IconArt.Raster -> runCatching {
+        val bitmap = decodeIcon(bytes) ?: return null
+        // The pixel verdict, which the header could not give: a glyph drawn in
+        // one colour on transparency is a mask and takes the theme's tint, and
+        // anything with more than one colour in it was painted deliberately.
+        // Gboard themes are the reason this matters — three quarters of the
+        // glyphs in the Rboard repository are white-on-transparent, and drawn
+        // as authored they vanish on a light theme.
+        ResolvedIcon(bitmap = bitmap.asImageBitmap(), monochrome = mask ?: bitmap.looksLikeMask())
+    }.getOrNull()
+}
+
+/**
+ * Decodes an icon no larger than a key can show it.
+ *
+ * `inSampleSize` halves, so a glyph at the size themes actually ship (around
+ * 100 px) is decoded untouched and only something far larger is reduced. The
+ * cap is there because a pack holds ninety slots and an ARGB bitmap is four
+ * bytes a pixel: at 2048 px square that is 16 MB per icon, in a process whose
+ * whole budget the keyboard shares with the app (#476).
+ */
+private fun decodeIcon(bytes: ByteArray): Bitmap? {
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+    val longest = maxOf(bounds.outWidth, bounds.outHeight)
+    var sample = 1
+    while (longest / (sample * 2) >= MAX_ICON_PX) sample *= 2
+    val options = BitmapFactory.Options().apply {
+        inSampleSize = sample
+        inPreferredConfig = Bitmap.Config.ARGB_8888
+    }
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+}
+
+/**
+ * Whether every visible pixel is the same hue, so the image is a stencil of a
+ * glyph rather than a picture of one.
+ *
+ * Sampled on a stride rather than read whole: the answer only has to be right
+ * about artwork, and a grid of a few thousand pixels settles that. Anti-aliased
+ * edges are why the test is on the opaque-enough pixels and not all of them —
+ * a white glyph's fringe runs through every alpha, and its *colour* stays
+ * white.
+ */
+private fun Bitmap.looksLikeMask(): Boolean {
+    if (width <= 0 || height <= 0) return false
+    val stride = maxOf(1, maxOf(width, height) / MASK_SAMPLES)
+    var seen = -1
+    var y = 0
+    while (y < height) {
+        var x = 0
+        while (x < width) {
+            val pixel = getPixel(x, y)
+            if ((pixel ushr 24) and 0xFF >= MASK_MIN_ALPHA) {
+                val rgb = pixel and 0xFFFFFF
+                if (seen == -1) seen = rgb else if (seen != rgb) return false
+            }
+            x += stride
+        }
+        y += stride
+    }
+    // Nothing visible at all is not a mask; it is an empty file, and drawing it
+    // tinted would put a solid block of the theme's colour on the key.
+    return seen != -1
+}
+
+/** Longest edge an icon is decoded at; see [decodeIcon]. */
+private const val MAX_ICON_PX = 192
+
+/** Roughly how many samples across the longest edge [looksLikeMask] takes. */
+private const val MASK_SAMPLES = 48
+
+/** Below this an edge pixel's colour is the background showing through. */
+private const val MASK_MIN_ALPHA = 0x80

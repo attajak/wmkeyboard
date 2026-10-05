@@ -233,9 +233,19 @@ class IconPackFileTest {
     fun `slotForEntry only accepts known slots`() {
         assertEquals(IconSlots.KEY_SHIFT, IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.svg"))
         assertEquals(IconSlots.KEY_SHIFT, IconPackFile.slotForEntry("../../${IconSlots.KEY_SHIFT}.SVG"))
+        // Every raster extension too, since issue #504. The extension only
+        // says where the slot id ends — what the file *is* comes from its
+        // bytes, so a `.png` holding an SVG is still stored as an SVG.
+        for (extension in listOf("png", "webp", "jpg", "gif")) {
+            assertEquals(
+                IconSlots.KEY_SHIFT,
+                IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.$extension"),
+            )
+        }
         assertNull(IconPackFile.slotForEntry("icons/../../evil.svg"))
         assertNull(IconPackFile.slotForEntry("icons/unknown.svg"))
-        assertNull(IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.png"))
+        assertNull(IconPackFile.slotForEntry("icons/unknown.png"))
+        assertNull(IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.exe"))
         assertNull(IconPackFile.slotForEntry("pack.json"))
     }
 

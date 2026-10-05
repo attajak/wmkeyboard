@@ -1064,12 +1064,23 @@ fun ThemesScreen(
         repository.upsertCustomTheme(stored)
         // Saved, not switched to, for the reason the FlorisBoard import is:
         // a converted theme is the thing worth looking at first.
-        message = context.getString(
-            R.string.import_heli_done,
-            stored.name,
-            result.coloursUsed,
-            result.coloursRead,
-        )
+        message = buildString {
+            append(
+                context.getString(
+                    R.string.import_heli_done,
+                    stored.name,
+                    result.coloursUsed,
+                    result.coloursRead,
+                ),
+            )
+            // The same list the other two imports show. "N of M colours" on
+            // its own never said which M − N, and for the all-colours export
+            // it is nearly always the emoji board.
+            if (result.dropped.isNotEmpty()) {
+                append("\n\n").append(context.getString(R.string.import_repairs_pending_title))
+                for (line in result.dropped) append("\n• ").append(heliDroppedLine(context, line))
+            }
+        }
     }
     val heliLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()

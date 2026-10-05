@@ -219,7 +219,8 @@ Colours mostly land. These all have somewhere to go:
 - **The one-handed rail** beside the keyboard, which had no way to differ from the board before.
 - The floating keyboard's handle, which takes the toolbar's own colours here.
 - **The panels.** A clipboard notice's heading and body, the buttons inside a panel, the icon buttons on a panel's header, the rows of the language list, the emoji keys, and the clipboard's dialogs. None of these is a separate colour here, so each lands on the one the keyboard already draws it with.
-- A board background image and a key texture.
+- A board background image and a key texture, and how the texture is told to fit its key.
+- **Keys named the 0.5 way.** A newer stylesheet names a key by what it types (`key[output=\`@k3:action/enter\`]`) rather than by its key code, and FlorisBoard's own themes write both. A theme written only the newer way used to come across with no enter key colour at all.
 - **A font the theme ships with itself.** A `.flex` can carry its own typeface, declared as `@font \`ndot\`` and pointed at with `font-family`. Two of the six themes on the FlorisBoard addon store do exactly that, and for one of them the dot-matrix face *is* the theme. The file is installed as a font add-on of its own, under the name the stylesheet gave it, and the converted theme is set to use it. It then appears in <SettingsPath path="Appearance / Keyboard font" /> like any other installed font, and other themes can use it too.
 
 **Colours that follow the wallpaper are read too.** A FlorisBoard theme may name a Material You role, such as `dynamic-dark-color(surfaceContainerLow)`, instead of a fixed colour. On Android 12 and later the app resolves those against the same system palette FlorisBoard reads, so a theme written that way arrives with its colours rather than empty. Two of the most-used theme packs are written entirely this way.
@@ -256,7 +257,9 @@ A colour that keyboard worked out for itself stays worked out. Its export marks 
 
 Two colours land on single keys rather than on the board: the spacebar's own background and label, and the shift key's icon colour, all of which become per-key styles you can see and change in the theme editor.
 
-The result message counts what landed: *"The app saved Midnight and used 19 of its 19 colours."* A colour with nowhere to go here, such as the emoji search field's own text colour, is counted as read and not used.
+The emoji board's own colours land too. That keyboard's *all colours* mode states seven values this app used to read and then drop — the emoji search field's fill and text, the emoji glyphs, the category tabs, the remove-suggestion icon, the second row of suggestions and the enter key's long-press sheet. Each of them now reaches the surface this keyboard draws the same thing with.
+
+The result message counts what landed: *"The app saved Midnight and used 19 of its 19 colours."* That count is the roles that actually reached a field, not the roles the app recognises — two of its roles may answer the same question here, and only the first one present is read. Under the count is the same list of what did not come across that the other two imports show: colours the file left for the keyboard to work out, colours stated for parts this keyboard has not got, and text that had to be replaced to stay readable.
 
 A theme is saved rather than switched on, the same as a FlorisBoard one, so you get to look at it first. Day or night is decided from the board colour, since neither shape records it.
 
@@ -284,14 +287,16 @@ What lands:
 - The board colour, the bar above the keys, and the navigation bar band.
 - The keys, the pressed key, the function keys and the enter key, including the round badge Gboard draws behind the enter icon in a borderless theme. The space bar's own colour and label become a per-key style.
 - Key outlines and their width, the corner size (a large one becomes a pill, and an empty shape means no key face at all), and the lift under the keys.
-- Key text, the corner hint, the suggestion text and its dividers, the toolbar icons, the popup and its selected highlight, the glide trail and the accent.
+- Key text, the corner hint, the suggestion text and its dividers, the toolbar icons, the popup and its selected highlight, the glide trail and the accent. The face Gboard draws behind a suggestion becomes a chip colour here.
 - The background photo, and a separate landscape photo when the theme has one. A picture on the keys becomes a key texture.
+- **The theme's own key glyphs.** More than half the themes in the Rboard repository replace the delete, shift and enter pictures with PNGs of their own, and for those themes the glyphs *are* the theme. They arrive as part of the theme and draw on the keys the moment you wear it — delete, shift in each of its three states, the emoji key, the globe, and enter in each of its wordings. A glyph drawn in a single colour on a transparent background (three quarters of them are) follows your theme's colour the way a built-in icon does; one with real artwork in it draws as its author painted it. See [the note on icon packs](#theme-glyphs-and-icon-packs) below.
+- **How faded a part is.** Gboard sets an element's opacity separately from its colour, and nearly every theme uses it to quiet the function keys' glyphs. Read without it they came across at full strength, which was the most visible difference between a converted theme and the original.
 - Light or dark, from the theme's own flag.
 
 Gboard styles far more than this app has, so most of a theme's rules name things with nowhere to go here: GIF and sticker search, the translate bar, Gboard's access points. Those are counted, not listed. What a person would notice is named on the dialog instead:
 
 - **Compiled or missing style sheets.** Gboard can compile a sheet to a binary form (`.binarypb`) whose format is not published. The readable sheets are used; a theme that is compiled through and through is refused with a message that says so. Gboard's own stock themes are all of this kind.
-- **Key icons.** Many themes replace the shift, delete and enter pictures. This app draws its own icons.
+- **A glyph for a key this keyboard has not got.** The space bar's branding and Gboard's own logo key are the two of these; the rest of a theme's glyphs now come across. A theme whose glyphs all land is not told anything was dropped.
 - **The space inside each key.** Gboard pads each key separately; here one gap is set for the whole keyboard.
 - **Fonts.** A Gboard theme names a font and never carries the file.
 - **Shadow colours.** The lift comes across, the colour of the shadow does not.
@@ -299,7 +304,13 @@ Gboard styles far more than this app has, so most of a theme's rules name things
 - **Pictures on other parts** of the keyboard, such as the bar's tabs.
 - **Unreadable text.** A key, function-key or popup text colour too close to what sits behind it is replaced with a readable one, and the dialog says so. The enter icon and the space bar label are exempt from the line: most community themes draw the first as a picture and hide the second on purpose, so a colour there is often the key's own and was never meant to be read.
 
-A sheet that breaks the rules is read as far as it goes. A stray `;`, a nine-digit colour, a comment that never closes, a variable used before it is defined and a `metadata.json` with junk after it all happen in real themes, and none of them stops the import. Eight hex digits are read as Gboard writes them, alpha last (`#FFFFFF33` is a faint white).
+A sheet that breaks the rules is read as far as it goes. A stray `;`, a nine-digit colour, a comment that never closes, a variable used before it is defined, a picture named without its extension, and a `metadata.json` with junk after it all happen in real themes, and none of them stops the import. Eight hex digits are read as Gboard writes them, alpha last (`#FFFFFF33` is a faint white).
+
+### Theme glyphs and icon packs
+
+A theme's own key glyphs sit *underneath* your [icon pack](/themes/icon-packs/) and underneath any single icon you picked by hand. That ordering is deliberate: an icon pack is a standing choice about the whole keyboard, and a theme should not quietly undo one. So with no pack installed a Gboard theme's glyphs show straight away; with a pack installed the pack keeps the slots it fills, and the theme dresses nothing.
+
+They also travel with the theme rather than with the keyboard. Switch theme and the glyphs switch with it; export the theme and they go in the file. This is why importing a twenty-theme Rboard pack gives you twenty themes and not twenty icon packs.
 
 ## Details & edge cases
 

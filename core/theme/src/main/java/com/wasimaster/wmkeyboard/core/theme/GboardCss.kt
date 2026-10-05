@@ -218,8 +218,32 @@ internal class GboardStyle(val sheets: List<GboardSheet>) {
         return null
     }
 
-    fun color(element: Set<String>, property: String, state: String? = null): Long? =
-        gboardColor(value(element, property, state))
+    /**
+     * [property]'s colour on an element, with the element's own `alpha` folded
+     * in.
+     *
+     * Gboard's `alpha` is a multiplier on whatever the element draws, and it is
+     * how every theme in the repository fades a functional key's glyph — a
+     * third of the glyph rules in the Rboard corpus carry one, usually `0.3`,
+     * `0.4` or `0.75` beside a fully opaque `color`. Read without it, the
+     * modifier icons of nearly every community theme came across at full
+     * strength, which is the single most visible difference between a converted
+     * theme and the original.
+     *
+     * Only the same element's own alpha, and only in the same state: `alpha` is
+     * a declaration like any other and goes through the same cascade, so
+     * `.icon { alpha: 1 }` under `.icon.for-function-key { alpha: 0.3 }` fades
+     * the function glyph and nothing else.
+     */
+    fun color(element: Set<String>, property: String, state: String? = null): Long? {
+        val color = gboardColor(value(element, property, state)) ?: return null
+        val alpha = number(element, ALPHA, state) ?: return color
+        // Outside 0..1 the declaration is not a multiplier, whatever it is, and
+        // a theme's stated colour beats a number this cannot read.
+        if (!alpha.isFinite() || alpha < 0f || alpha > 1f) return color
+        val scaled = (((color ushr 24) and 0xFFL).toFloat() * alpha).roundToInt().toLong()
+        return (scaled.coerceIn(0L, 0xFFL) shl 24) or (color and 0xFFFFFFL)
+    }
 
     fun number(element: Set<String>, property: String, state: String? = null): Float? =
         value(element, property, state)?.let(::gboardNumber)
@@ -262,6 +286,9 @@ internal class GboardStyle(val sheets: List<GboardSheet>) {
 
     private companion object {
         const val MAX_DEPTH = 16
+
+        /** Gboard's opacity multiplier on an element; see [color]. */
+        const val ALPHA = "alpha"
     }
 }
 

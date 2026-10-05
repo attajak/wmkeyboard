@@ -15,7 +15,7 @@ import java.util.UUID
  * ```
  * iconpacks/
  * ├── packs.json          manifest
- * └── <packId>/<slotId>.svg
+ * └── <packId>/<slotId>.<svg|png|webp|jpg|gif>
  * ```
  *
  * Modelled on [com.wasimaster.wmkeyboard.core.stickers.StickerPackStore] and
@@ -23,9 +23,15 @@ import java.util.UUID
  * mutate packs, so there is one store per process and every mutator writes the
  * manifest immediately. [revision] is how the keyboard notices.
  *
- * The store also owns the *parsed* form. [docs] caches the [SvgDoc] for a pack
- * so the keyboard's render path is a map lookup — parsing an SVG per frame
- * would be visible as jank on every keystroke.
+ * A slot's extension is not recorded anywhere: the file is found by trying each
+ * of [RasterIcons.FILE_EXTENSIONS] against the slot's id, and the extension a
+ * file is *written* with comes from sniffing its bytes (see [setIcon]). So the
+ * manifest still holds nothing but slot ids, and nothing a pack says can name a
+ * path.
+ *
+ * The store also owns the *parsed* form. [art] caches each slot's [IconArt] for
+ * a pack so the keyboard's render path is a map lookup — parsing an SVG per
+ * frame would be visible as jank on every keystroke.
  */
 class IconPackStore(private var baseDir: File?) {
 
@@ -36,7 +42,7 @@ class IconPackStore(private var baseDir: File?) {
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
     /** packId → parsed icons, dropped whenever that pack changes. */
-    private val docCache = HashMap<String, Map<String, SvgDoc>>()
+    private val artCache = HashMap<String, Map<String, IconArt>>()
 
     private val _revision = MutableStateFlow(0)
 
@@ -99,8 +105,29 @@ class IconPackStore(private var baseDir: File?) {
         /** Staging directories an import is still filling; skipped by reconcile. */
         private const val STAGING_PREFIX = ".staging_"
 
-        /** File name for a slot. Derived, never taken from untrusted input. */
+        /**
+         * File name for a slot's vector icon. Derived, never taken from
+         * untrusted input.
+         *
+         * Still the plain `.svg` name, because that is what a pack held before
+         * raster icons existed and what [IconPackFile.write] names an entry
+         * after when the file on disk is one.
+         */
         fun fileNameFor(slot: String): String = "$slot.svg"
+
+        /** File name for a slot in a given extension; see [fileNameFor]. */
+        fun fileNameFor(slot: String, extension: String): String = "$slot.$extension"
+
+        /**
+         * Every file name a slot's icon could be stored under, vectors first.
+         *
+         * Vectors first because a slot can only have one file and the writer
+         * deletes the others, so the order only decides which wins if a pack
+         * directory is hand-assembled with two — and a vector is the better of
+         * the two to honour.
+         */
+        fun fileNamesFor(slot: String): List<String> =
+            RasterIcons.FILE_EXTENSIONS.map { fileNameFor(slot, it) }
     }
 
     // ---- reading -------------------------------------------------------
@@ -111,18 +138,28 @@ class IconPackStore(private var baseDir: File?) {
     @Synchronized
     fun pack(packId: String?): IconPack? = packs.firstOrNull { it.id == packId }
 
-    /** Absolute file backing [slot] in [packId], whether or not it exists. */
-    fun fileFor(packId: String, slot: String): File? =
-        baseDir?.let { File(File(it, packId), fileNameFor(slot)) }
+    /**
+     * Absolute file backing [slot] in [packId]: whichever extension it is
+     * actually stored in, or the `.svg` name when it is stored in none.
+     *
+     * The fallback keeps the old contract — "whether or not it exists" — which
+     * [IconPackFile.write] relies on to skip a slot whose file has gone.
+     */
+    fun fileFor(packId: String, slot: String): File? {
+        val dir = baseDir?.let { File(it, packId) } ?: return null
+        return fileNamesFor(slot).map { File(dir, it) }.firstOrNull { it.isFile }
+            ?: File(dir, fileNameFor(slot))
+    }
 
     /**
-     * Parsed icons for [packId], slot id → document. Blocking on the first call
-     * for a pack (it reads and parses every SVG); cached after that, so callers
-     * should warm it off the main thread the way the dictionaries are warmed.
+     * Parsed icons for [packId], slot id → vector document or raster bytes.
+     * Blocking on the first call for a pack (it reads and parses every file);
+     * cached after that, so callers should warm it off the main thread the way
+     * the dictionaries are warmed.
      */
     @Synchronized
-    fun docs(packId: String): Map<String, SvgDoc> {
-        docCache[packId]?.let { return it }
+    fun art(packId: String): Map<String, IconArt> {
+        artCache[packId]?.let { return it }
         val pack = pack(packId)
         val dir = baseDir?.let { File(it, packId) }
         val parsed = if (pack == null || dir == null) {
@@ -130,15 +167,33 @@ class IconPackStore(private var baseDir: File?) {
         } else {
             buildMap {
                 for (slot in pack.slots) {
-                    val file = File(dir, fileNameFor(slot))
-                    if (!file.isFile || file.length() > SvgParser.MAX_SOURCE_BYTES) continue
-                    val doc = runCatching { SvgParser.parse(file.readText()) }.getOrNull() ?: continue
-                    put(slot, doc)
+                    readArt(dir, slot)?.let { put(slot, it) }
                 }
             }
         }
-        docCache[packId] = parsed
+        artCache[packId] = parsed
         return parsed
+    }
+
+    /**
+     * One slot's file, read and identified.
+     *
+     * A raster is recognised from its bytes and an SVG from parsing it, in that
+     * order: the sniff is a dozen byte comparisons and cannot be fooled into
+     * reading megabytes, while handing a PNG to an XML parser is wasted work on
+     * every keyboard start.
+     */
+    private fun readArt(dir: File, slot: String): IconArt? {
+        for (name in fileNamesFor(slot)) {
+            val file = File(dir, name)
+            if (!file.isFile || file.length() > RasterIcons.MAX_SOURCE_BYTES) continue
+            val bytes = runCatching { file.readBytes() }.getOrNull() ?: continue
+            RasterIcons.read(bytes)?.let { return it }
+            if (bytes.size > SvgParser.MAX_SOURCE_BYTES) continue
+            runCatching { SvgParser.parse(bytes.decodeToString()) }.getOrNull()
+                ?.let { return IconArt.Vector(it) }
+        }
+        return null
     }
 
     // ---- packs ---------------------------------------------------------
@@ -180,7 +235,7 @@ class IconPackStore(private var baseDir: File?) {
         if (packs.size >= MAX_PACKS) return null
         val adopted = pack.copy(name = uniqueName(pack.name))
         packs.add(adopted)
-        docCache.remove(adopted.id)
+        artCache.remove(adopted.id)
         save()
         return adopted
     }
@@ -204,31 +259,41 @@ class IconPackStore(private var baseDir: File?) {
     fun deletePack(packId: String) {
         if (!packs.removeAll { it.id == packId }) return
         baseDir?.let { File(it, packId).deleteRecursively() }
-        docCache.remove(packId)
+        artCache.remove(packId)
         save()
     }
 
     // ---- icons ---------------------------------------------------------
 
+    /** Writes [svg] as [slot]'s icon in [packId]; see [setIcon]. */
+    @Synchronized
+    fun setIcon(packId: String, slot: String, svg: String): Boolean =
+        setIcon(packId, slot, svg.toByteArray())
+
     /**
-     * Writes [svg] as [slot]'s icon in [packId]. Returns false when the slot is
-     * unknown, the SVG is unusable, or the write failed — the caller reports
-     * that rather than silently registering a slot with no file behind it.
+     * Writes [bytes] as [slot]'s icon in [packId]. Returns false when the slot
+     * is unknown, the file is not an icon this can draw, or the write failed —
+     * the caller reports that rather than silently registering a slot with no
+     * file behind it.
+     *
+     * The extension comes from the bytes, not from whatever the file was called
+     * where it came from: a raster is sniffed, and anything else is tried as
+     * SVG. A slot that already had an icon in a *different* format has that
+     * file removed, so a slot never has two.
      */
     @Synchronized
-    fun setIcon(packId: String, slot: String, svg: String): Boolean {
+    fun setIcon(packId: String, slot: String, bytes: ByteArray): Boolean {
         val index = packs.indexOfFirst { it.id == packId }
         if (index < 0) return false
         if (!IconSlots.isWellFormed(slot) || IconSlots.byId(slot) == null) return false
-        if (svg.length > SvgParser.MAX_SOURCE_BYTES) return false
-        // Parse before writing: an SVG the renderer can't use is not worth
+        // Identify before writing: a file the renderer can't use is not worth
         // storing, and finding out now lets the picker say so.
-        if (SvgParser.parse(svg) == null) return false
+        val extension = identify(bytes) ?: return false
         val dir = packDir(packId) ?: return false
-        val fileName = fileNameFor(slot)
+        val fileName = fileNameFor(slot, extension)
         val written = runCatching {
             val part = File(dir, "$fileName.part")
-            part.writeText(svg)
+            part.writeBytes(bytes)
             val target = File(dir, fileName)
             if (!part.renameTo(target)) {
                 target.delete()
@@ -240,13 +305,33 @@ class IconPackStore(private var baseDir: File?) {
             true
         }.getOrDefault(false)
         if (!written) return false
+        // The slot's other formats, if the user is replacing an SVG with a PNG
+        // or the other way round. Left behind they would shadow the new file
+        // through [readArt] and come back in the next export.
+        for (name in fileNamesFor(slot)) {
+            if (name != fileName) File(dir, name).delete()
+        }
 
         if (slot !in packs[index].slots) {
             packs[index] = packs[index].copy(slots = packs[index].slots + slot)
         }
-        docCache.remove(packId)
+        artCache.remove(packId)
         save()
         return true
+    }
+
+    /**
+     * The extension [bytes] should be stored under, or null when they are not a
+     * usable icon.
+     *
+     * Rasters are sniffed first for the reason given in [readArt], and the SVG
+     * attempt is skipped for bytes that are plainly not text.
+     */
+    private fun identify(bytes: ByteArray): String? {
+        RasterIcons.read(bytes)?.let { return it.format.extension }
+        if (bytes.size > SvgParser.MAX_SOURCE_BYTES) return null
+        val text = runCatching { bytes.decodeToString() }.getOrNull() ?: return null
+        return if (SvgParser.parse(text) != null) "svg" else null
     }
 
     @Synchronized
@@ -254,8 +339,9 @@ class IconPackStore(private var baseDir: File?) {
         val index = packs.indexOfFirst { it.id == packId }
         if (index < 0 || slot !in packs[index].slots) return
         packs[index] = packs[index].copy(slots = packs[index].slots - slot)
-        fileFor(packId, slot)?.delete()
-        docCache.remove(packId)
+        val dir = baseDir?.let { File(it, packId) }
+        if (dir != null) for (name in fileNamesFor(slot)) File(dir, name).delete()
+        artCache.remove(packId)
         save()
     }
 
@@ -293,7 +379,7 @@ class IconPackStore(private var baseDir: File?) {
     @Synchronized
     fun reload() {
         packs.clear()
-        docCache.clear()
+        artCache.clear()
         val dir = baseDir ?: return
         val file = manifestFile() ?: return
         var readable = true
@@ -320,12 +406,17 @@ class IconPackStore(private var baseDir: File?) {
         for (i in packs.indices) {
             val pack = packs[i]
             val packDir = File(dir, pack.id)
-            val alive = pack.slots.filter { File(packDir, fileNameFor(it)).isFile }
+            val alive = pack.slots.filter { slot ->
+                fileNamesFor(slot).any { File(packDir, it).isFile }
+            }
             if (alive.size != pack.slots.size) {
                 packs[i] = pack.copy(slots = alive)
                 changed = true
             }
-            val referenced = alive.mapTo(HashSet()) { fileNameFor(it) }
+            // Every name a live slot could be stored under, not just the one it
+            // is: the sweep below deletes whatever is left, and a slot the user
+            // is mid-way through replacing must not lose its old file.
+            val referenced = alive.flatMapTo(HashSet()) { fileNamesFor(it) }
             packDir.listFiles()?.forEach { if (it.name !in referenced) it.deleteRecursively() }
         }
         val known = packs.mapTo(HashSet()) { it.id }
