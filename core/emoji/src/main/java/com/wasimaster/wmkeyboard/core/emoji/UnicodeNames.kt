@@ -53,6 +53,29 @@ object UnicodeNames {
     }
 
     /**
+     * Drops the index. The next search rebuilds it.
+     *
+     * Worth a release of its own because of what this costs to hold: every
+     * assigned character from [FIRST] to [LAST] that is not a control, format,
+     * separator, surrogate or private-use one — some fifty thousand of them,
+     * the CJK ideographs and the eleven thousand Hangul syllables included —
+     * each with a [Named] of its own, its own copy of the lowercased name, the
+     * character as a `String`, and a list of the name's words split out for
+     * matching. That is tens of megabytes, built the first time somebody
+     * searches the emoji panel for a character by name, and until this existed
+     * it stayed for the life of the process whether or not they ever searched
+     * again. A keyboard is the wrong process to keep a Unicode database in.
+     *
+     * Nothing else holds a [Named], so dropping the list is the whole of it.
+     * Safe against a search in flight: [search] reads [entries] once into a
+     * local, so a release mid-search leaves that search working on the list it
+     * already has and only costs the next one a rebuild.
+     */
+    fun release() {
+        index = null
+    }
+
+    /**
      * Characters whose name holds every word of [query], best first, at most
      * [limit]. A query word matches a name word whole or as its start, whole
      * counting for more; ties go to the shorter name, so "dash" puts EM DASH

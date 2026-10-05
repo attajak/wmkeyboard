@@ -6598,6 +6598,10 @@ open class WMKeyboardService : InputMethodService() {
         // Media thumbnails: a tenth of the heap, shared by every media panel,
         // so they only go when none of them is the one on screen.
         if (panel == null || panel == PanelMode.NONE) trimMediaImageMemory()
+        // The Unicode name index: tens of megabytes of character names, built
+        // the first time somebody searched the emoji panel for one. Rebuilt by
+        // the next such search.
+        if (panel != PanelMode.EMOJI) UnicodeNames.release()
         // Harper's rule sets, one per dialect, built on the first lint and
         // until now never freed — and the spell-checker service lints in this
         // process too, so a user who never opened the grammar tool could still
