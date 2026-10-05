@@ -46,7 +46,8 @@ class JianpinPackTest {
         assertTrue("上海" in PinyinComposer.candidates("sh", 100))
         // CC-CEDICT carries no 好的 entry, and two initials mean a phrase: the
         // pack's hundreds of h…d… words (回答, 活动, 后代…) lead, each covering
-        // the buffer. A lone 好 is what `h` on its own is for.
+        // the buffer. A lone 好 is what `h` on its own is for. Two units are
+        // deliberately left alone by the stitching below — see [MIN_STITCH_UNITS].
         val hd = PinyinComposer.candidates("hd")
         assertEquals(hd.toString(), 2, PinyinComposer.consumedFor("hd", hd.first()))
         assertTrue("好" in PinyinComposer.candidates("h"))
@@ -59,9 +60,27 @@ class JianpinPackTest {
         assertTrue("北京" in PinyinComposer.candidates("beij").take(3))
     }
 
+    /**
+     * The follow-up on #405 (#528): a run of initials whose answer is everyday
+     * pairings of single characters, which no CC-CEDICT entry covers. Before the
+     * stitched readings these were not low-ranked, they were absent — `wdmm`
+     * answered 味道妈妈 and nothing else that covered the buffer.
+     */
+    @Test
+    fun `everyday pairings are reachable from a run of initials`() {
+        val wdmm = PinyinComposer.candidates("wdmm")
+        assertTrue(wdmm.toString(), "我的妈妈" in wdmm.take(4))
+        assertEquals(4, PinyinComposer.consumedFor("wdmm", "我的妈妈"))
+        val wbxhni = PinyinComposer.candidates("wbxhni")
+        assertTrue(wbxhni.toString(), "我不喜欢你" in wbxhni.take(4))
+        assertEquals(6, PinyinComposer.consumedFor("wbxhni", "我不喜欢你"))
+        // Still untouched where one entry covers the whole abbreviation.
+        assertTrue("中国" in PinyinComposer.candidates("zhg").take(3))
+    }
+
     @Test
     fun `a run of initials decodes within the frame budget`() {
-        val buffers = listOf("hd", "zgrm", "wsygzgr", "nihaoz")
+        val buffers = listOf("hd", "zgrm", "wsygzgr", "nihaoz", "wdmm", "wbxhni")
         for (b in buffers) PinyinComposer.candidates(b) // warm-up
         for (b in buffers) {
             CjkDictionaries.invalidate() // drop the one-entry cache

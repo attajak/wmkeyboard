@@ -65,10 +65,22 @@ Three conventions borrowed from Sogou and Google Pinyin:
 - **The vowels `a`, `e` and `o` are both a syllable and an abbreviation.** `aq` finds 安全. Typed on their own, the exact reading leads: `a` offers 啊 before 爱 and 安.
 - **A phrase beats a stitch.** Where the dictionary has the word (我们, 中国), it comes first; single characters strung together to cover the same letters rank below it. So the strip leads with what the abbreviation was for, and the ranking the issue asks for falls out of that: an exact reading first, then a partly spelled one, then pure initials.
 
+### Everyday pairings
+
+A lot of Chinese isn't dictionary words. 我的 and 我不 are two single characters that happen to turn up together constantly, and no Chinese-English dictionary lists either as an entry — so for a while `wdmm` answered 味道妈妈 and the 我的妈妈 you meant appeared nowhere at all.
+
+From three abbreviated letters up, and only where no single entry already covers everything you typed, the strip now carries a few **stitched readings** behind the dictionary's own answer: whole-buffer ways of reading what you typed as a sequence of separate words. `wdmm` offers 我的妈妈, `wbxhni` offers 我不喜欢你, `wsyg` offers 我是一个. They sit behind the phrase, not in front of it, because the keyboard has no corpus to tell it which of the two you meant — and one tap settles that for good: a picked reading is learned whole, and leads next time.
+
+Learning now steers the search as well as the finished list. The characters you keep choosing for a reading are the ones paths get built out of, so the longer you type the more the stitched readings come out in your own words rather than the dictionary's. Short abbreviations are deliberately left alone: `bj` means 北京 and `zg` means 中国, and filling those strips with 不就 and 在个 would cost more than it gives.
+
+One honest limit. Between two characters the shipped CC-CEDICT pack rates almost identically — 和 at 970 against 好 at 941 — the keyboard has nothing to go on, so `hd` leads with 回答 and a two-letter abbreviation can't reach 好的 the way a desktop IME with a corpus bigram model does. Fixing that is a data problem, not a ranking one: the decoder already takes a word n-gram model, and the day a pack ships one these orderings come right.
+
 Two things follow from abbreviations being real units:
 
 - **Candidates appear from the first key.** `n` alone offers 你, 那, 能 and so on, and `nih` already leads with 你好, so a whole word is often on the strip before its second syllable is finished.
 - **A half-typed trailing syllable is guessed, not ignored.** With `nihaoz` on the strip, the top candidate covers all six letters (你好在, say), where before it would have covered 你好 and left the `z`. Keep typing and the guess resolves; tap 你好 and only those five letters commit, the `z` stays.
+
+### The rest of it
 
 Jianpin is a matching rule, not a second dictionary. Its index is the ~410-syllable inventory grouped by first letter, so a run of initials costs a handful of binary searches per syllable rather than a scan. It has no effect under a Double Pinyin scheme, where a syllable is always exactly two keys, and it's independent of Fuzzy Pinyin: a syllable typed in full can still be matched fuzzily, an abbreviated one is expanded, and the two combine. Picks are learned under the reading the abbreviation resolved to, so choosing 我们 for `wm` also promotes it for `women`.
 

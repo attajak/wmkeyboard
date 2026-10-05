@@ -236,6 +236,81 @@ class JianpinTest {
         for (c in wide) assertTrue(PinyinComposer.consumedFor("hd", c) in 1..2)
     }
 
+    // --- stitched whole-buffer readings (#405, the follow-up on #528) -------------
+
+    /**
+     * Where the complaint lives: 我的 and 我不 are not dictionary entries, they
+     * are everyday pairings of single characters, so a unigram decoder can only
+     * answer with whatever one word happens to read the same way.
+     */
+    private fun pairingPack() = pinyin(
+        "wo\t我\t996", "wo\t握\t500", "de\t的\t1000", "ma\t妈\t900",
+        "mama\t妈妈\t700", "weidao\t味道\t600",
+    )
+
+    private val pairingSyllables = setOf("wo", "de", "ma", "wei", "dao")
+
+    private fun pairingSetUp() {
+        PinyinSyllables.valid = pairingSyllables
+        Jianpin.index = Jianpin.build(pairingSyllables)
+        pairingPack()
+    }
+
+    @Test
+    fun `a pairing of single characters is offered under the phrase that outranks it`() {
+        pairingSetUp()
+        val cands = PinyinComposer.candidates("wdmm")
+        // Unchanged at the top: 味道妈妈 is two dictionary words to 我的妈妈's
+        // three, and a unigram charges a path per word, so it still leads.
+        assertEquals(cands.toString(), "味道妈妈", cands.first())
+        // What the issue asked for: the reading nobody could reach before,
+        // covering everything typed, one tap away (#405).
+        assertTrue(cands.toString(), "我的妈妈" in cands)
+        assertEquals(4, PinyinComposer.consumedFor("wdmm", "我的妈妈"))
+    }
+
+    @Test
+    fun `nothing is stitched where one word already covers the buffer`() {
+        everydayPack()
+        // `zgrm` reaches 中国人民 whole, so the abbreviation worked and the
+        // strip is not spent on three ways of spelling it out.
+        assertEquals("中国人民", PinyinComposer.candidates("zgrm").first())
+        // Same for a buffer the user spelled out: 你好 needs no help.
+        assertEquals("你好", PinyinComposer.candidates("nihao").first())
+    }
+
+    @Test
+    fun `a learned character steers the path, not only the finished list`() {
+        pairingSetUp()
+        val store = CjkUserHistory(null)
+        CjkLearning.store = store
+        fun order() = PinyinComposer.candidates("wdmm", 40).let {
+            it.indexOf("我的妈妈") to it.indexOf("握的妈妈")
+        }
+        val (mineFirst, hisFirst) = order()
+        assertTrue("$mineFirst $hisFirst", mineFirst in 0 until hisFirst)
+        // 握 was never picked for `wodemama`, only for `wo`, so [CjkLearning.rank]
+        // — which matches a whole candidate against a whole reading — cannot see
+        // this pick at all. Only the decoder, choosing which words to build a
+        // path out of, can.
+        repeat(5) { store.learn("pinyin", "wo", "握") }
+        val (mineAfter, hisAfter) = order()
+        assertTrue("$mineAfter $hisAfter", hisAfter in 0 until mineAfter)
+        assertEquals(0, store.countFor("pinyin", "wodemama", "握的妈妈"))
+    }
+
+    @Test
+    fun `a stitched reading picked once leads from then on`() {
+        pairingSetUp()
+        val store = CjkUserHistory(null)
+        CjkLearning.store = store
+        val index = PinyinComposer.candidates("wdmm").indexOf("我的妈妈")
+        assertTrue(index > 0)
+        PinyinComposer.learnChoice("wdmm", index)
+        assertEquals(1, store.countFor("pinyin", "wodemama", "我的妈妈"))
+        assertEquals("我的妈妈", PinyinComposer.candidates("wdmm").first())
+    }
+
     @Test
     fun `a pick is learned under the full reading`() {
         everydayPack()

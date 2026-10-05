@@ -55,6 +55,12 @@ object PinyinComposer : Composer {
      */
     private val PARTIAL_PENALTY = ln(0.15)
 
+    /** Stitched whole-buffer readings offered beyond the best path (#405). */
+    private const val STITCH_CANDIDATES = 3
+
+    /** Shortest abbreviated buffer worth stitching; see [stitchFor]. */
+    private const val MIN_STITCH_UNITS = 3
+
     /**
      * Buffer length, in syllables, past which the lattice gives way to plain
      * prefix lookup. Nobody types two dozen syllables without committing, and the
@@ -216,13 +222,41 @@ object PinyinComposer : Composer {
             return dict.candidates(buffer, LOOKUP_LIMIT)
                 .map { Cand(HanVariant.toTraditional(it), buffer.length, buffer) }
         }
-        val decoded = Lattice.decode(latticeInput(segs), dict, CjkDictionaries.ngrams, Lattice.Opts(limit = LOOKUP_LIMIT))
+        val opts = Lattice.Opts(limit = LOOKUP_LIMIT, stitch = stitchFor(segs))
+        val decoded = Lattice.decode(latticeInput(segs), dict, CjkDictionaries.ngrams, opts, ::learnedPicks)
             .map { Cand(HanVariant.toTraditional(it.text), it.consumed, it.reading) }
             // Converting to Traditional can merge two Simplified words onto one
             // form, so de-duplicate after the conversion rather than before it.
             .distinctBy { it.text }
         return CjkLearning.rank(NAMESPACE, decoded, { it.text }, { it.reading })
     }
+
+    /**
+     * How many stitched whole-buffer readings to offer for [segs]
+     * (see [Lattice.Opts.stitch]); 0 for a buffer that needs none.
+     *
+     * Only where the buffer is abbreviated, and only from three units up. A
+     * fully spelled-out buffer is already decoded correctly — offering 呢好 under
+     * 你好 for `nihao` would be noise — and at two units the alternatives are
+     * worth less than the strip slots they would cost: `bj` means 北京 and
+     * `zg` means 中国, and stitching two single characters there pushes those
+     * down for 不就 and 在个. From three units the dictionary runs out of whole
+     * phrases and stitching is the only way to reach 我的妈妈 or 我不喜欢你.
+     */
+    private fun stitchFor(segs: List<Seg>): Int {
+        if (segs.size < MIN_STITCH_UNITS) return 0
+        val jianpin = jianpin() ?: return 0
+        val valid = PinyinSyllables.valid
+        return if (segs.any { it.syllable !in valid && jianpin.expansions.containsKey(it.syllable) }) {
+            STITCH_CANDIDATES
+        } else {
+            0
+        }
+    }
+
+    /** What the user has picked for this reading, for the decoder's own ranking. */
+    private fun learnedPicks(reading: String): Map<String, Int>? =
+        CjkLearning.store?.picksFor(NAMESPACE, reading)
 
     /** A candidate word, the input chars (keys) it covers, and the reading behind it. */
     private data class Cand(val text: String, val consumed: Int, val reading: String)

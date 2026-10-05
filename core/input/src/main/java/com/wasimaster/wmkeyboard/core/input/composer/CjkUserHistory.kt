@@ -65,6 +65,19 @@ class CjkUserHistory(private val storageFile: File?) {
     fun countFor(namespace: String, reading: String, word: String): Int =
         picks[namespace]?.get(reading)?.get(word) ?: 0
 
+    /**
+     * Every word chosen for [reading] and how often, or null when none was.
+     *
+     * For the decoder, which scores thousands of words across a hundred-odd
+     * readings per keystroke and would otherwise take this lock once per word.
+     * The map is the live one rather than a copy — it is read inside a single
+     * decode, and copying it per span is the cost this exists to avoid — so a
+     * caller must not hold it past the call.
+     */
+    @Synchronized
+    fun picksFor(namespace: String, reading: String): Map<String, Int>? =
+        picks[namespace]?.get(reading)?.takeIf { it.isNotEmpty() }
+
     /** True when nothing has ever been learned for [namespace]. */
     @Synchronized
     fun isEmptyFor(namespace: String): Boolean = picks[namespace].isNullOrEmpty()

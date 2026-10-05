@@ -148,6 +148,36 @@ object Lattice {
         val charPerUnit: Boolean = true,
         /** Charged per character by which a word overruns its span's unit count. */
         val overLengthPenalty: Double = -1.2,
+        /**
+         * How many extra whole-buffer readings made of *several* words to offer
+         * beyond the single best path, best first (issue #405). 0 offers none,
+         * which is right for every buffer the user spelled out in full.
+         *
+         * These exist because the language model here is a unigram over words,
+         * and a unigram cannot compare readings that split the buffer
+         * differently: each extra word costs another `ln(totalFreq)`, so a
+         * two-word reading loses to any single dictionary word covering the same
+         * span by about fifteen nats whatever the words are. That is an artifact
+         * of the normaliser, not a judgement — and it is exactly the readings
+         * jianpin is for. `wdmm` is 我的妈妈, two of whose three words
+         * (我, 的) are not a dictionary entry together, so the decoder answered
+         * 味道妈妈 and the right reading appeared nowhere at all.
+         *
+         * So they are *offered*, not promoted: the unbiased best path keeps rank
+         * 0 and these follow it, found with [stitchBonus] standing in for the
+         * missing word-insertion term. Picking one teaches [CjkLearning] the
+         * whole reading, after which it leads on its own.
+         */
+        val stitch: Int = 0,
+        /**
+         * The per-word bonus the [stitch] search runs with — the word-insertion
+         * term a unigram model lacks. Measured against the shipped CC-CEDICT
+         * pack: at 8.0 `wdmm` finds 我的妈妈 and `wbxhni` finds 我不喜欢你,
+         * which is what the issue asked for; much above it the decoder stops
+         * preferring phrases at all (`wdmm` → 我的们们) and much below it finds
+         * nothing new. It never touches the ranking the strip leads with.
+         */
+        val stitchBonus: Double = 8.0,
     )
 
     /** A decoded candidate: what to commit, how much of the buffer it eats. */
@@ -168,6 +198,22 @@ object Lattice {
 
     /** Score of committing a unit as its raw reading. */
     private val UNK_LOG = ln(1e-9)
+
+    /**
+     * What a learned pick is worth to an edge, times `ln(1 + times chosen)`.
+     *
+     * [CjkLearning.rank] already puts a previously-chosen candidate first, but
+     * that is a sort of the finished list and so can only promote a reading the
+     * decoder already found. This is the same knowledge applied *inside* the
+     * search, where it decides which words a path is built out of: a user who
+     * keeps choosing 好 for `hao` gets 好的 out of `hd`, which no re-sort of the
+     * answers could have done because 好的 was never among them (issue #405).
+     *
+     * One pick is worth 0.69 and ten are worth 2.4 — enough to settle the near
+     * ties the pack's frequency column is full of (和 970 against 好 941), not
+     * enough to beat a genuinely commoner word.
+     */
+    private const val LEARN_WEIGHT = 1.0
 
     /** One dictionary word spanning `[from, to)` units, with its context-free score. */
     private class Edge(
@@ -206,10 +252,11 @@ object Lattice {
         dict: ConversionDictionary,
         ngrams: CjkNgrams,
         opts: Opts = Opts(),
+        learned: (reading: String) -> Map<String, Int>? = { null },
     ): List<Cand> {
         val n = input.units
         if (n == 0) return emptyList()
-        val edges = buildEdges(input, dict, opts)
+        val edges = buildEdges(input, dict, opts, learned)
         val suffix = suffixScores(edges, dict, ngrams, n)
         val out = LinkedHashMap<String, Cand>()
 
@@ -220,6 +267,26 @@ object Lattice {
             val text = best.joinToString("") { it.text }
             val reading = best.joinToString("") { it.reading }
             out[text] = Cand(text, input.boundaries[n], best.sumOf { it.emission }, reading)
+        }
+
+        // Then the readings that cover the buffer with several words, which the
+        // unigram model above cannot see (see [Opts.stitch]). Ahead of the first
+        // words rather than after them: they cover everything typed, which is
+        // what the buffer was abbreviated to ask for.
+        //
+        // Only when nothing in the dictionary covers it on its own. An
+        // abbreviation that reaches a real phrase — `zhg` for 中国, `zgrm` for
+        // 中国人民 — has already done its job, and stitched readings there are
+        // three slots of 知好国 in front of the answer.
+        val wholeBufferWord = edges[0].any { !it.fallback && it.to == n }
+        if (opts.stitch > 0 && !wholeBufferWord) {
+            for (path in stitchedPaths(edges, dict, ngrams, opts, n)) {
+                if (out.size >= opts.limit) break
+                val text = path.joinToString("") { it.text }
+                out.getOrPut(text) {
+                    Cand(text, input.boundaries[n], path.sumOf { it.emission }, path.joinToString("") { it.reading })
+                }
+            }
         }
 
         // Then every plausible first word, scored with the rest of the buffer
@@ -245,11 +312,12 @@ object Lattice {
         input: Input,
         dict: ConversionDictionary,
         opts: Opts,
+        learned: (String) -> Map<String, Int>?,
     ): Array<MutableList<Edge>> {
         val n = input.units
         val out = Array(n) { mutableListOf<Edge>() }
         for (i in 0 until n) {
-            if (!dict.isEmpty) extend(i, i, "", 0 until dict.size, 0.0, 0, input, dict, opts, out)
+            if (!dict.isEmpty) extend(i, i, "", 0 until dict.size, 0.0, 0, input, dict, opts, out, learned)
             val raw = input.options[i].firstOrNull().orEmpty()
             out[i].add(Edge(i, i + 1, raw, raw, UNK_LOG, 0, fallback = true))
         }
@@ -275,6 +343,7 @@ object Lattice {
         dict: ConversionDictionary,
         opts: Opts,
         out: Array<MutableList<Edge>>,
+        learned: (String) -> Map<String, Int>?,
     ) {
         if (unit >= input.units || syllables >= opts.maxWordUnits) return
         val options = input.options[unit]
@@ -290,8 +359,8 @@ object Lattice {
             val sub = dict.prefixRange(reading, range)
             if (sub.isEmpty()) continue
             val cost = penalty + input.penalties[unit].getOrElse(oi) { 0.0 }
-            emitSpan(start, unit + 1, reading, cost, syllables + 1, dict, opts, out)
-            extend(start, unit + 1, reading, sub, cost, syllables + 1, input, dict, opts, out)
+            emitSpan(start, unit + 1, reading, cost, syllables + 1, dict, opts, out, learned)
+            extend(start, unit + 1, reading, sub, cost, syllables + 1, input, dict, opts, out, learned)
         }
         // Two units read as one syllable (`z` + `h` → `zh…`): the edge lands
         // past both, but counts one syllable towards the word-length test.
@@ -302,8 +371,8 @@ object Lattice {
             val sub = dict.prefixRange(reading, range)
             if (sub.isEmpty()) continue
             val cost = penalty + input.mergedPenalties[unit].getOrElse(mi) { 0.0 }
-            emitSpan(start, unit + 2, reading, cost, syllables + 1, dict, opts, out)
-            extend(start, unit + 2, reading, sub, cost, syllables + 1, input, dict, opts, out)
+            emitSpan(start, unit + 2, reading, cost, syllables + 1, dict, opts, out, learned)
+            extend(start, unit + 2, reading, sub, cost, syllables + 1, input, dict, opts, out, learned)
         }
     }
 
@@ -318,6 +387,7 @@ object Lattice {
         dict: ConversionDictionary,
         opts: Opts,
         out: Array<MutableList<Edge>>,
+        learned: (String) -> Map<String, Int>?,
     ) {
         val rows = dict.rowsFor(reading)
         if (rows.isEmpty()) return
@@ -325,6 +395,10 @@ object Lattice {
         if (usable.isEmpty()) return
         val cap = maxOf(opts.spanCandCap, opts.limit)
         val kept = usable.sortedByDescending { dict.frequency(it) }.take(cap)
+        // Asked once per span, not once per row: this reaches a synchronized
+        // store, and a long buffer enumerates thousands of rows across a
+        // hundred-odd spans (see [LEARN_WEIGHT]).
+        val picks = learned(reading)
         val maxFreq = dict.frequency(kept.first()).coerceAtLeast(1)
         for (row in kept) {
             val freq = dict.frequency(row).coerceAtLeast(1)
@@ -332,7 +406,10 @@ object Lattice {
             if (opts.charPerUnit) {
                 emission += opts.overLengthPenalty * (dict.wordLength(row) - syllables)
             }
-            out[start].add(Edge(start, end, dict.word(row), reading, emission, dict.frequency(row)))
+            val word = dict.word(row)
+            val chosen = picks?.get(word) ?: 0
+            if (chosen > 0) emission += LEARN_WEIGHT * ln(1.0 + chosen)
+            out[start].add(Edge(start, end, word, reading, emission, dict.frequency(row)))
         }
     }
 
@@ -361,6 +438,86 @@ object Lattice {
             }
         }
         return best
+    }
+
+    /**
+     * Whole-buffer paths of two or more words, best first, searched with
+     * [Opts.stitchBonus] added per word (see [Opts.stitch]).
+     *
+     * A second search rather than a k-best read-off of [bestPath], because the
+     * two want different things. That one prunes to one path per distinct last
+     * word, which is exactly right for finding *the* best reading — only the
+     * last word conditions what follows, so anything worse behind the same word
+     * can never win. Here it is the opposite: 和的 and 好的 end in the same 的
+     * and differ only in the word before it, so that prune keeps one of them and
+     * throws the alternative the user was looking for away. This one carries the
+     * text so far in the key instead, which is what makes the list diverse.
+     */
+    private fun stitchedPaths(
+        edges: Array<MutableList<Edge>>,
+        dict: ConversionDictionary,
+        ngrams: CjkNgrams,
+        opts: Opts,
+        n: Int,
+    ): List<List<Edge>> {
+        val live = arrayOfNulls<MutableList<Path>>(n + 1)
+        live[0] = mutableListOf(Path(null, 0.0, null, null))
+        for (p in 0..n) {
+            val here = live[p] ?: continue
+            val bestByText = LinkedHashMap<String, Path>()
+            for (path in here) {
+                val key = textOf(path)
+                val cur = bestByText[key]
+                if (cur == null || path.score > cur.score) bestByText[key] = path
+            }
+            val pruned = bestByText.values.sortedByDescending { it.score }.take(opts.beam)
+            live[p] = pruned.toMutableList()
+            if (p == n) break
+            for (path in pruned) {
+                for (e in edges[p]) {
+                    if (e.fallback) continue
+                    val lm = ngrams.logProbability(path.word, e.text, e.freq, dict.totalFreq)
+                    val next = live[e.to] ?: mutableListOf<Path>().also { live[e.to] = it }
+                    next.add(Path(e.text, path.score + lm + e.emission + opts.stitchBonus, path, e))
+                }
+            }
+        }
+        val ends = live[n]?.sortedByDescending { it.score } ?: return emptyList()
+        val out = ArrayList<List<Edge>>(opts.stitch)
+        for (end in ends) {
+            val path = pathOf(end)
+            if (path.size < 2) continue
+            out.add(path)
+            if (out.size >= opts.stitch) break
+        }
+        return out
+    }
+
+    /** The text a path has committed so far — the key that keeps the list diverse. */
+    private fun textOf(path: Path): String {
+        val parts = ArrayList<String>()
+        var cur: Path? = path
+        while (cur != null) {
+            val word = cur.word ?: break
+            parts.add(word)
+            cur = cur.prev
+        }
+        if (parts.isEmpty()) return ""
+        parts.reverse()
+        return parts.joinToString("")
+    }
+
+    /** The edges [end] was built from, in order. */
+    private fun pathOf(end: Path): List<Edge> {
+        val path = ArrayList<Edge>()
+        var cur: Path? = end
+        while (cur != null) {
+            val edge = cur.edge ?: break
+            path.add(edge)
+            cur = cur.prev
+        }
+        path.reverse()
+        return path
     }
 
     /** Viterbi over the lattice, carrying the previous word so bigrams can apply. */
@@ -394,14 +551,6 @@ object Lattice {
             }
         }
         val end = live[n]?.maxByOrNull { it.score } ?: return emptyList()
-        val path = ArrayList<Edge>()
-        var cur: Path? = end
-        while (cur != null) {
-            val edge = cur.edge ?: break
-            path.add(edge)
-            cur = cur.prev
-        }
-        path.reverse()
-        return path
+        return pathOf(end)
     }
 }
