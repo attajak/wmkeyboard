@@ -56,7 +56,7 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiEntry
 import com.wasimaster.wmkeyboard.core.emoji.EmojiVariantIndex
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPhase
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPlayer
-import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
+import com.wasimaster.wmkeyboard.core.feedback.KeySoundTarget
 import com.wasimaster.wmkeyboard.core.input.composer.composerFor
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
@@ -237,17 +237,17 @@ fun ThemeKeyboardPreview(
     // that mean "no sound of my own", which is what [ThemeSpec.keySound]
     // exists to spell out.
     val themeSound = remember(theme.soundStyle, theme.soundCustomId) { theme.keySound() }
-    val haptic: (KeySoundRole) -> Unit = remember(view, hapticsOn) {
+    val haptic: (KeySoundTarget) -> Unit = remember(view, hapticsOn) {
         { _ -> if (hapticsOn) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) }
     }
-    val plainHaptic: () -> Unit = remember(haptic) { { haptic(KeySoundRole.DEFAULT) } }
-    val sound: (KeySoundRole, KeySoundPhase) -> Unit = remember(context, soundSettings, themeSound) {
-        { role, phase ->
+    val plainHaptic: () -> Unit = remember(haptic) { { haptic(KeySoundTarget.DEFAULT) } }
+    val sound: (KeySoundTarget, KeySoundPhase) -> Unit = remember(context, soundSettings, themeSound) {
+        { target, phase ->
             if (soundSettings.enabled && (phase == KeySoundPhase.PRESS || soundSettings.playRelease)) {
                 val style = themeSound?.first ?: soundSettings.style
                 val id = themeSound?.second
                     ?: if (style == KeySoundStyle.PACK) soundSettings.packId else soundSettings.customId
-                KeySoundPlayer.play(context, style, soundSettings.volume, id, role, phase)
+                KeySoundPlayer.play(context, style, soundSettings.volume, id, target, phase)
             }
         }
     }

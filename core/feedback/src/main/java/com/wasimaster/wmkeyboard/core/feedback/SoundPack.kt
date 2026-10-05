@@ -41,6 +41,41 @@ enum class KeySoundRole(val serialName: String) {
 }
 
 /**
+ * The key a sound is being played for: the [KeySoundRole] it belongs to and,
+ * when it types something, what it types.
+ *
+ * [key] is what a per-key pack addresses — an Animalese-style voice pack that
+ * says a different syllable for every letter rather than one click for the
+ * whole board (issue #520). It is the key's committed text, **already
+ * lowercased**, and empty for every key that commits none: shift, the layer
+ * switches, the globe. Those are furniture a pack reaches through [role].
+ *
+ * Lowercased by the producer rather than at the lookup because the lookup sits
+ * on the touch path of every keystroke, twice, while the producer runs once per
+ * key per layout — see `Key.keySoundTarget` in the ime layer.
+ */
+data class KeySoundTarget(
+    val role: KeySoundRole = KeySoundRole.DEFAULT,
+    val key: String = "",
+) {
+    companion object {
+        /** No role and no key: what every style other than a pack plays. */
+        val DEFAULT = KeySoundTarget()
+
+        private val BY_ROLE = KeySoundRole.entries.map { KeySoundTarget(it) }
+
+        /**
+         * The shared instance for a key with no text of its own.
+         *
+         * Pooled because this is allocated per key per layout and read per
+         * keystroke: a board is mostly letters, but the five role instances are
+         * asked for by every modifier on every layer switch.
+         */
+        fun of(role: KeySoundRole): KeySoundTarget = BY_ROLE[role.ordinal]
+    }
+}
+
+/**
  * Which half of a keystroke a sound belongs to.
  *
  * A mechanical keyboard makes two noises per key: the switch actuating under
@@ -88,6 +123,21 @@ data class SoundPackManifest(
     val press: List<String> = emptyList(),
     val release: List<String> = emptyList(),
     val roles: Map<String, SoundPackRoleSpec> = emptyMap(),
+    /**
+     * Samples for individual keys, keyed by the text the key types — `"a"`,
+     * `"1"`, `"."` — lowercased by the importer so a pack cannot ship `"A"`
+     * and `"a"` as two sets the keyboard then picks between by shift state.
+     *
+     * The multi-character case is deliberate: a key that commits `th` or a
+     * Bengali conjunct is one entry, which is what lets a voice pack speak
+     * syllables rather than letters.
+     *
+     * Beats [roles] where it is filled, per field and per phase, exactly as
+     * [roles] beats the top-level set. A key a pack does not name is unaffected,
+     * so a pack that fills three letters and nothing else is legal and sounds
+     * like itself on those three keys and like the default set everywhere.
+     */
+    val keys: Map<String, SoundPackRoleSpec> = emptyMap(),
 ) {
 
     /** The samples [role] should play on key-down, falling back to the default set. */
@@ -104,6 +154,45 @@ data class SoundPackManifest(
         KeySoundPhase.RELEASE -> releaseFor(role)
     }
 
+    /** The per-key set [target] names, or null when the pack has none for it. */
+    fun keySpecFor(target: KeySoundTarget): SoundPackRoleSpec? =
+        if (keys.isEmpty() || target.key.isEmpty()) null else keys[target.key]
+
+    /**
+     * The samples a *per-key* set gives [target], or empty when the pack
+     * addresses that key only through its role.
+     *
+     * Kept separate from [samplesFor] because the player needs to know which
+     * list it got: a per-key list carries its own "never the same variant
+     * twice" cursor, while a role's cursor is shared by every key in the role.
+     */
+    fun keySamplesFor(target: KeySoundTarget, phase: KeySoundPhase): List<String> {
+        val spec = keySpecFor(target) ?: return emptyList()
+        return when (phase) {
+            KeySoundPhase.PRESS -> spec.press
+            KeySoundPhase.RELEASE -> spec.release
+        }
+    }
+
+    /** [target]'s samples for one half of a keystroke: per-key first, then role. */
+    fun samplesFor(target: KeySoundTarget, phase: KeySoundPhase): List<String> =
+        keySamplesFor(target, phase).ifEmpty { samplesFor(target.role, phase) }
+
+    /**
+     * Every sample the pack can play, in the order worth decoding them: the
+     * board-wide set, then the roles, then the per-key sets.
+     *
+     * The order is the point. A large per-key pack can be bigger than the
+     * player will hold resident, and when it is, the samples that get the
+     * remaining budget should be the ones most keys fall back to.
+     */
+    fun allSamples(): List<String> = buildList {
+        addAll(press)
+        addAll(release)
+        roles.values.forEach { addAll(it.press); addAll(it.release) }
+        keys.values.forEach { addAll(it.press); addAll(it.release) }
+    }.distinct()
+
     /**
      * Whether any key on the board would make a sound when it comes back up.
      *
@@ -111,7 +200,9 @@ data class SoundPackManifest(
      * falls back to the pack's top-level `release`.
      */
     fun hasRelease(): Boolean =
-        release.isNotEmpty() || roles.values.any { it.release.isNotEmpty() }
+        release.isNotEmpty() ||
+            roles.values.any { it.release.isNotEmpty() } ||
+            keys.values.any { it.release.isNotEmpty() }
 
     /**
      * [role]'s volume multiplier.
@@ -122,6 +213,11 @@ data class SoundPackManifest(
      */
     fun gainFor(role: KeySoundRole): Float =
         (roles[role.serialName]?.gain ?: gain).coerceIn(0f, 1f)
+
+    /** [target]'s volume multiplier: its own key's gain, then its role's, then the pack's. */
+    fun gainFor(target: KeySoundTarget): Float =
+        (keySpecFor(target)?.gain ?: roles[target.role.serialName]?.gain ?: gain)
+            .coerceIn(0f, 1f)
 
     /** The roles this pack actually overrides, for the UI to show what it covers. */
     fun filledRoles(): List<KeySoundRole> =
@@ -191,26 +287,50 @@ object SoundPackFile {
     )
 
     /**
-     * Every sample is decoded into the `SoundPool` when the pack is selected,
-     * so the ceiling is memory rather than disk. Ten variants across five roles
-     * would be fifty; sixty-four leaves room without inviting a pack that
-     * decodes for a second on first press.
+     * How many distinct audio files one pack may store.
+     *
+     * Was sixty-four, when a pack was a board-wide set plus four roles and the
+     * player decoded all of it the moment the pack was selected. A per-key pack
+     * is a different shape — one or more recordings for every letter, digit and
+     * punctuation mark a layout can type — and sixty-four cannot hold the
+     * Latin alphabet with variants, let alone a Bengali one (issue #520).
+     *
+     * Raising a *count* is safe because it was never the count that bounded
+     * memory — [MAX_TOTAL_BYTES] is, and it is unchanged. Sixteen megabytes
+     * holds five hundred keystroke-length recordings with room to spare, and a
+     * pack that genuinely wants five hundred four-megabyte files is refused by
+     * the byte cap as it always was.
      */
-    const val MAX_SAMPLES = 64
+    const val MAX_SAMPLES = 512
 
-    /** Per list, so one role cannot eat the whole [MAX_SAMPLES] budget. */
+    /** Per list, so one key or role cannot eat the whole [MAX_SAMPLES] budget. */
     const val MAX_VARIANTS = 32
+
+    /**
+     * How many individual keys a pack may address.
+     *
+     * Generous on purpose: 256 covers the Latin alphabet cased both ways with
+     * digits and punctuation, and the fifty-odd letters of an Indic script with
+     * room for the conjuncts a key can commit. The sample budget binds first in
+     * practice — a pack naming 256 keys with one recording each is already at
+     * half of [MAX_SAMPLES].
+     */
+    const val MAX_KEYS = 256
 
     /** Same ceiling one standalone key sound gets. */
     const val MAX_SAMPLE_BYTES = SoundStore.MAX_BYTES
 
     /**
-     * Zip-bomb guard. Counted from bytes actually read, never from the sizes
-     * the archive's own headers declare.
+     * Zip-bomb guard, and the pack format's real memory ceiling: every sample
+     * of the selected pack is decoded into the `SoundPool` at once, so this is
+     * what [MAX_SAMPLES] is counted against rather than the other way round.
+     *
+     * Counted from bytes actually read, never from the sizes the archive's own
+     * headers declare.
      */
     const val MAX_TOTAL_BYTES = 16L * 1024 * 1024
 
-    private const val MAX_ENTRIES = 128
+    private const val MAX_ENTRIES = 1024
     private const val MAX_MANIFEST_BYTES = 256 * 1024
 
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
@@ -270,9 +390,6 @@ object SoundPackFile {
             }
 
         val press = resolve(declared.press)
-        if (press.isEmpty()) {
-            return SoundPackImportResult.Rejected(R.string.core_feedback_pack_reject_no_samples)
-        }
         val release = resolve(declared.release)
         val roles = declared.roles.mapNotNull { (key, spec) ->
             // A role this build does not know is dropped rather than kept: it
@@ -286,6 +403,28 @@ object SoundPackFile {
         }.toMap()
 
         val id = store.freeId(now)
+        // Per-key sets last, so that a pack over the sample budget loses the
+        // keys it named rather than the board-wide set every other key needs.
+        val perKey = declared.keys.entries.take(MAX_KEYS).mapNotNull { (token, spec) ->
+            // Lowercased here, once, rather than at every lookup: the player
+            // probes this map twice per keystroke.
+            val name = token.lowercase()
+            if (name.isEmpty()) return@mapNotNull null
+            val keyPress = resolve(spec.press)
+            val keyRelease = resolve(spec.release)
+            if (keyPress.isEmpty() && keyRelease.isEmpty() && spec.gain == null) return@mapNotNull null
+            name to SoundPackRoleSpec(keyPress, keyRelease, spec.gain?.coerceIn(0f, 1f))
+        }.toMap()
+
+        // Checked here rather than straight after [press], because a pack is
+        // allowed to be per-key only: a voice pack that names every letter and
+        // no board-wide set is a pack, and the keys it did not name fall back
+        // the way a missing pack does. What is refused is a pack with no
+        // playable key-down anywhere — that reads as a broken keyboard.
+        if (press.isEmpty() && perKey.values.none { it.press.isNotEmpty() }) {
+            return SoundPackImportResult.Rejected(R.string.core_feedback_pack_reject_no_samples)
+        }
+
         val normalised = SoundPackManifest(
             format = FORMAT,
             version = VERSION,
@@ -298,6 +437,7 @@ object SoundPackFile {
             press = press,
             release = release,
             roles = roles,
+            keys = perKey,
         )
 
         val staged = store.stagingDir() ?: return SoundPackImportResult.Failed
@@ -318,9 +458,16 @@ object SoundPackFile {
                 name = normalised.name,
                 author = normalised.author,
                 version = version.trim().ifBlank { normalised.packVersion },
-                variantCount = press.size,
+                // Recordings per key press, which for a per-key-only pack is
+                // the longest set it named rather than zero: the row would
+                // otherwise read "0 recordings" for a pack that plainly has
+                // some.
+                variantCount = press.size.takeIf { it > 0 }
+                    ?: perKey.values.maxOfOrNull { it.press.size }
+                    ?: 0,
                 sampleCount = bytes.size,
                 roles = normalised.filledRoles().map { it.serialName },
+                keyCount = perKey.size,
                 hasRelease = normalised.hasRelease(),
                 addedAt = now,
             ),

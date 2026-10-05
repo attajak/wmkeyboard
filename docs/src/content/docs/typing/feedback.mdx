@@ -102,7 +102,7 @@ You can grow that library two ways: import a file directly here, or install a ke
 
 A **sound pack** is a key sound with more than one recording in it. Pick the Sound pack chip to reveal your installed packs and an **Import a sound pack (.wmsoundpack)** button.
 
-Why it exists: a single file can't sound like a real keyboard, because a real keyboard never makes the same noise twice. A pack holds up to 32 recordings of the same board, and the keyboard picks one for each key press, so a run of the same letter doesn't come out as a loop. The row under each pack's name tells you how many recordings it holds.
+Why it exists: a single file can't sound like a real keyboard, because a real keyboard never makes the same noise twice. A pack holds up to 32 recordings per key, and the keyboard picks one for each key press, so a run of the same letter doesn't come out as a loop. The row under each pack's name tells you how many recordings it holds.
 
 The same recording never plays twice in a row, which is a small but audible difference from how [monkeytype](https://monkeytype.com) does it. Monkeytype picks uniformly across the whole list, so on a three-recording set roughly every third keystroke repeats the previous one, which is exactly what the recordings are there to avoid.
 
@@ -119,6 +119,40 @@ Tap a pack in the list and it plays a whole keystroke (press, a short hold, rele
 A pack can also carry different recordings for different kinds of key: the <KeyCap>Space</KeyCap> bar, <KeyCap>Enter</KeyCap>, <KeyCap>⌫</KeyCap>, and the modifier row (<KeyCap>Shift</KeyCap>, <KeyCap>?123</KeyCap>, the globe and so on). On a real board those genuinely do sound different, mostly because of the stabilizers under the longer keys.
 
 Most packs don't fill those slots and don't need to. When a pack does, its row says so: "10 recordings • separate sounds for space, enter". A slot a pack leaves empty falls back to the pack's main recordings, so nothing ever goes silent. This is independent of the key-up recordings above. A spacebar recorded on its own still uses the pack's ordinary key-up sound unless it brought one.
+
+### A sound for one key
+
+A pack can go further and name individual keys, so <KeyCap>a</KeyCap> and
+<KeyCap>b</KeyCap> make different noises. That is what a voice pack is: a
+syllable per letter instead of a click for the whole board, in the spirit of
+[Animalese typing](https://github.com/joshxviii/animalese-typing-desktop).
+
+Packs that do it say so on their row ("26 recordings • its own sound for 26
+keys"). Keys the pack didn't name are unaffected and keep using its main
+recordings, so a pack can cover five letters and leave the rest of the board
+alone.
+
+A pack addresses a key by **what it types**, not by where it sits, so one
+recording of `a` covers that letter on every layout that has it. Uppercase and
+lowercase share the one recording. Keys that type nothing — <KeyCap>Shift</KeyCap>,
+the layer switches, the globe — can't be named individually; they're covered by
+the modifier slot above.
+
+Publishing one is [Per-key sounds](/development/addon-repos/sound-packs/#per-key-sounds).
+
+### A different pack per layout
+
+<SettingsPath path="Key press / Key press sound / Sound pack / A pack per layout" />
+
+With two or more layouts enabled and at least one pack installed, a list of your
+layouts appears under the packs. Tap one to give it its own pack: a voice pack on
+the layout you chat in, switch recordings on the one you write code in.
+
+Layouts you leave alone say "Same as the pack above" and follow the pack
+selected in the list, so this is a list of exceptions rather than a second place
+to keep in step. **Clear every layout's pack** drops the lot. A layout's pack is
+decoded when you switch to it, so the first key of the new layout already sounds
+like it.
 
 ### Where packs come from
 
@@ -168,6 +202,8 @@ No onboarding answer switches it on, not even "Show me everything", so if you fi
 | Key sound | Off |
 | Sound style | Click |
 | Sound volume | 50% |
+| Key release sound (packs that have it) | On |
+| A pack per layout | None — every layout follows the selected pack |
 
 Open the **Key press** tile on the settings home grid, or search "Key press" in settings search. For the field-by-field breakdown, including the key popup and the long-press editing shortcuts that share this screen, see [Key press settings](/reference/settings/keypress/).
 

@@ -23,6 +23,13 @@ data class InstalledSoundPack(
     /** Serial names of the roles this pack overrides; empty is the common case. */
     val roles: List<String> = emptyList(),
     /**
+     * How many individual keys the pack names in [SoundPackManifest.keys], for
+     * the picker to say so. Zero for every pack installed before per-key sets
+     * existed, which is correct rather than unknown: they could not have had
+     * any.
+     */
+    val keyCount: Int = 0,
+    /**
      * Whether the pack also sounds on key-up.
      *
      * Nullable, and null means "written before this field existed" rather than
@@ -101,10 +108,10 @@ class SoundPackStore(private var baseDir: File?) {
         const val SAMPLES_DIR = "sounds"
 
         /**
-         * Lower than [SoundStore.MAX_SOUNDS] because a pack is up to sixty-four
-         * files rather than one, and because a list of twenty switch recordings
-         * is already past the point where anyone can tell them apart in a
-         * picker.
+         * Lower than [SoundStore.MAX_SOUNDS] because a pack is many files
+         * rather than one — up to [SoundPackFile.MAX_SAMPLES] of them — and
+         * because a list of twenty switch recordings is already past the point
+         * where anyone can tell them apart in a picker.
          */
         const val MAX_PACKS = 20
 

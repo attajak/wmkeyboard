@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
+import com.wasimaster.wmkeyboard.core.feedback.KeySoundTarget
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 
@@ -40,4 +41,27 @@ fun Key.keySoundRole(): KeySoundRole = when (action) {
     // newer build introduces all land on the default set. A role guessed wrong
     // is worse than the default: it plays a spacebar sample under a letter.
     else -> KeySoundRole.DEFAULT
+}
+
+/**
+ * What a sound pack is being asked to play for this key: its role, plus the
+ * text it types so a pack that recorded individual keys can find it
+ * (issue #520).
+ *
+ * Only a [KeyAction.Text] key carries a token. Everything else either commits
+ * nothing or commits something a pack has no way to have recorded — a layer
+ * switch, a tool, a raw key event — and all of those are already addressable by
+ * role, which is the grouping a pack can realistically fill.
+ *
+ * Lowercased here, once per key per layout, rather than at the lookup: the
+ * lookup runs on the touch path twice per keystroke. A pack's own key names are
+ * lowercased at import for the same reason, so `A` under a held shift and `a`
+ * resolve to the one recording — a pack wanting two should name two keys, which
+ * the keyboard cannot express and no pack has asked for.
+ */
+fun Key.keySoundTarget(): KeySoundTarget {
+    val role = keySoundRole()
+    if (action != KeyAction.Text) return KeySoundTarget.of(role)
+    val token = (output ?: label).lowercase()
+    return if (token.isEmpty()) KeySoundTarget.of(role) else KeySoundTarget(role, token)
 }

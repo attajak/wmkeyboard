@@ -115,6 +115,17 @@
     <string name="hardware_sound_pack_release_subtitle">Play the second sound when you lift your finger, the way a mechanical keyboard clicks twice.</string>
     <string name="hardware_sound_pack_not_a_pack_error">This file is not a sound pack.</string>
     <string name="hardware_sound_pack_read_error">The app cannot read this sound pack.</string>
+    <!-- %1$s is the recordings line above, for example "10 recordings". %2$d is how many individual keys the pack recorded. -->
+    <plurals name="hardware_sound_pack_with_keys">
+        <item quantity="one">%1$s &#8226; its own sound for %2$d key</item>
+        <item quantity="other">%1$s &#8226; its own sound for %2$d keys</item>
+    </plurals>
+    <string name="hardware_sound_pack_per_layout_title">A pack per layout</string>
+    <string name="hardware_sound_pack_per_layout_caption">Give a layout its own pack. Layouts you leave alone use the pack selected above.</string>
+    <string name="hardware_sound_pack_per_layout_default">Same as the pack above</string>
+    <!-- Title of the dialog that picks one layout's pack. %1$s is the layout name, for example "Bengali (Avro)". -->
+    <string name="hardware_sound_pack_per_layout_pick">Sound pack for %1$s</string>
+    <string name="hardware_sound_pack_per_layout_clear">Clear every layout's pack</string>
     <!-- %1$d is the largest number of packs the app keeps, for example 20. -->
     <plurals name="hardware_sound_pack_limit_error">
         <item quantity="one">You already have %1$d sound pack. Delete one first.</item>

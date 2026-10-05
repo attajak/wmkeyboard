@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import com.wasimaster.wmkeyboard.core.addons.AddonType
@@ -58,6 +59,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeySoundStyle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.core.settings.DEFAULT_LONG_PRESS_LETTERS
+import com.wasimaster.wmkeyboard.core.layout.resolveLayoutName
 import com.wasimaster.wmkeyboard.core.settings.KeySoundSettings
 import com.wasimaster.wmkeyboard.core.settings.LongPressLetterActions
 import com.wasimaster.wmkeyboard.core.theme.popupOnKeyOrNull
@@ -67,6 +69,7 @@ import com.wasimaster.wmkeyboard.core.feedback.SoundFile
 import com.wasimaster.wmkeyboard.core.feedback.SoundImportResult
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackFile
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackImportResult
+import com.wasimaster.wmkeyboard.core.feedback.InstalledSoundPack
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackStore
 import com.wasimaster.wmkeyboard.core.feedback.SoundStore
 import kotlinx.coroutines.launch
@@ -516,7 +519,7 @@ private fun InstalledSoundPackSection(
                             pack.variantCount,
                             pack.variantCount,
                         )
-                        val counts = if (roles.isEmpty()) {
+                        val withRoles = if (roles.isEmpty()) {
                             variants
                         } else {
                             stringResource(
@@ -524,6 +527,19 @@ private fun InstalledSoundPackSection(
                                 variants,
                                 roles.joinToString(", "),
                             )
+                        }
+                        // How many keys the pack recorded individually, which
+                        // is the one thing that tells a voice pack apart from a
+                        // switch pack at a glance.
+                        val counts = if (pack.keyCount > 0) {
+                            pluralStringResource(
+                                R.plurals.hardware_sound_pack_with_keys,
+                                pack.keyCount,
+                                withRoles,
+                                pack.keyCount,
+                            )
+                        } else {
+                            withRoles
                         }
                         // Appended rather than given its own line: it is one
                         // more fact about the pack, and the row already has a
@@ -581,6 +597,7 @@ private fun InstalledSoundPackSection(
                 )
             }
         }
+        PerLayoutSoundPackSection(repository, settings, packs)
         AddonStoreRow(AddonType.SoundPack, onNavigate)
         OutlinedButton(
             onClick = { importLauncher.launch(SoundPackFile.IMPORT_MIME_TYPES) },
@@ -588,6 +605,111 @@ private fun InstalledSoundPackSection(
         ) { Text(stringResource(R.string.hardware_sound_pack_import_action)) }
     }
 }
+
+/**
+ * "A pack per layout": one row per enabled layout, naming the pack it plays
+ * (issue #520).
+ *
+ * Drawn only when there is a choice to make — two layouts and at least one
+ * installed pack. For everyone else it is a list of rows that can only say
+ * "same as above", which is a worse way of saying nothing.
+ *
+ * A layout with no override is not stored, so this section is a list of
+ * exceptions rather than a second copy of the selection above: the pack picked
+ * on the list above keeps meaning "everywhere I did not say otherwise".
+ */
+@Composable
+private fun PerLayoutSoundPackSection(
+    repository: SettingsRepository,
+    settings: LiveSettings,
+    packs: List<InstalledSoundPack>,
+) {
+    val layoutIds = settings.watch { it.enabledLayoutIds }
+    if (packs.isEmpty() || layoutIds.size < 2) return
+
+    val scope = rememberCoroutineScope()
+    val customLayouts = settings.watch { it.customLayouts }
+    val overrides = settings.watch { it.sound.packByLayout }
+    // The layout whose pack is being picked; null when no dialog is up.
+    var picking by remember { mutableStateOf<String?>(null) }
+
+    CaptionText(stringResource(R.string.hardware_sound_pack_per_layout_title))
+    CaptionText(stringResource(R.string.hardware_sound_pack_per_layout_caption))
+    for (layoutId in layoutIds) {
+        val chosen = overrides[layoutId]?.let { id -> packs.firstOrNull { it.id == id } }
+        WmRow(
+            title = resolveLayoutName(customLayouts, layoutId),
+            subtitle = chosen?.name
+                ?: stringResource(R.string.hardware_sound_pack_per_layout_default),
+            onClick = { picking = layoutId },
+        )
+    }
+    if (overrides.isNotEmpty()) {
+        TextButton(
+            onClick = { scope.launch { repository.clearKeySoundPacksByLayout() } },
+            modifier = Modifier.padding(horizontal = 8.dp),
+        ) { Text(stringResource(R.string.hardware_sound_pack_per_layout_clear)) }
+    }
+
+    picking?.let { layoutId ->
+        val current = overrides[layoutId].orEmpty()
+        AlertDialog(
+            onDismissRequest = { picking = null },
+            title = {
+                Text(
+                    stringResource(
+                        R.string.hardware_sound_pack_per_layout_pick,
+                        resolveLayoutName(customLayouts, layoutId),
+                    ),
+                )
+            },
+            text = {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    // "Follow the global pick" first, because it is the state
+                    // every layout starts in and the one a user who opened this
+                    // by mistake is looking for.
+                    SoundPackChoiceRow(
+                        label = stringResource(R.string.hardware_sound_pack_per_layout_default),
+                        selected = current.isEmpty(),
+                    ) {
+                        scope.launch { repository.setKeySoundPackForLayout(layoutId, "") }
+                        picking = null
+                    }
+                    for (pack in packs) {
+                        SoundPackChoiceRow(label = pack.name, selected = pack.id == current) {
+                            scope.launch { repository.setKeySoundPackForLayout(layoutId, pack.id) }
+                            picking = null
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { picking = null }) {
+                    Text(stringResource(CommonR.string.common_cancel))
+                }
+            },
+        )
+    }
+}
+
+/** One line of the per-layout pack dialog. */
+@Composable
+private fun SoundPackChoiceRow(label: String, selected: Boolean, onClick: () -> Unit) {
+    WmRow(
+        title = label,
+        trailing = {
+            if (selected) {
+                Icon(
+                    Icons.Outlined.Check,
+                    contentDescription = stringResource(R.string.hardware_sound_selected_desc),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+        },
+        onClick = onClick,
+    )
+}
+
 /**
  * "Play the key coming back up", for packs that recorded it.
  *

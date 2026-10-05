@@ -1806,7 +1806,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Implicit multiplication — 2π, 3(4+1), (1+2)(3+4), 3√4
     - 19 named functions — sin/cos/tan, asin/acos/atan, sinh/cosh/tanh, ln, log, lg, sqrt, cbrt, abs, exp, floor, ceil, round
     - nPr and nCr keypad shorthand — 5p3 and 4c2, built as running products so 60P3 doesn't overflow
-    - Percent is context-sensitive — Trailing % divides by 100; % followed by a value is modulo
+    - Percent is context-sensitive — A trailing % added or subtracted is a share of the left side (`100+20%` is 120, `100-20%` is 80, a second one compounding on the new total); alone or against × and ÷ it is a plain hundredth (`20%` is 0.2, `100×20%` is 20, `100÷20%` is 500), and brackets force that reading (`100+(20%)` is 100.2); % followed by a value is modulo
     - deg/rad chip — Remembers the choice; inverse trig returns in the same unit
     - = collapses in place — 12*4= becomes 12*4=48 rather than clearing
     - Insert chip — Types the formatted result at the cursor
@@ -3180,8 +3180,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - XXE hardened — Any DOCTYPE anywhere rejects the file outright — Android's SAX throws on Apache's disallow-doctype-decl, so it's done by inspection
     - Monochrome detection — An icon declaring no colours tracks the keyboard theme and the per-tool accent; a coloured one is drawn as authored
     - Parser caps — 256 KB source, 400 paths, 64 KB path data, depth 32, viewport clamp against width="1e999"
-  - Sound pack .wmsoundpack `RARE` — ZIP: pack.json + sounds/; 16 MB, 64 samples, 32 variants per list, 20 packs installed
+  - Sound pack .wmsoundpack `RARE` — ZIP: pack.json + sounds/; 16 MB, 512 samples, 32 variants per list, 20 packs installed
     - 5 key roles — default, space, enter, delete, modifier — each may carry its own samples and gain, falling back per field
+    - Per-key sounds — keys{} maps the text a key types (lowercased, multi-character allowed) to its own samples and gain; beats the role per field; 256 keys; what an Animalese-style voice pack needs
+    - A pack per layout — KeySoundSettings.packByLayout points one layout at its own pack; unnamed layouts follow the global pick, and the new pack is decoded on the switch
     - Key-down and key-up sets — Separate press/release lists so holding a key really holds the sound open; empty release means silence, not a fallback
     - Variant randomisation — Many recordings of one keyboard, one picked per press
     - Gain is a cut — Clamped to 0..1 because SoundPool can't amplify; a pack asking for 2.0 gets 1.0

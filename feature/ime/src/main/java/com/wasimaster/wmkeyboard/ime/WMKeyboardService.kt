@@ -143,7 +143,7 @@ import com.wasimaster.wmkeyboard.core.emoji.EmojiVariantIndex
 import com.wasimaster.wmkeyboard.core.feedback.HapticPlayer
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPhase
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPlayer
-import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
+import com.wasimaster.wmkeyboard.core.feedback.KeySoundTarget
 import com.wasimaster.wmkeyboard.core.feedback.SoundPackStore
 import com.wasimaster.wmkeyboard.core.feedback.SoundStore
 import com.wasimaster.wmkeyboard.core.gesture.GlideBeam
@@ -3196,9 +3196,13 @@ open class WMKeyboardService : InputMethodService() {
                 // here the first several keystrokes after the IME opens fall
                 // back to the system click, which reads as the pack not
                 // working rather than as the pool still catching up.
-                val sound = _uiState.value.settings.sound
+                val state = _uiState.value
+                val sound = state.settings.sound
                 if (sound.style == com.wasimaster.wmkeyboard.core.settings.KeySoundStyle.PACK) {
-                    KeySoundPlayer.preload(this@WMKeyboardService, sound.packId)
+                    KeySoundPlayer.preload(
+                        this@WMKeyboardService,
+                        sound.packFor(state.layoutId),
+                    )
                 }
                 HapticPlayer.warmUp(this@WMKeyboardService)
             }
@@ -4524,7 +4528,7 @@ open class WMKeyboardService : InputMethodService() {
                 onKey = ::onKey,
                 onKeyPressed = ::vibrate,
                 onHaptic = ::vibrateOnly,
-                onKeySound = { role, phase -> playKeySound(role = role, phase = phase) },
+                onKeySound = { target, phase -> playKeySound(target = target, phase = phase) },
                 onText = ::onText,
                 onPossessiveFlick = ::onPossessiveFlick,
                 onGesture = ::onGesture,
@@ -11732,6 +11736,11 @@ open class WMKeyboardService : InputMethodService() {
         // A chord or morse sequence half-typed on the old layout must not leak
         // into the new one (or worse, keep a dot counted as held forever).
         resetChordInputs()
+        // A layout with its own sound pack has to have it decoded before the
+        // first key of the new layout, for the reason the warm-up preload
+        // exists: a pack that arrives a few keystrokes late reads as the pack
+        // not working.
+        preloadLayoutSoundPack(from, spec.id)
         refreshKarContext()
         // The engine follows the switch in the same frame, and the strip is
         // rebuilt off it. Left to the settings write at the bottom of this
@@ -17711,7 +17720,7 @@ open class WMKeyboardService : InputMethodService() {
      * whole of haptics off to be rid of. The key sound is not part of that.
      */
     private fun caretStepFeedback() {
-        if (_uiState.value.settings.haptics.onCursorMove) vibrate() else playKeySound(role = KeySoundRole.DEFAULT)
+        if (_uiState.value.settings.haptics.onCursorMove) vibrate() else playKeySound()
     }
 
     /**
@@ -33845,10 +33854,10 @@ open class WMKeyboardService : InputMethodService() {
         doVibrate()
     }
 
-    private fun vibrate(role: KeySoundRole = KeySoundRole.DEFAULT) {
+    private fun vibrate(target: KeySoundTarget = KeySoundTarget.DEFAULT) {
         // Key sound rides along with every feedback point; it has no
         // interference problem, so it skips the haptic coalescing below.
-        playKeySound(role = role)
+        playKeySound(target = target)
         vibrateOnly()
     }
 
@@ -33870,6 +33879,27 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Decodes [to]'s sound pack when the layout switch changed which pack
+     * plays (`KeySoundSettings.packByLayout`, issue #520).
+     *
+     * Off the main thread, because it reads the pack's manifest, and skipped
+     * outright when the switch cannot have changed the pack — which is every
+     * switch for a user who has set no per-layout override, and that is almost
+     * everyone.
+     */
+    private fun preloadLayoutSoundPack(from: String, to: String) {
+        if (from == to) return
+        val sound = _uiState.value.settings.sound
+        if (sound.style != com.wasimaster.wmkeyboard.core.settings.KeySoundStyle.PACK) return
+        if (sound.packByLayout.isEmpty()) return
+        val next = sound.packFor(to)
+        if (next.isBlank() || next == sound.packFor(from)) return
+        serviceScope.launch(Dispatchers.Default) {
+            runCatching { KeySoundPlayer.preload(this@WMKeyboardService, next) }
+        }
+    }
+
+    /**
      * Plays the key-press sound via [KeySoundPlayer]. [force] previews even
      * while the setting is off (the quick panel's toggle fires before the
      * DataStore write lands). A theme that carries its own sound
@@ -33880,7 +33910,7 @@ open class WMKeyboardService : InputMethodService() {
         style: com.wasimaster.wmkeyboard.core.settings.KeySoundStyle? = null,
         volume: Float? = null,
         force: Boolean = false,
-        role: KeySoundRole = KeySoundRole.DEFAULT,
+        target: KeySoundTarget = KeySoundTarget.DEFAULT,
         phase: KeySoundPhase = KeySoundPhase.PRESS,
         // Overrides the sources `resolvedId` would otherwise read below, so a
         // preview can play the sound just pressed rather than the stored one.
@@ -33901,7 +33931,10 @@ open class WMKeyboardService : InputMethodService() {
         // press that just happened rather than about what is stored.
         val resolvedId = id ?: theme?.second
             ?: if (resolved == com.wasimaster.wmkeyboard.core.settings.KeySoundStyle.PACK) {
-                settings.sound.packId
+                // Per layout, falling back to the one global pick. The state
+                // read is inside this branch on purpose: every other style
+                // answers without touching it, and this runs per keystroke.
+                settings.sound.packFor(_uiState.value.layoutId)
             } else {
                 settings.sound.customId
             }
@@ -33910,7 +33943,7 @@ open class WMKeyboardService : InputMethodService() {
             resolved,
             volume ?: settings.sound.volume,
             resolvedId,
-            role,
+            target,
             phase,
         )
     }

@@ -958,7 +958,32 @@ data class KeySoundSettings(
      * from, and the packs that did not are unaffected either way.
      */
     val playRelease: Boolean = true,
-)
+    /**
+     * Sound pack per layout, keyed by layout id — the pack [KeySoundStyle.PACK]
+     * plays while that layout is up, overriding [packId] (issue #520).
+     *
+     * A layout the map does not name follows [packId], so this is an override
+     * list rather than a second setting to keep in step: a user who wants one
+     * pack everywhere never touches it, and one who wants a voice pack on their
+     * Bengali layout and switches recordings on QWERTY names one layout.
+     *
+     * Keyed by layout rather than by language because the layout is what the
+     * keyboard switches between and what the user picked in the first place —
+     * two layouts of the same language can differ by more than their letters.
+     */
+    val packByLayout: Map<String, String> = emptyMap(),
+) {
+    /**
+     * The pack to play while [layoutId] is up: its own, if it has one, else the
+     * global pick.
+     *
+     * A blank entry is treated as absent rather than as "no pack": the only way
+     * to store one is to clear a layout's override, and clearing it means
+     * "follow the global pick".
+     */
+    fun packFor(layoutId: String): String =
+        packByLayout[layoutId]?.takeIf { it.isNotBlank() } ?: packId
+}
 
 /**
  * Key-press haptic waveform.
@@ -6682,6 +6707,19 @@ data class LayoutBehaviorSettings(
      */
     val numberRowInSymbols: Boolean = true,
     /**
+     * Whether the number row's slot is kept over a numeric keypad, where it
+     * carries symbols rather than a second set of digits — `+ * # , ; ( ) - / .`
+     * on a phone field, `+ - * / = ( ) % : .` on the other numeric ones.
+     * Only meaningful when [KeyboardSettings.numberRow] is on. On by default
+     * (the long-standing behaviour); off leaves the bare keypad.
+     *
+     * Its own switch rather than a reading of [KeyboardSettings.numberRow]:
+     * the row this one draws is not the digit row at all, and the only way to
+     * be rid of it was to give up the digits over the letters too, which is
+     * what it was reported as (issue #523).
+     */
+    val numberRowOnKeypad: Boolean = true,
+    /**
      * A row of the four arrow keys under the keyboard (issue #369), for moving
      * the caret without a toolbar tool or a spacebar drag. Off by default. The
      * row takes the number row's height, so the resize handle and one-handed
@@ -7692,6 +7730,22 @@ private fun decodeEmojiOrder(raw: String?): Map<String, List<String>> {
         .filterValues { it.isNotEmpty() }
 }
 
+/** Serializes the per-layout sound-pack map to a compact `layoutId=packId;...` string. */
+private fun encodeKeySoundPacksByLayout(map: Map<String, String>): String =
+    map.entries
+        .filter { it.key.isNotEmpty() && it.value.isNotEmpty() }
+        .joinToString(";") { (layoutId, packId) -> "$layoutId=$packId" }
+
+private fun decodeKeySoundPacksByLayout(raw: String): Map<String, String> =
+    raw.split(';')
+        .filter { it.isNotEmpty() }
+        .mapNotNull { entry ->
+            val eq = entry.indexOf('=')
+            if (eq <= 0 || eq == entry.length - 1) return@mapNotNull null
+            entry.substring(0, eq) to entry.substring(eq + 1)
+        }
+        .toMap()
+
 /** Serializes the per-script font map to a compact `SCRIPT=fontId;...` string. */
 private fun encodeScriptFontIds(map: Map<String, String>): String =
     map.entries
@@ -8119,6 +8173,7 @@ class SettingsRepository(private val context: Context) {
         private val CUSTOM_LAYOUT_TOOL = stringPreferencesKey("custom_layout_tool")
         private val NUMBER_ROW_SHIFT_SYMBOLS = booleanPreferencesKey("number_row_shift_symbols")
         private val NUMBER_ROW_IN_SYMBOLS = booleanPreferencesKey("number_row_in_symbols")
+        private val NUMBER_ROW_ON_KEYPAD = booleanPreferencesKey("number_row_on_keypad")
         private val ARROW_ROW = booleanPreferencesKey("arrow_row")
         private val ARROW_ROW_ORDER = stringPreferencesKey("arrow_row_order")
         private val BOTTOM_ROW_HEIGHT = intPreferencesKey("bottom_row_height")
@@ -8517,6 +8572,7 @@ class SettingsRepository(private val context: Context) {
         private val KEY_SOUND_CUSTOM_ID = stringPreferencesKey("key_sound_custom_id")
         private val KEY_SOUND_PACK_ID = stringPreferencesKey("key_sound_pack_id")
         private val KEY_SOUND_RELEASE = booleanPreferencesKey("key_sound_release")
+        private val KEY_SOUND_PACK_BY_LAYOUT = stringPreferencesKey("key_sound_pack_by_layout")
         private val LEVEL_SHOW_ANGLES = booleanPreferencesKey("level_show_angles")
         private val REDO_USES_CTRL_Y = booleanPreferencesKey("redo_uses_ctrl_y")
         private val MOON_SOUTHERN = booleanPreferencesKey("moon_southern_hemisphere")
@@ -9493,6 +9549,9 @@ class SettingsRepository(private val context: Context) {
             customId = p[KEY_SOUND_CUSTOM_ID] ?: defaults.sound.customId,
             packId = p[KEY_SOUND_PACK_ID] ?: defaults.sound.packId,
             playRelease = p[KEY_SOUND_RELEASE] ?: defaults.sound.playRelease,
+            packByLayout = p[KEY_SOUND_PACK_BY_LAYOUT]
+                ?.let { decodeKeySoundPacksByLayout(it) }
+                ?: defaults.sound.packByLayout,
         )
 
     private fun readAccessibility(p: Preferences, defaults: KeyboardSettings) =
@@ -10162,6 +10221,8 @@ class SettingsRepository(private val context: Context) {
                 p[SHIFT_ENTER_NEWLINE] ?: defaults.layoutBehavior.shiftEnterNewline,
             numberRowInSymbols =
                 p[NUMBER_ROW_IN_SYMBOLS] ?: defaults.layoutBehavior.numberRowInSymbols,
+            numberRowOnKeypad =
+                p[NUMBER_ROW_ON_KEYPAD] ?: defaults.layoutBehavior.numberRowOnKeypad,
             arrowRow = p[ARROW_ROW] ?: defaults.layoutBehavior.arrowRow,
             arrowRowOrder = p[ARROW_ROW_ORDER]?.let(::decodeArrowRowOrder)
                 ?: defaults.layoutBehavior.arrowRowOrder,
@@ -11209,6 +11270,39 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setKeySoundPlayRelease(value: Boolean) =
         editPrefs { it[KEY_SOUND_RELEASE] = value }
+
+    /**
+     * Points one layout at its own sound pack, or clears the override with a
+     * blank [packId] so the layout follows the global pick again.
+     *
+     * Switches the style to [KeySoundStyle.PACK] for the same reason
+     * [setKeySoundPackId] does: choosing a pack is the user saying they want to
+     * hear one, and leaving the style on Click would have them wonder why
+     * nothing changed. Clearing an override does not, since it selects nothing.
+     */
+    suspend fun setKeySoundPackForLayout(layoutId: String, packId: String) {
+        if (layoutId.isBlank()) return
+        editPrefs { prefs ->
+            val current = prefs[KEY_SOUND_PACK_BY_LAYOUT]
+                ?.let { decodeKeySoundPacksByLayout(it) }
+                .orEmpty()
+            val updated = if (packId.isBlank()) {
+                current - layoutId
+            } else {
+                current + (layoutId to packId)
+            }
+            if (updated.isEmpty()) {
+                prefs.remove(KEY_SOUND_PACK_BY_LAYOUT)
+            } else {
+                prefs[KEY_SOUND_PACK_BY_LAYOUT] = encodeKeySoundPacksByLayout(updated)
+            }
+            if (packId.isNotBlank()) prefs[KEY_SOUND_STYLE] = KeySoundStyle.PACK.name
+        }
+    }
+
+    /** Drops every per-layout sound-pack override; the whole board follows [KeySoundSettings.packId]. */
+    suspend fun clearKeySoundPacksByLayout() =
+        editPrefs { it.remove(KEY_SOUND_PACK_BY_LAYOUT) }
 
     suspend fun setLevelShowAngles(value: Boolean) =
         editPrefs { it[LEVEL_SHOW_ANGLES] = value }
@@ -14415,6 +14509,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setNumberRowInSymbols(value: Boolean) =
         editPrefs { it[NUMBER_ROW_IN_SYMBOLS] = value }
+
+    suspend fun setNumberRowOnKeypad(value: Boolean) =
+        editPrefs { it[NUMBER_ROW_ON_KEYPAD] = value }
 
     suspend fun setArrowRow(value: Boolean) =
         editPrefs { it[ARROW_ROW] = value }

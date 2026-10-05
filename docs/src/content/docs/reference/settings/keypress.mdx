@@ -63,13 +63,16 @@ Two of the per-event rows are odd ones out. **Click on key repeat** has nothing 
 | Installed sound library *(Custom only)* | List + import | up to 30 installed sounds | Nothing installed |
 | Installed sound packs *(Sound pack only)* | List + import | up to 20 installed packs | Nothing installed |
 | Key release sound *(Sound pack only, and only for a pack that has key-up recordings)* | Toggle | On / Off | On |
+| A pack per layout *(Sound pack only, with 2+ layouts enabled and a pack installed)* | List of layouts | Any installed pack, or "Same as the pack above" | Every layout follows the selected pack |
 | Sound volume | Slider | 5%–100% | 50% |
 
 Seven chips, not six. Click and Standard come from the device's own system sound pack; Pop, Thock and Chime are synthesized in-app and sound identical on every device. The last two both name something you've installed rather than a fixed waveform, so each reveals its own list when you pick it — and each also selects the first thing in that list as you tap the chip, so the keyboard changes sound straight away rather than clicking until you make a second choice. With nothing installed yet, the chip still selects: the list it reveals is where you install one.
 
 Choosing **Custom** reveals your installed sound library and an **Import a sound file (.mp3)** button, and the label undersells it, since it also accepts `.ogg` and `.wav` files. The library holds up to 30 sounds between imports and installed sound addons.
 
-Choosing **Sound pack** reveals a second, separate list with its own **Import a sound pack (.wmsoundpack)** button, holding up to 20 packs. A pack is one keyboard recorded many times over, up to 32 recordings, and the keyboard picks a different one per key press. Each pack's row says what it carries, so "10 recordings • keys sound on the way up" means the pack was recorded with key-up sounds as well. For those packs only, a **Key release sound** toggle appears under the list. It's on by default. Packs without key-up recordings don't show it, because there'd be nothing for it to do. Tap a pack in the list and it plays a full keystroke rather than just the way down. See [Sound & vibration](/typing/feedback/#sound-packs) for the longer version.
+Choosing **Sound pack** reveals a second, separate list with its own **Import a sound pack (.wmsoundpack)** button, holding up to 20 packs. A pack is one keyboard recorded many times over, up to 32 recordings per key, and the keyboard picks a different one per key press. Each pack's row says what it carries, so "10 recordings • keys sound on the way up" means the pack was recorded with key-up sounds as well, and "26 recordings • its own sound for 26 keys" means it recorded individual letters. For packs with key-up sounds only, a **Key release sound** toggle appears under the list. It's on by default. Packs without key-up recordings don't show it, because there'd be nothing for it to do. Tap a pack in the list and it plays a full keystroke rather than just the way down.
+
+Below that, with two or more layouts enabled, **A pack per layout** lists your layouts so one of them can use a different pack from the rest; a layout you don't touch says "Same as the pack above". See [Sound & vibration](/typing/feedback/#sound-packs) for the longer version.
 
 Installing a [Sound addon](/addons/overview/) highlights this **Sound style** row and offers to switch to it right after install, the same "Use it now?" flow other addon types use (see [Installing addons](/addons/installing/)).
 

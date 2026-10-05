@@ -526,6 +526,7 @@ import com.wasimaster.wmkeyboard.core.layout.FlickDirection
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundPhase
 import com.wasimaster.wmkeyboard.core.feedback.KeySoundRole
+import com.wasimaster.wmkeyboard.core.feedback.KeySoundTarget
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.layout.KeyAlternate
 import com.wasimaster.wmkeyboard.core.layout.KeyRole
@@ -595,17 +596,18 @@ internal val LocalKeySound = staticCompositionLocalOf<() -> Unit> { {} }
 /**
  * [LocalKeyPressFeedback] and [LocalKeySound] again, told *which* key.
  *
- * A sound pack can carry a separate set of recordings per [KeySoundRole], so
- * the key grid — and only the key grid — needs to say what it just pressed.
- * Everything else that fires key feedback (panel buttons, the suggestion strip,
- * the toolbar) is not a key on the board and goes on using the two role-less
- * locals above, which this file provides bound to [KeySoundRole.DEFAULT].
+ * A sound pack can carry a separate set of recordings per [KeySoundRole] and
+ * per individual key, so the key grid — and only the key grid — needs to say
+ * what it just pressed. Everything else that fires key feedback (panel buttons,
+ * the suggestion strip, the toolbar) is not a key on the board and goes on
+ * using the two role-less locals above, which this file provides bound to
+ * [KeySoundTarget.DEFAULT].
  *
  * Two more locals rather than changing the type of the existing two: those have
  * thirty-odd call sites across the panels, none of which have a [Key] in scope
  * or any business inventing one.
  */
-internal val LocalKeyRoleFeedback = staticCompositionLocalOf<(KeySoundRole) -> Unit> { {} }
+internal val LocalKeyRoleFeedback = staticCompositionLocalOf<(KeySoundTarget) -> Unit> { {} }
 
 /**
  * [LocalKeySound] told which key, and which half of the keystroke; see
@@ -616,7 +618,7 @@ internal val LocalKeyRoleFeedback = staticCompositionLocalOf<(KeySoundRole) -> U
  * noise, and does not buzz.
  */
 internal val LocalKeyRoleSound =
-    staticCompositionLocalOf<(KeySoundRole, KeySoundPhase) -> Unit> { { _, _ -> } }
+    staticCompositionLocalOf<(KeySoundTarget, KeySoundPhase) -> Unit> { { _, _ -> } }
 
 /**
  * Sink for the A/C/V/X clipboard long-press shortcuts, provided once at the
@@ -1070,9 +1072,9 @@ fun KeyboardScreen(
     // spacebar. The parameter *count* is load-bearing: this argument list
     // already compiles to a method at the JVM's 64K ceiling, so these two grow
     // a type rather than growing the list. See [LocalKeyRoleFeedback].
-    onKeyPressed: (KeySoundRole) -> Unit = {},
-    onHaptic: () -> Unit = { onKeyPressed(KeySoundRole.DEFAULT) },
-    onKeySound: (KeySoundRole, KeySoundPhase) -> Unit = { _, _ -> },
+    onKeyPressed: (KeySoundTarget) -> Unit = {},
+    onHaptic: () -> Unit = { onKeyPressed(KeySoundTarget.DEFAULT) },
+    onKeySound: (KeySoundTarget, KeySoundPhase) -> Unit = { _, _ -> },
     onText: (String) -> Unit = {},
     onGesture: (List<GesturePoint>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
@@ -1509,11 +1511,11 @@ fun KeyboardScreen(
     CompositionLocalProvider(
         LocalKeyPreviewState provides keyPreview,
         LocalKeyPressFeedback provides remember(onKeyPressed) {
-            { onKeyPressed(KeySoundRole.DEFAULT) }
+            { onKeyPressed(KeySoundTarget.DEFAULT) }
         },
         LocalHapticFeedback provides onHaptic,
         LocalKeySound provides remember(onKeySound) {
-            { onKeySound(KeySoundRole.DEFAULT, KeySoundPhase.PRESS) }
+            { onKeySound(KeySoundTarget.DEFAULT, KeySoundPhase.PRESS) }
         },
         LocalKeyRoleFeedback provides onKeyPressed,
         LocalKeyRoleSound provides onKeySound,
@@ -14591,7 +14593,7 @@ private fun KeyRows(
     val ringFeedback = LocalKeyRoleFeedback.current
     if (dpadRing) {
         val typeKey: (Key) -> Unit = remember(stampedOnKey, ringFeedback) {
-            { key -> ringFeedback(key.keySoundRole()); stampedOnKey(key) }
+            { key -> ringFeedback(key.keySoundTarget()); stampedOnKey(key) }
         }
         SideEffect { keyGridFocus.publish(keyRects, typeKey) }
     }
@@ -18685,20 +18687,25 @@ internal fun KeyButton(
     // lambdas as plain `() -> Unit` parameters, so binding at the top means the
     // held-repeat on backspace is already a delete-role sound with nothing else
     // to change.
-    val soundRole = key.keySoundRole()
-    val onKeyPress: () -> Unit = remember(rawKeyPress, gate, soundRole) {
-        { if (gate.audible()) rawKeyPress(soundRole) }
+    //
+    // Remembered on the key rather than recomputed: resolving the target
+    // lowercases the key's text, and an allocation plus a case fold per
+    // recomposition of every cell on the board is not what that is worth. The
+    // keys below are the same ones the lambdas already had.
+    val soundTarget = remember(key) { key.keySoundTarget() }
+    val onKeyPress: () -> Unit = remember(rawKeyPress, gate, soundTarget) {
+        { if (gate.audible()) rawKeyPress(soundTarget) }
     }
-    val onKeySound: () -> Unit = remember(rawKeySound, gate, soundRole) {
-        { if (gate.audible()) rawKeySound(soundRole, KeySoundPhase.PRESS) }
+    val onKeySound: () -> Unit = remember(rawKeySound, gate, soundTarget) {
+        { if (gate.audible()) rawKeySound(soundTarget, KeySoundPhase.PRESS) }
     }
     // The finger leaving. Gated on the same window as the press, and for a
     // sharper reason: a contact the tremor filter dropped is a bounce, and a
     // bounce lifts again within a millisecond or two — still inside the window.
     // Ungated, that lift would play a key coming back up that was never heard
     // going down, which is the one artefact the filter exists to prevent.
-    val onKeyRelease: () -> Unit = remember(rawKeySound, gate, soundRole) {
-        { if (gate.audible()) rawKeySound(soundRole, KeySoundPhase.RELEASE) }
+    val onKeyRelease: () -> Unit = remember(rawKeySound, gate, soundTarget) {
+        { if (gate.audible()) rawKeySound(soundTarget, KeySoundPhase.RELEASE) }
     }
 
     // Under an explore-by-touch service the accessibility framework owns the

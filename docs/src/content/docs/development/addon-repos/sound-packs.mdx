@@ -1,6 +1,6 @@
 ---
 title: "Sound packs"
-description: "The .wmsoundpack format: many recordings of one keyboard, one played per key press and one when you lift, with optional per-key-role sounds."
+description: "The .wmsoundpack format: many recordings of one keyboard, one played per key press and one when you lift, with optional per-role and per-key sounds."
 sidebar:
   order: 3
 ---
@@ -70,6 +70,11 @@ to nothing at all, and has nowhere to go either way.
     "enter":    { "press": ["sounds/enter-1.wav"] },
     "delete":   { "press": ["sounds/delete-1.wav"] },
     "modifier": { "press": ["sounds/mod-1.wav"], "gain": 0.8 }
+  },
+
+  "keys": {
+    "a": { "press": ["sounds/a-1.wav", "sounds/a-2.wav"] },
+    "b": { "press": ["sounds/b-1.wav"] }
   }
 }
 ```
@@ -80,13 +85,14 @@ to nothing at all, and has nowhere to go either way.
 | `version` | ✔ | Format version, currently `1`. A higher number is refused rather than guessed at. |
 | `id` | ✔ | `[A-Za-z0-9._-]+`, at most 64 characters. Informational on the device: the store mints its own `pack_<timestamp>` id and keys the install on that. Keep it stable anyway, because your own tooling and the repository manifest both read it. |
 | `name` | ✔ | What the user sees in the picker. |
-| `press` | ✔ | At least one path. The default key-down recordings. |
+| `press` | ✔ | At least one path. The default key-down recordings. A pack that fills [`keys`](#per-key-sounds) instead may leave this out, but then keys it didn't name make the system click. |
 | `author` | | Shown on the row. |
 | `packVersion` | | Semver, informational. The addon entry's `version` is what drives updates. |
 | `description` | | |
 | `gain` | | `0.0`–`1.0`, default `1.0`. See [Gain is a cut](#gain-is-a-cut). |
 | `release` | | Key-**up** recordings, played when the finger lifts. See [Key-down and key-up](#key-down-and-key-up). |
 | `roles` | | Per-key-role overrides, below. |
+| `keys` | | Per-**key** overrides, keyed by the text the key types. See [Per-key sounds](#per-key-sounds). |
 
 Unknown top-level fields are ignored, so a later version can add one without
 breaking today's app.
@@ -153,6 +159,62 @@ Emoji, language switch and the layer keys are all `modifier` because they sit in
 the same bottom-row furniture as shift, and anyone who recorded that row
 recorded them together.
 
+## Per-key sounds
+
+`keys` addresses individual keys, keyed by **the text the key types**:
+
+```json
+"keys": {
+  "a":  { "press": ["sounds/ah.wav", "sounds/ah2.wav"] },
+  "b":  { "press": ["sounds/buh.wav"] },
+  "1":  { "press": ["sounds/one.wav"] },
+  ".":  { "press": ["sounds/dot.wav"], "gain": 0.7 },
+  "th": { "press": ["sounds/thuh.wav"] }
+}
+```
+
+This is what an [Animalese](https://github.com/joshxviii/animalese-typing-desktop)-style
+voice pack needs: a syllable per letter rather than one click for the whole
+board.
+
+The key is the committed text, **lowercased**. `"a"` covers both `a` and a
+shifted `A` — one recording, because the keyboard has no way to say which of two
+it meant and nobody has asked for two. Multi-character keys work too, which is
+the point of keying on text rather than on a key code: a key that commits `th`,
+or a Bengali conjunct, is one entry.
+
+Only keys that **type something** can be addressed this way. Shift, the layer
+switches, the globe, the tools — none of them commit text, and all of them are
+already reachable through `roles`, which is the grouping anyone can realistically
+record.
+
+Resolution is three deep and **per field**:
+
+```
+keys[<what the key types>]  →  roles[<the key's role>]  →  the top-level set
+```
+
+So `keys.a.press` with no `keys.a.release` plays the pack's default key-up under
+<KeyCap>a</KeyCap>, and a key no `keys` entry names is untouched. A pack that
+names three letters and nothing else is legal: those three sound like themselves
+and the rest of the board sounds like the default set.
+
+`gain` resolves the same way — a key's own, then its role's, then the pack's.
+
+**Ship a top-level `press` anyway.** A pack may be per-key only, and one is
+accepted, but a key it never named then falls back past the roles to nothing and
+the keyboard plays the system click instead. For a voice pack that means every
+punctuation mark your `keys` map missed. One generic recording under `press`
+covers them.
+
+Per-key sets get their own [variant](#variants) cursor, one per key, so
+alternating between two letters never makes either repeat itself.
+
+<KeyCap>Space</KeyCap>, <KeyCap>Enter</KeyCap> and <KeyCap>⌫</KeyCap> have roles
+*and* commit text (a space, a newline). The role is the right way to reach them
+and what every existing pack uses; a `keys` entry for `" "` would win over
+`roles.space`, which is almost never what you meant.
+
 ## Variants
 
 Every `press` and `release` is a list, and one entry is picked per keystroke.
@@ -172,20 +234,32 @@ third of the time, and a repeat is the exact thing variants exist to prevent.
 
 | Limit | Value | Why |
 | --- | --: | --- |
-| Audio files per pack | 64 | Every file is decoded into the `SoundPool` when the pack is selected. Key-up recordings count toward it. |
-| Variants per list | 32 | |
+| Audio files per pack | 512 | Every file is decoded into the `SoundPool` when the pack is selected. Key-up recordings count toward it. |
+| Keys named under `keys` | 256 | Enough for a cased alphabet with digits and punctuation, or an Indic script with its conjuncts. |
+| Variants per list | 32 | Per list, so one key or role can't eat the whole file budget. |
 | Bytes per audio file | 4 MB | Same ceiling a single-sound addon gets. |
-| Archive entries | 128 | Counted while reading, so a directory of junk stops the import. |
+| Archive entries | 1024 | Counted while reading, so a directory of junk stops the import. |
 | Unzipped bytes per pack | 16 MB | Counted while extracting, not read from the ZIP header, so a zip bomb stops mid-stream. |
 | Installed packs | 20 | |
 
-The last three are refusals: going over the entry count, the unzipped size or
-the installed-pack count fails the install with a message naming the limit.
+**The byte cap is the one that binds.** 16 MB is the real memory ceiling,
+because the selected pack is decoded whole, and it's what the file count is
+sized against rather than the other way round: 16 MB holds several hundred
+keystroke-length recordings with room to spare. A pack that wants 512
+four-megabyte files is refused on bytes, as it always was.
 
-The first three are not. A list longer than 32 keeps its first 32 entries, a
-sample past the 64th file is dropped, and a single recording over 4 MB is
-dropped on its own. The pack still installs with what fits, so check the
-variant count on the detail page after publishing a large pack.
+Going over the entry count, the unzipped size or the installed-pack count fails
+the install with a message naming the limit.
+
+The file, key and variant counts don't. A list longer than 32 keeps its first 32
+entries, a sample past the 512th file is dropped, a `keys` map past its 256th
+entry is truncated, and a single recording over 4 MB is dropped on its own. The
+pack still installs with what fits, so check the counts on the detail page after
+publishing a large pack.
+
+Per-key sets are resolved **last**, after the board-wide set and the roles, so a
+pack that runs out of file budget loses the keys it named rather than the set
+every other key falls back to.
 
 One thing that *isn't* fatal is a `press` entry naming a file that isn't in the
 archive. That variant is dropped and the rest of the pack is kept, because
@@ -281,8 +355,11 @@ recordings, so that pack is deliberately left whole.
 
 ## Known gaps
 
-- **No per-key mapping.** Mechvibes-style packs address individual key codes.
-  Roles cover the case that's actually audible on a phone, the spacebar, without
-  asking anyone to record 104 keys for a keyboard that has about 30.
+- **Keys are addressed by text, not by key code.** Mechvibes-style packs name
+  scan codes. A phone keyboard has no stable ones — the same cell types a
+  different letter on the next layout — so `keys` names what a key *types*
+  instead. The upshot is that one entry covers that character on every layout
+  that can type it, which is usually what you want and occasionally not.
+- **One recording per key, not per case.** `"a"` and `"A"` are the same entry.
 - **Key-up is a sound-pack feature only.** The single-file `sound` addon type and
   the built-in styles have one sound each, and there's no second file to play.

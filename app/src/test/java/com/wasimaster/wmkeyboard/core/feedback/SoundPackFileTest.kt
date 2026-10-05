@@ -243,6 +243,186 @@ class SoundPackFileTest {
         assertEquals(1f, manifest.gainFor(KeySoundRole.ENTER), 0.001f)
     }
 
+    // ---- per-key sets (issue #520) -------------------------------------
+
+    @Test
+    fun `a named key beats its role and the board, per field`() {
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"voice","name":"Voice",
+                 "press":["sounds/1.wav"],"release":["sounds/1-up.wav"],
+                 "roles":{"space":{"press":["sounds/space.wav"]}},
+                 "keys":{"a":{"press":["sounds/a.wav","sounds/a2.wav"],"gain":0.5},
+                         "th":{"press":["sounds/th.wav"]}}}
+                """.trimIndent(),
+                mapOf(
+                    "sounds/1.wav" to wav(),
+                    "sounds/1-up.wav" to wav(32),
+                    "sounds/space.wav" to wav(),
+                    "sounds/a.wav" to wav(),
+                    "sounds/a2.wav" to wav(),
+                    "sounds/th.wav" to wav(),
+                ),
+            ),
+        )
+        val pack = (result as SoundPackImportResult.Imported).pack
+        assertEquals(2, pack.keyCount)
+
+        val manifest = checkNotNull(s.manifestFor(pack.id))
+        val a = KeySoundTarget(KeySoundRole.DEFAULT, "a")
+        assertEquals(2, manifest.samplesFor(a, KeySoundPhase.PRESS).size)
+        // The key named only a way down, so it keeps the board's key-up: the
+        // fallback is per field here exactly as it is for a role.
+        assertEquals(
+            manifest.releaseFor(KeySoundRole.DEFAULT),
+            manifest.samplesFor(a, KeySoundPhase.RELEASE),
+        )
+        assertEquals(0.5f, manifest.gainFor(a), 0.001f)
+
+        // A key the pack never named is untouched by the fact that others were.
+        val z = KeySoundTarget(KeySoundRole.DEFAULT, "z")
+        assertEquals(manifest.press, manifest.samplesFor(z, KeySoundPhase.PRESS))
+        assertEquals(1f, manifest.gainFor(z), 0.001f)
+
+        // A multi-character key is one entry, which is the point of keying on
+        // what a key types rather than on a key code.
+        assertEquals(
+            1,
+            manifest.samplesFor(KeySoundTarget(KeySoundRole.DEFAULT, "th"), KeySoundPhase.PRESS).size,
+        )
+
+        // Every sample of every set is reachable for the player to decode.
+        val all = manifest.allSamples()
+        assertEquals(all.size, all.distinct().size)
+        for (name in all) assertNotNull(name, s.sampleFile(pack.id, name))
+    }
+
+    @Test
+    fun `a key name is lowercased at import so a shifted letter resolves`() {
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"caps","name":"Caps",
+                 "press":["sounds/1.wav"],"keys":{"A":{"press":["sounds/a.wav"]}}}
+                """.trimIndent(),
+                mapOf("sounds/1.wav" to wav(), "sounds/a.wav" to wav()),
+            ),
+        )
+        val pack = (result as SoundPackImportResult.Imported).pack
+        val manifest = checkNotNull(s.manifestFor(pack.id))
+        // The keyboard lowercases what a key types before asking, so a pack
+        // that shipped "A" has to be found by "a" or the entry is dead weight.
+        assertEquals(
+            1,
+            manifest.keySamplesFor(KeySoundTarget(KeySoundRole.DEFAULT, "a"), KeySoundPhase.PRESS).size,
+        )
+    }
+
+    @Test
+    fun `a key set with a key-up makes the pack a key-up pack`() {
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"up","name":"Up",
+                 "press":["sounds/1.wav"],
+                 "keys":{"a":{"press":["sounds/a.wav"],"release":["sounds/a-up.wav"]}}}
+                """.trimIndent(),
+                mapOf("sounds/1.wav" to wav(), "sounds/a.wav" to wav(), "sounds/a-up.wav" to wav(32)),
+            ),
+        )
+        val pack = (result as SoundPackImportResult.Imported).pack
+        // The release toggle is drawn off this flag, and a pack whose only
+        // key-up is on one letter still has one.
+        assertEquals(true, pack.hasRelease)
+        assertEquals(true, checkNotNull(s.manifestFor(pack.id)).hasRelease())
+    }
+
+    @Test
+    fun `a per-key pack past the old sixty-four file ceiling imports whole`() {
+        // The ceiling issue #520 asked about: a voice pack is one recording per
+        // letter, which the old limit of 64 files could not hold with variants.
+        val letters = ('a'..'z').toList()
+        val keys = letters.joinToString(",") { c ->
+            """"$c":{"press":["sounds/$c-1.wav","sounds/$c-2.wav","sounds/$c-3.wav"]}"""
+        }
+        val files = buildMap {
+            put("sounds/1.wav", wav())
+            for (c in letters) for (n in 1..3) put("sounds/$c-$n.wav", wav())
+        }
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"animalese","name":"Animalese",
+                 "press":["sounds/1.wav"],"keys":{$keys}}
+                """.trimIndent(),
+                files,
+            ),
+        )
+        val pack = (result as SoundPackImportResult.Imported).pack
+        assertEquals(26, pack.keyCount)
+        // 26 letters x 3 takes, plus the board-wide fallback: every one stored.
+        assertEquals(79, pack.sampleCount)
+        val manifest = checkNotNull(s.manifestFor(pack.id))
+        for (c in letters) {
+            val target = KeySoundTarget(KeySoundRole.DEFAULT, c.toString())
+            assertEquals("$c", 3, manifest.samplesFor(target, KeySoundPhase.PRESS).size)
+        }
+    }
+
+    @Test
+    fun `a pack with only per-key sounds is accepted and counted`() {
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"only","name":"Only keys",
+                 "keys":{"a":{"press":["sounds/a.wav","sounds/a2.wav"]},"b":{"press":["sounds/b.wav"]}}}
+                """.trimIndent(),
+                mapOf("sounds/a.wav" to wav(), "sounds/a2.wav" to wav(), "sounds/b.wav" to wav()),
+            ),
+        )
+        assertTrue("$result", result is SoundPackImportResult.Imported)
+        val pack = (result as SoundPackImportResult.Imported).pack
+        // The row counts recordings per key press, so the longest set it named
+        // rather than the top-level list it does not have.
+        assertEquals(2, pack.variantCount)
+        assertEquals(2, pack.keyCount)
+
+        val manifest = checkNotNull(s.manifestFor(pack.id))
+        // A key it never named has nothing to play, and the player answers that
+        // with the system click rather than with silence.
+        assertTrue(
+            manifest.samplesFor(KeySoundTarget(KeySoundRole.DEFAULT, "z"), KeySoundPhase.PRESS)
+                .isEmpty(),
+        )
+    }
+
+    @Test
+    fun `a pack with no playable key-down anywhere is refused`() {
+        val s = store()
+        val result = import(
+            s,
+            pack(
+                """
+                {"format":"wmkeyboard-sound-pack","version":1,"id":"empty","name":"Empty",
+                 "keys":{"a":{"press":["sounds/gone.wav"]}}}
+                """.trimIndent(),
+                mapOf("sounds/other.wav" to wav()),
+            ),
+        )
+        assertTrue("$result", result is SoundPackImportResult.Rejected)
+    }
+
     @Test
     fun `gain is clamped into what SoundPool can actually do`() {
         val s = store()
