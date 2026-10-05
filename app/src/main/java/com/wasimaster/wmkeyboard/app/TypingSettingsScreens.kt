@@ -2207,6 +2207,16 @@ internal fun TypingGesturesSettings(
                     default = SettingsDefaults.textEditing.spaceCursorEdgeRepeat,
                 ) { scope.launch { repository.setSpaceCursorEdgeRepeat(it) } }
             }
+            // Issue #505: the whole key area is the drag's touchpad.
+            item {
+                ToggleSetting(
+                    R.string.typing_space_cursor_whole_keyboard_title,
+                    stringResource(R.string.typing_space_cursor_whole_keyboard_subtitle),
+                    settings.watch { it.textEditing.spaceCursorWholeKeyboard },
+                    info = stringResource(R.string.typing_space_cursor_whole_keyboard_info),
+                    default = SettingsDefaults.textEditing.spaceCursorWholeKeyboard,
+                ) { scope.launch { repository.setSpaceCursorWholeKeyboard(it) } }
+            }
             item {
                 val valueFormat = stringResource(R.string.typing_value_multiplier_suffix)
                 SliderSetting(

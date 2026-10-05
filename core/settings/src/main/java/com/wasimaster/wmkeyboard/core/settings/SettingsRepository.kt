@@ -5065,6 +5065,15 @@ data class TextEditingSettings(
      */
     val spaceCursorEdgeRepeat: Boolean = false,
     /**
+     * Once a spacebar swipe has turned into a cursor drag, the whole key area
+     * is its touchpad (#505): the keys dim, a second finger on them types
+     * nothing, and [spaceCursorEdgeRepeat] measures its edges and its reach
+     * from the sides of the keyboard instead of the spacebar's. The finger was
+     * always followed off the key; what changes is that nothing else under it
+     * can go off. Off by default, as the drag looks different with it on.
+     */
+    val spaceCursorWholeKeyboard: Boolean = false,
+    /**
      * A magnifier over the caret while a spacebar cursor swipe moves it
      * (discussion #303): the line around the caret, enlarged, in a bubble over
      * the text. The trackpad has its own switch, [TrackpadSettings.magnifier].
@@ -8815,6 +8824,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACE_CURSOR_ACCELERATE = booleanPreferencesKey("space_cursor_accelerate")
         private val SPACE_CURSOR_DIRECT = booleanPreferencesKey("space_cursor_direct")
         private val SPACE_CURSOR_EDGE_REPEAT = booleanPreferencesKey("space_cursor_edge_repeat")
+        private val SPACE_CURSOR_WHOLE_KEYBOARD = booleanPreferencesKey("space_cursor_whole_keyboard")
         private val SPACE_CURSOR_TOP_SPEED = intPreferencesKey("space_cursor_top_speed")
         private val BACKSPACE_WORD_STEP_DP = intPreferencesKey("backspace_word_step_dp")
         private val BACKSPACE_SWIPE_UNIT = stringPreferencesKey("backspace_swipe_unit")
@@ -10695,6 +10705,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.textEditing.spaceCursorAccelerate,
             spaceCursorDirect = p[SPACE_CURSOR_DIRECT] ?: defaults.textEditing.spaceCursorDirect,
             spaceCursorEdgeRepeat = p[SPACE_CURSOR_EDGE_REPEAT] ?: defaults.textEditing.spaceCursorEdgeRepeat,
+            spaceCursorWholeKeyboard = p[SPACE_CURSOR_WHOLE_KEYBOARD]
+                ?: defaults.textEditing.spaceCursorWholeKeyboard,
             spaceCursorTopSpeed = p[SPACE_CURSOR_TOP_SPEED]
                 ?: defaults.textEditing.spaceCursorTopSpeed,
             backspaceWordStepDp = p[BACKSPACE_WORD_STEP_DP]
@@ -11778,6 +11790,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSpaceCursorEdgeRepeat(value: Boolean) =
         editPrefs { it[SPACE_CURSOR_EDGE_REPEAT] = value }
+
+    suspend fun setSpaceCursorWholeKeyboard(value: Boolean) =
+        editPrefs { it[SPACE_CURSOR_WHOLE_KEYBOARD] = value }
 
     suspend fun setSpaceCursorTopSpeed(value: Int) =
         editPrefs { it[SPACE_CURSOR_TOP_SPEED] = value.coerceIn(2, 8) }

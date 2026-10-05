@@ -730,6 +730,21 @@ internal val LocalDeleteSwipe = staticCompositionLocalOf { DeleteSwipeCallbacks(
 internal val LocalCursorMoveVertical = staticCompositionLocalOf<(Int) -> Unit> { {} }
 
 /**
+ * A spacebar cursor drag that has the whole key area for its touchpad (#505).
+ * The drag raises [active] and lowers it on the lift; the key grid reports
+ * [gridBounds] and, while [active] is up, dims the keys and swallows every
+ * other touch on them. Provided at the root like [LocalCursorMoveVertical].
+ */
+internal class SpaceTouchpad {
+    var active by mutableStateOf(false)
+
+    /** The key grid, in root coordinates, as the spacebar's own bounds are. */
+    var gridBounds: Rect = Rect.Zero
+}
+
+internal val LocalSpaceTouchpad = staticCompositionLocalOf { SpaceTouchpad() }
+
+/**
  * Dismisses the keyboard. Provided at the root so the spacebar's optional
  * swipe-down-to-hide gesture can reach it without threading a callback down
  * through the key grid.
@@ -1534,6 +1549,7 @@ fun KeyboardScreen(
         LocalCanForwardDelete provides canForwardDelete,
         LocalDeleteSwipe provides deleteSwipe,
         LocalCursorMoveVertical provides onCursorMoveVertical,
+        LocalSpaceTouchpad provides remember { SpaceTouchpad() },
         LocalCaretDrag provides toolHold.caretMagnifier.onDrag,
         LocalHideKeyboard provides onHideKeyboard,
         LocalLanguageSwitchEcho provides languageSwitchEcho,
@@ -12536,6 +12552,16 @@ private const val SpaceCursorHoldReach = 0.2f
  */
 private const val SpaceCursorVerticalShare = 0.75f
 
+/** How much of the board's colour dims the keys under a whole-keyboard cursor drag (#505). */
+private const val SpaceTouchpadScrimAlpha = 0.6f
+
+/**
+ * With the whole keyboard as the touchpad, the band at either side of it that
+ * counts as the edge for keep-moving (#505). The finger cannot go past the
+ * side of a keyboard as wide as the screen, so the edge is inside it.
+ */
+private const val SpaceTouchpadEdgeDp = 24
+
 /**
  * The preview bubble for [target] under a drag off [source] (#436): the capital
  * the lift would type, over [cell], exactly as a tap on the key bubbles its
@@ -14386,6 +14412,7 @@ private fun KeyRows(
     // be compared with it — the two must not be measured from different roots.
     var boxWindow by remember { mutableStateOf(Offset.Zero) }
     var boxSize by remember { mutableStateOf(IntSize.Zero) }
+    val spaceTouchpad = LocalSpaceTouchpad.current
     // Rows narrower than the grid (e.g. the 9-key QWERTY home row) keep the
     // standard key width and are centred with side gaps, instead of stretching
     // their keys to fill the full width.
@@ -14708,6 +14735,7 @@ private fun KeyRows(
                 boxOrigin = it.positionInRoot()
                 boxWindow = it.positionInWindow()
                 boxSize = it.size
+                spaceTouchpad.gridBounds = it.boundsInRoot()
             }
             // Issue #67: a drag that starts on a modifier key and lifts on
             // another fires that chord — Ctrl+C, rather than a latched Ctrl and
@@ -16223,7 +16251,35 @@ private fun KeyRows(
             layerPeek, state.settings.popup, stampedOnKey, stampedOnText,
             shifted = state.shiftCasesText(),
         )
+
+        SpaceTouchpadShield(spaceTouchpad)
     }
+}
+
+/**
+ * Over the keys while a spacebar cursor drag has the whole keyboard for its
+ * touchpad (#505): dims them, and takes every touch that lands on them so a
+ * second finger types nothing. The drag's own finger went down on the
+ * spacebar before this was here, and stays with it.
+ */
+@Composable
+private fun BoxScope.SpaceTouchpadShield(pad: SpaceTouchpad) {
+    if (!pad.active) return
+    val scrim = LocalKbTheme.current.board.copy(alpha = SpaceTouchpadScrimAlpha)
+    Box(
+        Modifier
+            .matchParentSize()
+            .background(scrim)
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false).consume()
+                    do {
+                        val event = awaitPointerEvent()
+                        event.changes.forEach { it.consume() }
+                    } while (event.changes.any { it.pressed })
+                }
+            },
+    )
 }
 
 /**
@@ -18748,6 +18804,7 @@ internal fun KeyButton(
     val deleteSwipe = LocalDeleteSwipe.current
     val onCursorMoveVertical = LocalCursorMoveVertical.current
     val caretDrag = LocalCaretDrag.current
+    val spaceTouchpad = LocalSpaceTouchpad.current
     val onHideKeyboard = LocalHideKeyboard.current
 
     // What this key would put in the shared bubble, were it pressed right now.
@@ -19022,6 +19079,8 @@ internal fun KeyButton(
                     onCursorMove = onCursorMove,
                     onCursorMoveVertical = onCursorMoveVertical,
                     onCaretDrag = { caretDrag(CaretDragSource.SPACEBAR, it) },
+                    spaceTouchpad = spaceTouchpad.takeIf { settings.textEditing.spaceCursorWholeKeyboard },
+                    keyBounds = { keyBounds.value },
                     onHideKeyboard = onHideKeyboard,
                     spaceCursor2d = settings.layoutBehavior.spaceCursor2d,
                     spaceSwipeDownHide = settings.layoutBehavior.spaceSwipeDownHide,
@@ -21492,6 +21551,13 @@ private fun Modifier.pointerInputKey(
      * the magnifier over it. Paired: the release ends what the drag began.
      */
     onCaretDrag: (Boolean) -> Unit = {},
+    /**
+     * The whole key area as the cursor drag's touchpad (#505), or null when
+     * the drag has the spacebar alone. Raised for as long as a drag runs.
+     */
+    spaceTouchpad: SpaceTouchpad? = null,
+    /** This key's bounds in root coordinates, to place [spaceTouchpad]'s grid against it. */
+    keyBounds: () -> Rect = { Rect.Zero },
     onHideKeyboard: () -> Unit,
     spaceCursor2d: Boolean,
     spaceSwipeDownHide: Boolean,
@@ -21538,7 +21604,7 @@ private fun Modifier.pointerInputKey(
             key, spaceShortSwipe, spaceLongSwipe, enabledLayoutIds, currentLayoutId, longPressDelayMs,
             hapticOnLongPress, hapticOnLongPressRelease, vibrateOnSpace, spaceCursor2d,
             spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel, pickerForLongRing,
-            languageEchoTotalMs,
+            languageEchoTotalMs, spaceTouchpad,
         ) {
             val slopPx = 12.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
@@ -21554,6 +21620,7 @@ private fun Modifier.pointerInputKey(
             val cursorRampStartPx = SpaceCursorRampStartDp.dp.toPx()
             val cursorRampEndPx = SpaceCursorRampEndDp.dp.toPx()
             val langStepPx = 44.dp.toPx()
+            val touchpadEdgePx = SpaceTouchpadEdgeDp.dp.toPx()
             // One picker row of vertical travel moves the hold-drag selection
             // one row; must match the fixed row height LanguagePickerPopup lays
             // out, or the finger and the highlight drift apart.
@@ -21814,6 +21881,7 @@ private fun Modifier.pointerInputKey(
                                 if (action == SpaceSwipeAction.CURSOR) {
                                     onCaretDrag(true)
                                     caretDragOpen = true
+                                    spaceTouchpad?.active = true
                                 }
                                 lastX = change.position.x
                                 lastY = change.position.y
@@ -21916,13 +21984,28 @@ private fun Modifier.pointerInputKey(
                                 // the finger is held still well away from where
                                 // the drag began, the way SwiftKey's does. Any
                                 // step the finger itself makes restarts the pause.
-                                val pastEdge = change.position.x < 0f || change.position.x > size.width
-                                val offset = change.position.x - down.position.x
+                                // With the whole keyboard as the pad, its sides
+                                // are the edges, a fingertip in from each, in
+                                // this key's coordinates.
+                                val grid = spaceTouchpad?.gridBounds
+                                val leftEdge: Float
+                                val rightEdge: Float
+                                if (grid != null && grid.width > 0f) {
+                                    val origin = keyBounds().left
+                                    leftEdge = grid.left - origin + touchpadEdgePx
+                                    rightEdge = grid.right - origin - touchpadEdgePx
+                                } else {
+                                    leftEdge = 0f
+                                    rightEdge = size.width.toFloat()
+                                }
+                                val x = change.position.x
+                                val pastEdge = x < leftEdge || x > rightEdge
+                                val offset = x - down.position.x
                                 val dir = when {
                                     !textEditing.spaceCursorEdgeRepeat -> 0
-                                    change.position.x < 0f -> -1
-                                    change.position.x > size.width -> 1
-                                    abs(offset) > size.width * SpaceCursorHoldReach -> if (offset > 0) 1 else -1
+                                    x < leftEdge -> -1
+                                    x > rightEdge -> 1
+                                    abs(offset) > (rightEdge - leftEdge) * SpaceCursorHoldReach -> if (offset > 0) 1 else -1
                                     else -> 0
                                 }
                                 if (dir == 0) {
@@ -21997,6 +22080,7 @@ private fun Modifier.pointerInputKey(
                         onCaretDrag(false)
                         caretDragOpen = false
                     }
+                    spaceTouchpad?.active = false
                     setPressed(false)
                     onKeyRelease()
                     setLanguagePreview(null)
@@ -22045,6 +22129,7 @@ private fun Modifier.pointerInputKey(
                 }
             } finally {
                 if (caretDragOpen) onCaretDrag(false)
+                spaceTouchpad?.active = false
             }
         }
     } else if (

@@ -18242,10 +18242,42 @@ open class WMKeyboardService : InputMethodService() {
         lastCaretScrubMs = SystemClock.uptimeMillis()
         commitComposing(ic, autocorrect = false)
         lastGestureWord = null
+        if (_uiState.value.settings.textEditing.spaceCursorDirect &&
+            !_uiState.value.caretExtendsSelection && moveCaretToEdgeDirectly(ic, delta)
+        ) {
+            return
+        }
         sendEditorKey(
             if (delta < 0) KeyEvent.KEYCODE_DPAD_UP else KeyEvent.KEYCODE_DPAD_DOWN,
             shift = _uiState.value.caretExtendsSelection,
         )
+    }
+
+    /**
+     * The vertical half of [moveCaretDirectly] (#505), for a one-line field
+     * only: up puts the caret at the start of the text, down at its end, with a
+     * selection change. An up or down arrow in a one-line field is not a line
+     * move at all; a search box takes it into its dropdown, and a plain field
+     * hands focus to the view above or below. False in a multi-line field,
+     * where the arrow is what follows the app's own line wrapping, and when the
+     * field has not said where its caret is.
+     */
+    private fun moveCaretToEdgeDirectly(ic: InputConnection, delta: Int): Boolean {
+        val inputType = currentInputEditorInfo?.inputType ?: return false
+        if (inputType and InputType.TYPE_TEXT_FLAG_MULTI_LINE != 0) return false
+        if (expectedSelStart < 0 || expectedSelStart != expectedSelEnd) return false
+        val to = if (delta < 0) {
+            val before = ic.getTextBeforeCursor(DIRECT_CARET_EDGE_REACH, 0) ?: return false
+            (expectedSelStart - before.length).coerceAtLeast(0)
+        } else {
+            val after = ic.getTextAfterCursor(DIRECT_CARET_EDGE_REACH, 0) ?: return false
+            expectedSelStart + after.length
+        }
+        if (to == expectedSelStart) return true
+        if (!ic.setSelection(to, to)) return false
+        expectedSelStart = to
+        expectedSelEnd = to
+        return true
     }
 
     // ---- gesture typing ----
@@ -35560,6 +35592,13 @@ fun compositionCannotPrecedeCaret(
  * down is not holding a language model.
  */
 private const val IDLE_RELEASE_MS = 120_000L
+
+/**
+ * How much text a direct up or down step in a one-line field reads to find
+ * either end of it (#505). Far past any search query or file name; a longer
+ * line lands this far along, and the next step goes on from there.
+ */
+private const val DIRECT_CARET_EDGE_REACH = 10_000
 
 /**
  * The largest sample [android.graphics.ImageDecoder] accepts, i.e. the
