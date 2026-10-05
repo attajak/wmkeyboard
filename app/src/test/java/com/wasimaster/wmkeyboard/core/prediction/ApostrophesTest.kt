@@ -54,12 +54,20 @@ class ApostrophesTest {
     @Test
     fun leavesRealWordsAlone() {
         // Apostrophe-less forms that are real words must never be touched.
-        for (word in listOf("its", "were", "well", "ill", "id", "hell",
+        for (word in listOf("its", "were", "well", "id", "hell",
                 "shell", "wed", "shed", "lets", "sons", "whore", "hers")) {
             assertNull(word, Apostrophes.fix(word))
         }
         assertNull(Apostrophes.fix("hello"))
         assertNull(Apostrophes.fix(""))
+    }
+
+    @Test
+    fun illIsRepairedDespiteBeingAWord() {
+        // Typed for I'll far more often than for ill; backspace undoes it (#482).
+        assertEquals("I'll", Apostrophes.fix("ill"))
+        assertEquals("I'll", Apostrophes.fix("Ill"))
+        assertNull(Apostrophes.offer("ill"))
     }
 
     /**

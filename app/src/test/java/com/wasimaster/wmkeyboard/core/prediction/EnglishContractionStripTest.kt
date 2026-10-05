@@ -53,6 +53,7 @@ class EnglishContractionStripTest {
             "theres" to "there's",
             "dont" to "don't",
             "im" to "I'm",
+            "ill" to "I'll",
         )) {
             assertEquals(typed, fixed, e.suggest(typed, previousWord = null).first())
             assertEquals(typed, fixed, e.elide(typed))
@@ -78,15 +79,12 @@ class EnglishContractionStripTest {
     }
 
     @Test fun anAmbiguousFormOffersItsContractionBehindTheTypedWord() {
-        // "ill" is I'll far more often than it is ill, but it is both, so the
-        // strip offers the contraction and the space bar keeps what was typed
-        // (#384). The list has i'll commoner than ill; it still sits second.
+        // "id" is I'd and a word of its own, so the strip offers the
+        // contraction and the space bar keeps what was typed (#384). The list
+        // does not hold i'd at all; it still reaches the strip.
         val e = english()
-        val strip = e.suggest("ill", previousWord = null)
-        assertEquals("ill", strip.first())
-        assertEquals("I'll", strip[1])
-        assertNull(e.elide("ill"))
-        // A contraction the list does not hold at all still reaches the strip.
+        val strip = e.suggest("id", previousWord = null)
+        assertEquals("id", strip.first())
         assertTrue("I'd" in e.suggest("id", previousWord = null))
         assertNull(e.elide("id"))
         // Common enough either way to be worth a slot.
@@ -96,6 +94,7 @@ class EnglishContractionStripTest {
     @Test fun anAmbiguousFormOffersNothingWithTheSettingOff() {
         val e = english()
         e.apostropheFixes = false
+        assertTrue("I'd" !in e.suggest("id", previousWord = null))
         assertTrue("I'll" !in e.suggest("ill", previousWord = null))
     }
 
@@ -122,6 +121,10 @@ class EnglishContractionStripTest {
         val strip = e.suggest("dont", previousWord = null)
         assertEquals("dont", strip.first())
         assertTrue("don't" in strip)
+        // The same for "ill", meant as the word (#482).
+        e.rejectCorrection("ill", "I'll")
+        assertNull(e.elide("ill"))
+        assertTrue("I'll" in e.suggest("ill", previousWord = null))
         // Only the pair that was undone.
         assertEquals("that's", e.elide("thats"))
     }

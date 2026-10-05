@@ -6,11 +6,12 @@ package com.wasimaster.wmkeyboard.core.prediction
  * "Fix missing apostrophes" setting is on, before autocorrect gets a look.
  *
  * The table deliberately excludes every apostrophe-less form that is a
- * real English word in its own right — its, were, well, ill, id, hell,
+ * real English word in its own right — its, were, well, id, hell,
  * shell, wed, shed, lets, whore, hes-vs-hers style near-misses aside —
  * so the fix never rewrites something the user may have meant literally.
  * "cant" and "wont" are technically words (a cant, wont to do) but are
- * rare enough that every mainstream keyboard corrects them anyway.
+ * rare enough that every mainstream keyboard corrects them anyway, and
+ * "ill" joins them for the same reason (#482).
  */
 object Apostrophes {
 
@@ -48,6 +49,11 @@ object Apostrophes {
         // the same lone capital "i" does and reach it nowhere else.
         "im" to "I'm",
         "ive" to "I've",
+        // A word too, but typed for I'll far more often than for ill, and one
+        // backspace puts it back — an undone repair is only offered after
+        // that (#482). Offering it behind the typed word (#384) was not
+        // enough: the slip is typed at speed and the strip goes unread.
+        "ill" to "I'll",
         "i'm" to "I'm",
         "i've" to "I've",
         "i'll" to "I'll",
@@ -103,7 +109,7 @@ object Apostrophes {
 
     /**
      * The forms [CONTRACTIONS] refuses, because each is also a real word: its,
-     * were, well, ill, id, hell, shell, wed, shed, lets, whore.
+     * were, well, id, hell, shell, wed, shed, lets, whore.
      *
      * Guessing at these is what [fix] must never do. Applying them when the user
      * *drew the apostrophe* — a glide through the key that
@@ -113,7 +119,6 @@ object Apostrophes {
      */
     private val DECLARED: Map<String, String> = mapOf(
         "id" to "I'd",
-        "ill" to "I'll",
         "its" to "it's",
         "hell" to "he'll",
         "lets" to "let's",
@@ -189,7 +194,7 @@ object Apostrophes {
 
     /**
      * The contraction [word] may have been typed for, when it is also a word
-     * in its own right: ill → I'll, id → I'd, were → we're. Null for every
+     * in its own right: id → I'd, were → we're. Null for every
      * other word.
      *
      * For the suggestion strip only, never a commit: the typed spelling is as

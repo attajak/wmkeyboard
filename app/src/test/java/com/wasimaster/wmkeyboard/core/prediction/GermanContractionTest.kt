@@ -43,7 +43,8 @@ class GermanContractionTest {
 
     @Test fun englishContractionsStayEnglish() {
         assertNull(Apostrophes.fix("dont", "de"))
-        assertNull(Apostrophes.offer("ill", "de"))
+        assertNull(Apostrophes.fix("ill", "de"))
+        assertNull(Apostrophes.offer("id", "de"))
     }
 
     @Test fun commitAndStripAgree() {
