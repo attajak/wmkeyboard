@@ -1433,6 +1433,7 @@ internal object SettingsRowIcons {
         put(R.string.theme_popup_selected_title) { Icons.Outlined.Highlight }
         put(R.string.theme_popup_selected_text_title) { Icons.Outlined.FormatColorText }
         put(R.string.theme_menu_shape_title) { Icons.Outlined.Category }
+        put(R.string.theme_toolbar_background_title) { Icons.Outlined.FormatColorFill }
         put(R.string.theme_tool_shape_title) { Icons.Outlined.Category }
         put(R.string.theme_tool_icons_title) { Icons.Outlined.Widgets }
         put(R.string.theme_tool_circles_title) { Icons.Outlined.Circle }
@@ -1448,6 +1449,8 @@ internal object SettingsRowIcons {
         put(R.string.theme_card_shape_title) { Icons.Outlined.Category }
         put(R.string.theme_card_elevation_title) { Icons.Outlined.Layers }
         put(R.string.theme_suggestion_text_title) { Icons.Outlined.FormatColorText }
+        put(R.string.theme_other_suggestions_title) { Icons.Outlined.FormatColorText }
+        put(R.string.theme_other_suggestions_size_title) { Icons.Outlined.FormatSize }
         put(R.string.theme_secondary_text_title) { Icons.Outlined.FormatColorText }
         put(R.string.theme_divider_title) { Icons.Outlined.HorizontalRule }
         put(R.string.theme_chip_shape_title) { Icons.Outlined.Category }

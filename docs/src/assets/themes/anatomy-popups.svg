@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" width="760" height="330" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">The three popup surfaces a theme paints</title>
+  <desc id="d">Left: the key preview bubble rising out of a pressed key. Middle: the press-and-hold alternates popup with one character highlighted. Right: a list menu with one row selected. Numbered markers point at the bubble's fill, text, outline and shape, the highlight and its text, the spacing between alternates, and the menu's shape.</desc>
+  <defs>
+    <style>
+      .label { fill: #E9E9EE; font-size: 17px; }
+      .badge { fill: #FFD166; stroke: #1B1C20; stroke-width: 1.5; }
+      .num { fill: #1B1C20; font-size: 12px; font-weight: 700; text-anchor: middle; }
+      .lead { stroke: #FFD166; stroke-width: 1.5; fill: none; }
+      .cap { fill: #6B6E78; font-size: 13px; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Three boards -->
+  <rect x="20" y="20" width="220" height="260" rx="16" fill="#17181C"/>
+  <rect x="270" y="20" width="220" height="260" rx="16" fill="#17181C"/>
+  <rect x="520" y="20" width="220" height="260" rx="16" fill="#17181C"/>
+  <text x="130" y="310" class="cap">Key preview bubble</text>
+  <text x="380" y="310" class="cap">Press-and-hold alternates</text>
+  <text x="630" y="310" class="cap">List menu (language picker)</text>
+
+  <!-- A: key preview bubble -->
+  <g>
+    <!-- keys around -->
+    <rect x="36" y="200" width="44" height="46" rx="8" fill="#303338"/><text x="58" y="229" text-anchor="middle" class="label">w</text>
+    <rect x="88" y="200" width="44" height="46" rx="8" fill="#4A5068"/><text x="110" y="229" text-anchor="middle" class="label">e</text>
+    <rect x="140" y="200" width="44" height="46" rx="8" fill="#303338"/><text x="162" y="229" text-anchor="middle" class="label">r</text>
+    <rect x="192" y="200" width="36" height="46" rx="8" fill="#303338"/><text x="210" y="229" text-anchor="middle" class="label">t</text>
+    <!-- bubble -->
+    <rect x="82" y="96" width="56" height="150" rx="12" fill="#34363E" stroke="#8AB4F8" stroke-width="2" filter="url(#shadow)"/>
+    <text x="110" y="140" text-anchor="middle" fill="#E9E9EE" font-size="30">e</text>
+    <!-- markers -->
+    <line x1="150" y1="110" x2="138" y2="110" class="lead"/>
+    <circle cx="162" cy="110" r="11" class="badge"/><text x="162" y="114" class="num">1</text>
+    <line x1="70" y1="132" x2="96" y2="132" class="lead"/>
+    <circle cx="58" cy="132" r="11" class="badge"/><text x="58" y="136" class="num">2</text>
+    <line x1="150" y1="160" x2="139" y2="160" class="lead"/>
+    <circle cx="162" cy="160" r="11" class="badge"/><text x="162" y="164" class="num">3</text>
+    <line x1="70" y1="100" x2="88" y2="100" class="lead"/>
+    <circle cx="58" cy="100" r="11" class="badge"/><text x="58" y="104" class="num">4</text>
+    <!-- height bracket -->
+    <path d="M196 96 h8 M200 96 v150 M196 246 h8" class="lead"/>
+    <circle cx="200" cy="171" r="11" class="badge"/><text x="200" y="175" class="num">5</text>
+  </g>
+
+  <!-- B: alternates popup -->
+  <g>
+    <rect x="286" y="200" width="44" height="46" rx="8" fill="#303338"/><text x="308" y="229" text-anchor="middle" class="label">w</text>
+    <rect x="338" y="200" width="44" height="46" rx="8" fill="#4A5068"/><text x="360" y="229" text-anchor="middle" class="label">e</text>
+    <rect x="390" y="200" width="44" height="46" rx="8" fill="#303338"/><text x="412" y="229" text-anchor="middle" class="label">r</text>
+    <rect x="442" y="200" width="36" height="46" rx="8" fill="#303338"/><text x="460" y="229" text-anchor="middle" class="label">t</text>
+    <!-- popup -->
+    <rect x="286" y="118" width="196" height="64" rx="12" fill="#34363E" filter="url(#shadow)"/>
+    <!-- entries: 5 cells of 36 wide, 48 tall, inset 4 -->
+    <rect x="294" y="126" width="36" height="48" rx="8" fill="#8AB4F8"/>
+    <text x="312" y="157" text-anchor="middle" fill="#0B1220" font-size="20">è</text>
+    <text x="350" y="157" text-anchor="middle" fill="#E9E9EE" font-size="20">é</text>
+    <text x="388" y="157" text-anchor="middle" fill="#E9E9EE" font-size="20">ê</text>
+    <text x="426" y="157" text-anchor="middle" fill="#E9E9EE" font-size="20">ë</text>
+    <text x="464" y="157" text-anchor="middle" fill="#E9E9EE" font-size="20">ē</text>
+    <!-- spacing bracket between é and ê cells -->
+    <path d="M368 190 v6 M406 190 v6 M368 193 h38" class="lead"/>
+    <!-- markers -->
+    <line x1="312" y1="110" x2="312" y2="122" class="lead"/>
+    <circle cx="312" cy="100" r="11" class="badge"/><text x="312" y="104" class="num">6</text>
+    <line x1="312" y1="186" x2="312" y2="176" class="lead"/>
+    <circle cx="312" cy="190" r="11" class="badge"/><text x="312" y="194" class="num">7</text>
+    <circle cx="387" cy="193" r="11" class="badge"/><text x="387" y="197" class="num">8</text>
+    <line x1="470" y1="110" x2="470" y2="118" class="lead"/>
+    <circle cx="470" cy="100" r="11" class="badge"/><text x="470" y="104" class="num">1</text>
+    <line x1="426" y1="100" x2="426" y2="112" class="lead"/>
+    <circle cx="426" cy="100" r="11" class="badge"/><text x="426" y="104" class="num">2</text>
+    <circle cx="482" cy="186" r="11" class="badge"/><text x="482" y="190" class="num">9</text>
+  </g>
+
+  <!-- C: list menu -->
+  <g>
+    <rect x="546" y="60" width="168" height="150" rx="12" fill="#34363E" filter="url(#shadow)"/>
+    <text x="562" y="98" fill="#E9E9EE" font-size="16">English</text>
+    <rect x="552" y="112" width="156" height="40" rx="8" fill="#8AB4F8"/>
+    <text x="562" y="138" fill="#0B1220" font-size="16">বাংলা</text>
+    <text x="562" y="188" fill="#E9E9EE" font-size="16">Deutsch</text>
+    <!-- space bar hint under the menu -->
+    <rect x="546" y="226" width="168" height="36" rx="8" fill="#303338"/>
+    <!-- markers -->
+    <line x1="724" y1="132" x2="712" y2="132" class="lead"/>
+    <circle cx="730" cy="132" r="11" class="badge"/><text x="730" y="136" class="num">6</text>
+    <line x1="536" y1="138" x2="556" y2="138" class="lead"/>
+    <circle cx="530" cy="138" r="11" class="badge"/><text x="530" y="142" class="num">7</text>
+    <line x1="724" y1="72" x2="712" y2="72" class="lead"/>
+    <circle cx="730" cy="72" r="11" class="badge"/><text x="730" y="76" class="num">10</text>
+  </g>
+</svg>

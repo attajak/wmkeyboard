@@ -178,6 +178,7 @@ import com.wasimaster.wmkeyboard.core.theme.keyEffectColorMode
 import com.wasimaster.wmkeyboard.core.theme.keyEffectKindOrNull
 import com.wasimaster.wmkeyboard.core.theme.KeyShapeKind
 import com.wasimaster.wmkeyboard.core.theme.MAX_DECALS
+import com.wasimaster.wmkeyboard.core.theme.SECONDARY_SUGGESTION_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.MAX_EFFECT_IMAGES
 import com.wasimaster.wmkeyboard.core.theme.MAX_THEME_VARIANTS
 import com.wasimaster.wmkeyboard.core.theme.withSidePad
@@ -2935,7 +2936,13 @@ fun ThemeEditorScreen(
             )
         }
         item {
-            ColorRow(R.string.theme_enter_key_title, look.watch { it.enterKeyBackground }) {
+            // Alpha like the other two key faces: a see-through enter key is
+            // half of a see-through keyboard (#504).
+            ColorRow(
+                R.string.theme_enter_key_title,
+                look.watch { it.enterKeyBackground },
+                supportsAlpha = true,
+            ) {
                 update { t -> t.copy(enterKeyBackground = it) }
             }
         }
@@ -3397,6 +3404,19 @@ fun ThemeEditorScreen(
 
     SettingsGroup(stringResource(R.string.theme_toolbar_section_title), foldKey = "theme/toolbar") {
         item {
+            // The fill behind the tools, its own row or the strip while the
+            // tools hold it. Auto follows the suggestion strip's fill, which
+            // itself follows the board, so the fallback swatch walks that chain.
+            NullableColorRow(
+                R.string.theme_toolbar_background_title,
+                look.watch { it.toolbarBackground },
+                fallback = look.watch { it.suggestionBarBackground ?: it.boardBackground },
+                supportsAlpha = true,
+                info = stringResource(R.string.theme_toolbar_background_body),
+                onChange = { update { t -> t.copy(toolbarBackground = it) } },
+            )
+        }
+        item {
             val toolShape = look.watchWith { s, t -> keyShapeKindOrNull(t.toolShape) ?: s.toolShape }
             WmRow(
                 title = stringResource(R.string.theme_tool_shape_title),
@@ -3494,6 +3514,32 @@ fun ThemeEditorScreen(
                 look.watch { it.suggestionText }, fallback = look.watch { it.keyText },
                 onChange = { update { t -> t.copy(suggestionText = it) } },
             )
+        }
+        item {
+            // The suggestions beside the primary one: their own colour, and
+            // their size as a share of the primary's (#504). Auto is the
+            // strip's text colour at full size, which is what they always were.
+            NullableColorRow(
+                R.string.theme_other_suggestions_title,
+                look.watch { it.secondarySuggestionText },
+                fallback = look.watch { it.suggestionText ?: it.keyText },
+                info = stringResource(R.string.theme_other_suggestions_body),
+                onChange = { update { t -> t.copy(secondarySuggestionText = it) } },
+            )
+        }
+        item {
+            SliderRow(
+                R.string.theme_other_suggestions_size_title,
+                value = look.watch { it.secondarySuggestionScale ?: 1f },
+                range = SECONDARY_SUGGESTION_SCALE_RANGE,
+                display = { "${(it * 100).roundToInt()}%" },
+                info = stringResource(R.string.theme_other_suggestions_size_body),
+            ) {
+                // Stored in 5% steps, and the resting value stays null so a
+                // theme that never touched the slider stays "same size".
+                val stepped = (it * 20).roundToInt() / 20f
+                update { t -> t.copy(secondarySuggestionScale = stepped.takeIf { s -> s != 1f }) }
+            }
         }
         item {
             // The quieter line beside the main one, and the hairlines between

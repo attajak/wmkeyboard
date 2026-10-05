@@ -233,6 +233,13 @@ data class ThemeSpec(
      */
     val suggestionBarBackground: Long? = null,
     /**
+     * Fill behind the toolbar's tools wherever they are drawn: the tools' own
+     * row, and the suggestion strip while it is showing the tools instead of
+     * words. Null follows [suggestionBarBackground], so the two bars stay one
+     * colour until a theme pulls them apart (issue #504). Alpha is honoured.
+     */
+    val toolbarBackground: Long? = null,
+    /**
      * Fill of the side rail shown in one-handed mode, and the colour of the two
      * buttons on it.
      *
@@ -384,6 +391,19 @@ data class ThemeSpec(
     // Panels (clipboard/snippet cards, emoji search bar)
     val chipBackground: Long? = null,
     val suggestionText: Long? = null,
+    /**
+     * The suggestions beside the primary one on the strip: the runner-up on
+     * its left and the rest on its right. Null draws them in [suggestionText],
+     * which is what every theme did before the field existed (issue #504).
+     */
+    val secondarySuggestionText: Long? = null,
+    /**
+     * Their size, as a multiple of the primary suggestion's: null or 1 keeps
+     * them the same size, 0.8 draws them a fifth smaller. A ratio rather than
+     * a size so it rides on the user's own suggestion-size slider. Held to
+     * [SECONDARY_SUGGESTION_SCALE_RANGE] where it is read.
+     */
+    val secondarySuggestionScale: Float? = null,
     /**
      * The quieter text beside the main one: a suggestion's secondary word, a
      * clipboard entry's kind and timestamp, a panel subheading. Null draws
@@ -786,6 +806,13 @@ data class DecalSpec(
 
 /** The most decals a theme may carry; past a handful they are just occlusion. */
 const val MAX_DECALS = 6
+
+/**
+ * Bounds for [ThemeSpec.secondarySuggestionScale]. Below half the words are
+ * unreadable beside the primary; a little above one is allowed so a theme can
+ * make the runner-ups the loud ones if it wants to.
+ */
+val SECONDARY_SUGGESTION_SCALE_RANGE = 0.5f..1.2f
 
 /** The most looks one theme may carry; the editor's Add stops here. */
 const val MAX_THEME_VARIANTS = 12
@@ -1196,7 +1223,9 @@ fun ThemeSpec.reseeded(seed: Long, dark: Boolean): ThemeSpec {
         toolbarIcon = null,
         toolCircleActiveBackground = null,
         suggestionText = null,
+        secondarySuggestionText = null,
         suggestionBarBackground = null,
+        toolbarBackground = null,
         navigationBarBackground = null,
         // The recorded roles described the palette that has just been replaced,
         // so nothing on the theme matches them any more. Clearing them lets

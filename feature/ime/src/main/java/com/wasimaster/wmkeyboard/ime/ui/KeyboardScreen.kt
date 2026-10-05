@@ -3478,7 +3478,16 @@ private fun TopBar(
     // Its own layer for the draw the same way: the strip repaints on every
     // keystroke, and without a layer that repaint re-recorded the window's
     // root, and with it every key that has no layer of its own.
-    Box(Modifier.fillMaxWidth().height(topBarHeight(state.settings)).graphicsLayer()) {
+    // The toolbar's own fill while the tools hold the bar (#504); null paints
+    // nothing, and the strip's fill from the slot outside shows through.
+    val toolbarFill = LocalKbTheme.current.toolbar
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(topBarHeight(state.settings))
+            .graphicsLayer()
+            .barRowFill(if (showToolbar) toolbarFill else null),
+    ) {
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -4745,7 +4754,8 @@ private fun RowScope.LatinSuggestionChips(
      */
     tinted: Boolean = false,
 ) {
-    val tint = LocalKbTheme.current.let { kb -> kb.accent to kb.dark }
+    val kb = LocalKbTheme.current
+    val tint = kb.accent to kb.dark
     // The word a long press is asking about, or null while no menu is up. Held
     // here rather than per slot so the menu survives the strip re-laying itself
     // out underneath it, which it does on every keystroke.
@@ -4927,34 +4937,35 @@ private fun RowScope.LatinSuggestionChips(
                     } else {
                         casedWords[suggestion] ?: displayCaseForShift(suggestion, shiftState)
                     }
-                    // See the colour note on the Text below.
-                    val textColor = if (
+                    val primary = index == primaryIndex
+                    // See the colour note on the Text below. The other
+                    // suggestions take the theme's own colour and size for
+                    // them (#504), which are the strip's until a theme says.
+                    val textColor = when {
                         primaryColor != null &&
-                            suggestion.equals(autocorrectWord, ignoreCase = true)
-                    ) {
-                        primaryColor
-                    } else {
-                        MaterialTheme.colorScheme.onSurface
+                            suggestion.equals(autocorrectWord, ignoreCase = true) -> primaryColor
+                        !primary -> kb.secondarySuggestionText
+                        else -> MaterialTheme.colorScheme.onSurface
                     }
+                    val slotSize = if (primary) baseSize else baseSize * kb.secondarySuggestionScale
                     val label = expansions[suggestion]
                         ?.takeIf { !isEmoji }
                         ?.let { glideExpansionLabel(display, it.previewFor(display), textColor) }
                         ?: AnnotatedString(display)
                     val family = if (isEmoji) emojiFamilyFor(suggestion) else null
-                    val weight =
-                        if (index == primaryIndex) FontWeight.SemiBold else FontWeight.Normal
+                    val weight = if (primary) FontWeight.SemiBold else FontWeight.Normal
                     // Re-measured only when the word, its styling or the slot
                     // width actually change — not on every keystroke that leaves
                     // this chip alone.
                     val fit = if (scrollable) {
                         // Natural width: nothing to fit, the row scrolls instead.
                         SuggestionTextFit(1f, 1f)
-                    } else remember(label, family, weight, textWidth, baseSize, baseStyle) {
+                    } else remember(label, family, weight, textWidth, slotSize, baseStyle) {
                         val measured = measurer.measure(
                             text = label,
                             style = baseStyle.merge(
                                 TextStyle(
-                                    fontSize = baseSize,
+                                    fontSize = slotSize,
                                     fontFamily = family,
                                     fontWeight = weight,
                                 ),
@@ -4980,7 +4991,7 @@ private fun RowScope.LatinSuggestionChips(
                         // about to keep it. The bold stays on the primary
                         // either way.
                         color = textColor,
-                        fontSize = baseSize * fit.fontScale,
+                        fontSize = slotSize * fit.fontScale,
                         softWrap = false,
                         // The default 0.5sp tracking is dead width once a word is
                         // already being squeezed.
@@ -10579,6 +10590,8 @@ private fun KeyboardBody(
             // all, which is what lets a board gradient, image or animation run
             // through the bars as it always has (issue #109).
             val barFill = LocalKbTheme.current.suggestionBar
+            // The tools' own row may differ (#504); null follows the strip.
+            val toolsFill = LocalKbTheme.current.toolbar ?: barFill
             // One row of the stack. A local composable so the two halves of the
             // order — above the keys and below them — draw through one `when`.
             // The fill rides on the slot rather than inside each row, so a row
@@ -10588,7 +10601,7 @@ private fun KeyboardBody(
             // through ColumnScope's own AnimatedVisibility.
             @Composable
             fun BarRowSlot(row: BarRow) {
-                Column(modifier = Modifier.barRowFill(barFill)) {
+                Column(modifier = Modifier.barRowFill(if (row == BarRow.TOOLS) toolsFill else barFill)) {
                     when (row) {
                         BarRow.TOPBAR -> when {
                             // Before every other case, the toolbar's own
@@ -19704,16 +19717,17 @@ private fun AlternatesPopup(
                 // are the same statement rather than two that have to agree.
                 key.alternateEntries().forEachIndexed { index, entry ->
                     when (entry) {
-                        is AlternateEntry.Character -> Text(
+                        is AlternateEntry.Character -> AlternateCharacter(
                             text = visibleAlternate(shiftCased(entry.text, shifted)),
+                            index = index,
+                            hold = hold,
+                            fontSize = (18 * fontScale).sp,
                             modifier = Modifier
                                 .clickable { onText(entry.text) }
                                 .alternateHighlight(
-                                    index, hold, kb.pressedKey, kb.popupRadiusDp.dp,
+                                    index, hold, kb.popupSelected, kb.popupRadiusDp.dp,
                                 )
                                 .alternatePadding(entryPadding),
-                            fontSize = (18 * fontScale).sp,
-                            color = kb.popupText,
                         )
                         is AlternateEntry.Action -> AlternateAction(
                             alternate = entry.alternate,
@@ -19723,7 +19737,7 @@ private fun AlternatesPopup(
                             modifier = Modifier.alternateHighlight(
                                 index = index,
                                 hold = hold,
-                                color = kb.pressedKey,
+                                color = kb.popupSelected,
                                 radius = kb.popupRadiusDp.dp,
                             ),
                         ) {
@@ -20167,7 +20181,37 @@ private fun alternateActionSpoken(action: KeyAction): Int? = when (action) {
 }
 
 /**
- * Paints the hold-drag's highlight behind an alternate.
+ * One character of the alternates popup, in a restart scope of its own.
+ *
+ * The glyph under the finger draws in the theme's Selected text colour, the
+ * way a selected menu row does, and that colour is baked into the text layout
+ * rather than read at draw time like the highlight below it. Reading the
+ * selection here, in a composable per entry, means a hold-drag recomposes the
+ * entry it leaves and the entry it lands on and nothing else — not the grid
+ * of twenty around them.
+ */
+@Composable
+private fun AlternateCharacter(
+    text: String,
+    index: Int,
+    hold: AlternatesHold?,
+    fontSize: TextUnit,
+    modifier: Modifier,
+) {
+    val kb = LocalKbTheme.current
+    val selected = hold != null && hold.selected.intValue == index
+    Text(
+        text = text,
+        modifier = modifier,
+        fontSize = fontSize,
+        color = if (selected) kb.popupSelectedText else kb.popupText,
+    )
+}
+
+/**
+ * Paints the hold-drag's highlight behind an alternate: the theme's Selected
+ * highlight, which the editor row of that name promised and which, until
+ * issue #504, this popup ignored in favour of the pressed-key colour.
  *
  * A draw modifier rather than a background: the selection is read in the draw
  * phase, so sliding the finger across a popup of twenty entries repaints it and

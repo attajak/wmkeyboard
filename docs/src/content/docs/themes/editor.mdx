@@ -74,6 +74,44 @@ Every color row in the app opens the same dialog, here and over in the tool scre
 
 The button in the dialog's title swaps the wheel for **Hue** and **Saturation** bars, for when you'd rather read exact numbers or move one channel at a time. Those bars are also the ones TalkBack can set. In landscape the wheel sits beside the bars instead of above them.
 
+### What's what
+
+Every row in the editor paints one part of the keyboard, and the names are only obvious once you know which part is which. The two drawings below put a number on each part. The tables under them say which row colours it.
+
+![A dark keyboard with numbered markers on the board, the toolbar row, the suggestion strip, a letter key and its hint, a pressed key, a bordered key, a modifier key, the enter key, the space bar and the navigation bar.](@assets/themes/anatomy-keyboard.svg)
+
+| | Part | Rows that paint it |
+|---|---|---|
+| 1 | **Board**: everything behind the keys, including the gaps between them | Board › Background, Gradient background, Background image |
+| 2 | **Toolbar row**: the tools, each on its own circle | Toolbar › Toolbar background, Tool circles, Tool icons, Active tool circle, Active tool icon, Tool outline; shape and size under Tool background shape and Corners |
+| 3 | **Suggestion strip**: the word candidates. The middle one is the primary, the others the runner-ups | Board › Suggestion strip (the fill); Panels & suggestions › Suggestion text (the primary), Other suggestions and Other suggestions size (the rest), Dividers (the hairlines between them) |
+| 4 | **Letter key** and its label | Keys › Letter keys, Key text; the sheen under Key gradient; the picture under Key textures › Letter keys |
+| 5 | **Key hint**: the small alternate in the corner | Keys › Key hint text; its size under Layout › Key hint font size |
+| 6 | **Pressed key**: the flash while a key is held | Keys › Pressed key; the picture under Key textures › Pressed keys |
+| 7 | **Key border** | Keys › Key border and Border width |
+| 8 | **Modifier key**: shift, delete, `?123`, the globe | Keys › Modifier keys, Modifier key text |
+| 9 | **Enter key** | Keys › Enter key, Enter key icon |
+| 10 | **Space bar** | Takes the letter-key colour and texture; give it its own under Single-key styles › Space |
+| 11 | **Navigation bar**: the band the phone's gesture bar sits on | Board › Navigation bar |
+| 12 | **Key shape and corners** | Keys › Key shape; Corners › Key corner radius; the lift under Key shadow |
+
+![Three popups: the key preview bubble rising out of a pressed key, the press-and-hold alternates popup with one character highlighted, and a list menu with one row selected. Numbered markers point at the fill, text, outline, shape, highlight, spacing and shadow.](@assets/themes/anatomy-popups.svg)
+
+| | Part | Rows that paint it |
+|---|---|---|
+| 1 | **Popup fill**: the bubble that rises out of a pressed key, and the sheet the press-and-hold alternates sit on | Accent & popups › Popup background; the picture under Key textures › Key preview popup |
+| 2 | **Popup text**: the character in the bubble, and every alternate that isn't under your finger | Accent & popups › Popup text |
+| 3 | **Popup outline** | Accent & popups › Popup outline and its width row |
+| 4 | **Popup shape and corners** | Accent & popups › Popup shape; Corners › Popup corner radius |
+| 5 | **Popup height**: how tall the bubble is | Layout › Popup height; where it sits is Popup placement |
+| 6 | **Selected highlight**: the alternate your finger is on, and the selected row of a menu | Panels & suggestions › Selected highlight |
+| 7 | **Selected text**: the character or row on that highlight | Panels & suggestions › Selected text |
+| 8 | **Spacing between alternates**: the room around each character, which is also the gap between the highlight and the popup's edge | Not a theme field. It's <SettingsPath path="Key press / Alternate keys / Alternate key spacing" />, and the characters' size is **Alternate key size** beside it |
+| 9 | **Popup shadow** | Panels & suggestions › Popup shadow |
+| 10 | **Menu shape**: the list menus' own outline | Accent & popups › Menu shape |
+
+The popup rows do nothing to a bubble you have coloured by hand under <SettingsPath path="Key press / Key popup" />: **Popup color** and **Popup text color** there win over the theme, and their reset controls hand the bubble back to it. A [single-key style](#single-key-styles) wins over both, for its one key.
+
 ### Board
 
 - **Background** is the board's base color. It supports alpha, which starts to matter once a background image is set. See [Image backgrounds](/themes/backgrounds/) for the image picker, crop, opacity, and blur controls that live in this same section.
@@ -90,6 +128,12 @@ The button in the dialog's title swaps the wheel for **Hue** and **Saturation** 
 - **Key text**, **Modifier keys**, **Modifier key text** (falls back to Key text when left on Auto), **Key hint text** (the small long-press alternate in a key's corner; Auto draws the key's own text color at 55% opacity, and this one keeps alpha so you can pick a translucent hint in another hue), **Enter key**, **Enter key icon**.
 - **Pressed key** is the color a key flashes while held. Auto derives it from Letter keys.
 - **Key border** stays off (Auto, no visible border) until you pick a color. A **Border width** slider (0–3dp) then appears, starting at 0dp. Picking a border color on its own shows nothing until you raise the width too.
+
+#### See-through keys
+
+Keys don't need a separate opacity slider: the colour itself carries it. **Letter keys**, **Modifier keys** and **Enter key** all open the picker with the **Opacity** bar, and the hex field takes eight digits, so `#80303338` is the stock key at half strength. Pull the opacity down and the board shows through the key, gradient, photo or animation included, and the gap between keys stops being a gap. Setting a background image does the first step for you: it drops opaque key and modifier colours to about 62%. A key you can see through casts no [shadow](#key-shadow), whatever Key shadow says.
+
+That is a translucent face. For no face at all, pick **None** under [Key shape](#no-key-shape): the labels then sit straight on the board, and only a pressed or latched key draws anything behind its label.
 
 ### Key shapes
 
@@ -187,7 +231,7 @@ A theme's sound is only ever a sound it can actually make. A theme whose sound i
 
 - **Accent** paints the shift-on tint, the active-tool color, and the buttons across the panels.
 - **Gesture trail** is the color of the swipe-typing trail. Auto falls back to Accent, and the field supports alpha.
-- **Popup background** and **Popup text** color the bubble that appears above a key on press. Both support Auto fallbacks, deriving from the board and key colors and from Key text respectively. Popup background supports alpha.
+- **Popup background** and **Popup text** color the bubble that appears above a key on press, and the press-and-hold alternates with it: the sheet the alternates sit on is Popup background, and every alternate not under your finger is Popup text. Both support Auto fallbacks, deriving from the board and key colors and from Key text respectively. Popup background supports alpha. The highlight that follows your finger across the alternates is **Selected highlight** under [Panels & suggestions](#panels--suggestions), and the character on it is **Selected text**, so the gap between that highlight and the sheet's edge is the alternates' spacing, which is <SettingsPath path="Key press / Alternate keys / Alternate key spacing" /> rather than a theme field. See [What's what](#whats-what) for a drawing of each part.
 - **Popup shape** sets the outline of every popup surface the keyboard draws: the character bubble, the long-press alternates, the language list, the panel menus. It's the same picker and the same twelve shapes as Key shape, drawn at this theme's popup radius. Until you pick one, the theme follows <SettingsPath path="Key press / Key popup / Popup shape" />.
 - **Popup placement** decides whether the character bubble grows out of the pressed key (the stock style) or floats detached above it. **Default** leaves the choice to <SettingsPath path="Key press" />. The other two make it part of the theme, so a bubble-popup theme looks right on every phone it lands on.
 - **Popup outline** and its width row draw a border around the bubble, off until you pick a color, exactly like the key border. It draws on every popup surface the keyboard opens: the character bubble, the long-press alternates, the spacebar language picker, the clipboard and emoji menus, and the small pickers inside the tool panels.
@@ -196,6 +240,7 @@ A theme's sound is only ever a sound it can actually make. A theme whose sound i
 
 ### Toolbar
 
+- **Toolbar background** fills the bar behind the tools: their own row, when <SettingsPath path="Appearance / Toolbar" /> gives them one, and the suggestion strip while it is showing the tools instead of words. On Auto it matches **Suggestion strip** under Board, which in turn matches the board, so the bars stay one colour until you pull this one apart. Alpha works here, so a half-transparent fill tints the strip's own colour rather than covering it. The strip takes its own colour back the moment words arrive, so a bar that flips between words and tools flips colour with them; if that reads as a flicker, leave the two the same and use the tools' own row instead.
 - **Tool background shape** is the outline of the background behind each toolbar tool, from the same twelve shapes. It follows <SettingsPath path="Appearance / Toolbar / Tool background shape" /> until you pick one here. Nothing draws at all while the tool radius is 0, which is the setting for bare icons.
 - **Tool icons** sets the toolbar's icon color, Auto by default.
 - **Tool circles** and **Active tool circle** paint the background behind a toolbar icon, at rest and while pressed or active. Both support alpha.
@@ -210,6 +255,8 @@ A theme's sound is only ever a sound it can actually make. A theme whose sound i
 - **Selected highlight** and **Selected text** color the letter your finger is on while you hold a key, and the selected row of the language list. Auto uses the accent, which is what these were before they had rows of their own.
 - **One-handed rail** and **One-handed rail icons** color the strip beside the keyboard in one-handed mode. It used to draw in the settings app's colors and ignore your keyboard theme entirely.
 - **Suggestion text** colors the suggestion strip and the panels' body text. Auto falls back to Key text, contrast-guarded against the board, so a theme whose keys invert against its board (dark ink on cream keys over a near-black board) still gets a legible strip. An explicit choice here is honoured as written.
+- **Other suggestions** colors the strip's suggestions other than the primary one: the runner-up on its left and the rest on its right, when the primary sits in the middle, or everything after the first word when it doesn't. Auto draws them in Suggestion text, which is what they always were. The primary keeps Suggestion text (and its bold), and the word autocorrect has settled on keeps the colour **Autocorrect word color** under <SettingsPath path="Appearance / Toolbar" /> gives it, so a strip that colours its runner-ups quieter never hides the one word a space is about to type.
+- **Other suggestions size** draws those words at a share of the primary's size, 50% to 120% in 5% steps, 100% being the same size. It's a ratio, not a size, so it rides on the suggestion-size slider under Typing the way the primary does, and a word squeezed to fit its slot shrinks from this size rather than from the primary's. The conversion candidates of the CJK layouts and Avro's candidate list are one row of equals and ignore it.
 - **Secondary text** colors the quieter text beside the main text: the second word of a suggestion, and the kind and time on a clipboard entry. Auto draws Suggestion text at 65% alpha, which is what it was before the row existed. Alpha works here.
 - **Dividers** colors the hairlines between the parts of a panel and between suggestions. Auto draws Suggestion text at 25% alpha. Alpha works here too, so you can keep the rule faint in a hue of its own.
 - **Card shadow** lifts the panel cards off the panel.
@@ -292,6 +339,7 @@ Delete isn't offered for built-in themes or for the Default theme, only for them
 - **Editing an existing custom theme doesn't switch to it.** Tapping the pencil on a theme already in Your Themes opens the editor without changing your active keyboard theme. Only Create, Duplicate (from a built-in), and Import set the edited theme as active, as a side effect of those actions rather than of editing.
 - **Typography is part of a theme, but only once you set it.** The key font, the per-script fonts, key label size, bold key labels and corner hint size are all theme fields. Each one is empty until you touch it, and an empty field follows your global setting instead. So a theme you never gave a font to picks up whatever [Keyboard fonts](/themes/fonts/) is set to, and changing that global font changes how the theme looks. Give the theme its own font and the global one stops applying to it. The sizes work the same way through the **Layout for this theme** switch.
 - **The key-preview bubble has no band to rise into here.** On the real keyboard, the bubble for a top-row key is drawn in an empty strip of window kept above the board, over whatever app you are typing into. The preview has no window of its own, so it holds no such strip — keeping one would be dead space taken out of the board's own room, and on the miniature it cost the board most of the width it had. The docked keyboard draws that bubble over the sections above it instead, the way the real one draws it over the app; the miniature, which is clipped to its own rounded corners, sits it on the board's top edge rather than letting it be cut in half.
+- **Selected highlight used to miss the alternates.** Before version 0.5.14 the press-and-hold popup drew the highlight under your finger in the **Pressed key** colour and ignored Selected highlight and Selected text, so changing either row did nothing visible there. Both now reach the alternates as well as the menus. A theme that relied on the old behaviour and wants the pressed colour back sets Selected highlight to it.
 - **Two "Auto" swatches don't match the real keyboard.** Pressed key and Active tool circle, when left on Auto, are worked out by a different formula in the editor's swatch than on the board itself. The swatch blends the key colour 40% toward the accent; the keyboard blends it 25% toward the key text. On a theme with a strong accent the two are visibly different colours, so trust the live preview over the swatch. Every other Auto fallback (popup background, tool circles at rest, and so on) matches exactly.
 - **A theme's background image lives in this same editor**, under Board, but the picker, crop dialog, and opacity/blur sliders are covered in full on [Image backgrounds](/themes/backgrounds/) rather than here.
 - **Corner-radius overrides here are theme-specific**; the sliders they inherit from and the global key-shape basics are covered in [Theming overview](/themes/overview/).

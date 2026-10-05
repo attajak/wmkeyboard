@@ -163,7 +163,7 @@ The last two rows stay hidden until you have started using photos, so a theme wi
 | Modifier keys | Color, alpha | `#222428` |
 | Modifier key text | Color, alpha off, Auto → Key text | Auto |
 | Key hint text | Color, alpha, Auto → the key's own text color at 55% opacity | Auto |
-| Enter key | Color | `#4C8DF6` |
+| Enter key | Color, alpha | `#4C8DF6` |
 | Enter key icon | Color | `#0B1220` |
 | Pressed key | Color, Auto → blended from Letter keys and Accent | Auto |
 | Key border | Color, Auto → no border | Auto |
@@ -240,6 +240,7 @@ Accent drives the shift-on tint, the active-tool highlight, and buttons across t
 
 | Setting | Control | Default |
 |---|---|---|
+| Toolbar background | Color, alpha, Auto → Suggestion strip, then the board | Auto |
 | Tool background shape | Row → the same picker dialog Key shape uses | follows <SettingsPath path="Appearance / Toolbar / Tool background shape" /> |
 | Tool icons | Color, Auto → Key text at partial opacity over the board | Auto |
 | Tool circles | Color, alpha, Auto → computed | Auto |
@@ -247,14 +248,20 @@ Accent drives the shift-on tint, the active-tool highlight, and buttons across t
 | Tool outline | Color, alpha, Auto → no outline | Auto |
 | Tool outline width *(outline color set)* | Slider, 0–3dp | 0dp |
 
+**Toolbar background** paints the tools' own row and the suggestion strip while it shows the tools. The strip's own fill (**Suggestion strip**, under Board) comes back the moment words arrive.
+
 ### Panels & suggestions
 
 | Setting | Control | Default |
 |---|---|---|
 | Cards & search bar | Color, alpha, Auto → Modifier keys | Auto |
 | Suggestion text | Color, Auto → Key text | Auto |
+| Other suggestions | Color, Auto → Suggestion text | Auto |
+| Other suggestions size | Slider, 50–120% in 5% steps | 100% |
+| Secondary text | Color, alpha, Auto → Suggestion text at 65% opacity | Auto |
+| Dividers | Color, alpha, Auto → Suggestion text at 25% opacity | Auto |
 
-"Cards & search bar" covers suggestion chips and the search bar surface across the tool panels.
+"Cards & search bar" covers suggestion chips and the search bar surface across the tool panels. **Other suggestions** and its size row cover every word on the strip except the primary one, as a colour and as a share of the primary's size; the CJK conversion candidates and Avro's candidate list ignore both.
 
 Any row still on Auto shows an "Auto" label instead of a swatch; once you override it, its [color picker](/themes/editor/#the-color-picker) gains an **Auto** button next to Apply that clears the override again. See [Theme editor](/themes/editor/#options) for the exact fallback formula behind every Auto field.
 

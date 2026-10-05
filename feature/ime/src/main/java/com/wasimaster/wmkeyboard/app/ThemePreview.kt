@@ -177,10 +177,12 @@ private fun ThemePreviewContent(
         ) {
             // A theme may paint the bar behind the tools rather than leave it
             // on the board (issue #109); the mock-up shows that, so the card
-            // answers the same question the real strip does. The navigation
-            // band has no counterpart here — this preview stops at the bottom
-            // key row, the way it stops short of popups and panels.
-            val barFill = theme.suggestionBarBackground
+            // answers the same question the real strip does. This row holds
+            // the tools, so the toolbar's own fill wins where there is one
+            // (#504), falling back to the strip's. The navigation band has no
+            // counterpart here — this preview stops at the bottom key row, the
+            // way it stops short of popups and panels.
+            val barFill = theme.toolbarBackground ?: theme.suggestionBarBackground
             Row(
                 modifier = Modifier
                     .weight(TOOLBAR_WEIGHT)
