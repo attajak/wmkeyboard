@@ -141,6 +141,12 @@ Tapping a candidate (in the strip or the grid) resolves by its position in the r
 
 If a reading has no dictionary match at all, it always falls back to committing what you typed as-is (raw pinyin letters, kana, or a stroke code) rather than trapping you in an empty buffer.
 
+### The keyboard's own boxes
+
+The same thing happens in the keyboard's own text fields — the dictionary tool's search, the clipboard and emoji filters, the AI prompt, Find and replace, a plugin's box. They compose and convert exactly as the app's field does: romaji turns into kana as you type it, the 小゛゜ key cycles the last kana, the candidates appear in the strip above the keys, and a tap commits the part of the reading it covers and leaves the rest composing. Nothing reaches the app behind the panel, and a pick there is learned the same way a pick anywhere else is.
+
+These boxes used to take the keys straight: `ka` stayed `ka`, there was no way to add a dakuten, and no kanji was ever offered — so a Japanese user could not search the dictionary tool for anything.
+
 The candidate bar is not the ordinary suggestion strip wearing a different coat, and it isn't switched off by the things that switch that strip off. Turning **Suggestions** off, or typing into a field that asks for a silent strip (search and filter boxes, address bars, email fields, password boxes), leaves the candidates exactly where they are. For a conversion method the candidate list *is* the input method, so hiding it wouldn't quiet a guess, it would stop you typing the language at all. Password boxes convert too, and what they don't do is remember the pick afterwards, which is the same rule the rest of the keyboard's learning follows.
 
 ## Learning from your picks

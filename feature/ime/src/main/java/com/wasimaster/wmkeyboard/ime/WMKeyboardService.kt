@@ -7904,12 +7904,20 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * Whether [composer] turns its keys into script text by itself, which is
      * what a keyboard-owned field can show: Hangul, Cheonjiin, Telex and VNI,
-     * Khipro. Not a converter, whose output is a pick off the strip, and not a
-     * phonetic one like Avro, whose buffer stays roman here and is converted
-     * by the field's own suggestions.
+     * Khipro, and every conversion IME (kana, pinyin, zhuyin, cangjie, stroke,
+     * jyutping). Not a phonetic one like Avro, whose buffer stays roman here
+     * and is converted by the field's own suggestions.
+     *
+     * The converters were excluded until #527, on the reasoning that their
+     * output is a pick off the strip rather than a rendering of the buffer.
+     * Half of that is true and the other half is the bug: a kana IME's buffer
+     * renders perfectly well on its own — it is kana — and leaving it out meant
+     * a Japanese user typing into the dictionary tool's search box got the
+     * letters `ka` instead of か, no 小゛゜ key, and no way to reach a kanji.
+     * The pick is handled too, by [captureConversionPick].
      */
     private fun composesInCapture(composer: Composer): Boolean =
-        composer.isTransliterating && !composer.isConversion && composer.phoneticLanguage == null
+        composer.isTransliterating && composer.phoneticLanguage == null
 
     /**
      * Whether [text] is a key [composer] spells with and so joins the word it
@@ -7935,13 +7943,23 @@ open class WMKeyboardService : InputMethodService() {
      * tap elsewhere ends composing in the app's field.
      */
     private fun liveCaptureComposition(state: KeyboardUiState, before: CaretText): CaptureComposition? {
+        val live = captureCompositionIfLive(state, before)
+        if (live == null) captureComposition = null
+        return live
+    }
+
+    /**
+     * [liveCaptureComposition] without letting the word go — for the readers
+     * that only want to *look* at the run (the candidate strip), which must not
+     * end a word merely by being asked about it.
+     */
+    private fun captureCompositionIfLive(state: KeyboardUiState, before: CaretText): CaptureComposition? {
         val run = captureComposition ?: return null
         val shown = state.composer.composeBuffer(run.keys)
         val live = run.key == state.captureKey() && !before.hasSelection &&
             before.at == run.start + shown.length &&
             before.text.regionMatches(run.start, shown, 0, shown.length)
-        if (!live) captureComposition = null
-        return captureComposition
+        return run.takeIf { live }
     }
 
     /**
@@ -7962,13 +7980,14 @@ open class WMKeyboardService : InputMethodService() {
         val oldLength = run?.let { composer.composeBuffer(it.keys).length } ?: 0
         val shown = composer.composeBuffer(keys)
         val text = base.text.substring(0, start) + shown + base.text.substring(start + oldLength)
-        captureWrite(target, before, CaretText(text, start + shown.length))
+        captureWrite(target, before, CaretText(text, start + shown.length), keepsComposing = true)
         // After the write, which lets every other edit's word go.
         captureComposition = if (keys.isEmpty()) {
             null
         } else {
             state.captureKey()?.let { CaptureComposition(it, start, keys) }
         }
+        publishKanaVariantReady()
     }
 
     /**
@@ -8274,7 +8293,12 @@ open class WMKeyboardService : InputMethodService() {
      * fields, the Learn speller), so what lands can be shorter than what was
      * asked for, and a caret past the end of the text would draw outside it.
      */
-    private fun captureWrite(target: CaptureTarget, before: CaretText, after: CaretText) {
+    private fun captureWrite(
+        target: CaptureTarget,
+        before: CaretText,
+        after: CaretText,
+        keepsComposing: Boolean = false,
+    ) {
         // Any edit ends a transliterated word; the one that continues it sets
         // it again straight after (see [rewriteCaptureComposition]).
         captureComposition = null
@@ -8315,6 +8339,11 @@ open class WMKeyboardService : InputMethodService() {
         val at = if (written == after.text) after.at else written.length
         val anchor = if (written == after.text) after.anchorAt else at
         _uiState.update { it.copy(captureCaret = key?.let { k -> CaptureCaret(k, at, written, anchor) }) }
+        // The run was just let go, so the 小゛゜ key goes back to what it was
+        // (#527). The callers that set a new run straight afterwards say so and
+        // publish once themselves, rather than flipping the flag twice — and
+        // with it the key grid's `remember` — on every keystroke.
+        if (!keepsComposing) publishKanaVariantReady()
     }
 
     /**
@@ -8367,6 +8396,7 @@ open class WMKeyboardService : InputMethodService() {
         val target = state.captureTarget()
         captureSuggestJob?.cancel()
         val caret = state.captureCaretText()
+        if (target != null && caret != null && refreshCaptureCandidates(state, caret)) return
         if (target == null || !target.takesWords || caret == null || !state.settings.suggestions) {
             if (state.captureSuggestions.isNotEmpty()) {
                 _uiState.update { it.copy(captureSuggestions = emptyList()) }
@@ -8389,6 +8419,87 @@ open class WMKeyboardService : InputMethodService() {
                 else s.copy(captureSuggestions = words)
             }
         }
+    }
+
+    /**
+     * The conversion candidates for the word a keyboard-owned field is
+     * composing, in place of its word-list suggestions (#527). True whenever
+     * this composer converts, so the ladder above stops there — a kana reading
+     * has nothing to say to the Latin word list.
+     *
+     * Drawn whatever **Suggestions** is set to, and with no debounce, for the
+     * reason the composing itself runs regardless: for a conversion IME the
+     * strip is not a convenience over typing, it is the only way to reach a
+     * kanji at all. Ranking is off the main thread as everywhere else; the
+     * answer lands only if the buffer and caret are still the ones it was
+     * asked about.
+     */
+    private fun refreshCaptureCandidates(state: KeyboardUiState, caret: CaretText): Boolean {
+        val composer = state.composer
+        if (!composer.isConversion || !composesInCapture(composer)) return false
+        val reading = captureCompositionIfLive(state, caret)?.keys?.takeIf { it.isNotEmpty() }
+        if (reading == null) {
+            if (state.captureSuggestions.isNotEmpty()) {
+                _uiState.update { it.copy(captureSuggestions = emptyList()) }
+            }
+            return true
+        }
+        val slots = state.settings.suggestionStrip.slotCount
+        val key = state.captureKey()
+        captureSuggestJob = serviceScope.launch {
+            val words = withContext(Dispatchers.Default) { composer.candidates(reading, slots) }
+            _uiState.update { s ->
+                if (s.captureKey() != key || s.captureCaretText() != caret) s
+                else s.copy(captureSuggestions = words)
+            }
+        }
+        return true
+    }
+
+    /**
+     * A conversion candidate picked off a keyboard-owned field's strip: it
+     * replaces the part of the composing run it covers and the rest keeps
+     * composing, which is [commitConversionPrefix] without an InputConnection
+     * to commit through (#527).
+     *
+     * Resolved by strip position, never by text: a candidate's text does not
+     * identify it — `ja_kana` lists 行 under four different readings — and the
+     * list on screen *is* [KeyboardUiState.captureSuggestions], so the position
+     * is exact. False when the tap cannot be matched to it, and the caller
+     * falls back to inserting the word as a plain suggestion pick.
+     */
+    private fun captureConversionPick(
+        state: KeyboardUiState,
+        target: CaptureTarget,
+        before: CaretText,
+        run: CaptureComposition,
+        chosen: String,
+    ): Boolean {
+        val composer = state.composer
+        val index = state.captureSuggestions.indexOf(chosen)
+        if (index < 0) return false
+        val consumed = composer.consumedForIndex(run.keys, index).coerceIn(1, run.keys.length)
+        if (learningAllowed) composer.learnChoice(run.keys, index)
+        val rest = run.keys.substring(consumed)
+        val shown = composer.composeBuffer(run.keys)
+        val tail = composer.composeBuffer(rest)
+        val text = before.text.substring(0, run.start) + chosen + tail +
+            before.text.substring(run.start + shown.length)
+        // No trailing space: a conversion commit never adds one, here or in a
+        // field. captureWrite lets the word go, so the tail is re-seated after.
+        captureWrite(
+            target,
+            before,
+            CaretText(text, run.start + chosen.length + tail.length),
+            keepsComposing = true,
+        )
+        captureComposition = if (rest.isEmpty()) {
+            null
+        } else {
+            _uiState.value.captureKey()?.let { CaptureComposition(it, run.start + chosen.length, rest) }
+        }
+        publishKanaVariantReady()
+        return true
     }
 
     /**
@@ -8452,6 +8563,11 @@ open class WMKeyboardService : InputMethodService() {
      * at the caret and leaves a space behind it, exactly as a pick does in a
      * real field. Nothing is learned from it — the word came from the word
      * list, and a search query is not writing.
+     *
+     * A conversion IME's candidate is a different thing with the same gesture,
+     * and goes to [captureConversionPick]: it commits a prefix of the reading,
+     * adds no space, and *is* learned, because which kanji a reading means is
+     * not a search term (#527).
      */
     fun onCaptureSuggestion(word: String) {
         val state = _uiState.value
@@ -8465,6 +8581,17 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val before = state.captureCaretText() ?: return
+        // A conversion pick commits the reading it covers and leaves the tail
+        // composing, rather than replacing the "word" at the caret (#527).
+        val run = if (state.composer.isConversion && composesInCapture(state.composer)) {
+            liveCaptureComposition(state, before)
+        } else {
+            null
+        }
+        if (run != null && captureConversionPick(state, target, before, run, word)) {
+            consumeShift()
+            return
+        }
         captureWrite(target, before, before.replacedWordAtCaret(word, spaceAfter = true))
         consumeShift()
     }
@@ -11997,7 +12124,14 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun publishKanaVariantReady() {
         val state = _uiState.value
-        val last = composing.lastOrNull()
+        // A keyboard-owned field composes in [captureComposition], not in the
+        // service's buffer, and that buffer still holds whatever the app's
+        // field was left half-way through (#527).
+        val last = if (state.captureTarget() != null) {
+            captureComposition?.keys?.lastOrNull()
+        } else {
+            composing.lastOrNull()
+        }
         val ready = last != null && state.layouts.hasKanaVariantKeys && Kana.cycleVariant(last) != last
         if (state.kanaVariantReady != ready) {
             _uiState.update { it.copy(kanaVariantReady = ready) }
@@ -13672,6 +13806,7 @@ open class WMKeyboardService : InputMethodService() {
      * buffer is empty or the last char has no variant.
      */
     private fun cycleKanaVariant() {
+        if (cycleCaptureKanaVariant()) return
         val ic = currentInputConnection ?: return
         if (composing.isEmpty()) return
         val last = composing[composing.length - 1]
@@ -13680,6 +13815,24 @@ open class WMKeyboardService : InputMethodService() {
         composing.setCharAt(composing.length - 1, cycled)
         updateComposingText(ic)
         refreshSuggestions()
+    }
+
+    /**
+     * [cycleKanaVariant] for a keyboard-owned field (#527). True whenever one
+     * has the keys — including when there is no kana to cycle — so the press is
+     * spent here rather than rewriting a word in the app behind the panel.
+     */
+    private fun cycleCaptureKanaVariant(): Boolean {
+        val state = _uiState.value
+        val target = state.captureTarget() ?: return false
+        if (!composesInCapture(state.composer)) return true
+        val before = state.captureCaretText() ?: return true
+        val run = liveCaptureComposition(state, before) ?: return true
+        val last = run.keys.lastOrNull() ?: return true
+        val cycled = Kana.cycleVariant(last)
+        if (cycled == last) return true
+        rewriteCaptureComposition(state, target, before, run, run.keys.dropLast(1) + cycled)
+        return true
     }
 
     /** Pack-state token the conversion tables were last loaded from; see [CjkDictStore.stateToken]. */
