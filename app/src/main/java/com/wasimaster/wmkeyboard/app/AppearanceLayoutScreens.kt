@@ -869,6 +869,15 @@ internal fun LayoutSettings(
                 default = SettingsDefaults.layoutBehavior.numberRowInSymbols,
             ) { scope.launch { repository.setNumberRowInSymbols(it) } }
         }
+        item(visible = numberRow) {
+            ToggleSetting(
+                R.string.layout_number_row_on_keypad_title,
+                stringResource(R.string.layout_number_row_on_keypad_subtitle),
+                settings.watch { it.layoutBehavior.numberRowOnKeypad },
+                info = stringResource(R.string.layout_number_row_on_keypad_info),
+                default = SettingsDefaults.layoutBehavior.numberRowOnKeypad,
+            ) { scope.launch { repository.setNumberRowOnKeypad(it) } }
+        }
     }
     // Issue #369: the caret keys as a row of their own under the spacebar.
     val arrowRow = settings.watch { it.layoutBehavior.arrowRow }

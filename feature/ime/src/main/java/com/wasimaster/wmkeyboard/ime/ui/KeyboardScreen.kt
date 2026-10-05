@@ -18171,11 +18171,18 @@ internal fun Modifier.toolbarPadding(settings: KeyboardSettings): Modifier =
  * ?123 / symbols layers where the symbols already carry their own top row.
  * Shared by the render loop and [keyRowsHeight] so the reserved height and the
  * drawn row always agree — otherwise a suppressed row would leave a blank gap.
+ *
+ * Over a keypad the slot holds symbols rather than digits (see
+ * [rememberExtraRow]), so it has an opt-out of its own,
+ * [LayoutBehaviorSettings.numberRowOnKeypad] — before it, the only way to be
+ * rid of that symbol row was to give up the digit row over the letters as well
+ * (issue #523).
  */
 internal fun numberRowShown(state: KeyboardUiState): Boolean =
     state.settings.numberRow &&
         // A secondary layout is drawn exactly as its author built it.
         state.layoutMode != LayoutMode.SECONDARY &&
+        (state.settings.layoutBehavior.numberRowOnKeypad || !numericPadActive(state)) &&
         (state.settings.layoutBehavior.numberRowInSymbols ||
             (state.layoutMode != LayoutMode.SYMBOLS &&
                 state.layoutMode != LayoutMode.SYMBOLS_SHIFTED))

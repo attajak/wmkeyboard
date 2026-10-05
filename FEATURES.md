@@ -3366,6 +3366,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Numeric keypads get operators instead of a second set of digits — Phone field: + * # , ; ( ) - / . ; other keypads: + - * / = ( ) % : .
   - Symbols on shift `RARE` — Holding shift on letters turns the digits into =\<>[]{}|~; off by default
   - Number row in symbols `uncommon` — On by default; off drops the digit row from the ?123 layer and shrinks the board there
+  - Symbol row on number pads `uncommon` — On by default; off drops that operator row from number/phone/date/time keypads, leaving the bare pad (#523)
   - Layout-authored number row `RARE` — A layout file can supply its own numberRow, per layer
     - Authored rows resolved for LETTERS, SYMBOLS, SYMBOLS_SHIFTED and FN independently
   - Tablet digit row carries backspace `RARE` — The body row gave it up for the mirrored shift, so both answers come from one condition

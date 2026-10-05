@@ -633,6 +633,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_number_row_title) { Icons.Outlined.Numbers }
         put(R.string.layout_number_row_height_title) { Icons.Outlined.Height }
         put(R.string.layout_number_row_in_symbols_title) { Icons.Outlined.Numbers }
+        put(R.string.layout_number_row_on_keypad_title) { Icons.Outlined.Dialpad }
         put(R.string.layout_number_row_shift_symbols_title) { Icons.Outlined.KeyboardCapslock }
         put(R.string.layout_arrow_row_title) { Icons.Outlined.OpenWith }
         put(R.string.layout_arrow_row_order_title) { Icons.Outlined.Reorder }

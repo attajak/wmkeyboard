@@ -18,6 +18,11 @@
     <!-- ?123 is the label printed on the key that opens the symbols layer. -->
     <string name="layout_number_row_in_symbols_subtitle">Keep the digit row on the ?123 symbols layer too</string>
     <string name="layout_number_row_in_symbols_info">The digit row stays in place when you change to the symbols layer. This is the default. Turn it off to drop the digits from the ?123 layer and keep them on the letters, where the number row is already showing them. The symbols keep their bracket and maths row, so nothing but the digits goes, and the keyboard is one row shorter on the symbols layer.</string>
+    <string name="layout_number_row_on_keypad_title">Symbol row on number pads</string>
+    <string name="layout_number_row_on_keypad_subtitle">Keep the row above the keypad in number and phone fields</string>
+    <!-- The runs of punctuation after each "instead:" and "and" are the symbols
+         themselves. Do not translate them. -->
+    <string name="layout_number_row_on_keypad_info" formatted="false">A number, phone, date or time field gets a keypad, which already leads with the digits, so the number row carries symbols instead: + * # , ; ( ) - / . on a phone field, and + - * / = ( ) % : . on the others. This is the default. Turn it off to type on the bare keypad, one row shorter. The digit row over the letters is not affected.</string>
 
     <!-- Layout screen: the arrow row under the keyboard (issue #369). The group
          header and the toggle carry the same name, so they share one key. -->
