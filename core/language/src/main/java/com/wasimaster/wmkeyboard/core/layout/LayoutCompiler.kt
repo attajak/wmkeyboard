@@ -21,10 +21,19 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
     compileCache[cacheKey]?.let { (spec, built) -> if (spec == this) return built }
     // Resolve the whole layer (not just its rows) so per-row heights travel with
     // the grid through the same fallback chain.
-    val resolved = layer(layer)
+    val own = layer(layer)
+    val resolved = own
         ?: BuiltInLayouts.default.layer(layer)
         ?: BuiltInLayouts.default.layer(LayoutLayer.LETTERS)
             ?: error("The default layout has no LETTERS layer")
+    // A borrowed symbols page shows the layout's own currency where the shipped
+    // one has `$`, as Gboard's does: ₹ under Hindi, ৳ under Bangla. A symbols
+    // page the layout wrote itself is drawn as written.
+    val rows = if (own == null && layer == LayoutLayer.SYMBOLS) {
+        withLocalCurrency(resolved.rows, langId)
+    } else {
+        resolved.rows
+    }
     val built = KeyboardLayout(
         name = "$id/${layer.key}",
         // The spacebar absorbs whatever the bottom row is short of the grid, so
@@ -32,7 +41,7 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
         // its `?123` and Enter floating in from the edges. Done here rather than
         // at the row's draw so the keyboard, the theme preview and the layout
         // editor's preview all measure the same grid.
-        rows = fillSpaceRows(resolved.rows, gridWeightOf(resolved.rows)),
+        rows = fillSpaceRows(rows, gridWeightOf(rows)),
         rowHeights = resolved.rowHeights,
         // From this layout, never from whichever layout the *grid* was inherited
         // from: the appearance belongs to the board the user is typing on, so a
@@ -95,6 +104,64 @@ private val namedCompileCache = HashMap<Pair<String, String>, Pair<LayoutSpec, K
 private fun LayoutSpec.appearanceFor(layer: LayerSpec): LayoutAppearance? {
     val layerScale = layer.fontScale ?: return appearance
     return (appearance ?: LayoutAppearance()).copy(fontScale = layerScale)
+}
+
+/**
+ * [rows] with the `$` key showing [langId]'s own currency, `$` first on its
+ * hold and the rest of the hold as it was. Unchanged for a language that writes
+ * dollars or that has no entry in [LocalCurrencies].
+ */
+internal fun withLocalCurrency(rows: List<List<Key>>, langId: String): List<List<Key>> {
+    val local = LocalCurrencies[langId.substringBefore('_')] ?: return rows
+    return rows.map { row ->
+        row.map { key ->
+            if (key.label == "$" && key.output == null && key.action == KeyAction.Text) {
+                key.copy(label = local, longPress = listOf("$") + key.longPress.filter { it != local && it != "$" })
+            } else {
+                key
+            }
+        }
+    }
+}
+
+/** Whether [key] is a `$` key [withLocalCurrency] turned into a local currency. */
+fun isLocalCurrencyKey(key: Key): Boolean =
+    key.output == null && key.action == KeyAction.Text && key.label in LocalCurrencySymbols
+
+private val LocalCurrencySymbols: Set<String> by lazy { LocalCurrencies.values.toSet() }
+
+/**
+ * The currency a language's symbols page leads with, by base language id. Only
+ * where one currency is plainly the language's own; a language written across
+ * several currencies (English, Spanish, Arabic, Portuguese) keeps `$`.
+ */
+private val LocalCurrencies: Map<String, String> = buildMap {
+    for (lang in listOf("hi", "mr", "gu", "pa", "or", "ta", "te", "kn", "ml", "as", "sa", "kok", "mai", "bho", "doi", "mni", "brx", "sat")) {
+        put(lang, "₹")
+    }
+    put("bn", "৳")
+    for (lang in listOf("de", "fr", "it", "nl", "el", "fi", "et", "lv", "lt", "sk", "sl", "mt", "ga", "lb", "eu", "ca", "gl", "br", "co", "fy")) {
+        put(lang, "€")
+    }
+    put("ru", "₽")
+    put("uk", "₴")
+    put("tr", "₺")
+    put("ko", "₩")
+    put("ja", "¥")
+    put("zh", "¥")
+    put("vi", "₫")
+    put("th", "฿")
+    put("he", "₪")
+    put("pl", "zł")
+    put("kk", "₸")
+    put("mn", "₮")
+    put("km", "៛")
+    put("lo", "₭")
+    put("hy", "֏")
+    put("ka", "₾")
+    put("az", "₼")
+    put("si", "රු")
+    put("ne", "रु")
 }
 
 /** The number row this layout shows above [layer], or null to use the default. */

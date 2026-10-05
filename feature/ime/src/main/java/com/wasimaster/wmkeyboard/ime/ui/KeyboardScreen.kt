@@ -513,6 +513,7 @@ import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.PAD_SPACE_LABEL
 import com.wasimaster.wmkeyboard.core.layout.arrangedBy
 import com.wasimaster.wmkeyboard.core.layout.asEmojiKey
+import com.wasimaster.wmkeyboard.core.layout.isLocalCurrencyKey
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
@@ -17863,9 +17864,16 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             if (stripDigits && mapped.longPress.any { it.isSingleDigit() }) {
                 mapped = mapped.copy(longPress = mapped.longPress.filterNot { it.isSingleDigit() })
             }
-            // A44: the $ key takes the user's currency glyphs as its popup.
-            if (currencyKeys.isNotEmpty() && (mapped.output ?: mapped.label) == "$") {
-                mapped = mapped.copy(longPress = currencyKeys)
+            // A44: the $ key takes the user's currency glyphs as its popup. On
+            // a symbols page showing the language's own currency in its place
+            // (see withLocalCurrency), `$` stays first on the hold.
+            if (currencyKeys.isNotEmpty()) {
+                val text = mapped.output ?: mapped.label
+                if (text == "$") {
+                    mapped = mapped.copy(longPress = currencyKeys)
+                } else if (mapped.longPress.firstOrNull() == "$" && isLocalCurrencyKey(mapped)) {
+                    mapped = mapped.copy(longPress = listOf("$") + currencyKeys.filter { it != text && it != "$" })
+                }
             }
             // Issue #57: the spacebar takes the user's hold keys. Prepended, so
             // a layout that authored its own space alternates keeps them, and
