@@ -2234,11 +2234,21 @@ open class WMKeyboardService : InputMethodService() {
     private var sandboxOfferPolicy: GlideSandboxPolicy? = null
 
     /**
-     * Languages already told, this process, that glide typing wants a word
-     * list they do not have (#219). Once each: the chip is a pointer to a
-     * download, not a nag, and a language kept without one is a choice.
+     * Languages already told that glide typing wants a word list they do not
+     * have (#219). Once each, and remembered across the process deaths the
+     * system puts the keyboard through: the chip is a pointer to a download,
+     * not a nag, and a language kept without one is a choice.
      */
-    private val glideWordListNoticed = HashSet<String>()
+    private val glideWordListNoticed by lazy { WordListOfferPrefs(this) }
+
+    /**
+     * The languages whose word list is in the APK. A chip pointing at a
+     * download is never the right thing to say about one of them: their page
+     * has nothing to press (discussion #364).
+     */
+    private val bundledListLanguages: Set<String> by lazy {
+        DictionaryStore.bundledLanguageIds(this)
+    }
 
     /** Keeps the mid-stroke word from changing under the finger (see [GlidePreviewGate]). */
     private val previewGate = GlidePreviewGate()
@@ -18379,6 +18389,14 @@ open class WMKeyboardService : InputMethodService() {
     private fun glideWordListOffer(languageId: String): LanguageDef? {
         val state = _uiState.value
         if (!state.settings.gestureTyping || state.language.id != languageId) return null
+        // Nothing to download for a language whose list is in the APK, so the
+        // chip would open a page with nothing on it to press. Its words being
+        // missing all the same means the list was switched off ("Only my word
+        // lists") or failed to inflate, and a download answers neither
+        // (discussion #364). Same for a language the user did switch off: a
+        // list downloaded while that switch is off is not read either.
+        if (languageId in bundledListLanguages) return null
+        if (!shippedDictionaryEnabled(languageId)) return null
         if (!glideWordListNoticed.add(languageId)) return null
         return state.language
     }
@@ -19060,8 +19078,20 @@ open class WMKeyboardService : InputMethodService() {
                     // and that is exactly when the chip is needed. A list that
                     // does not cover the layout is the other silent case, and
                     // the docs are what explain that one.
+                    // Asked of the engine only while the engine is answering
+                    // for the language in the gate. The binding follows a
+                    // language switch a beat behind the state it is read from
+                    // ([bindEngineToLayout] runs after the update that moves
+                    // the language), and across that beat the word lists on
+                    // hand are the ones of the language just left — which
+                    // raised the chip for a language that has a list, and the
+                    // once-per-language memory below then made that moment
+                    // stick (discussion #364). The settings pass that binds
+                    // bumps the epoch, so the question is re-asked the moment
+                    // the engine has caught up.
                     val missingList = allowed && gate.phonetic == null &&
-                        engine != null && !engine.hasLanguageWords()
+                        engine != null && engine.primaryLanguageId == gate.languageId &&
+                        !engine.hasLanguageWords()
                     // A phonetic layout with no word list behind it still types —
                     // the rules and the spelling map see to that — but it is
                     // guessing at every word the map does not list, and nothing

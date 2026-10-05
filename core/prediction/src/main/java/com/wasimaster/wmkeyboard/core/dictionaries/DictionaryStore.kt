@@ -159,6 +159,24 @@ object DictionaryStore {
         }
 
     /**
+     * The languages whose word list ships inside the APK, as
+     * [LanguageDef.id][com.wasimaster.wmkeyboard.core.script.LanguageDef.id]
+     * spells them — English and Bangla today. Read off the assets rather than
+     * written down here, so compiling a third list into `dictionaries-src`
+     * needs no change in this file.
+     *
+     * What it answers is "could a download add a list this language does not
+     * already have": nothing offers one for a language in this set, because
+     * there is nothing on its page to press.
+     */
+    fun bundledLanguageIds(context: Context): Set<String> =
+        runCatching {
+            context.assets.list("dictionaries").orEmpty()
+                .filter { it.endsWith(".wmdict") }
+                .mapTo(HashSet()) { it.removeSuffix(".wmdict") }
+        }.getOrDefault(emptySet())
+
+    /**
      * Guarantees the bundled dictionary [baseName] (e.g. `"en"`) exists as a
      * plain file and returns it, inflating `assets/dictionaries/<baseName>.wmdict`
      * on first run or after an app update. Returns null if the asset is missing
