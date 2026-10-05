@@ -327,6 +327,12 @@ function Output({ link, route, setting, incomplete }: { link: string; route?: st
 			{!incomplete && <Explain link={link} />}
 			{showQr && <Qr text={link} />}
 
+			<Spelling
+				title="Web address (https)"
+				text={`${SITE_URL}/open/#${link}`}
+				note="An https page that offers to open the link, and offers to install the app when it is missing. Use it where a custom scheme is not allowed to be a link at all, such as most chat apps and Markdown renderers."
+			/>
+
 			<button type="button" class="lb-disclosure" aria-expanded={showMore} onClick={() => setShowMore((v) => !v)}>
 				{showMore ? 'Fewer spellings' : 'Other spellings: intent://, adb, Markdown, HTML'}
 			</button>
@@ -337,11 +343,6 @@ function Output({ link, route, setting, incomplete }: { link: string; route?: st
 					</Field>
 					<Spelling title="Markdown" text={`[${label}](${link})`} />
 					<Spelling title="HTML" text={`<a href="${link.replace(/"/g, '&quot;')}">${escapeHtml(label)}</a>`} />
-					<Spelling
-						title="Web address (https)"
-						text={`${SITE_URL}/open/#${link}`}
-						note="An https page that offers to open the link, and offers to install the app when it is missing. Use it where a custom scheme is not allowed to be a link at all, such as most chat apps and Markdown renderers."
-					/>
 					<Spelling
 						title="Opaque form"
 						text={opaqueForm(link)}
@@ -631,7 +632,9 @@ function ScreenMode({ rows, languages }: { rows: SettingRow[] | null; languages:
 /* ---------- mode: one setting ---------- */
 
 function SettingMode({ rows }: { rows: SettingRow[] | null }) {
-	const [name, setName] = useState('typing_autocorrect_title');
+	// Nothing is picked at load: the form opens on an empty search, so the page
+	// never suggests one setting over another.
+	const [name, setName] = useState('');
 	// Which copy was picked, for a name listed on several screens: a keyboard
 	// mode's rows appear once per shipped mode.
 	const [pickedRoute, setPickedRoute] = useState<string | null>(null);
@@ -639,6 +642,7 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 	const [withScreen, setWithScreen] = useState(false);
 	const picked =
 		rows?.find((r) => r.name === name && !r.screen && (!pickedRoute || r.route === pickedRoute)) ?? null;
+	const empty = name === '';
 	const valid = SETTING_NAME.test(name);
 	const raw = withScreen && picked ? settingsLink({ route: picked.route, setting: name }) : settingLink(name);
 	const link = useMemo(() => (valid ? withSince(explain(raw)) ?? raw : raw), [raw, valid]);
@@ -665,7 +669,7 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 				<input
 					class="lb-input lb-mono"
 					value={name}
-					aria-invalid={!valid}
+					aria-invalid={!empty && !valid}
 					onInput={(e) => {
 						setName((e.target as HTMLInputElement).value.trim());
 						setPickedRoute(null);
@@ -676,6 +680,11 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 			{typed && name && valid && !picked && rows && (
 				<p class="lb-explain lb-warn">
 					No row in the settings index is called <code>{name}</code>. The link parses, but the app finds nothing to open.
+				</p>
+			)}
+			{empty && (
+				<p class="lb-explain lb-warn">
+					Pick a row, or type a resource name. An empty name makes the whole address invalid.
 				</p>
 			)}
 			<label class="lb-check">
@@ -690,7 +699,7 @@ function SettingMode({ rows }: { rows: SettingRow[] | null }) {
 					)}
 				</span>
 			</label>
-			<Output link={link} route={withScreen && picked ? picked.route : ''} setting={name} />
+			<Output link={link} route={withScreen && picked ? picked.route : ''} setting={name} incomplete={empty} />
 		</>
 	);
 }
