@@ -17610,7 +17610,8 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // hand in the editor is left alone by every one of these; see
     // [LayerSpec.bottomRowAsLaidOut].
     val secondaryGrid = state.layoutMode == LayoutMode.SECONDARY
-    val base = grid.arrangedBy(
+    val laidOut = grid.bottomRowAsLaidOut
+    val arranged = grid.arrangedBy(
         BottomRowRules(
             hideGlobe = !state.settings.showGlobeKey && !secondaryGrid,
             globeInOnePlace = state.settings.layoutBehavior.globeInOnePlace &&
@@ -17618,7 +17619,18 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             swapCommaAndGlobe = state.settings.swapCommaAndGlobe,
         ),
     ).layout
-    val laidOut = grid.bottomRowAsLaidOut
+    // Issue #423: Gboard's 1234 key beside ABC on the symbols pages, opt-in.
+    val symbolsPage = state.layoutMode == LayoutMode.SYMBOLS ||
+        state.layoutMode == LayoutMode.SYMBOLS_SHIFTED
+    val base = if (state.settings.layoutBehavior.symbolsNumpadKey && symbolsPage && !laidOut) {
+        arranged.withNumpadKey()
+    } else {
+        arranged
+    }
+    // Issue #423: a ?123 key whose layout gave it alternates holds them, not
+    // the number pad, so the pad joins that popup instead of being lost.
+    val numpadOnHold = state.settings.layoutBehavior.symbolsLongPressNumpad &&
+        base.rows.any { row -> row.any { it.action == KeyAction.Symbols && it.opensAlternatesPopup() } }
     // Email and URI fields keep the letter layouts but put the character they
     // are full of on the bottom-row comma slot, and domain endings on the
     // period key's long press. Both are otherwise a trip through the symbols
@@ -17759,7 +17771,7 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
         currencyKeys.isEmpty() && !allAccents && !shiftedKeys && fullStop == null &&
         !newlineAlternate && !emojiAlternate && spaceHoldKeys.isEmpty() &&
         punctuationAlternates.isEmpty() && !kanaVariantKeys && nativeLetters.isEmpty() &&
-        questionMark == null && !reorderAlternates
+        questionMark == null && !reorderAlternates && !numpadOnHold
     ) {
         return base
     }
@@ -17950,6 +17962,17 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                         mapped.actionAlternates,
                 )
             }
+            // First of the actions, after the layout's own characters: those
+            // keep the corner hint and the plain hold-and-release, which the
+            // author chose, and the pad is the next entry along.
+            if (numpadOnHold && mapped.action == KeyAction.Symbols && mapped.opensAlternatesPopup() &&
+                mapped.actionAlternates.none { it.action == KeyAction.Numpad }
+            ) {
+                mapped = mapped.copy(
+                    actionAlternates = listOf(KeyAlternate(action = KeyAction.Numpad)) +
+                        mapped.actionAlternates,
+                )
+            }
             // Last, so it covers whatever the passes above made of the key: a
             // 🌐 the emoji preference already turned into the emoji key is still
             // the 小゛゜ key while there is a kana to change.
@@ -17982,6 +18005,32 @@ private fun numericPadActive(state: KeyboardUiState): Boolean =
 
 
 private fun String.isSingleDigit(): Boolean = length == 1 && this[0].isDigit()
+
+/**
+ * Issue #423: this symbols page with a 1234 key straight after its ABC key,
+ * opening the number pad, the way Gboard's symbols page has one.
+ *
+ * The key is one standard width taken off the spacebar, so the row keeps its
+ * width and every other key its size. Left as it is when the page already has a
+ * number pad key, has no ABC key or spacebar on its bottom row to place it by,
+ * or has a spacebar too narrow to give the width up.
+ */
+internal fun KeyboardLayout.withNumpadKey(): KeyboardLayout {
+    if (rows.any { row -> row.any { it.action == KeyAction.Numpad } }) return this
+    val bottom = rows.lastOrNull() ?: return this
+    val letters = bottom.indexOfFirst { it.action == KeyAction.Letters }
+    val space = bottom.indexOfFirst { it.action == KeyAction.Space }
+    if (letters < 0 || space < 0 || bottom[space].width - NumpadKeyWidth < MinSpaceAfterNumpadKey) return this
+    val row = bottom.toMutableList()
+    row[space] = row[space].copy(width = row[space].width - NumpadKeyWidth)
+    row.add(letters + 1, Key(label = "1234", action = KeyAction.Numpad, width = NumpadKeyWidth))
+    return copy(rows = rows.dropLast(1) + listOf(row))
+}
+
+private const val NumpadKeyWidth = 1f
+
+/** The narrowest spacebar [withNumpadKey] leaves: still two keys wide. */
+private const val MinSpaceAfterNumpadKey = 2f
 
 /**
  * The digits a hold on the number row offers besides the ones a tap types

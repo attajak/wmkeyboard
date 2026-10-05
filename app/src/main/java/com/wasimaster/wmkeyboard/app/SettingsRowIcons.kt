@@ -673,6 +673,7 @@ internal object SettingsRowIcons {
         put(R.string.layout_persistent_title) { Icons.Outlined.PushPin }
         put(R.string.layout_reset_sizing_title) { Icons.Outlined.Restore }
         put(R.string.layout_comma_emoji_title) { Icons.Outlined.EmojiEmotions }
+        put(R.string.layout_symbols_numpad_key_title) { Icons.Outlined.Dialpad }
         put(R.string.layout_show_globe_title) { Icons.Outlined.Language }
         put(R.string.layout_globe_recent_title) { Icons.Outlined.History }
         put(R.string.layout_globe_guard_title) { Icons.Outlined.Timer }

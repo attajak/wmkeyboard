@@ -207,7 +207,7 @@
     <!-- ?123 is the label printed on the symbols key. Keep it as is. -->
     <string name="keypress_symbols_numpad_title">Press and hold ?123 for the number pad</string>
     <string name="keypress_symbols_numpad_subtitle">Press and hold the symbols key to open the number pad</string>
-    <string name="keypress_symbols_numpad_info">Normally the ?123 key only changes to the symbol layer. With this setting on, hold it to open the number pad panel over any field. You get a full number pad without leaving the current text box. A quick press still changes the layer.</string>
+    <string name="keypress_symbols_numpad_info">Normally the ?123 key only changes to the symbol layer. With this setting on, hold it to open the number pad panel over any field. You get a full number pad without leaving the current text box. A quick press still changes the layer. If your layout gives the ?123 key press and hold characters of its own, the hold opens them, and the number pad is an entry in that popup.</string>
 
     <string name="keypress_enter_emoji_title">Press and hold enter for emoji</string>
     <string name="keypress_enter_emoji_subtitle">Open the emoji panel from the enter key\'s popup</string>

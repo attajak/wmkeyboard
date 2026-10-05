@@ -810,6 +810,7 @@ private fun SearchStrings.layoutRows(): List<SettingsSearchEntry> {
         // opens the same group.
         row(R.string.layout_comma_emoji_title, R.string.layout_comma_emoji_subtitle),
         row(R.string.keypress_enter_emoji_title, R.string.keypress_enter_emoji_subtitle),
+        row(R.string.layout_symbols_numpad_key_title, R.string.layout_symbols_numpad_key_subtitle),
         row(R.string.layout_show_globe_title, R.string.layout_show_globe_subtitle),
         row(R.string.layout_globe_recent_title, R.string.layout_globe_recent_subtitle),
         row(R.string.layout_globe_guard_title, R.string.layout_globe_guard_subtitle),

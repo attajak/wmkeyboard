@@ -6609,6 +6609,13 @@ data class LayoutBehaviorSettings(
      */
     val symbolsLongPressNumpad: Boolean = true,
     /**
+     * A 1234 key beside ABC on the symbols pages that opens the number pad, the
+     * way Gboard's symbols page has one (issue #423). It takes one key's width
+     * off the spacebar. Off by default: it changes a bottom row people already
+     * know by touch, and the pad has a hold on ?123 and a tool already.
+     */
+    val symbolsNumpadKey: Boolean = false,
+    /**
      * Holding the enter key offers the emoji panel, the way SwiftKey's enter
      * key does, for a layout whose bottom row has no emoji key of its own.
      *
@@ -8329,6 +8336,7 @@ class SettingsRepository(private val context: Context) {
         private val SPACEBAR_LANGUAGE_ARROWS = booleanPreferencesKey("spacebar_language_arrows")
         private val SPACEBAR_LABEL = stringPreferencesKey("spacebar_label")
         private val SYMBOLS_LONGPRESS_NUMPAD = booleanPreferencesKey("symbols_longpress_numpad")
+        private val SYMBOLS_NUMPAD_KEY = booleanPreferencesKey("symbols_numpad_key")
         private val ENTER_LONGPRESS_EMOJI = booleanPreferencesKey("enter_longpress_emoji")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
         private val EDGE_SWIPE_BACK = booleanPreferencesKey("edge_swipe_back")
@@ -10365,6 +10373,7 @@ class SettingsRepository(private val context: Context) {
         LayoutBehaviorSettings(
             symbolsLongPressNumpad =
                 p[SYMBOLS_LONGPRESS_NUMPAD] ?: defaults.layoutBehavior.symbolsLongPressNumpad,
+            symbolsNumpadKey = p[SYMBOLS_NUMPAD_KEY] ?: defaults.layoutBehavior.symbolsNumpadKey,
             enterLongPressEmoji =
                 p[ENTER_LONGPRESS_EMOJI] ?: defaults.layoutBehavior.enterLongPressEmoji,
             spaceSwipeDownHide =
@@ -15332,6 +15341,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSymbolsLongPressNumpad(value: Boolean) =
         editPrefs { it[SYMBOLS_LONGPRESS_NUMPAD] = value }
+
+    suspend fun setSymbolsNumpadKey(value: Boolean) =
+        editPrefs { it[SYMBOLS_NUMPAD_KEY] = value }
 
     suspend fun setEnterLongPressEmoji(value: Boolean) =
         editPrefs { it[ENTER_LONGPRESS_EMOJI] = value }

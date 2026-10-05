@@ -982,6 +982,78 @@ class CurrentLayoutTest {
         assertEquals(shown.sumOf { it.width.toDouble() }, hidden.sumOf { it.width.toDouble() }, 0.001)
     }
 
+    private fun symbolsState(settings: KeyboardSettings): KeyboardUiState =
+        state(settings = settings).copy(layoutMode = LayoutMode.SYMBOLS)
+
+    private fun withNumpadKey(base: KeyboardSettings): KeyboardSettings =
+        base.copy(layoutBehavior = base.layoutBehavior.copy(symbolsNumpadKey = true))
+
+    /** Issue #423: off by default, so the symbols page keeps the row it had. */
+    @Test
+    fun `the symbols page has no 1234 key until asked`() {
+        val s = symbolsState(plain())
+        assertTrue(currentLayout(s).keys().none { it.action == KeyAction.Numpad })
+    }
+
+    /**
+     * Turned on, the 1234 key sits straight after ABC, on both symbols pages,
+     * and the spacebar gives up the width so the row stays the same length.
+     */
+    @Test
+    fun `the setting puts a 1234 key after ABC on the symbols pages`() {
+        for (mode in listOf(LayoutMode.SYMBOLS, LayoutMode.SYMBOLS_SHIFTED)) {
+            val before = currentLayout(symbolsState(plain()).copy(layoutMode = mode)).rows.last()
+            val after = currentLayout(symbolsState(withNumpadKey(plain())).copy(layoutMode = mode)).rows.last()
+            val letters = after.indexOfFirst { it.action == KeyAction.Letters }
+            assertEquals(KeyAction.Numpad, after[letters + 1].action)
+            assertEquals(before.sumOf { it.width.toDouble() }, after.sumOf { it.width.toDouble() }, 0.001)
+        }
+    }
+
+    /** The letters page is left alone: the key belongs with the symbols. */
+    @Test
+    fun `the 1234 key stays off the letters page`() {
+        val s = state(settings = withNumpadKey(plain()))
+        assertTrue(currentLayout(s).keys().none { it.action == KeyAction.Numpad })
+    }
+
+    private fun withSymbolsAlternates(s: KeyboardUiState): KeyboardUiState {
+        val letters = s.layouts.letters
+        val rows = letters.rows.map { row ->
+            row.map { if (it.action == KeyAction.Symbols) it.copy(longPress = listOf("½")) else it }
+        }
+        return s.copy(layouts = s.layouts.copy(letters = letters.copy(rows = rows)))
+    }
+
+    private fun symbolsKeyOf(s: KeyboardUiState): Key =
+        currentLayout(s).keys().single { it.action == KeyAction.Symbols }
+
+    /**
+     * Issue #423: a ?123 key with alternates of its own opens them on a hold,
+     * so the number pad joins that popup rather than being out of reach. The
+     * layout's own entry stays first.
+     */
+    @Test
+    fun `a symbols key with alternates offers the number pad in its popup`() {
+        val key = symbolsKeyOf(withSymbolsAlternates(state(settings = plain())))
+        assertEquals(listOf(KeyAction.Numpad), key.actionAlternates.map { it.action })
+        assertEquals(AlternateEntry.Character("½"), key.alternateEntries().first())
+    }
+
+    /** Rides the hold setting: off, the popup is the layout's alone. */
+    @Test
+    fun `the popup entry follows the hold setting`() {
+        val off = plain().let { it.copy(layoutBehavior = it.layoutBehavior.copy(symbolsLongPressNumpad = false)) }
+        val key = symbolsKeyOf(withSymbolsAlternates(state(settings = off)))
+        assertTrue(key.actionAlternates.isEmpty())
+    }
+
+    /** A plain ?123 key opens the pad on the hold itself and gets no popup. */
+    @Test
+    fun `a plain symbols key gets no popup entry`() {
+        assertTrue(symbolsKeyOf(state(settings = plain())).actionAlternates.isEmpty())
+    }
+
     private fun oneRow(vararg keys: Key): KeyboardLayout = com.wasimaster.wmkeyboard.core.layout.LayoutSpec(
         id = "custom_one_row",
         name = "One row",

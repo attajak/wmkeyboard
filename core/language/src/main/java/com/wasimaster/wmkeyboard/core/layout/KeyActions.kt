@@ -153,10 +153,12 @@ sealed interface KeyAction {
     @Serializable @SerialName("emoji") data object Emoji : KeyAction
 
     /**
-     * Opens the numeric keypad panel over the current field. Produced only at
-     * runtime by a long-press on the ?123 / symbols key (opt-in via
-     * `LayoutBehaviorSettings.symbolsLongPressNumpad`) — no built-in or custom
-     * layout binds it, so it is never written to a serialized layout.
+     * Opens the numeric keypad panel over the current field. Produced at
+     * runtime by a long-press on the ?123 / symbols key or the popup entry it
+     * adds to one with alternates
+     * (`LayoutBehaviorSettings.symbolsLongPressNumpad`), and by the symbols
+     * pages' 1234 key (`LayoutBehaviorSettings.symbolsNumpadKey`, issue #423).
+     * Imported FlorisBoard and FUTO layouts also bind it to their own keys.
      */
     @Serializable @SerialName("numpad") data object Numpad : KeyAction
 

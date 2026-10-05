@@ -1027,6 +1027,16 @@ internal fun LayoutSettings(
             ) { scope.launch { repository.setEnterLongPressEmoji(it) } }
         }
         item {
+            // Issue #423: Gboard's 1234 key on the symbols pages.
+            ToggleSetting(
+                R.string.layout_symbols_numpad_key_title,
+                stringResource(R.string.layout_symbols_numpad_key_subtitle),
+                settings.watch { it.layoutBehavior.symbolsNumpadKey },
+                info = stringResource(R.string.layout_symbols_numpad_key_info),
+                default = SettingsDefaults.layoutBehavior.symbolsNumpadKey,
+            ) { scope.launch { repository.setSymbolsNumpadKey(it) } }
+        }
+        item {
             ToggleSetting(
                 R.string.layout_show_globe_title,
                 stringResource(R.string.layout_show_globe_subtitle),
