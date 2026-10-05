@@ -6834,6 +6834,9 @@ open class WMKeyboardService : InputMethodService() {
             // One of the user's secondary layouts, shown over the letters the
             // way ?123 shows the symbols; a second press takes it down again.
             is KeyAction.Layout -> openSecondaryLayout((key.action as KeyAction.Layout).id)
+            // A page key of a paginated layout: one of this layout's own extra
+            // grids, in place of the letters (issue #498).
+            is KeyAction.LayerSwitch -> openNamedLayer((key.action as KeyAction.LayerSwitch).layer)
             is KeyAction.Mod -> onModifier((key.action as KeyAction.Mod).key)
             KeyAction.KanaVariant -> cycleKanaVariant()
             KeyAction.Fn -> onFn()
@@ -11419,6 +11422,35 @@ open class WMKeyboardService : InputMethodService() {
     private fun closeSecondaryLayout() {
         _uiState.update {
             it.copy(layoutMode = LayoutMode.LETTERS, fnLocked = false, fnReturn = null)
+        }
+    }
+
+    /**
+     * Shows one of the active layout's own extra grids — a page of a paginated
+     * layout (issue #498) — by its key in the layout's layers.
+     *
+     * Not a toggle, unlike [openSecondaryLayout]: a `2/4` key means "page
+     * three", and the page it lands on carries its own key onward. The letters
+     * layer, and a name this layout does not define, both land on the letters,
+     * so a page key that outlived its page cannot strand the user on a grid
+     * with no way back.
+     *
+     * [switchToKeymanLayer] is the rules engine's version of this and stays
+     * separate: that one also has to read `shift` and `caps` as our shift state
+     * rather than as places, which is a Keyman rule and not something a page key
+     * should inherit.
+     */
+    private fun openNamedLayer(name: String) {
+        val state = _uiState.value
+        val known = name in state.layouts.named
+        // Leaving the letter layer ends the on-keyboard writing surface.
+        if (state.layoutMode == LayoutMode.LETTERS) dropKeyboardHandwritingInk()
+        _uiState.update {
+            if (known) {
+                it.copy(layoutMode = LayoutMode.NAMED, namedLayer = name, fnLocked = false, fnReturn = null)
+            } else {
+                it.copy(layoutMode = LayoutMode.LETTERS, namedLayer = null, fnLocked = false, fnReturn = null)
+            }
         }
     }
 

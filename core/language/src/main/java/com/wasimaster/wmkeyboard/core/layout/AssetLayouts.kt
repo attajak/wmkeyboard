@@ -858,6 +858,8 @@ object AssetLayouts {
     const val HA_LETTERS_ID = "asset_ha_letters"
     const val HE_SI1452_ID = "asset_he_si1452"
     const val HI_COMPACT_ID = "asset_hi_compact"
+    /** Devanagari on the keys, four pages of them, as Gboard lays it out (#498). */
+    const val HI_DEVANAGARI_ID = "asset_hi_devanagari"
     const val HI_PHONETIC_KEYS_ID = "asset_hi_phonetic_keys"
     const val HOC_WARANG_CITI_ALT_ID = "asset_hoc_warang_citi_alt"
     const val HR_LETTERS_ID = "asset_hr_letters"

@@ -154,6 +154,10 @@ object LayoutJsonDocs {
         "action:tool.tool" to "Which tool the key opens.",
         "action:layout" to "Shows one of your secondary layouts in place of the letters. A second press goes back.",
         "action:layout.id" to "The id of the secondary layout.",
+        "action:layer" to
+            "Shows another of this layout's own grids: the page key of a layout spread over several pages. " +
+                "Naming the letters layer, or a layer this layout does not have, goes back to the letters.",
+        "action:layer.layer" to "The layer's name, as it is spelled under \"layers\".",
         "action:mod" to "Ctrl, Alt or Meta for the next key. Tap to arm it, and tap again to lock it.",
         "action:mod.key" to "Which modifier.",
         "action:send_key" to "Sends a key press to the app, such as Tab, Escape or an arrow.",

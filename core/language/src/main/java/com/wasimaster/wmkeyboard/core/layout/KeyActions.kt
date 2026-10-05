@@ -205,6 +205,33 @@ sealed interface KeyAction {
     @Serializable @SerialName("layout") data class Layout(val id: String = "") : KeyAction
 
     /**
+     * Shows one of this layout's *own* further grids, named by its key in
+     * [LayoutSpec.layers] — the page key of a paginated keyboard.
+     *
+     * The shipped layers are a fixed set ([LayoutLayer]) because the keyboard
+     * reaches them for its own reasons: ?123 cycles the symbol pages, a numeric
+     * field picks a keypad. A grid that is simply "page 3 of this alphabet" has
+     * no such reason and no slot, and a Devanagari keyboard needs four of them:
+     * the script has more letters, matras and conjunct ligatures than fit on
+     * fifty keys, and the native layout answers that the way Gboard does, with a
+     * `1/4` key in the corner (issue #498).
+     *
+     * [layer] is the layer's key, which is any string that is not one of
+     * [LayoutLayer]'s — the same place a converted Keyman layout's extra pages
+     * live, and drawn by the same `LayoutMode.NAMED` path. Naming the letters
+     * layer, or a layer this layout does not define, goes back to the letters
+     * rather than leaving the user on a page with no way off; a blank [layer]
+     * — the editor's placeholder, and what a file from a newer build with the
+     * field missing coerces to — does the same.
+     *
+     * Not a toggle, unlike [Layout]: the key that says `2/4` means "go to page
+     * three", and a second press of it on page three would have to mean
+     * something else. A page goes back the way it came, by naming the layer it
+     * wants.
+     */
+    @Serializable @SerialName("layer") data class LayerSwitch(val layer: String = "") : KeyAction
+
+    /**
      * Latches a modifier for the next key, the way [Shift] latches case: tap to
      * arm, tap again to lock, a third tap to clear.
      *
@@ -474,6 +501,10 @@ fun KeyAction.fallbackLabel(): String = when (this) {
     // The editor writes the layout's name onto the key when it is picked; this
     // is the grid glyph a hand-written layout that left the label blank gets.
     is KeyAction.Layout -> "▦"
+    // A page key is normally labelled by hand ("1/4"); this is what an
+    // unlabelled one falls back to, and it is deliberately not the layer's key,
+    // which is an identifier and can be any length.
+    is KeyAction.LayerSwitch -> "▤"
     is KeyAction.SwitchInputMethod -> "⌨"
     // A field is not a key: the cell draws its component, and the editor draws
     // the component's name from a string resource.
@@ -633,6 +664,7 @@ fun KeyAction.canRepeatOnHold(): Boolean = when (this) {
     KeyAction.LanguageSwitch, KeyAction.InputMethodPicker -> false
     is KeyAction.SwitchInputMethod -> false
     is KeyAction.Mod, is KeyAction.Layout, is KeyAction.Tool -> false
+    is KeyAction.LayerSwitch -> false
     is KeyAction.Unknown -> false
     else -> !holdIsSpokenFor()
 }
@@ -658,6 +690,7 @@ fun KeyAction.commitsNoText(): Boolean = when (this) {
     KeyAction.Shift, KeyAction.CapsLock, KeyAction.LanguageSwitch, KeyAction.None,
     -> true
     is KeyAction.Layout -> true
+    is KeyAction.LayerSwitch -> true
     else -> false
 }
 

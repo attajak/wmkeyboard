@@ -56,10 +56,12 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
 }
 
 /**
- * The runtime grid for the layer keyed [name] — one of a converted Keyman
- * layout's own layers, which have no [LayoutLayer] of their own — or null when
- * this layout does not define it. No fallback: a layer the layout does not have
- * is not one to draw a borrowed grid for.
+ * The runtime grid for the layer keyed [name] — one of a layout's own extra
+ * layers, which have no [LayoutLayer] of their own: a converted Keyman layout's
+ * further pages, or the pages a paginated layout reaches with a
+ * [KeyAction.LayerSwitch] key (issue #498) — or null when this layout does not
+ * define it. No fallback: a layer the layout does not have is not one to draw a
+ * borrowed grid for.
  */
 fun LayoutSpec.compileNamed(name: String): KeyboardLayout? = synchronized(namedCompileCache) {
     val resolved = layers[name] ?: return null

@@ -251,8 +251,9 @@ enum class LayoutMode {
     SECONDARY,
 
     /**
-     * One of a converted Keyman layout's own further layers — a right-Alt
-     * page, a page of one consonant's vowel forms — named by
+     * One of a layout's own further layers — a converted Keyman layout's
+     * right-Alt page or page of one consonant's vowel forms, or page three of
+     * four on a paginated alphabet (issue #498) — named by
      * [KeyboardUiState.namedLayer] and drawn from [LayoutSet.named]. Keyman
      * reaches these by key and by rule, so they are part of the layout rather
      * than something the user switched to, and the grid is sized for them.
@@ -344,8 +345,9 @@ data class LayoutSet(
     /** The same for Keyman's `caps` layer, drawn while caps lock is on. */
     val keymanCaps: KeyboardLayout? = null,
     /**
-     * A converted Keyman layout's further layers, by their key in the layout
-     * (see [LayoutMode.NAMED]). Empty for every other layout.
+     * A layout's further grids, by their key in the layout (see
+     * [LayoutMode.NAMED]): a converted Keyman layout's extra layers, and the
+     * pages of a paginated layout. Empty for every other layout.
      */
     val named: Map<String, KeyboardLayout> = emptyMap(),
     /**
@@ -2427,8 +2429,9 @@ data class KeyboardUiState(
      */
     val secondaryLayoutId: String? = null,
     /**
-     * The Keyman layer [LayoutMode.NAMED] shows, as a key into
-     * [LayoutSet.named]. An id the set no longer holds draws the letters.
+     * The layer [LayoutMode.NAMED] shows — a Keyman page, or a page of a
+     * paginated layout — as a key into [LayoutSet.named]. An id the set no
+     * longer holds draws the letters.
      */
     val namedLayer: String? = null,
     /**

@@ -238,6 +238,7 @@ object LanguageRegistry {
             layoutIds = listOf(
                 BuiltInLayouts.HINDI_ID,
                 BuiltInLayouts.HINDI_PHONETIC_ID,
+                AssetLayouts.HI_DEVANAGARI_ID,
                 AssetLayouts.HI_REMINGTON_GAIL_ID,
                 AssetLayouts.HI_COMPACT_ID,
                 AssetLayouts.HI_PHONETIC_KEYS_ID,

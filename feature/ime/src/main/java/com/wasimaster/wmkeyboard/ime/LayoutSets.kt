@@ -4,6 +4,7 @@ import com.wasimaster.wmkeyboard.core.keyman.KeymanLayers
 import com.wasimaster.wmkeyboard.core.layout.KeyboardLayout
 import com.wasimaster.wmkeyboard.core.layout.LayoutLayer
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
+import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.compile
 import com.wasimaster.wmkeyboard.core.layout.compileNamed
@@ -89,8 +90,14 @@ fun compileLayoutSet(
         themeId = safe.themeId,
         keymanShift = safe.compileNamed(KeymanLayers.SHIFT),
         keymanCaps = safe.compileNamed(KeymanLayers.CAPS),
+        // Every grid this layout defines that is not one of the fixed layers:
+        // a converted Keyman layout's further pages, and the pages a paginated
+        // layout reaches with a `KeyAction.LayerSwitch` key (issue #498). Both
+        // are drawn by `LayoutMode.NAMED`, so both are compiled here. Keyman's
+        // shift and caps pages are left out because they are our shift state
+        // rather than places, and have their own slots above.
         named = safe.layers.keys
-            .filter { it.startsWith(KeymanLayers.PREFIX) && it != KeymanLayers.SHIFT && it != KeymanLayers.CAPS }
+            .filter { it.isAnExtraGrid() }
             .mapNotNull { name -> safe.compileNamed(name)?.let { name to it } }
             .toMap(),
         keymanLayerKeys = safe.layers.keys.takeIf { keys ->
@@ -98,6 +105,22 @@ fun compileLayoutSet(
         },
     )
 }
+
+/** The layer keys that already have a slot of their own on [LayoutSet]. */
+private val RESERVED_LAYER_KEYS: Set<String> =
+    LayoutLayer.entries.mapTo(mutableSetOf()) { it.key }
+        .apply { addAll(PanelKind.entries.map { it.layerKey }) }
+        .apply {
+            add(KeymanLayers.SHIFT)
+            add(KeymanLayers.CAPS)
+        }
+
+/**
+ * Whether this layer key names a grid [LayoutSet.named] should hold: one of the
+ * layout's own further pages, rather than a fixed layer, a panel or Keyman's
+ * shift and caps grids.
+ */
+private fun String.isAnExtraGrid(): Boolean = this !in RESERVED_LAYER_KEYS
 
 /**
  * The user's secondary layouts (issue #62), each compiled to its letters grid,

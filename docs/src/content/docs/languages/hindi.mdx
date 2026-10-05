@@ -7,7 +7,7 @@ sidebar:
 
 import SettingsPath from '@components/SettingsPath.astro';
 
-Hindi ships three layouts. **हिन्दी** is the standard InScript keymap and it's what you get when you add Hindi. **Hindi phonetic** is a QWERTY grid that turns romanized Hindi into Devanagari as you type, so `kaise ho` commits कैसे हो. **Remington (GAIL)** is the typewriter layout. This page is mostly about the phonetic one, because it's the one with moving parts.
+Hindi ships four layouts. **हिन्दी** is the standard InScript keymap and it's what you get when you add Hindi. **Hindi phonetic** is a QWERTY grid that turns romanized Hindi into Devanagari as you type, so `kaise ho` commits कैसे हो. **हिन्दी वर्णमाला** puts the letters themselves on the keys, four pages of them. **Remington (GAIL)** is the typewriter layout. This page is mostly about the phonetic one, because it's the one with moving parts.
 
 ## Turning it on
 
@@ -99,13 +99,26 @@ The [typing test](/tools/utilities/) has a Hindi word list and quotations of its
 
 ## Editing
 
-Backspace inside a word you're still typing removes one Latin letter per press, and the Devanagari redraws. Over text that's already committed it removes one code point, or a whole conjunct if you turn on <SettingsPath path="Languages & layouts / Hindi / Clusters / Conjunct-aware backspace" />. That toggle is off by default and applies to all three Hindi layouts.
+Backspace inside a word you're still typing removes one Latin letter per press, and the Devanagari redraws. Over text that's already committed it removes one code point, or a whole conjunct if you turn on <SettingsPath path="Languages & layouts / Hindi / Clusters / Conjunct-aware backspace" />. That toggle is off by default and applies to every Hindi layout.
+
+## हिन्दी वर्णमाला: the letters on the keys
+
+<SettingsPath path="Languages & layouts / हिन्दी · Hindi / Layouts / हिन्दी वर्णमाला" />
+
+No transliteration, no keymap to learn: the Devanagari is printed on the keys, in alphabet order, and you tap what you want. Devanagari has far more letters, signs and conjuncts than fit on one grid, so they're spread over four pages of fifty keys. The key in the bottom-left corner of the fifth row says which page you're on — **1/4** — and each tap takes you to the next one; the fourth takes you back to the first.
+
+- **1/4** — the vowels अ to औ, the consonants क to श, then ष स ह, the four conjuncts ज्ञ क्ष श्र, ऋ, and nukta ़, anusvara ं and halant ्.
+- **2/4** — conjuncts: the `र` ligatures (क्र, ग्र, द्र, …), the reph forms (र्क, र्ग, र्च, …) and the `त` and `द` families.
+- **3/4** — more conjuncts: the `य` ligatures, then the न, म, प, ब, ल and ष families.
+- **4/4** — the rest of the script: candra vowels (ऍ ऑ ऎ ऒ), the Sindhi and Kashmiri letters (ॹ ॺ ॻ ॼ ॾ ॿ), the matras that aren't on the other pages, the Vedic accents ॒ ॑, and ऽ ॥ ॐ.
+
+**?१२३** reaches the numbers and symbols from any page, and **।** sits beside the space bar where the full stop usually is. Switching fields or closing the keyboard brings you back to page one.
 
 ## Options
 
 <SettingsPath path="Languages & layouts / हिन्दी · Hindi" />
 
-- **Layouts**: InScript, Hindi phonetic, and Remington (GAIL), one card each, turned on and off independently.
+- **Layouts**: InScript, Hindi phonetic, हिन्दी वर्णमाला, and Remington (GAIL), one card each, turned on and off independently.
 - **Key hints**: <SettingsPath path="Languages & layouts / Hindi / Key hints / Show the letter each key types" />. Off, Added, or Whole letter. It puts the Devanagari a key is about to write in its corner. It's the same shared setting Bangla's Avro uses, and it shows only while a transliterating layout is active.
 - **Key map**: a folded group just below the hints while Hindi phonetic is on, with the same tables as the [key map](#hindi-phonetic-key-map) above. **Full guide** at the bottom, <SettingsPath path="Languages & layouts / Hindi / Key map / Full guide" />, opens this page in your browser.
 - **Suggestion strip**: <SettingsPath path="Languages & layouts / Hindi / Suggestion strip / Keep the first two words in place" />, off by default, shown while Hindi phonetic is on. Turn it on and the strip's first two words stay in place: what you typed in English letters on the left, the rules' Devanagari reading of it next to it, and the suggestions after them. The space bar still writes the same word as before, and that word is the bold one. **Suggestions after them** picks what fills the rest: **Smart**, **Hindi only**, or **English only**. The same setting on Bangla's screen is described on [Bangla](/languages/bengali/#options).

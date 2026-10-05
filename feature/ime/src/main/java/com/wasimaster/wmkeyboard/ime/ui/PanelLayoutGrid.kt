@@ -342,7 +342,7 @@ private class PanelSlot(
 internal fun routePanelKey(key: Key, onKey: (Key) -> Unit, onClose: () -> Unit) {
     when (key.action) {
         KeyAction.Letters -> onClose()
-        KeyAction.Symbols, KeyAction.Fn, is KeyAction.Layout -> {
+        KeyAction.Symbols, KeyAction.Fn, is KeyAction.Layout, is KeyAction.LayerSwitch -> {
             onClose()
             onKey(key)
         }
