@@ -91,7 +91,39 @@ class SpellingMapTest {
                 assertTrue("missing $asset", java.io.File("src/main/assets/$asset").isFile)
             }
         }
-        assertEquals(setOf("bn", "hi"), SpellingMap.LANGUAGES)
+        assertEquals(setOf("bn", "hi", "ur"), SpellingMap.LANGUAGES)
+    }
+
+    @Test fun theUrduAssetsAreWellFormed() {
+        for (name in listOf("en_ur.tsv", "ur_rom.tsv")) {
+            val lines = java.io.File("src/main/assets/dictionaries/$name")
+                .readLines()
+                .filterNot { it.isBlank() || it.startsWith("#") }
+            assertTrue("$name looks empty", lines.size > 100)
+            for (line in lines) {
+                val parts = line.split("\t")
+                assertEquals("malformed line in $name: $line", 2, parts.size)
+                assertTrue("non-ascii key in $name: $line", parts[0].all { it in 'a'..'z' })
+                assertTrue("empty form in $name: $line", parts[1].isNotBlank())
+                assertFalse(
+                    "latin in urdu column of $name: $line",
+                    parts[1].any { it in 'a'..'z' || it in 'A'..'Z' },
+                )
+                // A form has to be spelled the way the word lists spell it, or
+                // it can never equal a word in them: Urdu's own code points and
+                // not Arabic's lookalikes (ي ك ه ة), no harakat, and one word —
+                // a space would be committed as a phrase.
+                assertFalse(
+                    "arabic lookalike in $name: $line",
+                    parts[1].any { it in "\u064A\u0643\u0647\u0629\u0649" },
+                )
+                assertFalse(
+                    "harakat in $name: $line",
+                    parts[1].any { it.code in 0x064B..0x0652 },
+                )
+                assertFalse("space in form in $name: $line", parts[1].contains(' '))
+            }
+        }
     }
 
     @Test fun theShippedAssetIsWellFormed() {

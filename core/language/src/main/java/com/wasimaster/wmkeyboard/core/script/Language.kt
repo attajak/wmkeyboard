@@ -480,8 +480,12 @@ object LanguageRegistry {
             englishName = "Urdu",
             script = ScriptId.ARABIC,
             localeTag = "ur-PK",
+            // The Urdu-lettered keyboard leads, so it is still what enabling
+            // Urdu gives; the roman-key phonetic layout is a choice made on the
+            // language's own screen, as Hindi's is.
             layoutIds = listOf(
                 AssetLayouts.UR_PHONETIC_ID,
+                BuiltInLayouts.URDU_PHONETIC_ID,
                 AssetLayouts.UR_NLA_ID,
                 AssetLayouts.UR_PHONETIC_FOUR_ROWS_ID,
                 AssetLayouts.UR_T9_ID,

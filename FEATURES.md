@@ -868,6 +868,16 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Download-only vocabulary — index built over the downloaded and imported Hindi lists, only while the phonetic layout is enabled; a one-time strip chip points at the download when there is none
     - Hindi spelling map — hand-written everyday words, chat shorthand (h, nhi, kr, bhut) and English loanwords, consulted first; per-language off switch
     - Glide — strokes decoded against the spelling map and the downloaded Hinglish list, resolved through the same index
+  - Urdu phonetic `RARE` — roman keys in, Urdu script out (aap kaise ho gives آپ کیسے ہو); its own layout under Urdu, the Urdu-lettered keyboard still the default (#496)
+    - Short vowels written as nothing — Urdu marks them with diacritics nobody types, so din gives دن and kitab کتب; only the long vowels get a letter, and the dictionary settles which a is long
+    - Position-dependent vowels — a word-final vowel is a letter (ka کا, hai ہے, ke کے), a word-initial one takes its carrier (ab اب, aap آپ, ek ایک, aur اور), a hamza carries one vowel onto another (koi کوئی, hua ہوا, jaao جاؤ)
+    - Aspiration and the retroflexes — do-chashmi he for bh ph th kh gh ch jh (dekh دیکھ, phir پھر, ghar گھر); capitals for ٹ ڈ ڑ and for the Perso-Arabic خ غ ح ص ض, which no roman spelling marks
+    - kh is خ at a word start and کھ elsewhere — khush خوش and khabar خبر against dekh دیکھ and likh لکھ; Kh is خ wherever typed, gh stays گھ because گھر outweighs the غ words
+    - Doubling written once — Urdu geminates with a shadda nobody types (sunna سنا, pakka پکا), while a doubled c is the aspirate people mean (accha اچھا)
+    - Consonant-skeleton index — both sides folded to the word's consonants, which is how the Arabic script spells anyway; ت ٹ ط, د ڈ, ر ڑ, س ص ث, ز ذ ض ظ, ک ق, ہ ح each one key, aspiration and which letter of the key as ranked detail; a vowel at either end of a word must be written, one inside need not, and a closing ہ or a ں may be left off (hai finds ہیں, bacha بچہ)
+    - Flat word list, so the map carries the ranking — every word in the downloadable Urdu list ships at frequency 1, so siblings order by typed detail and then by the shorter word; 580 curated spellings cover what people type most
+    - Other readings on the strip — the same spelling with its last inner a long, every one long, or the first one long; what fills the strip when no word list is installed
+    - Urdu spelling map — hand-written everyday words, chat shorthand (k, h, nhi, kr, bht) and English loanwords in the Urdu script (school اسکول, mobile موبائل); per-language off switch
   - Vietnamese Telex and VNI — Two shared-engine transliterators; letters spell the marks in Telex, digits in VNI
     - Standard tone placement — A marked vowel wins; else single vowel, else last vowel of a closed cluster, else first of an open one (oa/oe/uy take the second)
     - qu/gi onsets excluded from the nucleus — The u or i is a glide unless it is the syllable's only vowel

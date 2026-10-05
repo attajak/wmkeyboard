@@ -1,0 +1,127 @@
+---
+title: "Urdu"
+description: "Type Urdu the way you text it: roman letters in, Urdu script out. Plus the Urdu-lettered keyboards for typing the script directly."
+sidebar:
+  order: 3.6
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+
+Urdu ships five layouts. **اردو** is the phonetic *key* arrangement — Urdu letters sitting where the roman letter that sounds like them would be — and it is what you get when you add Urdu. **Urdu phonetic** is the new one (issue [#496](https://github.com/wasi-master/wmkeyboard/issues/496)): a QWERTY grid that turns roman Urdu into the Urdu script as you type, so `aap kaise ho` commits آپ کیسے ہو. **کلیدی تختہ (NLA)** is the national standard keymap, **اردو (four rows)** spreads the letters over four rows, and **اردو T9** is the keypad. This page is mostly about the phonetic one, because it is the one with moving parts.
+
+## Turning it on
+
+<SettingsPath path="Languages & layouts / اردو · Urdu / Layouts / Urdu phonetic" />
+
+Add Urdu, open its screen, and tap the **Urdu phonetic** card under **Layouts** to turn it on. Tap the اردو card on the same screen to turn that one off if you don't want both. Then do the one thing that makes the biggest difference: download the Urdu word list from the **Dictionary** row on that screen. Urdu ships no word list inside the app, and the next two sections explain why this layout cares about that more than most.
+
+## How it reads what you type
+
+Every key is where it is on the English layout. What you type shows up in the Urdu script in the composing text straight away, with no separate conversion step, and the space commits it. The keys stay left-to-right while the text runs right to left, which is how every roman-key method for an RTL script works.
+
+| You type | You get | Why |
+|---|---|---|
+| `din`, `kal`, `tum`, `mard` | دن, کل, تم, مرد | a short vowel is a diacritic nobody types, so it writes nothing |
+| `ka`, `ki`, `ke`, `hai`, `to` | کا, کی, کے, ہے, تو | a vowel that ends a word is long, because Urdu ends a word on a letter |
+| `ab`, `aap`, `ek`, `aur` | اب, آپ, ایک, اور | a vowel that opens a word takes its carrier: ا, آ, ای, او |
+| `koi`, `hua`, `jaao` | کوئی, ہوا, جاؤ | a vowel running into a vowel takes a hamza |
+| `yeh`, `woh`, `kya`, `liya` | یہ, وہ, کیا, لیا | …but a ی or و that is a *consonant* carries nothing |
+| `dekh`, `likh`, `phir`, `ghar` | دیکھ, لکھ, پھر, گھر | aspiration is do-chashmi he: ھ |
+| `khush`, `khabar` | خوش, خبر | `kh` opening a word is خ, not کھ |
+| `sunna`, `pakka`, `iss` | سنا, پکا, اس | a doubled consonant is written once: Urdu doubles with a shadda nobody types |
+| `accha` | اچھا | …and a doubled `c` is the aspirate, which is the word people mean |
+| `Theek`, `kaRa`, `DaDa` | ٹھیک, کڑا, ڈڈا | capitals spell the retroflexes exactly |
+| `Khabar`, `GhalaT`, `SubH`, `Zaroor` | خبر, غلٹ, صبح, ضرور | and the Perso-Arabic letters: خ غ ح ص ض ط ظ ق |
+| `Kitab` | کتب | a capital that spells nothing reads as its lowercase self |
+
+### Urdu phonetic key map
+
+**Vowels.** Urdu has no vowel signs — a vowel is a letter, a diacritic, or nothing at all — so the form depends on where in the word it falls.
+
+| Key | Opening a word | Inside a word | Closing a word |
+|---|---|---|---|
+| `a` | ا | nothing | ا |
+| `aa`, `A` | آ | ا | ا |
+| `i` | ا | nothing | ی |
+| `ee`, `ii`, `I` | ای | ی | ی |
+| `u` | ا | nothing | و |
+| `oo`, `uu`, `U` | او | و | و |
+| `e`, `ay`, `ey` | ای | ی | ے |
+| `ai` | ای | ی | ے |
+| `o` | او | و | و |
+| `au`, `ou` | او | و | و |
+| `ua` | او ا | وا | وا |
+| `ui` | اوئی | وئی | وئی |
+
+**Consonants.**
+
+| | | | | |
+|---|---|---|---|---|
+| `b` ب | `bh` بھ | `p` پ | `ph` پھ | `f` ف |
+| `t` ت | `th` تھ | `T` ٹ | `Th` ٹھ | |
+| `j` ج | `jh` جھ | `ch` چ | `chh`, `cch` چھ | |
+| `d` د | `dh` دھ | `D` ڈ | `Dh` ڈھ | |
+| `r` ر | `R` ڑ | `Rh` ڑھ | `l` ل | |
+| `s` س | `S` ص | `sh` ش | `z` ز | `Z` ض |
+| `k` ک | `kh` کھ / خ | `q` ق | `g` گ | `gh` گھ |
+| `Kh` خ | `Gh` غ | `h` ہ | `H` ح | `zh` ژ |
+| `m` م | `n` ن | `N` ں | `v`, `w` و | `y` ی |
+| `'` ع | `x` کس | `c` ک | | |
+
+`N` is the nasalisation ں, which the rules never guess at — جان and ہیں are both "n" in roman — so type it when you want it, or let the word list settle it. A capital that isn't in these tables reads as its lowercase letter.
+
+### Why Urdu is harder than Avro or Hindi phonetic
+
+Urdu's script does not write its short vowels. کتاب has no letter for the "i" of `kitab` and دن none for the "i" of `din`, so this transliterator writes *fewer* letters than it is given — the opposite of its Indic cousins — and the letters it does write are only the long vowels. Which leaves a pile of things roman spelling simply does not carry:
+
+- whether a lone `a` is a long ا or nothing at all (`kitab` is کتاب, `karna` کرنا);
+- whether a `t` is ت or ٹ, a `d` د or ڈ, an `r` ر or ڑ;
+- which of the Arabic letters a loanword uses (`khas` is خاص, `zaroori` ضروری, `galat` غلط, `subah` صبح);
+- whether a final `a` is ا or the ہ of a Perso-Arabic noun (`bacha` is بچہ, `karna` کرنا);
+- whether a final `n` is ن or the nasalisation ں (`jan` is جان, `hain` ہیں).
+
+The layout handles that in three layers, in this order.
+
+1. **A list of known spellings**, about 580 of them. The commonest words outright (`hai` is ہے, `hain` ہیں, `mein` میں, `kuch` کچھ, `bahut` بہت, `acha` اچھا, `pani` پانی, `theek` ٹھیک), chat shorthand (`k` is کہ, `h` ہے, `nhi` نہیں, `kr` کر, `bht` بہت), and English loanwords written in the Urdu script (`school` is اسکول, `doctor` ڈاکٹر, `mobile` موبائل). A spelling on the list is settled there, and it shows in the composing text the moment you finish typing it.
+2. **The Urdu word list, if you've downloaded it.** What you typed and every word on the list are both reduced to the word's consonant skeleton — which is how the Arabic script spells in the first place, and why it fits. The skeleton forgets every vowel, forgets aspiration (خ and کھ are one key), folds ت ٹ ط together, and د ڈ, ر ڑ, س ص ث, ز ذ ض ظ, ک ق, ہ ح. Words with the same skeleton are candidates, and what you *did* type ranks them: a vowel at the start or end of a word must find one written, a vowel inside it need not, and a capital that asked for ٹ or ق and did not get it counts heavily against a candidate. Habits are forgiven — a closing ہ read as "a", a ں left off, a long vowel typed with one letter — so `hai` finds ہیں as well as ہے, and `bacha` finds بچہ.
+3. **The rules alone**, the table above. They write the literal reading: short vowels dropped, nothing retroflex, nothing Arabic.
+
+With the word list installed, layer 3 rarely decides anything. Without it, layer 3 decides every word that isn't on the list in layer 1 — so expect `kitab` to read کتب and `pani` پنی until you download the list. That is why the strip also carries the other readings of what you typed: the same spelling with its last inner "a" long, with every one long, and with the first one long. Tap the one you meant.
+
+:::caution[The Urdu word list has no frequencies]
+Every word in the downloadable Urdu list ships with a count of 1, so there is no "commoner word" for the keyboard to prefer when two of them fit what you typed equally well. It falls back on the shorter word, which is right more often than not and sometimes isn't. The spelling map in layer 1 is what covers the words you actually type most, and it is the thing to grow when something common comes out wrong.
+:::
+
+## Glide typing
+
+Swiping over this layout draws a romanization, not an Urdu word, so the stroke is decoded against romanized spellings and the result is turned into the Urdu script. The known-spellings list is always there for that, and the **Urdu (Romanized)** word list (about 110,000 romanized spellings, in the language catalogue) widens it a lot if you download it. See [Glide typing](/typing/glide-typing/).
+
+## Editing
+
+Backspace inside a word you're still typing removes one roman letter per press, and the Urdu redraws. Over text that's already committed it removes one code point, which on an Urdu word is one letter.
+
+## Options
+
+<SettingsPath path="Languages & layouts / اردو · Urdu" />
+
+- **Layouts**: اردو, Urdu phonetic, کلیدی تختہ (NLA), اردو (four rows) and اردو T9, one card each, turned on and off independently.
+- **Key hints**: <SettingsPath path="Languages & layouts / Urdu / Key hints / Show the letter each key types" />. Off, Added, or Whole letter. It puts the Urdu letter a key is about to write in its corner. The same shared setting Avro and Hindi phonetic use, and it shows only while a transliterating layout is active.
+- **Spellings**: <SettingsPath path="Languages & layouts / Urdu / Spellings / Use known spellings" />, on by default. Switch it off for the letter-for-letter reading, which on Urdu means a lot more wrong guesses than on the other two.
+- **Dictionary words**: <SettingsPath path="Languages & layouts / Urdu / Spellings / Correct to dictionary words" />, on by default. Off, space commits exactly what the rules spell instead of a word from the list that matches its skeleton.
+- **Also suggest from**: with English picked, the phonetic layout's strip also carries the word as you typed it in roman letters, and an **English words** group appears below it. See [English on Avro and Hindi phonetic](/smart/mixed-language/#english-on-avro-and-hindi-phonetic), which works the same way here.
+- **Numerals**: `۰-۹` or `0-9`.
+- **Dictionary**: the downloadable Urdu list has about 155,000 words. You can import your own as well, and imported words are found through the same skeleton.
+
+## Details & edge cases
+
+**The اردو layout is also called "phonetic", and is a different thing.** Its keys are Urdu letters placed where the roman letter that sounds like them sits — a key *arrangement*. **Urdu phonetic** has roman letters on the keys and writes Urdu. Both are on Urdu's screen; turn on whichever you meant.
+
+**`kh` is خ at the start of a word and کھ everywhere else.** Both readings are everywhere in Urdu — خوش, خبر, خدا against کھانا, کھیل — but the aspirate is far commoner at the end of a word, where Urdu's own verbs put it (دیکھ, لکھ, رکھ, آنکھ), and the Perso-Arabic letter is commoner at the start. `Kh` is خ wherever you type it. `gh` goes the other way and stays گھ, because گھر alone outweighs the غ words; `Gh` is غ.
+
+**The composing text can change its mind as you type.** `k` is ک, `ka` is کا with the ا that closes a word, and the `r` of `kar` takes that ا straight back out again (کر). What you see at each point is what a space would commit at that point.
+
+**The phonetic machinery only loads if the layout is on.** Urdu with just the اردو keyboard enabled builds none of it.
+
+**There are no selection-bar chips for Urdu yet.** Bangla and Hindi have **To Bangla** / **To Banglish** and **To Hindi** / **To Hinglish** on the [selection bar](/smart/selection-actions/) for converting text you already have. Urdu has the machinery behind them — both directions are implemented — but no chip of its own; ask on the issue if you want one.
+
+**It's new, and both tables are a draft.** The rules, the spelling map and the English loanword list were written without a native speaker on hand, and measured against the word list rather than reviewed: the rules alone get about 62% of a 176-word test set exactly right, and the skeleton index puts the right word first for 44% of them and in the first three for 73%. If a common word comes out wrong, [say so on the issue](https://github.com/wasi-master/wmkeyboard/issues/496) and name the word and the spelling you typed.

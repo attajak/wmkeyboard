@@ -267,6 +267,11 @@ fun composerFor(script: ScriptDef, type: ComposerType): Composer = when (type) {
     ComposerType.TRANSLITERATE -> when (script.id) {
         ScriptId.BENGALI -> BengaliTransliterateComposer
         ScriptId.DEVANAGARI -> HindiTransliterateComposer
+        // The Arabic script is written by Urdu, Persian, Pashto, Sindhi and
+        // more, and this picks Urdu's rules for all of them — which is right
+        // while Urdu is the only one with a phonetic layout (issue #496), and
+        // is where a langId would have to come in when another gets one.
+        ScriptId.ARABIC -> UrduTransliterateComposer
         else -> NoComposer
     }
     ComposerType.HANGUL -> HangulComposer

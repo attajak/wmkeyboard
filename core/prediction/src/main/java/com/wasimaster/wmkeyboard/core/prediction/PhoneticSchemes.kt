@@ -8,6 +8,9 @@ import com.wasimaster.wmkeyboard.core.transliteration.DevanagariRomanizer
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.UrduPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.UrduPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.UrduRomanizer
 
 /**
  * Everything the prediction side needs to know about one phonetic input
@@ -90,7 +93,25 @@ object PhoneticSchemes {
         romanizeWord = DevanagariRomanizer::romanizeWord,
     )
 
-    val all: List<PhoneticScheme> = listOf(BENGALI, HINDI)
+    /**
+     * Urdu's word list is a download too, and a flat one — every word in it has
+     * frequency 1 — so its spelling map carries more weight than either of the
+     * others': it is the only thing that can rank one reading of a spelling
+     * above another for the words people type most (see [UrduPhoneticIndex]).
+     */
+    val URDU = PhoneticScheme(
+        languageId = "ur",
+        romanizedListId = "ur_rom",
+        spellingAssets = listOf("dictionaries/en_ur.tsv", "dictionaries/ur_rom.tsv"),
+        transliterate = UrduPhonetic::transliterate,
+        variants = UrduPhonetic::variants,
+        buildIndex = ::UrduPhoneticIndex,
+        isNative = UrduRomanizer::isUrdu,
+        normalize = UrduRomanizer::normalize,
+        romanizeWord = UrduRomanizer::romanizeWord,
+    )
+
+    val all: List<PhoneticScheme> = listOf(BENGALI, HINDI, URDU)
 
     fun forLanguage(languageId: String?): PhoneticScheme? =
         all.firstOrNull { it.languageId == languageId }

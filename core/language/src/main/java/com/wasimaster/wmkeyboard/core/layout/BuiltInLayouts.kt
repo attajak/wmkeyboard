@@ -43,6 +43,7 @@ object BuiltInLayouts {
     const val HEBREW_ID = "builtin_hebrew"
     const val HINDI_ID = "builtin_hindi"
     const val HINDI_PHONETIC_ID = "builtin_hindi_phonetic"
+    const val URDU_PHONETIC_ID = "builtin_urdu_phonetic"
     const val T9_ID = "builtin_t9"
     const val COMPACT_ID = "builtin_compact"
 
@@ -312,6 +313,24 @@ object BuiltInLayouts {
     )
 
     /**
+     * Urdu typed the way it is written in a chat — "aap kaise hain" → آپ کیسے
+     * ہیں — on the QWERTY grid unchanged, as Avro is for Bengali and
+     * [HINDI_PHONETIC] for Hindi (issue #496). The composer override is what
+     * makes it phonetic; the Arabic script's own default types its letters
+     * directly, which is what Urdu's other layouts do.
+     *
+     * The keys stay left-to-right while the text they write runs right to left,
+     * which is how every roman-key method for an RTL script works.
+     */
+    val URDU_PHONETIC = LayoutSpec(
+        id = URDU_PHONETIC_ID,
+        name = "Urdu phonetic",
+        langId = "ur",
+        composer = ComposerType.TRANSLITERATE,
+        layers = mapOf(LayoutLayer.LETTERS.key to LayerSpec(qwertyRows)),
+    )
+
+    /**
      * T9: the phone keypad, three or four letters to a key, decoded by the
      * language model rather than by multi-tap (discussion #103).
      *
@@ -381,7 +400,8 @@ object BuiltInLayouts {
      */
     val all: List<LayoutSpec> = listOf(
         QWERTY, AZERTY, DVORAK, COLEMAK, WORKMAN, HALMAK, AVRO, KHIPRO, PROBHAT, JATIYA, FRENCH,
-        GERMAN, SPANISH, KOREAN, RUSSIAN, ARABIC, GREEK, HEBREW, HINDI, HINDI_PHONETIC, T9, COMPACT,
+        GERMAN, SPANISH, KOREAN, RUSSIAN, ARABIC, GREEK, HEBREW, HINDI, HINDI_PHONETIC,
+        URDU_PHONETIC, T9, COMPACT,
     )
 
     fun byId(id: String): LayoutSpec? = all.firstOrNull { it.id == id }

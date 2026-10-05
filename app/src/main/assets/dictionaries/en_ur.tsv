@@ -1,0 +1,123 @@
+# English → Urdu loanword map.
+#
+# Words Urdu speakers routinely write in the Urdu script but which are NOT
+# phonetically derivable from the Urdu phonetic rules: English spelling says
+# little about English sound, so "school" would come out سچول and "phone" پھونے.
+# Typed on the Urdu phonetic layout, the English spelling on the left commits
+# the Urdu on the right.
+#
+# Kept short on purpose. A word is here only if the Urdu script is how it is
+# normally written in Urdu text (اسکول, موبائل, ڈاکٹر); anything people write in
+# Latin letters even mid-Urdu-sentence belongs in the English-words setting
+# instead, not here.
+#
+# Format: spelling<TAB>urdu   (one mapping per line; # starts a comment)
+
+school	اسکول
+college	کالج
+university	یونیورسٹی
+office	آفس
+phone	فون
+mobile	موبائل
+computer	کمپیوٹر
+internet	انٹرنیٹ
+message	میسج
+video	ویڈیو
+photo	فوٹو
+camera	کیمرہ
+car	کار
+bus	بس
+train	ٹرین
+ticket	ٹکٹ
+hotel	ہوٹل
+hospital	ہسپتال
+doctor	ڈاکٹر
+medicine	میڈیسن
+market	مارکیٹ
+bank	بینک
+police	پولیس
+court	کورٹ
+government	گورنمنٹ
+minister	منسٹر
+news	نیوز
+channel	چینل
+twitter	ٹوئٹر
+youtube	یوٹیوب
+google	گوگل
+account	اکاؤنٹ
+number	نمبر
+time	ٹائم
+date	ڈیٹ
+week	ویک
+party	پارٹی
+team	ٹیم
+match	میچ
+cricket	کرکٹ
+football	فٹبال
+film	فلم
+movie	مووی
+song	سانگ
+music	میوزک
+book	بک
+pen	پین
+class	کلاس
+test	ٹیسٹ
+exam	امتحان
+result	رزلٹ
+job	جاب
+business	بزنس
+company	کمپنی
+shop	شاپ
+plan	پلان
+problem	پرابلم
+sorry	سوری
+thanks	تھینکس
+please	پلیز
+ok	اوکے
+okay	اوکے
+yaar	یار
+no	نو
+good	گڈ
+best	بیسٹ
+nice	نائس
+love	لو
+life	لائف
+friend	فرینڈ
+sir	سر
+madam	میڈم
+boss	باس
+brother	برادر
+sister	سسٹر
+city	سٹی
+country	کنٹری
+airport	ایئرپورٹ
+flight	فلائٹ
+visa	ویزا
+passport	پاسپورٹ
+petrol	پٹرول
+electricity	بجلی
+water	واٹر
+milk	ملک
+tea	ٹی
+coffee	کافی
+hotel	ہوٹل
+restaurant	ریسٹورنٹ
+pizza	پیزا
+burger	برگر
+chocolate	چاکلیٹ
+ice	آئس
+meeting	میٹنگ
+report	رپورٹ
+project	پروجیکٹ
+screen	اسکرین
+battery	بیٹری
+charger	چارجر
+app	ایپ
+link	لنک
+site	سائٹ
+post	پوسٹ
+share	شیئر
+like	لائک
+comment	کمنٹ
+story	اسٹوری
+status	اسٹیٹس

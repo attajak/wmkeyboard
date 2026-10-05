@@ -36,10 +36,30 @@ class ComposerTest {
         assertTrue(composerFor(bengali, ComposerType.INDIC_CLUSTER) is IndicClusterComposer)
         assertTrue(composerFor(devanagari, ComposerType.INDIC_CLUSTER) is IndicClusterComposer)
         assertSame(HindiTransliterateComposer, composerFor(devanagari, ComposerType.TRANSLITERATE))
+        assertSame(
+            UrduTransliterateComposer,
+            composerFor(ScriptRegistry[ScriptId.ARABIC], ComposerType.TRANSLITERATE),
+        )
         // A transliterator with no engine for its script degrades, never crashes.
         assertSame(NoComposer, composerFor(latin, ComposerType.TRANSLITERATE))
         assertSame(KhiproComposer, composerFor(bengali, ComposerType.KHIPRO))
         assertSame(NoComposer, composerFor(latin, ComposerType.KHIPRO))
+    }
+
+    @Test
+    fun `the Urdu phonetic layout types through the Urdu composer`() {
+        val spec = BuiltInLayouts.URDU_PHONETIC
+        assertSame(UrduTransliterateComposer, composerFor(spec.script(), spec.composerType()))
+        // Its buffer is roman, so a word half-typed on a Latin keyboard carries
+        // into it when the language is switched mid-word (#522).
+        assertTrue(UrduTransliterateComposer.isRomanBuffer)
+        assertEquals("ur", UrduTransliterateComposer.phoneticLanguage)
+        assertEquals("کتب", UrduTransliterateComposer.composeBuffer("kitab"))
+        // The preview is diffed from the common prefix, because a key can take
+        // the letter before it away: the ا of "ka" when "kar" is typed.
+        assertEquals("ا", UrduTransliterateComposer.keyPreview("k", "a", false))
+        assertEquals("ر", UrduTransliterateComposer.keyPreview("ka", "r", false))
+        assertNull(UrduTransliterateComposer.keyPreview("ka", "1", false))
     }
 
     @Test
