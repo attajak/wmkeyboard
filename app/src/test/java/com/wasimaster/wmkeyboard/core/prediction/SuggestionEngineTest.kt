@@ -4,6 +4,7 @@ import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.UrduPhoneticIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
@@ -709,6 +710,69 @@ class SuggestionEngineTest {
         val suggestions = hindiEngine(emptyList()).suggest("pyar", null, phoneticLanguage = "hi")
         assertEquals(HindiPhonetic.transliterate("pyar"), suggestions.first())
         assertTrue("प्यार" in suggestions)
+    }
+
+    private fun urduEngine(
+        lexicon: UserLexicon = UserLexicon(null),
+        spellings: SpellingMap = SpellingMap.EMPTY,
+    ): SuggestionEngine = engine(lexicon).also {
+        it.extraPhonetic = mapOf(
+            "ur" to PhoneticBackend(
+                PhoneticSchemes.URDU,
+                UrduPhoneticIndex(listOf("\u06A9\u0645" to 500, "\u06A9\u0627\u0645" to 400)),
+                spellings,
+            ),
+        )
+    }
+
+    private val kam = "\u06A9\u0645" // کم, "less"
+    private val kaam = "\u06A9\u0627\u0645" // کام, "work"
+    private val mera = "\u0645\u06CC\u0631\u0627" // میرا
+
+    @Test fun phoneticReadingsFollowTheWordBefore() {
+        // Alone, "kam" is the commoner کم…
+        val plain = urduEngine()
+        assertEquals(kam, plain.suggest("kam", null, phoneticLanguage = "ur").first())
+        assertEquals(kam, plain.phoneticCommit("ur", "kam")?.output)
+        // …but after a "میرا کام" the user has typed before, it is کام, on the
+        // strip and on the space bar alike.
+        val lexicon = UserLexicon(null).also { it.learnBigram(mera, kaam) }
+        val e = urduEngine(lexicon)
+        assertEquals(kaam, e.suggest("kam", mera, phoneticLanguage = "ur").first())
+        assertEquals(kaam, e.phoneticCommit("ur", "kam", mera)?.output)
+        // A different word before leaves it alone.
+        assertEquals(kam, e.suggest("kam", "\u0628\u06C1\u062A", phoneticLanguage = "ur").first())
+    }
+
+    @Test fun phoneticContextCanBeSwitchedOff() {
+        val lexicon = UserLexicon(null).also { it.learnBigram(mera, kaam) }
+        val e = urduEngine(lexicon).also { it.phoneticContextOff = setOf("ur") }
+        assertEquals(kam, e.suggest("kam", mera, phoneticLanguage = "ur").first())
+        assertEquals(kam, e.phoneticCommit("ur", "kam", mera)?.output)
+    }
+
+    @Test fun contextReordersAKnownSpellingsFormsAndThePreviewFollows() {
+        val kal = "\u06A9\u0644" // کل
+        val kaal = "\u06A9\u0627\u0644" // کال
+        val aaj = "\u0622\u062C" // آج
+        val map = SpellingMap.load("kal\t$kal\nkal\t$kaal\n".byteInputStream(Charsets.UTF_8))
+        val lexicon = UserLexicon(null).also { it.learnBigram(aaj, kaal) }
+        val e = urduEngine(lexicon, map)
+        assertEquals(kal, e.phoneticSpelling("ur", "kal"))
+        // The composing preview and the space bar agree after the word before.
+        assertEquals(kaal, e.phoneticSpelling("ur", "kal", aaj))
+        assertEquals(kaal, e.suggest("kal", aaj, phoneticLanguage = "ur").first())
+    }
+
+    @Test fun contextNeverLiftsADictionaryWordOverAKnownSpelling() {
+        // The map says "kam" is کم; a habit of کام after میرا moves it up the
+        // strip but not past the listed spelling, which the preview showed.
+        val map = SpellingMap.load("kam\t$kam\n".byteInputStream(Charsets.UTF_8))
+        val lexicon = UserLexicon(null).also { it.learnBigram(mera, kaam) }
+        val e = urduEngine(lexicon, map)
+        val strip = e.suggest("kam", mera, phoneticLanguage = "ur")
+        assertEquals(kam, strip.first())
+        assertTrue(kaam in strip)
     }
 
     @Test fun aPhoneticLayoutNeverAnswersInLatin() {

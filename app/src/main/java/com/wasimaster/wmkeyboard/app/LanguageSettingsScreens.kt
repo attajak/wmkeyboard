@@ -1051,6 +1051,21 @@ internal fun LanguageDetailScreen(
                     default = SettingsDefaults.suggestionStrip.phoneticSiblingsEnabledFor(langId),
                 ) { scope.launch { repository.setPhoneticSiblingsEnabled(langId, it) } }
             }
+            // The words before: "kam" is کم or کام by what came before it.
+            // Reads the user's own word pairs and the language's corpus pack;
+            // off ranks a word the same anywhere in a sentence.
+            item {
+                ToggleSetting(
+                    R.string.languages_phonetic_context_row_title,
+                    stringResource(R.string.languages_phonetic_context_row_subtitle),
+                    settings.watch { it.suggestionStrip.phoneticContextEnabledFor(langId) },
+                    info = stringResource(
+                        R.string.languages_phonetic_context_info,
+                        lang.englishName,
+                    ),
+                    default = SettingsDefaults.suggestionStrip.phoneticContextEnabledFor(langId),
+                ) { scope.launch { repository.setPhoneticContextEnabled(langId, it) } }
+            }
         }
     }
 

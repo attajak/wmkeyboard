@@ -4265,6 +4265,7 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
                 phoneticSiblingsOff = _uiState.value.settings.suggestionStrip.phoneticSiblingsOffLangs
+                phoneticContextOff = _uiState.value.settings.suggestionStrip.phoneticContextOffLangs
                 phoneticFixedStrip = _uiState.value.let {
                     it.settings.suggestionStrip.phoneticFixedStripFor(it.composer.phoneticLanguage)
                 }
@@ -10134,7 +10135,7 @@ open class WMKeyboardService : InputMethodService() {
         val engine = suggestionEngine ?: return
         val typed = composing.toString()
         if (typed.isEmpty() || !engine.phoneticAutoEnglish) return
-        val commit = engine.phoneticCommit(language, typed, previousWord) ?: return
+        val commit = engine.phoneticCommit(language, typed, previousWord, previousWord2) ?: return
         if (suggestion != commit.alternate) return
         val to = if (commit.script == PhoneticScript.LATIN) PhoneticScript.NATIVE else PhoneticScript.LATIN
         noteScriptFlip(ScriptFlip(language, typed, to))
@@ -10165,9 +10166,15 @@ open class WMKeyboardService : InputMethodService() {
             .let { it.phoneticLanguage ?: it.completionLanguage }
         val next = settings.suggestionStrip.phoneticEnglishFor(language)
         val siblingsOff = settings.suggestionStrip.phoneticSiblingsOffLangs
-        if (engine.phoneticAutoEnglish == next && engine.phoneticSiblingsOff == siblingsOff) return
+        val contextOff = settings.suggestionStrip.phoneticContextOffLangs
+        if (engine.phoneticAutoEnglish == next && engine.phoneticSiblingsOff == siblingsOff &&
+            engine.phoneticContextOff == contextOff
+        ) {
+            return
+        }
         engine.phoneticAutoEnglish = next
         engine.phoneticSiblingsOff = siblingsOff
+        engine.phoneticContextOff = contextOff
         commitResolution = null
         if (composing.isEmpty() || _uiState.value.composer.let {
                 it.phoneticLanguage == null && it.completionLanguage == null
@@ -12295,7 +12302,7 @@ open class WMKeyboardService : InputMethodService() {
             suggestionEngine?.phoneticLatinPreview(language, buffer, previousWord)?.let {
                 return sentenceCasedLatin(it, buffer, state)
             }
-            suggestionEngine?.phoneticSpelling(language, buffer)?.let { return it }
+            suggestionEngine?.phoneticSpelling(language, buffer, previousWord, previousWord2)?.let { return it }
         }
         completionLatin(state, buffer)?.let { return it }
         return state.composer.composeBuffer(buffer)
@@ -12787,7 +12794,7 @@ open class WMKeyboardService : InputMethodService() {
                     scriptAlternate = pre.phoneticAlternate
                     pre.phoneticTop
                 } else {
-                    val commit = suggestionEngine?.phoneticCommit(language, typed, previousWord)
+                    val commit = suggestionEngine?.phoneticCommit(language, typed, previousWord, previousWord2)
                     scriptAlternate = commit?.alternate
                     commit?.output
                 } ?: state.composer.composeBuffer(typed)
@@ -17351,7 +17358,7 @@ open class WMKeyboardService : InputMethodService() {
                     typed.isEmpty() -> null
                     state.composer.phoneticLanguage != null -> {
                         val commit = engine
-                            .phoneticCommit(state.composer.phoneticLanguage.orEmpty(), typed, previousWord)
+                            .phoneticCommit(state.composer.phoneticLanguage.orEmpty(), typed, previousWord, previousWord2)
                         // The ordinary strip's head is what a space commits. A
                         // fixed strip's head is the buffer in Latin letters,
                         // whatever the space will do, so there the commit is

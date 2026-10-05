@@ -407,6 +407,22 @@ class SuggestionEngine(
         }
 
     /**
+     * Phonetic languages whose readings ignore the words before the one being
+     * typed ([inContext]): the strip and the space bar rank a buffer exactly
+     * as they would at the start of a sentence. Stored as the switched-off set,
+     * so a language nobody has touched reads its context.
+     */
+    @Volatile
+    private var phoneticContextOffField: Set<String> = emptySet()
+    var phoneticContextOff: Set<String>
+        get() = phoneticContextOffField
+        set(value) {
+            if (value == phoneticContextOffField) return
+            phoneticContextOffField = value
+            generation.incrementAndGet()
+        }
+
+    /**
      * Whether a phonetic layout's strip keeps its first two chips fixed — the
      * buffer as typed in Latin letters, then the rules' reading of it — and
      * what fills the rest; null is the ordinary strip, whose head is whatever
@@ -1929,6 +1945,16 @@ class SuggestionEngine(
         /** Seed pairs are weaker evidence than the user's own habits. */
         private val SEED_CONTEXT_BOOST = ln(1.5)
 
+        /** How many of a phonetic buffer's readings context may reorder ([inContext]). */
+        private const val PHONETIC_CONTEXT_POOL = 6
+
+        /**
+         * What one place up a phonetic buffer's readings costs in context
+         * boost: a single sighting of the pair (≈0.30) lifts a reading one
+         * place, a habit (≈0.8 at ten) three, the cap (ln 4) five.
+         */
+        private const val PHONETIC_CONTEXT_RANK_STEP = 0.25
+
         /** Handicap on a once-reverted pair: the x0.25 of the old design. */
         private val PAIR_PENALTY = ln(4.0)
 
@@ -2143,11 +2169,13 @@ class SuggestionEngine(
             }
             phoneticFixedStrip?.let { source ->
                 return fixedPhoneticStrip(
-                    backend, composing, previousWord, limit, phoneticSlots, source, latinCompletions,
+                    backend, composing, previousWord, previousWord2, limit, phoneticSlots, source, latinCompletions,
                 )
             }
-            if (!phoneticMixing) return nativeReadings(backend, composing, limit)
-            return phoneticStrip(backend, composing, previousWord, limit, phoneticSlots, latinCompletions)
+            if (!phoneticMixing) return nativeReadings(backend, composing, limit, previousWord, previousWord2)
+            return phoneticStrip(
+                backend, composing, previousWord, previousWord2, limit, phoneticSlots, latinCompletions,
+            )
         }
 
         val lower = composing.lowercase()
@@ -2223,29 +2251,9 @@ class SuggestionEngine(
             val prev2 = previousWord2?.lowercase()
             for (entry in merged.entries) {
                 val candidate = entry.key.lowercase()
-                val count = maxOf(
-                    userLexicon.bigramCount(prev, candidate),
-                    // The two-word context is rarer and stronger evidence;
-                    // its raw count rides the same bounded boost curve.
-                    if (prev2 != null) {
-                        userLexicon.trigramCount(prev2, prev, candidate) * 2
-                    } else {
-                        0
-                    },
-                    // Corpus counts are damped so a personal pair typed once
-                    // outranks a population prior seen dozens of times.
-                    ngramPack.bigramCount(prev, candidate) / PACK_COUNT_SCALE,
-                    if (prev2 != null) {
-                        ngramPack.trigramCount(prev2, prev, candidate) * 2 / PACK_COUNT_SCALE
-                    } else {
-                        0
-                    },
-                )
+                val count = contextCount(prev, prev2, candidate)
                 val boost = when {
-                    count > 0 -> minOf(
-                        ln(1.0 + CONTEXT_BIGRAM_BETA * ln(1.0 + count)),
-                        MAX_CONTEXT_BOOST,
-                    )
+                    count > 0 -> contextBoost(count)
                     englishSources && seedBigrams.follows(prev, candidate) -> SEED_CONTEXT_BOOST
                     else -> 0.0
                 }
@@ -2685,8 +2693,15 @@ class SuggestionEngine(
      *
      * @param languageId the language of the phonetic layout being typed on
      */
-    fun phoneticSpelling(languageId: String, composing: String): String? =
-        phoneticBackend(languageId)?.spellings?.lookup(composing)?.firstOrNull { !suppressed(it) }
+    fun phoneticSpelling(
+        languageId: String,
+        composing: String,
+        previousWord: String? = null,
+        previousWord2: String? = null,
+    ): String? {
+        val forms = phoneticBackend(languageId)?.spellings?.lookup(composing) ?: return null
+        return inContext(forms, languageId, previousWord, previousWord2).firstOrNull { !suppressed(it) }
+    }
 
     /**
      * The strip of a layout whose keys already spell the word (Khipro, see
@@ -2743,15 +2758,80 @@ class SuggestionEngine(
         return (sequenceOf(composed) + rest).take(limit).toList()
     }
 
-    private fun phoneticSuggestions(backend: PhoneticBackend, composing: String, limit: Int): List<String> {
+    /**
+     * How strongly [candidate] is expected after [prev] (and [prev2] before
+     * it): the learned pair or triple, or the downloaded corpus's, whichever
+     * says more. The two-word context is rarer and stronger evidence, so its
+     * raw count rides the same curve doubled; corpus counts are damped so a
+     * personal pair typed once outranks a population prior seen dozens of
+     * times. 0 when nothing has seen it there.
+     */
+    private fun contextCount(prev: String, prev2: String?, candidate: String): Int = maxOf(
+        userLexicon.bigramCount(prev, candidate),
+        if (prev2 != null) userLexicon.trigramCount(prev2, prev, candidate) * 2 else 0,
+        ngramPack.bigramCount(prev, candidate) / PACK_COUNT_SCALE,
+        if (prev2 != null) ngramPack.trigramCount(prev2, prev, candidate) * 2 / PACK_COUNT_SCALE else 0,
+    )
+
+    /** The bounded log-space lift a [contextCount] is worth. */
+    private fun contextBoost(count: Int): Double =
+        if (count > 0) minOf(ln(1.0 + CONTEXT_BIGRAM_BETA * ln(1.0 + count)), MAX_CONTEXT_BOOST) else 0.0
+
+    /**
+     * [words] — readings of one buffer, best first — reordered by what came
+     * before them, for [languageId]'s phonetic layout.
+     *
+     * The Latin strip has always weighed the words before the one being typed;
+     * the phonetic layouts ranked a buffer the same at the start of a sentence
+     * as after any word, so "kam" was the same word after "mera" as after
+     * "bahut". The evidence is the one [suggest] reads: the user's own pairs
+     * and triples, and the language's corpus pack where one is installed.
+     *
+     * Only the head moves, and it moves by steps: each place a word has to
+     * climb costs [PHONETIC_CONTEXT_RANK_STEP] of boost, so one sighting lifts
+     * a reading one place and a habit a few, and a reading deep in the fold's
+     * list — a poor match for what was typed — cannot jump the queue however
+     * common it is after the word before. Stable where nothing has been seen.
+     */
+    private fun inContext(
+        words: List<String>,
+        languageId: String,
+        previousWord: String?,
+        previousWord2: String?,
+    ): List<String> {
+        if (words.size < 2 || languageId in phoneticContextOff) return words
+        val prev = previousWord?.lowercase()?.takeIf { it.isNotEmpty() } ?: return words
+        val prev2 = previousWord2?.lowercase()?.takeIf { it.isNotEmpty() }
+        val head = words.take(PHONETIC_CONTEXT_POOL)
+        val boosts = head.map { contextBoost(contextCount(prev, prev2, it.lowercase())) }
+        if (boosts.all { it == 0.0 }) return words
+        val order = head.indices.sortedWith(
+            compareByDescending<Int> { boosts[it] - it * PHONETIC_CONTEXT_RANK_STEP }.thenBy { it },
+        )
+        return order.map { head[it] } + words.drop(PHONETIC_CONTEXT_POOL)
+    }
+
+    private fun phoneticSuggestions(
+        backend: PhoneticBackend,
+        composing: String,
+        limit: Int,
+        previousWord: String? = null,
+        previousWord2: String? = null,
+    ): List<String> {
         val spellings = backend.spellings
         val index = backend.index
         val phonetic = backend.scheme.transliterate(composing)
+        val language = backend.scheme.languageId
         val ordered = LinkedHashSet<String>()
         // Listed spellings win outright — loanwords like "keyboard" → কিবোর্ড,
         // and chat shorthand like "tmr" → তোমার whose vowels were never typed.
-        // Neither is reachable from the rules, so the map goes first.
-        ordered.addAll(spellings.lookup(composing))
+        // Neither is reachable from the rules, so the map goes first. Context
+        // may reorder a spelling's listed forms among themselves — "pora" is
+        // পৰা or পঢ়া by what came before — but never lifts anything above
+        // them, so the preview ([phoneticSpelling]) is still what a space
+        // commits.
+        val listed = inContext(spellings.lookup(composing), language, previousWord, previousWord2)
+        ordered.addAll(listed)
         // Phonetic siblings from the dictionary (আছি for "asi") outrank the
         // literal transliteration only when clearly more common — the commit
         // path takes the first entry, and the preview showed the literal, so
@@ -2776,7 +2856,11 @@ class SuggestionEngine(
         // offer in place of the siblings a dictionary would have found.
         ordered.add(phonetic)
         ordered.addAll(backend.scheme.variants(composing))
-        return ordered.asSequence().filterNot(::suppressed).take(limit).toList()
+        // The readings after the listed ones, reordered by context the same
+        // way: the dictionary siblings and the rules' own, which is where the
+        // word list's ambiguity lives ("kam" کم or کام).
+        val rest = inContext(ordered.filterNot(listed.toSet()::contains), language, previousWord, previousWord2)
+        return (listed.asSequence() + rest.asSequence()).filterNot(::suppressed).take(limit).toList()
     }
 
     /**
@@ -2794,8 +2878,14 @@ class SuggestionEngine(
      * the candidate list folded into the strip — its head (what a space
      * commits) followed by the candidate list in Avro's order.
      */
-    private fun nativeReadings(backend: PhoneticBackend, composing: String, limit: Int): List<String> {
-        val ours = phoneticSuggestions(backend, composing, limit)
+    private fun nativeReadings(
+        backend: PhoneticBackend,
+        composing: String,
+        limit: Int,
+        previousWord: String? = null,
+        previousWord2: String? = null,
+    ): List<String> {
+        val ours = phoneticSuggestions(backend, composing, limit, previousWord, previousWord2)
         if (phoneticCandidateLists[backend.scheme.languageId] != PhoneticCandidateList.STRIP) return ours
         val depth = maxOf(limit, PHONETIC_CANDIDATE_STRIP_DEPTH)
         val avro = PhoneticCandidates.build(backend, composing, depth, ::suppressed)
@@ -2819,10 +2909,15 @@ class SuggestionEngine(
      * The head of [suggest]'s list for the same buffer is always [PhoneticCommit.output]
      * — both ask [scriptVerdict] — which is what lets the preview show it early.
      */
-    fun phoneticCommit(languageId: String, composing: String, previousWord: String? = null): PhoneticCommit? {
+    fun phoneticCommit(
+        languageId: String,
+        composing: String,
+        previousWord: String? = null,
+        previousWord2: String? = null,
+    ): PhoneticCommit? {
         val backend = phoneticBackend(languageId) ?: return null
         if (composing.isEmpty()) return null
-        val native = phoneticSuggestions(backend, composing, 1).firstOrNull()
+        val native = phoneticSuggestions(backend, composing, 1, previousWord, previousWord2).firstOrNull()
             ?: backend.scheme.transliterate(composing)
         if (!phoneticMixing) return PhoneticCommit(native, PhoneticScript.NATIVE, alternate = null)
         val verdict = scriptVerdict(backend, composing, previousWord)
@@ -2979,7 +3074,7 @@ class SuggestionEngine(
         var pair = 0
         if (prev != null && latin != null && englishPair(prev, lower)) pair++
         if (prev != null && native != null) {
-            val reading = phoneticSuggestions(backend, composing, 1).firstOrNull()
+            val reading = phoneticSuggestions(backend, composing, 1, previousWord).firstOrNull()
             if (reading != null && nativePair(prev, reading)) pair--
         }
         return PhoneticScriptVerdict.Evidence(
@@ -3040,13 +3135,14 @@ class SuggestionEngine(
         backend: PhoneticBackend,
         composing: String,
         previousWord: String?,
+        previousWord2: String?,
         limit: Int,
         slots: Int,
         latinCompletions: () -> List<String>,
     ): List<String> {
         // Never empty: with every reading on the never-suggest list the rules'
         // own is still what a space commits, and the head has to say so.
-        val native = nativeReadings(backend, composing, limit)
+        val native = nativeReadings(backend, composing, limit, previousWord, previousWord2)
             .ifEmpty { listOf(backend.scheme.transliterate(composing)) }
         val literal = latinForm(composing)
         val latinLeads = scriptVerdict(backend, composing, previousWord).script == PhoneticScript.LATIN
@@ -3084,6 +3180,7 @@ class SuggestionEngine(
         backend: PhoneticBackend,
         composing: String,
         previousWord: String?,
+        previousWord2: String?,
         limit: Int,
         slots: Int,
         source: PhoneticStripSource,
@@ -3094,7 +3191,7 @@ class SuggestionEngine(
         val fixed = listOf(literal, reading).distinct()
         fun isFixed(word: String) = word == reading || word.equals(literal, ignoreCase = true)
         val want = limit + fixed.size
-        val native = { nativeReadings(backend, composing, want).filterNot(::isFixed) }
+        val native = { nativeReadings(backend, composing, want, previousWord, previousWord2).filterNot(::isFixed) }
         val english = { englishCompletions(composing, want, latinCompletions).filterNot(::isFixed) }
         val rest = when (source) {
             PhoneticStripSource.NATIVE -> native()

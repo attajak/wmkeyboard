@@ -628,6 +628,7 @@ internal object SettingsRowIcons {
         put(R.string.languages_fancy_style_row_title) { Icons.Outlined.TextFormat }
         put(R.string.languages_spelling_map_row_title) { Icons.Outlined.Spellcheck }
         put(R.string.languages_phonetic_siblings_row_title) { Icons.Outlined.FindReplace }
+        put(R.string.languages_phonetic_context_row_title) { Icons.Outlined.Link }
         put(R.string.languages_more_layouts_title) { Icons.Outlined.GridOn }
 
         // ---- Layout & size ----

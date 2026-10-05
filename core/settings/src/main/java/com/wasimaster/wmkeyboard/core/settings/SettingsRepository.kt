@@ -7522,6 +7522,14 @@ data class SuggestionStripSettings(
      */
     val phoneticSiblingsOffLangs: Set<String> = emptySet(),
     /**
+     * Phonetic languages whose readings ignore the words before the one being
+     * typed. Everywhere else the strip and the space bar weigh them the way the
+     * Latin strip does — the user's own word pairs and triples, and the
+     * language's downloaded corpus pack — so "kam" after "mera" is کام. Stored
+     * as the switched-off set, so a language nobody has touched reads context.
+     */
+    val phoneticContextOffLangs: Set<String> = emptySet(),
+    /**
      * Languages whose suggestions come from the user's own imported word lists
      * alone: the bundled list and any downloaded one are dropped for them
      * (issue #28).
@@ -7672,6 +7680,9 @@ data class SuggestionStripSettings(
 
     /** Whether a space on [langId]'s phonetic layout may commit a sound-alike dictionary word. */
     fun phoneticSiblingsEnabledFor(langId: String): Boolean = langId !in phoneticSiblingsOffLangs
+
+    /** Whether [langId]'s phonetic layout ranks its readings by the words before them. */
+    fun phoneticContextEnabledFor(langId: String): Boolean = langId !in phoneticContextOffLangs
 
     /** Whether [langId]'s phonetic layout commits English words as English; null is no phonetic layout. */
     fun phoneticEnglishFor(langId: String?): Boolean = langId != null && langId in phoneticEnglishLangs
@@ -8209,6 +8220,7 @@ class SettingsRepository(private val context: Context) {
         }
         private val SPELLING_MAP_OFF_LANGS = stringSetPreferencesKey("spelling_map_off_langs")
         private val PHONETIC_SIBLINGS_OFF_LANGS = stringSetPreferencesKey("phonetic_siblings_off_langs")
+        private val PHONETIC_CONTEXT_OFF_LANGS = stringSetPreferencesKey("phonetic_context_off_langs")
         private val IMPORTED_ONLY_LANGS = stringSetPreferencesKey("imported_only_langs")
         private val WORD_PAIRS_OFF_LANGS = stringSetPreferencesKey("word_pairs_off_langs")
         private val WORD_MENU_ITEMS = stringSetPreferencesKey("word_menu_items")
@@ -10210,6 +10222,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.suggestionStrip.spellingMapOffLangs,
             phoneticSiblingsOffLangs = p[PHONETIC_SIBLINGS_OFF_LANGS]
                 ?: defaults.suggestionStrip.phoneticSiblingsOffLangs,
+            phoneticContextOffLangs = p[PHONETIC_CONTEXT_OFF_LANGS]
+                ?: defaults.suggestionStrip.phoneticContextOffLangs,
             importedOnlyLangs = p[IMPORTED_ONLY_LANGS]
                 ?: defaults.suggestionStrip.importedOnlyLangs,
             wordPairsOffLangs = p[WORD_PAIRS_OFF_LANGS]
@@ -14914,6 +14928,16 @@ class SettingsRepository(private val context: Context) {
         editPrefs {
             val off = it[PHONETIC_SIBLINGS_OFF_LANGS].orEmpty()
             it[PHONETIC_SIBLINGS_OFF_LANGS] = if (enabled) off - langId else off + langId
+        }
+
+    /**
+     * Let one phonetic language rank its readings by the words before them, or
+     * keep them context-free. Only the switched-off languages are stored.
+     */
+    suspend fun setPhoneticContextEnabled(langId: String, enabled: Boolean) =
+        editPrefs {
+            val off = it[PHONETIC_CONTEXT_OFF_LANGS].orEmpty()
+            it[PHONETIC_CONTEXT_OFF_LANGS] = if (enabled) off - langId else off + langId
         }
 
     /**

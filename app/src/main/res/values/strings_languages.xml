@@ -126,6 +126,9 @@
     <string name="languages_phonetic_siblings_row_title">Correct to dictionary words</string>
     <string name="languages_phonetic_siblings_row_subtitle">Type "asi" to get আছি instead of আসি</string>
     <string name="languages_phonetic_siblings_info">Romanized typing is loose, so when you press space the keyboard can replace what you typed with a dictionary word that sounds the same. "asi" becomes আছি, the word people usually mean. This happens even with autocorrect off, because it is part of how <xliff:g id="language" example="Bengali">%1$s</xliff:g> is typed. Turn it off to always get exactly what the typing rules spell. The dictionary words still show in the suggestion strip, so you can tap one. Known spellings have their own setting above.</string>
+    <string name="languages_phonetic_context_row_title">Use the words before</string>
+    <string name="languages_phonetic_context_row_subtitle">Pick the reading that fits the words you already typed</string>
+    <string name="languages_phonetic_context_info">One romanized spelling can stand for several <xliff:g id="language" example="Bengali">%1$s</xliff:g> words. With this on, the keyboard looks at the one or two words you typed just before and moves up the reading that usually follows them, both in the suggestion strip and for what the space bar writes. It learns from what you type, and from the downloaded word-pair data where your language has it. A known spelling only trades places with another known spelling of the same word, so what you see while typing is still what space writes. Turn this off if the keyboard picks a different word than you expect after certain words.</string>
 
     <!-- Phonetic layouts (Avro): the corner hints that show what each roman key types. -->
     <string name="languages_translit_hints_title">Key hints</string>
