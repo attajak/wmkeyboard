@@ -99,6 +99,7 @@ import com.wasimaster.wmkeyboard.core.theme.themeFamilyName
 import com.wasimaster.wmkeyboard.core.theme.withExtractedImages
 import com.wasimaster.wmkeyboard.core.theme.withFreshIds
 import com.wasimaster.wmkeyboard.core.util.firstJsonDocument
+import com.wasimaster.wmkeyboard.core.util.readCapped
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import com.wasimaster.wmkeyboard.content.R as ContentR
@@ -329,7 +330,10 @@ object WMFileTypes {
         val text = runCatching {
             context.contentResolver.requireInputStream(uri).use { raw ->
                 val input = if (gzipped) java.util.zip.GZIPInputStream(raw, 32 * 1024) else raw
-                input.readBytes().decodeToString()
+                // Capped on what comes *out*: a few megabytes of gzip inflate
+                // to far more, and this is the one read where the file's own
+                // size says nothing about what it costs to hold.
+                input.readCapped()?.decodeToString()
             }
         }.getOrNull() ?: return Opened.Unreadable
 

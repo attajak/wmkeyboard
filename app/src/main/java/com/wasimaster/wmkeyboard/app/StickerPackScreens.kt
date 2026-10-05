@@ -70,6 +70,7 @@ import com.wasimaster.wmkeyboard.core.stickers.StickerPackFile
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.stickers.StickerKeywords
 import com.wasimaster.wmkeyboard.core.stickers.whatsapp.WaStickersFile
+import com.wasimaster.wmkeyboard.core.util.readBytesCapped
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import com.wasimaster.wmkeyboard.ime.ui.rememberMediaImageLoader
@@ -412,7 +413,7 @@ internal fun StickerPackScreen(
             val single = uris.singleOrNull()?.let { uri ->
                 withContext(Dispatchers.IO) {
                     runCatching {
-                        context.contentResolver.requireInputStream(uri).use { it.readBytes() }
+                        context.contentResolver.readBytesCapped(uri)
                     }.getOrNull()
                 }
             }
@@ -685,7 +686,7 @@ internal suspend fun addPickedStickers(
     var full = false
     for (uri in uris) {
         val bytes = runCatching {
-            context.contentResolver.requireInputStream(uri).use { it.readBytes() }
+            context.contentResolver.readBytesCapped(uri)
         }.getOrNull()
         if (bytes == null) {
             unreadable++

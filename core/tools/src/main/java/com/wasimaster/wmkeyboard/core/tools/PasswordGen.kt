@@ -98,13 +98,27 @@ object PasswordGen {
         return bits.roundToInt()
     }
 
+    /** The default size of a built wordlist. */
+    const val WORDLIST_LIMIT = 4096
+
+    /**
+     * Whether [word] is passphrase material: short, unambiguous, all lowercase
+     * letters.
+     *
+     * Named rather than inlined into [buildWordlist] because the caller that
+     * builds the list from a trie hands it to the walk as its filter, and the
+     * two must agree on what a passphrase word is.
+     */
+    fun acceptsWord(word: String): Boolean =
+        word.length in 4..8 && word.all { c -> c in 'a'..'z' }
+
     /**
      * Filters a dictionary's words down to passphrase material: common,
      * short, unambiguous, all-lowercase-letter words.
      */
-    fun buildWordlist(words: Sequence<String>, limit: Int = 4096): List<String> =
+    fun buildWordlist(words: Sequence<String>, limit: Int = WORDLIST_LIMIT): List<String> =
         words
-            .filter { it.length in 4..8 && it.all { c -> c in 'a'..'z' } }
+            .filter(::acceptsWord)
             .distinct()
             .take(limit)
             .toList()

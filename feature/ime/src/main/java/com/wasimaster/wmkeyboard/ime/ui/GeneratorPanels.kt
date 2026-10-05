@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
 import com.wasimaster.wmkeyboard.core.directboot.DirectBoot
 import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
+import com.wasimaster.wmkeyboard.core.prediction.topWords
 import com.wasimaster.wmkeyboard.core.tools.PasswordGen
 import com.wasimaster.wmkeyboard.core.tools.QrCodeGen
 import com.wasimaster.wmkeyboard.common.R as CommonR
@@ -79,15 +80,17 @@ private object PassphraseWords {
     @Volatile private var cached: List<String>? = null
 
     suspend fun load(context: Context): List<String> = cached ?: withContext(Dispatchers.IO) {
-        val entries = DictionaryStore.ensureBundled(DirectBoot.deviceContext(context), "en")
+        // Best-first over the trie, not an enumeration of it. `entries()` here
+        // built every word of the English list as a `String` in one list —
+        // some hundred thousand pairs, eight to ten megabytes — and then sorted
+        // the lot by frequency to keep four thousand of them. [topWords] exists
+        // for exactly this and says so: it walks the subtree maxima and emits a
+        // word only once its own frequency reaches the head of the queue, so
+        // the order is the same one the sort produced, without the list.
+        val words = DictionaryStore.ensureBundled(DirectBoot.deviceContext(context), "en")
             ?.let { MappedTrie.open(it) }
-            ?.entries()
+            ?.topWords(PasswordGen.WORDLIST_LIMIT, accept = PasswordGen::acceptsWord)
             .orEmpty()
-        // The trie walks alphabetically; the wordlist keeps the first matches
-        // it sees, so rank by frequency first or it would be all a- words.
-        val words = PasswordGen.buildWordlist(
-            entries.sortedByDescending { it.second }.asSequence().map { it.first },
-        )
         // An empty result is not cached, so a failed extraction (disk full)
         // gets another try the next time the panel opens.
         if (words.isNotEmpty()) cached = words

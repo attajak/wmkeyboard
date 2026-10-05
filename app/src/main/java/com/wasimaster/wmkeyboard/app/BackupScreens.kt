@@ -51,7 +51,7 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wasimaster.wmkeyboard.core.util.firstJsonDocument
-import com.wasimaster.wmkeyboard.core.util.requireInputStream
+import com.wasimaster.wmkeyboard.core.util.readTextCapped
 import com.wasimaster.wmkeyboard.core.util.runCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.Dispatchers
@@ -736,8 +736,7 @@ internal fun BackupSettings(
         scope.launch {
             val text = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri)
-                        .use { it.readBytes().decodeToString() }
+                    context.contentResolver.readTextCapped(uri)
                 }.getOrNull()?.firstJsonDocument()
             }
             confirmImport = when {

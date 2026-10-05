@@ -574,7 +574,7 @@ private fun IconPickerDialog(
                         ) {
                             items(shown, key = { it }) { name ->
                                 IconGridCell(
-                                    vector = BuiltinIcons.catalog.getValue(name),
+                                    vector = BuiltinIcons.catalog.getValue(name).invoke(),
                                     name = name,
                                     selected = name == selected,
                                     onClick = { onPickBuiltin(name) },

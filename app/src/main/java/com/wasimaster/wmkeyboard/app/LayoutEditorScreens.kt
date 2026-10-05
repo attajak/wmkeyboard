@@ -40,6 +40,7 @@ import com.wasimaster.wmkeyboard.core.layout.KanaVariantKeyLabel
 import com.wasimaster.wmkeyboard.core.layout.LayerFile
 import com.wasimaster.wmkeyboard.core.layout.LayerSpec
 import com.wasimaster.wmkeyboard.core.ui.WmSlider
+import com.wasimaster.wmkeyboard.core.util.readTextCapped
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import com.wasimaster.wmkeyboard.core.util.runCancellable
@@ -506,8 +507,7 @@ internal fun KeyLayoutsScreen(
         scope.launch {
             val text = withContext(Dispatchers.IO) {
                 runCatching {
-                    context.contentResolver.requireInputStream(uri)
-                        .use { it.readBytes().decodeToString() }
+                    context.contentResolver.readTextCapped(uri)
                 }.getOrNull()
             }
             val parsed = text?.let { LayoutFile.decode(it) }

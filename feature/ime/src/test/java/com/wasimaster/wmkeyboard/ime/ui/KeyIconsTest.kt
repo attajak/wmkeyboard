@@ -13,7 +13,7 @@ class KeyIconsTest {
 
     @Test
     fun `a bundled app icon resolves by name in any case`() {
-        val vector = BuiltinIcons.catalog.getValue("EmojiEmotions")
+        val vector = BuiltinIcons.catalog.getValue("EmojiEmotions").invoke()
         assertSame(vector, KeyIcons.byName("EmojiEmotions"))
         assertSame(vector, KeyIcons.byName("emojiemotions"))
         assertSame(vector, KeyIcons.byName(" EMOJIEMOTIONS "))

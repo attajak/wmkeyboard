@@ -84,7 +84,7 @@ import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.settings.DeviceForm
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
-import com.wasimaster.wmkeyboard.core.util.requireInputStream
+import com.wasimaster.wmkeyboard.core.util.readTextCapped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -206,8 +206,8 @@ private fun FileEditorScreen(uri: Uri, settings: LiveSettings, onBack: () -> Uni
     val loaded by produceState<FileText?>(null, uri) {
         value = withContext(Dispatchers.IO) {
             runCatching {
-                context.contentResolver.requireInputStream(uri).use { it.readBytes().decodeToString() }
-            }.fold({ FileText.Loaded(it) }, { FileText.Failed })
+                context.contentResolver.readTextCapped(uri)
+            }.getOrNull()?.let(FileText::Loaded) ?: FileText.Failed
         }
     }
 

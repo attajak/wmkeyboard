@@ -42,30 +42,36 @@ fun ContentResolver.requireOutputStream(uri: Uri, mode: String = "wt"): OutputSt
 const val MAX_IMPORT_BYTES = 32L * 1024 * 1024
 
 /**
+ * At most [maxBytes] of this stream, or null when it holds more.
+ *
+ * Counts as it reads rather than trusting a reported length: a content
+ * provider is free to give no size at all, `available()` is not one, and for a
+ * compressed stream the only honest number is the one that comes out.
+ */
+fun InputStream.readCapped(maxBytes: Long = MAX_IMPORT_BYTES): ByteArray? {
+    val out = ByteArrayOutputStream()
+    val buffer = ByteArray(COPY_BUFFER)
+    var total = 0L
+    while (true) {
+        val n = read(buffer)
+        if (n < 0) break
+        total += n
+        if (total > maxBytes) return null
+        out.write(buffer, 0, n)
+    }
+    return out.toByteArray()
+}
+
+/**
  * At most [maxBytes] of [uri], or null when it is larger than that.
  *
  * The importers used to `readBytes()` whatever the picker handed back, with no
  * ceiling at all. Picking the wrong file in the document picker could
  * therefore take the process down instead of showing an import error, and on a
  * keyboard that process is the keyboard.
- *
- * Counting as it reads rather than trusting a reported length: a content
- * provider is free to give no size at all, and `available()` is not one.
  */
 fun ContentResolver.readBytesCapped(uri: Uri, maxBytes: Long = MAX_IMPORT_BYTES): ByteArray? =
-    requireInputStream(uri).use { input ->
-        val out = ByteArrayOutputStream()
-        val buffer = ByteArray(COPY_BUFFER)
-        var total = 0L
-        while (true) {
-            val n = input.read(buffer)
-            if (n < 0) break
-            total += n
-            if (total > maxBytes) return null
-            out.write(buffer, 0, n)
-        }
-        out.toByteArray()
-    }
+    requireInputStream(uri).use { it.readCapped(maxBytes) }
 
 /**
  * [readBytesCapped] decoded as text.

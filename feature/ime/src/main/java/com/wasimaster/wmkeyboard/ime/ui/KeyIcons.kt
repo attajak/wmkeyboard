@@ -178,7 +178,9 @@ object KeyIcons {
      * — at no size cost (issue #187). Looked up after [catalog] and [aliases],
      * which keep their short names.
      */
-    private val builtinByLowerName: Map<String, ImageVector> by lazy {
+    private val builtinByLowerName: Map<String, () -> ImageVector> by lazy {
+        // mapKeys, not mapValues: the builders stay unbuilt, so resolving one
+        // bundled icon name costs that one icon rather than all of them.
         BuiltinIcons.catalog.mapKeys { it.key.lowercase() }
     }
 
@@ -204,10 +206,15 @@ object KeyIcons {
      */
     val pickerEntries: List<Pair<String, ImageVector>> by lazy {
         val drawn = catalog.values.toHashSet()
-        catalog.toList() + BuiltinIcons.catalog.filter { (name, vector) ->
+        // The picker is the one place that wants every bundled icon, so this
+        // is where the builders are invoked. Names are checked first so an icon
+        // already offered under a short name is skipped without building it.
+        catalog.toList() + BuiltinIcons.catalog.mapNotNull { (name, build) ->
             val key = name.lowercase()
-            vector !in drawn && key !in catalog && key !in aliases
-        }.toList()
+            if (key in catalog || key in aliases) return@mapNotNull null
+            val vector = build()
+            if (vector in drawn) null else name to vector
+        }
     }
 
     /**
@@ -226,6 +233,6 @@ object KeyIcons {
         val key = name.trim().lowercase()
         catalog[key]?.let { return it }
         aliases[key]?.let { alias -> return catalog[alias] }
-        return builtinByLowerName[key]
+        return builtinByLowerName[key]?.invoke()
     }
 }

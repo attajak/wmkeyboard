@@ -38,6 +38,7 @@ import com.wasimaster.wmkeyboard.core.stickers.StickerPack
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackAdoption
 import com.wasimaster.wmkeyboard.core.stickers.StickerPackStore
 import com.wasimaster.wmkeyboard.core.stickers.whatsapp.WaStickersFile
+import com.wasimaster.wmkeyboard.core.util.readBytesCapped
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -173,7 +174,7 @@ internal fun WhatsAppStickersScreen(onNavigate: (String) -> Unit) {
                                 addedAt = sticker.modified,
                                 read = {
                                     runCatching {
-                                        context.contentResolver.requireInputStream(sticker.uri).use { it.readBytes() }
+                                        context.contentResolver.readBytesCapped(sticker.uri)
                                     }.getOrNull()
                                 },
                             )
