@@ -1785,8 +1785,9 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         notifications(R.string.notify_backup_title, R.string.notify_backup_subtitle),
         notifications(R.string.notify_controls_title, R.string.notify_controls_subtitle),
         // Selection actions. The screen's own row is indexed as a section
-        // above; these are the three switches on it.
+        // above; these are the switches on it.
         selectionMacro(R.string.selection_macros_placement_title, R.string.selection_macros_placement_subtitle),
+        selectionMacro(R.string.selection_macros_every_title, R.string.selection_macros_every_subtitle),
         selectionMacro(R.string.selection_macros_detect_title, R.string.selection_macros_detect_subtitle),
         // The Permissions screen's rows. The version-gated Storage row is left
         // out: on most devices a result would land on a screen without it.

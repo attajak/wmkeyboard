@@ -464,4 +464,69 @@ class SelectionMacrosTest {
         assertEquals("https://example.com", SelectionMacros.openableUrl("example.com"))
         assertEquals("http://example.com", SelectionMacros.openableUrl("http://example.com"))
     }
+
+    // ---- the over-cap row (#525) ----
+
+    @Test
+    fun `every text-free macro acts through the editor, so none of them needs the text`() {
+        // The service publishes an offer with no text at all past the length
+        // cap, so a macro that lands on that row and then reads `offer.text`
+        // would act on "". Anything added to the set has to be handled by
+        // `onSelectionMacro` through onTextEdit/deleteSelection, never by
+        // reading the selection.
+        assertEquals(
+            setOf(
+                SelectionMacro.SELECT_ALL,
+                SelectionMacro.COPY,
+                SelectionMacro.CUT,
+                SelectionMacro.PASTE,
+                SelectionMacro.DELETE,
+            ),
+            SelectionMacros.textFreeMacros,
+        )
+    }
+
+    @Test
+    fun `the over-cap row is the text-free macros the user has on, in their order`() {
+        val allowed = SelectionMacros.defaultMacros.intersect(SelectionMacros.textFreeMacros)
+        val row = SelectionMacros.offer(
+            SelectionKind.TEXT,
+            allowed,
+            MacroGates(clipboardHasText = true),
+        )
+        assertEquals(
+            listOf(
+                SelectionMacro.SELECT_ALL,
+                SelectionMacro.COPY,
+                SelectionMacro.CUT,
+                SelectionMacro.PASTE,
+                SelectionMacro.DELETE,
+            ),
+            row,
+        )
+    }
+
+    @Test
+    fun `the over-cap row still answers its own gates`() {
+        val allowed = SelectionMacros.defaultMacros.intersect(SelectionMacros.textFreeMacros)
+        // Nothing to paste, and the selection already spans the field: both
+        // chips would do nothing, so neither is drawn.
+        val row = SelectionMacros.offer(
+            SelectionKind.TEXT,
+            allowed,
+            MacroGates(wholeField = true, clipboardHasText = false),
+        )
+        assertFalse(SelectionMacro.PASTE in row)
+        assertFalse(SelectionMacro.SELECT_ALL in row)
+        assertTrue(SelectionMacro.COPY in row)
+    }
+
+    @Test
+    fun `a user who turned the text-free macros off gets no over-cap row`() {
+        val allowed = setOf(SelectionMacro.SHARE, SelectionMacro.FORMAT)
+            .intersect(SelectionMacros.textFreeMacros)
+        assertTrue(
+            SelectionMacros.offer(SelectionKind.TEXT, allowed, MacroGates(clipboardHasText = true)).isEmpty(),
+        )
+    }
 }

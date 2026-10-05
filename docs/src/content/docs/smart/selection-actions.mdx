@@ -197,10 +197,13 @@ None of these send anything anywhere themselves: each hands the text to an app y
 |---|---|---|
 | Selection actions | Toggle | Off |
 | Where it appears | Choice of 2 | Own row |
+| Show on every selection | Toggle | Off |
 | Read what is selected | Toggle | On |
 | Actions | Screen | 33 of 48 on |
 | AI buttons | Screen | None |
 | Time zones | Screen | UTC and your own |
+
+**Show on every selection** keeps the bar up on a selection too long to read. The keyboard does not read a selection past about 4,000 characters, so by default such a selection takes the whole bar away — Copy and Paste included, even though neither of those ever needed the text read, because the app does that work itself. Turn this on and the bar stays, carrying Select all, Copy, Cut, Paste and Delete, whichever of them you have switched on. Everything else still waits for a shorter selection, since every other action begins by reading the text.
 
 **Read what is selected** is the entity half of the feature. Turn it off and every selection is read as plain text: you keep the edits, the case options and the conversions, and lose Call, Email, Open, QR and Contact. It is worth turning off if you find the guesses wrong more often than right, since the generic half is the half that always applies.
 
@@ -212,6 +215,6 @@ None of these send anything anywhere themselves: each hands the text to an app y
 - **An action is only offered when it can work.** WhatsApp is hidden when WhatsApp is not installed. Search, Translate, QR, Grammar and AI are hidden when their tools are switched off, which includes the tools that [power saving](/typing/power-saving/) and the lock screen have already taken away, and AI is hidden until a provider is set up. Hiding a tool from the toolbox is not switching it off: turn off **Show in toolbox** on the tool's own page to keep, say, the AI chip here while the AI tool stays out of the toolbox grid.
 - **Nothing is stored and nothing is sent by the keyboard.** Every action either edits the field you are already in, or hands the text to an app you picked. Grammar and the Bengali conversions run on the device. The one exception is DeepL Write, which you set up yourself: it sends the selection to DeepL.
 - **Before your first unlock**, only the actions that touch the current field survive: the edits, the rewrites and Find. Paste needs a clipboard that is still locked, Speak needs a speech engine, and everything under Open in would have to start another app.
-- **A very long selection gets no bar.** Past about 4,000 characters you have selected a document rather than a fragment, and the toolbar's own [Copy tool](/tools/text-editing/) is the better answer.
+- **A very long selection gets only the actions that need no reading.** Past about 4,000 characters the keyboard stops reading the selection, so the case options, the rewrites and the entity actions all stand down. With **Show on every selection** off, which is how it ships, the bar goes away entirely and the toolbar's own [Copy tool](/tools/text-editing/) is the answer; with it on, Select all, Copy, Cut, Paste and Delete stay on the bar, because the app does their work and the length costs them nothing.
 - **The bar follows the selection, not the caret.** Extending a selection with [selection mode](/tools/text-editing/#selection-mode) or a [trackpad](/tools/trackpad/) drag re-reads it as you go, so the actions change under your finger as the selection grows into a whole phone number.
 - **This version resets the list of actions once.** The list grew from thirteen actions to forty-five, and the shipped choices replace whatever you had picked before, so the new actions are there. Anything you switch off after that stays off.

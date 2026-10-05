@@ -17,6 +17,7 @@ The Selection actions screen is the switch and two choices, then three doors: th
 |---|---|---|
 | Selection actions | Toggle | Off |
 | Where it appears | Choice of 2 | **Own row** |
+| Show on every selection | Toggle | Off |
 | Read what is selected | Toggle | On |
 | Actions | Screen | 33 of 48 on |
 | AI buttons | Screen | None |
@@ -25,6 +26,8 @@ The Selection actions screen is the switch and two choices, then three doors: th
 **Selection actions** is the whole feature. Nothing below it is read while it is off, and no selection raises anything.
 
 **Where it appears** is either *Own row* or *Suggestion strip*. Own row gives the bar a row of its own above the keys, which arrives with the selection and leaves with it, so the keyboard is one row taller while it is there. That row is called **Selection actions** in the row list on [Rows & bars](/reference/settings/rows/#row-order), where you can move it above or below the suggestion strip. Suggestion strip draws the actions over the strip instead and costs no height, since there are no word suggestions to show while text is selected. Under that choice the strip goes back to the toolbar whenever a panel is open, because the arrow on that row is the way out of the panel.
+
+**Show on every selection** governs what happens past the length cap. The keyboard does not read a selection longer than 4,000 characters, and with this off the bar disappears at that point, since every action it draws is derived from the text. On, it keeps the five actions that are carried out by the editor rather than by the keyboard — Select all, Copy, Cut, Paste and Delete — filtered as always by which of them you have on and by whether each can do anything (Paste needs something on the clipboard; Select all is dropped once the selection already spans the field). The reading itself never happens, so the kind of the selection is not known and nothing that depends on it is offered. It also covers a selection some apps report but will not hand over, where those same five are the only actions that could have worked. Password fields are excluded whichever way this is set.
 
 **Read what is selected** decides whether a selection is read as a phone number, an address or a link, or only ever as plain text. With it off you keep every action that works on any text and lose Call, Message, WhatsApp, Email, Open, QR and Contact, because none of those mean anything without the reading. Phone shapes come from the formats you saved under [Phone number formats](/reference/settings/phone-formats/).
 

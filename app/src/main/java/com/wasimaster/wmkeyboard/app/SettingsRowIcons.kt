@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.app
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AllInclusive
 import androidx.compose.material.icons.outlined.BatteryStd
 import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Download
@@ -1195,6 +1196,7 @@ internal object SettingsRowIcons {
         // row, its search result and the heading are one icon.
         put(R.string.selection_macros_title) { Icons.Outlined.HighlightAlt }
         put(R.string.selection_macros_placement_title) { Icons.Outlined.ViewStream }
+        put(R.string.selection_macros_every_title) { Icons.Outlined.AllInclusive }
         put(R.string.selection_macros_detect_title) { Icons.Outlined.Sensors }
         put(R.string.selection_macros_actions_title) { Icons.Outlined.Checklist }
         put(R.string.selection_macros_ai_title) { Icons.Outlined.AutoAwesome }

@@ -29074,9 +29074,9 @@ open class WMKeyboardService : InputMethodService() {
      * user came back to may already have one), and the settings collector when the
      * feature is switched on or off. Every gate that can be answered
      * without reading the field is asked first — the feature off, a password
-     * field, no range selected, a range longer than the cap — because
-     * `getSelectedText` is an IPC to the target app and this runs on every
-     * caret move.
+     * field, no range selected, a range longer than the cap (see
+     * [publishUnread]) — because `getSelectedText` is an IPC to the target
+     * app and this runs on every caret move.
      */
     private fun refreshSelectionMacros(
         selStart: Int = expectedSelStart,
@@ -29094,47 +29094,106 @@ open class WMKeyboardService : InputMethodService() {
             if (_uiState.value.panel != PanelMode.FIND_REPLACE) macroUndo.clear()
             stopReadAloud()
         }
+        // Publishes [offer], or takes the bar down when it is null, and asks
+        // the app to scroll the caret clear of a bar that has just arrived on
+        // a row of its own: that row grows the keyboard by its height, which
+        // takes the same height off the app, and nothing in the framework
+        // scrolls the caret back out from under it (#525). The strip
+        // placement borrows a row that was already there and costs nothing,
+        // and so does an open panel, which keeps the row away (#414).
+        fun publish(offer: SelectionMacroOffer?) {
+            if (offer == null) return clear()
+            if (offer == _uiState.value.selectionMacros) return
+            val arriving = _uiState.value.selectionMacros == null
+            _uiState.update { it.copy(selectionMacros = offer) }
+            if (arriving && settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
+                _uiState.value.panel == PanelMode.NONE
+            ) {
+                revealCaretAfterGrowth(selStart, selEnd)
+            }
+        }
         if (!settings.selectionMacros.enabled) return clear()
         // A password is never a number to dial or text to share, and putting a
         // field's contents in front of a Share chooser is exactly the mistake
-        // this bar must not make.
+        // this bar must not make. No setting reaches past this one.
         if (currentInputEditorInfo.isSecureField()) return clear()
         // A collapsed caret has nothing to act on, and a selection past the cap
         // is a document rather than a fragment. Both are answered from the
         // reported positions, before the read that costs an IPC to the target
         // app; unknown positions (-1) fall through to it, which is the state
         // right after a field opens.
-        if (selStart >= 0 && selEnd >= 0 &&
-            (selStart == selEnd || selEnd - selStart > MAX_MACRO_SELECTION)
-        ) {
-            return clear()
+        val rangeReported = selStart >= 0 && selEnd >= 0
+        if (rangeReported) {
+            if (selStart == selEnd) return clear()
+            if (selEnd - selStart > MAX_MACRO_SELECTION) return publishUnread(selStart, selEnd, settings) { publish(it) }
         }
         val ic = currentInputConnection ?: return clear()
         val selected = runCatching { ic.getSelectedText(0)?.toString() }.getOrNull().orEmpty()
         val text = selected.trim()
+        // Nothing came back. Where the editor has reported a range, that is an
+        // editor which will not hand the text over rather than an empty
+        // selection, and the actions it carries out itself still work on it;
+        // where it has reported nothing either, there is no selection to be
+        // sure of.
+        if (text.isEmpty()) {
+            return if (rangeReported) publishUnread(selStart, selEnd, settings) { publish(it) } else clear()
+        }
         // The same cap again, for the path that could not check it up front.
-        if (text.isEmpty() || selected.length > MAX_MACRO_SELECTION) return clear()
+        if (selected.length > MAX_MACRO_SELECTION) return publishUnread(selStart, selEnd, settings) { publish(it) }
         // A selection moved onto other text is a new session: the rewrites
         // remembered were about the old one. Our own rewrite's echo passes,
         // because what is selected is exactly what was committed.
         if (_uiState.value.panel != PanelMode.FIND_REPLACE) {
             macroUndo.peek()?.let { if (!MacroUndo.stillHolds(it, selected)) macroUndo.clear() }
         }
-        val offer = selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd), _uiState.value.selectionMacros)
-        if (offer == _uiState.value.selectionMacros) return
-        val arriving = _uiState.value.selectionMacros == null && offer != null
-        _uiState.update { it.copy(selectionMacros = offer) }
-        // A bar arriving on a row of its own grows the keyboard by that row,
-        // which takes the same height off the app — and nothing in the
-        // framework scrolls the caret back out from under it, so the line
-        // being worked on disappears behind the keyboard (#525). The strip
-        // placement borrows a row that was already there and costs nothing,
-        // and so does an open panel, which keeps the row away (#414).
-        if (arriving && settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
-            _uiState.value.panel == PanelMode.NONE
-        ) {
-            revealCaretAfterGrowth(selStart, selEnd)
-        }
+        publish(selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd), _uiState.value.selectionMacros))
+    }
+
+    /**
+     * The bar for a selection the keyboard has not read: one past
+     * [MAX_MACRO_SELECTION], or one an editor reports but will not hand over.
+     *
+     * Off by default the bar goes away, which is what the cap has always
+     * meant: reading a selection that large is an IPC and an allocation to
+     * match, and every action that needs the text is therefore unavailable.
+     * With `inEverySelection` on, the actions that need neither the text nor a
+     * scan of it stay ([SelectionMacros.textFreeMacros]) — the editor does
+     * their work — so the bar's Copy and Paste survive the one case where the
+     * app's own toolbar is least likely to be enough (#525).
+     *
+     * Nothing here reads the selection. The offer carries no text, which is
+     * precisely why only the text-free actions may be on it; every handler for
+     * those goes through the editor's own clipboard and selection (see
+     * [onSelectionMacro]). The undo stack goes with it: a span this long is
+     * not the fragment a remembered rewrite was about, and it cannot be
+     * checked against one without the read.
+     */
+    private fun publishUnread(
+        selStart: Int,
+        selEnd: Int,
+        settings: KeyboardSettings,
+        publish: (SelectionMacroOffer?) -> Unit,
+    ) {
+        // Taking the bar down does both of these itself, so they belong on the
+        // path that keeps it up.
+        if (!settings.selectionMacros.inEverySelection) return publish(null)
+        val ic = currentInputConnection ?: return publish(null)
+        if (_uiState.value.panel != PanelMode.FIND_REPLACE) macroUndo.clear()
+        stopReadAloud()
+        val wholeField = selectionSpansField(ic, selStart, selEnd)
+        val macros = SelectionMacros.offer(
+            kind = SelectionKind.TEXT,
+            allowed = settings.selectionMacros.macros.intersect(SelectionMacros.textFreeMacros),
+            gates = MacroGates(wholeField = wholeField, clipboardHasText = clipboardHasText()),
+            order = settings.selectionMacros.order,
+        )
+        publish(
+            if (macros.isEmpty()) {
+                null
+            } else {
+                SelectionMacroOffer(text = "", kind = SelectionKind.TEXT, macros = macros, wholeField = wholeField)
+            },
+        )
     }
 
     /** Pending [scrollCaretIntoView], cancelled by anything that moves on. */

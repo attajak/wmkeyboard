@@ -4481,6 +4481,25 @@ data class SelectionMacroSettings(
      * generic half of the bar is the half that always applies.
      */
     val detectEntities: Boolean = true,
+    /**
+     * Keep the bar up for a selection longer than the keyboard will read
+     * (`MAX_MACRO_SELECTION`, 4000 characters), offering the actions that do
+     * not need the text: Select all, Copy, Cut, Paste and Delete.
+     *
+     * Off, such a selection takes the bar away altogether, on the grounds
+     * that a selection that large is a document and the app's own toolbar has
+     * Copy. That leaves the bar's Copy and Paste — which for many people is
+     * the whole reason it is on, the app's toolbar being too small to hold
+     * what they reach for — gone exactly when the selection is biggest
+     * (#525). The actions this keeps cost nothing at any length: the editor
+     * does the work, and the keyboard never reads the selection.
+     *
+     * The entity actions, the case ladder and every rewrite stay off a
+     * selection that long whichever way this is set, because each of them
+     * begins by reading it. Password fields are excluded regardless, as they
+     * are everywhere else on this bar.
+     */
+    val inEverySelection: Boolean = false,
 )
 
 /** The zones the ladder shows: the picked ones, or UTC and the device's own. */
@@ -9041,6 +9060,8 @@ class SettingsRepository(private val context: Context) {
         private val SELECTION_MACROS_ENABLED = booleanPreferencesKey("selection_macros_enabled")
         private val SELECTION_MACROS_PLACEMENT = stringPreferencesKey("selection_macros_placement")
         private val SELECTION_MACROS_DETECT = booleanPreferencesKey("selection_macros_detect")
+        private val SELECTION_MACROS_EVERY_SELECTION =
+            booleanPreferencesKey("selection_macros_every_selection")
 
         /**
          * The macros that are on, by [SelectionMacro] name.
@@ -10919,6 +10940,8 @@ class SettingsRepository(private val context: Context) {
             timeZones = p[SELECTION_MACROS_TIME_ZONES]?.let(AiActionCodec::decodeIds)
                 ?: defaults.selectionMacros.timeZones,
             detectEntities = p[SELECTION_MACROS_DETECT] ?: defaults.selectionMacros.detectEntities,
+            inEverySelection = p[SELECTION_MACROS_EVERY_SELECTION]
+                ?: defaults.selectionMacros.inEverySelection,
         )
 
     private fun readPasswordGenerator(p: Preferences, defaults: KeyboardSettings) =
@@ -16905,6 +16928,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSelectionMacroDetectEntities(value: Boolean) =
         editPrefs { it[SELECTION_MACROS_DETECT] = value }
+
+    suspend fun setSelectionMacrosInEverySelection(value: Boolean) =
+        editPrefs { it[SELECTION_MACROS_EVERY_SELECTION] = value }
 
     /**
      * Stamps the current list version, writing the shipped lists first when

@@ -343,6 +343,24 @@ object SelectionMacros {
     val configurable: List<SelectionMacro> = SelectionMacro.entries - fixedCaseMacros.toSet()
 
     /**
+     * The actions that need neither the selected text nor a scan of it: they
+     * go through the editor's own clipboard and selection, so they cost the
+     * same however much is selected.
+     *
+     * This is what the bar can still offer past the length cap, where reading
+     * the selection is the expense the cap exists to avoid (#525). Everything
+     * else either rewrites the selection or acts on what it says, and both
+     * start by reading it.
+     */
+    val textFreeMacros: Set<SelectionMacro> = setOf(
+        SelectionMacro.SELECT_ALL,
+        SelectionMacro.COPY,
+        SelectionMacro.CUT,
+        SelectionMacro.PASTE,
+        SelectionMacro.DELETE,
+    )
+
+    /**
      * The row as shipped. Only bar-capable macros, in the order they read
      * when the user has not moved anything: Undo, Select all, then what the
      * entity is for (absent on plain text, so they cost it nothing), then the

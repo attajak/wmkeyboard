@@ -72,6 +72,18 @@ internal fun SelectionMacroSettingsScreen(
                 },
             ) { scope.launch { repository.setSelectionMacroPlacement(it) } }
         }
+        // Reads as a second question about where the bar appears rather than
+        // as one about the actions: it decides whether there is a bar at all
+        // on the longest selections, not which chips go on it.
+        if (macrosOn) item {
+            ToggleSetting(
+                R.string.selection_macros_every_title,
+                stringResource(R.string.selection_macros_every_subtitle),
+                settings.watch { it.selectionMacros.inEverySelection },
+                info = stringResource(R.string.selection_macros_every_info),
+                default = SettingsDefaults.selectionMacros.inEverySelection,
+            ) { scope.launch { repository.setSelectionMacrosInEverySelection(it) } }
+        }
     }
 
     // The whole group goes with the switch above it — SettingsGroup draws
