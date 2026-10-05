@@ -333,10 +333,12 @@
     <string name="layout_editor_role_subtitle">Email and web fields put @ and / in these two slots</string>
     <string name="layout_editor_role_comma">Comma slot</string>
     <string name="layout_editor_role_period">Full stop slot</string>
+    <string name="layout_editor_role_plain">Exactly as laid out</string>
     <!-- One line under each option in the field adaptation picker. -->
-    <string name="layout_editor_role_none_desc">The key keeps its character in every field</string>
+    <string name="layout_editor_role_none_desc">Work it out from the key: a full stop or a comma on the bottom row fills its slot</string>
     <string name="layout_editor_role_comma_desc">An email field puts @ here, and a web field puts /</string>
     <string name="layout_editor_role_period_desc">An email field and a web field add .com and the other endings to the long press</string>
+    <string name="layout_editor_role_plain_desc">No slot and no substitution: the key types what you put on it, so a full stop stays a full stop on a language that ends sentences some other way</string>
 
     <!-- Labels the row of four arrows that move the key around the grid. -->
     <string name="layout_editor_move_key_label">Move the key</string>

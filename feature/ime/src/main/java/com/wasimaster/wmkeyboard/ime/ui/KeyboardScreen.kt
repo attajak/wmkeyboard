@@ -17470,7 +17470,6 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
     // where the layout has not already put the mark there itself — the fixed
     // Bengali layouts carry দাঁড়ি on their own keys.
     val fullStop = state.script.fullStop.takeIf { it != "." }
-    val symbolsLayer = state.layoutMode == LayoutMode.SYMBOLS || state.layoutMode == LayoutMode.SYMBOLS_SHIFTED
     // The script's own punctuation, on the shared symbol key that types the
     // nearest ASCII mark: Bengali's ঃ on the colon. Every layer, since that key
     // is on the symbols one.
@@ -17596,21 +17595,28 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
             // own mark and the "." it displaces travel together either way. A
             // layout that already types the mark is left alone.
             //
-            // Not on the symbols pages, which are where numbers are typed: there
-            // the key stays "." for a decimal point and the mark leads its popup
-            // instead (issue #489).
+            // Only on the letters page. Every other layer — the symbols pages,
+            // an Fn or Number layer, a secondary grid — is where numbers, file
+            // names and addresses are typed, so there the key stays "." for a
+            // decimal point and the mark leads its popup instead (issue #489,
+            // widened past the symbols pages for #529: a Japanese layout could
+            // not hold a literal "." anywhere, keypad included).
+            //
+            // [KeyRole.Plain] opts a key out of this and of field adaptation
+            // both: it is how a layout says "this key types a full stop, and I
+            // mean it" on a script whose sentences end some other way (#529).
             val stopped = if (
                 fullStop != null && role == KeyRole.Period &&
                 (rowKey.output ?: rowKey.label) == "."
             ) {
-                if (symbolsLayer) {
-                    rowKey.copy(longPress = listOf(fullStop) + rowKey.longPress.filterNot { it == fullStop })
-                } else {
+                if (lettersLayer) {
                     rowKey.copy(
                         label = fullStop,
                         output = null,
                         longPress = listOf(".") + rowKey.longPress.filterNot { it == fullStop },
                     )
+                } else {
+                    rowKey.copy(longPress = listOf(fullStop) + rowKey.longPress.filterNot { it == fullStop })
                 }
             } else {
                 rowKey

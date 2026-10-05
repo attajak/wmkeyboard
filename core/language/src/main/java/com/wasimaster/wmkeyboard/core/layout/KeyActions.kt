@@ -787,6 +787,20 @@ enum class KeyRole {
 
     /** The secondary-punctuation slot; becomes @ in EMAIL, / in URI, or the emoji key. */
     Comma,
+
+    /**
+     * Neither slot, and no rewrite of any kind: this key types exactly what its
+     * author put on it (issue #529).
+     *
+     * A null [Key.role] cannot say this, because null is also what every layout
+     * written before roles existed carries, and the fallback below reads a
+     * bottom-row `.` or `,` as a slot so those layouts keep their field
+     * adaptation. That inference is right far more often than not, but it has no
+     * off switch: on a script whose sentence mark is not `.` — Japanese `。`,
+     * Devanagari `।` — a `.` key put somewhere deliberately was swapped to the
+     * mark and there was no way to say "I meant the full stop". This is that way.
+     */
+    Plain,
 }
 
 /**

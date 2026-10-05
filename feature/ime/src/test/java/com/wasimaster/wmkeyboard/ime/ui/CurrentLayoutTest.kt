@@ -588,6 +588,50 @@ class CurrentLayoutTest {
         assertEquals(emptyList<String>(), colon.longPress)
     }
 
+    /**
+     * Issue #529: a Japanese layout could not hold a literal full stop
+     * anywhere, because the swap ran on every layer but the symbols pages.
+     */
+    @Test
+    fun `only the letters page swaps the full stop for the script mark`() {
+        val pad = oneRow(Key(".", role = KeyRole.Period), Key("0"))
+        val s = KeyboardUiState(
+            settings = plain(),
+            layouts = setOf(BuiltInLayouts.QWERTY).copy(secondaries = mapOf("pad" to pad)),
+            script = ScriptRegistry[ScriptId.JAPANESE],
+            layoutMode = LayoutMode.SECONDARY,
+            secondaryLayoutId = "pad",
+        )
+        val period = currentLayout(s).keys().first { it.role == KeyRole.Period }
+        assertEquals(".", period.output ?: period.label)
+        assertEquals("。", period.longPress.first())
+    }
+
+    /** And on the letters page the swap still happens, as it has since #489. */
+    @Test
+    fun `a japanese letters page types the ideographic full stop`() {
+        val s = state(settings = plain()).copy(script = ScriptRegistry[ScriptId.JAPANESE])
+        val period = currentLayout(s).rows.last().first { it.role == KeyRole.Period }
+        assertEquals("。", period.output ?: period.label)
+        assertEquals(".", period.longPress.first())
+    }
+
+    /** [KeyRole.Plain] is the per-key way out of both that and field adaptation. */
+    @Test
+    fun `a key tagged plain keeps its full stop and takes no domain endings`() {
+        val grid = oneRow(Key(".", role = KeyRole.Plain), Key(",", role = KeyRole.Plain))
+        val s = KeyboardUiState(
+            settings = plain(),
+            layouts = setOf(BuiltInLayouts.QWERTY).copy(letters = grid),
+            script = ScriptRegistry[ScriptId.JAPANESE],
+            fieldKind = FieldKind.EMAIL,
+        )
+        val keys = currentLayout(s).keys()
+        val period = keys.first { it.role == KeyRole.Plain && (it.output ?: it.label) == "." }
+        assertEquals(emptyList<String>(), period.longPress)
+        assertTrue("the comma slot must not become @", keys.none { it.label == "@" })
+    }
+
     @Test
     fun `a latin layout keeps its full stop`() {
         val period = currentLayout(state(settings = plain()))

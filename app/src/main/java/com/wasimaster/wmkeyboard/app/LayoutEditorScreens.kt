@@ -221,6 +221,7 @@ import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.FiberManualRecord
 import androidx.compose.material.icons.outlined.MoreHoriz
 import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
@@ -5059,6 +5060,7 @@ private fun RoleRow(role: KeyRole?, onChange: (KeyRole?) -> Unit) {
             null to stringResource(CommonR.string.common_none),
             KeyRole.Comma to stringResource(R.string.layout_editor_role_comma),
             KeyRole.Period to stringResource(R.string.layout_editor_role_period),
+            KeyRole.Plain to stringResource(R.string.layout_editor_role_plain),
         ),
         selected = role,
         detail = { slot ->
@@ -5067,12 +5069,14 @@ private fun RoleRow(role: KeyRole?, onChange: (KeyRole?) -> Unit) {
                     null -> Icons.Outlined.Block
                     KeyRole.Comma -> Icons.Outlined.MoreHoriz
                     KeyRole.Period -> Icons.Outlined.FiberManualRecord
+                    KeyRole.Plain -> Icons.Outlined.Lock
                 },
                 description = stringResource(
                     when (slot) {
                         null -> R.string.layout_editor_role_none_desc
                         KeyRole.Comma -> R.string.layout_editor_role_comma_desc
                         KeyRole.Period -> R.string.layout_editor_role_period_desc
+                        KeyRole.Plain -> R.string.layout_editor_role_plain_desc
                     },
                 ),
             )
