@@ -119,6 +119,7 @@ import com.wasimaster.wmkeyboard.core.settings.AutoThemeTrigger
 import com.wasimaster.wmkeyboard.core.settings.ManualModeDuration
 import com.wasimaster.wmkeyboard.core.settings.ClipboardView
 import com.wasimaster.wmkeyboard.core.settings.CopiedCodeChip
+import com.wasimaster.wmkeyboard.core.settings.SelectionMacroPlacement
 import com.wasimaster.wmkeyboard.core.settings.SensitiveClipHandling
 import com.wasimaster.wmkeyboard.core.settings.activeThemeSpec
 import com.wasimaster.wmkeyboard.core.settings.keySound
@@ -9392,6 +9393,7 @@ open class WMKeyboardService : InputMethodService() {
                 // app behind it (#204).
                 spell.recased(::nextCaseForm)?.let { next ->
                     _uiState.update { it.copy(wordSpell = next) }
+                    syncShiftToCase(next.draft.substring(next.selectionStart, next.selectionEnd))
                     return
                 }
             } else {
@@ -9483,7 +9485,34 @@ open class WMKeyboardService : InputMethodService() {
         val end = ic.getExtractedText(ExtractedTextRequest(), 0)?.selectionEnd
         if (end != null) ic.setSelection((end - next.length).coerceAtLeast(0), end)
         ic.endBatchEdit()
+        syncShiftToCase(next)
         return true
+    }
+
+    /**
+     * Moves the keyboard's own case to match [text]'s, which is where the
+     * selection's case has just been put (#525).
+     *
+     * Without this the shift key re-cased the selection and left the keys
+     * where they were, so taking a word to UPPER and carrying on typing in
+     * upper case meant un-selecting the word, pressing shift again, and
+     * re-selecting — every other keyboard with this feature moves both with
+     * the one press. Title case maps to the one-shot shift and UPPER to caps
+     * lock, which is what each would have typed. A caseless script (Bengali,
+     * and the mixed forms the cycle normalizes rather than steps) has no case
+     * for the keys to show, so the state is left alone.
+     */
+    private fun syncShiftToCase(text: String) {
+        val next = shiftStateForCase(text) ?: return
+        _uiState.update {
+            if (it.shiftState == next) {
+                it
+            } else {
+                // Same pairing as [onShift]: a shift that is up is one the user
+                // put up, which is what Shift+Enter's newline override reads.
+                it.copy(shiftState = next, shiftPressedByUser = next != ShiftState.OFF)
+            }
+        }
     }
 
     /** Advances [s] one step through lower → Title → UPPER → lower. */
@@ -9497,17 +9526,6 @@ open class WMKeyboardService : InputMethodService() {
             s == upper -> lower
             else -> lower // mixed case → normalize to lower to restart the cycle
         }
-    }
-
-    /** "hELLO wORLD" → "Hello World": first letter of each word up, rest down. */
-    private fun toTitleCase(s: String): String {
-        val sb = StringBuilder(s.length)
-        var prevLetter = false
-        for (c in s) {
-            sb.append(if (!prevLetter && c.isLetter()) c.uppercaseChar() else c.lowercaseChar())
-            prevLetter = c.isLetter()
-        }
-        return sb.toString()
     }
 
     private fun onDelete() {
@@ -28443,6 +28461,7 @@ open class WMKeyboardService : InputMethodService() {
         settings: KeyboardSettings = _uiState.value.settings,
     ) {
         fun clear() {
+            caretRevealJob?.cancel()
             if (_uiState.value.selectionMacros != null) {
                 _uiState.update { it.copy(selectionMacros = null) }
             }
@@ -28480,7 +28499,63 @@ open class WMKeyboardService : InputMethodService() {
         }
         val offer = selectionMacroOffer(text, settings, selectionSpansField(ic, selStart, selEnd), _uiState.value.selectionMacros)
         if (offer == _uiState.value.selectionMacros) return
+        val arriving = _uiState.value.selectionMacros == null && offer != null
         _uiState.update { it.copy(selectionMacros = offer) }
+        // A bar arriving on a row of its own grows the keyboard by that row,
+        // which takes the same height off the app — and nothing in the
+        // framework scrolls the caret back out from under it, so the line
+        // being worked on disappears behind the keyboard (#525). The strip
+        // placement borrows a row that was already there and costs nothing,
+        // and so does an open panel, which keeps the row away (#414).
+        if (arriving && settings.selectionMacros.placement == SelectionMacroPlacement.OWN_ROW &&
+            _uiState.value.panel == PanelMode.NONE
+        ) {
+            revealCaretAfterGrowth(selStart, selEnd)
+        }
+    }
+
+    /** Pending [scrollCaretIntoView], cancelled by anything that moves on. */
+    private var caretRevealJob: Job? = null
+
+    /**
+     * Waits for the row to have opened and the app to have re-laid out, then
+     * puts the caret back on screen — but only if the selection it was asked
+     * about is still the one standing, so a handle still being dragged is left
+     * alone.
+     */
+    private fun revealCaretAfterGrowth(selStart: Int, selEnd: Int) {
+        caretRevealJob?.cancel()
+        caretRevealJob = serviceScope.launch {
+            delay(MACRO_ROW_REVEAL_DELAY_MS)
+            if (expectedSelStart == selStart && expectedSelEnd == selEnd) scrollCaretIntoView()
+        }
+    }
+
+    /**
+     * Asks the focused editor to scroll the caret back into view.
+     *
+     * There is no API for this, so it goes through the one thing every editor
+     * reacts to: a selection that *changes* is scrolled to (TextView registers
+     * a pre-draw pass that calls `bringPointIntoView`; Compose's field asks its
+     * own scroller). Setting the identical range back is a no-op the editor
+     * ignores, so the range goes in reversed first — the same highlight on
+     * screen, which is what a backwards drag leaves — and then forwards again.
+     * Deliberately not inside a batch edit: an editor that coalesces a batch
+     * compares only the value it ends on, which is the value it started with.
+     *
+     * Only ever called with a range live (the macro bar is the caller), so
+     * there is no collapsed case to handle: reversing a caret would be the
+     * same no-op.
+     */
+    private fun scrollCaretIntoView() {
+        val ic = currentInputConnection ?: return
+        val start = expectedSelStart
+        val end = expectedSelEnd
+        if (start < 0 || end < 0 || start == end) return
+        runCatching {
+            ic.setSelection(end, start)
+            ic.setSelection(start, end)
+        }
     }
 
     /**
@@ -34789,6 +34864,37 @@ open class WMKeyboardService : InputMethodService() {
     }
 }
 
+/** "hELLO wORLD" → "Hello World": first letter of each word up, rest down. */
+internal fun toTitleCase(s: String): String {
+    val sb = StringBuilder(s.length)
+    var prevLetter = false
+    for (c in s) {
+        sb.append(if (!prevLetter && c.isLetter()) c.uppercaseChar() else c.lowercaseChar())
+        prevLetter = c.isLetter()
+    }
+    return sb.toString()
+}
+
+/**
+ * The keyboard case that matches [text]'s own, or null when there is none to
+ * show: a caseless script (Bengali), and the mixed forms the re-case cycle
+ * normalizes rather than steps through.
+ *
+ * Title case maps to the one-shot shift and UPPER to caps lock, which is what
+ * each of them would have typed. A single capital letter reads as the one-shot
+ * shift, not the lock: its own cycle is only `a` and `A`.
+ */
+internal fun shiftStateForCase(text: String): ShiftState? {
+    val lower = text.lowercase()
+    if (lower == text.uppercase()) return null
+    return when (text) {
+        lower -> ShiftState.OFF
+        toTitleCase(text) -> ShiftState.ON
+        text.uppercase() -> ShiftState.CAPS_LOCK
+        else -> null
+    }
+}
+
 /**
  * Whether a selection update means the user moved the caret away from the
  * composing region, so the composition should be abandoned.
@@ -34943,6 +35049,14 @@ private class GlideRetryOffer(
  * Copy is what somebody selecting that much text is reaching for anyway.
  */
 private const val MAX_MACRO_SELECTION = 4000
+
+/**
+ * How long [WMKeyboardService.revealCaretAfterGrowth] waits before putting the
+ * caret back on screen: the row's own reveal plus a frame for the app to have
+ * re-laid out under the taller keyboard. Asking sooner scrolls to where the
+ * caret was before the keyboard grew, which is the thing being fixed.
+ */
+private const val MACRO_ROW_REVEAL_DELAY_MS = 200L
 
 /** How many characters found by Unicode name the emoji search appends (#385). */
 private const val UNICODE_SEARCH_RESULTS = 24

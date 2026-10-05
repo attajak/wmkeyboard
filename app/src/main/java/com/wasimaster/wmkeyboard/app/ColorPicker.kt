@@ -74,6 +74,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
@@ -583,10 +584,17 @@ private fun HexField(
         },
         prefix = { Text("#") },
         singleLine = true,
-        // A password field is the one keyboard type that no IME decorates with
-        // autocorrect or word suggestions. Nothing here is masked.
+        // Not a password field, though it was one until #525: that is the
+        // keyboard type no IME decorates with autocorrect, but it is also the
+        // one every IME treats as a secret — WM's own selection actions bar,
+        // clipboard suggestions and learning all stand down on it, and a
+        // password manager offers to fill it. Ascii with autocorrect and
+        // capitalization off asks for the same plain keys without the claim,
+        // and the filter above drops anything that is not a hex digit anyway.
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
+            capitalization = KeyboardCapitalization.None,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Ascii,
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
