@@ -118,8 +118,8 @@ import com.wasimaster.wmkeyboard.core.clipboard.ClipLinks
 import com.wasimaster.wmkeyboard.core.clipboard.PhoneFormats
 import com.wasimaster.wmkeyboard.core.clipboard.clipEditable
 import com.wasimaster.wmkeyboard.core.clipboard.clipPreviewText
+import com.wasimaster.wmkeyboard.core.clipboard.clipQueryMatcher
 import com.wasimaster.wmkeyboard.core.clipboard.expiresAt
-import com.wasimaster.wmkeyboard.core.clipboard.matchesQuery
 import com.wasimaster.wmkeyboard.core.layout.PanelFieldKind
 import com.wasimaster.wmkeyboard.core.settings.ClipGridColumnsRange
 import com.wasimaster.wmkeyboard.core.settings.ClipTimeLabel
@@ -252,7 +252,9 @@ internal fun rememberClipboardPanelSession(state: KeyboardUiState): ClipboardPan
     } else {
         state.clipboardItems
     }
-    val shownItems = if (query.isEmpty()) inTab else inTab.filter { it.matchesQuery(query) }
+    val regexSearch = state.settings.clipboard.searchRegex
+    val matcher = remember(query, regexSearch) { clipQueryMatcher(query, regexSearch) }
+    val shownItems = if (query.isEmpty()) inTab else inTab.filter(matcher)
     val showClear = state.settings.clipboard.clearButton && unpinnedCount > 0
     val clearAsking = remember { mutableStateOf(false) }
     // A question left standing while there was nothing to clear would pop

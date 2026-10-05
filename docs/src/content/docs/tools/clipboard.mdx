@@ -19,7 +19,7 @@ The clipboard tool keeps a running history of what you copy: text, images, files
 
 ## Opening the panel
 
-Tap **Clipboard** on the toolbar. If you unpinned it, open the toolbox and tap it there. See [the toolbar](/tools/overview/) for how pinning works. On a hardware keyboard, use the [leader key](/reference/shortcuts/): double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>C</KeyCap>.
+Tap **Clipboard** on the toolbar: the clipboard with lines of text on it. The empty clipboard beside it, if you pinned one, is the **Paste** tool, which pastes your latest copy without opening anything. If you unpinned Clipboard, open the toolbox and tap it there. See [the toolbar](/tools/overview/) for how pinning works. On a hardware keyboard, use the [leader key](/reference/shortcuts/): double-tap <KeyCap>Ctrl</KeyCap>, then press <KeyCap>C</KeyCap>.
 
 Cards lay out in a staggered grid, two columns by default, rather than a fixed one, so a short text clip doesn't get stretched to match a tall image beside it. Pinned clips sort first by default ([flip that](#options) to put them last instead). Tap any card to insert it. Copying the same content again moves the existing card back to the top rather than adding a duplicate.
 
@@ -116,6 +116,8 @@ Turn on the search bar and a search pill appears at the top of the panel, once y
 
 Matching is a case-insensitive substring search, and it reaches past a clip's own text. A clip with no text of its own is still found by what it is: "image", "picture" or "screenshot" for a copied picture, "video", "movie" or "recording" for a clip, "folder" for a folder. The file format works too, because all of that is indexed alongside the file name, the source app and any link preview's title and description.
 
+Turn on **Regular expressions** under [Options](#options) and the search reads what you type as a pattern instead: `^https` finds clips that start with a web address, `\d{6}` six digits in a row, `invoice|receipt` either word. Case still doesn't matter, and `^` and `$` hold on to the clip's own text, not the words it's indexed under. A pattern you haven't finished yet, such as an open bracket, searches as plain text until you have, so the results don't vanish halfway through typing it.
+
 ## Pulling codes and links out of a clip
 
 Turn on entity detection and the panel scans your recent clips for one-time codes, phone numbers and links. Each one becomes a dashed-outline chip above the history grid, so the six digits inside a verification text are one tap away rather than a copy-select-paste. Tapping a chip pastes just that fragment and leaves the full clip in place. Press and hold a chip to see it highlighted inside the message it came from.
@@ -190,6 +192,7 @@ Everything below lives on the Clipboard screen, under Features on the settings h
 - **Undo a deleted clip**: shows the Undo bar for a few seconds after you delete a clip with the bin or a swipe; on by default. Off, a delete is immediate and final.
 - **Pinned entries last**: moves pinned clips to the end of the panel instead of the top; off by default. Greyed out while the tabs are on.
 - **Search bar**: enables the [search pill](#finding-a-clip-again) described above; off by default.
+- **Regular expressions**: shown while the search bar is on, off by default. On, the search reads what you type as a [regular expression](#finding-a-clip-again).
 - **Clear button**: the [bin](#clearing-the-history) that deletes every unpinned clip after asking, and empties the system clipboard unless it holds a pinned clip; off by default.
 - **Detect codes, numbers and links**: enables the [entity chips](#pulling-codes-and-links-out-of-a-clip); on by default. Detection runs entirely on the device.
 - **Show the found parts as icons on each clip**: off by default, and only while detection is on. Icons with counts on each clip in place of the chip strip.

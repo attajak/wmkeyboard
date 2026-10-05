@@ -86,7 +86,14 @@ data class ClipItem(
  * kind/format words ("image", "png", "folder") so a clip with no text of its
  * own — an image, a screenshot — is still findable by what it is.
  */
-fun ClipItem.searchHaystack(): String = buildList {
+fun ClipItem.searchHaystack(): String = searchParts().joinToString(" ")
+
+/**
+ * [searchHaystack] before it is joined, one entry per thing a clip is known
+ * by. A regex search tries each on its own, so `^` and `$` anchor to the
+ * clip's text rather than to wherever it happens to sit in the joined string.
+ */
+private fun ClipItem.searchParts(): List<String> = buildList {
     add(text)
     fileName?.let(::add)
     linkPreview?.let { preview ->
@@ -109,17 +116,34 @@ fun ClipItem.searchHaystack(): String = buildList {
         },
     )
     mimeType.substringAfterLast('/').takeIf { it.isNotBlank() }?.let(::add)
-}.joinToString(" ")
+}
 
 /**
  * Whether this clip should be shown for [query]. A blank query matches
  * everything; otherwise the query is a case-insensitive substring of
  * [searchHaystack]. The clipboard panel's filter and [ClipboardStore.search]
- * both go through here so the two can never drift apart.
+ * both go through [clipQueryMatcher] so the two can never drift apart.
  */
-fun ClipItem.matchesQuery(query: String): Boolean {
+fun ClipItem.matchesQuery(query: String): Boolean = clipQueryMatcher(query, regex = false)(this)
+
+/**
+ * The filter behind [matchesQuery], built once per query so a regex is
+ * compiled once rather than once per clip.
+ *
+ * With [regex] on (#414) the query is a case-insensitive regular expression,
+ * found anywhere in any one of a clip's [searchParts]. A pattern that does not
+ * compile, which is what one is halfway through being typed (`(htt`, `[0-9`),
+ * searches as plain text instead, so the list never blanks out mid-word.
+ */
+fun clipQueryMatcher(query: String, regex: Boolean): (ClipItem) -> Boolean {
     val trimmed = query.trim()
-    return trimmed.isEmpty() || searchHaystack().contains(trimmed, ignoreCase = true)
+    if (trimmed.isEmpty()) return { true }
+    val pattern = if (regex) runCatching { Regex(trimmed, RegexOption.IGNORE_CASE) }.getOrNull() else null
+    return if (pattern != null) {
+        { item -> item.searchParts().any { pattern.containsMatchIn(it) } }
+    } else {
+        { item -> item.searchHaystack().contains(trimmed, ignoreCase = true) }
+    }
 }
 
 /**

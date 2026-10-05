@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoStories
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
+import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.automirrored.outlined.Backspace
 import androidx.compose.material.icons.automirrored.outlined.FactCheck
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
@@ -123,7 +124,10 @@ object IconDefaults {
 
     fun forTool(tool: ToolbarTool): ImageVector = when (tool) {
         ToolbarTool.EMOJI -> Icons.Outlined.EmojiEmotions
-        ToolbarTool.CLIPBOARD -> Icons.Outlined.ContentPaste
+        // The clipboard with lines on it, not the empty one Paste draws: the
+        // two sit side by side on a toolbar often enough that sharing a
+        // glyph left only their position to tell them apart (#414).
+        ToolbarTool.CLIPBOARD -> Icons.AutoMirrored.Outlined.Assignment
         ToolbarTool.SNIPPETS -> Icons.AutoMirrored.Outlined.TextSnippet
         ToolbarTool.TEXT_EDIT -> Icons.Outlined.EditNote
         ToolbarTool.TRACKPAD -> Icons.Outlined.OpenWith
