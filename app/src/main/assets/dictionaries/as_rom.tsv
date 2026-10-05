@@ -1,0 +1,527 @@
+# Romanized Assamese → Assamese spelling map.
+#
+# How people actually type Assamese in Latin letters, and what they mean by it.
+# The Assamese phonetic layout runs the Bangla Avro rules, reads a typed "x" as
+# "s" and turns every র into ৰ, so this list holds the spellings that pipeline
+# cannot reach:
+#
+#  - Chat romanization writes চ and ছ as "s" ("ase" is আছে, "kisu" কিছু,
+#    "xohor" চহৰ), so the rules land on স.
+#  - The o-sound is written "u" or "o" and the rules hear neither as ো: "mur" /
+#    "mor" is মোৰ, "tumar" তোমাৰ, "kunu" কোনো. The same goes for the ' of the
+#    short forms ("hol" হ'ল, "kot" ক'ত, "kobo" ক'ব), for ৱ ("kua" কোৱা,
+#    "suwali" ছোৱালী) and for the nasal of the first person ("asu" আছোঁ,
+#    "teo" তেওঁ).
+#  - Chat shorthand that drops letters wholesale: "tmr" for তোমাৰ, "kn" for
+#    কেনে, "bhl" for ভাল, "r" for আৰু.
+#  - A handful of everyday words the rules already spell right (মই, তুমি,
+#    আৰু, কি …) are here too, because Assamese ships no bundled word list and
+#    until the user downloads one these lines are all the vocabulary the layout
+#    has.
+#
+# A hand-written draft of the commonest few hundred chat words; it wants an
+# Assamese speaker's review. Every value was checked against the Assamese word
+# list in wmkeyboard-data (data/as/as_full.txt.gz). That list is encyclopedic
+# prose, so a few colloquial verb forms (খালোঁ, খাইছা, গৈছোঁ, ক'বা …) are
+# missing from it and are kept here on the strength of standard spelling.
+#
+# Format: spelling<TAB>assamese   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+# Loaded after en_as.tsv, so the hand-written loanword spellings win a tie.
+
+# --- pronouns ---
+moi	মই
+mui	মই
+mur	মোৰ
+mor	মোৰ
+muk	মোক
+mok	মোক
+muloi	মোলৈ
+moloi	মোলৈ
+tumi	তুমি
+tmi	তুমি
+tm	তুমি
+tumar	তোমাৰ
+tomar	তোমাৰ
+tmr	তোমাৰ
+tumak	তোমাক
+tomak	তোমাক
+tmk	তোমাক
+tumaloi	তোমালৈ
+tomaloi	তোমালৈ
+tumalok	তোমালোক
+tomalok	তোমালোক
+apuni	আপুনি
+apuna	আপোনা
+apunar	আপোনাৰ
+aponar	আপোনাৰ
+apunak	আপোনাক
+aponak	আপোনাক
+toi	তই
+tur	তোৰ
+tor	তোৰ
+tok	তোক
+ami	আমি
+amar	আমাৰ
+amaloi	আমালৈ
+xi	সি
+si	সি
+tar	তাৰ
+tak	তাক
+taloi	তালৈ
+tai	তাই
+teo	তেওঁ
+tew	তেওঁ
+teor	তেওঁৰ
+teok	তেওঁক
+teolok	তেওঁলোক
+xihot	সিহঁত
+sihot	সিহঁত
+xihotor	সিহঁতৰ
+tohot	তহঁত
+eo	এওঁ
+iyaloi	ইয়ালৈ
+xekhini	সেইখিনি
+
+# --- this, that, someone ---
+eitu	এইটো
+eito	এইটো
+eibur	এইবোৰ
+eibor	এইবোৰ
+xeitu	সেইটো
+seitu	সেইটো
+xeibur	সেইবোৰ
+xeikarone	সেইকাৰণে
+kunuba	কোনোবা
+konoba	কোনোবা
+kunu	কোনো
+kono	কোনো
+kiba	কিবা
+kisu	কিছু
+kisuman	কিছুমান
+kisu	কিছুমান
+xokolu	সকলো
+sokolu	সকলো
+xokole	সকলোৱে
+eku	একো
+eko	একো
+
+# --- questions ---
+ki	কি
+k	কি
+kiyo	কিয়
+kio	কিয়
+kiu	কিয়
+kiyonu	কিয়নো
+kot	ক'ত
+kut	ক'ত
+koloi	ক'লৈ
+kuloi	ক'লৈ
+ketia	কেতিয়া
+ketiya	কেতিয়া
+kenekoi	কেনেকৈ
+kenekua	কেনেকুৱা
+kene	কেনে
+kn	কেনে
+kiman	কিমান
+kun	কোন
+kon	কোন
+kunto	কোনটো
+konto	কোনটো
+neki	নেকি
+nki	নেকি
+ne	নে
+jodi	যদি
+
+# --- to be, yes, no ---
+ase	আছে
+ache	আছে
+asey	আছে
+asa	আছা
+aso	আছোঁ
+asu	আছোঁ
+aso	আছো
+asil	আছিল
+asila	আছিলা
+asilu	আছিলোঁ
+asile	আছিলে
+asi	আছি
+nai	নাই
+nae	নাই
+nasil	নাছিল
+hoi	হয়
+hoi	হৈ
+nohoi	নহয়
+nhoi	নহয়
+hoine	হয়নে
+hol	হ'ল
+hul	হ'ল
+hole	হ'লে
+hule	হ'লে
+holu	হ'লোঁ
+hobo	হ'ব
+nohobo	নহ'ব
+hoise	হৈছে
+hoiche	হৈছে
+hoisil	হৈছিল
+hoa	হোৱা
+huwa	হোৱা
+howa	হোৱা
+thik	ঠিক
+thk	ঠিক
+bal	ভাল
+bhal	ভাল
+bhl	ভাল
+bhalo	ভাল
+
+# --- go, come ---
+jau	যাওঁ
+jao	যাওঁ
+jai	যায়
+jay	যায়
+ja	যা
+jabo	যাব
+jab	যাব
+jam	যাম
+jaba	যাবা
+gol	গ'ল
+gul	গ'ল
+gole	গ'লে
+golu	গ'লোঁ
+goi	গৈ
+goise	গৈছে
+goisa	গৈছা
+goisu	গৈছোঁ
+goisil	গৈছিল
+jua	যোৱা
+juwa	যোৱা
+najau	নাযাওঁ
+naja	নাযায়
+ahi	আহি
+ahisa	আহিছা
+ahise	আহিছে
+ahisu	আহিছোঁ
+ahilu	আহিলোঁ
+naha	নাহে
+ulai	ওলাই
+uthi	উঠি
+
+# --- do, say, see ---
+kora	কৰা
+kore	কৰে
+kori	কৰি
+koru	কৰোঁ
+koro	কৰোঁ
+koribo	কৰিব
+korim	কৰিম
+korisa	কৰিছা
+korise	কৰিছে
+korisu	কৰিছোঁ
+korisu	কৰিছো
+korisil	কৰিছিল
+korilu	কৰিলোঁ
+koribole	কৰিবলৈ
+koriboloi	কৰিবলৈ
+kua	কোৱা
+kowa	কোৱা
+koi	কৈ
+koisa	কৈছা
+koise	কৈছে
+koisu	কৈছোঁ
+koisil	কৈছিল
+kole	ক'লে
+kule	ক'লে
+kola	ক'লা
+kola	কলা
+kula	ক'লা
+kolu	ক'লোঁ
+kulu	ক'লোঁ
+kobo	ক'ব
+kubo	ক'ব
+kum	ক'ম
+koba	ক'বা
+kuba	ক'বা
+nokoba	নক'বা
+dekha	দেখা
+sa	চা
+sua	চোৱা
+sau	চাওঁ
+sabo	চাব
+sam	চাম
+saisa	চাইছা
+saise	চাইছে
+saisu	চাইছোঁ
+cha	চাহ
+
+# --- eat, give, take, get ---
+khua	খোৱা
+khowa	খোৱা
+khai	খাই
+khabo	খাব
+kham	খাম
+khaisa	খাইছা
+khaisu	খাইছোঁ
+khaise	খাইছে
+khalu	খালোঁ
+nakhau	নাখাওঁ
+diya	দিয়া
+dia	দিয়া
+dibo	দিব
+dise	দিছে
+disa	দিছা
+disu	দিছোঁ
+dilu	দিলোঁ
+lua	লোৱা
+loi	লৈ
+lobo	ল'ব
+pua	পোৱা
+powa	পোৱা
+pau	পাওঁ
+pao	পাওঁ
+pabo	পাব
+palu	পালোঁ
+paisu	পাইছোঁ
+paise	পাইছে
+pare	পাৰে
+paru	পাৰোঁ
+paro	পাৰোঁ
+pari	পাৰি
+nuwaru	নোৱাৰোঁ
+nuware	নোৱাৰে
+nuwari	নোৱাৰি
+
+# --- know, think, want ---
+jano	জানো
+janu	জানো
+jani	জানি
+najanu	নাজানো
+najano	নাজানো
+buji	বুজি
+bujhi	বুজি
+bujisa	বুজিছা
+bujisu	বুজিছোঁ
+bujilu	বুজিলোঁ
+bujise	বুজিছে
+bhabu	ভাবোঁ
+bhabo	ভাবোঁ
+bhabisa	ভাবিছা
+lage	লাগে
+lagise	লাগিছে
+nalage	নালাগে
+bisaru	বিচাৰোঁ
+bisare	বিচাৰে
+bisari	বিচাৰি
+mon	মন
+thaka	থকা
+roi	ৰৈ
+xuna	শুনা
+suna	শুনা
+xunisa	শুনিছা
+sunisa	শুনিছা
+pora	পৰা
+pora	পঢ়া
+porha	পঢ়া
+porhi	পঢ়ি
+porisa	পঢ়িছা
+xui	শুই
+sui	শুই
+xuwa	শোৱা
+
+# --- people ---
+ma	মা
+maa	মা
+aai	আই
+deuta	দেউতা
+baideu	বাইদেউ
+baidew	বাইদেউ
+dada	দাদা
+kokai	ককাই
+bhai	ভাই
+vai	ভাই
+bhoni	ভনী
+voni	ভনী
+bhonti	ভণ্টী
+khuri	খুৰী
+mami	মামী
+pehi	পেহী
+bondhu	বন্ধু
+bandhu	বন্ধু
+lora	ল'ৰা
+lura	ল'ৰা
+suwali	ছোৱালী
+chowali	ছোৱালী
+suali	ছোৱালী
+manuh	মানুহ
+lok	লোক
+
+# --- time ---
+etia	এতিয়া
+etiya	এতিয়া
+jetia	যেতিয়া
+jetiya	যেতিয়া
+aji	আজি
+aaji	আজি
+kali	কালি
+kailoi	কাইলৈ
+rati	ৰাতি
+ratiloi	ৰাতিলৈ
+ratipua	ৰাতিপুৱা
+puwa	পুৱা
+pua	পুৱা
+duporia	দুপৰীয়া
+gadhuli	গধূলি
+godhuli	গধূলি
+din	দিন
+xomoy	সময়
+somoy	সময়
+ghonta	ঘণ্টা
+bosor	বছৰ
+pasot	পাছত
+pisot	পিছত
+pase	পাছে
+pise	পিছে
+pisoloi	পিছলৈ
+pasoloi	পাছলৈ
+akou	আকৌ
+aku	আকৌ
+xodai	সদায়
+sodai	সদায়
+olop	অলপ
+olp	অলপ
+xunkale	সোনকালে
+sonkale	সোনকালে
+
+# --- places, things ---
+ghor	ঘৰ
+ghr	ঘৰ
+ghoroloi	ঘৰলৈ
+ghorloi	ঘৰলৈ
+gaon	গাঁও
+gau	গাঁও
+xohor	চহৰ
+sohor	চহৰ
+bazar	বজাৰ
+bat	বাট
+dex	দেশ
+axom	অসম
+asom	অসম
+axomot	অসমত
+asomot	অসমত
+axomiya	অসমীয়া
+asomiya	অসমীয়া
+oxomiya	অসমীয়া
+guwahati	গুৱাহাটী
+pani	পানী
+gakhir	গাখীৰ
+mas	মাছ
+kam	কাম
+kotha	কথা
+kothabur	কথাবোৰ
+khobor	খবৰ
+khabar	খবৰ
+taka	টকা
+poisa	পইচা
+kapor	কাপোৰ
+gari	গাড়ী
+gaari	গাড়ী
+naam	নাম
+nam	নাম
+puja	পূজা
+xopon	সপোন
+sopon	সপোন
+gaan	গান
+nas	নাচ
+naach	নাচ
+bota	বঁটা
+xorir	শৰীৰ
+mur	মূৰ
+
+# --- feelings, describing ---
+morom	মৰম
+bhalpua	ভালপোৱা
+dhuniya	ধুনীয়া
+dhunia	ধুনীয়া
+beya	বেয়া
+bea	বেয়া
+dukh	দুখ
+khang	খং
+bhok	ভোক
+hahi	হাঁহি
+haahi	হাঁহি
+dangor	ডাঙৰ
+dangar	ডাঙৰ
+nutun	নতুন
+puroni	পুৰণি
+purona	পুৰণা
+thanda	ঠাণ্ডা
+dur	দূৰ
+usor	ওচৰ
+tan	টান
+
+# --- much, little, very ---
+bor	বৰ
+bohut	বহুত
+bohuto	বহুতো
+besi	বেছি
+kom	কম
+kom	ক'ম
+ekdom	একদম
+kewol	কেৱল
+heno	হেনো
+dey	দেই
+
+# --- and, but, because ---
+aru	আৰু
+r	আৰু
+ar	আৰু
+kintu	কিন্তু
+jodiu	যদিও
+gotike	গতিকে
+gtike	গতিকে
+karone	কাৰণে
+karon	কাৰণ
+babe	বাবে
+logot	লগত
+lg	লগত
+xoite	সৈতে
+soite	সৈতে
+jen	যেন
+jene	যেনে
+nohole	নহ'লে
+nhole	নহ'লে
+mane	মানে
+
+# --- where ---
+uporot	ওপৰত
+kakhot	কাষত
+kaxot	কাষত
+usorot	ওচৰত
+
+# --- numbers, counters ---
+eta	এটা
+ekta	এটা
+eti	এটি
+ejoni	এজনী
+duta	দুটা
+tinita	তিনিটা
+sari	চাৰি
+pas	পাঁচ
+pach	পাঁচ
+dox	দহ
+dos	দহ
+bur	বোৰ
+
+# --- greetings, chat ---
+nomoskar	নমস্কাৰ
+namaskar	নমস্কাৰ
+dhonyobad	ধন্যবাদ
+dhanyabad	ধন্যবাদ
+xuvo	শুভ
+subho	শুভ
+xuvesa	শুভেচ্ছা
+subhesa	শুভেচ্ছা
+jonmodin	জন্মদিন
+janmadin	জন্মদিন
+ishwar	ঈশ্বৰ
+bhogowan	ভগৱান
+bhagawan	ভগৱান

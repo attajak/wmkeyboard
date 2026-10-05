@@ -1,0 +1,181 @@
+# English → Odia loanword map.
+#
+# Words Odia speakers routinely write in Odia script but which are NOT
+# phonetically derivable from the Odia phonetic rules: English spelling says
+# little about English sound, so "school" would come out ସ୍ଚୂଲ and "phone"
+# ଫୋନେ. Typed on the Odia phonetic layout, the English spelling on the left
+# resolves directly to the Odia form on the right, ahead of the rules and of
+# the dictionary.
+#
+# Spellings follow the bundled Odia word list: where it writes both a bare
+# final consonant (ଫୋନ) and one with an explicit halant (ମ୍ୟାଚ୍), the commoner
+# form is used. Words Odia prefers to translate (book ବହି, airport
+# ବିମାନବନ୍ଦର) are left out on purpose.
+#
+# A hand-written draft that wants an Odia speaker's review. A wrong entry here
+# is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>odia   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+
+# --- Technology / devices ---
+phone	ଫୋନ
+mobile	ମୋବାଇଲ
+computer	କମ୍ପ୍ୟୁଟର
+laptop	ଲାପଟପ
+internet	ଇଣ୍ଟରନେଟ
+tv	ଟିଭି
+radio	ରେଡିଓ
+camera	କ୍ୟାମେରା
+charger	ଚାର୍ଜର୍
+battery	ବ୍ୟାଟେରୀ
+sim	ସିମ୍
+network	ନେଟୱର୍କ
+data	ଡାଟା
+recharge	ରିଚାର୍ଜ
+wifi	ୱାଇଫାଇ
+software	ସଫ୍ଟୱେର
+system	ସିଷ୍ଟମ
+app	ଆପ୍
+website	ୱେବସାଇଟ
+email	ଇମେଲ
+message	ମେସେଜ
+download	ଡାଉନଲୋଡ
+file	ଫାଇଲ
+digital	ଡିଜିଟାଲ
+light	ଲାଇଟ୍
+fan	ଫ୍ୟାନ୍
+fridge	ଫ୍ରିଜ
+
+# --- Social media / chat ---
+facebook	ଫେସବୁକ
+youtube	ୟୁଟ୍ୟୁବ୍
+google	ଗୁଗୁଲ
+video	ଭିଡିଓ
+photo	ଫଟୋ
+post	ପୋଷ୍ଟ
+like	ଲାଇକ୍
+share	ସେୟାର
+group	ଗ୍ରୁପ
+chat	ଚାଟ
+call	କଲ
+online	ଅନଲାଇନ୍
+hello	ହେଲୋ
+hi	ହାଏ
+bye	ବାଏ
+ok	ଓକେ
+okay	ଓକେ
+sorry	ସରି
+good	ଗୁଡ୍
+love	ଲଭ୍
+gift	ଗିଫ୍ଟ
+game	ଗେମ
+news	ନ୍ୟୁଜ୍
+time	ଟାଇମ୍
+minute	ମିନିଟ
+
+# --- School / work ---
+school	ସ୍କୁଲ
+college	କଲେଜ
+class	କ୍ଲାସ
+teacher	ଟିଚର
+result	ରେଜଲ୍ଟ୍
+mark	ମାର୍କ
+project	ପ୍ରୋଜେକ୍ଟ
+coaching	କୋଚିଂ
+tuition	ଟିଉସନ
+pen	ପେନ୍
+pencil	ପେନସିଲ
+bag	ବ୍ୟାଗ
+office	ଅଫିସ
+officer	ଅଫିସର
+manager	ମ୍ୟାନେଜର
+meeting	ମିଟିଂ
+company	କମ୍ପାନୀ
+job	ଜବ
+engineer	ଇଞ୍ଜିନିୟର
+collector	କଲେକ୍ଟର
+sir	ସାର
+madam	ମାଡାମ
+
+# --- Health ---
+doctor	ଡାକ୍ତର
+doctor	ଡକ୍ଟର
+hospital	ହସ୍ପିଟାଲ
+medicine	ମେଡିସିନ
+nurse	ନର୍ସ
+operation	ଅପରେସନ
+corona	କରୋନା
+mask	ମାସ୍କ
+test	ଟେଷ୍ଟ
+report	ରିପୋର୍ଟ
+positive	ପଜିଟିଭ
+negative	ନେଗେଟିଭ
+
+# --- Travel / transport ---
+bus	ବସ
+train	ଟ୍ରେନ
+station	ଷ୍ଟେସନ
+ticket	ଟିକେଟ
+cycle	ସାଇକେଲ
+bike	ବାଇକ
+car	କାର
+truck	ଟ୍ରକ
+auto	ଅଟୋ
+petrol	ପେଟ୍ରୋଲ
+road	ରୋଡ
+bridge	ବ୍ରିଜ
+airport	ଏୟାରପୋର୍ଟ
+plane	ପ୍ଲେନ
+passport	ପାସପୋର୍ଟ
+driver	ଡ୍ରାଇଭର
+traffic	ଟ୍ରାଫିକ
+signal	ସିଗନାଲ
+parking	ପାର୍କିଂ
+helmet	ହେଲମେଟ
+
+# --- Shopping / food / home ---
+market	ମାର୍କେଟ
+store	ଷ୍ଟୋର
+order	ଅର୍ଡର
+delivery	ଡେଲିଭରି
+bank	ବ୍ୟାଙ୍କ
+atm	ଏଟିଏମ୍
+card	କାର୍ଡ
+hotel	ହୋଟେଲ
+restaurant	ରେଷ୍ଟୁରାଣ୍ଟ
+chicken	ଚିକେନ
+icecream	ଆଇସକ୍ରିମ
+cake	କେକ୍
+chocolate	ଚକୋଲେଟ
+biscuit	ବିସ୍କୁଟ
+coffee	କଫି
+juice	ଜୁସ୍
+lunch	ଲଞ୍ଚ
+gas	ଗ୍ୟାସ
+cylinder	ସିଲିଣ୍ଡର
+shirt	ସାର୍ଟ
+pant	ପ୍ୟାଣ୍ଟ
+table	ଟେବୁଲ
+chair	ଚେୟାର
+glass	ଗ୍ଲାସ୍
+plate	ପ୍ଲେଟ
+room	ରୁମ
+
+# --- Public life / entertainment ---
+police	ପୋଲିସ
+court	କୋର୍ଟ
+film	ଫିଲ୍ମ
+cinema	ସିନେମା
+hero	ହିରୋ
+heroine	ହିରୋଇନ
+star	ଷ୍ଟାର
+cricket	କ୍ରିକେଟ
+football	ଫୁଟବଲ
+team	ଟିମ୍
+match	ମ୍ୟାଚ୍
+party	ପାର୍ଟି
+vote	ଭୋଟ
+park	ପାର୍କ
+gym	ଜିମ୍

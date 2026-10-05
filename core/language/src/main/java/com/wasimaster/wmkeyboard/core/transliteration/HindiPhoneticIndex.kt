@@ -326,6 +326,11 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
             put("ब", 'b'); put("भ", 'b', true)
             put("म", 'm'); put("य", 'y'); put("र", 'r'); put("ल", 'l'); put("ळ", 'l')
             put("व", 'v'); put("शषस", 's'); put("ह", 'h')
+            // The letters Devanagari encodes for the Dravidian scripts, which
+            // reach this fold through IndicPhoneticIndex: Tamil ன and ற, and ழ,
+            // which roman spells "zh" or "l" and is folded as l. No Hindi word
+            // holds any of them.
+            put("ऩ", 'n'); put("ऱ", 'r'); put("ऴ", 'l')
         }
 
         /** Precomposed nukta letters (U+0958–U+095F), should a list carry them. */
@@ -365,6 +370,10 @@ class HindiPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
                     c == 'उ' || c == 'ऊ' -> slots.add(Vowel('u', c == 'ऊ', diphthong = false, independent = true))
                     c == 'ु' || c == 'ू' -> slots.add(Vowel('u', c == 'ू', diphthong = false, independent = false))
                     c == 'ए' || c == 'े' -> slots.add(Vowel('e', long = false, diphthong = false, independent = c == 'ए'))
+                    // The Dravidian short e and o, which length aside are the
+                    // same vowels to a romanized spelling.
+                    c == 'ऎ' || c == 'ॆ' -> slots.add(Vowel('e', long = false, diphthong = false, independent = c == 'ऎ'))
+                    c == 'ऒ' || c == 'ॊ' -> slots.add(Vowel('o', long = false, diphthong = false, independent = c == 'ऒ'))
                     c == 'ऐ' || c == 'ै' -> slots.add(Vowel('e', long = false, diphthong = true, independent = c == 'ऐ'))
                     c == 'ओ' || c == 'ो' -> slots.add(Vowel('o', long = false, diphthong = false, independent = c == 'ओ'))
                     c == 'औ' || c == 'ौ' -> slots.add(Vowel('o', long = false, diphthong = true, independent = c == 'औ'))

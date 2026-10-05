@@ -481,7 +481,7 @@ private fun layoutPreviewState(
         settings = shown,
         language = spec.language(),
         script = script,
-        composer = composerFor(script, spec.composerType()),
+        composer = composerFor(script, spec.composerType(), spec.langId),
         layoutId = spec.id,
         layoutName = spec.name,
         layouts = PreviewLayoutSets.get(spec, form, shown.numberRow, shown.customLayouts, television),

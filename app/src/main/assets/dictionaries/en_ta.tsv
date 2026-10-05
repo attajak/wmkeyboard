@@ -1,0 +1,175 @@
+# English → Tamil loanword map.
+#
+# Words Tamil speakers routinely write in Tamil script but which are NOT
+# phonetically derivable from the Tamil phonetic rules: English spelling says
+# little about English sound, so "school" would come out ச்சூல் and "phone"
+# பொனே. Typed on the Tamil phonetic layout, the English spelling on the left
+# resolves directly to the Tamil form on the right, ahead of the rules and of
+# the dictionary.
+#
+# A hand-written draft that wants a Tamil speaker's review. A wrong entry here
+# is worse than a missing one, since it outranks everything. Where Tamil writes
+# a loan two ways (ஃப்ரெண்ட் / பிரண்டு), the commoner chat form comes first.
+#
+# Format: english<TAB>tamil   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+
+# --- Technology / devices ---
+phone	போன்
+mobile	மொபைல்
+computer	கம்ப்யூட்டர்
+laptop	லேப்டாப்
+internet	இன்டர்நெட்
+online	ஆன்லைன்
+email	இமெயில்
+whatsapp	வாட்ஸ்ஆப்
+whatsapp	வாட்சப்
+facebook	பேஸ்புக்
+youtube	யூடியூப்
+google	கூகுள்
+video	வீடியோ
+photo	போட்டோ
+message	மெசேஜ்
+call	கால்
+charge	சார்ஜ்
+charger	சார்ஜர்
+battery	பேட்டரி
+app	ஆப்
+password	பாஸ்வேர்டு
+wifi	வைஃபை
+data	டேட்டா
+tv	டிவி
+camera	கேமரா
+selfie	செல்பி
+status	ஸ்டேட்டஸ்
+download	டவுன்லோட்
+update	அப்டேட்
+
+# --- School / office ---
+school	ஸ்கூல்
+college	காலேஜ்
+class	கிளாஸ்
+teacher	டீச்சர்
+exam	எக்ஸாம்
+mark	மார்க்
+marks	மார்க்ஸ்
+office	ஆபீஸ்
+boss	பாஸ்
+meeting	மீட்டிங்
+project	ப்ராஜெக்ட்
+company	கம்பெனி
+job	ஜாப்
+salary	சேலரி
+leave	லீவு
+book	புக்
+result	ரிசல்ட்
+degree	டிகிரி
+engineer	இன்ஜினியர்
+doctor	டாக்டர்
+hospital	ஹாஸ்பிடல்
+nurse	நர்ஸ்
+police	போலீஸ்
+lawyer	லாயர்
+driver	டிரைவர்
+fees	ஃபீஸ்
+form	பார்ம்
+list	லிஸ்ட்
+plan	பிளான்
+
+# --- Travel / places ---
+bus	பஸ்
+train	ட்ரெயின்
+ticket	டிக்கெட்
+auto	ஆட்டோ
+car	கார்
+bike	பைக்
+station	ஸ்டேஷன்
+road	ரோடு
+hotel	ஹோட்டல்
+flight	பிளைட்
+airport	ஏர்போர்ட்
+india	இந்தியா
+bangalore	பெங்களூர்
+delhi	டெல்லி
+america	அமெரிக்கா
+london	லண்டன்
+singapore	சிங்கப்பூர்
+dubai	துபாய்
+
+# --- Money / shopping ---
+bank	பேங்க்
+card	கார்டு
+shop	ஷாப்
+cash	கேஷ்
+offer	ஆஃபர்
+free	ஃப்ரீ
+gift	கிஃப்ட்
+dress	டிரஸ்
+shirt	ஷர்ட்
+jeans	ஜீன்ஸ்
+shoe	ஷூ
+
+# --- Food ---
+tea	டீ
+coffee	காபி
+juice	ஜூஸ்
+cake	கேக்
+chocolate	சாக்லேட்
+biscuit	பிஸ்கட்
+bread	பிரட்
+chicken	சிக்கன்
+mutton	மட்டன்
+pizza	பீட்சா
+burger	பர்கர்
+
+# --- Time / everyday ---
+time	டைம்
+late	லேட்
+sorry	சாரி
+thanks	தேங்க்ஸ்
+please	ப்ளீஸ்
+ok	ஓகே
+okay	ஓகே
+hello	ஹலோ
+hi	ஹாய்
+bye	பை
+good	குட்
+morning	மார்னிங்
+night	நைட்
+super	சூப்பர்
+nice	நைஸ்
+friend	பிரண்டு
+friend	ஃப்ரெண்ட்
+friends	பிரண்ட்ஸ்
+family	பேமிலி
+birthday	பர்த்டே
+party	பார்ட்டி
+movie	மூவி
+cinema	சினிமா
+hero	ஹீரோ
+heroine	ஹீரோயின்
+fan	ஃபேன்
+match	மேட்ச்
+cricket	கிரிக்கெட்
+team	டீம்
+game	கேம்
+tension	டென்ஷன்
+feel	ஃபீல்
+feeling	ஃபீலிங்
+problem	ப்ராப்ளம்
+doubt	டவுட்
+sure	ஷ்யூர்
+confirm	கன்பார்ம்
+address	அட்ரஸ்
+number	நம்பர்
+chance	சான்ஸ்
+life	லைஃப்
+love	லவ்
+ready	ரெடி
+busy	பிஸி
+wait	வெயிட்
+waiting	வெயிட்டிங்
+start	ஸ்டார்ட்
+finish	ஃபினிஷ்
+sunday	சண்டே

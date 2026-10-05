@@ -1,0 +1,124 @@
+# English → Persian loanword map.
+#
+# Words Persian speakers routinely write in the Persian script but which are
+# NOT phonetically derivable from the Finglish phonetic rules: English spelling
+# says little about English sound, so "mobile" would come out مبیله and
+# "computer" کمپوتر. Typed on the Persian phonetic layout, the English
+# spelling on the left commits the Persian on the right.
+#
+# Kept short on purpose. A word is here only if the Persian script is how it is
+# normally written in Persian text (موبایل, اینترنت, دکتر); a Persian word for
+# the thing (دوربین for camera, دانشگاه for university) is a translation, not a
+# loan, and is left out. Compounds are written the way the fa word list writes
+# them (لپتاپ, وبسایت). A draft that wants a Persian speaker's review.
+#
+# Format: spelling<TAB>persian   (one mapping per line; # starts a comment)
+
+ok	اوکی
+okay	اوکی
+bye	بای
+mobile	موبایل
+phone	تلفن
+telephone	تلفن
+computer	کامپیوتر
+laptop	لپتاپ
+online	آنلاین
+offline	آفلاین
+email	ایمیل
+message	مسیج
+site	سایت
+website	وبسایت
+file	فایل
+video	ویدیو
+application	اپلیکیشن
+username	یوزرنیم
+account	اکانت
+page	پیج
+like	لایک
+comment	کامنت
+follow	فالو
+follower	فالوور
+story	استوری
+live	لایو
+google	گوگل
+youtube	یوتیوب
+instagram	اینستاگرام
+telegram	تلگرام
+whatsapp	واتساپ
+facebook	فیسبوک
+twitter	توییتر
+android	اندروید
+iphone	آیفون
+windows	ویندوز
+battery	باتری
+charge	شارژ
+charger	شارژر
+headphone	هدفون
+keyboard	کیبورد
+mouse	ماوس
+wifi	وایفای
+bluetooth	بلوتوث
+game	گیم
+ambulance	آمبولانس
+vitamin	ویتامین
+bank	بانک
+dollar	دلار
+euro	یورو
+card	کارت
+visa	ویزا
+passport	پاسپورت
+ticket	بلیط
+taxi	تاکسی
+bus	اتوبوس
+park	پارک
+parking	پارکینگ
+restaurant	رستوران
+cafe	کافه
+pizza	پیتزا
+sandwich	ساندویچ
+hamburger	همبرگر
+burger	برگر
+salad	سالاد
+sauce	سس
+ketchup	کچاپ
+chocolate	شکلات
+cake	کیک
+coca	کوکا
+cappuccino	کاپوچینو
+nescafe	نسکافه
+shampoo	شامپو
+mask	ماسک
+supermarket	سوپرمارکت
+market	مارکت
+party	پارتی
+music	موزیک
+guitar	گیتار
+piano	پیانو
+series	سریال
+cartoon	کارتون
+animation	انیمیشن
+football	فوتبال
+volleyball	والیبال
+basketball	بسکتبال
+team	تیم
+penalty	پنالتی
+league	لیگ
+club	کلوپ
+class	کلاس
+project	پروژه
+professor	پروفسور
+radio	رادیو
+television	تلویزیون
+tv	تلویزیون
+theater	تئاتر
+apartment	آپارتمان
+elevator	آسانسور
+lamp	لامپ
+plastic	پلاستیک
+gas	گاز
+benzine	بنزین
+motor	موتور
+motorcycle	موتورسیکلت
+traffic	ترافیک
+kilometer	کیلومتر
+centimeter	سانتیمتر

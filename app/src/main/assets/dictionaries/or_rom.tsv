@@ -1,0 +1,479 @@
+# Romanized Odia → Odia spelling map.
+#
+# How people actually type Odia in Latin letters, and what they mean by it.
+# Two kinds of spelling are here, and neither is reachable from the phonetic
+# rules:
+#
+#  - Words the rules get wrong because Latin spelling does not carry the
+#    difference: a long aa nobody doubles ("ame" is ଆମେ, "pani" is ପାଣି),
+#    retroflex against dental ("bada" is ବଡ଼, "gote" is ଗୋଟେ), ଣ against ନ
+#    ("kana" is କଣ), ଳ against ଲ ("sakala" is ସକାଳ), the word-opening ଯ that
+#    is said "j" ("jiba" is ଯିବା, "jadi" is ଯଦି), and the nasal mark nobody
+#    types ("mu" is ମୁଁ, "nahi" is ନାହିଁ, "pain" is ପାଇଁ).
+#  - Chat shorthand that drops letters wholesale: "kn" for କଣ, "nhi" for
+#    ନାହିଁ, "hn" for ହଁ, "tme" for ତମେ.
+#
+# The phonetic rules read "a" as the inherent vowel and "o" as ୋ, so words that
+# already come out right ("bhala" ଭଲ, "achhi" ଅଛି, "kariba" କରିବା) are not
+# listed. A few common verb forms are missing from the bundled word list
+# (a mostly encyclopaedic corpus) but are regular conjugations: ଯାଉଛ, ଆସନ୍ତୁ,
+# ପଢ଼ୁଛି, ଶୋଇବି and the like.
+#
+# A hand-written draft of the commonest few hundred words that wants an Odia
+# speaker's review.
+#
+# Format: spelling<TAB>odia   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+# Loaded after en_or.tsv, so the hand-written loanword spellings win a tie.
+
+
+# --- pronouns ---
+mu	ମୁଁ
+mun	ମୁଁ
+ame	ଆମେ
+apana	ଆପଣ
+apan	ଆପଣ
+apanamane	ଆପଣମାନେ
+ama	ଆମ
+amara	ଆମର
+amaku	ଆମକୁ
+amaro	ଆମର
+amemane	ଆମେମାନେ
+apananka	ଆପଣଙ୍କ
+apanankara	ଆପଣଙ୍କର
+apananku	ଆପଣଙ୍କୁ
+tanka	ତାଙ୍କ
+tanka	ଟଙ୍କା
+tankara	ତାଙ୍କର
+tanku	ତାଙ୍କୁ
+tara	ତାର
+tara	ତାରା
+ta	ତ
+ta	ତା
+eha	ଏହା
+ehara	ଏହାର
+taha	ତାହା
+jaha	ଯାହା
+jie	ଯିଏ
+kaha	କାହା
+kaha	କହ
+kahara	କାହାର
+kahaku	କାହାକୁ
+emane	ଏମାନେ
+tme	ତମେ
+tmku	ତମକୁ
+tmr	ତମର
+
+# --- question words ---
+kana	କଣ
+kan	କଣ
+kn	କଣ
+kna	କଣ
+kahinki	କାହିଁକି
+kahiki	କାହିଁକି
+kahnki	କାହିଁକି
+kahin	କାହିଁ
+kemti	କେମିତି
+kmiti	କେମିତି
+kouthi	କୋଉଠି
+kauthi	କୋଉଠି
+keunthi	କେଉଁଠି
+kuade	କୁଆଡ଼େ
+kuade	କୁଆଡେ
+keun	କେଉଁ
+kou	କୋଉ
+ketebele	କେତେବେଳେ
+
+# --- function words ---
+na	ନା
+na	ନ
+nahi	ନାହିଁ
+nahin	ନାହିଁ
+nai	ନାହିଁ
+nhi	ନାହିଁ
+nuhe	ନୁହେଁ
+nuhen	ନୁହେଁ
+nuhan	ନୁହଁ
+han	ହଁ
+haan	ହଁ
+hn	ହଁ
+ha	ହଁ
+hau	ହଉ
+pain	ପାଇଁ
+pai	ପାଇଁ
+pai	ପାଇ
+sathire	ସାଥିରେ
+bahare	ବାହାରେ
+pakhare	ପାଖରେ
+pakhaku	ପାଖକୁ
+pachare	ପଛରେ
+age	ଆଗେ
+agaru	ଆଗରୁ
+aji	ଆଜି
+kali	କାଲି
+parasu	ପରଶୁ
+sethi	ସେଠି
+ethi	ଏଠି
+sethiku	ସେଠିକୁ
+ethiku	ଏଠିକୁ
+jethi	ଯେଉଁଠି
+jouthi	ଯୋଉଠି
+jadi	ଯଦି
+je	ଯେ
+jemiti	ଯେମିତି
+jete	ଯେତେ
+jebe	ଯେବେ
+jeun	ଯେଉଁ
+jetebele	ଯେତେବେଳେ
+jogu	ଯୋଗୁ
+tenu	ତେଣୁ
+kimba	କିମ୍ବା
+ebang	ଏବଂ
+ebam	ଏବଂ
+khali	ଖାଲି
+tike	ଟିକେ
+tikie	ଟିକିଏ
+bhari	ଭାରି
+sata	ସତ
+sata	ସାତ
+michi	ମିଛ
+puni	ପୁଣି
+kebala	କେବଳ
+keval	କେବଳ
+thik	ଠିକ
+thika	ଠିକ
+thk	ଠିକ
+ekdam	ଏକଦମ
+sighra	ଶୀଘ୍ର
+dhire	ଧୀରେ
+nischaya	ନିଶ୍ଚୟ
+nischay	ନିଶ୍ଚୟ
+hueta	ହୁଏତ
+sabubele	ସବୁବେଳେ
+bele	ବେଳେ
+
+# --- verbs: to be ---
+hauchi	ହେଉଛି
+haucha	ହେଉଛ
+kala	କଲା
+kala	କଳା
+gala	ଗଲା
+
+# --- verbs: go, come ---
+jiba	ଯିବା
+jibi	ଯିବି
+jibu	ଯିବୁ
+jibe	ଯିବେ
+jiba	ଯିବ
+jaa	ଯା
+ja	ଯା
+jau	ଯାଉ
+jaucha	ଯାଉଛ
+jauchi	ଯାଉଛି
+jauchu	ଯାଉଛୁ
+jaichi	ଯାଇଛି
+jai	ଯାଇ
+jai	ଜୟ
+jae	ଯାଏ
+jaye	ଯାଏ
+jaithila	ଯାଇଥିଲା
+jaithile	ଯାଇଥିଲେ
+jibaku	ଯିବାକୁ
+asa	ଆସ
+asi	ଆସି
+asibi	ଆସିବି
+asiba	ଆସିବା
+asila	ଆସିଲା
+asile	ଆସିଲେ
+asuchi	ଆସୁଛି
+asucha	ଆସୁଛ
+asantu	ଆସନ୍ତୁ
+asanti	ଆସନ୍ତି
+asichi	ଆସିଛି
+asibaku	ଆସିବାକୁ
+
+# --- verbs: say, hear, know ---
+suna	ଶୁଣ
+suni	ଶୁଣି
+sunibi	ଶୁଣିବି
+sunila	ଶୁଣିଲା
+sunantu	ଶୁଣନ୍ତୁ
+sunuchi	ଶୁଣୁଛି
+jani	ଜାଣି
+jane	ଜଣେ
+jane	ଜାଣେ
+jana	ଜଣ
+jana	ଜାଣ
+janichi	ଜାଣିଛି
+janini	ଜାଣିନି
+janibi	ଜାଣିବି
+janiba	ଜାଣିବା
+
+# --- verbs: other ---
+padha	ପଢ଼
+padhi	ପଢ଼ି
+padhibi	ପଢ଼ିବି
+padhuchi	ପଢ଼ୁଛି
+padhiba	ପଢ଼ିବା
+padhila	ପଢ଼ିଲା
+soi	ଶୋଇ
+soibi	ଶୋଇବି
+soiba	ଶୋଇବା
+soichi	ଶୋଇଛି
+utha	ଉଠ
+uthi	ଉଠି
+uthila	ଉଠିଲା
+chala	ଚାଲ
+chali	ଚାଲି
+chaliba	ଚାଲିବା
+chalantu	ଚାଲନ୍ତୁ
+chalibi	ଚାଲିବି
+chaluchi	ଚାଲୁଛି
+chalila	ଚାଲିଲା
+dia	ଦିଅ
+diya	ଦିଅ
+deba	ଦେବା
+nia	ନିଅ
+neba	ନେବା
+ana	ଆଣ
+ani	ଆଣି
+anibi	ଆଣିବି
+laga	ଲାଗ
+lagi	ଲାଗି
+lagila	ଲାଗିଲା
+laguchi	ଲାଗୁଛି
+lage	ଲାଗେ
+lagiba	ଲାଗିବା
+mili	ମିଳି
+milila	ମିଳିଲା
+miliba	ମିଳିବା
+miluchi	ମିଳୁଛି
+pari	ପାରି
+pariba	ପାରିବା
+paribi	ପାରିବି
+parini	ପାରିନି
+paruchi	ପାରୁଛି
+kanda	କାନ୍ଦ
+kandi	କାନ୍ଦି
+khela	ଖେଳ
+kheli	ଖେଳି
+kheluchi	ଖେଳୁଛି
+khelibi	ଖେଳିବି
+khela	ଖେଳା
+sikhiba	ଶିଖିବା
+sikhi	ଶିଖି
+sikha	ଶିଖ
+pathai	ପଠାଇ
+pathei	ପଠେଇ
+chhada	ଛାଡ଼
+chhadi	ଛାଡ଼ି
+chadi	ଛାଡ଼ି
+padila	ପଡ଼ିଲା
+padi	ପଡ଼ି
+bhalapae	ଭଲପାଏ
+bhalapaye	ଭଲପାଏ
+
+# --- family, people ---
+bhauni	ଭଉଣୀ
+bhaina	ଭାଇନା
+nana	ନାନା
+apa	ଅପା
+ma	ମା
+bapa	ବାପା
+baapa	ବାପା
+bou	ବୋଉ
+dada	ଦାଦା
+mamu	ମାମୁଁ
+mausi	ମାଉସୀ
+mausa	ମଉସା
+pilamane	ପିଲାମାନେ
+sanga	ସାଙ୍ଗ
+sathi	ସାଥୀ
+jhia	ଝିଅ
+pua	ପୁଅ
+manisa	ମଣିଷ
+swami	ସ୍ୱାମୀ
+bohu	ବୋହୂ
+jwain	ଜ୍ୱାଇଁ
+sasu	ଶାଶୁ
+
+# --- time ---
+kama	କାମ
+katha	କଥା
+rati	ରାତି
+sakala	ସକାଳ
+sakal	ସକାଳ
+sakalu	ସକାଳୁ
+sandhya	ସନ୍ଧ୍ୟା
+sanjha	ସଞ୍ଜ
+bela	ବେଳ
+ghanta	ଘଣ୍ଟା
+masa	ମାସ
+barsa	ବର୍ଷ
+barsa	ବର୍ଷା
+barsha	ବର୍ଷ
+
+# --- food, home ---
+bhata	ଭାତ
+pani	ପାଣି
+paani	ପାଣି
+cha	ଚା
+dalma	ଡାଲମା
+dali	ଡାଲି
+pakhala	ପଖାଳ
+tarakari	ତରକାରୀ
+macha	ମାଛ
+machha	ମାଛ
+mansa	ମାଂସ
+jalakhia	ଜଳଖିଆ
+rasagola	ରସଗୋଲା
+pitha	ପିଠା
+chaula	ଚାଉଳ
+gan	ଗାଁ
+gaan	ଗାଁ
+gaon	ଗାଁ
+bata	ବାଟ
+rasta	ରାସ୍ତା
+bazar	ବଜାର
+bajar	ବଜାର
+dokan	ଦୋକାନ
+dokana	ଦୋକାନ
+gadi	ଗାଡ଼ି
+ghadi	ଘଡ଼ି
+kapada	କପଡ଼ା
+
+# --- places, faith ---
+bhagaban	ଭଗବାନ
+bhagabana	ଭଗବାନ
+bhagwan	ଭଗବାନ
+jagannath	ଜଗନ୍ନାଥ
+jagannatha	ଜଗନ୍ନାଥ
+puri	ପୁରୀ
+odisha	ଓଡ଼ିଶା
+odisa	ଓଡ଼ିଶା
+orissa	ଓଡ଼ିଶା
+odia	ଓଡ଼ିଆ
+odiya	ଓଡ଼ିଆ
+oriya	ଓଡ଼ିଆ
+cuttack	କଟକ
+katak	କଟକ
+kataka	କଟକ
+bhubaneswar	ଭୁବନେଶ୍ୱର
+sambalpur	ସମ୍ବଲପୁର
+berhampur	ବ୍ରହ୍ମପୁର
+balasore	ବାଲେଶ୍ୱର
+baleswar	ବାଲେଶ୍ୱର
+rourkela	ରାଉରକେଲା
+konark	କୋଣାର୍କ
+puja	ପୂଜା
+pooja	ପୂଜା
+rathajatra	ରଥଯାତ୍ରା
+jatra	ଯାତ୍ରା
+durga	ଦୁର୍ଗା
+ganesh	ଗଣେଶ
+diwali	ଦୀପାବଳି
+bahaghara	ବାହାଘର
+
+# --- everyday nouns ---
+bhasa	ଭାଷା
+bhasha	ଭାଷା
+desa	ଦେଶ
+sarakar	ସରକାର
+sarkar	ସରକାର
+paisa	ପଇସା
+jibana	ଜୀବନ
+jiban	ଜୀବନ
+duniya	ଦୁନିଆ
+khushi	ଖୁସି
+dukha	ଦୁଃଖ
+dukh	ଦୁଃଖ
+akhi	ଆଖି
+mukha	ମୁହଁ
+mukha	ମୁଖ
+muha	ମୁହଁ
+hata	ହାତ
+pada	ପାଦ
+munda	ମୁଣ୍ଡ
+peta	ପେଟ
+naka	ନାକ
+danta	ଦାନ୍ତ
+bala	ବାଳ
+ausadha	ଔଷଧ
+nadi	ନଦୀ
+akasa	ଆକାଶ
+akash	ଆକାଶ
+surya	ସୂର୍ଯ୍ୟ
+pahada	ପାହାଡ଼
+jala	ଜଳ
+phala	ଫଳ
+dala	ଦଳ
+kabita	କବିତା
+gita	ଗୀତ
+gita	ଗୀତା
+nacha	ନାଚ
+raja	ରାଜା
+rani	ରାଣୀ
+pariksha	ପରୀକ୍ଷା
+parikhya	ପରୀକ୍ଷା
+siksha	ଶିକ୍ଷା
+sikhya	ଶିକ୍ଷା
+gyana	ଜ୍ଞାନ
+gyan	ଜ୍ଞାନ
+guna	ଗୁଣ
+prana	ପ୍ରାଣ
+pruthibi	ପୃଥିବୀ
+singha	ସିଂହ
+singh	ସିଂହ
+ingraji	ଇଂରାଜୀ
+sankhya	ସଂଖ୍ୟା
+ganga	ଗଙ୍ଗା
+sangita	ସଙ୍ଗୀତ
+anchala	ଅଞ୍ଚଳ
+anchal	ଅଞ୍ଚଳ
+ananda	ଆନନ୍ଦ
+anand	ଆନନ୍ଦ
+chhati	ଛାତି
+ruchi	ରୁଚି
+
+# --- adjectives ---
+bada	ବଡ଼
+chhota	ଛୋଟ
+chota	ଛୋଟ
+nua	ନୂଆ
+purana	ପୁରୁଣା
+thanda	ଥଣ୍ଡା
+mitha	ମିଠା
+kasta	କଷ୍ଟ
+besi	ବେଶୀ
+beshi	ବେଶୀ
+pura	ପୁରା
+pura	ପୂରା
+sasta	ଶସ୍ତା
+nila	ନୀଳ
+kamala	କମଳା
+badhia	ବଢ଼ିଆ
+badhiya	ବଢ଼ିଆ
+tale	ତଳେ
+
+# --- numbers ---
+gote	ଗୋଟେ
+gotie	ଗୋଟିଏ
+goti	ଗୋଟି
+pancha	ପାଞ୍ଚ
+panch	ପାଞ୍ଚ
+chha	ଛଅ
+atha	ଆଠ
+na	ନଅ
+dasa	ଦଶ
+sahe	ଶହେ
+hajar	ହଜାର
+
+# --- greetings ---
+namaskar	ନମସ୍କାର
+namaskara	ନମସ୍କାର
+dhanyabad	ଧନ୍ୟବାଦ
+dhanyabada	ଧନ୍ୟବାଦ
+dhanyavad	ଧନ୍ୟବାଦ
+subha	ଶୁଭ
+swagata	ସ୍ୱାଗତ
+swagat	ସ୍ୱାଗତ

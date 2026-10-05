@@ -44,6 +44,17 @@ object BuiltInLayouts {
     const val HINDI_ID = "builtin_hindi"
     const val HINDI_PHONETIC_ID = "builtin_hindi_phonetic"
     const val URDU_PHONETIC_ID = "builtin_urdu_phonetic"
+    const val MARATHI_PHONETIC_ID = "builtin_marathi_phonetic"
+    const val GUJARATI_PHONETIC_ID = "builtin_gujarati_phonetic"
+    const val PUNJABI_PHONETIC_ID = "builtin_punjabi_phonetic"
+    const val ODIA_PHONETIC_ID = "builtin_odia_phonetic"
+    const val ASSAMESE_PHONETIC_ID = "builtin_assamese_phonetic"
+    const val TAMIL_PHONETIC_ID = "builtin_tamil_phonetic"
+    const val TELUGU_PHONETIC_ID = "builtin_telugu_phonetic"
+    const val KANNADA_PHONETIC_ID = "builtin_kannada_phonetic"
+    const val MALAYALAM_PHONETIC_ID = "builtin_malayalam_phonetic"
+    const val PERSIAN_PHONETIC_ID = "builtin_persian_phonetic"
+    const val ARABIC_PHONETIC_ID = "builtin_arabic_phonetic"
     const val T9_ID = "builtin_t9"
     const val COMPACT_ID = "builtin_compact"
 
@@ -331,6 +342,34 @@ object BuiltInLayouts {
     )
 
     /**
+     * The rest of the phonetic layouts: roman letters on the QWERTY grid
+     * unchanged, the language's own script written, as [URDU_PHONETIC] and
+     * [HINDI_PHONETIC] do. The composer override is what makes each phonetic;
+     * which rules it reads is the layout's language (`PhoneticComposers`), since
+     * several of these share a script with another language's phonetic layout —
+     * Marathi with Hindi, Assamese with Bangla, Persian and Arabic with Urdu.
+     */
+    private fun phonetic(id: String, name: String, langId: String) = LayoutSpec(
+        id = id,
+        name = name,
+        langId = langId,
+        composer = ComposerType.TRANSLITERATE,
+        layers = mapOf(LayoutLayer.LETTERS.key to LayerSpec(qwertyRows)),
+    )
+
+    val MARATHI_PHONETIC = phonetic(MARATHI_PHONETIC_ID, "Marathi phonetic", "mr")
+    val GUJARATI_PHONETIC = phonetic(GUJARATI_PHONETIC_ID, "Gujarati phonetic", "gu")
+    val PUNJABI_PHONETIC = phonetic(PUNJABI_PHONETIC_ID, "Punjabi phonetic", "pa")
+    val ODIA_PHONETIC = phonetic(ODIA_PHONETIC_ID, "Odia phonetic", "or")
+    val ASSAMESE_PHONETIC = phonetic(ASSAMESE_PHONETIC_ID, "Assamese phonetic", "as")
+    val TAMIL_PHONETIC = phonetic(TAMIL_PHONETIC_ID, "Tamil phonetic", "ta")
+    val TELUGU_PHONETIC = phonetic(TELUGU_PHONETIC_ID, "Telugu phonetic", "te")
+    val KANNADA_PHONETIC = phonetic(KANNADA_PHONETIC_ID, "Kannada phonetic", "kn")
+    val MALAYALAM_PHONETIC = phonetic(MALAYALAM_PHONETIC_ID, "Malayalam phonetic", "ml")
+    val PERSIAN_PHONETIC = phonetic(PERSIAN_PHONETIC_ID, "Persian phonetic", "fa")
+    val ARABIC_PHONETIC = phonetic(ARABIC_PHONETIC_ID, "Arabic phonetic", "ar")
+
+    /**
      * T9: the phone keypad, three or four letters to a key, decoded by the
      * language model rather than by multi-tap (discussion #103).
      *
@@ -401,7 +440,9 @@ object BuiltInLayouts {
     val all: List<LayoutSpec> = listOf(
         QWERTY, AZERTY, DVORAK, COLEMAK, WORKMAN, HALMAK, AVRO, KHIPRO, PROBHAT, JATIYA, FRENCH,
         GERMAN, SPANISH, KOREAN, RUSSIAN, ARABIC, GREEK, HEBREW, HINDI, HINDI_PHONETIC,
-        URDU_PHONETIC, T9, COMPACT,
+        URDU_PHONETIC, MARATHI_PHONETIC, GUJARATI_PHONETIC, PUNJABI_PHONETIC, ODIA_PHONETIC,
+        ASSAMESE_PHONETIC, TAMIL_PHONETIC, TELUGU_PHONETIC, KANNADA_PHONETIC, MALAYALAM_PHONETIC,
+        PERSIAN_PHONETIC, ARABIC_PHONETIC, T9, COMPACT,
     )
 
     fun byId(id: String): LayoutSpec? = all.firstOrNull { it.id == id }

@@ -1,0 +1,448 @@
+# Romanized Gujarati → Gujarati spelling map.
+#
+# How people actually type Gujarati in Latin letters, and what they mean by it.
+# Two kinds of spelling are here, and neither is reachable from the phonetic
+# rules:
+#
+#  - Words the rules get wrong because Latin spelling does not carry the
+#    difference: a long vowel nobody doubles ("maru" is મારું, "pani" is
+#    પાણી), dental against retroflex ("mate" is માટે, "thodu" is થોડું), ણ and
+#    ળ typed as plain n and l ("pan" is પણ, "dal" is દાળ), ષ typed as sh
+#    ("bhasha" is ભાષા), gemination nobody types ("papa" is પપ્પા).
+#  - Chat shorthand: "che" / "chu" / "cho" for છે / છું / છો, "su" for શું,
+#    vowel-dropped "kr", "nthi", "tme", "pn", "bau" for બહુ.
+#
+# What the rules already do is left out: final -u is the neuter -ું (hu હું,
+# karvu કરવું), locative -ma is માં, -vanu is વાનું.
+#
+# A hand-written draft of the commonest few hundred words that wants a Gujarati
+# speaker's review.
+#
+# Format: spelling<TAB>gujarati   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+
+# --- Pronouns, possessives
+hun	હું
+tun	તું
+tme	તમે
+apne	આપણે
+aapne	આપણે
+apde	આપણે
+aapde	આપણે
+apnu	આપણું
+aapnu	આપણું
+aapno	આપણો
+aapni	આપણી
+aapna	આપણા
+apna	આપણા
+maru	મારું
+maro	મારો
+mari	મારી
+mara	મારા
+mare	મારે
+taru	તારું
+taro	તારો
+tari	તારી
+tara	તારા
+tare	તારે
+tamaru	તમારું
+tamaro	તમારો
+tamari	તમારી
+tamara	તમારા
+tamare	તમારે
+amaru	અમારું
+amaro	અમારો
+amari	અમારી
+amara	અમારા
+amare	અમારે
+mne	મને
+tne	તને
+tmne	તમને
+kon	કોણ
+kai	કંઈ
+kain	કંઈ
+kaik	કંઈક
+kasu	કશું
+
+# --- Copula
+che	છે
+chu	છું
+chhun	છું
+cho	છો
+chie	છીએ
+chhie	છીએ
+chiye	છીએ
+chhiye	છીએ
+hase	હશે
+htu	હતું
+hti	હતી
+hta	હતા
+nthi	નથી
+nai	નહીં
+nahi	નહીં
+nahin	નહીં
+
+# --- Questions
+su	શું
+kya	ક્યાં
+kyan	ક્યાં
+kyaa	ક્યાં
+kyare	ક્યારે
+kyre	ક્યારે
+kyathi	ક્યાંથી
+ketlu	કેટલું
+ketla	કેટલા
+ketli	કેટલી
+ketlo	કેટલો
+etlu	એટલું
+etla	એટલા
+etli	એટલી
+jetlu	જેટલું
+etle	એટલે
+km	કેમ
+
+# --- Time and place
+atyare	અત્યારે
+aje	આજે
+kale	કાલે
+kal	કાલ
+pachi	પછી
+pchi	પછી
+pachu	પાછું
+pachhu	પાછું
+pacho	પાછો
+pachho	પાછો
+pachha	પાછા
+pacha	પાછા
+pehla	પહેલા
+pehela	પહેલાં
+hamna	હમણાં
+hamnaa	હમણાં
+hamana	હમણાં
+hve	હવે
+jaldi	જલ્દી
+dhire	ધીરે
+dhime	ધીમે
+ahi	અહીં
+ahiya	અહીંયા
+ahiyan	અહીંયા
+tya	ત્યાં
+tyan	ત્યાં
+tyathi	ત્યાંથી
+jya	જ્યાં
+jyan	જ્યાં
+tyare	ત્યારે
+jyare	જ્યારે
+savare	સવારે
+savar	સવાર
+sanje	સાંજે
+sanj	સાંજ
+raate	રાત્રે
+kyarey	ક્યારેય
+hamesha	હંમેશા
+hammesha	હંમેશા
+jarur	જરૂર
+khali	ખાલી
+sathe	સાથે
+mate	માટે
+mte	માટે
+karan	કારણ
+pan	પણ
+pn	પણ
+aagal	આગળ
+agal	આગળ
+pachhal	પાછળ
+pachal	પાછળ
+pase	પાસે
+bajuma	બાજુમાં
+niche	નીચે
+bahar	બહાર
+dur	દૂર
+najik	નજીક
+
+# --- Quantity, manner
+bahu	બહુ
+bau	બહુ
+bov	બહુ
+khub	ખૂબ
+ghanu	ઘણું
+ghana	ઘણા
+ghani	ઘણી
+thodu	થોડું
+thoda	થોડા
+thodi	થોડી
+vadhare	વધારે
+vadhu	વધુ
+ochu	ઓછું
+bdhu	બધું
+bdha	બધા
+sau	સૌ
+ekdum	એકદમ
+barabar	બરાબર
+saru	સારું
+sachu	સાચું
+sachi	સાચી
+khotu	ખોટું
+khoti	ખોટી
+
+# --- Verbs
+kr	કર
+krvu	કરવું
+krje	કરજે
+karse	કરશે
+karsu	કરીશું
+karshu	કરીશું
+khavu	ખાવું
+khava	ખાવા
+khavanu	ખાવાનું
+khay	ખાય
+khadhu	ખાધું
+khadhi	ખાધી
+khadho	ખાધો
+pivu	પીવું
+pidhu	પીધું
+lidhu	લીધું
+didhu	દીધું
+kidhu	કીધું
+kehvu	કહેવું
+samjay	સમજાય
+samjayu	સમજાયું
+malvu	મળવું
+malyu	મળ્યું
+malyo	મળ્યો
+mali	મળી
+male	મળે
+malie	મળીએ
+maliye	મળીએ
+malishu	મળીશું
+malsu	મળીશું
+malshu	મળીશું
+malje	મળજે
+sambhal	સાંભળ
+sambhalyu	સાંભળ્યું
+sambhalvu	સાંભળવું
+jay	જાય
+jay	જય
+jvu	જવું
+avje	આવજે
+avjo	આવજો
+avu	આવું
+avyo	આવ્યો
+avi	આવી
+ave	આવે
+avshe	આવશે
+aavse	આવશે
+avse	આવશે
+thay	થાય
+thy	થાય
+rehvu	રહેવું
+rehje	રહેજે
+rakhje	રાખજે
+rakhvu	રાખવું
+rakh	રાખ
+vanchvu	વાંચવું
+vachvu	વાંચવું
+bhanvu	ભણવું
+bhanvanu	ભણવાનું
+suvu	સૂવું
+uthvu	ઊઠવું
+betho	બેઠો
+bethi	બેઠી
+chalo	ચાલો
+chal	ચાલ
+chalvu	ચાલવું
+chale	ચાલે
+chalse	ચાલશે
+chalshe	ચાલશે
+lage	લાગે
+lagyu	લાગ્યું
+lagse	લાગશે
+lagshe	લાગશે
+gamse	ગમશે
+pade	પડે
+padyu	પડ્યું
+padi	પડી
+padse	પડશે
+padshe	પડશે
+joise	જોઈશે
+joiae	જોઈએ
+shakay	શકાય
+puchh	પૂછ
+puchhvu	પૂછવું
+puchhyu	પૂછ્યું
+puchvu	પૂછવું
+puchyu	પૂછ્યું
+ladvu	લડવું
+chhod	છોડ
+chod	છોડ
+chhodi	છોડી
+chhodvu	છોડવું
+mukvu	મૂકવું
+muki	મૂકી
+muk	મૂક
+mukje	મૂકજે
+bhuli	ભૂલી
+bhulvu	ભૂલવું
+yad	યાદ
+vichar	વિચાર
+vicharvu	વિચારવું
+janvu	જાણવું
+jane	જાણે
+janu	જાણું
+khbr	ખબર
+nakh	નાખ
+nakhi	નાખી
+nakhvu	નાખવું
+
+# --- Food
+kam	કામ
+pani	પાણી
+paani	પાણી
+dudh	દૂધ
+nasto	નાસ્તો
+nashto	નાસ્તો
+rotli	રોટલી
+rotla	રોટલા
+shak	શાક
+dal	દાળ
+daal	દાળ
+bhat	ભાત
+khichdi	ખીચડી
+dhokla	ઢોકળા
+fafda	ફાફડા
+khaman	ખમણ
+undhiyu	ઊંધિયું
+khandvi	ખાંડવી
+puri	પૂરી
+mithai	મીઠાઈ
+
+# --- Family, people
+mummy	મમ્મી
+mummi	મમ્મી
+papa	પપ્પા
+bhai	ભાઈ
+behen	બહેન
+dadi	દાદી
+nani	નાની
+kaki	કાકી
+mami	મામી
+masi	માસી
+dikro	દીકરો
+dikri	દીકરી
+chokro	છોકરો
+chokri	છોકરી
+chokra	છોકરા
+balko	બાળકો
+baalko	બાળકો
+balak	બાળક
+sasu	સાસુ
+vahu	વહુ
+manas	માણસ
+maanas	માણસ
+
+# --- Time words, places
+varsh	વર્ષ
+athvadiyu	અઠવાડિયું
+ravivar	રવિવાર
+somvar	સોમવાર
+gam	ગામ
+sheher	શહેર
+dukan	દુકાન
+bajar	બજાર
+bazar	બજાર
+nishal	નિશાળ
+gujarat	ગુજરાત
+gujarati	ગુજરાતી
+amdavad	અમદાવાદ
+ahmedabad	અમદાવાદ
+rajkot	રાજકોટ
+vadodara	વડોદરા
+mumbai	મુંબઈ
+saurashtra	સૌરાષ્ટ્ર
+kathiyawad	કાઠિયાવાડ
+
+# --- Body, health
+davakhanu	દવાખાનું
+dukhavo	દુખાવો
+tav	તાવ
+sharir	શરીર
+mathu	માથું
+ankh	આંખ
+hath	હાથ
+mo	મોં
+
+# --- Feelings, misc
+vat	વાત
+vato	વાતો
+rupiya	રૂપિયા
+maza	મજા
+majama	મજામાં
+mja	મજા
+pyar	પ્યાર
+zindagi	જિંદગી
+jivan	જીવન
+dukh	દુઃખ
+vishvas	વિશ્વાસ
+bhagwan	ભગવાન
+bhagvan	ભગવાન
+mataji	માતાજી
+prabhu	પ્રભુ
+bhasha	ભાષા
+pariksha	પરીક્ષા
+lagna	લગ્ન
+gussa	ગુસ્સો
+udas	ઉદાસ
+bhukh	ભૂખ
+gadi	ગાડી
+
+# --- Adjectives, numbers
+kharab	ખરાબ
+motu	મોટું
+moto	મોટો
+moti	મોટી
+mota	મોટા
+nanu	નાનું
+nano	નાનો
+nana	નાના
+juno	જૂનો
+junu	જૂનું
+juni	જૂની
+thandu	ઠંડું
+thandi	ઠંડી
+mithu	મીઠું
+khatu	ખાટું
+tikhu	તીખું
+lambu	લાંબું
+tunku	ટૂંકું
+uchu	ઊંચું
+dhimu	ધીમું
+zadpi	ઝડપી
+taiyar	તૈયાર
+tran	ત્રણ
+char	ચાર
+panch	પાંચ
+chha	છ
+sat	સાત
+aath	આઠ
+vis	વીસ
+hajar	હજાર
+pehlo	પહેલો
+biju	બીજું
+bijo	બીજો
+biji	બીજી
+trijo	ત્રીજો
+
+# --- Greetings, festivals
+abhar	આભાર
+aabhar	આભાર
+dhanyavad	ધન્યવાદ
+jai	જય
+krishna	કૃષ્ણ
+krushna	કૃષ્ણ
+suprabhat	સુપ્રભાત
+navratri	નવરાત્રી
+diwali	દિવાળી
+divali	દિવાળી
+holi	હોળી
+uttarayan	ઉત્તરાયણ
+janmdivas	જન્મદિવસ

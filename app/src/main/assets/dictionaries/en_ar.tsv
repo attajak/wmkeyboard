@@ -1,0 +1,166 @@
+# English → Arabic loanword map.
+#
+# Words Arabic speakers routinely write in the Arabic script but which are NOT
+# phonetically derivable from the Arabizi phonetic rules: English spelling says
+# little about English sound, and Arabic writes long vowels the rules cannot
+# guess, so "mobile" would come out مبلة and "phone" بهنة. Typed on the Arabic
+# phonetic layout, the English spelling on the left commits the Arabic on the
+# right.
+#
+# Kept short on purpose. A word is here only if the Arabic script is how it is
+# normally written in Arabic text (موبايل, كمبيوتر, دكتور); a word Arabic has its
+# own word for (school مدرسة, ticket تذكرة) is not a loanword and stays out, and
+# anything people write in Latin letters even mid-Arabic-sentence belongs in the
+# English-words setting instead, not here. Spellings follow the ar_full
+# frequency list; where Egypt and the Gulf differ, both are offered (جروب,
+# قروب). It is a draft and wants an Arabic speaker's review.
+#
+# Format: spelling<TAB>arabic   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+
+mobile	موبايل
+phone	تليفون
+phone	تلفون
+computer	كمبيوتر
+laptop	لابتوب
+tablet	تابلت
+ipad	آيباد
+iphone	آيفون
+internet	إنترنت
+internet	انترنت
+email	إيميل
+email	ايميل
+wifi	وايفاي
+bluetooth	بلوتوث
+password	باسورد
+video	فيديو
+film	فيلم
+cinema	سينما
+radio	راديو
+tv	تلفزيون
+television	تلفزيون
+camera	كاميرا
+mouse	ماوس
+keyboard	كيبورد
+battery	بطارية
+cable	كابل
+taxi	تاكسي
+bus	باص
+bus	أتوبيس
+metro	مترو
+uber	أوبر
+motor	موتور
+benzine	بنزين
+petrol	بنزين
+garage	جراج
+bank	بنك
+visa	فيزا
+dollar	دولار
+euro	يورو
+million	مليون
+check	شيك
+doctor	دكتور
+police	بوليس
+mister	مستر
+madam	مدام
+baby	بيبي
+captain	كابتن
+chef	شيف
+pizza	بيتزا
+burger	برجر
+sandwich	ساندويتش
+chocolate	شوكولاتة
+cake	كيك
+biscuit	بسكويت
+chips	تشيبس
+ketchup	كاتشب
+mayonnaise	مايونيز
+pasta	باستا
+spaghetti	سباغيتي
+macaroni	معكرونة
+salad	سلطة
+donut	دونات
+cola	كولا
+cafe	كافيه
+cappuccino	كابتشينو
+ok	اوكي
+okay	اوكي
+bye	باي
+hi	هاي
+hello	هالو
+sorry	سوري
+please	بليز
+wow	واو
+nice	نايس
+cool	كول
+super	سوبر
+happy	هابي
+weekend	ويكند
+like	لايك
+share	شير
+post	بوست
+story	ستوري
+follow	فولو
+block	بلوك
+chat	شات
+group	قروب
+group	جروب
+link	لينك
+online	اونلاين
+live	لايف
+page	بيج
+admin	أدمن
+trend	ترند
+mood	مود
+crush	كراش
+style	ستايل
+selfie	سيلفي
+youtube	يوتيوب
+facebook	فيسبوك
+whatsapp	واتساب
+instagram	انستغرام
+twitter	تويتر
+snapchat	سناب
+google	جوجل
+google	غوغل
+samsung	سامسونج
+netflix	نتفليكس
+zoom	زوم
+message	مسج
+playstation	بلايستيشن
+anime	أنمي
+cartoon	كرتون
+match	ماتش
+gym	جيم
+tennis	تنس
+mall	مول
+market	ماركت
+supermarket	سوبرماركت
+jeans	جينز
+jacket	جاكيت
+pajamas	بيجاما
+shampoo	شامبو
+salon	صالون
+balcony	بلكونة
+sofa	صوفا
+course	كورس
+plan	بلان
+program	برنامج
+technology	تكنولوجيا
+democracy	ديمقراطية
+academy	أكاديمية
+music	موسيقى
+piano	بيانو
+guitar	جيتار
+microphone	ميكروفون
+kilo	كيلو
+meter	متر
+liter	لتر
+virus	فيروس
+corona	كورونا
+covid	كوفيد
+vitamin	فيتامين
+oxygen	أكسجين
+robot	روبوت
+physics	فيزياء
+chemistry	كيمياء

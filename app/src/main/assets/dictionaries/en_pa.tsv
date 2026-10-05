@@ -1,0 +1,173 @@
+# English → Punjabi (Gurmukhi) loanword map.
+#
+# Words Punjabi speakers routinely write in Gurmukhi but which are NOT
+# phonetically derivable from the Punjabi phonetic rules: English spelling says
+# little about English sound, so "school" would come out ਸਚੂਲ and "phone"
+# ਫੋਣੇ. Typed on the Punjabi phonetic layout, the English spelling on the left
+# resolves directly to the Gurmukhi form on the right, ahead of the rules and
+# of the dictionary.
+#
+# A hand-written draft that wants a Punjabi speaker's review. A wrong entry
+# here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>gurmukhi   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+# No "sir": on this layout it is ਸਿਰ (head), typed far more often than the title.
+
+# --- Technology / devices ---
+phone	ਫ਼ੋਨ
+phone	ਫੋਨ
+mobile	ਮੋਬਾਈਲ
+computer	ਕੰਪਿਊਟਰ
+laptop	ਲੈਪਟਾਪ
+internet	ਇੰਟਰਨੈੱਟ
+online	ਆਨਲਾਈਨ
+whatsapp	ਵਟਸਐਪ
+facebook	ਫੇਸਬੁੱਕ
+youtube	ਯੂਟਿਊਬ
+instagram	ਇੰਸਟਾਗ੍ਰਾਮ
+google	ਗੂਗਲ
+video	ਵੀਡੀਓ
+photo	ਫ਼ੋਟੋ
+photo	ਫੋਟੋ
+message	ਮੈਸੇਜ
+call	ਕਾਲ
+app	ਐਪ
+website	ਵੈੱਬਸਾਈਟ
+email	ਈਮੇਲ
+password	ਪਾਸਵਰਡ
+camera	ਕੈਮਰਾ
+tv	ਟੀਵੀ
+radio	ਰੇਡੀਓ
+battery	ਬੈਟਰੀ
+charger	ਚਾਰਜਰ
+sim	ਸਿਮ
+network	ਨੈੱਟਵਰਕ
+link	ਲਿੰਕ
+post	ਪੋਸਟ
+status	ਸਟੇਟਸ
+# --- School / office ---
+school	ਸਕੂਲ
+college	ਕਾਲਜ
+university	ਯੂਨੀਵਰਸਿਟੀ
+class	ਕਲਾਸ
+teacher	ਟੀਚਰ
+student	ਸਟੂਡੈਂਟ
+paper	ਪੇਪਰ
+exam	ਐਗਜ਼ਾਮ
+result	ਰਿਜ਼ਲਟ
+book	ਬੁੱਕ
+copy	ਕਾਪੀ
+pen	ਪੈੱਨ
+office	ਆਫ਼ਿਸ
+company	ਕੰਪਨੀ
+job	ਜੌਬ
+boss	ਬੌਸ
+manager	ਮੈਨੇਜਰ
+meeting	ਮੀਟਿੰਗ
+project	ਪ੍ਰੋਜੈਕਟ
+report	ਰਿਪੋਰਟ
+form	ਫ਼ਾਰਮ
+file	ਫ਼ਾਈਲ
+degree	ਡਿਗਰੀ
+# --- Health ---
+doctor	ਡਾਕਟਰ
+hospital	ਹਸਪਤਾਲ
+nurse	ਨਰਸ
+injection	ਇੰਜੈਕਸ਼ਨ
+test	ਟੈਸਟ
+# --- Travel / places ---
+bus	ਬੱਸ
+train	ਟਰੇਨ
+ticket	ਟਿਕਟ
+station	ਸਟੇਸ਼ਨ
+airport	ਏਅਰਪੋਰਟ
+car	ਕਾਰ
+taxi	ਟੈਕਸੀ
+truck	ਟਰੱਕ
+tractor	ਟਰੈਕਟਰ
+road	ਰੋਡ
+hotel	ਹੋਟਲ
+market	ਮਾਰਕੀਟ
+park	ਪਾਰਕ
+police	ਪੁਲਿਸ
+canada	ਕੈਨੇਡਾ
+england	ਇੰਗਲੈਂਡ
+america	ਅਮਰੀਕਾ
+australia	ਆਸਟ੍ਰੇਲੀਆ
+india	ਇੰਡੀਆ
+delhi	ਦਿੱਲੀ
+visa	ਵੀਜ਼ਾ
+passport	ਪਾਸਪੋਰਟ
+flight	ਫਲਾਈਟ
+# --- Money / shopping ---
+bank	ਬੈਂਕ
+card	ਕਾਰਡ
+cash	ਕੈਸ਼
+shop	ਸ਼ਾਪ
+shopping	ਸ਼ਾਪਿੰਗ
+order	ਆਰਡਰ
+free	ਫ਼ਰੀ
+dollar	ਡਾਲਰ
+rupees	ਰੁਪਏ
+rupee	ਰੁਪਿਆ
+# --- Food ---
+coffee	ਕੌਫੀ
+pizza	ਪੀਜ਼ਾ
+burger	ਬਰਗਰ
+cake	ਕੇਕ
+chocolate	ਚਾਕਲੇਟ
+juice	ਜੂਸ
+# --- Time / everyday ---
+time	ਟਾਈਮ
+minute	ਮਿੰਟ
+sunday	ਸੰਡੇ
+party	ਪਾਰਟੀ
+birthday	ਬਰਥਡੇ
+match	ਮੈਚ
+team	ਟੀਮ
+cricket	ਕ੍ਰਿਕਟ
+game	ਗੇਮ
+film	ਫ਼ਿਲਮ
+movie	ਮੂਵੀ
+music	ਮਿਊਜ਼ਿਕ
+news	ਨਿਊਜ਼
+room	ਰੂਮ
+light	ਲਾਈਟ
+gas	ਗੈਸ
+# --- Chat ---
+ok	ਓਕੇ
+okay	ਓਕੇ
+sorry	ਸੌਰੀ
+please	ਪਲੀਜ਼
+thanks	ਥੈਂਕਸ
+welcome	ਵੈਲਕਮ
+hello	ਹੈਲੋ
+bye	ਬਾਏ
+good	ਗੁੱਡ
+night	ਨਾਈਟ
+morning	ਮਾਰਨਿੰਗ
+love	ਲਵ
+miss	ਮਿਸ
+happy	ਹੈਪੀ
+tension	ਟੈਂਸ਼ਨ
+problem	ਪ੍ਰਾਬਲਮ
+mummy	ਮੰਮੀ
+papa	ਪਾਪਾ
+uncle	ਅੰਕਲ
+aunty	ਆਂਟੀ
+madam	ਮੈਡਮ
+family	ਫੈਮਿਲੀ
+friend	ਫ੍ਰੈਂਡ
+friend	ਫਰੈਂਡ
+# --- Vehicles ---
+driver	ਡਰਾਈਵਰ
+petrol	ਪੈਟਰੋਲ
+diesel	ਡੀਜ਼ਲ
+bike	ਬਾਈਕ
+scooter	ਸਕੂਟਰ
+medical	ਮੈਡੀਕਲ
+gift	ਗਿਫਟ
+lunch	ਲੰਚ
+dinner	ਡਿਨਰ
+breakfast	ਬ੍ਰੇਕਫਾਸਟ

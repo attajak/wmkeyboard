@@ -1,0 +1,186 @@
+# English → Gujarati loanword map.
+#
+# Words Gujarati speakers routinely write in Gujarati script but which are NOT
+# phonetically derivable from the Gujarati phonetic rules: English spelling says
+# little about English sound, so "school" would come out સ્ચૂલ and "phone"
+# ફોને. Typed on the Gujarati phonetic layout, the English spelling on the left
+# resolves directly to the Gujarati form on the right, ahead of the rules and of
+# the dictionary.
+#
+# Spelling follows the commoner written form: ઇ in English "ai"/"i" (મોબાઇલ,
+# લાઇટ), ઓ rather than ઑ (ઓફિસ, કોલેજ), no nukta (Gujarati writes ફ for f, ઝ
+# for z).
+#
+# A hand-written draft that wants a Gujarati speaker's review. A wrong entry
+# here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>gujarati   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+# --- Technology / devices ---
+phone	ફોન
+mobile	મોબાઇલ
+computer	કમ્પ્યુટર
+laptop	લેપટોપ
+internet	ઇન્ટરનેટ
+online	ઓનલાઇન
+offline	ઓફલાઇન
+email	ઈમેલ
+message	મેસેજ
+msg	મેસેજ
+call	કોલ
+video	વિડિયો
+photo	ફોટો
+camera	કેમેરા
+screen	સ્ક્રીન
+charger	ચાર્જર
+battery	બેટરી
+network	નેટવર્ક
+wifi	વાઇફાઇ
+data	ડેટા
+app	એપ
+software	સોફ્ટવેર
+website	વેબસાઇટ
+password	પાસવર્ડ
+account	એકાઉન્ટ
+download	ડાઉનલોડ
+update	અપડેટ
+file	ફાઇલ
+number	નંબર
+whatsapp	વોટ્સએપ
+facebook	ફેસબુક
+google	ગૂગલ
+youtube	યુટ્યુબ
+instagram	ઇન્સ્ટાગ્રામ
+tv	ટીવી
+radio	રેડિયો
+machine	મશીન
+light	લાઇટ
+switch	સ્વિચ
+recharge	રિચાર્જ
+group	ગ્રુપ
+like	લાઇક
+comment	કોમેન્ટ
+
+# --- School / study ---
+school	સ્કૂલ
+college	કોલેજ
+class	ક્લાસ
+teacher	ટીચર
+exam	એક્ઝામ
+result	રિઝલ્ટ
+tuition	ટ્યુશન
+homework	હોમવર્ક
+book	બુક
+paper	પેપર
+project	પ્રોજેક્ટ
+university	યુનિવર્સિટી
+student	સ્ટુડન્ટ
+
+# --- Work / money ---
+office	ઓફિસ
+boss	બોસ
+meeting	મીટિંગ
+company	કંપની
+bank	બેંક
+salary	સેલરી
+card	કાર્ડ
+cash	કેશ
+
+# --- Health ---
+doctor	ડોક્ટર
+hospital	હોસ્પિટલ
+medical	મેડિકલ
+medicine	મેડિસિન
+test	ટેસ્ટ
+report	રિપોર્ટ
+injection	ઇન્જેક્શન
+operation	ઓપરેશન
+ambulance	એમ્બ્યુલન્સ
+
+# --- Transport ---
+bus	બસ
+train	ટ્રેન
+car	કાર
+bike	બાઇક
+rickshaw	રિક્ષા
+station	સ્ટેશન
+ticket	ટિકિટ
+petrol	પેટ્રોલ
+road	રોડ
+airport	એરપોર્ટ
+flight	ફ્લાઇટ
+traffic	ટ્રાફિક
+driver	ડ્રાઇવર
+scooter	સ્કૂટર
+
+# --- Home / food / shopping ---
+hotel	હોટેલ
+restaurant	રેસ્ટોરન્ટ
+table	ટેબલ
+fridge	ફ્રિજ
+ac	એસી
+glass	ગ્લાસ
+bottle	બોટલ
+coffee	કોફી
+pizza	પિઝા
+chocolate	ચોકલેટ
+icecream	આઇસ્ક્રીમ
+biscuit	બિસ્કિટ
+market	માર્કેટ
+shopping	શોપિંગ
+order	ઓર્ડર
+delivery	ડિલિવરી
+party	પાર્ટી
+birthday	બર્થડે
+gift	ગિફ્ટ
+
+# --- Entertainment / sport ---
+movie	મૂવી
+picture	પિક્ચર
+music	મ્યુઝિક
+cricket	ક્રિકેટ
+match	મેચ
+game	ગેમ
+
+# --- Everyday words ---
+time	ટાઇમ
+minute	મિનિટ
+police	પોલીસ
+plan	પ્લાન
+problem	પ્રોબ્લેમ
+tension	ટેન્શન
+sorry	સોરી
+thanks	થેંક્સ
+please	પ્લીઝ
+ok	ઓકે
+okay	ઓકે
+hello	હેલો
+hi	હાય
+bye	બાય
+good	ગુડ
+morning	મોર્નિંગ
+night	નાઇટ
+
+# --- People ---
+sir	સર
+uncle	અંકલ
+aunty	આન્ટી
+friend	ફ્રેન્ડ
+family	ફેમિલી
+love	લવ
+life	લાઇફ
+style	સ્ટાઇલ
+fashion	ફેશન
+dress	ડ્રેસ
+shirt	શર્ટ
+address	એડ્રેસ
+lift	લિફ્ટ
+flat	ફ્લેટ
+society	સોસાયટી
+building	બિલ્ડિંગ
+gym	જિમ
+idea	આઇડિયા
+selfie	સેલ્ફી
+busy	બિઝી
+private	પ્રાઇવેટ

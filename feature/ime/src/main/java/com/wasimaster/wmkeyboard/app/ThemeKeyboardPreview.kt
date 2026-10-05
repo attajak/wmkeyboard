@@ -160,7 +160,7 @@ fun ThemeKeyboardPreview(
         previewLayoutSet(spec, form, previewSettings.numberRow, customs)
     }
     val script = remember(spec) { spec.script() }
-    val composer = remember(spec, script) { composerFor(script, spec.composerType()) }
+    val composer = remember(spec, script) { composerFor(script, spec.composerType(), spec.langId) }
     val sandboxContext = remember(previewSettings, spec, layouts) {
         SandboxContext(
             cased = script.hasLetterCase,

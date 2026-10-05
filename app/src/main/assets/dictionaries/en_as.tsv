@@ -1,0 +1,183 @@
+# English → Assamese loanword map.
+#
+# Words Assamese speakers routinely write in Assamese script but which are NOT
+# phonetically derivable from the Assamese phonetic rules: English spelling
+# says little about English sound, and Assamese has its own habits for English
+# sounds on top — an English s is usually চ or ছ ("office" অফিচ, "bus" বাছ),
+# an English short o is ' or ো ("mobile" ম'বাইল), "a" in "bank" is এ (বেংক).
+# Typed on the Assamese phonetic layout, the English spelling on the left
+# resolves directly to the Assamese form on the right, ahead of the rules and of
+# the dictionary.
+#
+# A hand-written draft that wants an Assamese speaker's review. Every spelling
+# was checked against the Assamese word list in wmkeyboard-data
+# (data/as/as_full.txt.gz); where the list has two spellings, the commoner one
+# comes first. A wrong entry here is worse than a missing one, since it
+# outranks everything.
+#
+# Format: english<TAB>assamese   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+# --- Technology / devices ---
+phone	ফোন
+mobile	ম'বাইল
+mobile	মোবাইল
+computer	কম্পিউটাৰ
+laptop	লেপটপ
+keyboard	কীবৰ্ড
+screen	স্ক্ৰীন
+battery	বেটেৰী
+camera	কেমেৰা
+tv	টিভি
+radio	ৰেডিঅ'
+internet	ইণ্টাৰনেট
+wifi	ৱাই-ফাই
+online	অনলাইন
+offline	অফলাইন
+data	ডাটা
+app	এপ
+website	ৱেবছাইট
+link	লিংক
+password	পাছৱৰ্ড
+account	একাউণ্ট
+download	ডাউনলোড
+upload	আপল'ড
+update	আপডেট
+file	ফাইল
+
+# --- Messaging / social ---
+message	মেছেজ
+msg	মেছেজ
+email	ইমেইল
+mail	মেইল
+call	কল
+video	ভিডিঅ'
+photo	ফটো
+chat	চেট
+group	গ্ৰুপ
+post	পোষ্ট
+like	লাইক
+share	শ্বেয়াৰ
+facebook	ফেচবুক
+youtube	ইউটিউব
+whatsapp	হোৱাটচএপ
+google	গুগল
+
+# --- School / study ---
+school	স্কুল
+college	কলেজ
+class	ক্লাছ
+sir	ছাৰ
+sir	চাৰ
+madam	মেডাম
+student	ষ্টুডেণ্ট
+teacher	টিচাৰ
+tuition	টিউচন
+project	প্ৰজেক্ট
+copy	কপি
+notes	নোট
+note	নোট
+pass	পাছ
+fail	ফেল
+board	ব'ৰ্ড
+library	লাইব্ৰেৰী
+hostel	হোষ্টেল
+canteen	কেণ্টিন
+
+# --- Work / town ---
+doctor	ডাক্তৰ
+nurse	নাৰ্চ
+medicine	মেডিচিন
+police	পুলিচ
+office	অফিচ
+bank	বেংক
+bill	বিল
+company	কোম্পানী
+boss	বছ
+meeting	মিটিং
+manager	মেনেজাৰ
+engineer	ইঞ্জিনিয়াৰ
+driver	ড্ৰাইভাৰ
+form	ফৰ্ম
+number	নম্বৰ
+card	কাৰ্ড
+
+# --- Travel / places ---
+bus	বাছ
+bike	বাইক
+cycle	চাইকেল
+train	ট্ৰেইন
+ticket	টিকট
+station	ষ্টেচন
+road	ৰোড
+hotel	হোটেল
+restaurant	ৰেষ্টুৰেণ্ট
+market	মাৰ্কেট
+mall	মল
+taxi	টেক্সী
+auto	অটো
+airport	এয়াৰপৰ্ট
+flight	ফ্লাইট
+tour	টুৰ
+trip	ট্ৰিপ
+gym	জিম
+
+# --- Entertainment / sport ---
+party	পাৰ্টি
+team	টিম
+match	মেচ
+cricket	ক্ৰিকেট
+football	ফুটবল
+ball	বল
+game	গেম
+movie	মুভি
+music	মিউজিক
+hero	হিৰো
+heroine	হিৰোইন
+
+# --- Food / home ---
+cake	কেক
+chocolate	চকলেট
+coffee	কফি
+biscuit	বিস্কুট
+tiffin	টিফিন
+lunch	লাঞ্চ
+dinner	ডিনাৰ
+ice	আইচ
+chicken	চিকেন
+cream	ক্ৰীম
+bottle	বটল
+table	টেবুল
+gate	গেট
+light	লাইট
+fan	ফেন
+bag	বেগ
+shirt	চাৰ্ট
+pant	পেণ্ট
+gift	গিফ্ট
+
+# --- Everyday chat ---
+hello	হেলো
+hi	হাই
+bye	বাই
+ok	অ'কে
+okay	অ'কে
+welcome	ৱেলকাম
+birthday	বাৰ্থডে
+happy	হেপি
+good	গুড
+nice	নাইচ
+cool	কুল
+super	চুপাৰ
+smart	স্মাৰ্ট
+best	বেষ্ট
+fine	ফাইন
+late	লেট
+baby	বেবী
+uncle	আংকল
+aunty	আণ্টি
+time	টাইম
+minute	মিনিট
+date	ডেট
+news	নিউজ
+paper	পেপাৰ

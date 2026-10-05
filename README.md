@@ -69,6 +69,7 @@ Every one of these runs on the device, with no network and no delay.
 | `ami valo achi` | আমি ভালো আছি | Avro-compatible Bangla phonetic, with a lenient index: `asi`, `achi` and `achhi` all reach আছি |
 | `namaste` | नमस्ते | Hindi phonetic with a map of how people actually romanise Hindi |
 | `aap kaise ho` | آپ کیسے ہو | Urdu phonetic, folding to the consonant skeleton the script itself spells with |
+| `vanakkam`, `nenu`, `3arabi` | Tamil, Telugu, Arabic script | Phonetic layouts for eleven more languages, Arabizi digits included |
 | `nihao` | 你好 | Pinyin, including a T9 nine-key variant |
 | `konnichiwa` | こんにちは | Romaji to kana with conversion candidates |
 | `xin chaof` | xin chào | Vietnamese Telex |

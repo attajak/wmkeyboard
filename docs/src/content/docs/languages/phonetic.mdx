@@ -1,0 +1,97 @@
+---
+title: "Phonetic typing in more languages"
+description: "Roman letters in, native script out, for Marathi, Gujarati, Punjabi, Odia, Assamese, Tamil, Telugu, Kannada, Malayalam, Persian and Arabic."
+sidebar:
+  order: 3.7
+---
+
+import SettingsPath from '@components/SettingsPath.astro';
+
+Bangla has [Avro](/languages/bengali/), Hindi has [Hindi phonetic](/languages/hindi/) and Urdu has [Urdu phonetic](/languages/urdu/). Eleven more languages now have the same kind of layout: a QWERTY grid where you type a word the way you'd write it in a chat, and the keyboard writes it in the language's own script. Type `vanakkam` on Tamil phonetic and you get Tamil; type `el7amdulillah` on Arabic phonetic and you get الحمدلله.
+
+| Language | Layout | You type | You get |
+|---|---|---|---|
+| Marathi | Marathi phonetic | `tumhi`, `tyala` | तुम्ही, त्याला |
+| Gujarati | Gujarati phonetic | `tame`, `chhu` | તમે, છું |
+| Punjabi | Punjabi phonetic | `mainu`, `ohda` | ਮੈਨੂੰ, ਉਹਦਾ |
+| Odia | Odia phonetic | `tume`, `kemiti` | ତୁମେ, କେମିତି |
+| Assamese | Assamese phonetic | `tumar`, `xokolu` | তোমাৰ, সকলো |
+| Tamil | Tamil phonetic | `naan`, `neenga` | நான், நீங்க |
+| Telugu | Telugu phonetic | `nenu`, `meeru` | నేను, మీరు |
+| Kannada | Kannada phonetic | `naanu`, `namma` | ನಾನು, ನಮ್ಮ |
+| Malayalam | Malayalam phonetic | `njaan`, `ningal` | ഞാൻ, നിങ്ങൾ |
+| Persian | Persian phonetic | `kheili`, `mikonam` | خیلی, می‌کنم |
+| Arabic | Arabic phonetic | `3arabi`, `kayf` | عربي, كيف |
+
+## Turning one on
+
+<SettingsPath path="Languages & layouts / your language / Layouts" />
+
+Add the language, open its screen, and turn on its **phonetic** card under **Layouts**. The layout the language already had stays the default, so adding a language still gives you the keyboard you'd expect for it; the phonetic one is a choice. Then download the language's word list from the **Dictionary** row on the same screen. None of these lists ships inside the app, and the next section explains why the phonetic layout cares more than most.
+
+Every key is where it is on the English layout. What you type shows up in the native script in the composing text straight away, and the space commits it. The keys stay left-to-right on Persian and Arabic while the text runs right to left, as on Urdu phonetic.
+
+## How a word is read
+
+Three layers, the same three Hindi and Urdu phonetic use, in this order:
+
+1. **A list of known spellings**, a few hundred words for each language: the commonest words whose roman spelling doesn't carry enough to get the script right, chat shorthand, and English loanwords written in the script (`school`, `phone`, `doctor`). A spelling on the list is settled there, and it shows in the composing text the moment you finish typing it.
+2. **The language's word list, if you've downloaded it.** What you typed and every word on the list are reduced to a loose key that forgets what roman spelling never says — vowel length, dental against retroflex, aspiration, the letters a script keeps for its loanwords — and keeps those details only to rank the candidates. With the list installed, the right word comes first for most chat spellings: Marathi 90%, Gujarati 82%, Telugu 78%, Punjabi 75%, Kannada 60%, Malayalam 56%, Odia 54%, Tamil 48% (measured on about 200 everyday chat spellings per language).
+3. **The rules alone**, for every word that's in neither. They make the likelier guess, and the strip offers the other readings next to it — the same spelling with a vowel read long, with a different closing vowel — so you can tap the one you meant.
+
+The rules alone get about half of everyday words exactly right: Tamil 66%, Kannada and Malayalam 60%, Marathi 57%, Punjabi 57%, Gujarati 55%, Telugu 53%, Odia 42%, Persian 67%, Arabic 46%. The rest are lexical facts no rule can know, which is what the first two layers are for.
+
+:::note
+None of this is part of autocorrect, and the autocorrect toggle doesn't control it. The known-spellings list has its own switch, <SettingsPath path="Languages & layouts / your language / Spellings / Use known spellings" />, and so does a space committing a dictionary word instead of the rules' spelling: **Correct to dictionary words** in the same group.
+:::
+
+## What each language does
+
+### Marathi, Gujarati and Punjabi
+
+These follow Hindi phonetic's model: you write the word the way it sounds, the inherent vowel drops in speech, and a final vowel is long. Each language has its own grammatical endings the rules keep clear of a conjunct.
+
+- **Marathi** reads `z` and `zh` as झ (`maza`, `tuza`), `L` as ळ, and knows its own postpositions and verb endings: `tyala` त्याला, `karnar` करणार, `karun` करून, `gharachya` घराच्या, `mitranno` मित्रांनो.
+- **Gujarati** reads `z` as ઝ and `x` as ક્ષ (`Axar`, `Laxmi`), writes the neuter and infinitive endings with their nasal (`hu` હું, `karvu` કરવું, `kartu` કરતું), and the locative too (`gharma` ઘરમાં).
+- **Punjabi** is written in Gurmukhi, which has almost no conjuncts: a doubled consonant is the addak (`pakka` ਪੱਕਾ), a nasal is a tippi or a bindi by the vowel before it (`mainu` ਮੈਨੂੰ, `ton` ਤੋਂ), and a y-glide is a vowel carrier rather than ਯ (`pyar` ਪਿਆਰ, `gya` ਗਿਆ, `duniya` ਦੁਨੀਆ).
+
+### Odia, Tamil, Telugu, Kannada and Malayalam
+
+These languages pronounce every vowel, so people type every vowel: `amma`, `nanna`, `avan`. A consonant straight after a consonant is a conjunct, and a word-final consonant takes a virama (Tamil's pulli, Malayalam's chillu).
+
+- **Short and long e and o** are separate letters in the four Dravidian languages. Type `E` or `O` for the long one if you want to be exact; otherwise each language's rules pick the likelier one from context (`nenu` నేను, `beku` ಬೇಕು).
+- **Tamil** has no separate voiced or aspirated letters, so `g d b` and `k t p` write the same Tamil letter. `zh` is ழ, `L` ள, `R` or `rr` ற, `ndr` ன்ற (`nandri` நன்றி), and a single stop between vowels is doubled the way Tamil writes it (`iruku` இருக்கு).
+- **Malayalam** follows the Mozhi conventions people already use: `t` ട, `th` ത, `d` ഡ, `dh` ദ, `nt` ന്റ (`ente` എന്റെ), `ng` ങ്ങ, `nj` ഞ, `zh` ഴ, and a final `m` is ം.
+- **Telugu** reads `th` and `dh` as the plain dentals (`thammudu` తమ్ముడు), and a final `m` as ం (`manam` మనం).
+- **Kannada** reads `th` as ತ and knows its plural `-galu` and the long first vowels of its commonest words (`beku` ಬೇಕು, `helu` ಹೇಳು).
+- **Odia** writes ଯ where a word opens and ୟ elsewhere, ୱ for `w`, and spells its nasal clusters as conjuncts (`ranga` ରଙ୍ଗ, `pancha` ପଞ୍ଚ).
+
+### Assamese
+
+Assamese uses Avro's rules — people romanize it the way they romanize Bangla — with three changes: every র is ৰ, an `x` is the Assamese স (`xokolu` সকলো, `axom` অসম), and a `w` gliding into a vowel is ৱ.
+
+### Persian
+
+`kh` is خ, `ch` چ, `zh` ژ, `gh` ق (`Gh` for غ). Short a, e and o aren't written inside a word, a final `e` is the silent ه (`khoone` خونه), and `i` is always the long ی. The verb prefixes می‌ and نمی‌ are written with the zero-width non-joiner the language uses (`mikonam` می‌کنم, `nemitoonam` نمی‌تونم).
+
+### Arabic
+
+Arabizi works, digits and all: `2` ق, `3` ع, `3'` غ, `5` خ, `6` ط, `6'` ظ, `7` ح, `8` ق, `9` ص, `9'` ض. A number you type on its own stays a number. `al`, `el` and `il` before a consonant are the article ال (`elyoum` اليوم, `essalam` السلام), `g` is ج, `ch` is ش, and a closing `a` is ا with ة and ى offered beside it. `2` is ق rather than the hamza of most charts, because the people who type `2` most mean the glottal stop their dialect says for ق (`2albi` قلبي); the real hamza words are in the known-spellings list.
+
+## Glide typing
+
+Swiping over a phonetic layout draws a romanization, so the stroke is decoded against romanized spellings and turned into the script, as on Avro. Marathi, Gujarati, Punjabi, Tamil, Telugu, Kannada, Malayalam and Arabic each have a romanized word list in the language catalogue that widens what a swipe can find. See [Glide typing](/typing/glide-typing/).
+
+## Switching mid-word
+
+If you notice halfway through a word that you're still on your Latin keyboard, switch to the phonetic layout: with **Carry the word over** on (the default), what you already typed is converted too. See [Switching languages](/languages/switching/#switching-mid-word-onto-a-phonetic-layout).
+
+## Details & edge cases
+
+**These are new, and every table is a draft.** The rules, the known-spellings lists and the loanword lists were written and measured against each language's word list and a hand-written set of everyday chat spellings, not reviewed by native speakers. If a common word comes out wrong with the word list installed, [open an issue](https://github.com/wasi-master/wmkeyboard/issues) and name the word and the spelling you typed.
+
+**Some word lists are better than others.** Tamil's has no frequencies at all, so the keyboard breaks ties by how close a candidate is to what the rules spell. Malayalam's comes from subtitles and Gujarati's, Marathi's and Kannada's from encyclopedic text, so spoken forms are thinner there, and the known-spellings lists lean on chat forms for that reason.
+
+**The phonetic machinery only loads if the layout is on.** A language with just its script layout enabled builds none of it.
+
+**There are no selection-bar conversion chips for these languages yet.** Bangla and Hindi have chips to convert selected text between roman and native script; these languages don't.

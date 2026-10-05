@@ -1,0 +1,531 @@
+# Romanized Kannada → Kannada spelling map.
+#
+# How people actually type Kannada in Latin letters, and what they mean by it.
+# Two kinds of spelling are here, and neither is reachable from the phonetic
+# rules:
+#
+#  - Words the rules get wrong because Latin spelling does not carry the
+#    difference: a long vowel nobody doubles ("nanu" is ನಾನು, "hogu" is ಹೋಗು),
+#    retroflex against dental ("madu" is ಮಾಡು, "oota" is ಊಟ), ಳ and ಣ typed
+#    as plain l and n ("helu" ಹೇಳು, "anna" ಅಣ್ಣ), a geminate typed single
+#    ("gothu" ಗೊತ್ತು), aspirates the rules read plain ("athava" ಅಥವಾ).
+#  - Spoken forms chat writes as they sound, which the formal word list lacks:
+#    "madtini" ಮಾಡ್ತೀನಿ, "hegidira" ಹೇಗಿದ್ದೀರಾ, "nange" ನಂಗೆ, "aithu" ಆಯ್ತು.
+#
+# The rules already handle th → ತ, sht → ಷ್ಟ, -galu → -ಗಳು, -agi → -ಾಗಿ,
+# ol → ಒಳ, -ona → -ಓಣ, a two-syllable "e" read long (beku ಬೇಕು) and more;
+# words they get right are left out. A hand-written draft of the commonest few
+# hundred words; it wants a Kannada speaker's review.
+#
+# Format: spelling<TAB>kannada   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+# Loaded after en_kn.tsv, so the hand-written loanword spellings win a tie.
+
+
+# --- pronouns ---
+nanu	ನಾನು
+ninu	ನೀನು
+navu	ನಾವು
+nivu	ನೀವು
+avalu	ಅವಳು
+avlu	ಅವ್ಳು
+ivlu	ಇವ್ಳು
+ivalu	ಇವಳು
+avlige	ಅವ್ಳಿಗೆ
+avalige	ಅವಳಿಗೆ
+ellaru	ಎಲ್ಲರೂ
+ellarigu	ಎಲ್ಲರಿಗೂ
+ellavu	ಎಲ್ಲವೂ
+
+# --- questions ---
+yaru	ಯಾರು
+yake	ಯಾಕೆ
+yak	ಯಾಕ್
+yava	ಯಾವ
+yavaga	ಯಾವಾಗ
+yaavaga	ಯಾವಾಗ
+yavdu	ಯಾವ್ದು
+yavudu	ಯಾವುದು
+en	ಏನ್
+yen	ಏನ್
+enri	ಏನ್ರಿ
+enadru	ಏನಾದ್ರು
+enaadru	ಏನಾದ್ರು
+enadaru	ಏನಾದರೂ
+enaytu	ಏನಾಯ್ತು
+enaaytu	ಏನಾಯ್ತು
+yenaytu	ಏನಾಯ್ತು
+hegidira	ಹೇಗಿದ್ದೀರಾ
+hegiddira	ಹೇಗಿದ್ದೀರಾ
+hegidiya	ಹೇಗಿದ್ದೀಯಾ
+hegiddiya	ಹೇಗಿದ್ದೀಯಾ
+hegidya	ಹೇಗಿದ್ಯಾ
+hegide	ಹೇಗಿದೆ
+
+# --- adverbs, particles ---
+iga	ಈಗ
+aga	ಆಗ
+amele	ಆಮೇಲೆ
+aamele	ಆಮೇಲೆ
+nale	ನಾಳೆ
+naale	ನಾಳೆ
+belagge	ಬೆಳಗ್ಗೆ
+beligge	ಬೆಳಿಗ್ಗೆ
+ratri	ರಾತ್ರಿ
+madhyana	ಮಧ್ಯಾಹ್ನ
+thumba	ತುಂಬಾ
+tumba	ತುಂಬಾ
+jasti	ಜಾಸ್ತಿ
+ashte	ಅಷ್ಟೇ
+hage	ಹಾಗೆ
+hige	ಹೀಗೆ
+adre	ಆದ್ರೆ
+adare	ಆದರೆ
+adru	ಆದ್ರೂ
+aadru	ಆದ್ರೂ
+yakandre	ಯಾಕಂದ್ರೆ
+kelage	ಕೆಳಗೆ
+alva	ಅಲ್ವಾ
+alwa	ಅಲ್ವಾ
+illva	ಇಲ್ವಾ
+ilva	ಇಲ್ವಾ
+illwa	ಇಲ್ವಾ
+houda	ಹೌದಾ
+howda	ಹೌದಾ
+beda	ಬೇಡ
+idya	ಇದ್ಯಾ
+idiya	ಇದ್ದೀಯಾ
+haagu	ಹಾಗೂ
+hagu	ಹಾಗೂ
+athava	ಅಥವಾ
+athavaa	ಅಥವಾ
+mulaka	ಮೂಲಕ
+sumaru	ಸುಮಾರು
+kevala	ಕೇವಲ
+matra	ಮಾತ್ರ
+kuda	ಕೂಡ
+bahala	ಬಹಳ
+prakara	ಪ್ರಕಾರ
+sahaya	ಸಹಾಯ
+nijvaagi	ನಿಜವಾಗಿ
+
+# --- verbs: madu ---
+madu	ಮಾಡು
+maadu	ಮಾಡು
+madi	ಮಾಡಿ
+madide	ಮಾಡಿದೆ
+madidya	ಮಾಡಿದ್ಯಾ
+maadidya	ಮಾಡಿದ್ಯಾ
+madtiya	ಮಾಡ್ತೀಯಾ
+madtini	ಮಾಡ್ತೀನಿ
+maadtini	ಮಾಡ್ತೀನಿ
+madthini	ಮಾಡ್ತೀನಿ
+madtidini	ಮಾಡ್ತಿದ್ದೀನಿ
+madtidya	ಮಾಡ್ತಿದ್ಯಾ
+madthidya	ಮಾಡ್ತಿದ್ಯಾ
+madtidiya	ಮಾಡ್ತಿದ್ದೀಯಾ
+madbeku	ಮಾಡ್ಬೇಕು
+maadbeku	ಮಾಡ್ಬೇಕು
+madbeda	ಮಾಡ್ಬೇಡ
+madona	ಮಾಡೋಣ
+maadona	ಮಾಡೋಣ
+madidru	ಮಾಡಿದ್ರು
+madidre	ಮಾಡಿದ್ರೆ
+madodu	ಮಾಡೋದು
+madalu	ಮಾಡಲು
+
+# --- hogu ---
+hogu	ಹೋಗು
+hogi	ಹೋಗಿ
+hogona	ಹೋಗೋಣ
+hogtini	ಹೋಗ್ತೀನಿ
+hogthini	ಹೋಗ್ತೀನಿ
+hogtiya	ಹೋಗ್ತೀಯಾ
+hogtidini	ಹೋಗ್ತಿದ್ದೀನಿ
+hogbeku	ಹೋಗ್ಬೇಕು
+hogbeda	ಹೋಗ್ಬೇಡ
+hogidde	ಹೋಗಿದ್ದೆ
+hogo	ಹೋಗೋ
+hoytu	ಹೋಯ್ತು
+hogalla	ಹೋಗಲ್ಲ
+hogodu	ಹೋಗೋದು
+hogide	ಹೋಗಿದೆ
+hoda	ಹೋದ
+hodru	ಹೋದ್ರು
+
+# --- baru ---
+ba	ಬಾ
+baro	ಬಾರೋ
+bartiya	ಬರ್ತೀಯಾ
+barthiya	ಬರ್ತೀಯಾ
+barbeku	ಬರ್ಬೇಕು
+bandidini	ಬಂದಿದ್ದೀನಿ
+
+# --- nodu ---
+nodu	ನೋಡು
+nodi	ನೋಡಿ
+nodona	ನೋಡೋಣ
+nodtini	ನೋಡ್ತೀನಿ
+nodide	ನೋಡಿದೆ
+nodidya	ನೋಡಿದ್ಯಾ
+nodbeku	ನೋಡ್ಬೇಕು
+nodkondu	ನೋಡ್ಕೊಂಡು
+
+# --- helu, kelu ---
+helu	ಹೇಳು
+heli	ಹೇಳಿ
+heltini	ಹೇಳ್ತೀನಿ
+helthini	ಹೇಳ್ತೀನಿ
+helde	ಹೇಳ್ದೆ
+helidru	ಹೇಳಿದ್ರು
+helide	ಹೇಳಿದೆ
+kelu	ಕೇಳು
+keli	ಕೇಳಿ
+kelide	ಕೇಳಿದೆ
+
+# --- kodu, tago, tinnu, kudi, odu ---
+kodu	ಕೊಡು
+kodtini	ಕೊಡ್ತೀನಿ
+kotte	ಕೊಟ್ಟೆ
+kottu	ಕೊಟ್ಟು
+kotta	ಕೊಟ್ಟ
+kottidini	ಕೊಟ್ಟಿದ್ದೀನಿ
+kudi	ಕುಡಿ
+odu	ಓದು
+odi	ಓದಿ
+eddelu	ಎದ್ದೇಳು
+
+# --- gottu, aagu, irbeku ---
+gothu	ಗೊತ್ತು
+gotu	ಗೊತ್ತು
+gothilla	ಗೊತ್ತಿಲ್ಲ
+gotilla	ಗೊತ್ತಿಲ್ಲ
+gotta	ಗೊತ್ತಾ
+gotha	ಗೊತ್ತಾ
+gottaytu	ಗೊತ್ತಾಯ್ತು
+gothaytu	ಗೊತ್ತಾಯ್ತು
+aytu	ಆಯ್ತು
+aithu	ಆಯ್ತು
+aitu	ಆಯ್ತು
+aita	ಆಯ್ತಾ
+aayta	ಆಯ್ತಾ
+agutte	ಆಗುತ್ತೆ
+agalla	ಆಗಲ್ಲ
+agolla	ಆಗೊಲ್ಲ
+aagolla	ಆಗೊಲ್ಲ
+agli	ಆಗ್ಲಿ
+agbeku	ಆಗ್ಬೇಕು
+agtide	ಆಗ್ತಿದೆ
+agoythu	ಆಗೋಯ್ತು
+bidu	ಬಿಡು
+bittu	ಬಿಟ್ಟು
+bitbidu	ಬಿಟ್ಬಿಡು
+mathadu	ಮಾತಾಡು
+maathadu	ಮಾತಾಡು
+matadu	ಮಾತಾಡು
+mathadi	ಮಾತಾಡಿ
+maathadi	ಮಾತಾಡಿ
+matadi	ಮಾತಾಡಿ
+mathu	ಮಾತು
+matu	ಮಾತು
+kalsu	ಕಳ್ಸು
+kalsi	ಕಳ್ಸಿ
+kalisu	ಕಳಿಸು
+kalisi	ಕಳಿಸಿ
+yochane	ಯೋಚನೆ
+
+# --- feelings ---
+bejaru	ಬೇಜಾರು
+bejar	ಬೇಜಾರ್
+bejaar	ಬೇಜಾರ್
+khushi	ಖುಷಿ
+kushi	ಖುಷಿ
+santosha	ಸಂತೋಷ
+santhosha	ಸಂತೋಷ
+
+# --- family, people ---
+anna	ಅಣ್ಣ
+anna	ಅನ್ನ
+thatha	ತಾತ
+makkalu	ಮಕ್ಕಳು
+huduga	ಹುಡುಗ
+hudugi	ಹುಡುಗಿ
+hudugru	ಹುಡುಗ್ರು
+hudugaru	ಹುಡುಗರು
+hudugiru	ಹುಡುಗೀರು
+ganda	ಗಂಡ
+hendati	ಹೆಂಡತಿ
+hendathi	ಹೆಂಡತಿ
+hendti	ಹೆಂಡ್ತಿ
+hendthi	ಹೆಂಡ್ತಿ
+snehita	ಸ್ನೇಹಿತ
+snehitha	ಸ್ನೇಹಿತ
+snehitaru	ಸ್ನೇಹಿತರು
+geleya	ಗೆಳೆಯ
+gelati	ಗೆಳತಿ
+gelathi	ಗೆಳತಿ
+devaru	ದೇವರು
+devru	ದೇವ್ರು
+
+# --- nouns ---
+hana	ಹಣ
+duddu	ದುಡ್ಡು
+niru	ನೀರು
+halu	ಹಾಲು
+oota	ಊಟ
+ootta	ಊಟ
+aata	ಆಟ
+tindi	ತಿಂಡಿ
+thindi	ತಿಂಡಿ
+kafi	ಕಾಫಿ
+bhashe	ಭಾಷೆ
+bhaashe	ಭಾಷೆ
+kannada	ಕನ್ನಡ
+bengaluru	ಬೆಂಗಳೂರು
+bengalooru	ಬೆಂಗಳೂರು
+mysuru	ಮೈಸೂರು
+karnataka	ಕರ್ನಾಟಕ
+shale	ಶಾಲೆ
+kannu	ಕಣ್ಣು
+kalu	ಕಾಲು
+hotte	ಹೊಟ್ಟೆ
+hadu	ಹಾಡು
+haadu	ಹಾಡು
+dari	ದಾರಿ
+vishaya	ವಿಷಯ
+vishya	ವಿಷ್ಯ
+vichara	ವಿಚಾರ
+samachara	ಸಮಾಚಾರ
+kathe	ಕಥೆ
+kathe	ಕತೆ
+male	ಮಳೆ
+gali	ಗಾಳಿ
+gaali	ಗಾಳಿ
+chali	ಚಳಿ
+bele	ಬೆಲೆ
+ele	ಎಲೆ
+kere	ಕೆರೆ
+nela	ನೆಲ
+nayi	ನಾಯಿ
+hovu	ಹೂವು
+hannu	ಹಣ್ಣು
+balehannu	ಬಾಳೆಹಣ್ಣು
+saru	ಸಾರು
+varsha	ವರ್ಷ
+sinima	ಸಿನಿಮಾ
+
+# --- adjectives ---
+hale	ಹಳೆ
+haleya	ಹಳೆಯ
+dodda	ದೊಡ್ಡ
+sanna	ಸಣ್ಣ
+ketta	ಕೆಟ್ಟ
+kettadu	ಕೆಟ್ಟದು
+bili	ಬಿಳಿ
+chennagidini	ಚೆನ್ನಾಗಿದ್ದೀನಿ
+chennagidiya	ಚೆನ್ನಾಗಿದ್ದೀಯಾ
+
+# --- numbers ---
+eradu	ಎರಡು
+muru	ಮೂರು
+nalku	ನಾಲ್ಕು
+elu	ಏಳು
+entu	ಎಂಟು
+nuru	ನೂರು
+savira	ಸಾವಿರ
+
+# --- greetings ---
+namaskara	ನಮಸ್ಕಾರ
+dhanyavadagalu	ಧನ್ಯವಾದಗಳು
+dhanyavada	ಧನ್ಯವಾದ
+shubharatri	ಶುಭರಾತ್ರಿ
+shubhashayagalu	ಶುಭಾಶಯಗಳು
+swagata	ಸ್ವಾಗತ
+swagatha	ಸ್ವಾಗತ
+
+# --- days ---
+somavara	ಸೋಮವಾರ
+mangalavara	ಮಂಗಳವಾರ
+budhavara	ಬುಧವಾರ
+guruvara	ಗುರುವಾರ
+shukravara	ಶುಕ್ರವಾರ
+shanivara	ಶನಿವಾರ
+bhanuvara	ಭಾನುವಾರ
+ravivara	ರವಿವಾರ
+
+# --- common words of written Kannada (frequency list) ---
+hagoo	ಹಾಗೂ
+aneka	ಅನೇಕ
+samanyavagi	ಸಾಮಾನ್ಯವಾಗಿ
+saamanyavaagi	ಸಾಮಾನ್ಯವಾಗಿ
+halavaru	ಹಲವಾರು
+yavude	ಯಾವುದೇ
+yaavude	ಯಾವುದೇ
+mathra	ಮಾತ್ರ
+bharatada	ಭಾರತದ
+bharathada	ಭಾರತದ
+bharatiya	ಭಾರತೀಯ
+bhaaratiya	ಭಾರತೀಯ
+bharathiya	ಭಾರತೀಯ
+naduve	ನಡುವೆ
+maduva	ಮಾಡುವ
+maaduva	ಮಾಡುವ
+maadalu	ಮಾಡಲು
+dakshina	ದಕ್ಷಿಣ
+kala	ಕಾಲ
+sangita	ಸಂಗೀತ
+sangitha	ಸಂಗೀತ
+ritiya	ರೀತಿಯ
+rithiya	ರೀತಿಯ
+samanya	ಸಾಮಾನ್ಯ
+saamanya	ಸಾಮಾನ್ಯ
+ade	ಅದೇ
+madida	ಮಾಡಿದ
+karana	ಕಾರಣ
+kaarana	ಕಾರಣ
+madidaru	ಮಾಡಿದರು
+onde	ಒಂದೇ
+innu	ಇನ್ನೂ
+shri	ಶ್ರೀ
+vishesha	ವಿಶೇಷ
+rashtriya	ರಾಷ್ಟ್ರೀಯ
+raashtriya	ರಾಷ್ಟ್ರೀಯ
+addarinda	ಆದ್ದರಿಂದ
+udaharanege	ಉದಾಹರಣೆಗೆ
+udaaharanege	ಉದಾಹರಣೆಗೆ
+sthaliya	ಸ್ಥಳೀಯ
+sthaleeya	ಸ್ಥಳೀಯ
+ritiyalli	ರೀತಿಯಲ್ಲಿ
+rithiyalli	ರೀತಿಯಲ್ಲಿ
+sahitya	ಸಾಹಿತ್ಯ
+sahithya	ಸಾಹಿತ್ಯ
+ekendare	ಏಕೆಂದರೆ
+adhunika	ಆಧುನಿಕ
+ottu	ಒಟ್ಟು
+kendra	ಕೇಂದ್ರ
+bari	ಬಾರಿ
+shikshana	ಶಿಕ್ಷಣ
+samajika	ಸಾಮಾಜಿಕ
+saamajika	ಸಾಮಾಜಿಕ
+bharata	ಭಾರತ
+bharatha	ಭಾರತ
+deshada	ದೇಶದ
+adaru	ಆದರೂ
+aadaru	ಆದರೂ
+melina	ಮೇಲಿನ
+ada	ಆದ
+rajya	ರಾಜ್ಯ
+rajakiya	ರಾಜಕೀಯ
+raajakiya	ರಾಜಕೀಯ
+eradoo	ಎರಡೂ
+adagyu	ಆದಾಗ್ಯೂ
+aadaagyu	ಆದಾಗ್ಯೂ
+karnaataka	ಕರ್ನಾಟಕ
+visheshavagi	ವಿಶೇಷವಾಗಿ
+visheshavaagi	ವಿಶೇಷವಾಗಿ
+ahara	ಆಹಾರ
+aahara	ಆಹಾರ
+sakashtu	ಸಾಕಷ್ಟು
+avakasha	ಅವಕಾಶ
+karya	ಕಾರ್ಯ
+niduva	ನೀಡುವ
+bahuteka	ಬಹುತೇಕ
+bahutheka	ಬಹುತೇಕ
+bidugade	ಬಿಡುಗಡೆ
+sampurna	ಸಂಪೂರ್ಣ
+sampoorna	ಸಂಪೂರ್ಣ
+kudaa	ಕೂಡಾ
+vele	ವೇಳೆ
+tanu	ತಾನು
+thanu	ತಾನು
+riti	ರೀತಿ
+rithi	ರೀತಿ
+aru	ಆರು
+vyavasthe	ವ್ಯವಸ್ಥೆ
+intha	ಇಂಥ
+kandu	ಕಂಡು
+sarkara	ಸರ್ಕಾರ
+jivana	ಜೀವನ
+idi	ಇಡೀ
+idee	ಇಡೀ
+bhaga	ಭಾಗ
+patra	ಪಾತ್ರ
+pathra	ಪಾತ್ರ
+tayi	ತಾಯಿ
+thayi	ತಾಯಿ
+ulida	ಉಳಿದ
+mahiti	ಮಾಹಿತಿ
+mahithi	ಮಾಹಿತಿ
+modalada	ಮೊದಲಾದ
+bahalashtu	ಬಹಳಷ್ಟು
+hageye	ಹಾಗೆಯೇ
+haageye	ಹಾಗೆಯೇ
+kade	ಕಡೆ
+kanunu	ಕಾನೂನು
+kaanunu	ಕಾನೂನು
+maisuru	ಮೈಸೂರು
+avala	ಅವಳ
+vyapara	ವ್ಯಾಪಾರ
+vyaapara	ವ್ಯಾಪಾರ
+krushi	ಕೃಷಿ
+khasagi	ಖಾಸಗಿ
+khaasagi	ಖಾಸಗಿ
+higagi	ಹೀಗಾಗಿ
+higaagi	ಹೀಗಾಗಿ
+nataka	ನಾಟಕ
+naataka	ನಾಟಕ
+neravagi	ನೇರವಾಗಿ
+neravaagi	ನೇರವಾಗಿ
+arogya	ಆರೋಗ್ಯ
+ayke	ಆಯ್ಕೆ
+ityadi	ಇತ್ಯಾದಿ
+ityaadi	ಇತ್ಯಾದಿ
+ithyadi	ಇತ್ಯಾದಿ
+sarasari	ಸರಾಸರಿ
+balika	ಬಳಿಕ
+kaleda	ಕಳೆದ
+artha	ಅರ್ಥ
+ittichina	ಇತ್ತೀಚಿನ
+makkala	ಮಕ್ಕಳ
+bheti	ಭೇಟಿ
+raja	ರಾಜ
+untu	ಉಂಟು
+banna	ಬಣ್ಣ
+tingala	ತಿಂಗಳ
+thingala	ತಿಂಗಳ
+roga	ರೋಗ
+hennu	ಹೆಣ್ಣು
+kelave	ಕೆಲವೇ
+purna	ಪೂರ್ಣ
+poorna	ಪೂರ್ಣ
+koti	ಕೋಟಿ
+hagagi	ಹಾಗಾಗಿ
+hagaagi	ಹಾಗಾಗಿ
+sarala	ಸರಳ
+sarkari	ಸರ್ಕಾರಿ
+yavagalu	ಯಾವಾಗಲೂ
+yaavaagalu	ಯಾವಾಗಲೂ
+yojane	ಯೋಜನೆ
+nijavada	ನಿಜವಾದ
+adhikara	ಅಧಿಕಾರ
+devara	ದೇವರ
+sthala	ಸ್ಥಳ
+ittichege	ಇತ್ತೀಚೆಗೆ
+sariyada	ಸರಿಯಾದ
+bekada	ಬೇಕಾದ
+bekaada	ಬೇಕಾದ
+igalu	ಈಗಲೂ
+eegalu	ಈಗಲೂ
+itihasa	ಇತಿಹಾಸ
+ithihasa	ಇತಿಹಾಸ
+dura	ದೂರ
+rathri	ರಾತ್ರಿ
+puje	ಪೂಜೆ
+modale	ಮೊದಲೇ
+hoguva	ಹೋಗುವ
+igina	ಈಗಿನ
+abhipraya	ಅಭಿಪ್ರಾಯ
+belaku	ಬೆಳಕು
+sadhya	ಸಾಧ್ಯ
+gandu	ಗಂಡು
+ake	ಆಕೆ

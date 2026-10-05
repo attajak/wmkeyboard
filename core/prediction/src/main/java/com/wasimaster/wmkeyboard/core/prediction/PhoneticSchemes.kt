@@ -1,5 +1,9 @@
 package com.wasimaster.wmkeyboard.core.prediction
 
+import com.wasimaster.wmkeyboard.core.transliteration.ArabicPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.ArabicScriptPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.AssamesePhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.AssamesePhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
@@ -7,10 +11,16 @@ import com.wasimaster.wmkeyboard.core.transliteration.BengaliRomanizer
 import com.wasimaster.wmkeyboard.core.transliteration.DevanagariRomanizer
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.HindiPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.IndicPhonetic
+import com.wasimaster.wmkeyboard.core.transliteration.IndicPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.IndicProfile
+import com.wasimaster.wmkeyboard.core.transliteration.IndicProfiles
+import com.wasimaster.wmkeyboard.core.transliteration.PersianPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.UrduPhonetic
 import com.wasimaster.wmkeyboard.core.transliteration.UrduPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.UrduRomanizer
+import java.text.Normalizer
 
 /**
  * Everything the prediction side needs to know about one phonetic input
@@ -111,7 +121,80 @@ object PhoneticSchemes {
         romanizeWord = UrduRomanizer::romanizeWord,
     )
 
-    val all: List<PhoneticScheme> = listOf(BENGALI, HINDI, URDU)
+    /**
+     * An [IndicPhonetic] language: its rules, the Hindi fold reached through
+     * Devanagari ([IndicPhoneticIndex]) with the language's own romanization
+     * habits rewritten first ([IndicProfiles.romanPrep]), and the Hindi
+     * romanizer over the same Devanagari spelling for the way back.
+     */
+    private fun indic(profile: IndicProfile): PhoneticScheme {
+        val engine = IndicPhonetic(profile)
+        val script = profile.script
+        val id = profile.languageId
+        return PhoneticScheme(
+            languageId = id,
+            romanizedListId = "${id}_rom",
+            spellingAssets = listOf("dictionaries/en_$id.tsv", "dictionaries/${id}_rom.tsv"),
+            transliterate = engine::transliterate,
+            variants = engine::variants,
+            buildIndex = {
+                IndicPhoneticIndex(
+                    entries = it,
+                    script = script,
+                    romanPrep = IndicProfiles.romanPrep(id),
+                    devanagariPrep = IndicProfiles.devanagariPrep(id),
+                    rerankBy = if (IndicProfiles.rerankFlatList(id)) engine::transliterate else null,
+                )
+            },
+            isNative = script::isNative,
+            normalize = { Normalizer.normalize(it, Normalizer.Form.NFC) },
+            romanizeWord = { DevanagariRomanizer.romanizeWord(script.toDevanagari(it)) },
+        )
+    }
+
+    /** Marathi, Gujarati, Punjabi, Odia, Tamil, Telugu, Kannada, Malayalam. */
+    val INDIC: List<PhoneticScheme> = IndicProfiles.all.map(::indic)
+
+    /** Assamese: Avro's rules with ৰ for র, and Bangla's index over the list in Bangla letters. */
+    val ASSAMESE = PhoneticScheme(
+        languageId = "as",
+        romanizedListId = "as_rom",
+        spellingAssets = listOf("dictionaries/en_as.tsv", "dictionaries/as_rom.tsv"),
+        transliterate = AssamesePhonetic::transliterate,
+        variants = { listOf(AssamesePhonetic.transliterate(it)) },
+        buildIndex = ::AssamesePhoneticIndex,
+        isNative = AssamesePhonetic::isAssamese,
+        normalize = { BengaliRomanizer.normalize(it) },
+        romanizeWord = { BengaliRomanizer.romanizeWord(AssamesePhonetic.toBengali(it)) },
+    )
+
+    /** Persian: Urdu's skeleton fold, with "gh" read as ق too. */
+    val PERSIAN = PhoneticScheme(
+        languageId = "fa",
+        romanizedListId = "fa_rom",
+        spellingAssets = listOf("dictionaries/en_fa.tsv", "dictionaries/fa_rom.tsv"),
+        transliterate = PersianPhonetic::transliterate,
+        variants = PersianPhonetic::variants,
+        buildIndex = { ArabicScriptPhoneticIndex(it, ArabicScriptPhoneticIndex::persianReadings) },
+        isNative = UrduRomanizer::isUrdu,
+        normalize = UrduRomanizer::normalize,
+        romanizeWord = UrduRomanizer::romanizeWord,
+    )
+
+    /** Arabic: Urdu's skeleton fold, with the Arabizi digits read as letters. */
+    val ARABIC = PhoneticScheme(
+        languageId = "ar",
+        romanizedListId = "ar_rom",
+        spellingAssets = listOf("dictionaries/en_ar.tsv", "dictionaries/ar_rom.tsv"),
+        transliterate = ArabicPhonetic::transliterate,
+        variants = ArabicPhonetic::variants,
+        buildIndex = { ArabicScriptPhoneticIndex(it, ArabicScriptPhoneticIndex::arabicReadings) },
+        isNative = UrduRomanizer::isUrdu,
+        normalize = UrduRomanizer::normalize,
+        romanizeWord = UrduRomanizer::romanizeWord,
+    )
+
+    val all: List<PhoneticScheme> = listOf(BENGALI, HINDI, URDU) + INDIC + listOf(ASSAMESE, PERSIAN, ARABIC)
 
     fun forLanguage(languageId: String?): PhoneticScheme? =
         all.firstOrNull { it.languageId == languageId }

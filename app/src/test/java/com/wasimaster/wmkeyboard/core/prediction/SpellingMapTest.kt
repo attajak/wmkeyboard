@@ -91,37 +91,44 @@ class SpellingMapTest {
                 assertTrue("missing $asset", java.io.File("src/main/assets/$asset").isFile)
             }
         }
-        assertEquals(setOf("bn", "hi", "ur"), SpellingMap.LANGUAGES)
+        assertEquals(
+            setOf("bn", "hi", "ur", "mr", "gu", "pa", "or", "ta", "te", "kn", "ml", "as", "fa", "ar"),
+            SpellingMap.LANGUAGES,
+        )
     }
 
-    @Test fun theUrduAssetsAreWellFormed() {
-        for (name in listOf("en_ur.tsv", "ur_rom.tsv")) {
-            val lines = java.io.File("src/main/assets/dictionaries/$name")
-                .readLines()
-                .filterNot { it.isBlank() || it.startsWith("#") }
-            assertTrue("$name looks empty", lines.size > 100)
-            for (line in lines) {
-                val parts = line.split("\t")
-                assertEquals("malformed line in $name: $line", 2, parts.size)
-                assertTrue("non-ascii key in $name: $line", parts[0].all { it in 'a'..'z' })
-                assertTrue("empty form in $name: $line", parts[1].isNotBlank())
-                assertFalse(
-                    "latin in urdu column of $name: $line",
-                    parts[1].any { it in 'a'..'z' || it in 'A'..'Z' },
-                )
-                // A form has to be spelled the way the word lists spell it, or
-                // it can never equal a word in them: Urdu's own code points and
-                // not Arabic's lookalikes (ي ك ه ة), no harakat, and one word —
-                // a space would be committed as a phrase.
-                assertFalse(
-                    "arabic lookalike in $name: $line",
-                    parts[1].any { it in "\u064A\u0643\u0647\u0629\u0649" },
-                )
-                assertFalse(
-                    "harakat in $name: $line",
-                    parts[1].any { it.code in 0x064B..0x0652 },
-                )
-                assertFalse("space in form in $name: $line", parts[1].contains(' '))
+    @Test fun thePhoneticAssetsAreWellFormed() {
+        // Every scheme past Bengali and Hindi, whose assets have tests of their
+        // own: a form has to be spelled the way that language's word lists
+        // spell it, or it can never equal a word in them.
+        for (scheme in PhoneticSchemes.all.filter { it.languageId != "bn" && it.languageId != "hi" }) {
+            val id = scheme.languageId
+            for (asset in scheme.spellingAssets) {
+                val lines = java.io.File("src/main/assets/$asset")
+                    .readLines()
+                    .filterNot { it.isBlank() || it.startsWith("#") }
+                assertTrue("$asset looks empty", lines.size > 80)
+                for (line in lines) {
+                    val parts = line.split("\t")
+                    assertEquals("malformed line in $asset: $line", 2, parts.size)
+                    val (key, form) = parts
+                    // Arabizi spells letters with digits and an apostrophe.
+                    val keyOk = if (id == "ar") key.all { it in 'a'..'z' || it in '0'..'9' || it == '\'' } else key.all { it in 'a'..'z' }
+                    assertTrue("bad key in $asset: $line", keyOk)
+                    assertTrue("empty form in $asset: $line", form.isNotBlank())
+                    assertFalse("latin in $asset: $line", form.any { it in 'a'..'z' || it in 'A'..'Z' })
+                    // One word: a space would be committed as a phrase.
+                    assertFalse("space in $asset: $line", form.contains(' '))
+                    // Every letter the language's own: Urdu and Persian never
+                    // write Arabic's ي ك, Arabic never Urdu's or Persian's ی ک ہ,
+                    // and an Indic form stays in its script's block. Assamese
+                    // writes ক'ত with the apostrophe the word list uses.
+                    assertTrue("foreign letter in $asset: $line", form.all { scheme.isNative(it) || it in ALLOWED })
+                    when (id) {
+                        "ur", "fa" -> assertFalse("Arabic letter in $asset: $line", form.any { it == '\u064A' || it == '\u0643' })
+                        "ar" -> assertFalse("Urdu/Persian letter in $asset: $line", form.any { it == '\u06CC' || it == '\u06A9' || it == '\u06C1' })
+                    }
+                }
             }
         }
     }
@@ -170,5 +177,10 @@ class SpellingMapTest {
             assertFalse("$spelling is listed", spelling in keys)
             assertEquals(word, com.wasimaster.wmkeyboard.core.transliteration.AvroPhonetic.transliterate(spelling))
         }
+    }
+
+    private companion object {
+        /** ZWNJ (Persian می‌), the apostrophe (Assamese ক'ত) and the hyphen (ৱাই-ফাই). */
+        val ALLOWED = setOf('\u200C', '\'', '-')
     }
 }

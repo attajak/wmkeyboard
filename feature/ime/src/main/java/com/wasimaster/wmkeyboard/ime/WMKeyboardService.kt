@@ -552,7 +552,7 @@ import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.commitsNoText
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.LayoutSpec
-import com.wasimaster.wmkeyboard.core.input.composer.composerFor
+import com.wasimaster.wmkeyboard.core.input.composer.resolvedComposer
 import com.wasimaster.wmkeyboard.core.input.composer.Composer
 import com.wasimaster.wmkeyboard.core.input.composer.KhiproComposer
 import com.wasimaster.wmkeyboard.core.input.composer.CjkConfig
@@ -2110,7 +2110,7 @@ open class WMKeyboardService : InputMethodService() {
         val wanted = HashSet<String>()
         for (id in settings.enabledLayoutIds) {
             val spec = resolveLayout(settings.customLayouts, id)
-            val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage ?: continue
+            val language = spec.resolvedComposer().phoneticLanguage ?: continue
             if (language == PhoneticSchemes.BENGALI.languageId) continue
             val map = settings.suggestionStrip.spellingMapEnabledFor(language)
             wanted.add(if (map) "$language$WITH_SPELLING_MAP" else language)
@@ -3691,7 +3691,7 @@ open class WMKeyboardService : InputMethodService() {
                         dataSaver = dataSaverStatus,
                         language = activeSpec.language(),
                         script = activeSpec.script(),
-                        composer = composerFor(activeSpec.script(), activeSpec.composerType()),
+                        composer = activeSpec.resolvedComposer(),
                         shiftState = shift ?: it.shiftState,
                         shiftPressedByUser = if (shift != null) false else it.shiftPressedByUser,
                         layoutId = activeSpec.id,
@@ -4112,7 +4112,7 @@ open class WMKeyboardService : InputMethodService() {
                 val enabled = _uiState.value.settings
                 val khipro = enabled.enabledLayoutIds.any { id ->
                     val spec = resolveLayout(enabled.customLayouts, id)
-                    composerFor(spec.script(), spec.composerType()) === KhiproComposer
+                    spec.resolvedComposer() === KhiproComposer
                 }
                 if (khipro) Khipro.Variant.entries.forEach(Khipro::warm)
                 // Older installs inflated the bundled lists into
@@ -5523,7 +5523,7 @@ open class WMKeyboardService : InputMethodService() {
                 settings = modeSettings,
                 language = fieldSpec.language(),
                 script = fieldSpec.script(),
-                composer = composerFor(fieldSpec.script(), fieldSpec.composerType()),
+                composer = fieldSpec.resolvedComposer(),
                 // A locked Ctrl crossing an app boundary is the worst failure
                 // this feature can have: every letter after it becomes a
                 // shortcut in an app the user never armed it for.
@@ -10160,7 +10160,7 @@ open class WMKeyboardService : InputMethodService() {
         val engine = suggestionEngine ?: return
         // A layout that spells its words outright (Khipro) reads the same
         // switch its language's phonetic layout does (#487).
-        val language = composerFor(spec.script(), spec.composerType())
+        val language = spec.resolvedComposer()
             .let { it.phoneticLanguage ?: it.completionLanguage }
         val next = settings.suggestionStrip.phoneticEnglishFor(language)
         val siblingsOff = settings.suggestionStrip.phoneticSiblingsOffLangs
@@ -10211,7 +10211,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     private fun syncPhoneticFixedStrip(settings: KeyboardSettings, spec: LayoutSpec) {
         val engine = suggestionEngine ?: return
-        val language = composerFor(spec.script(), spec.composerType()).phoneticLanguage
+        val language = spec.resolvedComposer().phoneticLanguage
         val next = settings.suggestionStrip.phoneticFixedStripFor(language)
         if (engine.phoneticFixedStrip == next) return
         engine.phoneticFixedStrip = next
@@ -12014,7 +12014,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!state.settings.carryWordOnLanguageSwitch) return null
         // Only *into* a layout that spells its words in roman letters: Avro,
         // Hindi phonetic, Khipro.
-        if (!composerFor(spec.script(), spec.composerType()).isRomanBuffer) return null
+        if (!spec.resolvedComposer().isRomanBuffer) return null
         // And only *out of* a board whose letters are those same roman ones —
         // a Latin keyboard, or another phonetic layout. Probhat's buffer is
         // Bengali, Hangul's is jamo, a conversion reading stands for a choice
@@ -12096,7 +12096,7 @@ open class WMKeyboardService : InputMethodService() {
             it.copy(
                 language = spec.language(),
                 script = spec.script(),
-                composer = composerFor(spec.script(), spec.composerType()),
+                composer = spec.resolvedComposer(),
                 shiftState = shift ?: it.shiftState,
                 shiftPressedByUser = if (shift != null) false else it.shiftPressedByUser,
                 layoutId = spec.id,

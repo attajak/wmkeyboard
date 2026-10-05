@@ -1,0 +1,181 @@
+# English → Marathi loanword map.
+#
+# Words Marathi speakers routinely write in Devanagari but which are NOT
+# phonetically derivable from the Marathi phonetic rules: English spelling says
+# little about English sound, so "school" would come out स्चूल and "phone"
+# फोने. Typed on the Marathi phonetic layout, the English spelling on the left
+# resolves directly to the Marathi form on the right, ahead of the rules and of
+# the dictionary. Marathi writes the English open o and a with ऑ / ॅ (ऑफिस,
+# बॅटरी) and, unlike Hindi, no nukta (फोन, not फ़ोन).
+#
+# A hand-written draft that wants a Marathi speaker's review. A wrong entry
+# here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>marathi   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+# --- Technology / devices ---
+phone	फोन
+mobile	मोबाईल
+computer	कॉम्प्युटर
+laptop	लॅपटॉप
+internet	इंटरनेट
+online	ऑनलाईन
+offline	ऑफलाईन
+email	ईमेल
+facebook	फेसबुक
+youtube	यूट्यूब
+google	गुगल
+video	व्हिडिओ
+photo	फोटो
+camera	कॅमेरा
+charger	चार्जर
+battery	बॅटरी
+network	नेटवर्क
+password	पासवर्ड
+message	मेसेज
+call	कॉल
+recharge	रिचार्ज
+wifi	वायफाय
+data	डेटा
+link	लिंक
+website	वेबसाईट
+software	सॉफ्टवेअर
+tv	टीव्ही
+screen	स्क्रीन
+keyboard	कीबोर्ड
+update	अपडेट
+download	डाउनलोड
+upload	अपलोड
+group	ग्रुप
+status	स्टेटस
+post	पोस्ट
+share	शेअर
+like	लाईक
+comment	कमेंट
+
+# --- School / office ---
+school	स्कूल
+college	कॉलेज
+class	क्लास
+teacher	टीचर
+result	रिझल्ट
+office	ऑफिस
+boss	बॉस
+company	कंपनी
+manager	मॅनेजर
+meeting	मीटिंग
+project	प्रोजेक्ट
+job	जॉब
+form	फॉर्म
+file	फाईल
+pen	पेन
+tuition	ट्युशन
+
+# --- Health ---
+doctor	डॉक्टर
+hospital	हॉस्पिटल
+medical	मेडिकल
+nurse	नर्स
+report	रिपोर्ट
+test	टेस्ट
+gym	जिम
+mask	मास्क
+corona	कोरोना
+
+# --- Travel / places ---
+police	पोलीस
+station	स्टेशन
+bus	बस
+train	ट्रेन
+ticket	तिकीट
+car	कार
+taxi	टॅक्सी
+rickshaw	रिक्षा
+auto	ऑटो
+bike	बाईक
+cycle	सायकल
+road	रोड
+petrol	पेट्रोल
+traffic	ट्रॅफिक
+hotel	हॉटेल
+room	रूम
+building	बिल्डिंग
+airport	एअरपोर्ट
+
+# --- Money / shopping ---
+bank	बँक
+card	कार्ड
+cash	कॅश
+atm	एटीएम
+shop	शॉप
+mall	मॉल
+market	मार्केट
+offer	ऑफर
+order	ऑर्डर
+delivery	डिलिव्हरी
+gift	गिफ्ट
+
+# --- Food ---
+pizza	पिझ्झा
+burger	बर्गर
+cake	केक
+chocolate	चॉकलेट
+coffee	कॉफी
+icecream	आईस्क्रीम
+biscuit	बिस्किट
+juice	ज्यूस
+
+# --- Home ---
+fridge	फ्रीज
+light	लाईट
+ac	एसी
+gas	गॅस
+cooker	कुकर
+table	टेबल
+shirt	शर्ट
+pant	पॅन्ट
+shoes	शूज
+dress	ड्रेस
+
+# --- Time / everyday ---
+time	टाईम
+minute	मिनिट
+weekend	वीकेंड
+plan	प्लॅन
+tension	टेन्शन
+problem	प्रॉब्लेम
+idea	आयडिया
+chance	चान्स
+sir	सर
+madam	मॅडम
+
+# --- Fun ---
+birthday	बर्थडे
+party	पार्टी
+cricket	क्रिकेट
+match	मॅच
+team	टीम
+player	प्लेयर
+movie	मूव्ही
+film	फिल्म
+news	न्यूज
+dance	डान्स
+music	म्युझिक
+game	गेम
+
+# --- Chat ---
+hello	हॅलो
+bye	बाय
+thanks	थॅंक्स
+sorry	सॉरी
+please	प्लीज
+ok	ओके
+okay	ओके
+good	गुड
+morning	मॉर्निंग
+night	नाईट
+happy	हॅपी
+miss	मिस
+love	लव्ह
+friend	फ्रेंड

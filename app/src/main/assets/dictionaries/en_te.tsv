@@ -1,0 +1,179 @@
+# English → Telugu loanword map.
+#
+# Words Telugu speakers routinely write in Telugu script but which are NOT
+# phonetically derivable from the Telugu phonetic rules: English spelling says
+# little about English sound, so "school" would come out స్చూల్ and "phone"
+# ఫొనే. Typed on the Telugu phonetic layout, the English spelling on the left
+# resolves directly to the Telugu form on the right, ahead of the rules and of
+# the dictionary.
+#
+# A hand-written draft that wants a Telugu speaker's review. A wrong entry here
+# is worse than a missing one, since it outranks everything. Where Telugu adds
+# its own final -u (బస్సు, ఆఫీసు, డాక్టరు) both forms are listed, the commoner
+# in the Telugu word list first. Compounds are written as plain conjuncts
+# (ల్యాప్టాప్), without a zero-width non-joiner.
+#
+# Format: english<TAB>telugu   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+# --- Technology / devices
+phone	ఫోన్
+mobile	మొబైల్
+computer	కంప్యూటర్
+laptop	ల్యాప్టాప్
+internet	ఇంటర్నెట్
+online	ఆన్లైన్
+email	ఈమెయిల్
+message	మెసేజ్
+call	కాల్
+video	వీడియో
+photo	ఫోటో
+camera	కెమెరా
+screen	స్క్రీన్
+charger	ఛార్జర్
+battery	బ్యాటరీ
+network	నెట్వర్క్
+data	డేటా
+app	యాప్
+software	సాఫ్ట్వేర్
+website	వెబ్సైట్
+link	లింక్
+password	పాస్వర్డ్
+account	అకౌంట్
+download	డౌన్లోడ్
+update	అప్డేట్
+file	ఫైల్
+number	నంబర్
+whatsapp	వాట్సాప్
+facebook	ఫేస్బుక్
+google	గూగుల్
+youtube	యూట్యూబ్
+instagram	ఇన్స్టాగ్రామ్
+tv	టీవీ
+radio	రేడియో
+machine	మెషిన్
+light	లైట్
+
+# --- School / office
+school	స్కూల్
+school	స్కూలు
+college	కాలేజీ
+university	యూనివర్సిటీ
+class	క్లాస్
+teacher	టీచర్
+student	స్టూడెంట్
+exam	ఎగ్జామ్
+test	టెస్ట్
+result	రిజల్ట్
+book	బుక్
+pen	పెన్
+paper	పేపర్
+homework	హోంవర్క్
+project	ప్రాజెక్టు
+project	ప్రాజెక్ట్
+office	ఆఫీసు
+office	ఆఫీస్
+job	జాబ్
+boss	బాస్
+manager	మేనేజర్
+meeting	మీటింగ్
+company	కంపెనీ
+business	బిజినెస్
+interview	ఇంటర్వ్యూ
+form	ఫారం
+report	రిపోర్ట్
+engineer	ఇంజనీర్
+doctor	డాక్టర్
+doctor	డాక్టరు
+nurse	నర్సు
+police	పోలీసు
+police	పోలీస్
+driver	డ్రైవర్
+officer	ఆఫీసర్
+minister	మినిస్టర్
+sir	సార్
+madam	మేడం
+
+# --- Travel / places
+bus	బస్సు
+bus	బస్
+train	ట్రైన్
+station	స్టేషన్
+ticket	టికెట్
+taxi	టాక్సీ
+auto	ఆటో
+car	కారు
+car	కార్
+bike	బైక్
+cycle	సైకిల్
+metro	మెట్రో
+airport	ఎయిర్పోర్ట్
+flight	ఫ్లైట్
+road	రోడ్డు
+road	రోడ్
+traffic	ట్రాఫిక్
+petrol	పెట్రోల్
+hotel	హోటల్
+hospital	హాస్పిటల్
+market	మార్కెట్
+mall	మాల్
+bank	బ్యాంకు
+bank	బ్యాంక్
+park	పార్క్
+room	రూమ్
+gate	గేట్
+address	అడ్రస్
+city	సిటీ
+india	ఇండియా
+hyderabad	హైదరాబాద్
+
+# --- Money / shopping
+card	కార్డు
+card	కార్డ్
+offer	ఆఫర్
+free	ఫ్రీ
+size	సైజు
+colour	కలర్
+color	కలర్
+
+# --- Food
+tea	టీ
+coffee	కాఫీ
+chocolate	చాక్లెట్
+glass	గ్లాస్
+lunch	లంచ్
+party	పార్టీ
+
+# --- Time / everyday
+time	టైమ్
+time	టైం
+week	వీక్
+sunday	సండే
+holiday	హాలిడే
+plan	ప్లాన్
+problem	ప్రాబ్లం
+tension	టెన్షన్
+chance	ఛాన్స్
+love	లవ్
+life	లైఫ్
+movie	మూవీ
+cinema	సినిమా
+hero	హీరో
+song	సాంగ్
+cricket	క్రికెట్
+match	మ్యాచ్
+team	టీమ్
+sorry	సారీ
+thanks	థాంక్స్
+please	ప్లీజ్
+okay	ఓకే
+ok	ఓకే
+hello	హలో
+bye	బై
+super	సూపర్
+friend	ఫ్రెండ్
+family	ఫ్యామిలీ
+news	న్యూస్
+government	గవర్నమెంట్
+medicine	మెడిసిన్
+fever	ఫీవర్

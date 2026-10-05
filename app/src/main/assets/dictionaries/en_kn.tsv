@@ -1,0 +1,179 @@
+# English → Kannada loanword map.
+#
+# Words Kannada speakers routinely write in Kannada script but which are NOT
+# phonetically derivable from the Kannada phonetic rules: English spelling says
+# little about English sound, so "school" would come out ಸ್ಚೂಲ್ and "phone"
+# ಫೊನೆ. Typed on the Kannada phonetic layout, the English spelling on the left
+# resolves directly to the Kannada form on the right, ahead of the rules and of
+# the dictionary. Kannada gives some loans a final u (ಕಾರು, ಕಾಲೇಜು); where a
+# native word is as common, it follows as a second choice (train ಟ್ರೈನ್, ರೈಲು).
+# Spellings are written without ZWNJ (ವೆಬ್ಸೈಟ್, not ವೆಬ್‌ಸೈಟ್).
+#
+# A hand-written draft that wants a Kannada speaker's review. A wrong entry
+# here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>kannada   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+
+# --- Technology / devices ---
+phone	ಫೋನ್
+mobile	ಮೊಬೈಲ್
+computer	ಕಂಪ್ಯೂಟರ್
+laptop	ಲ್ಯಾಪ್ಟಾಪ್
+internet	ಇಂಟರ್ನೆಟ್
+online	ಆನ್ಲೈನ್
+email	ಇಮೇಲ್
+message	ಮೆಸೇಜ್
+call	ಕಾಲ್
+video	ವಿಡಿಯೋ
+photo	ಫೋಟೋ
+camera	ಕ್ಯಾಮೆರಾ
+screen	ಸ್ಕ್ರೀನ್
+charger	ಚಾರ್ಜರ್
+battery	ಬ್ಯಾಟರಿ
+network	ನೆಟ್ವರ್ಕ್
+wifi	ವೈಫೈ
+data	ಡೇಟಾ
+app	ಆ್ಯಪ್
+app	ಆಪ್
+software	ಸಾಫ್ಟ್ವೇರ್
+website	ವೆಬ್ಸೈಟ್
+link	ಲಿಂಕ್
+password	ಪಾಸ್ವರ್ಡ್
+account	ಅಕೌಂಟ್
+update	ಅಪ್ಡೇಟ್
+download	ಡೌನ್ಲೋಡ್
+number	ನಂಬರ್
+whatsapp	ವಾಟ್ಸಾಪ್
+facebook	ಫೇಸ್ಬುಕ್
+google	ಗೂಗಲ್
+youtube	ಯೂಟ್ಯೂಬ್
+instagram	ಇನ್ಸ್ಟಾಗ್ರಾಮ್
+tv	ಟಿವಿ
+radio	ರೇಡಿಯೋ
+light	ಲೈಟ್
+fan	ಫ್ಯಾನ್
+switch	ಸ್ವಿಚ್
+recharge	ರೀಚಾರ್ಜ್
+sim	ಸಿಮ್
+group	ಗ್ರೂಪ್
+
+# --- School / office ---
+school	ಸ್ಕೂಲ್
+college	ಕಾಲೇಜು
+class	ಕ್ಲಾಸ್
+exam	ಎಕ್ಸಾಮ್
+result	ರಿಸಲ್ಟ್
+teacher	ಟೀಚರ್
+student	ಸ್ಟೂಡೆಂಟ್
+office	ಆಫೀಸ್
+boss	ಬಾಸ್
+meeting	ಮೀಟಿಂಗ್
+project	ಪ್ರಾಜೆಕ್ಟ್
+job	ಜಾಬ್
+company	ಕಂಪನಿ
+manager	ಮ್ಯಾನೇಜರ್
+salary	ಸ್ಯಾಲರಿ
+holiday	ಹಾಲಿಡೇ
+book	ಬುಕ್
+pen	ಪೆನ್
+degree	ಡಿಗ್ರಿ
+engineering	ಎಂಜಿನಿಯರಿಂಗ್
+engineer	ಎಂಜಿನಿಯರ್
+interview	ಇಂಟರ್ವ್ಯೂ
+form	ಫಾರ್ಮ್
+
+# --- Travel / places ---
+bus	ಬಸ್
+train	ಟ್ರೈನ್
+train	ರೈಲು
+ticket	ಟಿಕೆಟ್
+station	ಸ್ಟೇಷನ್
+auto	ಆಟೋ
+car	ಕಾರು
+bike	ಬೈಕ್
+taxi	ಟ್ಯಾಕ್ಸಿ
+hotel	ಹೋಟೆಲ್
+road	ರೋಡ್
+traffic	ಟ್ರಾಫಿಕ್
+signal	ಸಿಗ್ನಲ್
+petrol	ಪೆಟ್ರೋಲ್
+airport	ಏರ್ಪೋರ್ಟ್
+flight	ಫ್ಲೈಟ್
+hospital	ಆಸ್ಪತ್ರೆ
+hospital	ಹಾಸ್ಪಿಟಲ್
+doctor	ಡಾಕ್ಟರ್
+police	ಪೊಲೀಸ್
+metro	ಮೆಟ್ರೋ
+city	ಸಿಟಿ
+address	ಅಡ್ರೆಸ್
+location	ಲೊಕೇಶನ್
+
+# --- Money / shopping ---
+bank	ಬ್ಯಾಂಕ್
+card	ಕಾರ್ಡ್
+cash	ಕ್ಯಾಶ್
+atm	ಎಟಿಎಂ
+shop	ಶಾಪ್
+shopping	ಶಾಪಿಂಗ್
+offer	ಆಫರ್
+order	ಆರ್ಡರ್
+delivery	ಡೆಲಿವರಿ
+bill	ಬಿಲ್
+rent	ರೆಂಟ್
+loan	ಲೋನ್
+payment	ಪೇಮೆಂಟ್
+rupees	ರೂಪಾಯಿ
+
+# --- Food ---
+tea	ಟೀ
+coffee	ಕಾಫಿ
+juice	ಜ್ಯೂಸ್
+icecream	ಐಸ್ಕ್ರೀಮ್
+cake	ಕೇಕ್
+chocolate	ಚಾಕೊಲೇಟ್
+biscuit	ಬಿಸ್ಕತ್ತು
+pizza	ಪಿಜ್ಜಾ
+
+# --- Time / everyday ---
+time	ಟೈಮ್
+late	ಲೇಟ್
+sorry	ಸಾರಿ
+thanks	ಥ್ಯಾಂಕ್ಸ್
+please	ಪ್ಲೀಸ್
+ok	ಓಕೆ
+hello	ಹಲೋ
+hi	ಹಾಯ್
+bye	ಬೈ
+good	ಗುಡ್
+morning	ಮಾರ್ನಿಂಗ್
+night	ನೈಟ್
+super	ಸೂಪರ್
+nice	ನೈಸ್
+best	ಬೆಸ್ಟ್
+birthday	ಬರ್ತ್ಡೇ
+party	ಪಾರ್ಟಿ
+plan	ಪ್ಲಾನ್
+problem	ಪ್ರಾಬ್ಲಮ್
+tension	ಟೆನ್ಷನ್
+free	ಫ್ರೀ
+busy	ಬ್ಯುಸಿ
+ready	ರೆಡಿ
+room	ರೂಮ್
+gym	ಜಿಮ್
+cricket	ಕ್ರಿಕೆಟ್
+match	ಮ್ಯಾಚ್
+team	ಟೀಮ್
+movie	ಮೂವಿ
+cinema	ಸಿನಿಮಾ
+film	ಫಿಲ್ಮ್
+song	ಸಾಂಗ್
+news	ನ್ಯೂಸ್
+friend	ಫ್ರೆಂಡ್
+love	ಲವ್
+family	ಫ್ಯಾಮಿಲಿ
+uncle	ಅಂಕಲ್
+aunty	ಆಂಟಿ
+sir	ಸರ್
+madam	ಮೇಡಂ

@@ -1,0 +1,431 @@
+# Romanized Tamil ("Tanglish") → Tamil spelling map.
+#
+# How people actually type Tamil in Latin letters, and what they mean by it.
+# Every line here is a word the Tamil phonetic rules get wrong, because Latin
+# spelling does not carry the difference:
+#
+#  - A long vowel nobody doubles ("vendam" is வேண்டாம், "pesu" is பேசு,
+#    "amma" is அம்மா), and the e/o length the rules cannot know.
+#  - Which n, l, r: retroflex ண against alveolar ன ("panam" is பணம்,
+#    "thanni" is தண்ணி), ள against ல ("aval" is அவள்), ற against ர
+#    ("nooru" is நூறு), ழ written l ("tamil" is தமிழ்).
+#  - Gemination a single letter hides ("eduthu" is எடுத்து, "pathu" பத்து).
+#  - Spoken forms and chat spellings ("evlo" எவ்ளோ, "apram" அப்றம்,
+#    "ena" என்ன, "ni" நீ).
+#
+# The rules already handle t/d ட, th/dh த, zh ழ, ndr ன்ற, intervocalic tr ற்ற,
+# a doubled k/ch/t/p between vowels, the long final e/o, -en/-om verb endings,
+# the plural -gal கள், and -anum ணும்; words those rules get right are not
+# listed here.
+#
+# A hand-written draft of the commonest few hundred words; it wants a Tamil
+# speaker's review. Colloquial (spoken Chennai/central) forms are spelt the way
+# Tamil chats spell them in script (இருக்கு, பண்ணு, வேணும்).
+#
+# Format: spelling<TAB>tamil   (one mapping per line; # starts a comment)
+# A spelling may repeat to offer several forms, most-preferred first.
+# Loaded after en_ta.tsv, so the hand-written loanword spellings win a tie.
+
+
+# --- pronouns and people words ---
+aval	அவள்
+avalukku	அவளுக்கு
+avaluku	அவளுக்கு
+ival	இவள்
+ivalukku	இவளுக்கு
+nan	நான்
+ni	நீ
+yaru	யாரு
+yar	யார்
+yarukku	யாருக்கு
+ellam	எல்லாம்
+ellame	எல்லாமே
+ellarum	எல்லாரும்
+ellorum	எல்லோரும்
+onnu	ஒண்ணு
+onnum	ஒண்ணும்
+
+# --- question words ---
+yen	ஏன்
+yenna	என்ன
+ena	என்ன
+ennada	என்னடா
+enada	என்னடா
+yepdi	எப்டி
+yeppadi	எப்படி
+evlo	எவ்ளோ
+evalo	எவ்ளோ
+evlo	எவ்வளவு
+evalavu	எவ்வளவு
+evvalavu	எவ்வளவு
+ivlo	இவ்ளோ
+avlo	அவ்ளோ
+yethuku	எதுக்கு
+ethavathu	ஏதாவது
+edhavadhu	ஏதாவது
+yaaravathu	யாராவது
+
+# --- particles and adverbs ---
+aama	ஆமா
+ama	ஆமா
+ila	இல்ல
+illaya	இல்லையா
+illaiya	இல்லையா
+than	தான்
+thane	தானே
+kuda	கூட
+seri	சரி
+sariya	சரியா
+seriya	சரியா
+vendam	வேண்டாம்
+vendaam	வேண்டாம்
+venam	வேணாம்
+venaam	வேணாம்
+venum	வேணும்
+venuma	வேணுமா
+aana	ஆனா
+ana	ஆனா
+appuram	அப்புறம்
+apram	அப்றம்
+inum	இன்னும்
+pola	போல
+pole	போல
+mathiri	மாதிரி
+madhiri	மாதிரி
+ulla	உள்ள
+ulle	உள்ளே
+ullae	உள்ளே
+veliya	வெளிய
+veliye	வெளியே
+mela	மேல
+mele	மேலே
+keela	கீழ
+munnadi	முன்னாடி
+pinnadi	பின்னாடி
+kandippa	கண்டிப்பா
+kandipa	கண்டிப்பா
+sikiram	சீக்கிரம்
+seekram	சீக்கிரம்
+nala	நல்ல
+vera	வேற
+veru	வேறு
+
+# --- verbs ---
+va	வா
+vanga	வாங்க
+ponga	போங்க
+poda	போடா
+podi	போடி
+vada	வாடா
+vaada	வாடா
+solu	சொல்லு
+sonnan	சொன்னான்
+sonnanga	சொன்னாங்க
+paru	பாரு
+paathen	பாத்தேன்
+paathiya	பாத்தியா
+paakalam	பாக்கலாம்
+kelu	கேளு
+kettu	கேட்டு
+ketten	கேட்டேன்
+kekuren	கேக்குறேன்
+kekkuren	கேக்குறேன்
+saapitiya	சாப்பிட்டியா
+saapten	சாப்பிட்டேன்
+pesu	பேசு
+pesuren	பேசுறேன்
+pesalam	பேசலாம்
+pesalaam	பேசலாம்
+pesunga	பேசுங்க
+pesanum	பேசணும்
+poren	போறேன்
+porom	போறோம்
+pora	போற
+poriya	போறியா
+poitu	போயிட்டு
+poiten	போயிட்டேன்
+ponen	போனேன்
+ponaan	போனான்
+ponan	போனான்
+ponanga	போனாங்க
+povom	போவோம்
+varuviya	வருவியா
+vanthiya	வந்தியா
+vandhiya	வந்தியா
+vanthanga	வந்தாங்க
+vandhanga	வந்தாங்க
+pannu	பண்ணு
+pannunga	பண்ணுங்க
+pannen	பண்ணேன்
+panna	பண்ண
+pannala	பண்ணல
+panniten	பண்ணிட்டேன்
+pannitten	பண்ணிட்டேன்
+panren	பண்றேன்
+pannuren	பண்ணுறேன்
+pannanum	பண்ணணும்
+panniya	பண்ணியா
+odu	ஓடு
+odi	ஓடி
+irukinga	இருக்கீங்க
+irukingala	இருக்கீங்களா
+irukeengala	இருக்கீங்களா
+irukkiya	இருக்கியா
+irukiya	இருக்கியா
+eduthu	எடுத்து
+eduthen	எடுத்தேன்
+koduthu	கொடுத்து
+kuduthu	குடுத்து
+kuduthen	குடுத்தேன்
+paathu	பாத்து
+mudiyathu	முடியாது
+mudiyadhu	முடியாது
+theriyathu	தெரியாது
+theriyadhu	தெரியாது
+teriyum	தெரியும்
+teriyala	தெரியல
+theriyuma	தெரியுமா
+puriyudha	புரியுதா
+puriyutha	புரியுதா
+purinjutha	புரிஞ்சுதா
+aaguma	ஆகுமா
+achu	ஆச்சு
+pochu	போச்சு
+ennachu	என்னாச்சு
+enachu	என்னாச்சு
+enaachu	என்னாச்சு
+kaathiru	காத்திரு
+thungu	தூங்கு
+kelambu	கெளம்பு
+kilambu	கிளம்பு
+seira	செய்ற
+
+# --- family and people ---
+amma	அம்மா
+appa	அப்பா
+akka	அக்கா
+anna	அண்ணா
+annan	அண்ணன்
+thaatha	தாத்தா
+thatha	தாத்தா
+mama	மாமா
+maama	மாமா
+chithi	சித்தி
+periyappa	பெரியப்பா
+chithappa	சித்தப்பா
+pondatti	பொண்டாட்டி
+kanavan	கணவன்
+ponnu	பொண்ணு
+payyan	பையன்
+kulanthai	குழந்தை
+machan	மச்சான்
+mapla	மாப்ள
+maapillai	மாப்பிள்ளை
+nanban	நண்பன்
+nanba	நண்பா
+nanbargal	நண்பர்கள்
+da	டா
+dei	டேய்
+dey	டேய்
+
+# --- food and home ---
+thanni	தண்ணி
+thanneer	தண்ணீர்
+saapadu	சாப்பாடு
+sapadu	சாப்பாடு
+sappadu	சாப்பாடு
+sooru	சோறு
+soru	சோறு
+kari	கறி
+kozhi	கோழி
+dosai	தோசை
+dosa	தோசை
+sambar	சாம்பார்
+biriyani	பிரியாணி
+chapathi	சப்பாத்தி
+parotta	பரோட்டா
+koil	கோயில்
+
+# --- places ---
+tamil	தமிழ்
+tamizh	தமிழ்
+thamil	தமிழ்
+tamilnadu	தமிழ்நாடு
+madurai	மதுரை
+kovai	கோவை
+trichy	திருச்சி
+salem	சேலம்
+india	இந்தியா
+
+# --- greetings, time ---
+vanakkam	வணக்கம்
+vanakam	வணக்கம்
+vazhthukkal	வாழ்த்துக்கள்
+valthukkal	வாழ்த்துக்கள்
+pirandhanaal	பிறந்தநாள்
+piranthanaal	பிறந்தநாள்
+pongal	பொங்கல்
+deepavali	தீபாவளி
+kalai	காலை
+kalai	கலை
+raathiri	ராத்திரி
+saayangalam	சாயங்காலம்
+naal	நாள்
+naalaikku	நாளைக்கு
+naalaiku	நாளைக்கு
+nalaiku	நாளைக்கு
+naalai	நாளை
+inaiku	இன்னைக்கு
+netru	நேற்று
+
+# --- nouns ---
+velai	வேலை
+vela	வேல
+panam	பணம்
+kasu	காசு
+kadhal	காதல்
+alagu	அழகு
+azhaga	அழகா
+kann	கண்
+kannu	கண்ணு
+nila	நிலா
+suriyan	சூரியன்
+unmai	உண்மை
+kelvi	கேள்வி
+prachanai	பிரச்சனை
+prachinai	பிரச்சினை
+sandhosam	சந்தோஷம்
+santhosham	சந்தோஷம்
+santhosam	சந்தோசம்
+sogam	சோகம்
+kobam	கோபம்
+kopam	கோபம்
+pathu	பத்து
+moonu	மூணு
+ezhu	ஏழு
+nooru	நூறு
+laksham	லட்சம்
+kalyanam	கல்யாணம்
+kalyaanam	கல்யாணம்
+ezhuthu	எழுத்து
+
+# --- more: retroflex L, alveolar R, long vowels nobody doubles ---
+pulla	புள்ள
+pillai	பிள்ளை
+pullainga	புள்ளைங்க
+vellai	வெள்ளை
+palli	பள்ளி
+pallikoodam	பள்ளிக்கூடம்
+thalli	தள்ளி
+kulir	குளிர்
+thelivu	தெளிவு
+vilayaadu	விளையாடு
+vilayattu	விளையாட்டு
+velicham	வெளிச்சம்
+ozhunga	ஒழுங்கா
+olunga	ஒழுங்கா
+aalu	ஆளு
+aal	ஆள்
+aalunga	ஆளுங்க
+kadavul	கடவுள்
+valakkam	வழக்கம்
+palakkam	பழக்கம்
+muzhusa	முழுசா
+palaya	பழைய
+vizha	விழா
+ezhai	ஏழை
+kanna	கண்ணா
+pen	பெண்
+ennam	எண்ணம்
+kannadi	கண்ணாடி
+anni	அண்ணி
+panni	பண்ணி
+kanakku	கணக்கு
+mani	மணி
+kaaranam	காரணம்
+karanam	காரணம்
+payanam	பயணம்
+maranam	மரணம்
+ponnunga	பொண்ணுங்க
+kaanom	காணோம்
+kaanum	காணும்
+vendum	வேண்டும்
+maanavan	மாணவன்
+maanavargal	மாணவர்கள்
+mannu	மண்ணு
+pannalam	பண்ணலாம்
+pannalaam	பண்ணலாம்
+pannuven	பண்ணுவேன்
+marandhu	மறந்து
+maranthu	மறந்து
+maranthuten	மறந்துட்டேன்
+marandhutten	மறந்துட்டேன்
+marakka	மறக்க
+kurai	குறை
+niraya	நிறைய
+neraya	நிறைய
+nerya	நிறைய
+pirandha	பிறந்த
+aaru	ஆறு
+maari	மாறி
+maathu	மாத்து
+maathi	மாத்தி
+pathi	பத்தி
+uravu	உறவு
+arivu	அறிவு
+porumai	பொறுமை
+poramai	பொறாமை
+vayiru	வயிறு
+siru	சிறு
+siriya	சிறிய
+veruppu	வெறுப்பு
+pasam	பாசம்
+pavam	பாவம்
+padal	பாடல்
+sapdu	சாப்டு
+ninga	நீங்க
+nanga	நாங்க
+kupidu	கூப்பிடு
+arambam	ஆரம்பம்
+nijama	நிஜமா
+unmaiya	உண்மையா
+sathiyama	சத்தியமா
+seekirama	சீக்கிரமா
+summa	சும்மா
+chumma	சும்மா
+pa	பா
+ma	மா
+dhan	தான்
+theda	தேட
+thedu	தேடு
+paatha	பாத்த
+pakkathula	பக்கத்துல
+pakathula	பக்கத்துல
+kekka	கேக்க
+kekkala	கேக்கல
+pesala	பேசல
+pesitu	பேசிட்டு
+pesinen	பேசினேன்
+podu	போடு
+poten	போட்டேன்
+pottu	போட்டு
+potta	போட்ட
+podunga	போடுங்க
+varanga	வராங்க
+poranga	போறாங்க
+poraanga	போறாங்க
+samayal	சமையல்
+paritchai	பரீட்சை
+kovam	கோவம்
+bayama	பயமா
+pudhusa	புதுசா
+asai	ஆசை
+paravala	பரவால்ல
+paravaillai	பரவாயில்லை
+paravayilla	பரவாயில்ல
+vazhga	வாழ்க
+thalaiva	தலைவா
+gethu	கெத்து
+sapten	சாப்பிட்டேன்
+konjum	கொஞ்சம்
+kojam	கொஞ்சம்

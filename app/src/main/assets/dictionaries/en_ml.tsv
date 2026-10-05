@@ -1,0 +1,181 @@
+# English → Malayalam loanword map.
+#
+# Words Malayalam speakers routinely write in Malayalam script but which are
+# NOT phonetically derivable from the Malayalam phonetic rules: English
+# spelling says little about English sound, so "school" would come out
+# സ്ചൂൽ and "phone" ഫൊനെ. Typed on the Malayalam phonetic layout, the English
+# spelling on the left resolves directly to the Malayalam form on the right,
+# ahead of the rules and of the dictionary.
+#
+# A hand-written draft that wants a Malayalam speaker's review. A wrong entry
+# here is worse than a missing one, since it outranks everything.
+#
+# Format: english<TAB>malayalam   (one mapping per line; # starts a comment)
+# Keep the English key lowercase. First column is matched case-insensitively.
+
+
+# --- Technology / devices ---
+phone	ഫോൺ
+mobile	മൊബൈൽ
+computer	കമ്പ്യൂട്ടർ
+laptop	ലാപ്ടോപ്പ്
+internet	ഇന്റർനെറ്റ്
+online	ഓൺലൈൻ
+email	ഇമെയിൽ
+message	മെസേജ്
+call	കോൾ
+video	വീഡിയോ
+photo	ഫോട്ടോ
+camera	ക്യാമറ
+keyboard	കീബോർഡ്
+screen	സ്ക്രീൻ
+charger	ചാർജർ
+battery	ബാറ്ററി
+wifi	വൈഫൈ
+data	ഡാറ്റ
+app	ആപ്പ്
+
+# --- Chat and social media ---
+chat	ചാറ്റ്
+group	ഗ്രൂപ്പ്
+post	പോസ്റ്റ്
+like	ലൈക്ക്
+share	ഷെയർ
+comment	കമന്റ്
+link	ലിങ്ക്
+download	ഡൗൺലോഡ്
+update	അപ്ഡേറ്റ്
+status	സ്റ്റാറ്റസ്
+number	നമ്പർ
+
+# --- Greetings and everyday words ---
+hello	ഹലോ
+hi	ഹായ്
+ok	ഓക്കെ
+bye	ബൈ
+sorry	സോറി
+thanks	താങ്ക്സ്
+thankyou	താങ്ക്യൂ
+please	പ്ലീസ്
+welcome	വെൽക്കം
+good	ഗുഡ്
+morning	മോർണിംഗ്
+night	നൈറ്റ്
+super	സൂപ്പർ
+happy	ഹാപ്പി
+love	ലവ്
+sure	ഷുവർ
+time	ടൈം
+minute	മിനിറ്റ്
+second	സെക്കൻഡ്
+idea	ഐഡിയ
+plan	പ്ലാൻ
+problem	പ്രോബ്ലം
+
+# --- People and titles ---
+sir	സർ
+madam	മാഡം
+miss	മിസ്
+mister	മിസ്റ്റർ
+boss	ബോസ്
+doctor	ഡോക്ടർ
+nurse	നഴ്സ്
+police	പോലീസ്
+teacher	ടീച്ചർ
+driver	ഡ്രൈവർ
+manager	മാനേജർ
+engineer	എഞ്ചിനീയർ
+lawyer	ലോയർ
+friend	ഫ്രണ്ട്
+family	ഫാമിലി
+baby	ബേബി
+daddy	ഡാഡി
+mummy	മമ്മി
+uncle	അങ്കിൾ
+aunty	ആന്റി
+
+# --- School, work, money ---
+school	സ്കൂൾ
+college	കോളേജ്
+class	ക്ലാസ്
+exam	എക്സാം
+office	ഓഫീസ്
+company	കമ്പനി
+job	ജോബ്
+salary	സാലറി
+leave	ലീവ്
+bank	ബാങ്ക്
+account	അക്കൗണ്ട്
+card	കാർഡ്
+cash	ക്യാഷ്
+bill	ബിൽ
+hospital	ഹോസ്പിറ്റൽ
+medicine	മെഡിസിൻ
+
+# --- Travel and places ---
+bus	ബസ്
+train	ട്രെയിൻ
+car	കാർ
+bike	ബൈക്ക്
+auto	ഓട്ടോ
+road	റോഡ്
+station	സ്റ്റേഷൻ
+ticket	ടിക്കറ്റ്
+seat	സീറ്റ്
+flight	ഫ്ലൈറ്റ്
+airport	എയർപോർട്ട്
+passport	പാസ്പോർട്ട്
+visa	വിസ
+hotel	ഹോട്ടൽ
+room	റൂം
+bag	ബാഗ്
+shop	ഷോപ്പ്
+market	മാർക്കറ്റ്
+
+# --- Entertainment, food ---
+cinema	സിനിമ
+film	ഫിലിം
+movie	മൂവി
+song	സോങ്
+music	മ്യൂസിക്
+tv	ടിവി
+radio	റേഡിയോ
+news	ന്യൂസ്
+game	ഗെയിം
+cricket	ക്രിക്കറ്റ്
+football	ഫുട്ബോൾ
+team	ടീം
+match	മാച്ച്
+party	പാർട്ടി
+birthday	ബർത്ത്ഡേ
+cake	കേക്ക്
+chocolate	ചോക്ലേറ്റ്
+ice	ഐസ്
+juice	ജ്യൂസ്
+coffee	കോഫി
+tea	ടീ
+
+# --- Things around the house and office ---
+light	ലൈറ്റ്
+fan	ഫാൻ
+current	കറന്റ്
+gas	ഗ്യാസ്
+petrol	പെട്രോൾ
+case	കേസ്
+jail	ജയിൽ
+report	റിപ്പോർട്ട്
+file	ഫയൽ
+form	ഫോം
+letter	ലെറ്റർ
+gift	ഗിഫ്റ്റ്
+dress	ഡ്രസ്സ്
+shirt	ഷർട്ട്
+glass	ഗ്ലാസ്
+bottle	ബോട്ടിൽ
+box	ബോക്സ്
+table	ടേബിൾ
+chair	ചെയർ
+door	ഡോർ
+lift	ലിഫ്റ്റ്
+flat	ഫ്ലാറ്റ്
+rent	റെന്റ്
