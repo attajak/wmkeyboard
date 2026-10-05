@@ -65,6 +65,17 @@
     <string name="accessibility_screen_transitions_subtitle">A setting\'s icon and name move into the screen it opens</string>
     <string name="accessibility_screen_transitions_info">Turn this off if these settings screens are slow to open on your phone. Moving a setting\'s icon and name into the screen it opens makes each screen take more work to draw, and some slower phones show that as a stutter. With this off, a screen opens with the plain slide, and it draws faster.\n\nThis changes only these settings screens. It does nothing to the keyboard. When Reduce motion is on, these transitions are already off.</string>
     <string name="accessibility_row_icons_info">Turn this off for plain rows that show only words, as in earlier versions of the app. Some people find a list of words easier to read than a column of coloured icons.\n\nThis changes only these settings screens. The icons of the keyboard and of its tools stay as they are.</string>
+    <string name="accessibility_keyboard_preview_title">Keyboard test button</string>
+    <string name="accessibility_keyboard_preview_subtitle">A small button on every settings screen that opens the keyboard with a field to type in</string>
+    <string name="accessibility_keyboard_preview_info">The button sits in the bottom corner of every settings screen. Tap it and a text field opens above the real keyboard, so you can try a change on the screen where you made it, without going back to another app. Tap the button again, or hide the keyboard, to close the field. It stays open while you move between settings screens.\n\nScreens that already show a keyboard of their own, such as the theme editor, don\'t show the button. Turn this off if you don\'t want the button on your screens.</string>
+
+    <!-- The button itself, on every settings screen (#412). Read by screen
+         readers; the field's placeholder shows while it is empty. -->
+    <string name="keyboard_preview_open">Try the keyboard</string>
+    <string name="keyboard_preview_close">Close the keyboard test</string>
+    <string name="keyboard_preview_hint">Type here to try your changes</string>
+    <string name="keyboard_preview_clear">Clear</string>
+    <string name="keyboard_preview_switch">Switch to this keyboard</string>
 
     <!-- Accessibility settings screen, "Screen reader" group. TalkBack is the
          name of the Android screen reader and is not translated. -->

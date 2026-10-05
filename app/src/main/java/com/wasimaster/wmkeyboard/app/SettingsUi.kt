@@ -2424,9 +2424,19 @@ internal fun WmScreen(
                 Spacer(Modifier.height(ScreenTopGap))
                 content()
                 // Room for a FAB to float over the last row rather than on it:
-                // the button, its margin, and a little air.
-                val hasFab = fab != null || LocalScreenSlots.current?.fab != null
-                Spacer(Modifier.height(if (hasFab) FAB_TAIL else 24.dp))
+                // the button, its margin, and a little air. The keyboard test
+                // button stacks above a screen's own, and needs its own room.
+                val hasFab = fab != null || slots?.fab != null
+                val hasPreview = LocalKeyboardPreview.current != null && slots?.dock == null
+                Spacer(
+                    Modifier.height(
+                        when {
+                            hasFab && hasPreview -> FAB_TAIL + PREVIEW_FAB_STEP
+                            hasFab || hasPreview -> FAB_TAIL
+                            else -> 24.dp
+                        },
+                    ),
+                )
             }
         }
     }
@@ -2434,6 +2444,12 @@ internal fun WmScreen(
 
 /** Height a scrolling body leaves free under a floating action button. */
 private val FAB_TAIL = 88.dp
+
+/** What the keyboard test button adds above a screen's own: its size and the gap. */
+private val PREVIEW_FAB_STEP = 56.dp
+
+/** Gap between the keyboard test button and the screen's own button under it. */
+private val PREVIEW_FAB_GAP = 16.dp
 
 /** Air between the bar (or the path strip under it) and a screen's first row. */
 private val ScreenTopGap = 12.dp
@@ -2515,6 +2531,7 @@ private fun WmScreenFrame(
     val entry = currentCrumbEntry()
     RegisterSettingsCrumb(crumbTitle ?: title, route)
     val slots = remember { ScreenSlots() }
+    val preview = LocalKeyboardPreview.current?.takeIf { slots.dock == null }
     val scope = rememberCoroutineScope()
     // One per screen, published for everything it draws — see [SettingsSnackbar].
     val snackbarHost = remember { SnackbarHostState() }
@@ -2608,9 +2625,28 @@ private fun WmScreenFrame(
                         (pinned ?: slots.pinned)?.invoke()
                     }
                 },
-                floatingActionButton = { (fab ?: slots.fab)?.invoke() },
+                floatingActionButton = {
+                    val own = fab ?: slots.fab
+                    // The keyboard test (#412) rides above the screen's own
+                    // button rather than in its place. Not on a screen that
+                    // docks a keyboard of its own: two keyboards, one of them
+                    // the real one, would be a test of nothing.
+                    if (preview != null) {
+                        Column(
+                            horizontalAlignment = Alignment.End,
+                            verticalArrangement = Arrangement.spacedBy(PREVIEW_FAB_GAP),
+                        ) {
+                            KeyboardPreviewFab(preview)
+                            own?.invoke()
+                        }
+                    } else {
+                        own?.invoke()
+                    }
+                },
                 snackbarHost = { SnackbarHost(snackbarHost) },
-                bottomBar = { slots.dock?.invoke() },
+                bottomBar = {
+                    if (preview != null && preview.open) KeyboardPreviewBar(preview) else slots.dock?.invoke()
+                },
                 content = { padding ->
                     // Always wrapped, whether or not the screen has a refresh: the
                     // slot is filled by the content composing, so branching on it

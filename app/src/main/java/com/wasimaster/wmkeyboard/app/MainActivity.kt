@@ -658,6 +658,12 @@ private fun SettingsNavHost(
     // before this is first composed, so the new activity starts on the right
     // side and does not flip again.
     val layoutShown = remember { layoutWanted }
+    // The keyboard test every screen carries (#412). One for the graph, so the
+    // field stays open, text and all, as the user moves between screens.
+    val preview = remember { KeyboardPreviewState() }
+    val previewWanted = settings.watch { it.appUi.keyboardPreviewButton }
+    LaunchedEffect(previewWanted) { if (!previewWanted) preview.open = false }
+    CloseOrphanedKeyboardPreview(preview)
     val context = LocalContext.current
     LaunchedEffect(layoutWanted) {
         if (layoutWanted != layoutShown) context.findActivity()?.recreate()
@@ -673,6 +679,7 @@ private fun SettingsNavHost(
             // motions deep in a row can be still without every row being
             // handed the settings.
             LocalReduceMotion provides reduceMotion,
+            LocalKeyboardPreview provides preview.takeIf { previewWanted },
             // "Icons in settings", animated once here for every row and
             // heading, so the screen the switch is on sees its tiles leave.
             LocalIconReveal provides rememberIconReveal(
@@ -683,22 +690,30 @@ private fun SettingsNavHost(
             if (twoPane) {
                 SettingsTwoPane(
                     list = {
-                        HomeScreen(
-                            settings = settings,
-                            selectedRoute = if (topRoute == HomeRoute) null else openedFrom,
-                            onNavigate = { route ->
-                                openedFrom = route
-                                // From the list pane the detail always replaces
-                                // what is in it rather than stacking on top:
-                                // the pane beside it *is* the step back, so a
-                                // stack of home rows would be one the user
-                                // never took.
-                                navController.navigate(route) {
-                                    popUpTo(HomeRoute)
-                                    launchSingleTop = true
-                                }
-                            },
-                        )
+                        // One keyboard test button on the window: the list's
+                        // while the pane beside it is only the welcome panel,
+                        // the open screen's once there is one.
+                        CompositionLocalProvider(
+                            LocalKeyboardPreview provides
+                                LocalKeyboardPreview.current?.takeIf { topRoute == HomeRoute },
+                        ) {
+                            HomeScreen(
+                                settings = settings,
+                                selectedRoute = if (topRoute == HomeRoute) null else openedFrom,
+                                onNavigate = { route ->
+                                    openedFrom = route
+                                    // From the list pane the detail always replaces
+                                    // what is in it rather than stacking on top:
+                                    // the pane beside it *is* the step back, so a
+                                    // stack of home rows would be one the user
+                                    // never took.
+                                    navController.navigate(route) {
+                                        popUpTo(HomeRoute)
+                                        launchSingleTop = true
+                                    }
+                                },
+                            )
+                        }
                     },
                     detail = {
                         SettingsNavGraph(

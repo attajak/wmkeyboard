@@ -167,6 +167,15 @@ internal fun AccessibilitySettings(
                 default = SettingsDefaults.appUi.screenTransitions,
             ) { scope.launch { repository.setSettingsScreenTransitions(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.accessibility_keyboard_preview_title,
+                stringResource(R.string.accessibility_keyboard_preview_subtitle),
+                settings.watch { it.appUi.keyboardPreviewButton },
+                info = stringResource(R.string.accessibility_keyboard_preview_info),
+                default = SettingsDefaults.appUi.keyboardPreviewButton,
+            ) { scope.launch { repository.setKeyboardPreviewButton(it) } }
+        }
     }
 
     SettingsGroup(stringResource(R.string.accessibility_screen_reader_title)) {

@@ -5358,6 +5358,13 @@ data class AppUiSettings(
      * shows opening a screen. The plain slide between screens stays.
      */
     val screenTransitions: Boolean = true,
+    /**
+     * Whether every settings screen carries the small keyboard button that
+     * opens a text field and the real keyboard under it, so a change can be
+     * tried where it was made (#412). Off for anyone who finds the button in
+     * the way; nothing in the keyboard reads it.
+     */
+    val keyboardPreviewButton: Boolean = true,
 )
 
 /** What the symbol row's height slider offers, matching the number row's. */
@@ -8477,6 +8484,8 @@ class SettingsRepository(private val context: Context) {
         private val DICTIONARY_SORT = stringPreferencesKey("dictionary_sort")
         private val SETTINGS_ROW_ICONS = booleanPreferencesKey("settings_row_icons")
         private val SETTINGS_SCREEN_TRANSITIONS = booleanPreferencesKey("settings_screen_transitions")
+        private val SETTINGS_KEYBOARD_PREVIEW_BUTTON =
+            booleanPreferencesKey("settings_keyboard_preview_button")
         private val SYMBOL_ROW_HEIGHT = intPreferencesKey("symbol_row_height")
         private val SYMBOL_ROW_LINES = intPreferencesKey("symbol_row_lines")
         private val SYMBOL_ROW_SCROLL = stringPreferencesKey("symbol_row_scroll")
@@ -9956,6 +9965,8 @@ class SettingsRepository(private val context: Context) {
             rowIcons = p[SETTINGS_ROW_ICONS] ?: defaults.appUi.rowIcons,
             screenTransitions = p[SETTINGS_SCREEN_TRANSITIONS]
                 ?: defaults.appUi.screenTransitions,
+            keyboardPreviewButton = p[SETTINGS_KEYBOARD_PREVIEW_BUTTON]
+                ?: defaults.appUi.keyboardPreviewButton,
         )
 
     private fun readToolLimits(p: Preferences, defaults: KeyboardSettings) =
@@ -15718,6 +15729,10 @@ class SettingsRepository(private val context: Context) {
     /** See [AppUiSettings.screenTransitions]. */
     suspend fun setSettingsScreenTransitions(value: Boolean) =
         editPrefs { it[SETTINGS_SCREEN_TRANSITIONS] = value }
+
+    /** See [AppUiSettings.keyboardPreviewButton]. */
+    suspend fun setKeyboardPreviewButton(value: Boolean) =
+        editPrefs { it[SETTINGS_KEYBOARD_PREVIEW_BUTTON] = value }
 
     suspend fun setWeatherRefreshMinutes(value: Int) =
         editPrefs { it[WEATHER_REFRESH_MINUTES] = value.coerceIn(1, 180) }

@@ -1866,6 +1866,7 @@ private fun SearchStrings.otherRows(): List<SettingsSearchEntry> {
         access(R.string.accessibility_reduce_motion_title, R.string.accessibility_reduce_motion_subtitle),
         access(R.string.accessibility_row_icons_title, R.string.accessibility_row_icons_subtitle),
         access(R.string.accessibility_screen_transitions_title, R.string.accessibility_screen_transitions_subtitle),
+        access(R.string.accessibility_keyboard_preview_title, R.string.accessibility_keyboard_preview_subtitle),
         access(R.string.accessibility_talkback_title, R.string.accessibility_talkback_subtitle),
         access(R.string.accessibility_passthrough_service_title).takeIf { ChannelFeatures.GESTURE_PASSTHROUGH },
         access(R.string.accessibility_debounce_title, R.string.accessibility_debounce_subtitle_off),
