@@ -4085,6 +4085,9 @@ open class WMKeyboardService : InputMethodService() {
                     // A list downloaded before capitals were kept apart holds
                     // "Haus" under a key no lower-case typing reaches (#481).
                     WordlistDownloadManager.foldCapitals(filesDir)
+                    // A Romanian list downloaded before the cedilla came out
+                    // of it still autocorrects to the Turkish letters.
+                    WordlistDownloadManager.respellRomanian(filesDir)
                 }
                 // Bundled lists ship as compiled .wmdict binaries and are
                 // memory-mapped, not parsed: the trie stays out of the Java

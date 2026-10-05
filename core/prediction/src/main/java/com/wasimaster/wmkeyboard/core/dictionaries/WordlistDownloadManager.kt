@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.core.prediction.AospScores
 import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrieCodec
+import com.wasimaster.wmkeyboard.core.prediction.RomanianSpelling
 import com.wasimaster.wmkeyboard.prediction.R
 import java.io.File
 import java.io.IOException
@@ -286,6 +287,68 @@ object WordlistDownloadManager {
         }
     }
 
+    /**
+     * Rewrites, in place, a Romanian list downloaded before its spelling was
+     * repaired ([RomanianSpelling]). Nothing is fetched. Run beside
+     * [foldCapitals] at keyboard start, off the main thread.
+     *
+     * The test is four lookups on the mapped trie, so a list that is already
+     * right costs nothing and this can run at every start rather than once
+     * behind a marker. That is also what lets a list too big to rebuild here
+     * heal by itself the moment its owner downloads one at another size.
+     */
+    fun respellRomanian(filesDir: File) {
+        if (isBusy) return
+        val langId = RomanianSpelling.LANGUAGE_ID
+        val main = DictionaryStore.downloadedFile(filesDir, langId)
+        if (!main.exists()) return
+        val part = DictionaryStore.partFile(filesDir, langId)
+        runCatching {
+            val mapped = MappedTrie.open(main) ?: return@runCatching
+            if (RomanianSpelling.PROBES.none { mapped.contains(it) }) return@runCatching
+            // The same ceiling as [foldCapitals], for the same reason: the
+            // walk below puts every word on the heap, and an "everything"
+            // list is over a million of them.
+            if (mapped.wordCount > MAX_REFOLD_WORDS) return@runCatching
+            if (!respell(mapped, main, part)) return@runCatching
+            // The capitals are a second trie under the same keys, so a key
+            // with a cedilla in it has to move with the list or the spelling
+            // it holds stops being reachable (see [DictionaryCapitals]).
+            val capitals = DictionaryStore.capitalsFile(filesDir, langId)
+            if (capitals.length() > 0) {
+                MappedTrie.open(capitals)?.let {
+                    respell(it, capitals, File(capitals.path + ".part"))
+                }
+            }
+        }.onFailure { part.delete() }
+    }
+
+    /**
+     * [mapped] with every key respelt, written back over [file] through
+     * [part]. True when it landed.
+     *
+     * Serves the list and its capitals both: the trie's second column is a
+     * frequency in one and a capitalisation shape in the other, and neither
+     * is touched. Where two keys become one, [PackedTrie.of] keeps the larger
+     * value, which is the more frequent spelling of a word and the commoner
+     * shape of a name.
+     */
+    private fun respell(mapped: MappedTrie, file: File, part: File): Boolean {
+        val entries = mapped.entries()
+        val keys = arrayOfNulls<String>(entries.size)
+        val values = IntArray(entries.size)
+        entries.forEachIndexed { i, (key, value) ->
+            keys[i] = RomanianSpelling.canonical(key)
+            values[i] = value
+        }
+        part.outputStream().use {
+            PackedTrieCodec.write(PackedTrie.of(keys, values, entries.size), it)
+        }
+        if (part.renameTo(file)) return true
+        part.delete()
+        return false
+    }
+
     /** [file] inflated when it is gzip (the repo's form), as it is otherwise. */
     private fun openList(file: File): InputStream {
         val raw = file.inputStream().buffered()
@@ -454,6 +517,13 @@ object WordlistDownloadManager {
         // them, which then lost to a sibling from the kept half. A flat
         // list is taken whole, whatever size was asked for.
         val aosp = entry.source == WordlistSource.AOSP
+        // A Romanian list spells its comma-below letters with a cedilla, and
+        // the spelling the list carries is the one autocorrect commits
+        // ([RomanianSpelling]). Respelt here, one word at a time, rather than
+        // at every lookup. Both spellings of a word then land on one key, so
+        // the trie ends a few thousand words under the cap; it merges them by
+        // the larger count, which is the ranking the two halves earn together.
+        val respell = RomanianSpelling.appliesTo(entry.languageId)
         var ranked: Boolean? = if (aosp) false else null
         input.bufferedReader().useLines { lines ->
             for (line in lines) {
@@ -462,7 +532,8 @@ object WordlistDownloadManager {
                 if (trimmed.isEmpty() || trimmed.startsWith("#")) continue
                 val separator = trimmed.lastIndexOf(' ')
                 if (separator <= 0) continue
-                val word = trimmed.substring(0, separator).trim()
+                val read = trimmed.substring(0, separator).trim()
+                val word = if (respell) RomanianSpelling.canonical(read) else read
                 val raw = trimmed.substring(separator + 1).toIntOrNull() ?: continue
                 val frequency = if (aosp) AospScores.listCount(raw) else raw
                 if (ranked == null) ranked = frequency >= MIN_FREQUENCY

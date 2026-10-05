@@ -133,7 +133,14 @@ object CustomDictionaries {
     fun entries(filesDir: File, langId: String): List<Pair<String, Int>> {
         val all = ArrayList<Pair<String, Int>>()
         for (file in lists(filesDir, langId)) all += wordsOf(file)
-        return all
+        // A Romanian list found in the wild spells its comma-below letters
+        // with a cedilla as often as the downloadable ones did, and the
+        // spelling a list carries is the one autocorrect commits
+        // ([RomanianSpelling]). Read here rather than rewritten at import, so
+        // a list already on disk reads right without being imported again,
+        // and the file the user manages stays the file they chose.
+        if (!RomanianSpelling.appliesTo(langId)) return all
+        return all.map { (word, frequency) -> RomanianSpelling.canonical(word) to frequency }
     }
 
     /**
