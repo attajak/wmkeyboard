@@ -131,6 +131,16 @@ object CalcEngine {
     private class Parser(private val text: String, private val degrees: Boolean) {
         private var pos = 0
 
+        /**
+         * Set by [parsePower] when the value it just read carried a trailing
+         * "%", and by [parseTerm] when that value was the whole of the term
+         * — the "20%" of "100+20%". [parseExpression] reads the latter to
+         * decide whether the term is a share of the running value or a
+         * number to add outright.
+         */
+        private var lastWasPercent = false
+        private var percentOfLeft = false
+
         val atEnd: Boolean get() = pos >= text.length
         fun rest(): String = text.substring(pos)
 
@@ -147,21 +157,33 @@ object CalcEngine {
         }
 
         // expression := term (('+' | '-') term)*
+        //
+        // A bare trailing "%" on the right-hand side is a share of what is
+        // already on the left: "100+20%" is 120 and "100-20%" is 80, the way
+        // a pocket calculator reads a tip or a discount. Alone, or against
+        // × and ÷, "%" stays a plain hundredth — "20%" is 0.2 and
+        // "100×20%" is 20.
         fun parseExpression(): Double {
             var value = parseTerm()
             while (true) {
                 val op = accept('+', '-', '−') ?: return value
                 val rhs = parseTerm()
-                value = if (op == '+') value + rhs else value - rhs
+                val delta = if (percentOfLeft) value * rhs else rhs
+                value = if (op == '+') value + delta else value - delta
             }
         }
 
         // term := unary (('*' | '/' | '%' | 'p' | 'c' | juxtaposition) unary)*
         private fun parseTerm(): Double {
             var value = parseUnary()
+            // Whether the term is nothing but a percentage, and how many
+            // operators it went on to apply — together they tell a lone
+            // "20%" apart from a "%" that trails arithmetic of its own.
+            val firstWasPercent = lastWasPercent
+            var ops = 0
             while (true) {
                 skipSpaces()
-                val c = peek() ?: return value
+                val c = peek() ?: break
                 when {
                     c == '*' || c == '×' || c == '·' -> { pos++; value *= parseUnary() }
                     c == '/' || c == '÷' -> {
@@ -170,20 +192,13 @@ object CalcEngine {
                         if (rhs == 0.0) throw CalcException(R.string.core_tools_calc_error_division_by_zero)
                         value /= rhs
                     }
+                    // A "%" still here is the infix one: [parsePower] has
+                    // already taken any that stood for a percentage.
                     c == '%' -> {
                         pos++
-                        skipSpaces()
-                        // Trailing % is "percent"; % followed by a value is modulo.
-                        val next = peek()
-                        if (next == null || next == ')' || next == '+' || next == '-' ||
-                            next == '−' || next == '*' || next == '×' || next == '/' || next == '÷'
-                        ) {
-                            value /= 100.0
-                        } else {
-                            val rhs = parseUnary()
-                            if (rhs == 0.0) throw CalcException(R.string.core_tools_calc_error_division_by_zero)
-                            value = value.mod(rhs)
-                        }
+                        val rhs = parseUnary()
+                        if (rhs == 0.0) throw CalcException(R.string.core_tools_calc_error_division_by_zero)
+                        value = value.mod(rhs)
                     }
                     text.startsWith("mod", pos) -> { pos += 3
                         val rhs = parseUnary()
@@ -206,9 +221,14 @@ object CalcEngine {
                     // Implicit multiplication: 2π, 2(3+4), (1+2)(3+4), 3√4.
                     c == '(' || c == '√' || c.isLetter() && !text.startsWith("mod", pos) ->
                         value *= parseUnary()
-                    else -> return value
+                    else -> break
                 }
+                ops++
             }
+            // A share of the left side only when the percentage was the whole
+            // of the term: "20%", not "20%×3" or "20%mod3".
+            percentOfLeft = ops == 0 && firstWasPercent
+            return value
         }
 
         // unary := ('-' | '+')* power
@@ -221,15 +241,40 @@ object CalcEngine {
             }
         }
 
-        // power := atom ('^' unary)?   (right-associative)
+        // power := atom ('^' unary)? '%'?   (right-associative)
         private fun parsePower(): Double {
             val base = parseAtom()
             skipSpaces()
-            if (peek() == '^') {
+            val value = if (peek() == '^') {
                 pos++
-                return base.pow(parseUnary())
+                base.pow(parseUnary())
+            } else {
+                base
             }
-            return base
+            return takePercent(value)
+        }
+
+        /**
+         * A "%" that stands for a percentage binds to the value in front of
+         * it, so "100×20%" is a fifth of a hundred and "100÷20%" is five
+         * hundred. A "%" with a value after it is the infix modulo instead,
+         * and is left for [parseTerm].
+         */
+        private fun takePercent(value: Double): Double {
+            lastWasPercent = false
+            skipSpaces()
+            if (peek() != '%') return value
+            var probe = pos + 1
+            while (probe < text.length && text[probe] == ' ') probe++
+            val next = text.getOrNull(probe)
+            if (next != null && (next.isDigit() || next == '.' || next == '(' ||
+                    next == '√' || next == 'π' || next.isLetter())
+            ) {
+                return value
+            }
+            pos++
+            lastWasPercent = true
+            return value / 100.0
         }
 
         private fun parseAtom(): Double {

@@ -589,9 +589,9 @@ class SmartSuggestTest {
     fun aTrailingPercentIsAPercentageNotADivision() {
         assertNull(hit("100%"))
         assertNull(hit("up 50%"))
-        // Mixed with another operator it is arithmetic again — and the
-        // engine reads a trailing "%" as "of one", so this is 50 + 0.1.
-        assertEquals("50.1", hit("50+10%")?.result)
+        // Mixed with another operator it is arithmetic again — and an
+        // added percentage is a share of the left side, so this is 50 + 5.
+        assertEquals("55", hit("50+10%")?.result)
     }
 
     @Test
