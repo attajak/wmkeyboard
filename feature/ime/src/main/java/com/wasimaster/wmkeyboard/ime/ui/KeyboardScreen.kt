@@ -21515,8 +21515,12 @@ private fun repeatFeedback(
  * chooser that opened first swallowed the drag it was configured for, which left
  * "press and hold, then swipe" unable to do anything but switch languages
  * (issue #122). What is left over — a slot set to the language switch, or to
- * nothing at all — leaves the hold free for the chooser. One enabled layout
- * leaves nothing worth choosing between, and holding would only cost a space.
+ * nothing while the quick swipe switches languages — leaves the hold free for
+ * the chooser. With neither slot on the language switch the chooser has no
+ * claim on the hold at all (issue #533): the spacebar gesture is then only
+ * installed for the swipe down to hide, and turning that on must not hand the
+ * hold to a chooser nobody asked for. One enabled layout leaves nothing worth
+ * choosing between, and holding would only cost a space.
  *
  * The chooser is still on the 🌐 key's long press and on either swipe slot set
  * to the language switch, so nothing here takes it away entirely. Hiding the
@@ -21526,10 +21530,14 @@ private fun repeatFeedback(
 internal fun spaceHoldOpensPicker(
     enabledLayoutCount: Int,
     holdOpensAlternates: Boolean,
+    spaceShortSwipe: SpaceSwipeAction,
     spaceLongSwipe: SpaceSwipeAction,
 ): Boolean = enabledLayoutCount > 1 &&
     !holdOpensAlternates &&
-    (spaceLongSwipe == SpaceSwipeAction.NONE || spaceLongSwipe == SpaceSwipeAction.LANGUAGE)
+    (
+        spaceLongSwipe == SpaceSwipeAction.LANGUAGE ||
+            (spaceLongSwipe == SpaceSwipeAction.NONE && spaceShortSwipe == SpaceSwipeAction.LANGUAGE)
+        )
 
 /**
  * Press handling: tap commits, long-press opens alternates (or begins
@@ -21648,7 +21656,7 @@ private fun Modifier.pointerInputKey(
             key, spaceShortSwipe, spaceLongSwipe, enabledLayoutIds, currentLayoutId, longPressDelayMs,
             hapticOnLongPress, hapticOnLongPressRelease, vibrateOnSpace, spaceCursor2d,
             spaceSwipeDownHide, textEditing, alternates, pickerIsCarousel, pickerForLongRing,
-            languageEchoTotalMs, spaceTouchpad,
+            languageEchoTotalMs, spaceTouchpad, keyRepeat, vibrateOnRepeat, soundOnRepeat,
         ) {
             val slopPx = 12.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
@@ -21748,7 +21756,7 @@ private fun Modifier.pointerInputKey(
                     // a still-hold (action == null); a drag sets action first and
                     // still runs the swipe/cursor gesture.
                     val holdOpensSwitcher = spaceHoldOpensPicker(
-                        enabledLayoutIds.size, holdOpensAlternates, spaceLongSwipe,
+                        enabledLayoutIds.size, holdOpensAlternates, spaceShortSwipe, spaceLongSwipe,
                     )
                     // The popup waits out the full long-press delay, like every other
                     // key's does; the picker keeps its own shorter cap.
@@ -21762,6 +21770,13 @@ private fun Modifier.pointerInputKey(
                     val holdOpensKeyboards = !holdOpensAlternates &&
                         spaceLongSwipe == SpaceSwipeAction.KEYBOARDS
                     var keyboardsOpened = false
+                    // Issue #533: with both slots set to nothing, this gesture is
+                    // here only for the swipe down to hide, and the hold keeps the
+                    // space repeat it has with that switch off. Any movement (the
+                    // swipe resolves to nothing) or the hide stops it.
+                    val holdRepeatsSpace = spaceShortSwipe == SpaceSwipeAction.NONE &&
+                        spaceLongSwipe == SpaceSwipeAction.NONE && key.holdRepeats()
+                    var spaceRepeated = false
                     val holdJob = if (holdOpensAlternates || holdOpensSwitcher || holdOpensKeyboards) {
                         scope.launch {
                             delay(holdDelayMs.toLong())
@@ -21794,6 +21809,16 @@ private fun Modifier.pointerInputKey(
                                     setLanguagePreview(enabledLayoutIds[langIndex])
                                 }
                                 if (hapticOnLongPress) onKeyPress()
+                            }
+                        }
+                    } else if (holdRepeatsSpace) {
+                        scope.launch {
+                            delay(keyRepeat.startDelayMs.toLong())
+                            while (action == null && !hidden) {
+                                spaceRepeated = true
+                                repeatFeedback(vibrateOnRepeat, soundOnRepeat, onKeyPress, onKeySound, onKeyHaptic)
+                                onKeyRepeat(key)
+                                delay(keyRepeat.spaceMs.toLong())
                             }
                         }
                     } else {
@@ -22157,6 +22182,8 @@ private fun Modifier.pointerInputKey(
                             val selected = enabledLayoutIds[langIndex]
                             if (selected != currentLayoutId) onLayoutSelect(selected)
                         }
+                        // The hold repeated the space: those were the keystrokes.
+                        spaceRepeated -> {}
                         action == null -> onKey(key)
                         action == SpaceSwipeAction.LANGUAGE -> {
                             val selected = enabledLayoutIds[langIndex]
