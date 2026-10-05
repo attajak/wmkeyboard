@@ -484,13 +484,26 @@ export interface SoundPackRead {
 	press: SoundSample[];
 	release: SoundSample[];
 	roles: Record<string, { press: SoundSample[]; release: SoundSample[]; gain: number | null }>;
+	/** Per-key sets, keyed by the text the key types (lowercased). */
+	keys: Record<string, { press: SoundSample[]; release: SoundSample[]; gain: number | null }>;
 	problems: string[];
 }
 
 export const SOUND_ROLES = ['default', 'space', 'enter', 'delete', 'modifier'] as const;
 
+/** `SoundPackFile.MAX_SAMPLES`. */
+export const SOUND_PACK_MAX_SAMPLES = 512;
+
+/** `SoundPackFile.MAX_KEYS`. */
+export const SOUND_PACK_MAX_KEYS = 256;
+
+/** `SoundPackFile.MAX_VARIANTS`, per list. */
+export const SOUND_PACK_MAX_VARIANTS = 32;
+
 export function readSoundPack(bytes: Uint8Array): SoundPackRead {
-	const entries = readZip(bytes, 200);
+	// 1024 is the importer's own entry cap; a per-key pack is one recording per
+	// letter, so the old 200 would have thrown on a pack the app accepts.
+	const entries = readZip(bytes, 1024);
 	const manifest = zipFind(entries, 'pack.json');
 	if (!manifest) throw new Error('No pack.json in the archive.');
 	const raw = JSON.parse(textOf(manifest));
@@ -508,7 +521,7 @@ export function readSoundPack(bytes: Uint8Array): SoundPackRead {
 	};
 	const list = (v: unknown): SoundSample[] => (Array.isArray(v) ? v.map(sample) : []);
 	const press = list(raw.press);
-	if (!press.some((s) => s.url)) problems.push('"press" resolves to no playable sample; the app refuses the pack.');
+	const release = list(raw.release);
 	const roles: SoundPackRead['roles'] = {};
 	if (raw.roles && typeof raw.roles === 'object') {
 		for (const [k, v] of Object.entries(raw.roles as Record<string, Record<string, unknown>>)) {
@@ -519,8 +532,39 @@ export function readSoundPack(bytes: Uint8Array): SoundPackRead {
 			roles[k] = { press: list(v?.press), release: list(v?.release), gain: typeof v?.gain === 'number' ? v.gain : null };
 		}
 	}
-	const count = press.length + list(raw.release).length + Object.values(roles).reduce((n, r) => n + r.press.length + r.release.length, 0);
-	if (count > 64) problems.push(`${count} samples; the app caps at 64.`);
+	// Per-key sets, keyed by the text a key types. Lowercased here because the
+	// importer lowercases them, so a pack shipping "A" and "a" ends up with one
+	// entry on the device and should read as one here too.
+	const keys: SoundPackRead['keys'] = {};
+	if (raw.keys && typeof raw.keys === 'object') {
+		const named = Object.entries(raw.keys as Record<string, Record<string, unknown>>);
+		if (named.length > SOUND_PACK_MAX_KEYS) {
+			problems.push(`"keys" names ${named.length} keys; the app keeps the first ${SOUND_PACK_MAX_KEYS} and drops the rest.`);
+		}
+		for (const [rawKey, v] of named.slice(0, SOUND_PACK_MAX_KEYS)) {
+			const k = rawKey.toLowerCase();
+			if (!k) {
+				problems.push('"keys" has an empty key name; the app drops it.');
+				continue;
+			}
+			if (keys[k]) {
+				problems.push(`"keys" names "${k}" twice once cased down; the app keeps one of them.`);
+			}
+			keys[k] = { press: list(v?.press), release: list(v?.release), gain: typeof v?.gain === 'number' ? v.gain : null };
+		}
+	}
+	// The app refuses a pack only when nothing plays on key-down anywhere: a
+	// per-key pack with no board-wide set is legal, though keys it does not
+	// name then fall through to the system click.
+	const anyPress = press.some((s) => s.url) || Object.values(keys).some((k) => k.press.some((s) => s.url));
+	if (!anyPress) {
+		problems.push('Nothing resolves to a playable key-down sample; the app refuses the pack.');
+	} else if (!press.some((s) => s.url) && Object.keys(keys).length) {
+		problems.push('No top-level "press": keys this pack does not name play the system click rather than the pack.');
+	}
+	const setsOf = (m: SoundPackRead['keys']) => Object.values(m).reduce((n, r) => n + r.press.length + r.release.length, 0);
+	const count = press.length + release.length + setsOf(roles) + setsOf(keys);
+	if (count > SOUND_PACK_MAX_SAMPLES) problems.push(`${count} samples; the app caps at ${SOUND_PACK_MAX_SAMPLES}.`);
 	return {
 		id: String(raw.id ?? ''),
 		name: String(raw.name ?? ''),
@@ -529,8 +573,9 @@ export function readSoundPack(bytes: Uint8Array): SoundPackRead {
 		packVersion: String(raw.packVersion ?? '1.0.0'),
 		gain: typeof raw.gain === 'number' ? raw.gain : 1,
 		press,
-		release: list(raw.release),
+		release,
 		roles,
+		keys,
 		problems,
 	};
 }

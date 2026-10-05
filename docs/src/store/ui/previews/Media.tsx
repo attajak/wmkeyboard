@@ -147,11 +147,13 @@ export function SoundPackPreview({ read }: { read: SoundPackRead }) {
 	const cache = useRef(new Map<string, AudioBuffer>());
 	const [busy, setBusy] = useState(false);
 	const pick = (list: SoundSample[]) => list.filter((s) => s.url)[Math.floor(Math.random() * list.filter((s) => s.url).length)];
-	const play = async (role: string, phase: 'press' | 'release') => {
+	const play = async (key: string, role: string, phase: 'press' | 'release') => {
+		// keys -> roles -> top level, per field, the order the app resolves in.
+		const k = key ? read.keys[key] : undefined;
 		const r = read.roles[role];
-		const list = r ? r[phase] : phase === 'press' ? read.press : read.release;
+		const own = k?.[phase].length ? k[phase] : r?.[phase].length ? r[phase] : [];
 		const fallback = phase === 'press' ? read.press : read.release;
-		const s = pick(list.length ? list : fallback);
+		const s = pick(own.length ? own : fallback);
 		if (!s?.url) return;
 		const ctx = get();
 		let buf = cache.current.get(s.url);
@@ -167,27 +169,38 @@ export function SoundPackPreview({ read }: { read: SoundPackRead }) {
 		const src = ctx.createBufferSource();
 		src.buffer = buf;
 		const g = ctx.createGain();
-		g.gain.value = Math.min(1, (r?.gain ?? read.gain) || 1);
+		g.gain.value = Math.min(1, (k?.gain ?? r?.gain ?? read.gain) || 1);
 		src.connect(g).connect(ctx.destination);
 		src.start();
 	};
 	const roleOf = (k: string) => (k === 'space' ? 'space' : k === '⏎' ? 'enter' : k === '⌫' ? 'delete' : k === '⇧' ? 'modifier' : 'default');
+	// What a pack would look this pad key up as: the text it types, which for
+	// the furniture keys is nothing the pack can have named.
+	const keyOf = (k: string) => (k === '⇧' || k === '⌫' || k === '⏎' ? '' : k === 'space' ? ' ' : k);
+	// A per-key pack is mostly letters, so the pad shows the ones it named
+	// rather than a fixed q/w/e that may be silent.
+	const namedKeys = Object.keys(read.keys).filter((k) => k.trim().length > 0);
+	const padKeys = [...(namedKeys.length ? namedKeys.slice(0, 8) : ['q', 'w', 'e']), '⇧', 'space', '⌫', '⏎'];
 	return (
 		<>
 			<Problems items={read.problems} />
 			<div class="st-pv-pad">
 				<p class="st-small st-muted" style="margin-bottom:0.5rem">
-					Type on the pad: a random press sample plays on the way down{read.release.length ? ', a release sample on the way up' : ''}, per role, the way the keyboard does it.
+					Type on the pad: a random press sample plays on the way down{read.release.length ? ', a release sample on the way up' : ''}, per key and per role, the way the keyboard does it.
 				</p>
 				<div class="st-keypad" style="padding:0">
-					{['q', 'w', 'e', '⇧', 'space', '⌫', '⏎'].map((k) => (
-						<button key={k} disabled={busy} onPointerDown={() => play(roleOf(k), 'press')} onPointerUp={() => play(roleOf(k), 'release')}>{k}</button>
+					{padKeys.map((k) => (
+						<button key={k} disabled={busy} onPointerDown={() => play(keyOf(k), roleOf(k), 'press')} onPointerUp={() => play(keyOf(k), roleOf(k), 'release')}>{k}</button>
 					))}
 				</div>
 			</div>
 			<div style="border-top:1px solid var(--st-card-border)">
 				{read.press.map((s, i) => <PlayRow key={`p${i}`} sample={s} label={`press ${i + 1} · ${s.path}`} gain={read.gain} />)}
 				{read.release.map((s, i) => <PlayRow key={`r${i}`} sample={s} label={`release ${i + 1} · ${s.path}`} gain={read.gain} />)}
+				{Object.entries(read.keys).flatMap(([key, k]) => [
+					...k.press.map((s, i) => <PlayRow key={`k${key}p${i}`} sample={s} label={`"${key}" press ${i + 1} · ${s.path}`} gain={k.gain ?? read.gain} />),
+					...k.release.map((s, i) => <PlayRow key={`k${key}r${i}`} sample={s} label={`"${key}" release ${i + 1} · ${s.path}`} gain={k.gain ?? read.gain} />),
+				])}
 				{Object.entries(read.roles).flatMap(([role, r]) => [
 					...r.press.map((s, i) => <PlayRow key={`${role}p${i}`} sample={s} label={`${role} press ${i + 1} · ${s.path}`} gain={r.gain ?? read.gain} />),
 					...r.release.map((s, i) => <PlayRow key={`${role}r${i}`} sample={s} label={`${role} release ${i + 1} · ${s.path}`} gain={r.gain ?? read.gain} />),
@@ -195,6 +208,7 @@ export function SoundPackPreview({ read }: { read: SoundPackRead }) {
 			</div>
 			<div class="st-pv-pad st-small st-muted" style="border-top:1px solid var(--st-card-border)">
 				{read.name || 'Sound pack'} v{read.packVersion}{read.author ? ` by ${read.author}` : ''} · gain {read.gain} · roles: {Object.keys(read.roles).length ? Object.keys(read.roles).join(', ') : 'default only'}
+				{Object.keys(read.keys).length ? ` · its own sound for ${Object.keys(read.keys).length} key${Object.keys(read.keys).length === 1 ? '' : 's'}` : ''}
 			</div>
 		</>
 	);
