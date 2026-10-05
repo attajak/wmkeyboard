@@ -2310,7 +2310,8 @@ open class WMKeyboardService : InputMethodService() {
 
     /**
      * The word the caret is sitting *inside* — [head] behind it, [tail] ahead
-     * — when it is not parked at that word's end. Null the rest of the time.
+     * — when it is not parked at that word's end, or is parked there but the
+     * word could not be re-armed (an empty [tail]). Null the rest of the time.
      *
      * Deliberately not armed as a composing region, unlike the word a caret
      * lands at the end of ([restartSuggestionsAtCursor]). A region with the
@@ -10760,7 +10761,13 @@ open class WMKeyboardService : InputMethodService() {
             // That word gets the strip too — a caret on a word is the user
             // looking at that word (#32) — read-only, because a composing
             // region cannot hold a caret in its middle (see [caretWord]).
-            val touching = caretWordAt(before, after)
+            //
+            // Or parked at the end of one the resume above turned down: an
+            // editor that refused the region, an echo the caret had already
+            // moved past, a spelling the composer cannot read back. Read-only
+            // too, with nothing ahead of the caret, so `word| to` still puts
+            // the word on the strip instead of predicting past it (#413).
+            val touching = caretWordAt(before, after) ?: word?.let { it to "" }
             if (touching != null) {
                 val (head, tail) = touching
                 // Context comes from the text ahead of the word, not from the
