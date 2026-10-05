@@ -26309,14 +26309,30 @@ open class WMKeyboardService : InputMethodService() {
         BitmapFactory.decodeFile(file.path, bounds)
         val longest = maxOf(bounds.outWidth, bounds.outHeight)
         if (longest <= edge) return file.readBytes()
-        val bitmap = BitmapFactory.decodeFile(file.path) ?: return file.readBytes()
-        val scale = edge.toFloat() / longest
-        val scaled = Bitmap.createScaledBitmap(
-            bitmap,
-            (bitmap.width * scale).toInt().coerceAtLeast(1),
-            (bitmap.height * scale).toInt().coerceAtLeast(1),
-            true,
-        )
+        // Halved on the way in, never decoded whole. The bounds above already
+        // say the picture is bigger than we want, and decoding it at full size
+        // first was one allocation of width x height x 4 bytes in the
+        // keyboard's process: 48 MB for an ordinary 12 MP photo and over 400 MB
+        // for a 108 MP one, which is most of why this process could be seen
+        // holding hundreds of megabytes. The sample stops while the long edge
+        // still covers [edge], so scaling to it afterwards loses nothing — the
+        // same shape as `decodeClipImage` in the scanner panels.
+        var sample = 1
+        while (longest / (sample * 2) >= edge) sample *= 2
+        val options = BitmapFactory.Options().apply { inSampleSize = sample }
+        val bitmap = BitmapFactory.decodeFile(file.path, options) ?: return file.readBytes()
+        val decoded = maxOf(bitmap.width, bitmap.height)
+        val scale = if (decoded <= edge) 1f else edge.toFloat() / decoded
+        val scaled = if (scale >= 1f) {
+            bitmap
+        } else {
+            Bitmap.createScaledBitmap(
+                bitmap,
+                (bitmap.width * scale).toInt().coerceAtLeast(1),
+                (bitmap.height * scale).toInt().coerceAtLeast(1),
+                true,
+            )
+        }
         if (scaled != bitmap) bitmap.recycle()
         return java.io.ByteArrayOutputStream().use { out ->
             scaled.compress(Bitmap.CompressFormat.JPEG, 88, out)

@@ -4915,21 +4915,40 @@ private fun DecalDialog(
 }
 
 /**
- * Copies a picked sticker into the theme-images folder, downscaled like a key
- * texture and kept as PNG so its transparency survives.
+ * Decodes [uri] sampled down, scales it to [maxPx] on its longest edge, and
+ * writes it as PNG under [fileName] in the theme-images folder. Returns the
+ * path, or null when the image cannot be read.
+ *
+ * The sampling is the point. Every importer here used to `decodeStream` the
+ * picked picture **whole** and only then ask whether it was too big — one
+ * allocation of width x height x 4 bytes, which for an ordinary 12 MP phone
+ * photo is 48 MB and for a 108 MP one is over 400 MB, in the process that also
+ * draws the keyboard, to end up storing 512 px (or 192 for a particle). Reading
+ * the bounds first costs a second open of the stream and nothing else. The
+ * sample stops while the long edge still covers [maxPx], so the scale that
+ * follows loses nothing.
  */
-private fun importDecalImage(
+private fun importScaledThemeImage(
     context: android.content.Context,
-    themeId: String,
-    decalId: String,
     uri: android.net.Uri,
+    maxPx: Int,
+    fileName: String,
 ): String? = runCatching {
+    val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.requireInputStream(uri).use { input ->
+        android.graphics.BitmapFactory.decodeStream(input, null, bounds)
+    }
+    val longest = maxOf(bounds.outWidth, bounds.outHeight)
+    if (longest <= 0) return null
+    var sample = 1
+    while (longest / (sample * 2) >= maxPx) sample *= 2
+    val options = android.graphics.BitmapFactory.Options().apply { inSampleSize = sample }
     val source = context.contentResolver.requireInputStream(uri).use { input ->
-        android.graphics.BitmapFactory.decodeStream(input)
+        android.graphics.BitmapFactory.decodeStream(input, null, options)
     } ?: return null
-    val longest = maxOf(source.width, source.height)
-    val scaled = if (longest > KEY_TEXTURE_IMPORT_PX) {
-        val scale = KEY_TEXTURE_IMPORT_PX.toFloat() / longest
+    val decoded = maxOf(source.width, source.height)
+    val scaled = if (decoded > maxPx) {
+        val scale = maxPx.toFloat() / decoded
         android.graphics.Bitmap.createScaledBitmap(
             source,
             maxOf(1, (source.width * scale).toInt()),
@@ -4939,12 +4958,30 @@ private fun importDecalImage(
     } else {
         source
     }
-    val file = File(themeImagesDir(context), "${themeId}_decal_$decalId.img")
+    val file = File(themeImagesDir(context), fileName)
     file.outputStream().use { out ->
         scaled.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
     }
+    if (scaled != source) source.recycle()
+    scaled.recycle()
     file.absolutePath
 }.getOrNull()
+
+/**
+ * Copies a picked sticker into the theme-images folder, downscaled like a key
+ * texture and kept as PNG so its transparency survives.
+ */
+private fun importDecalImage(
+    context: android.content.Context,
+    themeId: String,
+    decalId: String,
+    uri: android.net.Uri,
+): String? = importScaledThemeImage(
+    context = context,
+    uri = uri,
+    maxPx = KEY_TEXTURE_IMPORT_PX,
+    fileName = "${themeId}_decal_$decalId.img",
+)
 
 /** Longest edge a press-effect particle image is stored at. */
 private const val EFFECT_IMAGE_IMPORT_PX = 192
@@ -4957,31 +4994,12 @@ private fun importEffectImage(
     context: android.content.Context,
     themeId: String,
     uri: android.net.Uri,
-): String? = runCatching {
-    val source = context.contentResolver.requireInputStream(uri).use { input ->
-        android.graphics.BitmapFactory.decodeStream(input)
-    } ?: return null
-    val longest = maxOf(source.width, source.height)
-    val scaled = if (longest > EFFECT_IMAGE_IMPORT_PX) {
-        val scale = EFFECT_IMAGE_IMPORT_PX.toFloat() / longest
-        android.graphics.Bitmap.createScaledBitmap(
-            source,
-            maxOf(1, (source.width * scale).toInt()),
-            maxOf(1, (source.height * scale).toInt()),
-            true,
-        )
-    } else {
-        source
-    }
-    val file = File(
-        themeImagesDir(context),
-        "${themeId}_fx_${System.currentTimeMillis()}.img",
-    )
-    file.outputStream().use { out ->
-        scaled.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
-    }
-    file.absolutePath
-}.getOrNull()
+): String? = importScaledThemeImage(
+    context = context,
+    uri = uri,
+    maxPx = EFFECT_IMAGE_IMPORT_PX,
+    fileName = "${themeId}_fx_${System.currentTimeMillis()}.img",
+)
 
 /** Longest edge a texture is stored at. A key never draws bigger than this. */
 private const val KEY_TEXTURE_IMPORT_PX = 512
@@ -5010,31 +5028,12 @@ private fun importThemeImage(
     context: android.content.Context,
     namePrefix: String,
     uri: android.net.Uri,
-): String? = runCatching {
-    val source = context.contentResolver.requireInputStream(uri).use { input ->
-        android.graphics.BitmapFactory.decodeStream(input)
-    } ?: return null
-    val longest = maxOf(source.width, source.height)
-    val scaled = if (longest > KEY_TEXTURE_IMPORT_PX) {
-        val scale = KEY_TEXTURE_IMPORT_PX.toFloat() / longest
-        android.graphics.Bitmap.createScaledBitmap(
-            source,
-            maxOf(1, (source.width * scale).toInt()),
-            maxOf(1, (source.height * scale).toInt()),
-            true,
-        )
-    } else {
-        source
-    }
-    val file = File(
-        themeImagesDir(context),
-        "${namePrefix}_${System.currentTimeMillis()}.img",
-    )
-    file.outputStream().use { out ->
-        scaled.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, out)
-    }
-    file.absolutePath
-}.getOrNull()
+): String? = importScaledThemeImage(
+    context = context,
+    uri = uri,
+    maxPx = KEY_TEXTURE_IMPORT_PX,
+    fileName = "${namePrefix}_${System.currentTimeMillis()}.img",
+)
 
 /** Opens a credit link in the browser. Failure is not worth a message. */
 private fun openLink(context: android.content.Context, url: String) {
