@@ -119,4 +119,19 @@ class BengaliPhoneticIndexTest {
     @Test fun unknownInputHasNoSiblings() {
         assertEquals(null, top("zzzq"))
     }
+
+    /**
+     * Issue #516: "vodor" is ভোঁদড় on desktop Avro's list. A typed o between
+     * consonants folds as the inherent vowel, so the strip's lookup cannot see
+     * a written ো there; the loose lookup reads it both ways, plain fold first.
+     */
+    @Test fun looseLookupReadsAMedialOAsOKar() {
+        val words = BengaliPhoneticIndex(
+            listOf("বদর" to 50, "ভোঁদড়" to 1, "দোকান" to 30, "ভোট" to 40, "বট" to 60),
+        )
+        assertEquals(false, "ভোঁদড়" in words.lookup("vodor"))
+        assertEquals(listOf("বদর", "ভোঁদড়"), words.lookupLoose("vodor"))
+        assertEquals(listOf("দোকান"), words.lookupLoose("dokan"))
+        assertEquals(listOf("বট", "ভোট"), words.lookupLoose("vot"))
+    }
 }

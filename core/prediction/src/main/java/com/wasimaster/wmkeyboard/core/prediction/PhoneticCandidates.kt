@@ -57,7 +57,9 @@ object PhoneticCandidates {
         val reading = scheme.transliterate(composing)
         val listed = backend.spellings.lookup(composing)
         val dictionary = LinkedHashSet<String>()
-        dictionary.addAll(backend.index.lookup(composing))
+        // The loose search, as Avro's regex is loose: a typed o in mid-word may
+        // be ো, which the strip's fold reads only as the inherent vowel.
+        dictionary.addAll(backend.index.lookupLoose(composing))
         dictionary.addAll(withSuffixes(backend, composing))
         val out = LinkedHashSet<String>()
         out.addAll(listed)

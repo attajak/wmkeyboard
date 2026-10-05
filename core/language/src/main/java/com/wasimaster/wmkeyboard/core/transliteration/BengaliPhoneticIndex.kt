@@ -197,14 +197,39 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     /** Dictionary words phonetically matching the romanized [input], best first. */
     override fun lookup(input: String): List<String> {
-        val folded = foldRomanFull(input)
+        val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
+        return ranked(foldRomanFull(input), typedFinalO)
+    }
+
+    /**
+     * [lookup], then the words reached by reading a typed `o` between two
+     * consonants as ো rather than as the inherent vowel.
+     *
+     * The fold drops that `o` so that "kori" meets করি, whose inherent vowel is
+     * not written. But a ো in the middle of a word is written, so the same rule
+     * left every such word out of reach of the `o` that spells it: "vodor" could
+     * not find ভোঁদড় (issue #516, fourth on desktop Avro's list), "dokan" not
+     * দোকান, "vot" not ভোট. Avro's regular expression lets each `o` be either,
+     * and so does this: every way of keeping some of those vowels, the plain
+     * fold's words first. Capped at [LOOSE_VARIANTS] keys; four medial vowels
+     * already make sixteen.
+     */
+    override fun lookupLoose(input: String): List<String> {
+        val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
+        val raw = foldRomanRaw(input)
+        val out = LinkedHashSet<String>()
+        for (folded in inherentVariants(raw, LOOSE_VARIANTS)) out.addAll(ranked(folded, typedFinalO))
+        return out.toList()
+    }
+
+    /** The bucket for [folded]'s key, best first, or empty. */
+    private fun ranked(folded: Folded, typedFinalO: Boolean): List<String> {
         val bucket = bucketOf(folded.key)
         if (bucket < 0) return emptyList()
         val from = bucketStart[bucket]
         val until = bucketStart[bucket + 1]
         // One sibling is the overwhelmingly common case; skip the comparator.
         if (until - from == 1) return listOf(wordAt(from))
-        val typedFinalO = input.isNotEmpty() && input.last().lowercaseChar() in "ow"
         return (from until until)
             .sortedByDescending { frequencies[it].toLong() * SCALE / handicap(it, folded.aspiration, typedFinalO) }
             .map(::wordAt)
@@ -338,6 +363,9 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
         /** Keeps the divided frequencies in integer arithmetic. */
         private const val SCALE = 1024L
 
+        /** Most fold keys [lookupLoose] tries for one input. */
+        private const val LOOSE_VARIANTS = 16
+
         /**
          * Bengali consonants whose aspiration a typist genuinely signals with
          * an h. ছ and ফ are absent on purpose: "ch" is how চ gets written by
@@ -466,7 +494,43 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
         fun foldRoman(input: String): String = foldRomanFull(input).key
 
         /** Folds romanized typing, keeping the aspiration the typist wrote. */
-        fun foldRomanFull(input: String): Folded {
+        fun foldRomanFull(input: String): Folded = dropTrailingO(collapseInherent(foldRomanRaw(input)))
+
+        /**
+         * Every key [raw] folds to when each `o` between two consonants may be
+         * the inherent vowel (dropped, as [foldRomanFull] always does) or a
+         * written ো (kept), the all-dropped one first, at most [cap] of them.
+         */
+        internal fun inherentVariants(raw: Folded, cap: Int): List<Folded> {
+            val key = raw.key
+            val medial = key.indices.filter { i ->
+                key[i] == 'o' && i > 0 && key[i - 1] !in "aeiou" && i < key.length - 1 && key[i + 1] !in "aeiou"
+            }
+            val out = ArrayList<Folded>()
+            val seen = HashSet<String>()
+            for (kept in 0..medial.size) {
+                for (subset in subsets(medial, kept)) {
+                    val folded = dropTrailingO(collapseInherent(raw, subset.toSet()))
+                    if (seen.add(folded.key)) out += folded
+                    if (out.size >= cap) return out
+                }
+            }
+            return out
+        }
+
+        /** Every [size]-element subset of [items], in order. */
+        private fun subsets(items: List<Int>, size: Int): List<List<Int>> {
+            if (size == 0) return listOf(emptyList())
+            if (size > items.size) return emptyList()
+            val out = ArrayList<List<Int>>()
+            for (i in 0..items.size - size) {
+                for (rest in subsets(items.subList(i + 1, items.size), size - 1)) out += listOf(items[i]) + rest
+            }
+            return out
+        }
+
+        /** [input] folded letter for letter, before the inherent vowels and a final o come off. */
+        private fun foldRomanRaw(input: String): Folded {
             val lower = input.lowercase()
             val out = StringBuilder()
             val marks = StringBuilder()
@@ -512,7 +576,7 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
                 }
                 i++
             }
-            return dropTrailingO(collapseInherent(Folded(out.toString(), marks.toString())))
+            return Folded(out.toString(), marks.toString())
         }
 
         /**
@@ -520,14 +584,14 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
          * the Bengali fold of করি is "kri" (inherent o is invisible). Dropping
          * medial "o" between consonants from the roman side aligns the two.
          */
-        private fun collapseInherent(folded: Folded): Folded {
+        private fun collapseInherent(folded: Folded, keep: Set<Int> = emptySet()): Folded {
             val key = folded.key
             val out = StringBuilder()
             val marks = StringBuilder()
             for ((index, ch) in key.withIndex()) {
                 val prevIsConsonant = index > 0 && key[index - 1] !in "aeiou"
                 val nextIsConsonant = index < key.length - 1 && key[index + 1] !in "aeiou"
-                if (ch == 'o' && prevIsConsonant && nextIsConsonant) continue
+                if (ch == 'o' && prevIsConsonant && nextIsConsonant && index !in keep) continue
                 out.append(ch)
                 marks.append(folded.aspiration[index])
             }

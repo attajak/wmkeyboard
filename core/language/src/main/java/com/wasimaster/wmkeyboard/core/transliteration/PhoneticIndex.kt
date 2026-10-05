@@ -16,6 +16,14 @@ interface PhoneticIndex {
     /** Dictionary words phonetically matching the romanized [input], best first. */
     fun lookup(input: String): List<String>
 
+    /**
+     * [lookup], widened to the readings a looser search would also allow: what
+     * desktop Avro's regular expression finds and the fold alone does not. For
+     * the candidate list, which is meant to be long; the strip keeps [lookup].
+     * The default is [lookup] itself.
+     */
+    fun lookupLoose(input: String): List<String> = lookup(input)
+
     /** Dictionary frequency of a native-script [word], 0 when unknown. */
     fun frequencyOf(word: String): Int
 
