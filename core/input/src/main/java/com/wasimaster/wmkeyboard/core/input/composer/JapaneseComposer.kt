@@ -228,8 +228,10 @@ object Kana {
     /**
      * The next form of a kana in the flick pad's 小゛゜ cycle: base → small /
      * dakuten / handakuten → base, following the ring the kana sits in
-     * (か→が→か, は→ば→ぱ→は, つ→っ→づ→つ, う→ぅ→ゔ→う). A kana with no variant
-     * (な, ん, …) maps to itself, so cycling it is a no-op.
+     * (か→が→か, は→ば→ぱ→は, つ→っ→づ→つ, う→ぅ→ゔ→う). Katakana cycles the same
+     * rings (エ→ェ→エ, ハ→バ→パ→ハ), because a layout can type kana straight in
+     * either script. A kana with no variant (な, ん, …) maps to itself, so
+     * cycling it is a no-op.
      */
     fun cycleVariant(kana: Char): Char = VARIANT_NEXT[kana] ?: kana
 
@@ -313,6 +315,8 @@ object Kana {
      * Each string is a cycle ring for the flick pad's 小゛゜ key: char *i* advances
      * to char *i+1*, and the last wraps back to the first. Only kana with a small,
      * dakuten or handakuten form appear; everything else cycles to itself.
+     *
+     * Written in hiragana; [VARIANT_NEXT] derives the katakana rings from these.
      */
     private val VARIANT_CYCLES = listOf(
         "あぁ", "いぃ", "うぅゔ", "えぇ", "おぉ",
@@ -324,14 +328,27 @@ object Kana {
         "わゎ",
     )
 
-    /** Flattened [VARIANT_CYCLES]: kana → its next form in the ring. */
+    /**
+     * Flattened [VARIANT_CYCLES]: kana → its next form in the ring, in **both**
+     * scripts — every ring above has a katakana twin one 0x60 offset away, and a
+     * layout is free to put katakana on its keys (issue #526), in which case the
+     * kana reaches the buffer as katakana and the key has to cycle it there.
+     */
     private val VARIANT_NEXT: Map<Char, Char> = buildMap {
-        for (ring in VARIANT_CYCLES) {
-            for (i in ring.indices) put(ring[i], ring[(i + 1) % ring.length])
+        for (hiragana in VARIANT_CYCLES) {
+            for (ring in listOf(hiragana, toKatakana(hiragana))) {
+                for (i in ring.indices) put(ring[i], ring[(i + 1) % ring.length])
+            }
         }
     }
 
-    /** [VARIANT_CYCLES] keyed by each ring's plain kana: か → "が", は → "ばぱ". */
+    /**
+     * [VARIANT_CYCLES] keyed by each ring's plain kana: か → "が", は → "ばぱ".
+     *
+     * Hiragana only, unlike [VARIANT_NEXT]: this one feeds the loose-mark lattice
+     * lookup, and `ja_kana` files its readings in hiragana, so a katakana ring
+     * would widen the lattice for nothing.
+     */
     private val MARKED_FORMS: Map<Char, String> =
         VARIANT_CYCLES.associate { ring -> ring[0] to ring.substring(1) }
 

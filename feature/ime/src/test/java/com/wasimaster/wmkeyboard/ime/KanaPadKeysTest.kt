@@ -37,15 +37,13 @@ class KanaPadKeysTest {
     )
 
     /** A pad whose globe key doubles as 小゛゜, or an ordinary one. */
-    private fun pad(flagged: Boolean): LayoutSet {
+    private fun pad(flagged: Boolean, kana: List<String> = listOf("か", "ん")): LayoutSet {
         val letters = KeyboardLayout(
             name = "pad",
             rows = listOf(
                 listOf(
                     Key("🌐", action = KeyAction.LanguageSwitch, kanaVariantWhileComposing = flagged),
-                    Key("か"),
-                    Key("ん"),
-                ),
+                ) + kana.map { Key(it) },
             ),
         )
         return LayoutSet(letters, Layouts.SYMBOLS, Layouts.SYMBOLS_SHIFTED)
@@ -102,5 +100,28 @@ class KanaPadKeysTest {
         val (service, _, _) = glideKeyboard(japanese(settings(), pad(flagged = false)))
         service.onKey(Key("か"))
         assertFalse(service.uiState.value.kanaVariantReady)
+    }
+
+    /**
+     * A layout may type katakana straight from its keys rather than through a
+     * romaji reading, and the key has to work there too (issue #526): エ takes
+     * its small form ェ, カ its dakuten ガ.
+     */
+    @Test
+    fun `the kana-mark key works on katakana keys`() {
+        val katakana = pad(flagged = true, kana = listOf("エ", "カ", "ン"))
+        val (service, _, _) = glideKeyboard(japanese(settings(), katakana))
+
+        service.onKey(Key("エ"))
+        assertTrue("エ can become ェ", service.uiState.value.kanaVariantReady)
+        service.onKey(Key("小゛゜", action = KeyAction.KanaVariant))
+        assertEquals("ェ", service.uiState.value.composingPreview)
+
+        service.onKey(Key("カ"))
+        service.onKey(Key("小゛゜", action = KeyAction.KanaVariant))
+        assertEquals("ェガ", service.uiState.value.composingPreview)
+
+        service.onKey(Key("ン"))
+        assertFalse("ン has no marked form", service.uiState.value.kanaVariantReady)
     }
 }

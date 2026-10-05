@@ -216,6 +216,39 @@ class CjkComposerTest {
         assertEquals('ん', Kana.cycleVariant('ん'))
     }
 
+    /**
+     * A layout may put katakana straight on its keys, in which case the kana
+     * reaches the buffer as katakana and the 小゛゜ key has to cycle it there
+     * (issue #526). Same rings, one 0x60 offset up.
+     */
+    @Test
+    fun `the kana variant key cycles katakana too`() {
+        // Small-form ring: エ↔ェ.
+        assertEquals('ェ', Kana.cycleVariant('エ'))
+        assertEquals('エ', Kana.cycleVariant('ェ'))
+        // Dakuten-only ring: カ↔ガ.
+        assertEquals('ガ', Kana.cycleVariant('カ'))
+        assertEquals('カ', Kana.cycleVariant('ガ'))
+        // ハ→バ→パ→ハ.
+        assertEquals('バ', Kana.cycleVariant('ハ'))
+        assertEquals('パ', Kana.cycleVariant('バ'))
+        assertEquals('ハ', Kana.cycleVariant('パ'))
+        // ツ→ッ→ヅ→ツ and ウ→ゥ→ヴ→ウ, the three-form rings.
+        assertEquals('ッ', Kana.cycleVariant('ツ'))
+        assertEquals('ヅ', Kana.cycleVariant('ッ'))
+        assertEquals('ツ', Kana.cycleVariant('ヅ'))
+        assertEquals('ゥ', Kana.cycleVariant('ウ'))
+        assertEquals('ヴ', Kana.cycleVariant('ゥ'))
+        assertEquals('ウ', Kana.cycleVariant('ヴ'))
+        // ワ→ヮ, the last ring, and the no-variant katakana stay put.
+        assertEquals('ヮ', Kana.cycleVariant('ワ'))
+        assertEquals('ナ', Kana.cycleVariant('ナ'))
+        assertEquals('ン', Kana.cycleVariant('ン'))
+        // Half-width katakana is not cycled: its marks are separate code points,
+        // so a one-char swap cannot express ｶ → ｶﾞ.
+        assertEquals('ｶ', Kana.cycleVariant('ｶ'))
+    }
+
     @Test
     fun `japanese segments kana and reports consumed romaji length`() {
         // Kana readings are fine in tests; the words are ASCII stand-ins.
@@ -253,6 +286,10 @@ class CjkComposerTest {
         assertEquals("", Kana.markedForms('な'))
         assertEquals("", Kana.markedForms('が'))
         assertEquals("", Kana.markedForms('っ'))
+        // Katakana is left out on purpose: `ja_kana` files its readings in
+        // hiragana, so a katakana option would widen the lattice for nothing.
+        assertEquals("", Kana.markedForms('カ'))
+        assertEquals("", Kana.markedForms('ハ'))
     }
 
     /**
