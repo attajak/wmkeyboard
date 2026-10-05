@@ -42,9 +42,14 @@ object VoiceCasing {
 
     /**
      * [text] with its opening capital lowered unless [sentenceStart] says the
-     * caret sits where a sentence begins, in which case it stays.
+     * caret sits where a sentence begins, and with every *later* sentence in
+     * it opened with a capital.
      */
-    fun apply(text: String, sentenceStart: Boolean): String {
+    fun apply(text: String, sentenceStart: Boolean): String =
+        capitalizeInnerSentences(openingCase(text, sentenceStart))
+
+    /** [text] with only its opening capital judged against [sentenceStart]. */
+    private fun openingCase(text: String, sentenceStart: Boolean): String {
         if (sentenceStart || text.isEmpty()) return text
         val first = text[0]
         if (!first.isUpperCase()) return text
@@ -55,6 +60,62 @@ object VoiceCasing {
         // that way.
         if (word.drop(1).any { it.isUpperCase() }) return text
         return first.lowercaseChar() + text.substring(1)
+    }
+
+    /**
+     * [text] with the first letter of every sentence after the first raised.
+     *
+     * The recognizer capitalizes the utterance it was given and nothing
+     * inside it, so "hello period how are you" came back as "hello. how are
+     * you" — a full stop the user dictated, with the next sentence in lower
+     * case. The same holds for any recognizer that punctuates a long phrase
+     * by itself. Only the opening letter of each sentence is touched; the
+     * rest of the words are the recognizer's to case.
+     *
+     * A full stop that is part of an abbreviation is not a sentence end:
+     * "e.g." and "a.m." would otherwise raise the word after them. The test
+     * is the length of the letter run in front of the stop — one letter is an
+     * initial, more is a word — which is what separates "e.g. this" from
+     * "ready. this". The other terminators (? ! …) need no such guard.
+     */
+    private fun capitalizeInnerSentences(text: String): String {
+        var out: StringBuilder? = null
+        var i = 1
+        while (i < text.length) {
+            val mark = text[i]
+            if (mark !in TERMINATORS || (mark == '.' && isAbbreviationDot(text, i))) {
+                i++
+                continue
+            }
+            var j = i + 1
+            while (j < text.length && text[j] in CLOSERS) j++
+            // The gap is what makes it a sentence break rather than a mark
+            // sitting inside a word ("3.5", "what?!").
+            val gap = j
+            while (j < text.length && text[j].isWhitespace()) j++
+            if (j == gap || j == text.length) {
+                i++
+                continue
+            }
+            val letter = text[j]
+            if (letter.isLowerCase()) {
+                val sb = out ?: StringBuilder(text).also { out = it }
+                sb.setCharAt(j, letter.uppercaseChar())
+            }
+            i = j
+        }
+        return out?.toString() ?: text
+    }
+
+    /** Whether the full stop at [at] closes an initial rather than a sentence. */
+    private fun isAbbreviationDot(text: String, at: Int): Boolean {
+        var i = at - 1
+        var letters = 0
+        while (i >= 0 && text[i].isLetter()) {
+            letters++
+            i--
+        }
+        return letters == 1
     }
 
     /**

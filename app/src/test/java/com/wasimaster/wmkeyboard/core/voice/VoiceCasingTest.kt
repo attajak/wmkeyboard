@@ -96,6 +96,37 @@ class VoiceCasingTest {
     }
 
     @Test
+    fun `every sentence after the first opens with a capital`() {
+        assertEquals(
+            "Hello. How are you",
+            VoiceCasing.apply("Hello. how are you", sentenceStart = true),
+        )
+        assertEquals(
+            "one. Two! Three? Four",
+            VoiceCasing.apply("One. two! three? four", sentenceStart = false),
+        )
+        assertEquals(
+            "He said \"go.\" Then he left",
+            VoiceCasing.apply("He said \"go.\" then he left", sentenceStart = true),
+        )
+    }
+
+    @Test
+    fun `a stop that is not a sentence end raises nothing`() {
+        // An initial, a decimal, and a stop with no gap after it.
+        assertEquals("e.g. this one", VoiceCasing.apply("e.g. this one", sentenceStart = false))
+        assertEquals("at 9 a.m. tomorrow", VoiceCasing.apply("at 9 a.m. tomorrow", sentenceStart = false))
+        assertEquals("it was 3.5 metres", VoiceCasing.apply("it was 3.5 metres", sentenceStart = false))
+        assertEquals("go to site.com now", VoiceCasing.apply("go to site.com now", sentenceStart = false))
+    }
+
+    @Test
+    fun `a sentence already capitalized is left as it is`() {
+        assertEquals("Hello. World", VoiceCasing.apply("Hello. World", sentenceStart = true))
+        assertEquals("Hello. NASA", VoiceCasing.apply("Hello. NASA", sentenceStart = true))
+    }
+
+    @Test
     fun `the field's own caps mode has no say — an empty field keeps the capital`() {
         // The regression this pins: a plain inputType="text" field never asks
         // for sentence capitals, and Automatic capitals may be off, yet a
