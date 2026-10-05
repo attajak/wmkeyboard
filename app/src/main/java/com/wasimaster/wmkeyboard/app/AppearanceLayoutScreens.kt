@@ -1242,6 +1242,16 @@ internal fun LayoutSizeSettings(
             ) { scope.launch { repository.setKeyGapScale(it) } }
         }
         item {
+            // Issue #530: a tap in a short row's side gap types the key at that end.
+            ToggleSetting(
+                R.string.layout_extend_edge_keys_title,
+                stringResource(R.string.layout_extend_edge_keys_subtitle),
+                settings.watch { it.layoutBehavior.extendEdgeKeys },
+                info = stringResource(R.string.layout_extend_edge_keys_info),
+                default = SettingsDefaults.layoutBehavior.extendEdgeKeys,
+            ) { scope.launch { repository.setExtendEdgeKeys(it) } }
+        }
+        item {
             val bottomPadding = settings.watch { it.bottomPaddingDp }
             SliderSetting(
                 R.string.layout_bottom_padding_title,

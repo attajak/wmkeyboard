@@ -6590,6 +6590,15 @@ data class LayoutBehaviorSettings(
      */
     val edgeSwipeBack: Boolean = false,
     /**
+     * The keys at the ends of a row narrower than the board take the blank
+     * space beside them (#530): a tap left of QWERTY's `a` or right of its `l`
+     * types that letter instead of landing on nothing, the way Gboard does.
+     * Only the touch area grows; the key is drawn, and reports its centre to
+     * glide and autopilot, exactly where it was. On by default, since a tap in
+     * the gap has never done anything else.
+     */
+    val extendEdgeKeys: Boolean = true,
+    /**
      * A short, quick swipe down on a key types its corner hint — the first of
      * its long-press characters — without waiting out the hold (issue #178).
      * The `1` on `q`, the `!` on the exclamation-mark key's shifted twin,
@@ -8265,6 +8274,7 @@ class SettingsRepository(private val context: Context) {
         private val ENTER_LONGPRESS_EMOJI = booleanPreferencesKey("enter_longpress_emoji")
         private val SPACE_SWIPE_DOWN_HIDE = booleanPreferencesKey("space_swipe_down_hide")
         private val EDGE_SWIPE_BACK = booleanPreferencesKey("edge_swipe_back")
+        private val EXTEND_EDGE_KEYS = booleanPreferencesKey("extend_edge_keys")
         private val GLOBE_IN_ONE_PLACE = booleanPreferencesKey("globe_in_one_place")
         private val HINT_FLICK = booleanPreferencesKey("hint_flick")
         private val CAPITAL_FLICK = booleanPreferencesKey("capital_flick")
@@ -10289,6 +10299,7 @@ class SettingsRepository(private val context: Context) {
             spaceSwipeDownHide =
                 p[SPACE_SWIPE_DOWN_HIDE] ?: defaults.layoutBehavior.spaceSwipeDownHide,
             edgeSwipeBack = p[EDGE_SWIPE_BACK] ?: defaults.layoutBehavior.edgeSwipeBack,
+            extendEdgeKeys = p[EXTEND_EDGE_KEYS] ?: defaults.layoutBehavior.extendEdgeKeys,
             globeInOnePlace = p[GLOBE_IN_ONE_PLACE] ?: defaults.layoutBehavior.globeInOnePlace,
             hintFlick = p[HINT_FLICK] ?: defaults.layoutBehavior.hintFlick,
             capitalFlick = p[CAPITAL_FLICK] ?: defaults.layoutBehavior.capitalFlick,
@@ -15242,6 +15253,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setEdgeSwipeBack(value: Boolean) =
         editPrefs { it[EDGE_SWIPE_BACK] = value }
+
+    suspend fun setExtendEdgeKeys(value: Boolean) =
+        editPrefs { it[EXTEND_EDGE_KEYS] = value }
 
     suspend fun setGlobeInOnePlace(value: Boolean) =
         editPrefs { it[GLOBE_IN_ONE_PLACE] = value }

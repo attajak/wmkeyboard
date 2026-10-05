@@ -16940,12 +16940,21 @@ private fun KeyRow(
     /** Spawns the theme's press burst at the key's bounds; null when off. */
     onBurst: ((Rect, String?) -> Unit)? = null,
 ) {
+    // Issue #530: the end keys of a short row take its side gaps as touch area,
+    // so a tap beside QWERTY's `a` or `l` types it. The cell grows into the gap
+    // and the key's face is inset back to where the spacer would have left it.
+    val extend = settings.layoutBehavior.extendEdgeKeys && row.sidePad > 0.01f
+    val rightDrawn = split && row.splitGapWeight > 0f
+    val endsLeft = !rightDrawn || row.right.isEmpty()
     Row {
-        if (row.sidePad > 0.01f) Spacer(modifier = Modifier.weight(row.sidePad))
-        for (visual in row.left) {
+        if (row.sidePad > 0.01f && !extend) Spacer(modifier = Modifier.weight(row.sidePad))
+        for ((index, visual) in row.left.withIndex()) {
+            val start = if (extend && index == 0) row.sidePad else 0f
+            val end = if (extend && endsLeft && index == row.left.lastIndex) row.sidePad else 0f
+            val cell = visual.key.width + start + end
             KeyCell(
                 visual,
-                Modifier.weight(visual.key.width),
+                Modifier.weight(cell),
                 row.heightDp,
                 settings,
                 numericField,
@@ -16959,18 +16968,23 @@ private fun KeyRow(
                 onSpacePositioned,
                 smartResolve,
                 onBurst,
+                edgeStart = start / cell,
+                edgeEnd = end / cell,
             )
         }
         // Split mode only: the halves are cut where the row was resolved, so an
         // unsplit row has nothing on the right and needs no gap.
         // A row whose spacebar bridges the gap (#399) is drawn whole, gap and all
         // inside the spacebar, so it has no spacer — and a zero weight throws.
-        if (split && row.splitGapWeight > 0f) {
+        if (rightDrawn) {
             Spacer(modifier = Modifier.weight(row.splitGapWeight))
-            for (visual in row.right) {
+            for ((index, visual) in row.right.withIndex()) {
+                val start = if (extend && index == 0 && row.left.isEmpty()) row.sidePad else 0f
+                val end = if (extend && index == row.right.lastIndex) row.sidePad else 0f
+                val cell = visual.key.width + start + end
                 KeyCell(
                     visual,
-                    Modifier.weight(visual.key.width),
+                    Modifier.weight(cell),
                     row.heightDp,
                     settings,
                     numericField,
@@ -16984,10 +16998,12 @@ private fun KeyRow(
                     onSpacePositioned,
                     smartResolve,
                     onBurst,
+                    edgeStart = start / cell,
+                    edgeEnd = end / cell,
                 )
             }
         }
-        if (row.sidePad > 0.01f) Spacer(modifier = Modifier.weight(row.sidePad))
+        if (row.sidePad > 0.01f && !extend) Spacer(modifier = Modifier.weight(row.sidePad))
     }
 }
 
@@ -17102,20 +17118,36 @@ private fun KeyCell(
     onSpacePositioned: (LayoutCoordinates) -> Unit = {},
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
     onBurst: ((Rect, String?) -> Unit)? = null,
+    /**
+     * How much of the cell, as a fraction of its width, is a row's side gap the
+     * key has taken as touch area (#530) rather than room for its face.
+     */
+    edgeStart: Float = 0f,
+    edgeEnd: Float = 0f,
 ) {
     val key = visual.key
+    // Every key reports, not only the ones that write a letter: the rect
+    // table behind [onKeyPositioned] answers "which key is under the
+    // finger" for the modifier drag, and a mode key or an arrow is as
+    // likely an answer as a letter.
+    val reportPosition = Modifier.onGloballyPositioned { coords ->
+        onKeyPositioned(key, coords)
+        // The spacebar has a second reader — the multi-word glide split —
+        // which needs its whole rect rather than a centre.
+        if (key.action == KeyAction.Space) onSpacePositioned(coords)
+    }
+    // A key stretched into a side gap reports the cell it is drawn in, not the
+    // one it answers touches in: glide, autopilot and the touch model all read
+    // these rects as where the key *is*, and the gap must not move its centre.
+    val extended = edgeStart > 0f || edgeEnd > 0f
     KeyButton(
         visual = visual,
         settings = settings,
-        // Every key reports, not only the ones that write a letter: the rect
-        // table behind [onKeyPositioned] answers "which key is under the
-        // finger" for the modifier drag, and a mode key or an arrow is as
-        // likely an answer as a letter.
-        modifier = sizeModifier.onGloballyPositioned { coords ->
-            onKeyPositioned(key, coords)
-            // The spacebar has a second reader — the multi-word glide split —
-            // which needs its whole rect rather than a centre.
-            if (key.action == KeyAction.Space) onSpacePositioned(coords)
+        modifier = if (extended) sizeModifier else sizeModifier.then(reportPosition),
+        faceModifier = if (extended) {
+            Modifier.edgeInset(edgeStart, edgeEnd).then(reportPosition)
+        } else {
+            Modifier
         },
         heightDp = keyHeightDp,
         numericField = numericField,
@@ -17128,6 +17160,19 @@ private fun KeyCell(
         smartResolve = smartResolve,
         onBurst = onBurst,
     )
+}
+
+/**
+ * Draws the content in the part of the cell left after [start] and [end], each a
+ * fraction of the cell's width, while the cell itself keeps its full size — and
+ * with it every pointer handler outside this modifier (#530).
+ */
+private fun Modifier.edgeInset(start: Float, end: Float): Modifier = layout { measurable, constraints ->
+    val width = constraints.maxWidth
+    val left = (width * start).roundToInt()
+    val inner = (width - left - (width * end).roundToInt()).coerceAtLeast(0)
+    val placeable = measurable.measure(constraints.copy(minWidth = inner, maxWidth = inner))
+    layout(width, placeable.height) { placeable.placeRelative(left, 0) }
 }
 
 /**
@@ -18622,6 +18667,12 @@ internal fun KeyButton(
     smartResolve: (Key, PointerId) -> Key = { k, _ -> k },
     /** Spawns the theme's press burst at this key; null when the effect is off. */
     onBurst: ((Rect, String?) -> Unit)? = null,
+    /**
+     * Between the touch handler and the key's gap padding: what narrows the
+     * drawn key inside a cell wider than it, as [KeyCell] does for a key that
+     * has taken a row's side gap (#530).
+     */
+    faceModifier: Modifier = Modifier,
 ) {
     val key = visual.key
     // Held as the state object, never read through a `by` delegate: every read of
@@ -18997,6 +19048,7 @@ internal fun KeyButton(
                     alternates = alternatesHold.takeIf { holdToSelect },
                 )
             )
+            .then(faceModifier)
             .padding(horizontal = keyGapH(settings), vertical = keyGapV(settings))
             // The theme's lift, under the fill and the border so both ride it.
             // Modifier.shadow is a no-op at 0 dp with clip off, so a flat theme
