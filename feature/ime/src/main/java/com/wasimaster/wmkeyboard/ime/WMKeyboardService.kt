@@ -11265,7 +11265,7 @@ open class WMKeyboardService : InputMethodService() {
             // selection after the caret, so a trigger typed there always
             // arrives with one. The expansion replaces it the way the space
             // would have.
-            if (tryUncomposedTrigger(ic, state)) {
+            if (tryUncomposedTrigger(ic, state, endedBySpace = true)) {
                 if (swallowTerminatorAfterCommit) {
                     swallowTerminatorAfterCommit = false
                 } else {
@@ -11356,7 +11356,7 @@ open class WMKeyboardService : InputMethodService() {
             autocorrect = state.settings.correction.enabled,
             fixApostrophes = state.settings.autoText.apostrophe,
             expandPatterns = true,
-        ) || tryUncomposedTrigger(ic, state)
+        ) || tryUncomposedTrigger(ic, state, endedBySpace = true)
         // The expansion left the caret inside itself, at its {cursor} marker.
         // A space committed there lands in the middle of the text the snippet
         // inserted, so this press is spent on the expansion instead.
@@ -13170,7 +13170,9 @@ open class WMKeyboardService : InputMethodService() {
         // The buffer became boilerplate, not a spelling of anything.
         revision = null
         composing = StringBuilder()
-        setContextFrom(inserted)
+        // In a password field (#555) the inserted text is a secret, and the
+        // field has no strip to predict for anyway.
+        setContextFrom(inserted.takeUnless { _uiState.value.secureField })
         invalidateRecentWords()
         commitResolution = null
         lastGestureWord = null
@@ -13195,16 +13197,24 @@ open class WMKeyboardService : InputMethodService() {
      * lands. Returns true when it expanded one.
      *
      * Only where the buffer is off, so an ordinary text box keeps its one
-     * matching path, and never in a password field. The read is skipped
-     * outright for a user with no triggers.
+     * matching path, and in a password field only when the user has turned
+     * [SuggestionStripSettings.snippetsInSecureFields] on (#555). There the
+     * Space that ended the trigger ([endedBySpace]) is spent on the expansion
+     * rather than typed, since a space after it would land in the password;
+     * Enter still fires the field's action. The read is skipped outright for
+     * a user with no triggers.
      *
      * A field that composes gets this path for one shape only: a trigger that
      * opens with a digit (#554). A word-initial digit commits literally
      * (`3pm`), so `123` never reaches the buffer and [commitComposing] has
      * nothing to match; every other trigger was already looked up there.
      */
-    private fun tryUncomposedTrigger(ic: InputConnection, state: KeyboardUiState): Boolean {
-        if (composing.isNotEmpty() || state.secureField || state.nullField) return false
+    private fun tryUncomposedTrigger(
+        ic: InputConnection,
+        state: KeyboardUiState,
+        endedBySpace: Boolean = false,
+    ): Boolean {
+        if (composing.isNotEmpty() || secureFieldRefusesSnippets(state) || state.nullField) return false
         if (state.composer.isTransliterating || state.composer.isConversion) return false
         val digitLedOnly = state.composesForSuggestions
         if (digitLedOnly && !snippetStore.hasDigitLedTriggers()) return false
@@ -13246,8 +13256,19 @@ open class WMKeyboardService : InputMethodService() {
             original = consumed,
             caretParked = expanded.cursorOffset < expanded.text.length,
         )
+        if (endedBySpace && state.secureField) swallowTerminatorAfterCommit = true
         return true
     }
+
+    /**
+     * Whether a password field keeps triggers out: always, unless the user
+     * opted in with [SuggestionStripSettings.snippetsInSecureFields] (#555).
+     * Only the two trigger shapes that consume nothing but what was just typed
+     * ask this — [tryUncomposedTrigger] and [trySuffixExpansion]. Patterns,
+     * the ask-first chips and the automation API keep their own refusals.
+     */
+    private fun secureFieldRefusesSnippets(state: KeyboardUiState): Boolean =
+        state.secureField && !state.settings.suggestionStrip.snippetsInSecureFields
 
     /**
      * Expands a trigger that ends in the symbol just typed (#471): `js:` the
@@ -13262,7 +13283,7 @@ open class WMKeyboardService : InputMethodService() {
      * committed something.
      */
     private fun trySuffixExpansion(ic: InputConnection, typed: String, state: KeyboardUiState): Boolean {
-        if (typed.length != 1 || state.secureField || state.nullField) return false
+        if (typed.length != 1 || secureFieldRefusesSnippets(state) || state.nullField) return false
         if (!snippetStore.hasSuffixTriggers() || !snippetStore.couldEndWith(typed[0])) return false
         val read = ic.getTextBeforeCursor(SnippetMatcher.MAX_PREFIX + 1, 0)?.toString() ?: return false
         if (!read.endsWith(typed)) return false

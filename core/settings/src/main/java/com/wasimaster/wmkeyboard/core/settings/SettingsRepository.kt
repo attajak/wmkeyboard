@@ -7496,6 +7496,15 @@ data class SuggestionStripSettings(
      */
     val snippetGridColumns: Int = 2,
     /**
+     * Let a word or suffix trigger expand in a password field (#555). Off by
+     * default: with it on, the keyboard reads the few characters before the
+     * caret back out of a password box when Space, Enter or a trigger's last
+     * symbol lands, which is the one kind of field it otherwise never reads.
+     * Patterns, ask-first chips and the automation API stay refused there
+     * either way. Beside [snippetMultiExpand] for the same field-ceiling reason.
+     */
+    val snippetsInSecureFields: Boolean = false,
+    /**
      * Show the system's smart replies ("On my way!") beside the word
      * candidates. They arrive down the same inline-suggestions API as
      * password-manager chips but from Android System Intelligence rather than
@@ -8405,6 +8414,7 @@ class SettingsRepository(private val context: Context) {
         private val USE_SYSTEM_DICTIONARY = booleanPreferencesKey("use_system_dictionary")
         private val SNIPPET_MULTI_EXPAND = stringPreferencesKey("snippet_multi_expand")
         private val SNIPPET_GRID_COLUMNS = intPreferencesKey("snippet_grid_columns")
+        private val SNIPPETS_IN_SECURE_FIELDS = booleanPreferencesKey("snippets_in_secure_fields")
         private val SYSTEM_SMART_REPLIES = booleanPreferencesKey("system_smart_replies")
         private val SMART_HIT_DETECTION = booleanPreferencesKey("smart_hit_detection")
         private val AUTOPILOT_STRENGTH = intPreferencesKey("autopilot_strength")
@@ -10271,6 +10281,8 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.suggestionStrip.snippetMultiExpand,
             snippetGridColumns = p[SNIPPET_GRID_COLUMNS]?.coerceIn(1, 4)
                 ?: defaults.suggestionStrip.snippetGridColumns,
+            snippetsInSecureFields = p[SNIPPETS_IN_SECURE_FIELDS]
+                ?: defaults.suggestionStrip.snippetsInSecureFields,
             systemSmartReplies = p[SYSTEM_SMART_REPLIES]
                 ?: defaults.suggestionStrip.systemSmartReplies,
             registerPriors = p[REGISTER_PRIORS]
@@ -14770,6 +14782,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setSnippetGridColumns(value: Int) =
         editPrefs { it[SNIPPET_GRID_COLUMNS] = value.coerceIn(1, 4) }
+
+    suspend fun setSnippetsInSecureFields(value: Boolean) =
+        editPrefs { it[SNIPPETS_IN_SECURE_FIELDS] = value }
 
     suspend fun setSystemSmartReplies(value: Boolean) =
         editPrefs { it[SYSTEM_SMART_REPLIES] = value }

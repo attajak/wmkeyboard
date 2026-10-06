@@ -146,6 +146,9 @@
     <string name="expander_behaviour_title">Behaviour</string>
     <string name="expander_grid_columns_title">Panel columns</string>
     <string name="expander_grid_columns_subtitle">How many snippet tiles sit side by side in the keyboard\'s panel</string>
+    <string name="expander_secure_fields_title">Expand in password fields</string>
+    <string name="expander_secure_fields_subtitle">Let a trigger you type turn into its snippet inside a password box</string>
+    <string name="expander_secure_fields_info">Off by default. With it on, pressing space or Enter in a password field, or typing the symbol a trigger ends in, makes the keyboard read back the few characters before the cursor and check them against your triggers. Nothing it reads is learned, kept or sent. The space that ends a trigger is not typed into the password; Enter still does what the field asks. Patterns, chips that ask first and apps typing snippets through automation stay off in password fields, and number-only PIN fields are not covered.</string>
     <string name="expander_grid_columns_info">More columns show more snippets at once, which suits short labels. Fewer give each tile more room for its text. Folders use the same grid. The default is 2.</string>
     <string name="expander_multi_expand_title">When a snippet has several expansions</string>
     <string name="expander_multi_expand_subtitle">What happens after you type the trigger</string>

@@ -2221,6 +2221,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - The key that fired a caret-parked snippet is swallowed — A space would otherwise land in the middle of the inserted text
     - Composing region finished before the delete — deleteSurroundingText behaves differently in EditText and BasicTextField otherwise
     - Never runs in password fields or no-suggestion fields
+    - Expand in password fields — Opt-in (default off, #555): word and suffix triggers read back on space/Enter/symbol; the ending space is swallowed, Enter still submits; patterns, ask-first chips and automation stay refused
   - Import, export and packs `uncommon`
     - .wmsnippets.json versioned envelope — format tag is the only strict check; permissive import MIME list
     - Repair-not-reject import — 500-snippet cap, 20,000-char text cap, blank label filled from the first line

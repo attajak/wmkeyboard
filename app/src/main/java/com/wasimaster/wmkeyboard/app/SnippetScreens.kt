@@ -457,6 +457,15 @@ internal fun SnippetSettings(
                 default = SettingsDefaults.suggestionStrip.snippetGridColumns.toFloat(),
             ) { scope.launch { repository.setSnippetGridColumns(it.toInt()) } }
         }
+        item {
+            ToggleSetting(
+                R.string.expander_secure_fields_title,
+                stringResource(R.string.expander_secure_fields_subtitle),
+                settings.watch { it.suggestionStrip.snippetsInSecureFields },
+                info = stringResource(R.string.expander_secure_fields_info),
+                default = SettingsDefaults.suggestionStrip.snippetsInSecureFields,
+            ) { scope.launch { repository.setSnippetsInSecureFields(it) } }
+        }
     }
     Spacer(Modifier.height(12.dp))
     RegisterAddFab(stringResource(R.string.expander_add_action)) { onNavigate("expander/edit/0") }
