@@ -442,6 +442,17 @@
     <string name="tooldetail_media_full_bleed_title">Full-screen picker</string>
     <string name="tooldetail_media_full_bleed_subtitle">Hide the toolbar and move the search up next to a back button</string>
     <string name="tooldetail_media_full_bleed_info">The GIF and sticker panels take the whole keyboard. The toolbar, the emoji row and the symbol row step aside, and the search box moves into the row that they leave. The grid then gets every pixel. This applies to both tools.</string>
+    <string name="tooldetail_media_gif_per_row_title">GIFs per row</string>
+    <string name="tooldetail_media_gif_per_row_subtitle">The most GIFs side by side. Fewer makes each one bigger</string>
+    <string name="tooldetail_media_sticker_per_row_title">Stickers per row</string>
+    <string name="tooldetail_media_sticker_per_row_subtitle">The most stickers side by side. Fewer makes each one bigger</string>
+    <string name="tooldetail_media_per_row_info">Each picture keeps its shape, so a wide one takes more of its row than a square one, and a row of wide ones can hold fewer than this. To see more rows at one time, make the panel taller with Panel height, or drag the bar on top of the panel.</string>
+    <string name="tooldetail_media_spacing_title">Gap between cells</string>
+    <string name="tooldetail_media_spacing_subtitle">The space around each GIF and sticker in the grid. This applies to both tools</string>
+    <string name="tooldetail_media_spacing_value" tools:ignore="PluralsCandidate">%1$d dp</string>
+    <string name="tooldetail_media_hide_header_title">Hide the search when you scroll</string>
+    <string name="tooldetail_media_hide_header_subtitle">Scroll down to fold the search box and the chips away, and scroll up to bring them back</string>
+    <string name="tooldetail_media_hide_header_info">The results get the room that the search box, the source chips and the category chips take. When you are at the top of the results, pull down to bring them back. While you type a search, the search box always shows. This applies to both tools.</string>
     <string name="tooldetail_media_keys_group">Sources and API keys</string>
     <string name="tooldetail_media_klipy_label">Klipy API key</string>
     <string name="tooldetail_media_klipy_hint">Free from partner.klipy.com. The Tenor API closed in the middle of 2026</string>

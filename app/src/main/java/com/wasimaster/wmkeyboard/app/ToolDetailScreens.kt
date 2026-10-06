@@ -98,6 +98,9 @@ import com.wasimaster.wmkeyboard.core.settings.GifSourceMode
 import com.wasimaster.wmkeyboard.core.settings.GrammarCategory
 import com.wasimaster.wmkeyboard.core.settings.GrammarDialect
 import com.wasimaster.wmkeyboard.core.settings.GrammarLintKind
+import com.wasimaster.wmkeyboard.core.settings.MediaGridSpacingRange
+import com.wasimaster.wmkeyboard.core.settings.MediaPanelExtraHeightRange
+import com.wasimaster.wmkeyboard.core.settings.MediaPerRowRange
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.QrEccLevel
 import com.wasimaster.wmkeyboard.core.settings.StickerSuggestStyle
@@ -2038,6 +2041,68 @@ internal fun ToolDetailSettings(
                         info = stringResource(R.string.tooldetail_media_full_bleed_info),
                         default = SettingsDefaults.mediaFullBleed,
                     ) { scope.launch { repository.setMediaFullBleed(it) } }
+                }
+                item {
+                    // The grid's own size, the way the emoji panel has one:
+                    // how many to a row, each tool its own.
+                    val stickers = tool == ToolbarTool.STICKER
+                    SliderSetting(
+                        if (stickers) R.string.tooldetail_media_sticker_per_row_title else R.string.tooldetail_media_gif_per_row_title,
+                        subtitle = stringResource(
+                            if (stickers) {
+                                R.string.tooldetail_media_sticker_per_row_subtitle
+                            } else {
+                                R.string.tooldetail_media_gif_per_row_subtitle
+                            },
+                        ),
+                        value = settings.watch { if (stickers) it.gif.stickerPerRow else it.gif.gifPerRow }.toFloat(),
+                        range = MediaPerRowRange.first.toFloat()..MediaPerRowRange.last.toFloat(),
+                        display = { numberFormat.format(it.roundToInt()) },
+                        info = stringResource(R.string.tooldetail_media_per_row_info),
+                        default = (if (stickers) SettingsDefaults.gif.stickerPerRow else SettingsDefaults.gif.gifPerRow).toFloat(),
+                    ) {
+                        scope.launch {
+                            if (stickers) repository.setStickerPerRow(it.roundToInt()) else repository.setGifPerRow(it.roundToInt())
+                        }
+                    }
+                }
+                item {
+                    val spacing = stringResource(R.string.tooldetail_media_spacing_value)
+                    SliderSetting(
+                        R.string.tooldetail_media_spacing_title,
+                        subtitle = stringResource(R.string.tooldetail_media_spacing_subtitle),
+                        value = settings.watch { it.gif.gridSpacing }.toFloat(),
+                        range = MediaGridSpacingRange.first.toFloat()..MediaGridSpacingRange.last.toFloat(),
+                        display = { spacing.format(it.roundToInt()) },
+                        default = SettingsDefaults.gif.gridSpacing.toFloat(),
+                    ) { scope.launch { repository.setMediaGridSpacing(it.roundToInt()) } }
+                }
+                item {
+                    // The emoji panel's own setting (#537), here too because
+                    // the bar on top of these panels drags the same value.
+                    val none = stringResource(R.string.langemoji_panel_height_none)
+                    val taller = stringResource(R.string.langemoji_panel_height_value)
+                    SliderSetting(
+                        R.string.langemoji_panel_height_title,
+                        subtitle = stringResource(R.string.langemoji_panel_height_subtitle),
+                        value = settings.watch { it.emoji.panelExtraHeightDp }.toFloat(),
+                        range = MediaPanelExtraHeightRange.first.toFloat()..MediaPanelExtraHeightRange.last.toFloat(),
+                        display = {
+                            val dp = it.roundToInt()
+                            if (dp == 0) none else taller.format(dp)
+                        },
+                        info = stringResource(R.string.langemoji_panel_height_info),
+                        default = SettingsDefaults.emoji.panelExtraHeightDp.toFloat(),
+                    ) { scope.launch { repository.setMediaPanelExtraHeightDp(it.roundToInt()) } }
+                }
+                item {
+                    ToggleSetting(
+                        R.string.tooldetail_media_hide_header_title,
+                        stringResource(R.string.tooldetail_media_hide_header_subtitle),
+                        settings.watch { it.gif.hideHeaderOnScroll },
+                        info = stringResource(R.string.tooldetail_media_hide_header_info),
+                        default = SettingsDefaults.gif.hideHeaderOnScroll,
+                    ) { scope.launch { repository.setMediaHideHeaderOnScroll(it) } }
                 }
                 item {
                     // A panel layout like the emoji panel's (#538): the keys

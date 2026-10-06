@@ -2606,7 +2606,30 @@ data class GifSettings(
      * Off, a hold does nothing and a slide scrolls the tray.
      */
     val stickerSuggestMagnify: Boolean = true,
+    /**
+     * How many GIFs the panel puts side by side in a row, at most. Rows are
+     * justified, so a wide GIF still takes more of its row than a square one;
+     * this sets how many share one, and so how big each is. See
+     * [MediaPerRowRange].
+     */
+    val gifPerRow: Int = 3,
+    /** The same as [gifPerRow], for the sticker panel. */
+    val stickerPerRow: Int = 3,
+    /** The gap between the cells of the GIF and sticker grids, in dp. See [MediaGridSpacingRange]. */
+    val gridSpacing: Int = 4,
+    /**
+     * Scrolling down the GIF or sticker results slides the search box and the
+     * rows of chips under it out of the way, and scrolling back up brings them
+     * back. Off by default: they stay put, as they always have.
+     */
+    val hideHeaderOnScroll: Boolean = false,
 )
+
+/** Bounds for [GifSettings.gifPerRow] and [GifSettings.stickerPerRow]; the settings sliders share them. */
+val MediaPerRowRange = 1..6
+
+/** Bounds for [GifSettings.gridSpacing]; the settings slider shares them. */
+val MediaGridSpacingRange = 0..12
 
 /**
  * The web, image and encyclopedia search tools.
@@ -9131,6 +9154,10 @@ class SettingsRepository(private val context: Context) {
         private val STICKER_SUGGEST_STYLE = stringPreferencesKey("sticker_suggest_style")
         private val STICKER_SUGGEST_TRIGGER = stringPreferencesKey("sticker_suggest_trigger")
         private val STICKER_SUGGEST_MAGNIFY = booleanPreferencesKey("sticker_suggest_magnify")
+        private val GIF_PER_ROW = intPreferencesKey("gif_per_row")
+        private val STICKER_PER_ROW = intPreferencesKey("sticker_per_row")
+        private val MEDIA_GRID_SPACING = intPreferencesKey("media_grid_spacing")
+        private val MEDIA_HIDE_HEADER_ON_SCROLL = booleanPreferencesKey("media_hide_header_on_scroll")
         private val SEARCH_SAFE = booleanPreferencesKey("search_safe")
         private val SEARCH_RESULT_COUNT = intPreferencesKey("search_result_count")
         private val SEARCH_SHOW_ANSWER = booleanPreferencesKey("search_show_answer")
@@ -10893,6 +10920,10 @@ class SettingsRepository(private val context: Context) {
                 ?.let { runCatching { StickerTriggerAction.valueOf(it) }.getOrNull() }
                 ?: defaults.gif.stickerSuggestTrigger,
             stickerSuggestMagnify = p[STICKER_SUGGEST_MAGNIFY] ?: defaults.gif.stickerSuggestMagnify,
+            gifPerRow = p[GIF_PER_ROW]?.coerceIn(MediaPerRowRange) ?: defaults.gif.gifPerRow,
+            stickerPerRow = p[STICKER_PER_ROW]?.coerceIn(MediaPerRowRange) ?: defaults.gif.stickerPerRow,
+            gridSpacing = p[MEDIA_GRID_SPACING]?.coerceIn(MediaGridSpacingRange) ?: defaults.gif.gridSpacing,
+            hideHeaderOnScroll = p[MEDIA_HIDE_HEADER_ON_SCROLL] ?: defaults.gif.hideHeaderOnScroll,
         )
 
     private fun readTextEditing(p: Preferences, defaults: KeyboardSettings) =
@@ -16841,6 +16872,18 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setStickerSuggestMagnify(value: Boolean) =
         editPrefs { it[STICKER_SUGGEST_MAGNIFY] = value }
+
+    suspend fun setGifPerRow(value: Int) =
+        editPrefs { it[GIF_PER_ROW] = value.coerceIn(MediaPerRowRange) }
+
+    suspend fun setStickerPerRow(value: Int) =
+        editPrefs { it[STICKER_PER_ROW] = value.coerceIn(MediaPerRowRange) }
+
+    suspend fun setMediaGridSpacing(value: Int) =
+        editPrefs { it[MEDIA_GRID_SPACING] = value.coerceIn(MediaGridSpacingRange) }
+
+    suspend fun setMediaHideHeaderOnScroll(value: Boolean) =
+        editPrefs { it[MEDIA_HIDE_HEADER_ON_SCROLL] = value }
 
     suspend fun setGifContentFilter(value: GifContentFilter) =
         editPrefs { it[GIF_CONTENT_FILTER] = value.name }

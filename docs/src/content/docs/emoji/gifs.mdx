@@ -20,13 +20,21 @@ The GIF tool searches Klipy and GIPHY from a panel inside the keyboard, then sen
 
 Open the GIF tool and it fetches trending GIFs immediately, before you type anything. Start typing in the search box and results update live, 450ms after you stop. There's no Enter to press. That's different from the [web and image search tools](/tools/search/), which wait for you to submit the query; GIF and sticker lookups are cheap enough on Klipy and GIPHY to search as you type.
 
-Results are laid out as justified rows of animated previews rather than a fixed grid: every preview keeps its own aspect ratio and nothing is cropped, so squarish results sit three across and a pair of wide ones fills a row on its own. At the end of the search box a small line reads "from Klipy" (or "from Klipy · GIPHY" once Mixed mode is pulling from both at once), so you know where a result came from.
+Results are laid out as justified rows of animated previews rather than a fixed grid: every preview keeps its own aspect ratio and nothing is cropped, so squarish results sit three across and a pair of wide ones fills a row on its own. **GIFs per row** sets how many share a row, from one to six, and **Gap between cells** the space around each one. At the end of the search box a small line reads "from Klipy" (or "from Klipy · GIPHY" once Mixed mode is pulling from both at once), so you know where a result came from.
 
 Before you've typed anything, a scrollable row of **category chips** sits above the grid: Trending first, then Reactions, Love, Happy, Sad and so on. Tap one to run it as a search, which is a way to browse without thinking of a word. Tap the active chip, or Trending, to go back. The chips come from the provider itself when it publishes categories, and from a built-in list when it doesn't, so the row is there offline too. It belongs to the default view only. Type anything and it steps aside for the results. With the full-screen picker turned off it also needs a certain amount of key height to be worth drawing, so a short three-row layout with the number row off loses it rather than losing the last row of the grid.
 
 Along the bottom sits the same row the [emoji panel](/emoji/picker/#switching-to-gifs-and-stickers) ends in: <KeyCap>ABC</KeyCap>, a switch to emoji, GIFs and stickers, space and backspace. The switch jumps straight to the emoji or sticker panel, and <KeyCap>ABC</KeyCap> goes back to the keys. <SettingsPath path="Emoji / Emoji panel / Switch to GIFs and stickers" /> moves the switch next to the search box instead, or turns it off, and the row keeps its <KeyCap>ABC</KeyCap>, space and backspace either way. If you rearranged the emoji panel's bottom row, the GIF panel takes your row. The row steps aside while you type a search, since the keys come back under the panel then.
 
 The GIF panel is a [panel layout](/languages/custom-layouts/#panel-layouts) too, so you can lay it out yourself: <SettingsPath path="Tools / GIFs / Layout / Panel layout" />. The search box, the chips and the results are one component, **GIF search and results**, and every other cell is a key, so the panel can carry a different bottom row, a second row of keys, or the switch in a place of its own. Once you change it, it stops following the emoji panel. The panel is as tall as <SettingsPath path="Emoji / Emoji panel / Panel height" /> makes the emoji panel, so the three panels never change the keyboard's height between them.
+
+### Making the panel taller
+
+A short bar sits across the top of the panel. Drag it up to make the panel taller, so more rows of results show at one time, and drag it down to make it shorter. When you let go, the panel keeps that height from then on. The bar sets the same **Panel height** as the emoji settings, so the emoji and sticker panels change with it, and the three still open at one height. The panel never covers more than most of the screen, and the bar is not there while you type a search, or where the screen has no room for a taller panel.
+
+### Hiding the search while you scroll
+
+With **Hide the search when you scroll** on, scrolling down the results folds the search box and the rows of chips away, and the results get their room. Scroll back up, or pull down at the top of the results, and they come back. The panel itself stays the same height. While you type a search, the search box always shows. Off by default, and shared with the sticker tool.
 
 If neither provider has a key configured and no offline pack is installed, the panel shows a "needs an API key" notice with a shortcut into settings instead of a grid. The F-Droid build never hits that notice, since Commons is already searching.
 
@@ -78,6 +86,10 @@ Saving to a pack is sticker-only, since a GIF can't become one. That row shows o
 | Klipy API key | Empty | Paste a free key from `partner.klipy.com`. Klipy replaced Tenor as the primary provider after Google retired Tenor's third-party API in mid-2026. |
 | GIPHY API key | Empty | Paste a free key from `developers.giphy.com`, as a second source. |
 | Full-screen picker | On | The toolbar, emoji row and symbol row step aside so the GIF grid gets the full keyboard height, with search moved up next to a back button. Shared with the sticker tool. |
+| GIFs per row | 3 | A slider from 1 to 6: the most GIFs side by side in a row. Fewer makes each one bigger. A row of wide GIFs can hold fewer than this. The sticker tool has its own. |
+| Gap between cells | 4 dp | A slider from 0 to 12 dp: the space around each result. Shared with the sticker tool. |
+| Panel height | Same as keyboard | How much taller than the keyboard the emoji, GIF and sticker panels open, up to 400 dp more. The same setting as <SettingsPath path="Emoji / Emoji panel / Panel height" /> and the [bar on top of the panel](#making-the-panel-taller). |
+| Hide the search when you scroll | Off | Scrolling down folds the search box and the chips away, scrolling up brings them back. See [Hiding the search while you scroll](#hiding-the-search-while-you-scroll). Shared with the sticker tool. |
 | Panel layout | Standard | The keys around the results. **Standard** ends the way the emoji panel ends. See [Panel layouts](/languages/custom-layouts/#panel-layouts). |
 | Send GIFs as | Image | Whether a tap tries to land the result as a sticker-style MIME first or always as a plain image. See the sticker-limitation note above. |
 | Multiple sources | Tabs | **Tabs**: one chip per configured provider once you have more than one, to switch between them. **Mixed**: a single grid interleaving results from every provider evenly, with an **Online** chip for it and an **Offline** chip for your offline GIF packs once one is installed. Without an offline pack the Mixed panel shows no chip row at all. |

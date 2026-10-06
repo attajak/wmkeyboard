@@ -142,7 +142,8 @@ internal fun Modifier.clipPanelHeightProbe(resize: ClipPanelResize): Modifier = 
  * The bar itself: a short pill across the top of the panel, the whole band
  * its hit target. [extra] is the height over the keyboard's the panel has now,
  * [maxExtra] the most the screen allows; a screen reader gets Taller and
- * Shorter, a row's worth at a time, in place of the drag.
+ * Shorter, a row's worth at a time, in place of the drag. The GIF and sticker
+ * panels wear the same bar for their own height, [description] naming it.
  */
 @Composable
 internal fun ClipPanelHeightBar(
@@ -150,12 +151,12 @@ internal fun ClipPanelHeightBar(
     extra: Dp,
     maxExtra: Dp,
     onCommit: (Int) -> Unit,
+    description: String = stringResource(R.string.ime_clipboard_height_desc),
 ) {
     val kb = LocalKbTheme.current
     val current by rememberUpdatedState(extra.value)
     val max by rememberUpdatedState(maxExtra.value)
     val commit by rememberUpdatedState(onCommit)
-    val description = stringResource(R.string.ime_clipboard_height_desc)
     val taller = stringResource(R.string.ime_clipboard_height_taller)
     val shorter = stringResource(R.string.ime_clipboard_height_shorter)
     Box(

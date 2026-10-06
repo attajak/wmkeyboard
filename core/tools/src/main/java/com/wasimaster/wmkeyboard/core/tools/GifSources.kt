@@ -108,28 +108,30 @@ object GifSources {
     /**
      * Splits picker results into justified rows: every item in a row shares
      * one height, widths follow each item's own aspect ratio, and nothing is
-     * cropped. Rows aim for three items and close early once they carry
-     * [TARGET_ROW_RATIO] worth of width, so a pair of wide GIFs makes a row
-     * of two rather than squeezing a cropped third in.
+     * cropped. Rows aim for [perRow] items and close early once they carry
+     * [targetRowRatio] worth of width, so a pair of wide GIFs makes a row of
+     * two rather than squeezing a cropped third in.
      *
-     * A row never opens with an item that would push it past [MAX_ROW_RATIO]:
-     * heights are `width / ratio-sum`, and an unbounded sum is a row of
-     * thumbnails too short to read.
+     * A row never takes an item that would push it past [MAX_ROW_STRETCH]
+     * times its target: heights are `width / ratio-sum`, and an unbounded sum
+     * is a row of thumbnails too short to read.
      */
-    fun rows(items: List<GifItem>): List<List<GifItem>> {
+    fun rows(items: List<GifItem>, perRow: Int = DEFAULT_PER_ROW): List<List<GifItem>> {
+        val most = perRow.coerceAtLeast(1)
+        val target = targetRowRatio(most)
         val rows = ArrayList<List<GifItem>>()
         val row = ArrayList<GifItem>()
         var sum = 0f
         for (item in items) {
             val ratio = cellRatio(item)
-            if (row.isNotEmpty() && (row.size == MAX_ROW_ITEMS || sum + ratio > MAX_ROW_RATIO)) {
+            if (row.isNotEmpty() && (row.size == most || sum + ratio > target * MAX_ROW_STRETCH)) {
                 rows += row.toList()
                 row.clear()
                 sum = 0f
             }
             row += item
             sum += ratio
-            if (sum >= TARGET_ROW_RATIO) {
+            if (sum >= target) {
                 rows += row.toList()
                 row.clear()
                 sum = 0f
@@ -139,10 +141,22 @@ object GifSources {
         return rows
     }
 
-    /** How much ratio-width a row wants; also the floor rows are padded to. */
-    const val TARGET_ROW_RATIO = 3.2f
-    private const val MAX_ROW_RATIO = 4.6f
-    private const val MAX_ROW_ITEMS = 3
+    /**
+     * How much ratio-width a row of at most [perRow] items wants; also the
+     * floor rows are padded to, so a short last row keeps its neighbours'
+     * height. A little over one square per item, so [perRow] squares close a
+     * row and fewer leave room.
+     */
+    fun targetRowRatio(perRow: Int): Float = perRow.coerceAtLeast(1) + 0.2f
+
+    /** The ratio-width a row wants at the shipped three to a row. */
+    val TARGET_ROW_RATIO: Float get() = targetRowRatio(DEFAULT_PER_ROW)
+
+    /** Items to a row unless the setting says otherwise. */
+    const val DEFAULT_PER_ROW = 3
+
+    /** How far past its target a row may run before an item starts the next one: 4.6 at three to a row. */
+    private const val MAX_ROW_STRETCH = 1.4375f
     private const val MIN_CELL_RATIO = 0.5f
     private const val MAX_CELL_RATIO = 2.6f
 

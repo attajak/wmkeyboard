@@ -1258,6 +1258,10 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_sticker_suggest_style_title) { Icons.Outlined.ViewAgenda }
         put(R.string.tooldetail_sticker_suggest_trigger_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.tooldetail_media_full_bleed_title) { Icons.Outlined.Fullscreen }
+        put(R.string.tooldetail_media_gif_per_row_title) { Icons.Outlined.ViewColumn }
+        put(R.string.tooldetail_media_sticker_per_row_title) { Icons.Outlined.ViewColumn }
+        put(R.string.tooldetail_media_spacing_title) { Icons.Outlined.Padding }
+        put(R.string.tooldetail_media_hide_header_title) { Icons.Outlined.SwipeUp }
         put(R.string.tooldetail_media_sticker_send_title) { Icons.AutoMirrored.Outlined.Send }
         put(R.string.tooldetail_media_gif_send_title) { Icons.AutoMirrored.Outlined.Send }
         put(R.string.tooldetail_media_limit_title) { Icons.Outlined.Numbers }

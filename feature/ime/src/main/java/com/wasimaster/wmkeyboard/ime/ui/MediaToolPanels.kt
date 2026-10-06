@@ -63,6 +63,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -861,6 +863,20 @@ internal fun GifPanel(
     // "Add to which pack?", up when the add chip is pressed under All with
     // more than one pack to choose from. Panel-local: nothing else reads it.
     var choosingAddPack by remember { mutableStateOf(false) }
+    // With no packs at all the empty grid has its own way in, so the add
+    // chip waits for the first one.
+    val canAdd = localGrid && state.stickerPacks.isNotEmpty() && !state.mediaSearchActive
+    val onAdd: () -> Unit = {
+        val target = stickerAddTarget(state.stickerPacks, state.stickerPackId)
+        if (target == null) {
+            choosingAddPack = true
+        } else {
+            onOpenRoute(stickerPackAddRoute(target))
+        }
+    }
+    // The search box and the chip rows fold away while the results scroll
+    // down, when the setting asks (see [MediaChrome]).
+    val chrome = LocalMediaChrome.current
     BoxWithConstraints(modifier = sizing) {
         // In a layout cell the keys around it have taken some of the key area.
         val available = if (inGrid) maxHeight else null
@@ -872,72 +888,71 @@ internal fun GifPanel(
                 columns = 1,
                 onActivate = { onQueryTap() },
             )
-            if (!fullBleed) {
-                MediaSearchBar(
-                    state = state,
-                    placeholder = gifSearchHint(stickers),
-                    onQueryTap = onQueryTap,
-                    attribution = gifAttribution(state, stickers),
-                    focused = state.focusedIndex(FocusRegion.SEARCH) == 0,
-                    trailing = switcher,
-                )
-            }
-            if (chips.isNotEmpty() && !state.mediaSearchActive) {
-                // Tab reaches the source chips: results are useless if the
-                // keyboard can browse them but not switch where they come from.
-                PanelFocusTarget(
-                    panel = state.panel,
-                    region = FocusRegion.CHIPS,
-                    count = chips.size,
-                    columns = chips.size,
-                    onActivate = { index -> chips.getOrNull(index)?.let { onSourceSelect(it.source) } },
-                )
-                GifSourceChips(
-                    chips = chips,
-                    selectedIndex = GifSources.selectedChip(chips, state.mediaSource),
-                    onSelect = onSourceSelect,
-                    focused = state.focusedIndex(FocusRegion.CHIPS),
-                )
-            }
-            // With no packs at all the empty grid has its own way in, so the
-            // row waits for the first one.
-            if (localGrid && state.stickerPacks.isNotEmpty() && !state.mediaSearchActive) {
-                StickerPackChips(
-                    packs = state.stickerPacks,
-                    selected = state.stickerPackId,
-                    onSelect = onPackFilter,
-                    onAdd = {
-                        val target = stickerAddTarget(state.stickerPacks, state.stickerPackId)
-                        if (target == null) {
-                            choosingAddPack = true
-                        } else {
-                            onOpenRoute(stickerPackAddRoute(target))
-                        }
-                    },
-                )
-            }
-            if (showMediaCategories(state, localGrid, fullBleed, state.acceptsRichMedia, available)) {
-                // Trending first, so there is always a way back out of a
-                // category — and somewhere for the focus ring to sit when no
-                // category is on.
-                val entries = listOf(
-                    MediaCategory(term = "", labelRes = R.string.ime_media_category_trending_label),
-                ) + state.mediaCategories
-                PanelFocusTarget(
-                    panel = state.panel,
-                    region = FocusRegion.CATEGORIES,
-                    count = entries.size,
-                    columns = entries.size,
-                    onActivate = { index ->
-                        entries.getOrNull(index)?.let { onCategorySelect(it.term) }
-                    },
-                )
-                GifCategoryChips(
-                    categories = entries,
-                    selected = state.mediaCategory,
-                    onSelect = onCategorySelect,
-                    focused = state.focusedIndex(FocusRegion.CATEGORIES),
-                )
+            MediaHeaderReveal(collapsed = chrome?.collapsed(state) == true) {
+                if (!fullBleed) {
+                    MediaSearchBar(
+                        state = state,
+                        placeholder = gifSearchHint(stickers),
+                        onQueryTap = onQueryTap,
+                        attribution = gifAttribution(state, stickers),
+                        focused = state.focusedIndex(FocusRegion.SEARCH) == 0,
+                        trailing = switcher,
+                    )
+                }
+                if (chips.isNotEmpty() && !state.mediaSearchActive) {
+                    // Tab reaches the source chips: results are useless if the
+                    // keyboard can browse them but not switch where they come from.
+                    PanelFocusTarget(
+                        panel = state.panel,
+                        region = FocusRegion.CHIPS,
+                        count = chips.size,
+                        columns = chips.size,
+                        onActivate = { index -> chips.getOrNull(index)?.let { onSourceSelect(it.source) } },
+                    )
+                    // The add chip ends this row rather than taking a row of its
+                    // own under it: with one pack there is nothing else to put
+                    // there, and a row for one small chip was a row of stickers.
+                    GifSourceChips(
+                        chips = chips,
+                        selectedIndex = GifSources.selectedChip(chips, state.mediaSource),
+                        onSelect = onSourceSelect,
+                        focused = state.focusedIndex(FocusRegion.CHIPS),
+                        onAdd = if (canAdd) onAdd else null,
+                    )
+                }
+                // The pack filter, from two packs up; with no source chips to sit
+                // beside, the add chip leads it, alone for a single pack.
+                if (canAdd && (chips.isEmpty() || state.stickerPacks.size > 1)) {
+                    StickerPackChips(
+                        packs = state.stickerPacks,
+                        selected = state.stickerPackId,
+                        onSelect = onPackFilter,
+                        onAdd = if (chips.isEmpty()) onAdd else null,
+                    )
+                }
+                if (showMediaCategories(state, localGrid, fullBleed, state.acceptsRichMedia, available)) {
+                    // Trending first, so there is always a way back out of a
+                    // category — and somewhere for the focus ring to sit when no
+                    // category is on.
+                    val entries = listOf(
+                        MediaCategory(term = "", labelRes = R.string.ime_media_category_trending_label),
+                    ) + state.mediaCategories
+                    PanelFocusTarget(
+                        panel = state.panel,
+                        region = FocusRegion.CATEGORIES,
+                        count = entries.size,
+                        columns = entries.size,
+                        onActivate = { index ->
+                            entries.getOrNull(index)?.let { onCategorySelect(it.term) }
+                        },
+                    )
+                    GifCategoryChips(
+                        categories = entries,
+                        selected = state.mediaCategory,
+                        onSelect = onCategorySelect,
+                        focused = state.focusedIndex(FocusRegion.CATEGORIES),
+                    )
+                }
             }
             // The field publishes the MIME types it accepts; when none of them
             // is an image, nothing this panel can send will ever arrive. Say so
@@ -986,6 +1001,7 @@ internal fun GifPanel(
                             // the user can see what they'd get in a field that
                             // accepts it.
                             Box(modifier = Modifier.alpha(if (unsupported) 0.45f else 1f)) {
+                                val gif = state.settings.gif
                                 GifGrid(
                                     items = ui.items,
                                     downloadingId = state.mediaDownloadingId,
@@ -994,6 +1010,9 @@ internal fun GifPanel(
                                     onLongPress = onLongPress,
                                     panel = state.panel,
                                     focused = state.focusedIndex(),
+                                    perRow = if (stickers) gif.stickerPerRow else gif.gifPerRow,
+                                    spacing = gif.gridSpacing.dp,
+                                    scroll = chrome?.connection,
                                 )
                             }
                         }
@@ -1089,6 +1108,8 @@ private fun GifSourceChips(
     selectedIndex: Int,
     onSelect: (GifSource) -> Unit,
     focused: Int? = null,
+    /** Adds a sticker to a pack of your own: a [StickerAddChip] at the row's end. Null, none. */
+    onAdd: (() -> Unit)? = null,
 ) {
     val kb = LocalKbTheme.current
     Row(
@@ -1118,6 +1139,30 @@ private fun GifSourceChips(
                     .padding(horizontal = 12.dp, vertical = 4.dp),
             )
         }
+        if (onAdd != null) StickerAddChip(onAdd, verticalPadding = 4.dp)
+    }
+}
+
+/** The chip that adds a sticker to one of your packs: a plus, as wide as it needs. */
+@Composable
+private fun StickerAddChip(onAdd: () -> Unit, verticalPadding: Dp) {
+    val kb = LocalKbTheme.current
+    val shape = kb.chipShape()
+    Box(
+        modifier = Modifier
+            .clip(shape)
+            .background(kb.chip)
+            .chipBorder(kb, shape)
+            .clickable { onAdd() }
+            .padding(horizontal = 10.dp, vertical = verticalPadding),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            Icons.Outlined.Add,
+            contentDescription = stringResource(R.string.ime_sticker_add_desc),
+            modifier = Modifier.size(16.dp),
+            tint = kb.chipText,
+        )
     }
 }
 
@@ -1175,6 +1220,8 @@ private fun categoryLabel(category: MediaCategory): String =
 /**
  * Pack chips under the "My stickers" tab: the add chip, then All and one per
  * pack. A single pack has nothing to filter, so it gets the add chip alone.
+ * A null [onAdd] leaves the chip out, for when it ends the source chips' row
+ * above instead.
  *
  * Add comes first so a long row of packs cannot scroll it out of reach.
  */
@@ -1183,7 +1230,7 @@ private fun StickerPackChips(
     packs: List<com.wasimaster.wmkeyboard.core.stickers.StickerPack>,
     selected: String?,
     onSelect: (String?) -> Unit,
-    onAdd: () -> Unit,
+    onAdd: (() -> Unit)?,
 ) {
     val kb = LocalKbTheme.current
     Row(
@@ -1195,22 +1242,7 @@ private fun StickerPackChips(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val shape = kb.chipShape()
-        Box(
-            modifier = Modifier
-                .clip(shape)
-                .background(kb.chip)
-                .chipBorder(kb, shape)
-                .clickable { onAdd() }
-                .padding(horizontal = 10.dp, vertical = 2.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Outlined.Add,
-                contentDescription = stringResource(R.string.ime_sticker_add_desc),
-                modifier = Modifier.size(16.dp),
-                tint = kb.chipText,
-            )
-        }
+        if (onAdd != null) StickerAddChip(onAdd, verticalPadding = 2.dp)
         if (packs.size < 2) return@Row
         val allLabel = stringResource(R.string.ime_sticker_pack_all_label)
         val entries = listOf<Pair<String?, String>>(null to allLabel) + packs.map { it.id to it.name }
@@ -1443,13 +1475,20 @@ private fun GifGrid(
     onLongPress: ((GifItem) -> Unit)? = null,
     panel: PanelMode = PanelMode.GIF,
     focused: Int? = null,
+    /** At most this many to a row, from the tool's setting. */
+    perRow: Int = GifSources.DEFAULT_PER_ROW,
+    /** The gap between cells, and around the grid's edge. */
+    spacing: Dp = 4.dp,
+    /** Watches the scroll for the header that folds away ([MediaChrome]); null, nothing does. */
+    scroll: NestedScrollConnection? = null,
 ) {
     val loader = rememberMediaImageLoader()
     val listState = rememberLazyListState()
     // Justified rows instead of a fixed grid: each row shares one height and
     // every preview keeps its own aspect ratio, so nothing is cropped. Wide
-    // GIFs pair up into rows of two; squarish ones sit three across.
-    val rows = remember(items) { GifSources.rows(items) }
+    // GIFs pair up into rows of two; squarish ones sit [perRow] across.
+    val rows = remember(items, perRow) { GifSources.rows(items, perRow) }
+    val target = GifSources.targetRowRatio(perRow)
     // First flat index of each row, for mapping the focus ring to a row.
     val rowStarts = remember(rows) {
         var start = 0
@@ -1458,7 +1497,7 @@ private fun GifGrid(
     PanelFocusTarget(
         panel = panel,
         count = items.size,
-        columns = 3,
+        columns = perRow,
         onActivate = { index -> items.getOrNull(index)?.let(onSelect) },
     )
     ScrollFocusIntoView(focused) { index ->
@@ -1467,14 +1506,14 @@ private fun GifGrid(
     }
     LazyColumn(
         state = listState,
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = if (scroll != null) Modifier.fillMaxSize().nestedScroll(scroll) else Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(spacing),
+        verticalArrangement = Arrangement.spacedBy(spacing),
     ) {
         itemsIndexed(rows, key = { _, row -> row.first().id }) { rowIndex, row ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(spacing),
             ) {
                 row.forEachIndexed { indexInRow, item ->
                     val ratio = GifSources.cellRatio(item)
@@ -1494,8 +1533,8 @@ private fun GifGrid(
                 // Weights hand a sparse row the full width, which would blow
                 // its height up; pad thin rows out to the target instead.
                 val sum = row.fold(0f) { acc, item -> acc + GifSources.cellRatio(item) }
-                if (sum < GifSources.TARGET_ROW_RATIO) {
-                    Spacer(Modifier.weight(GifSources.TARGET_ROW_RATIO - sum))
+                if (sum < target) {
+                    Spacer(Modifier.weight(target - sum))
                 }
             }
         }

@@ -12,7 +12,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,12 +34,14 @@ import com.wasimaster.wmkeyboard.core.layout.PanelFieldKind
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
+import com.wasimaster.wmkeyboard.core.settings.MediaPanelExtraHeightRange
 import com.wasimaster.wmkeyboard.core.settings.MediaSwitcher
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
 import com.wasimaster.wmkeyboard.core.settings.isUsableTool
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
+import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.ime.layoutKind
 
 /**
@@ -156,6 +165,10 @@ internal fun mediaSwitchPill(
  * is on. A search draws the browser alone, short, with the key rows back
  * underneath it for typing the query.
  *
+ * A bar on top drags the panel taller or shorter, the clipboard's bar
+ * ([ClipPanelHeightBar]) writing the emoji panel's height setting (#537),
+ * which the three panels share.
+ *
  * [browser] draws the panel's body; `fullBleed` says the header already holds
  * the search box, `inGrid` that it is filling a layout cell rather than
  * sizing itself. [headerSearch] is the full-bleed header's search box.
@@ -180,36 +193,69 @@ internal fun MediaPanelHost(
             else -> Unit
         }
     }
-    if (fullBleed) {
-        FullBleedTool(
-            state,
-            title = "",
-            onClose = onClose,
-            // Search collapses the panel so the key rows fit below it, keeping
-            // a band of live results up.
-            compact = searching,
-            extraHeight = mediaPanelExtraHeight(state),
-            headerActions = {
-                headerSearch()
-                pill?.invoke()
-            },
-        ) {
-            if (searching) {
-                browser(true, false, null)
-            } else {
-                PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+    // A fresh header for each panel: switching from GIFs to stickers shows
+    // the new panel's search box and chips, wherever the last one was scrolled.
+    val density = LocalDensity.current
+    val chrome = remember(state.panel, density) { MediaChrome(with(density) { MediaChromeSlopDp.dp.toPx() }) }
+    // A search shows the box, and its results start with the header out.
+    LaunchedEffect(chrome, searching) { if (searching) chrome.hidden = false }
+    // The height bar: the panel opens this much taller than the keyboard, up
+    // to what the screen can give it, the way the clipboard's does (#414).
+    val setting = state.settings.emoji.panelExtraHeightDp
+    val resize = rememberClipPanelResize(setting)
+    val base = if (fullBleed) keyRowsHeight(state) + fullBleedHiddenRows(state, macroRowAtPanelOpen(state)) else keyRowsHeight(state)
+    val maxPanel = toolPanelHeight(state, wanted = base + MediaPanelExtraHeightRange.last.dp, floor = base)
+    val maxExtra = (maxPanel - base).coerceAtLeast(0.dp)
+    val extra = resize.shownDp(setting).dp.coerceIn(0.dp, maxExtra)
+    val maxPanelPx = with(density) { maxPanel.roundToPx() }
+    SideEffect { resize.maxPanelPx = maxPanelPx }
+    val probe = remember(resize) { Modifier.clipPanelHeightProbe(resize) }
+    val barDescription = stringResource(R.string.ime_media_height_desc)
+    // Not while a search has the keys, and not where the screen leaves no
+    // room to grow: the bar would drag nothing.
+    val bar: (@Composable () -> Unit)? = if (searching || maxExtra < 1.dp) null else {
+        { ClipPanelHeightBar(resize, extra, maxExtra, callbacks.onMediaPanelHeight, barDescription) }
+    }
+    CompositionLocalProvider(LocalMediaChrome provides chrome) {
+        if (fullBleed) {
+            Box(modifier = probe) {
+                FullBleedTool(
+                    state,
+                    title = "",
+                    onClose = onClose,
+                    // Search collapses the panel so the key rows fit below it, keeping
+                    // a band of live results up.
+                    compact = searching,
+                    extraHeight = extra,
+                    topHandle = bar,
+                    headerHidden = chrome.collapsed(state),
+                    headerActions = {
+                        headerSearch()
+                        pill?.invoke()
+                    },
+                ) {
+                    if (searching) {
+                        browser(true, false, null)
+                    } else {
+                        PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+                    }
+                }
             }
-        }
-    } else if (searching) {
-        browser(false, false, null)
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                // As tall as the emoji panel's setting makes it (#537).
-                .height(mediaPanelHeight(state, keyRowsHeight(state))),
-        ) {
-            PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+        } else if (searching) {
+            browser(false, false, null)
+        } else {
+            Column(
+                modifier = probe
+                    .fillMaxWidth()
+                    // As tall as the emoji panel's setting makes it (#537), or
+                    // as the bar is dragging it.
+                    .height(toolPanelHeight(state, wanted = base + extra, floor = base)),
+            ) {
+                bar?.invoke()
+                Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                    PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+                }
+            }
         }
     }
 }

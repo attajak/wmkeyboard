@@ -675,6 +675,7 @@
     <string name="ime_clipboard_height_desc">Clipboard panel height. Drag up or down</string>
     <string name="ime_clipboard_height_taller">Make the panel taller</string>
     <string name="ime_clipboard_height_shorter">Make the panel shorter</string>
+    <string name="ime_media_height_desc">Emoji, GIF and sticker panel height. Drag up or down</string>
     <!-- The bin beside the clipboard search bar, for a screen reader. -->
     <string name="ime_clipboard_clear_desc">Delete all unpinned clips</string>
     <!-- The question the bin asks before it deletes. %1$d is how many clips it deletes. -->

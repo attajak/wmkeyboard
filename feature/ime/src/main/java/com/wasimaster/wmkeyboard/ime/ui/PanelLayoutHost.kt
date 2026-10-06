@@ -53,6 +53,8 @@ internal class PanelLayoutCallbacks(
     val emoji: EmojiFieldCallbacks,
     val clipboard: ClipboardFieldCallbacks,
     val trackpad: TrackpadFieldCallbacks,
+    /** The GIF and sticker panels' height bar let go: dp over the keyboard's, for the three media panels (#537). */
+    val onMediaPanelHeight: (Int) -> Unit = {},
 )
 
 /**

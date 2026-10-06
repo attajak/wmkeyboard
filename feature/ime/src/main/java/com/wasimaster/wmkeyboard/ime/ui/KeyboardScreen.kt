@@ -10173,6 +10173,9 @@ internal fun FullBleedTool(
     // A band over the header, out of the panel's own height: the clipboard's
     // drag bar that sets how tall the panel opens (#414).
     topHandle: (@Composable () -> Unit)? = null,
+    // Folds the header away and gives its row to [content]: the GIF and
+    // sticker panels' search box while their results scroll down.
+    headerHidden: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -10194,33 +10197,35 @@ internal fun FullBleedTool(
             .height(height),
     ) {
         topHandle?.invoke()
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(FullBleedHeaderHeight)
-                .padding(horizontal = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (showBack) {
-                ToolCircle(
-                    slot = IconSlots.CHROME_PANEL_BACK,
-                    description = stringResource(R.string.ime_panel_back_desc),
-                    active = false,
-                    onClick = onClose,
-                )
-            }
-            if (title.isNotEmpty()) {
-                Text(
-                    title,
-                    color = kb.secondaryText,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(start = 8.dp),
-                )
-            }
-            if (headerActions != null) {
-                if (title.isNotEmpty()) Spacer(Modifier.weight(1f))
-                headerActions()
+        MediaHeaderReveal(collapsed = headerHidden) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(FullBleedHeaderHeight)
+                    .padding(horizontal = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (showBack) {
+                    ToolCircle(
+                        slot = IconSlots.CHROME_PANEL_BACK,
+                        description = stringResource(R.string.ime_panel_back_desc),
+                        active = false,
+                        onClick = onClose,
+                    )
+                }
+                if (title.isNotEmpty()) {
+                    Text(
+                        title,
+                        color = kb.secondaryText,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.padding(start = 8.dp),
+                    )
+                }
+                if (headerActions != null) {
+                    if (title.isNotEmpty()) Spacer(Modifier.weight(1f))
+                    headerActions()
+                }
             }
         }
         Box(
@@ -10945,6 +10950,7 @@ private fun KeyboardBody(
                     onSelectionHold = toolHold.onSelectionHold,
                     onCaretDrag = { toolHold.caretMagnifier.onDrag(CaretDragSource.TRACKPAD, it) },
                 ),
+                onMediaPanelHeight = toolHold.onMediaPanelHeight,
             )
         }
         val shownPanel = if (lockHidden && state.panel == PanelMode.CLIPBOARD) PanelMode.NONE else state.panel
@@ -24706,6 +24712,12 @@ data class ToolHoldCallbacks(
     val clipboard: ClipboardPanelActions = ClipboardPanelActions(),
     /** The caret magnifier (discussion #303); here for the same reason as [dictionaryBar]. */
     val caretMagnifier: CaretMagnifierSeam = CaretMagnifierSeam(),
+    /**
+     * The GIF and sticker panels' height bar let go: how many dp taller than
+     * the keyboard the emoji, GIF and sticker panels open. Here for the same
+     * reason as [dictionaryBar].
+     */
+    val onMediaPanelHeight: (Int) -> Unit = {},
 )
 
 // ---- snippets panel ----

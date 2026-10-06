@@ -29581,6 +29581,7 @@ open class WMKeyboardService : InputMethodService() {
                 onUndo = ::onFindReplaceUndo,
             ),
             clipboard = clipboardPanelActions(),
+            onMediaPanelHeight = ::onMediaPanelHeight,
             caretMagnifier = com.wasimaster.wmkeyboard.ime.ui.CaretMagnifierSeam(
                 onDrag = ::onCaretDrag,
                 state = caretMagnifier.state,
@@ -33522,6 +33523,16 @@ open class WMKeyboardService : InputMethodService() {
     fun onClipboardPanelHeight(extraDp: Int) {
         if (extraDp == _uiState.value.settings.clipboard.panelExtraHeightDp) return
         serviceScope.launch { settingsRepository.setClipboardPanelExtraHeightDp(extraDp) }
+    }
+
+    /**
+     * The GIF or sticker panel's height bar let go: [extraDp] is how much
+     * taller than the keyboard the emoji, GIF and sticker panels open from now
+     * on, the setting the emoji settings' Panel height slider writes (#537).
+     */
+    fun onMediaPanelHeight(extraDp: Int) {
+        if (extraDp == _uiState.value.settings.emoji.panelExtraHeightDp) return
+        serviceScope.launch { settingsRepository.setMediaPanelExtraHeightDp(extraDp) }
     }
 
     /**

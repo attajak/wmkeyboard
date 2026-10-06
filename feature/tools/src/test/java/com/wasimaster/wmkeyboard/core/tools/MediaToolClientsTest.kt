@@ -296,6 +296,20 @@ class GifSourcesTest {
     }
 
     @Test
+    fun `squarish items pack as many to a row as asked`() {
+        val items = (1..7).map { ratioItem("i$it", 1f) }
+        assertEquals(listOf(5, 2), GifSources.rows(items, perRow = 5).map { it.size })
+        assertEquals(List(7) { 1 }, GifSources.rows(items, perRow = 1).map { it.size })
+    }
+
+    @Test
+    fun `wide items still close a roomier row early`() {
+        // Five to a row targets 5.2; three wide ones already carry 5.4.
+        val items = (1..6).map { ratioItem("w$it", 1.8f) }
+        assertEquals(listOf(3, 3), GifSources.rows(items, perRow = 5).map { it.size })
+    }
+
+    @Test
     fun `wide items pack two to a row`() {
         val items = (1..4).map { ratioItem("w$it", 1.8f) }
         assertEquals(listOf(2, 2), GifSources.rows(items).map { it.size })
