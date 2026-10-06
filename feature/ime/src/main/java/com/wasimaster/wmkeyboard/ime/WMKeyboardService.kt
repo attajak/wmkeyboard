@@ -522,6 +522,7 @@ import com.wasimaster.wmkeyboard.core.voice.VoiceClipGate
 import com.wasimaster.wmkeyboard.core.voice.VoicePunctuation
 import com.wasimaster.wmkeyboard.core.voice.VoiceCasing
 import com.wasimaster.wmkeyboard.core.voice.VoiceSpacing
+import com.wasimaster.wmkeyboard.core.voice.VoiceTidy
 import com.wasimaster.wmkeyboard.core.voice.WavEncoder
 import com.wasimaster.wmkeyboard.core.voice.WhisperRecorder
 import com.wasimaster.wmkeyboard.core.voice.whisper.WhisperLanguages
@@ -21462,7 +21463,11 @@ open class WMKeyboardService : InputMethodService() {
             // and continuous dictation would start the next phrase after it.
             // A press here means "that was the last one".
             VoiceStatus.FINISHING -> voiceStopRequested = true
-            VoiceStatus.TRANSCRIBING -> {}
+            // A phrase with the AI being tidied (#499) is the same case as
+            // FINISHING: it has been heard, so the press can only mean that
+            // no phrase follows it. A clip being transcribed keeps its old
+            // meaning of nothing to do.
+            VoiceStatus.TRANSCRIBING -> if (_uiState.value.voice.tidying) voiceStopRequested = true
             else -> {
                 if (voiceMeteredAsked) grantMetered(MeteredFeature.CLOUD_VOICE)
                 voiceSilentRetries = 0
@@ -21767,8 +21772,13 @@ open class WMKeyboardService : InputMethodService() {
                     if (generation != voiceGeneration) return
                     voiceGeneration++
                     micBlockWatcher.stop()
-                    commitVoiceUtterance(text, tag)
+                    val landed = commitVoiceUtterance(text, tag)
                     voiceSilentRetries = 0
+                    tidyVoiceThen(landed) { afterVoiceFinal() }
+                }
+
+                /** The phrase is in the field, tidied or not: chain or come to rest. */
+                private fun afterVoiceFinal() {
                     if (voiceChains() && !voiceStopRequested && voiceSessionAlive()) {
                         // Continuous dictation: chain straight into the next
                         // utterance until the user stops or leaves. Deferred
@@ -22288,8 +22298,16 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         voiceSilentRetries = 0
-        commitVoiceUtterance(text, tag)
-        if (chain) {
+        val landed = commitVoiceUtterance(text, tag)
+        tidyVoiceThen(landed) { afterWhisperCommit(chain) }
+    }
+
+    /**
+     * The clip's words are in the field, tidied or not: continue the session or
+     * end it. A stop pressed while they were being tidied is still a stop.
+     */
+    private fun afterWhisperCommit(chain: Boolean) {
+        if (chain && !voiceStopRequested && voiceSessionAlive()) {
             _uiState.update { it.copy(voice = it.voice.copy(partial = "", level = 0f, canUndo = true)) }
             serviceScope.launch(Dispatchers.Main) { startVoice() }
         } else {
@@ -22348,8 +22366,11 @@ open class WMKeyboardService : InputMethodService() {
      * unconditionally lowered the first word of a dictation into an empty
      * field, which is not a rule anyone asked for either. So the capital is
      * judged by the same place rule as every other mode.
+     *
+     * Returns what went into the app's field, for [tidyVoiceThen] to rewrite,
+     * or null when nothing did.
      */
-    private fun commitVoiceUtterance(text: String, tag: String) {
+    private fun commitVoiceUtterance(text: String, tag: String): VoiceLanding? {
         val settings = _uiState.value.settings
         val plain = settings.voiceBar.plainTyping()
         val processed = if (!plain && settings.voiceSpokenPunctuation) {
@@ -22359,14 +22380,15 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (voiceSessionForField) {
             commitFieldVoice(processed)
-            return
+            return null
         }
-        val ic = currentInputConnection ?: return
+        val ic = currentInputConnection ?: return null
         // A word still being composed — typed under the microphone, or resumed
         // by a caret tap while a transcription was in flight — has to commit
         // first, or the dictated text replaces it.
         commitComposing(ic, autocorrect = false)
         if (settings.voiceBar.interactiveTyping()) refreshVoiceContext()
+        val sentenceStart = voiceSentenceStart
         val cased = casedVoiceText(processed)
         val spaced = if (plain) cased else spacedVoiceText(cased)
         ic.commitText(spaced, 1)
@@ -22375,6 +22397,139 @@ open class WMKeyboardService : InputMethodService() {
         // A chained session's next utterance lands after this one, so what it
         // needs in front of it — a space, a capital — is read now that the
         // field holds it, not from wherever the session began (#182).
+        refreshVoiceContext()
+        return VoiceLanding(spaced, sentenceStart)
+    }
+
+    /**
+     * One phrase as it went into the field: [text] exactly as committed,
+     * spaces included, and whether the caret stood at a sentence start when
+     * it did, so a rewrite of it is cased by the same rule ([VoiceCasing]).
+     */
+    private class VoiceLanding(val text: String, val sentenceStart: Boolean)
+
+    /**
+     * Runs [then] once the phrase that just [landed] has been tidied by the AI
+     * tool's model (#499), or at once when it is not to be.
+     *
+     * The raw words go into the field first and stay there while the model
+     * works, and the answer only replaces them if they are still exactly what
+     * is in front of the caret. So nothing that was said can be lost to a slow,
+     * failed or wrong answer, or to the user typing, moving the caret or
+     * leaving the field in the meantime: the phrase just stays as heard.
+     *
+     * [then] chains the next phrase or ends the session, and is held back
+     * until the answer is in. A new phrase starting under the request would
+     * put its own partial in front of the caret, and the rewrite could no
+     * longer find the old one. A session cancelled meanwhile never runs it:
+     * [cancelVoice] has already brought the surfaces to rest.
+     */
+    private fun tidyVoiceThen(landed: VoiceLanding?, then: () -> Unit) {
+        val settings = _uiState.value.settings
+        if (landed == null || !voiceTidyApplies(settings, landed.text)) {
+            then()
+            return
+        }
+        val generation = voiceGeneration
+        _uiState.update {
+            it.copy(voice = it.voice.copy(status = VoiceStatus.TRANSCRIBING, tidying = true, partial = "", level = 0f))
+        }
+        serviceScope.launch {
+            val tidied = withContext(Dispatchers.IO) {
+                runCatching { tidyDictation(landed.text, settings, generation) }.getOrNull()
+            }
+            if (generation != voiceGeneration) return@launch
+            // FINISHING, the state a phrase is in between being heard and the
+            // next one starting, so nothing still reads "Tidying up" or
+            // "Transcribing" in the moment before [then] moves it on.
+            _uiState.update { it.copy(voice = it.voice.copy(status = VoiceStatus.FINISHING, tidying = false)) }
+            if (tidied != null) replaceVoiceLanding(landed, tidied)
+            then()
+        }
+    }
+
+    /**
+     * Whether the phrase [text] goes to the model at all. Not in plain voice
+     * typing, which is the words exactly as said; not into the keyboard's own
+     * boxes, which hold a search or a short phrase; never from a password
+     * field; and only when the AI tool can answer without asking anything,
+     * which rules out a provider that is not set up and data saver holding
+     * cloud AI back. Silently: the phrase is in the field already, and a
+     * notice on every phrase of a long dictation would be worse than the
+     * filler it failed to take out.
+     */
+    private fun voiceTidyApplies(settings: KeyboardSettings, text: String): Boolean {
+        if (!settings.voiceBar.aiTidy || settings.voiceBar.plainTyping()) return false
+        if (voiceSessionForField || _uiState.value.secureField) return false
+        if (!VoiceTidy.worthTidying(text)) return false
+        if (voiceTidyOnDevice(settings)) {
+            return BuildConfig.ENABLE_LOCAL_LLM && effectiveLocalModelFile(settings) != null
+        }
+        return AiClient.isConfigured(settings.ai) &&
+            dataSaverStatus.decide(MeteredFeature.CLOUD_AI) == MeteredDecision.ALLOWED
+    }
+
+    /**
+     * The tidy runs on the downloaded model: it is the AI tool's provider, or
+     * it stands in for a server there is no connection to reach (#452).
+     */
+    private fun voiceTidyOnDevice(settings: KeyboardSettings): Boolean =
+        settings.ai.provider == AiProvider.ON_DEVICE ||
+            (aiOfflineStandIn(settings) && !networkWatcher.state.value.online)
+
+    /**
+     * The model's tidied [landed] phrase, or null when there is no answer to
+     * use: none in [VOICE_TIDY_TIMEOUT_MS], the session moved on, or
+     * [VoiceTidy.accept] turned it down. Blocking; call off the main thread.
+     */
+    private fun tidyDictation(landed: String, settings: KeyboardSettings, generation: Int): String? {
+        val heard = landed.trim()
+        val system = AiPrompts.dictationPrompt()
+        val deadline = SystemClock.uptimeMillis() + VOICE_TIDY_TIMEOUT_MS
+        val alive = { generation == voiceGeneration && SystemClock.uptimeMillis() < deadline }
+        val answer = if (voiceTidyOnDevice(settings)) {
+            val modelFile = effectiveLocalModelFile(settings) ?: return null
+            LocalLlmEngine.generate(
+                context = applicationContext,
+                modelFile = modelFile,
+                backend = settings.ai.localBackend,
+                contextTokens = settings.ai.localContextTokens,
+                system = system,
+                user = heard,
+            )
+        } else {
+            AiClient.completeStreaming(
+                config = AiClient.config(settings.ai),
+                system = system,
+                user = heard,
+                maxTokens = AiClient.effectiveMaxTokens(settings.ai),
+                onPhase = {},
+                onPartial = {},
+                isActive = alive,
+            ).text
+        }
+        // A request stopped by [alive] hands back what it had so far, which
+        // is a phrase cut short, not a tidied one.
+        if (!alive()) return null
+        return VoiceTidy.accept(AiThinking.stripped(answer), heard)
+    }
+
+    /**
+     * Puts [tidied] where [landed] went in, if [landed] is still exactly what
+     * sits in front of the caret with nothing selected. The undo chip then
+     * takes back the tidied phrase, which is what is in the field.
+     */
+    private fun replaceVoiceLanding(landed: VoiceLanding, tidied: String) {
+        val ic = currentInputConnection ?: return
+        val old = landed.text
+        if (ic.getTextBeforeCursor(old.length, 0)?.toString() != old) return
+        if (!ic.getSelectedText(0).isNullOrEmpty()) return
+        val replacement = VoiceTidy.land(old, VoiceCasing.apply(tidied, sentenceStart = landed.sentenceStart))
+        ic.beginBatchEdit()
+        ic.deleteSurroundingText(old.length, 0)
+        ic.commitText(replacement, 1)
+        ic.endBatchEdit()
+        if (lastVoiceCommit == old) lastVoiceCommit = replacement
         refreshVoiceContext()
     }
 
@@ -22557,7 +22712,7 @@ open class WMKeyboardService : InputMethodService() {
         // longer composing.
         if (!interactiveVoice() && !voiceSessionForField) currentInputConnection?.finishComposingText()
         _uiState.update {
-            it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f))
+            it.copy(voice = it.voice.copy(status = VoiceStatus.IDLE, partial = "", level = 0f, tidying = false))
         }
     }
 
@@ -35349,6 +35504,14 @@ open class WMKeyboardService : InputMethodService() {
          */
         private const val VOICE_SILENT_RETRIES = 2
         private const val VOICE_SILENT_RETRIES_INTERACTIVE = 12
+
+        /**
+         * How long a dictated phrase waits on the AI model to tidy it (#499)
+         * before it stays as heard. The next phrase waits too, so this is the
+         * longest the microphone can be held shut by a slow model; an
+         * on-device one that has to load first is the slow case.
+         */
+        private const val VOICE_TIDY_TIMEOUT_MS = 15_000L
 
         /** What [noteOfflineFallback] tells the user about, one feature each (#452). */
         private const val OFFLINE_FALLBACK_VOICE = "voice"

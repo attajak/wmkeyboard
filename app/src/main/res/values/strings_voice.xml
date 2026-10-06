@@ -106,6 +106,10 @@
     <string name="voice_pause_media_title">Pause media during voice typing</string>
     <string name="voice_pause_media_subtitle">Pause music and video while the microphone listens</string>
     <string name="voice_pause_media_info">When voice typing starts, the keyboard asks other apps to pause their sound. Music, podcasts and video stop while the microphone listens. They continue a moment after voice typing stops. An app that ignores the request continues to play.</string>
+    <!-- #499: each dictated phrase is cleaned up by the model of the AI tool. -->
+    <string name="voice_ai_tidy_title">Tidy dictation with AI</string>
+    <string name="voice_ai_tidy_subtitle">Remove filler words, repeats and spoken corrections from each phrase</string>
+    <string name="voice_ai_tidy_info">After each phrase goes into the field, the keyboard sends it to the model of the AI tool. The model removes filler words such as um and uh, false starts, repeated words and the parts that you corrected aloud: \"at three, no, four\" becomes \"at four\". Your words, language and tone stay the same. The phrase stays as you said it if the answer is slow or fails, or if you change the text first. The next phrase starts when the answer arrives. Each phrase goes to the AI provider that you set for the AI tool. Plain text mode, password fields and the boxes of the keyboard itself are not tidied.</string>
     <string name="voice_hold_picks_title">Hold the tool to pick a mode</string>
     <string name="voice_hold_picks_subtitle">Press and hold the Voice tool on the toolbar to choose a voice typing mode and start at once</string>
     <string name="voice_hold_picks_info">A press and hold on the toolbar\'s Voice tool opens a menu of the three voice typing modes. Picking one makes it the mode and starts dictation straight away, so switching between one block at a time and typing while you speak is one hold rather than a trip through settings. Tap the tool to stop. Turn this off to give the hold back to the toolbar: it then runs the tool you bound to it, or opens this screen.</string>

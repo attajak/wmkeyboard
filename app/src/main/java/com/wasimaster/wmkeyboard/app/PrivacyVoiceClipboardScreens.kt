@@ -404,6 +404,17 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: LiveSetting
                 default = SettingsDefaults.voiceSpokenPunctuation,
             ) { scope.launch { repository.setVoiceSpokenPunctuation(it) } }
         }
+        // Plain voice typing is the words exactly as said, so it is never
+        // tidied (#499) and the row goes with the punctuation one above.
+        if (typingMode != com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings.TYPING_PLAIN) item {
+            ToggleSetting(
+                R.string.voice_ai_tidy_title,
+                stringResource(R.string.voice_ai_tidy_subtitle),
+                settings.watch { it.voiceBar.aiTidy },
+                info = stringResource(R.string.voice_ai_tidy_info),
+                default = SettingsDefaults.voiceBar.aiTidy,
+            ) { scope.launch { repository.setVoiceAiTidy(it) } }
+        }
     }
     // Offline Whisper has no way to take a hint, so the group only shows for
     // the two engines that read it (#305).

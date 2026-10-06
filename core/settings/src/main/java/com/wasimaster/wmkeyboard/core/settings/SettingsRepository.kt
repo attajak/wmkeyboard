@@ -4780,6 +4780,14 @@ data class VoiceBarSettings(
      */
     val pauseMedia: Boolean = false,
     /**
+     * Each dictated phrase is tidied by the AI tool's provider after it lands
+     * (#499): filler words, false starts and spoken self-corrections taken out,
+     * the way Gboard's "Rambler" does it on Google's servers. Off by default:
+     * it sends every phrase to whichever model the AI tool uses. Never in
+     * plain voice typing, whose point is the words exactly as said.
+     */
+    val aiTidy: Boolean = false,
+    /**
      * The surface the bar's expand button goes back to — whichever of
      * [MODE_PANEL] or [MODE_STRIP] the user collapsed from, defaulting to the
      * panel when the bar was chosen in settings instead.
@@ -8833,6 +8841,7 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_HOLD_TO_TALK_MS = intPreferencesKey("voice_hold_to_talk_ms")
         private val VOICE_HOLD_PICKS_MODE = booleanPreferencesKey("voice_hold_picks_mode")
         private val VOICE_PAUSE_MEDIA = booleanPreferencesKey("voice_pause_media")
+        private val VOICE_AI_TIDY = booleanPreferencesKey("voice_ai_tidy")
         private val VOICE_UI_RETURN_MODE = stringPreferencesKey("voice_ui_return_mode")
         private val VOICE_BAR_INLINE = booleanPreferencesKey("voice_bar_inline")
         private val VOICE_CONTINUOUS = booleanPreferencesKey("voice_continuous")
@@ -10683,6 +10692,7 @@ class SettingsRepository(private val context: Context) {
             silenceStopMs = p[VOICE_SILENCE_STOP_MS] ?: defaults.voiceBar.silenceStopMs,
             holdPicksTypingMode = p[VOICE_HOLD_PICKS_MODE] ?: defaults.voiceBar.holdPicksTypingMode,
             pauseMedia = p[VOICE_PAUSE_MEDIA] ?: defaults.voiceBar.pauseMedia,
+            aiTidy = p[VOICE_AI_TIDY] ?: defaults.voiceBar.aiTidy,
             returnMode = p[VOICE_UI_RETURN_MODE] ?: defaults.voiceBar.returnMode,
             inline = p[VOICE_BAR_INLINE] ?: defaults.voiceBar.inline,
         )
@@ -11696,6 +11706,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoicePauseMedia(value: Boolean) =
         editPrefs { it[VOICE_PAUSE_MEDIA] = value }
+
+    suspend fun setVoiceAiTidy(value: Boolean) =
+        editPrefs { it[VOICE_AI_TIDY] = value }
 
     suspend fun setVoiceBarActive(value: Boolean) =
         editPrefs { it[VOICE_BAR_ACTIVE] = value }

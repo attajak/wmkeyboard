@@ -178,6 +178,14 @@ A symbol whose plain name is an everyday word only answers to its longer name, w
 
 A language other than English or Bangla has no table, so its dictation is typed exactly as it was heard.
 
+## Tidying dictation with AI
+
+A recognizer writes down what you said, word for word: the "um"s, the false starts, the word you said twice, and both halves of "let's meet at three, no, four". **Tidy dictation with AI**, off by default, hands each phrase to the model the [AI tool](/tools/ai/) uses, the way Gboard's Rambler does on Google's servers, and puts the cleaned version in its place. Filler and repeats go, a spoken correction keeps only the correction ("let's meet at four"), and punctuation and obvious mishearings get fixed. Your words, your language and your tone stay; it doesn't summarize, translate or answer what you said.
+
+The phrase goes into the field as heard first, and the surface says **Tidying up…** while the model works. The cleaned text only replaces it if the phrase is still exactly what sits in front of your cursor, so typing, moving the cursor or leaving the field in the meantime just keeps what you said. So does a model that fails, gives nothing back or is still thinking after 15 seconds. Nothing you dictated is ever lost to the rewrite. The next phrase of a continuous dictation starts once the answer is in, and tapping the mic while it's tidying makes that phrase the last one. **Undo** takes back the tidied phrase.
+
+It uses whatever provider and model the AI tool is set to, cloud or on-device, and is skipped without a word when that provider isn't set up yet, when [data saver](/privacy/data-saver/) is holding cloud AI back, in password fields, in the keyboard's own search boxes, for phrases of only a word or two, and in **Type while you speak, plain text**, whose point is the words exactly as said. A small on-device model tidies less reliably than a cloud one, and it holds the next phrase back for longer.
+
 ## Language and engine
 
 Voice typing doesn't have its own language picker: it dictates in whatever language your active keyboard layout is set to. If you have both English and at least one non-English language enabled, a small **EN** / **বাং** chip appears in the corner of the panel. Tapping it switches your active layout to the other language's first enabled layout, and dictation follows along. With only one language enabled, or with several non-English languages and no English one, no chip appears.
@@ -205,8 +213,9 @@ Everything below lives on the Voice typing screen, under Features on the setting
 | Hold to talk | 600&nbsp;ms | How long you hold the microphone before a tap becomes a press-and-hold, from 200 to 1500&nbsp;ms. Raise it if a slow press keeps stopping your dictation. Lower it if you mean to hold and it keeps latching on. |
 | Keep listening | On | Starts the next sentence automatically after each one commits. |
 | Spoken punctuation | On | Saying "comma", "question mark" or "দাঁড়ি" types the mark. |
+| Tidy dictation with AI | Off | Sends each phrase to the AI tool's model to take out filler words, repeats and spoken corrections. Hidden in plain text mode. See [Tidying dictation with AI](#tidying-dictation-with-ai). |
 
-All six sit in a group headed **Dictation**. An **Engine** group above it holds the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
+All of these sit in a group headed **Dictation**. An **Engine** group above it holds the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
 
 > Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.
 
@@ -237,6 +246,8 @@ Want a hard guarantee that audio never leaves the device, whichever model is ins
 Want the phone to do less work instead? A [transcription server](/tools/transcription-server/) sends each phrase to a server you choose, on your own network or a hosted service, and types what comes back. The audio goes to that address and nowhere else.
 
 With **Listen for my words** on, the list of your own words goes to the same place the audio goes: the system recognizer, or your transcription server. On-device recognition keeps it on the phone too.
+
+With **Tidy dictation with AI** on, the text of each phrase (never the audio) also goes to the AI tool's provider. Pick an on-device model there to keep it on the phone.
 
 ## Details & edge cases
 

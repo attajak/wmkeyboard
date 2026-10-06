@@ -82,6 +82,31 @@ object AiPrompts {
             "Write that text." + OUTPUT_ONLY
 
     /**
+     * System prompt for tidying one dictated phrase as it lands (#499): the
+     * filler, false starts and spoken self-corrections a recognizer writes
+     * down word for word, taken out the way a careful typist would.
+     *
+     * The dictation is third-party data like any field text — the user may be
+     * reading out a message that is itself full of instructions — so it carries
+     * the same [GUARD] as the actions. It also has to stay the speaker's own
+     * words: a phrase lands in the middle of whatever is being written, so a
+     * summary, a reply or a translation would be worse than the raw text.
+     */
+    fun dictationPrompt(): String =
+        ROLE + TASK +
+            "the input is one phrase of voice dictation, transcribed word for word. " +
+            "Clean it up the way a careful typist would: remove filler words and " +
+            "hesitations (um, uh, er, you know, I mean), stutters, false starts and " +
+            "accidental repetitions. When the speaker corrects themselves (\"at three, " +
+            "no, four\"), keep only the correction. Fix punctuation and obvious " +
+            "mis-heard words. Keep everything else exactly as said: the same words, " +
+            "language, tone and point of view. Never translate, summarize, shorten " +
+            "what was meant, answer, or add anything. Keep the case of the first " +
+            "letter and the punctuation at the end as they are in the input. If " +
+            "nothing needs cleaning, return the input unchanged." +
+            GUARD + OUTPUT_ONLY
+
+    /**
      * System prompt for the chat screen. A conversation, not a transform: the
      * user's messages are genuine directives typed on their own keyboard, so
      * like [generatePrompt] this carries no [GUARD] and no [OUTPUT_ONLY] —

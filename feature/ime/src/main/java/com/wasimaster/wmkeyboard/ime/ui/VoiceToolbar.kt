@@ -707,7 +707,7 @@ private fun VoiceBarStatus(
         12 -> pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
         4 -> stringResource(R.string.ime_voice_strip_listening_hint)
         5 -> voice.partial.ifEmpty { speakNow }
-        6 -> stringResource(R.string.ime_voice_status_transcribing)
+        6 -> stringResource(voice.transcribingLabelRes())
         7 -> "…"
         8 -> voice.errorMessage ?: stringResource(R.string.ime_voice_status_error)
         else -> stringResource(R.string.ime_voice_bar_paused)

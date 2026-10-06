@@ -84,6 +84,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
+ * What every surface says while the words are on their way with the mic shut:
+ * a clip being transcribed, or a phrase with the AI tool being tidied (#499).
+ */
+internal fun VoiceUi.transcribingLabelRes(): Int =
+    if (tidying) R.string.ime_voice_status_tidying else R.string.ime_voice_status_transcribing
+
+/**
  * Voice input panel: a large mic button with a level-driven pulse ring and
  * the utterance in progress underneath (the same text is live in the editor
  * as composing text), plus the handwriting panel's action rail. The service
@@ -495,7 +502,7 @@ private fun MicContent(
                 pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
             listening && voice.clipBased -> stringResource(R.string.ime_voice_status_listening_hint)
             listening -> voice.partial.ifEmpty { listeningLabel }
-            transcribing -> stringResource(R.string.ime_voice_status_transcribing)
+            transcribing -> stringResource(voice.transcribingLabelRes())
             finishing -> "…"
             voice.status == VoiceStatus.ERROR ->
                 voice.errorMessage ?: stringResource(R.string.ime_voice_status_error)
@@ -782,7 +789,7 @@ internal fun VoiceStripBar(
                 pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
             listening && voice.clipBased -> stringResource(R.string.ime_voice_strip_listening_hint)
             listening -> voice.partial.ifEmpty { listeningLabel }
-            transcribing -> stringResource(R.string.ime_voice_status_transcribing)
+            transcribing -> stringResource(voice.transcribingLabelRes())
             finishing -> "…"
             voice.status == VoiceStatus.ERROR ->
                 voice.errorMessage ?: stringResource(R.string.ime_voice_status_error)
@@ -1037,7 +1044,7 @@ internal fun RowScope.FieldVoiceStatus(voice: VoiceUi, onAction: (CaptureVoiceAc
             pluralStringResource(R.plurals.ime_voice_status_stops_in, voice.secondsLeft, voice.secondsLeft)
         listening && voice.clipBased -> stringResource(R.string.ime_voice_strip_listening_hint)
         listening -> voice.partial.ifEmpty { listeningLabel }
-        voice.status == VoiceStatus.TRANSCRIBING -> stringResource(R.string.ime_voice_status_transcribing)
+        voice.status == VoiceStatus.TRANSCRIBING -> stringResource(voice.transcribingLabelRes())
         voice.status == VoiceStatus.FINISHING -> voice.partial.ifEmpty { "…" }
         voice.status == VoiceStatus.ERROR -> voice.errorMessage ?: stringResource(R.string.ime_voice_status_error)
         else -> ""

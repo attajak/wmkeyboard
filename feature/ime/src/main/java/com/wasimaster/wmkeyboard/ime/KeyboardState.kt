@@ -972,6 +972,12 @@ data class VoiceUi(
     val barInline: Boolean = false,
     /** A just-dictated utterance is still at the cursor; the undo chip shows. */
     val canUndo: Boolean = false,
+    /**
+     * The phrase just dictated is with the AI tool's model being tidied (#499).
+     * Rides [VoiceStatus.TRANSCRIBING], which already means "the words are
+     * coming, the mic is shut"; this only changes what the status line says.
+     */
+    val tidying: Boolean = false,
     /** Offline-model chip on the panel (download for offline dictation). */
     val modelState: VoiceModelState = VoiceModelState.UNKNOWN,
     /** Download percent while [modelState] is DOWNLOADING, -1 when unknown. */
