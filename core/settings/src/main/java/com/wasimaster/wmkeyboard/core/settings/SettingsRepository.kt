@@ -4647,6 +4647,18 @@ data class CjkSettings(
      * its own way. Empty by default, so nobody's space changes under them.
      */
     val fullWidthSpaceLanguages: Set<String> = emptySet(),
+    /**
+     * The languages whose space bar steps through the conversion candidates
+     * instead of committing the first one, by language id (#419): the first
+     * press highlights the top candidate, each press after it moves on, and
+     * Enter types the highlighted one. How Japanese IMEs (and fcitx's) work.
+     *
+     * Per language for the same reason as [fullWidthSpaceLanguages], and empty
+     * by default: the space bar committing the top candidate is what everyone
+     * already typing Chinese here has in their fingers. The arrow keys step
+     * through the candidates whatever this says.
+     */
+    val spaceStepsCandidatesLanguages: Set<String> = emptySet(),
     /** Which region's vocabulary Traditional output should prefer. */
     val hanRegion: HanVariant.HanRegion = HanVariant.HanRegion.GENERIC,
 )
@@ -8670,6 +8682,8 @@ class SettingsRepository(private val context: Context) {
         private val JYUTPING_LAZY = booleanPreferencesKey("jyutping_lazy")
         private val KANA_LOOSE_MARKS = booleanPreferencesKey("kana_loose_marks")
         private val FULL_WIDTH_SPACE_LANGUAGES = stringSetPreferencesKey("full_width_space_languages")
+        private val SPACE_STEPS_CANDIDATES_LANGUAGES =
+            stringSetPreferencesKey("space_steps_candidates_languages")
         private val CJK_HAN_REGION = stringPreferencesKey("cjk_han_region")
         private val VI_STRICT_TONES = booleanPreferencesKey("vi_strict_tones")
         private val VI_RESTORE_MARKS = booleanPreferencesKey("vi_restore_marks")
@@ -10186,6 +10200,8 @@ class SettingsRepository(private val context: Context) {
             jyutpingLazy = p[JYUTPING_LAZY] ?: defaults.cjk.jyutpingLazy,
             kanaLooseMarks = p[KANA_LOOSE_MARKS] ?: defaults.cjk.kanaLooseMarks,
             fullWidthSpaceLanguages = p[FULL_WIDTH_SPACE_LANGUAGES] ?: defaults.cjk.fullWidthSpaceLanguages,
+            spaceStepsCandidatesLanguages = p[SPACE_STEPS_CANDIDATES_LANGUAGES]
+                ?: defaults.cjk.spaceStepsCandidatesLanguages,
             hanRegion = p[CJK_HAN_REGION]
                 ?.let { runCatching { HanVariant.HanRegion.valueOf(it) }.getOrNull() }
                 ?: defaults.cjk.hanRegion,
@@ -16082,6 +16098,11 @@ class SettingsRepository(private val context: Context) {
     suspend fun setFullWidthSpace(languageId: String, value: Boolean) = editPrefs { p ->
         val current = p[FULL_WIDTH_SPACE_LANGUAGES] ?: emptySet()
         p[FULL_WIDTH_SPACE_LANGUAGES] = if (value) current + languageId else current - languageId
+    }
+
+    suspend fun setSpaceStepsCandidates(languageId: String, value: Boolean) = editPrefs { p ->
+        val current = p[SPACE_STEPS_CANDIDATES_LANGUAGES] ?: emptySet()
+        p[SPACE_STEPS_CANDIDATES_LANGUAGES] = if (value) current + languageId else current - languageId
     }
 
     suspend fun setCjkHanRegion(value: HanVariant.HanRegion) =

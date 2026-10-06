@@ -417,6 +417,9 @@
          as it is. -->
     <string name="languages_cjk_full_width_space_subtitle">The space bar types a full-width space [　]</string>
     <string name="languages_cjk_full_width_space_info">Japanese and Chinese text is spaced with the ideographic space (U+3000), which is as wide as one character. With this on, the space bar types it instead of the narrow space used between words in other languages. A space pressed while you are still typing a reading picks a candidate as before, and only a press with nothing waiting to convert types a space.</string>
+    <string name="languages_cjk_space_steps_title">Space steps through candidates</string>
+    <string name="languages_cjk_space_steps_subtitle">Space highlights the next candidate, and Enter types it</string>
+    <string name="languages_cjk_space_steps_info">Off, the space bar types the first candidate straight away. On, the first press highlights it and each press after moves to the next one, the way Japanese input methods work. Enter types the highlighted candidate, typing on keeps it and starts a new reading, and backspace goes back to the reading. With a physical keyboard, the arrow keys move the highlight either way, Enter or space types it, and once something is highlighted the keys 1 to 9 pick a candidate and Escape goes back to the reading.</string>
     <!-- Jianpin (简拼) is the standard name for abbreviated Pinyin, where a
          syllable is typed as its first letter only. Keep the Chinese in the
          title. The examples in the subtitle are Pinyin and stay as they are. -->

@@ -125,6 +125,7 @@
     <string name="search_kw_languages_cjk_double_pinyin_custom">shuangpin 双拼 mandarin chinese scheme key table fcitx sp.dat import export</string>
     <string name="search_kw_languages_cjk_fuzzy">mandarin putonghua</string>
     <string name="search_kw_languages_cjk_lazy">cantonese jyutping</string>
+    <string name="search_kw_languages_cjk_space_steps">japanese chinese candidate select highlight arrow keys enter convert henkan fcitx mozc hardware physical keyboard</string>
     <string name="search_kw_languages_cjk_full_width_space">japanese chinese zenkaku ideographic double wide u3000</string>
     <string name="search_kw_languages_cjk_loose_marks">japanese flick dakuten handakuten sokuon modifier insensitive</string>
     <string name="search_kw_languages_cjk_traditional">taiwan hong kong hanzi</string>

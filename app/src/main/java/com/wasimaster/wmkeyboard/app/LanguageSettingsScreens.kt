@@ -1672,6 +1672,20 @@ private fun CjkDictPackManager(
             ) { on -> scope.launch { repository.setFullWidthSpace(langId, on) } }
         }
 
+        // Issue #419: Japanese IMEs step through the candidates with the space
+        // bar and type the highlighted one with Enter. Per language, and off
+        // until asked for, since space committing the top pick is the habit
+        // everyone typing here already has.
+        item {
+            ToggleSetting(
+                R.string.languages_cjk_space_steps_title,
+                stringResource(R.string.languages_cjk_space_steps_subtitle),
+                settings.watch { langId in it.cjk.spaceStepsCandidatesLanguages },
+                info = stringResource(R.string.languages_cjk_space_steps_info),
+                default = langId in SettingsDefaults.cjk.spaceStepsCandidatesLanguages,
+            ) { on -> scope.launch { repository.setSpaceStepsCandidates(langId, on) } }
+        }
+
     }
     // Chinese-only: fuzzy pinyin + Double Pinyin scheme, in a card of their own.
     if (langId == "zh") {

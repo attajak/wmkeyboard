@@ -4402,6 +4402,7 @@ private fun TopBar(
                         alpha = stripContentFade,
                         textScale = state.settings.suggestionStrip.textScale,
                         hints = if (suggestionsShowing) suggestionHintPlan(state) else null,
+                        highlighted = state.candidateCursor,
                         onCandidate = onCandidate,
                         onExpand = onCandidatesExpand,
                     )
@@ -5282,10 +5283,19 @@ private fun RowScope.CandidateStrip(
     textScale: Float,
     /** The hotkey badges, or null when no physical keyboard is asking for them. */
     hints: HintPlan? = null,
+    /** The candidate the arrow keys or a stepping space bar moved to, or -1 (#419). */
+    highlighted: Int = -1,
     onCandidate: (String, Int) -> Unit,
     onExpand: () -> Unit,
 ) {
+    val listState = rememberLazyListState()
+    // Stepping past the right edge has to bring the highlight with it, or the
+    // candidate Enter is about to type is one nobody can see.
+    ScrollFocusIntoView(highlighted.takeIf { it >= 0 && it < candidates.size }) {
+        listState.animateScrollToItem(it)
+    }
     LazyRow(
+        state = listState,
         modifier = Modifier
             .weight(1f)
             .fillMaxHeight()
@@ -5304,6 +5314,8 @@ private fun RowScope.CandidateStrip(
                 modifier = Modifier
                     .widthIn(min = CandidateChipMinWidth)
                     .fillMaxHeight()
+                    .padding(vertical = if (index == highlighted) 6.dp else 0.dp)
+                    .focusRing(index == highlighted, RoundedCornerShape(10.dp))
                     // By position, not text: the composer works out how much of
                     // the buffer to eat from where the chip sat.
                     .clickable(enabled = enabled) { onCandidate(suggestion, index) },
@@ -5314,7 +5326,9 @@ private fun RowScope.CandidateStrip(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = CandidateFontSize * textScale,
-                    fontWeight = if (index == 0) FontWeight.SemiBold else FontWeight.Normal,
+                    // Bold is "what the space bar commits", which is the
+                    // highlight once there is one.
+                    fontWeight = if (index == highlighted.coerceAtLeast(0)) FontWeight.SemiBold else FontWeight.Normal,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -10674,8 +10688,11 @@ private fun KeyboardBody(
                 state.panel == PanelMode.NONE &&
                 !fullBleed && !emojiSearching && !clipboardSearching && !lockHidden
             // Disabling the toolbar drops the whole strip — suggestions and
-            // tools alike — so the keys claim its height.
-            val topBarVisible = state.settings.toolbarBehavior.enabled && !fullBleed &&
+            // tools alike — so the keys claim its height. Not when the strip is
+            // all there is: a view up only for a physical keyboard's candidates
+            // would otherwise be an empty band (#419).
+            val topBarVisible = (state.settings.toolbarBehavior.enabled || state.hardwareCandidateWindow) &&
+                !fullBleed &&
                 !emojiSearching && !clipboardSearching && !lockHidden
             // The other placement: the macros take the suggestion strip's own
             // row instead of asking for one.
@@ -11581,9 +11598,11 @@ private fun KeyboardBody(
                 )
                 // With a hardware keyboard and toolbar-only mode on, the keys
                 // step aside and just the toolbar remains — tools stay one tap
-                // away while the physical keyboard does the typing.
+                // away while the physical keyboard does the typing. Same for a
+                // view that is only up to show a reading's candidates (#419).
                 PanelMode.NONE -> if (
-                    !(state.hardwareKeyboardPresent && state.settings.toolbarBehavior.onlyWithHardwareKeyboard)
+                    !(state.hardwareKeyboardPresent && state.settings.toolbarBehavior.onlyWithHardwareKeyboard) &&
+                    !state.hardwareCandidateWindow
                 ) {
                     KeyRows(
                         state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,

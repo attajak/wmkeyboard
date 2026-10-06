@@ -177,6 +177,14 @@ Tapping a candidate (in the strip or the grid) resolves by its position in the r
 
 If a reading has no dictionary match at all, it always falls back to committing what you typed as-is (raw pinyin letters, kana, or a stroke code) rather than trapping you in an empty buffer.
 
+### Picking with space, the arrows and Enter
+
+<SettingsPath path="Languages & layouts / (a CJK language) / (language) options / Space steps through candidates" />
+
+Out of the box the space bar types the first candidate straight away. Turn on **Space steps through candidates** and it works the way Japanese input methods do instead: the first press highlights the first candidate, each press after it moves the highlight one along (wrapping back to the start at the end), and <KeyCap>Enter</KeyCap> types the highlighted one. Keep typing and the highlighted candidate goes in before the next reading starts; <KeyCap>⌫</KeyCap> drops the highlight and leaves you editing the reading again. The strip scrolls to keep the highlight in view, and it draws the same outline the keyboard uses for anything picked with the keys. The setting is per language, and off by default, so you can have it for Japanese and keep the quick space for Chinese.
+
+On a physical keyboard the candidates come up even though the on-screen keys stay hidden: just the strip appears while a reading is waiting to convert, and goes again once it's done. The arrow keys move the highlight whether or not the setting is on (<KeyCap>→</KeyCap> or <KeyCap>↓</KeyCap> for the next candidate, <KeyCap>←</KeyCap> or <KeyCap>↑</KeyCap> for the one before), and <KeyCap>Space</KeyCap> or <KeyCap>Enter</KeyCap> types it. Once a candidate is highlighted, <KeyCap>1</KeyCap> to <KeyCap>9</KeyCap> pick one by its place on the strip and <KeyCap>Esc</KeyCap> goes back to the reading. Before that the number keys are left alone, because Jyutping's tones and the T9 pad type digits into the reading. Enter only stops confirming the reading as typed once you've moved the highlight, so it still works for dropping in a word as you typed it.
+
 ### The keyboard's own boxes
 
 The same thing happens in the keyboard's own text fields — the dictionary tool's search, the clipboard and emoji filters, the AI prompt, Find and replace, a plugin's box. They compose and convert exactly as the app's field does: romaji turns into kana as you type it, the 小゛゜ key cycles the last kana, the candidates appear in the strip above the keys, and a tap commits the part of the reading it covers and leaves the rest composing. Nothing reaches the app behind the panel, and a pick there is learned the same way a pick anywhere else is.
@@ -211,6 +219,7 @@ Opening a Chinese, Cantonese, or Japanese entry from the Languages screen shows 
 | Lazy pronunciation (懶音) | On | Cantonese only |
 | Match kana without marks | On | Japanese only, and only kana typed on Flick or Kana JIS |
 | Full-width space | Off | Chinese, Cantonese, and Japanese, each on its own |
+| Space steps through candidates | Off | Chinese, Cantonese, and Japanese, each on its own |
 | Jianpin (简拼) | On | Chinese only; ignored under a Double Pinyin scheme |
 | Fuzzy Pinyin | Off | Chinese only |
 | The eleven fuzzy pairs, one row each | All on | Chinese only, shown while Fuzzy Pinyin is on |

@@ -2450,6 +2450,18 @@ data class KeyboardUiState(
      * is on; updated from the service's configuration.
      */
     val hardwareKeyboardPresent: Boolean = false,
+    /**
+     * The input view is up only so a physical keyboard's conversion reading
+     * has somewhere to show its candidates (#419): the strip, never the keys.
+     */
+    val hardwareCandidateWindow: Boolean = false,
+    /**
+     * The conversion candidate the arrow keys (or a stepping space bar) have
+     * moved to, as an index into [suggestions]; -1 while nobody has moved, when
+     * the space bar's pick is simply the first one. What Enter and the space bar
+     * commit while it is set (#419). Reset whenever the candidates are redrawn.
+     */
+    val candidateCursor: Int = -1,
     /** The active layout's language — dictionary, dictation, script behaviour. */
     val language: LanguageDef = LanguageRegistry.byId("en"),
     /** The active language's script — direction, case, composer, font. */
