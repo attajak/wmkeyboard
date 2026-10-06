@@ -365,17 +365,18 @@ internal fun CalculatorPanel(
                     onSuccess = { "= $it" },
                     onFailure = { failureText ?: "…" },
                 )
-                if (resultText != null) {
-                    Text(
-                        resultText,
-                        color = if (result.isSuccess) kb.accent else kb.secondaryText,
-                        fontSize = 12.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
+                // The line is always laid out, blank on an empty expression,
+                // so the first key pressed does not grow the display and push
+                // the keypad down (issue #546).
+                Text(
+                    resultText ?: " ",
+                    color = if (result?.isSuccess == true) kb.accent else kb.secondaryText,
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth(),
+                )
             }
             if (result?.isSuccess == true) {
                 Spacer(Modifier.width(8.dp))
