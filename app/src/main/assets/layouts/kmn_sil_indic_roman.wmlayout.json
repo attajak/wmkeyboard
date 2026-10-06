@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sil_indic_roman",
     "name": "Indic Roman Transliteration (SIL)",
-    "langId": "hi-Latn",
+    "langId": "hi_rom",
     "layers": {
       "letters": {
         "rows": [

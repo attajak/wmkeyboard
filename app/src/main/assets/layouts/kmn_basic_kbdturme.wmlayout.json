@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdturme",
     "name": "Turkmen Basic",
-    "langId": "tk-Latn",
+    "langId": "tk",
     "layers": {
       "letters": {
         "rows": [

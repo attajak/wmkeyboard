@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_taiwan_austronesian",
     "name": "Taiwan Austronesian",
-    "langId": "ami-Latn-001",
+    "langId": "ami",
     "layers": {
       "letters": {
         "rows": [

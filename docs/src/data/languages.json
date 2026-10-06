@@ -2793,13 +2793,6 @@
   "keyman": true
  },
  {
-  "id": "ak-Latn",
-  "name": "Akan (Latin)",
-  "english": "Akan (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "alq",
   "name": "Algonquin",
   "english": "Algonquin",
@@ -2828,13 +2821,6 @@
   "keyman": true
  },
  {
-  "id": "ami-Latn-001",
-  "name": "Amis (Latin)",
-  "english": "Amis (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "amj",
   "name": "Amdang",
   "english": "Amdang",
@@ -2846,13 +2832,6 @@
   "name": "Old English (ca. 450-1100)",
   "english": "Old English (ca. 450-1100)",
   "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "ar-DZ",
-  "name": "Arabic (Algeria)",
-  "english": "Arabic (Algeria)",
-  "script": "Arabic",
   "keyman": true
  },
  {
@@ -2884,13 +2863,6 @@
   "keyman": true
  },
  {
-  "id": "as-IN",
-  "name": "Assamese (India)",
-  "english": "Assamese (India)",
-  "script": "Bengali",
-  "keyman": true
- },
- {
   "id": "asb-Latn",
   "name": "Assiniboine (Latin)",
   "english": "Assiniboine (Latin)",
@@ -2902,13 +2874,6 @@
   "name": "Zaiwa (Lisu)",
   "english": "Zaiwa (Lisu)",
   "script": "Lisu",
-  "keyman": true
- },
- {
-  "id": "atj-Latn",
-  "name": "Atikamekw (Latin)",
-  "english": "Atikamekw (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -2951,13 +2916,6 @@
   "name": "North Azerbaijani (Latin, Azerbaijan)",
   "english": "North Azerbaijani (Latin, Azerbaijan)",
   "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "ba-Cyrl",
-  "name": "Bashkir (Cyrillic)",
-  "english": "Bashkir (Cyrillic)",
-  "script": "Cyrillic",
   "keyman": true
  },
  {
@@ -3150,13 +3108,6 @@
   "keyman": true
  },
  {
-  "id": "bo-Tibt-CN",
-  "name": "Tibetan (Tibetan, China)",
-  "english": "Tibetan (Tibetan, China)",
-  "script": "Tibetan",
-  "keyman": true
- },
- {
   "id": "bqj",
   "name": "Bandial",
   "english": "Bandial",
@@ -3339,20 +3290,6 @@
   "keyman": true
  },
  {
-  "id": "chr-Cher",
-  "name": "Cherokee (Cherokee)",
-  "english": "Cherokee (Cherokee)",
-  "script": "Cherokee",
-  "keyman": true
- },
- {
-  "id": "chy-Latn",
-  "name": "Cheyenne (Latin)",
-  "english": "Cheyenne (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "cjm",
   "name": "Eastern Cham",
   "english": "Eastern Cham",
@@ -3455,13 +3392,6 @@
   "name": "Cappadocian Greek",
   "english": "Cappadocian Greek",
   "script": "Greek",
-  "keyman": true
- },
- {
-  "id": "cr-Latn",
-  "name": "Cree (Latin)",
-  "english": "Cree (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -3587,13 +3517,6 @@
   "id": "dhg-Latn",
   "name": "Dhangu-Djangu (Latin)",
   "english": "Dhangu-Djangu (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "din-Latn",
-  "name": "Dinka (Latin)",
-  "english": "Dinka (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -3738,13 +3661,6 @@
   "keyman": true
  },
  {
-  "id": "es-Latn-419",
-  "name": "Spanish (Latin)",
-  "english": "Spanish (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "esg-Deva",
   "name": "Aheri Gondi (Devanagari)",
   "english": "Aheri Gondi (Devanagari)",
@@ -3780,13 +3696,6 @@
   "keyman": true
  },
  {
-  "id": "fr-CA",
-  "name": "French (Canada)",
-  "english": "French (Canada)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "fub",
   "name": "Adamawa Fulfulde",
   "english": "Adamawa Fulfulde",
@@ -3804,13 +3713,6 @@
   "id": "gaw",
   "name": "Nobonob",
   "english": "Nobonob",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "gd-Latn",
-  "name": "Scottish Gaelic (Latin)",
-  "english": "Scottish Gaelic (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -3850,13 +3752,6 @@
   "keyman": true
  },
  {
-  "id": "grc-Grek",
-  "name": "Ancient Greek (to 1453) (Greek)",
-  "english": "Ancient Greek (to 1453) (Greek)",
-  "script": "Greek",
-  "keyman": true
- },
- {
   "id": "gsl",
   "name": "Gusilay",
   "english": "Gusilay",
@@ -3889,13 +3784,6 @@
   "name": "Hausa (Arabic)",
   "english": "Hausa (Arabic)",
   "script": "Arabic",
-  "keyman": true
- },
- {
-  "id": "ha-Latn",
-  "name": "Hausa (Latin)",
-  "english": "Hausa (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -3934,13 +3822,6 @@
   "keyman": true
  },
  {
-  "id": "haw-Latn-US",
-  "name": "Hawaiian (Latin, United States)",
-  "english": "Hawaiian (Latin, United States)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "hax",
   "name": "Southern Haida",
   "english": "Southern Haida",
@@ -3965,13 +3846,6 @@
   "id": "hei",
   "name": "Heiltsuk",
   "english": "Heiltsuk",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "hi-Latn",
-  "name": "Hindi (Latin)",
-  "english": "Hindi (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -4070,13 +3944,6 @@
   "id": "idu",
   "name": "Idoma",
   "english": "Idoma",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "ig-Latn",
-  "name": "Igbo (Latin)",
-  "english": "Igbo (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -4431,13 +4298,6 @@
   "keyman": true
  },
  {
-  "id": "ky-Cyrl",
-  "name": "Kirghiz (Cyrillic)",
-  "english": "Kirghiz (Cyrillic)",
-  "script": "Cyrillic",
-  "keyman": true
- },
- {
   "id": "kyu",
   "name": "Western Kayah",
   "english": "Western Kayah",
@@ -4505,13 +4365,6 @@
   "name": "Lisu",
   "english": "Lisu",
   "script": "Lisu",
-  "keyman": true
- },
- {
-  "id": "lkt-Latn",
-  "name": "Lakota (Latin)",
-  "english": "Lakota (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -4595,13 +4448,6 @@
   "id": "mhi",
   "name": "Ma'di",
   "english": "Ma'di",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "mi-Latn",
-  "name": "Maori (Latin)",
-  "english": "Maori (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -4760,13 +4606,6 @@
   "keyman": true
  },
  {
-  "id": "nia-Latn",
-  "name": "Nias (Latin)",
-  "english": "Nias (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "nko",
   "name": "Nkonya",
   "english": "Nkonya",
@@ -4812,13 +4651,6 @@
   "id": "nus-Latn",
   "name": "Nuer (Latin)",
   "english": "Nuer (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "nv-Latn",
-  "name": "Navajo (Latin)",
-  "english": "Navajo (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -5026,13 +4858,6 @@
   "keyman": true
  },
  {
-  "id": "pnb-Arab",
-  "name": "Western Panjabi (Arabic)",
-  "english": "Western Panjabi (Arabic)",
-  "script": "Arabic",
-  "keyman": true
- },
- {
   "id": "pot-Latn",
   "name": "Potawatomi (Latin)",
   "english": "Potawatomi (Latin)",
@@ -5058,20 +4883,6 @@
   "name": "Southeast Pashai",
   "english": "Southeast Pashai",
   "script": "Arabic",
-  "keyman": true
- },
- {
-  "id": "pt-BR",
-  "name": "Portuguese (Brazil)",
-  "english": "Portuguese (Brazil)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "pt-PT",
-  "name": "Portuguese (Portugal)",
-  "english": "Portuguese (Portugal)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -5166,13 +4977,6 @@
   "keyman": true
  },
  {
-  "id": "sah-Cyrl-RU",
-  "name": "Yakut (Cyrillic, Russian Federation)",
-  "english": "Yakut (Cyrillic, Russian Federation)",
-  "script": "Cyrillic",
-  "keyman": true
- },
- {
   "id": "saj",
   "name": "Sahu",
   "english": "Sahu",
@@ -5184,13 +4988,6 @@
   "name": "Samaritan Aramaic",
   "english": "Samaritan Aramaic",
   "script": "Samaritan",
-  "keyman": true
- },
- {
-  "id": "sat-Olck",
-  "name": "Santali (Ol Chiki)",
-  "english": "Santali (Ol Chiki)",
-  "script": "Ol Chiki",
   "keyman": true
  },
  {
@@ -5246,13 +5043,6 @@
   "id": "sd-Sind",
   "name": "Sindhi (Khudawadi)",
   "english": "Sindhi (Khudawadi)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "se-Latn",
-  "name": "Northern Sami (Latin)",
-  "english": "Northern Sami (Latin)",
   "script": "Latin",
   "keyman": true
  },
@@ -5530,13 +5320,6 @@
   "keyman": true
  },
  {
-  "id": "tg-Cyrl",
-  "name": "Tajik (Cyrillic)",
-  "english": "Tajik (Cyrillic)",
-  "script": "Cyrillic",
-  "keyman": true
- },
- {
   "id": "tgo",
   "name": "Sudest",
   "english": "Sudest",
@@ -5579,20 +5362,6 @@
   "keyman": true
  },
  {
-  "id": "ti-ER",
-  "name": "Tigrinya (Eritrea)",
-  "english": "Tigrinya (Eritrea)",
-  "script": "Ethiopic",
-  "keyman": true
- },
- {
-  "id": "ti-ET",
-  "name": "Tigrinya (Ethiopia)",
-  "english": "Tigrinya (Ethiopia)",
-  "script": "Ethiopic",
-  "keyman": true
- },
- {
   "id": "tk-Arab",
   "name": "Turkmen (Arabic)",
   "english": "Turkmen (Arabic)",
@@ -5604,13 +5373,6 @@
   "name": "Turkmen (Cyrillic)",
   "english": "Turkmen (Cyrillic)",
   "script": "Cyrillic",
-  "keyman": true
- },
- {
-  "id": "tk-Latn",
-  "name": "Turkmen (Latin)",
-  "english": "Turkmen (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -5667,13 +5429,6 @@
   "name": "Tsimshian (Latin)",
   "english": "Tsimshian (Latin)",
   "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "tt-Cyrl",
-  "name": "Tatar (Cyrillic)",
-  "english": "Tatar (Cyrillic)",
-  "script": "Cyrillic",
   "keyman": true
  },
  {
@@ -5740,13 +5495,6 @@
   "keyman": true
  },
  {
-  "id": "ug-Arab",
-  "name": "Uighur (Arabic)",
-  "english": "Uighur (Arabic)",
-  "script": "Arabic",
-  "keyman": true
- },
- {
   "id": "uga",
   "name": "Ugaritic",
   "english": "Ugaritic",
@@ -5782,13 +5530,6 @@
   "keyman": true
  },
  {
-  "id": "ur-Latn",
-  "name": "Urdu (Latin)",
-  "english": "Urdu (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
   "id": "ush",
   "name": "Ushojo",
   "english": "Ushojo",
@@ -5806,20 +5547,6 @@
   "id": "vai",
   "name": "Vai",
   "english": "Vai",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "vec-Latn",
-  "name": "Venetian (Latin)",
-  "english": "Venetian (Latin)",
-  "script": "Latin",
-  "keyman": true
- },
- {
-  "id": "vi-Latn-VN",
-  "name": "Vietnamese (Latin, Viet Nam)",
-  "english": "Vietnamese (Latin, Viet Nam)",
   "script": "Latin",
   "keyman": true
  },
@@ -5856,13 +5583,6 @@
   "name": "Wolof (Arabic)",
   "english": "Wolof (Arabic)",
   "script": "Arabic",
-  "keyman": true
- },
- {
-  "id": "wo-Latn",
-  "name": "Wolof (Latin)",
-  "english": "Wolof (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {
@@ -6010,13 +5730,6 @@
   "name": "Aluo (Miao)",
   "english": "Aluo (Miao)",
   "script": "Miao",
-  "keyman": true
- },
- {
-  "id": "yo-Latn",
-  "name": "Yoruba (Latin)",
-  "english": "Yoruba (Latin)",
-  "script": "Latin",
   "keyman": true
  },
  {

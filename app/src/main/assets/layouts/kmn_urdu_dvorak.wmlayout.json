@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_urdu_dvorak",
     "name": "Urdu (DVorak)",
-    "langId": "ur-Latn",
+    "langId": "ur_rom",
     "layers": {
       "letters": {
         "rows": [

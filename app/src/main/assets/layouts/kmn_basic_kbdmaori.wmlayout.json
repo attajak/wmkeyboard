@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdmaori",
     "name": "Maori Basic",
-    "langId": "mi-Latn",
+    "langId": "mi",
     "layers": {
       "letters": {
         "rows": [

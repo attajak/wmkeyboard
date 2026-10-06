@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdughr",
     "name": "Uyghur (Legacy) Basic",
-    "langId": "ug-Arab",
+    "langId": "ug",
     "layers": {
       "letters": {
         "rows": [

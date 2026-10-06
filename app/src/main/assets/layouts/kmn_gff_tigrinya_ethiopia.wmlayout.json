@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_gff_tigrinya_ethiopia",
     "name": "GFF Tigrinya-Ethiopia",
-    "langId": "ti-ET",
+    "langId": "ti",
     "layers": {
       "letters": {
         "rows": [

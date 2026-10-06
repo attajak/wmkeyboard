@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sanjha_punjabi",
     "name": "Sanjha Punjabi",
-    "langId": "pnb-Arab",
+    "langId": "pnb",
     "layers": {
       "letters": {
         "rows": [

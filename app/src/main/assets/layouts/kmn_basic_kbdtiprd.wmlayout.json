@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdtiprd",
     "name": "Tibetan (PRC) - Updated Basic",
-    "langId": "bo-Tibt-CN",
+    "langId": "bo",
     "layers": {
       "letters": {
         "rows": [

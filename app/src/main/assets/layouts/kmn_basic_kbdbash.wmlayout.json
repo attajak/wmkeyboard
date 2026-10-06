@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdbash",
     "name": "Bashkir Basic",
-    "langId": "ba-Cyrl",
+    "langId": "ba",
     "layers": {
       "letters": {
         "rows": [

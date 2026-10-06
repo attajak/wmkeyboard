@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sabdalipi_assamese",
     "name": "Assamese (Sabdalipi)",
-    "langId": "as-IN",
+    "langId": "as",
     "layers": {
       "letters": {
         "rows": [

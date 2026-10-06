@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_galaxie_greek_positional",
     "name": "Galaxie Greek (Phonetic)",
-    "langId": "grc-Grek",
+    "langId": "grc",
     "layers": {
       "letters": {
         "rows": [

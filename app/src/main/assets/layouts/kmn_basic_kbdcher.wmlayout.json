@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdcher",
     "name": "Cherokee Nation Basic",
-    "langId": "chr-Cher",
+    "langId": "chr",
     "layers": {
       "letters": {
         "rows": [

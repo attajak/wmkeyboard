@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_vietnam",
     "name": "vietnam",
-    "langId": "vi-Latn-VN",
+    "langId": "vi",
     "layers": {
       "letters": {
         "rows": [

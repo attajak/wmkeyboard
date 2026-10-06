@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sil_greek_polytonic",
     "name": "Polytonic Greek (SIL)",
-    "langId": "grc-Grek",
+    "langId": "grc",
     "layers": {
       "letters": {
         "rows": [

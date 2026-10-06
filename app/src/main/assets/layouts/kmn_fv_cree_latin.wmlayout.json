@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_fv_cree_latin",
     "name": "Cree - Roman Orthography",
-    "langId": "cr-Latn",
+    "langId": "cr",
     "layers": {
       "letters": {
         "rows": [

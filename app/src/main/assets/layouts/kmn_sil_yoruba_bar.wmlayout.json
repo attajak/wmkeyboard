@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sil_yoruba_bar",
     "name": "Yorùbá with Bar",
-    "langId": "yo-Latn",
+    "langId": "yo",
     "layers": {
       "letters": {
         "rows": [

@@ -141,14 +141,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_east_syriac_qwerty"),
         ),
         LanguageDef(
-            id = "ak-Latn",
-            displayName = "Akan (Latin)",
-            englishName = "Akan (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "ak-Latn",
-            layoutIds = listOf("asset_kmn_ghana"),
-        ),
-        LanguageDef(
             id = "alq",
             displayName = "Algonquin",
             englishName = "Algonquin",
@@ -181,14 +173,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_banne"),
         ),
         LanguageDef(
-            id = "ami-Latn-001",
-            displayName = "Amis (Latin)",
-            englishName = "Amis (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "ami-Latn-001",
-            layoutIds = listOf("asset_kmn_taiwan_austronesian"),
-        ),
-        LanguageDef(
             id = "amj",
             displayName = "Amdang",
             englishName = "Amdang",
@@ -209,14 +193,6 @@ object KeymanLanguages {
                 "asset_kmn_anglish",
                 "asset_kmn_anglish_dvorak",
             ),
-        ),
-        LanguageDef(
-            id = "ar-DZ",
-            displayName = "Arabic (Algeria)",
-            englishName = "Arabic (Algeria)",
-            script = ScriptId.ARABIC,
-            localeTag = "ar-DZ",
-            layoutIds = listOf("asset_kmn_arabic_izza"),
         ),
         LanguageDef(
             id = "arc-Hatr",
@@ -251,14 +227,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_arbore"),
         ),
         LanguageDef(
-            id = "as-IN",
-            displayName = "Assamese (India)",
-            englishName = "Assamese (India)",
-            script = ScriptId.BENGALI,
-            localeTag = "as-IN",
-            layoutIds = listOf("asset_kmn_sabdalipi_assamese"),
-        ),
-        LanguageDef(
             id = "asb-Latn",
             displayName = "Assiniboine (Latin)",
             englishName = "Assiniboine (Latin)",
@@ -276,14 +244,6 @@ object KeymanLanguages {
                 "asset_kmn_basic_kbdlisub",
                 "asset_kmn_basic_kbdlisus",
             ),
-        ),
-        LanguageDef(
-            id = "atj-Latn",
-            displayName = "Atikamekw (Latin)",
-            englishName = "Atikamekw (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "atj-Latn",
-            layoutIds = listOf("asset_kmn_fv_atikamekw"),
         ),
         LanguageDef(
             id = "auj-Latn",
@@ -332,14 +292,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "azj-Latn-AZ",
             layoutIds = listOf("asset_kmn_basic_kbdazel"),
-        ),
-        LanguageDef(
-            id = "ba-Cyrl",
-            displayName = "Bashkir (Cyrillic)",
-            englishName = "Bashkir (Cyrillic)",
-            script = ScriptId.CYRILLIC,
-            localeTag = "ba-Cyrl",
-            layoutIds = listOf("asset_kmn_basic_kbdbash"),
         ),
         LanguageDef(
             id = "bal",
@@ -569,14 +521,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_marchen_direct_input"),
         ),
         LanguageDef(
-            id = "bo-Tibt-CN",
-            displayName = "Tibetan (Tibetan, China)",
-            englishName = "Tibetan (Tibetan, China)",
-            script = ScriptId.TIBETAN,
-            localeTag = "bo-Tibt-CN",
-            layoutIds = listOf("asset_kmn_basic_kbdtiprd"),
-        ),
-        LanguageDef(
             id = "bqj",
             displayName = "Bandial",
             englishName = "Bandial",
@@ -797,25 +741,6 @@ object KeymanLanguages {
             ),
         ),
         LanguageDef(
-            id = "chr-Cher",
-            displayName = "Cherokee (Cherokee)",
-            englishName = "Cherokee (Cherokee)",
-            script = ScriptId.CHEROKEE,
-            localeTag = "chr-Cher",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdcher",
-                "asset_kmn_sil_cherokee_nation",
-            ),
-        ),
-        LanguageDef(
-            id = "chy-Latn",
-            displayName = "Cheyenne (Latin)",
-            englishName = "Cheyenne (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "chy-Latn",
-            layoutIds = listOf("asset_kmn_sil_cheyenne"),
-        ),
-        LanguageDef(
             id = "cjm",
             displayName = "Eastern Cham",
             englishName = "Eastern Cham",
@@ -937,14 +862,6 @@ object KeymanLanguages {
             script = ScriptId.GREEK,
             localeTag = "cpg",
             layoutIds = listOf("asset_kmn_greekclassical"),
-        ),
-        LanguageDef(
-            id = "cr-Latn",
-            displayName = "Cree (Latin)",
-            englishName = "Cree (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "cr-Latn",
-            layoutIds = listOf("asset_kmn_fv_cree_latin"),
         ),
         LanguageDef(
             id = "crk",
@@ -1092,14 +1009,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "dhg-Latn",
             layoutIds = listOf("asset_kmn_fv_australian"),
-        ),
-        LanguageDef(
-            id = "din-Latn",
-            displayName = "Dinka (Latin)",
-            englishName = "Dinka (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "din-Latn",
-            layoutIds = listOf("asset_kmn_el_dinka"),
         ),
         LanguageDef(
             id = "dmf",
@@ -1270,14 +1179,6 @@ object KeymanLanguages {
             ),
         ),
         LanguageDef(
-            id = "es-Latn-419",
-            displayName = "Spanish (Latin)",
-            englishName = "Spanish (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "es-Latn-419",
-            layoutIds = listOf("asset_kmn_sil_colombia_venezuela"),
-        ),
-        LanguageDef(
             id = "esg-Deva",
             displayName = "Aheri Gondi (Devanagari)",
             englishName = "Aheri Gondi (Devanagari)",
@@ -1321,17 +1222,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_sil_nubian"),
         ),
         LanguageDef(
-            id = "fr-CA",
-            displayName = "French (Canada)",
-            englishName = "French (Canada)",
-            script = ScriptId.LATIN,
-            localeTag = "fr-CA",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdca",
-                "asset_kmn_basic_kbdcan",
-            ),
-        ),
-        LanguageDef(
             id = "fub",
             displayName = "Adamawa Fulfulde",
             englishName = "Adamawa Fulfulde",
@@ -1361,14 +1251,6 @@ object KeymanLanguages {
     ) }
 
     private val chunk2: List<LanguageDef> by lazy { listOf(
-        LanguageDef(
-            id = "gd-Latn",
-            displayName = "Scottish Gaelic (Latin)",
-            englishName = "Scottish Gaelic (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "gd-Latn",
-            layoutIds = listOf("asset_kmn_basic_kbdgae"),
-        ),
         LanguageDef(
             id = "git",
             displayName = "Gitxsan",
@@ -1411,17 +1293,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "got-Goth",
             layoutIds = listOf("asset_kmn_basic_kbdgthc"),
-        ),
-        LanguageDef(
-            id = "grc-Grek",
-            displayName = "Ancient Greek (to 1453) (Greek)",
-            englishName = "Ancient Greek (to 1453) (Greek)",
-            script = ScriptId.GREEK,
-            localeTag = "grc-Grek",
-            layoutIds = listOf(
-                "asset_kmn_galaxie_greek_positional",
-                "asset_kmn_sil_greek_polytonic",
-            ),
         ),
         LanguageDef(
             id = "gsl",
@@ -1467,17 +1338,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_hausa_ajami_qwerty"),
         ),
         LanguageDef(
-            id = "ha-Latn",
-            displayName = "Hausa (Latin)",
-            englishName = "Hausa (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "ha-Latn",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdhau",
-                "asset_kmn_hausa_kano",
-            ),
-        ),
-        LanguageDef(
             id = "haa-Latn",
             displayName = "Hän (Latin)",
             englishName = "Hän (Latin)",
@@ -1521,14 +1381,6 @@ object KeymanLanguages {
             ),
         ),
         LanguageDef(
-            id = "haw-Latn-US",
-            displayName = "Hawaiian (Latin, United States)",
-            englishName = "Hawaiian (Latin, United States)",
-            script = ScriptId.LATIN,
-            localeTag = "haw-Latn-US",
-            layoutIds = listOf("asset_kmn_basic_kbdhaw"),
-        ),
-        LanguageDef(
             id = "hax",
             displayName = "Southern Haida",
             englishName = "Southern Haida",
@@ -1566,14 +1418,6 @@ object KeymanLanguages {
                 "asset_kmn_fv_hailzaqvla",
                 "asset_kmn_fv_uwikala",
             ),
-        ),
-        LanguageDef(
-            id = "hi-Latn",
-            displayName = "Hindi (Latin)",
-            englishName = "Hindi (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "hi-Latn",
-            layoutIds = listOf("asset_kmn_sil_indic_roman"),
         ),
         LanguageDef(
             id = "hi-Mahj",
@@ -1691,14 +1535,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "idu",
             layoutIds = listOf("asset_kmn_idoma"),
-        ),
-        LanguageDef(
-            id = "ig-Latn",
-            displayName = "Igbo (Latin)",
-            englishName = "Igbo (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "ig-Latn",
-            layoutIds = listOf("asset_kmn_basic_kbdibo"),
         ),
         LanguageDef(
             id = "ii",
@@ -2130,14 +1966,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_rac_wadiyara"),
         ),
         LanguageDef(
-            id = "ky-Cyrl",
-            displayName = "Kirghiz (Cyrillic)",
-            englishName = "Kirghiz (Cyrillic)",
-            script = ScriptId.CYRILLIC,
-            localeTag = "ky-Cyrl",
-            layoutIds = listOf("asset_kmn_basic_kbdkyr"),
-        ),
-        LanguageDef(
             id = "kyu",
             displayName = "Western Kayah",
             englishName = "Western Kayah",
@@ -2222,14 +2050,6 @@ object KeymanLanguages {
                 "asset_kmn_sil_lisu_basic",
                 "asset_kmn_sil_lisu_standard",
             ),
-        ),
-        LanguageDef(
-            id = "lkt-Latn",
-            displayName = "Lakota (Latin)",
-            englishName = "Lakota (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "lkt-Latn",
-            layoutIds = listOf("asset_kmn_fv_lakota"),
         ),
         LanguageDef(
             id = "lmk",
@@ -2329,18 +2149,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "mhi",
             layoutIds = listOf("asset_kmn_sil_madi"),
-        ),
-        LanguageDef(
-            id = "mi-Latn",
-            displayName = "Maori (Latin)",
-            englishName = "Maori (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "mi-Latn",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdmaori",
-                "asset_kmn_el_pasifika",
-                "asset_kmn_fv_maori",
-            ),
         ),
         LanguageDef(
             id = "mic-Latn",
@@ -2532,14 +2340,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_sil_senegal_ndv_azerty"),
         ),
         LanguageDef(
-            id = "nia-Latn",
-            displayName = "Nias (Latin)",
-            englishName = "Nias (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "nia-Latn",
-            layoutIds = listOf("asset_kmn_nias"),
-        ),
-        LanguageDef(
             id = "nko",
             displayName = "Nkonya",
             englishName = "Nkonya",
@@ -2594,14 +2394,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "nus-Latn",
             layoutIds = listOf("asset_kmn_el_nuer"),
-        ),
-        LanguageDef(
-            id = "nv-Latn",
-            displayName = "Navajo (Latin)",
-            englishName = "Navajo (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "nv-Latn",
-            layoutIds = listOf("asset_kmn_fv_dine_bizaad"),
         ),
         LanguageDef(
             id = "nzi",
@@ -2851,14 +2643,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_pukapuka"),
         ),
         LanguageDef(
-            id = "pnb-Arab",
-            displayName = "Western Panjabi (Arabic)",
-            englishName = "Western Panjabi (Arabic)",
-            script = ScriptId.ARABIC,
-            localeTag = "pnb-Arab",
-            layoutIds = listOf("asset_kmn_sanjha_punjabi"),
-        ),
-        LanguageDef(
             id = "pot-Latn",
             displayName = "Potawatomi (Latin)",
             englishName = "Potawatomi (Latin)",
@@ -2892,22 +2676,6 @@ object KeymanLanguages {
                 "asset_kmn_pashai",
                 "asset_kmn_rac_pashai",
             ),
-        ),
-        LanguageDef(
-            id = "pt-BR",
-            displayName = "Portuguese (Brazil)",
-            englishName = "Portuguese (Brazil)",
-            script = ScriptId.LATIN,
-            localeTag = "pt-BR",
-            layoutIds = listOf("asset_kmn_basic_kbdbr"),
-        ),
-        LanguageDef(
-            id = "pt-PT",
-            displayName = "Portuguese (Portugal)",
-            englishName = "Portuguese (Portugal)",
-            script = ScriptId.LATIN,
-            localeTag = "pt-PT",
-            layoutIds = listOf("asset_kmn_pt_pro"),
         ),
         LanguageDef(
             id = "qun-Latn",
@@ -3021,14 +2789,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_siddham_inscript"),
         ),
         LanguageDef(
-            id = "sah-Cyrl-RU",
-            displayName = "Yakut (Cyrillic, Russian Federation)",
-            englishName = "Yakut (Cyrillic, Russian Federation)",
-            script = ScriptId.CYRILLIC,
-            localeTag = "sah-Cyrl-RU",
-            layoutIds = listOf("asset_kmn_basic_kbdyak"),
-        ),
-        LanguageDef(
             id = "saj",
             displayName = "Sahu",
             englishName = "Sahu",
@@ -3043,14 +2803,6 @@ object KeymanLanguages {
             script = ScriptId.SAMARITAN,
             localeTag = "sam",
             layoutIds = listOf("asset_kmn_samaritan"),
-        ),
-        LanguageDef(
-            id = "sat-Olck",
-            displayName = "Santali (Ol Chiki)",
-            englishName = "Santali (Ol Chiki)",
-            script = ScriptId.OL_CHIKI,
-            localeTag = "sat-Olck",
-            layoutIds = listOf("asset_kmn_basic_kbdolch"),
         ),
         LanguageDef(
             id = "sav",
@@ -3118,19 +2870,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "sd-Sind",
             layoutIds = listOf("asset_kmn_khudawadi_inscript"),
-        ),
-        LanguageDef(
-            id = "se-Latn",
-            displayName = "Northern Sami (Latin)",
-            englishName = "Northern Sami (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "se-Latn",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdfi1",
-                "asset_kmn_basic_kbdno1",
-                "asset_kmn_basic_kbdsmsfi",
-                "asset_kmn_basic_kbdsmsno",
-            ),
         ),
         LanguageDef(
             id = "sec",
@@ -3455,14 +3194,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_sil_temiar"),
         ),
         LanguageDef(
-            id = "tg-Cyrl",
-            displayName = "Tajik (Cyrillic)",
-            englishName = "Tajik (Cyrillic)",
-            script = ScriptId.CYRILLIC,
-            localeTag = "tg-Cyrl",
-            layoutIds = listOf("asset_kmn_basic_kbdtajik"),
-        ),
-        LanguageDef(
             id = "tgo",
             displayName = "Sudest",
             englishName = "Sudest",
@@ -3515,22 +3246,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_tuareg_tifinagh"),
         ),
         LanguageDef(
-            id = "ti-ER",
-            displayName = "Tigrinya (Eritrea)",
-            englishName = "Tigrinya (Eritrea)",
-            script = ScriptId.ETHIOPIC,
-            localeTag = "ti-ER",
-            layoutIds = listOf("asset_kmn_gff_tigrinya_eritrea"),
-        ),
-        LanguageDef(
-            id = "ti-ET",
-            displayName = "Tigrinya (Ethiopia)",
-            englishName = "Tigrinya (Ethiopia)",
-            script = ScriptId.ETHIOPIC,
-            localeTag = "ti-ET",
-            layoutIds = listOf("asset_kmn_gff_tigrinya_ethiopia"),
-        ),
-        LanguageDef(
             id = "tk-Arab",
             displayName = "Turkmen (Arabic)",
             englishName = "Turkmen (Arabic)",
@@ -3545,14 +3260,6 @@ object KeymanLanguages {
             script = ScriptId.CYRILLIC,
             localeTag = "tk-Cyrl",
             layoutIds = listOf("asset_kmn_turkmen_cyrl"),
-        ),
-        LanguageDef(
-            id = "tk-Latn",
-            displayName = "Turkmen (Latin)",
-            englishName = "Turkmen (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "tk-Latn",
-            layoutIds = listOf("asset_kmn_basic_kbdturme"),
         ),
         LanguageDef(
             id = "tl-Buhd",
@@ -3623,14 +3330,6 @@ object KeymanLanguages {
             script = ScriptId.LATIN,
             localeTag = "tsi-Latn",
             layoutIds = listOf("asset_kmn_fv_smalgyax"),
-        ),
-        LanguageDef(
-            id = "tt-Cyrl",
-            displayName = "Tatar (Cyrillic)",
-            englishName = "Tatar (Cyrillic)",
-            script = ScriptId.CYRILLIC,
-            localeTag = "tt-Cyrl",
-            layoutIds = listOf("asset_kmn_basic_kbdtt102"),
         ),
         LanguageDef(
             id = "ttm-Latn",
@@ -3708,14 +3407,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_udi_keyboard"),
         ),
         LanguageDef(
-            id = "ug-Arab",
-            displayName = "Uighur (Arabic)",
-            englishName = "Uighur (Arabic)",
-            script = ScriptId.ARABIC,
-            localeTag = "ug-Arab",
-            layoutIds = listOf("asset_kmn_basic_kbdughr"),
-        ),
-        LanguageDef(
             id = "uga",
             displayName = "Ugaritic",
             englishName = "Ugaritic",
@@ -3756,17 +3447,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_nag_mundari"),
         ),
         LanguageDef(
-            id = "ur-Latn",
-            displayName = "Urdu (Latin)",
-            englishName = "Urdu (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "ur-Latn",
-            layoutIds = listOf(
-                "asset_kmn_latinized_urdu",
-                "asset_kmn_urdu_dvorak",
-            ),
-        ),
-        LanguageDef(
             id = "ush",
             displayName = "Ushojo",
             englishName = "Ushojo",
@@ -3792,22 +3472,6 @@ object KeymanLanguages {
                 "asset_kmn_athinkra_vai",
                 "asset_kmn_athinkra_vai_typewriter",
             ),
-        ),
-        LanguageDef(
-            id = "vec-Latn",
-            displayName = "Venetian (Latin)",
-            englishName = "Venetian (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "vec-Latn",
-            layoutIds = listOf("asset_kmn_venetia_et_histria"),
-        ),
-        LanguageDef(
-            id = "vi-Latn-VN",
-            displayName = "Vietnamese (Latin, Viet Nam)",
-            englishName = "Vietnamese (Latin, Viet Nam)",
-            script = ScriptId.LATIN,
-            localeTag = "vi-Latn-VN",
-            layoutIds = listOf("asset_kmn_vietnam"),
         ),
         LanguageDef(
             id = "way",
@@ -3851,14 +3515,6 @@ object KeymanLanguages {
             script = ScriptId.ARABIC,
             localeTag = "wo-Arab",
             layoutIds = listOf("asset_kmn_wolofal"),
-        ),
-        LanguageDef(
-            id = "wo-Latn",
-            displayName = "Wolof (Latin)",
-            englishName = "Wolof (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "wo-Latn",
-            layoutIds = listOf("asset_kmn_basic_kbdwol"),
         ),
         LanguageDef(
             id = "wsg",
@@ -4035,18 +3691,6 @@ object KeymanLanguages {
             layoutIds = listOf("asset_kmn_sil_yna_plrd"),
         ),
         LanguageDef(
-            id = "yo-Latn",
-            displayName = "Yoruba (Latin)",
-            englishName = "Yoruba (Latin)",
-            script = ScriptId.LATIN,
-            localeTag = "yo-Latn",
-            layoutIds = listOf(
-                "asset_kmn_basic_kbdyba",
-                "asset_kmn_sil_yoruba_bar",
-                "asset_kmn_sil_yoruba_dot",
-            ),
-        ),
-        LanguageDef(
             id = "yue-Latn-001",
             displayName = "Yue Chinese (Latin)",
             englishName = "Yue Chinese (Latin)",
@@ -4152,7 +3796,10 @@ object KeymanLanguages {
      */
     val extraLayoutIds: Map<String, List<String>> = mapOf(
         "af" to listOf("asset_kmn_kreative_superlatin"),
-        "ak" to listOf("asset_kmn_akan"),
+        "ak" to listOf(
+            "asset_kmn_akan",
+            "asset_kmn_ghana",
+        ),
         "am" to listOf(
             "asset_kmn_geezword_amharic",
             "asset_kmn_gff_amharic",
@@ -4161,6 +3808,7 @@ object KeymanLanguages {
             "asset_kmn_gff_harege_fidelat",
             "asset_kmn_gff_mesobe_fidelat",
         ),
+        "ami" to listOf("asset_kmn_taiwan_austronesian"),
         "ann" to listOf(
             "asset_kmn_obolo_chwerty",
             "asset_kmn_obolo_qwerty",
@@ -4173,9 +3821,15 @@ object KeymanLanguages {
             "asset_kmn_basic_kbda3",
             "asset_kmn_rac_arabic",
             "asset_kmn_sil_arabic_phonetic",
+            "asset_kmn_arabic_izza",
         ),
-        "as" to listOf("asset_kmn_basic_kbdinasa"),
+        "as" to listOf(
+            "asset_kmn_basic_kbdinasa",
+            "asset_kmn_sabdalipi_assamese",
+        ),
+        "atj" to listOf("asset_kmn_fv_atikamekw"),
         "ay" to listOf("asset_kmn_sil_bolivia"),
+        "ba" to listOf("asset_kmn_basic_kbdbash"),
         "be" to listOf("asset_kmn_basic_kbdblr"),
         "be-Latn" to listOf("asset_kmn_slaviature"),
         "bg" to listOf(
@@ -4199,9 +3853,16 @@ object KeymanLanguages {
             "asset_kmn_nlci_bengali_winscript",
             "asset_kmn_sil_bengali_phonetic",
         ),
+        "bo" to listOf("asset_kmn_basic_kbdtiprd"),
         "br" to listOf("asset_kmn_breton_chwerty"),
-        "chr" to listOf("asset_kmn_basic_kbdcherp"),
+        "chr" to listOf(
+            "asset_kmn_basic_kbdcherp",
+            "asset_kmn_basic_kbdcher",
+            "asset_kmn_sil_cherokee_nation",
+        ),
+        "chy" to listOf("asset_kmn_sil_cheyenne"),
         "ckb" to listOf("asset_kmn_basic_kbdkurd"),
+        "cr" to listOf("asset_kmn_fv_cree_latin"),
         "cs" to listOf(
             "asset_kmn_basic_kbdcz",
             "asset_kmn_basic_kbdcz1",
@@ -4220,6 +3881,7 @@ object KeymanLanguages {
             "asset_kmn_german_enhanced",
         ),
         "dga" to listOf("asset_kmn_dagaare"),
+        "din" to listOf("asset_kmn_el_dinka"),
         "dv" to listOf(
             "asset_kmn_basic_kbddiv1",
             "asset_kmn_basic_kbddiv2",
@@ -4271,6 +3933,7 @@ object KeymanLanguages {
             "asset_kmn_basic_kbdes",
             "asset_kmn_basic_kbdla",
             "asset_kmn_basic_kbdsp",
+            "asset_kmn_sil_colombia_venezuela",
         ),
         "et" to listOf("asset_kmn_basic_kbdest"),
         "fa" to listOf(
@@ -4288,13 +3951,20 @@ object KeymanLanguages {
             "asset_kmn_basic_kbdfr",
             "asset_kmn_basic_kbdsf",
             "asset_kmn_french_zhjay",
+            "asset_kmn_basic_kbdca",
+            "asset_kmn_basic_kbdcan",
         ),
         "gaa" to listOf("asset_kmn_ga"),
+        "gd" to listOf("asset_kmn_basic_kbdgae"),
         "glk" to listOf(
             "asset_kmn_gilaki",
             "asset_kmn_gilaki_phonetic",
         ),
         "gn" to listOf("asset_kmn_basic_kbdgn"),
+        "grc" to listOf(
+            "asset_kmn_galaxie_greek_positional",
+            "asset_kmn_sil_greek_polytonic",
+        ),
         "gu" to listOf(
             "asset_kmn_basic_kbdinguj",
             "asset_kmn_itrans_gujarati",
@@ -4302,8 +3972,15 @@ object KeymanLanguages {
             "asset_kmn_nlci_gujarati_winscript",
         ),
         "guc" to listOf("asset_kmn_sil_wayuu"),
+        "ha" to listOf(
+            "asset_kmn_basic_kbdhau",
+            "asset_kmn_hausa_kano",
+        ),
         "hac" to listOf("asset_kmn_horami"),
-        "haw" to listOf("asset_kmn_sil_hawaiian"),
+        "haw" to listOf(
+            "asset_kmn_sil_hawaiian",
+            "asset_kmn_basic_kbdhaw",
+        ),
         "he" to listOf(
             "asset_kmn_basic_kbdheb",
             "asset_kmn_basic_kbdhebl3",
@@ -4320,6 +3997,7 @@ object KeymanLanguages {
             "asset_kmn_remington_gail",
             "asset_kmn_sil_devanagari_phonetic",
         ),
+        "hi_rom" to listOf("asset_kmn_sil_indic_roman"),
         "hoc-Wara" to listOf("asset_kmn_warang_citi"),
         "hsb" to listOf(
             "asset_kmn_basic_kbdsorex",
@@ -4342,6 +4020,7 @@ object KeymanLanguages {
             "asset_kmn_indonesia",
             "asset_kmn_indonesian_suku",
         ),
+        "ig" to listOf("asset_kmn_basic_kbdibo"),
         "ipa" to listOf("asset_kmn_kreative_superipa"),
         "is" to listOf("asset_kmn_basic_kbdic"),
         "it" to listOf(
@@ -4372,8 +4051,10 @@ object KeymanLanguages {
         ),
         "ko" to listOf("asset_kmn_korean_rr"),
         "ks" to listOf("asset_kmn_rac_kashmiri"),
+        "ky" to listOf("asset_kmn_basic_kbdkyr"),
         "la" to listOf("asset_kmn_gautami_inditran"),
         "lad" to listOf("asset_kmn_ladino"),
+        "lkt" to listOf("asset_kmn_fv_lakota"),
         "ln" to listOf("asset_kmn_sil_eastern_congo"),
         "lo" to listOf(
             "asset_kmn_basic_kbdlao",
@@ -4394,6 +4075,11 @@ object KeymanLanguages {
             "asset_kmn_basic_kbdlvst",
         ),
         "mad" to listOf("asset_kmn_sil_madurese"),
+        "mi" to listOf(
+            "asset_kmn_basic_kbdmaori",
+            "asset_kmn_el_pasifika",
+            "asset_kmn_fv_maori",
+        ),
         "mk" to listOf(
             "asset_kmn_basic_kbdmac",
             "asset_kmn_basic_kbdmacst",
@@ -4439,12 +4125,16 @@ object KeymanLanguages {
             "asset_kmn_newa_traditional",
             "asset_kmn_newa_traditional_extended",
         ),
+        "nia" to listOf("asset_kmn_nias"),
         "nl" to listOf("asset_kmn_basic_kbdne"),
         "nqo" to listOf(
             "asset_kmn_nko",
             "asset_kmn_sil_nko",
         ),
-        "nv" to listOf("asset_kmn_dine_bizaad"),
+        "nv" to listOf(
+            "asset_kmn_dine_bizaad",
+            "asset_kmn_fv_dine_bizaad",
+        ),
         "or" to listOf(
             "asset_kmn_basic_kbdinori",
             "asset_kmn_nlci_oriya_winscript",
@@ -4461,6 +4151,7 @@ object KeymanLanguages {
         "pnb" to listOf(
             "asset_kmn_rac_western_punjabi",
             "asset_kmn_shahmukhi_phonetic",
+            "asset_kmn_sanjha_punjabi",
         ),
         "ps" to listOf(
             "asset_kmn_basic_kbdpash",
@@ -4472,6 +4163,8 @@ object KeymanLanguages {
             "asset_kmn_camoes",
             "asset_kmn_hcesar",
             "asset_kmn_pt_azerty",
+            "asset_kmn_basic_kbdbr",
+            "asset_kmn_pt_pro",
         ),
         "qu" to listOf("asset_kmn_winchus"),
         "ro" to listOf(
@@ -4490,7 +4183,15 @@ object KeymanLanguages {
             "asset_kmn_optitrans_devanagari_sanskrit_pre_vedic",
             "asset_kmn_slp1_deva",
         ),
+        "sah" to listOf("asset_kmn_basic_kbdyak"),
+        "sat" to listOf("asset_kmn_basic_kbdolch"),
         "sd" to listOf("asset_kmn_rac_sindhi"),
+        "se" to listOf(
+            "asset_kmn_basic_kbdfi1",
+            "asset_kmn_basic_kbdno1",
+            "asset_kmn_basic_kbdsmsfi",
+            "asset_kmn_basic_kbdsmsno",
+        ),
         "shn" to listOf(
             "asset_kmn_shan_thailayout",
             "asset_kmn_sil_shan",
@@ -4533,6 +4234,7 @@ object KeymanLanguages {
             "asset_kmn_lavanya",
             "asset_kmn_nlci_telugu_winscript",
         ),
+        "tg" to listOf("asset_kmn_basic_kbdtajik"),
         "th" to listOf(
             "asset_kmn_basic_kbdth0",
             "asset_kmn_basic_kbdth1",
@@ -4541,16 +4243,23 @@ object KeymanLanguages {
             "asset_kmn_qwerty_farang",
             "asset_kmn_thai_kedmanee_mattix",
         ),
-        "ti" to listOf("asset_kmn_geezword_tigrinya"),
+        "ti" to listOf(
+            "asset_kmn_geezword_tigrinya",
+            "asset_kmn_gff_tigrinya_eritrea",
+            "asset_kmn_gff_tigrinya_ethiopia",
+        ),
         "tig" to listOf("asset_kmn_gff_tigre"),
+        "tk" to listOf("asset_kmn_basic_kbdturme"),
         "tn" to listOf("asset_kmn_basic_kbdnso"),
         "tr" to listOf(
             "asset_kmn_basic_kbdtuf",
             "asset_kmn_basic_kbdtuq",
         ),
+        "tt" to listOf("asset_kmn_basic_kbdtt102"),
         "ug" to listOf(
             "asset_kmn_basic_kbdughr1",
             "asset_kmn_rac_uyghur",
+            "asset_kmn_basic_kbdughr",
         ),
         "uk" to listOf(
             "asset_kmn_basic_kbdur",
@@ -4563,17 +4272,82 @@ object KeymanLanguages {
             "asset_kmn_urdu_phonetic",
             "asset_kmn_urdu_phonetic_crulp",
         ),
+        "ur_rom" to listOf(
+            "asset_kmn_latinized_urdu",
+            "asset_kmn_urdu_dvorak",
+        ),
+        "vec" to listOf("asset_kmn_venetia_et_histria"),
         "vi" to listOf(
             "asset_kmn_basic_kbdvntc",
             "asset_kmn_vietnamese_telex",
             "asset_kmn_vietnamese_telex_legacy",
             "asset_kmn_vietnamese_vni",
+            "asset_kmn_vietnam",
         ),
-        "wo" to listOf("asset_kmn_sil_senegal_wo_azerty"),
+        "wo" to listOf(
+            "asset_kmn_sil_senegal_wo_azerty",
+            "asset_kmn_basic_kbdwol",
+        ),
         "yi" to listOf(
             "asset_kmn_yiddish_hebrew",
             "asset_kmn_yiddish_pasekh",
         ),
-        "yo" to listOf("asset_kmn_yo"),
+        "yo" to listOf(
+            "asset_kmn_yo",
+            "asset_kmn_basic_kbdyba",
+            "asset_kmn_sil_yoruba_bar",
+            "asset_kmn_sil_yoruba_dot",
+        ),
+    )
+
+    /**
+     * Generated languages folded into a hand-written one with the same
+     * language and script (`hi-Latn` is Hinglish, `pt-BR` is Portuguese),
+     * by the id they used to have. Their layouts are in [extraLayoutIds];
+     * the ids stay resolvable so a setting saved under one still finds its
+     * language.
+     */
+    val mergedInto: Map<String, String> = mapOf(
+        "ak-Latn" to "ak",
+        "ami-Latn-001" to "ami",
+        "ar-DZ" to "ar",
+        "as-IN" to "as",
+        "atj-Latn" to "atj",
+        "ba-Cyrl" to "ba",
+        "bo-Tibt-CN" to "bo",
+        "chr-Cher" to "chr",
+        "chy-Latn" to "chy",
+        "cr-Latn" to "cr",
+        "din-Latn" to "din",
+        "es-Latn-419" to "es",
+        "fr-CA" to "fr",
+        "gd-Latn" to "gd",
+        "grc-Grek" to "grc",
+        "ha-Latn" to "ha",
+        "haw-Latn-US" to "haw",
+        "hi-Latn" to "hi_rom",
+        "ig-Latn" to "ig",
+        "ky-Cyrl" to "ky",
+        "lkt-Latn" to "lkt",
+        "mi-Latn" to "mi",
+        "nia-Latn" to "nia",
+        "nv-Latn" to "nv",
+        "pnb-Arab" to "pnb",
+        "pt-BR" to "pt",
+        "pt-PT" to "pt",
+        "sah-Cyrl-RU" to "sah",
+        "sat-Olck" to "sat",
+        "se-Latn" to "se",
+        "tg-Cyrl" to "tg",
+        "ti-ER" to "ti",
+        "ti-ET" to "ti",
+        "tk-Latn" to "tk",
+        "tt-Cyrl" to "tt",
+        "ug-Arab" to "ug",
+        "ur-Latn" to "ur_rom",
+        "vec-Latn" to "vec",
+        "vi-Latn-VN" to "vi",
+        "wo-Latn" to "wo",
+        "yo-Latn" to "yo",
     )
 }

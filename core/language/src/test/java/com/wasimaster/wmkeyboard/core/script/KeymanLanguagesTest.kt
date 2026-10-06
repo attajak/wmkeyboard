@@ -101,4 +101,29 @@ class KeymanLanguagesTest {
         val malformed = KeymanLanguages.all.map { it.id }.filterNot { shape.matches(it) }
         assertTrue("malformed language tags: ${malformed.take(20)}", malformed.isEmpty())
     }
+
+    /**
+     * A generated language with the same tag as a hand-written one is the same
+     * language listed twice ("Hindi (Latin)" beside Hinglish). Those are folded
+     * into the hand-written entry; this keeps a new one from creeping back.
+     */
+    @Test
+    fun `no generated language repeats a hand-written one's tag`() {
+        val generated = KeymanLanguages.all.toSet()
+        val handTags = LanguageRegistry.all.filterNot { it in generated }.map { it.localeTag.lowercase() }.toSet()
+        val repeats = KeymanLanguages.all.filter { it.localeTag.lowercase() in handTags }.map { it.id }
+        assertTrue("generated languages repeating a hand-written tag: $repeats", repeats.isEmpty())
+    }
+
+    /** A folded id still resolves, to the language its layouts joined, so saved settings keep working. */
+    @Test
+    fun `a folded language id resolves to the one it joined`() {
+        for ((old, target) in KeymanLanguages.mergedInto) {
+            assertEquals(old, target, LanguageRegistry.byId(old).id)
+            assertTrue(
+                "$old's layouts are not on $target",
+                KeymanLanguages.extraLayoutIds[target].orEmpty().isNotEmpty(),
+            )
+        }
+    }
 }

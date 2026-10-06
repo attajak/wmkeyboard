@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_sil_colombia_venezuela",
     "name": "Teclado de Idiomas Indígenas (Colombia y Venezuela)",
-    "langId": "es-Latn-419",
+    "langId": "es",
     "layers": {
       "letters": {
         "rows": [

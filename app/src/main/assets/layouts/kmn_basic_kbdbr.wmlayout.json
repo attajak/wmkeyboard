@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdbr",
     "name": "Portuguese (Brazilian) Basic",
-    "langId": "pt-BR",
+    "langId": "pt",
     "layers": {
       "letters": {
         "rows": [

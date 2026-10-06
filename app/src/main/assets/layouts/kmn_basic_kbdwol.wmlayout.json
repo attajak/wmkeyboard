@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_basic_kbdwol",
     "name": "Wolof Basic",
-    "langId": "wo-Latn",
+    "langId": "wo",
     "layers": {
       "letters": {
         "rows": [

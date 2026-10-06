@@ -3774,7 +3774,8 @@ object LanguageRegistry {
         }
     }
 
-    fun byId(id: String): LanguageDef = index[id] ?: keymanIndex[id] ?: GENERIC
+    fun byId(id: String): LanguageDef =
+        index[id] ?: keymanIndex[id] ?: KeymanLanguages.mergedInto[id]?.let(index::get) ?: GENERIC
 
     /**
      * The language whose primary subtag matches a BCP-47 tag ("fr-FR" → French,

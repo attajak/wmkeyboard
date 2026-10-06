@@ -4,7 +4,7 @@
   "layout": {
     "id": "asset_kmn_fv_maori",
     "name": "Māori",
-    "langId": "mi-Latn",
+    "langId": "mi",
     "layers": {
       "letters": {
         "rows": [
