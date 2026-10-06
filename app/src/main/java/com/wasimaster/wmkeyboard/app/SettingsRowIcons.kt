@@ -1508,6 +1508,8 @@ internal object SettingsRowIcons {
         put(R.string.layout_editor_kana_variant_title) { Icons.Outlined.Spellcheck }
         put(R.string.layout_editor_repeat_hold_title) { Icons.Outlined.Repeat }
         put(R.string.panel_name_emoji) { Icons.Outlined.EmojiEmotions }
+        put(R.string.panel_name_gif) { Icons.Outlined.Gif }
+        put(R.string.panel_name_sticker) { Icons.AutoMirrored.Outlined.StickyNote2 }
         put(R.string.panel_name_clipboard) { Icons.Outlined.ContentPaste }
         put(R.string.panel_name_text_edit) { Icons.Outlined.EditNote }
         put(R.string.panel_name_trackpad) { Icons.Outlined.Mouse }

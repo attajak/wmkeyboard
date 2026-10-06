@@ -611,6 +611,8 @@
     <string name="panel_name_text_edit">Text editing panel</string>
     <string name="panel_name_trackpad">Trackpad panel</string>
     <string name="panel_name_numpad">Numpad</string>
+    <string name="panel_name_gif">GIF panel</string>
+    <string name="panel_name_sticker">Sticker panel</string>
     <string name="field_name_emoji_tabs">Emoji categories</string>
     <string name="field_name_emoji_search">Emoji search</string>
     <string name="field_name_emoji_grid">Emoji grid</string>
@@ -620,6 +622,8 @@
     <string name="field_name_clipboard_list">Clipboard history</string>
     <string name="field_name_clipboard_view">Grid or list switch</string>
     <string name="field_name_trackpad">Trackpad</string>
+    <string name="field_name_gif_browser">GIF search and results</string>
+    <string name="field_name_sticker_browser">Sticker search and results</string>
     <string name="field_name_unknown">Unknown component</string>
     <string name="layout_editor_action_group_panel">Panel</string>
     <string name="layout_editor_action_field_title">Panel component</string>

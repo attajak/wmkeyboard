@@ -104,6 +104,8 @@ internal fun panelEditRoute(kind: PanelKind): String = "panel_edit/${kind.name}"
 @StringRes
 internal fun panelTitleRes(kind: PanelKind): Int = when (kind) {
     PanelKind.EMOJI -> R.string.panel_name_emoji
+    PanelKind.GIF -> R.string.panel_name_gif
+    PanelKind.STICKER -> R.string.panel_name_sticker
     PanelKind.CLIPBOARD -> R.string.panel_name_clipboard
     PanelKind.TEXT_EDIT -> R.string.panel_name_text_edit
     PanelKind.TRACKPAD -> R.string.panel_name_trackpad
@@ -122,6 +124,8 @@ internal fun fieldTitleRes(kind: PanelFieldKind): Int = when (kind) {
     PanelFieldKind.CLIPBOARD_LIST -> R.string.field_name_clipboard_list
     PanelFieldKind.CLIPBOARD_VIEW -> R.string.field_name_clipboard_view
     PanelFieldKind.TRACKPAD -> R.string.field_name_trackpad
+    PanelFieldKind.GIF_BROWSER -> R.string.field_name_gif_browser
+    PanelFieldKind.STICKER_BROWSER -> R.string.field_name_sticker_browser
     PanelFieldKind.UNKNOWN -> R.string.field_name_unknown
 }
 
@@ -156,7 +160,7 @@ internal fun textEditActionTitle(op: TextEditAction): Int = when (op) {
 
 /** The components a layout of [kind] may place; empty for the keys-only pad. */
 internal fun fieldKindsFor(kind: PanelKind): List<PanelFieldKind> =
-    PanelFieldKind.entries.filter { it.isReal && it.panel == kind }
+    PanelFieldKind.entries.filter { it.isReal && it.isOn(kind) }
 
 /**
  * The actions a panel key may take: the panel's own component first, then

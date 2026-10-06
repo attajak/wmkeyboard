@@ -97,6 +97,29 @@ object BuiltInPanelLayouts {
     val EMOJI: PanelLayoutSpec = emoji(MediaSwitcher.BOTTOM)
 
     /**
+     * The GIF or sticker panel (#538): its browser over [bottom], which is the
+     * emoji panel's switch row unless the keyboard passes the row the user's
+     * own emoji panel ends in. The browser is a component like the emoji grid,
+     * so it takes everything the key row leaves.
+     */
+    fun media(kind: PanelKind, bottom: List<Key> = mediaBottomRow, bottomHeight: Float = 1f): PanelLayoutSpec {
+        val browser = requireNotNull(kind.requiredField) { "$kind has no browser" }
+        return PanelLayoutSpec(
+            panel = kind,
+            grid = LayerSpec(
+                rows = listOf(listOf(field(browser, 10f)), bottom),
+                rowHeights = listOf(3f, bottomHeight),
+            ),
+        )
+    }
+
+    /** The GIF panel as it ships: the browser over the emoji panel's bottom row. */
+    val GIF: PanelLayoutSpec = media(PanelKind.GIF)
+
+    /** The sticker panel as it ships, the same shape as [GIF]. */
+    val STICKER: PanelLayoutSpec = media(PanelKind.STICKER)
+
+    /**
      * The clipboard: search pill and the grid / list switch, the fragment
      * chips pulled out of the history, the history itself. [bottomRow] adds the abc / space / backspace
      * row the old `clipboard.bottomRow` setting used to switch on; the
@@ -220,6 +243,8 @@ object BuiltInPanelLayouts {
 
     val byKind: Map<PanelKind, PanelLayoutSpec> = mapOf(
         PanelKind.EMOJI to EMOJI,
+        PanelKind.GIF to GIF,
+        PanelKind.STICKER to STICKER,
         PanelKind.CLIPBOARD to CLIPBOARD,
         PanelKind.TEXT_EDIT to TEXT_EDIT,
         PanelKind.TRACKPAD to TRACKPAD,

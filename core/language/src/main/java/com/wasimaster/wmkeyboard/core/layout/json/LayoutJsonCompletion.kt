@@ -316,7 +316,7 @@ private class Context(
         shape.values.forEachIndexed { index, value ->
             if (shape.typeName == FIELD_KIND) {
                 if (value == UNKNOWN) return@forEachIndexed
-                if (panel != null && fieldKindOf(value)?.panel != panel) return@forEachIndexed
+                if (panel != null && fieldKindOf(value)?.isOn(panel) != true) return@forEachIndexed
             }
             val label = values.enumLabel(shape.typeName, value)
             val item = JsonCompletionItem(value, JsonCompletionKind.ENUM, quote(value), detail = label)

@@ -676,14 +676,17 @@ enum class PanelMode {
 }
 
 /**
- * The panel layout behind a panel mode, for the four panels that are layouts
- * (issue #63); null for every other panel and for none. Shared by the
+ * The panel layout behind a panel mode, for the panels that are layouts
+ * (issue #63, the GIF and sticker panels since #538); null for every other
+ * panel and for none. Shared by the
  * service's "keep this panel open" check and the theme resolution, so the two
  * cannot disagree about which panels have a grid of their own.
  */
 val PanelMode.layoutKind: PanelKind?
     get() = when (this) {
         PanelMode.EMOJI -> PanelKind.EMOJI
+        PanelMode.GIF -> PanelKind.GIF
+        PanelMode.STICKER -> PanelKind.STICKER
         PanelMode.CLIPBOARD -> PanelKind.CLIPBOARD
         PanelMode.TEXT_EDIT -> PanelKind.TEXT_EDIT
         PanelMode.TRACKPAD -> PanelKind.TRACKPAD

@@ -42,7 +42,7 @@ fun KeyAction.isAllowedOnPanel(): Boolean = when (this) {
 
 /** A field cell this panel can draw: one of its own kinds, and a real one. */
 private fun PanelLayoutSpec.owns(kind: PanelFieldKind): Boolean =
-    kind.isReal && kind.panel == panel
+    kind.isReal && kind.isOn(panel)
 
 /** Everything wrong with this panel layout, worst first. Never mutates. */
 fun validatePanelLayout(spec: PanelLayoutSpec): List<LayoutFinding> {

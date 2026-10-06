@@ -2008,6 +2008,23 @@ internal fun ToolDetailSettings(
                         default = SettingsDefaults.mediaFullBleed,
                     ) { scope.launch { repository.setMediaFullBleed(it) } }
                 }
+                item {
+                    // A panel layout like the emoji panel's (#538): the keys
+                    // under the results, and where the switch sits.
+                    val panel = if (tool == ToolbarTool.STICKER) PanelKind.STICKER else PanelKind.GIF
+                    val customPanels by repository.customPanelLayouts.collectAsStateWithLifecycle(emptyList())
+                    NavRow(
+                        title = R.string.panel_layout_row_title,
+                        subtitle = stringResource(R.string.panel_layout_row_subtitle),
+                        value = stringResource(
+                            if (customPanels.none { it.panel == panel }) {
+                                R.string.panel_layout_value_default
+                            } else {
+                                R.string.panel_layout_value_custom
+                            },
+                        ),
+                    ) { onNavigate(panelEditRoute(panel)) }
+                }
             }
             if (tool == ToolbarTool.GIF) OfflineGifPacksGroup()
             SettingsGroup(

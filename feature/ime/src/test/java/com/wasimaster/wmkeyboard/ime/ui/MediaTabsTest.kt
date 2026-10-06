@@ -96,38 +96,73 @@ class MediaTabsTest {
         assertEquals(own, state.panelLayout(PanelKind.EMOJI))
     }
 
+    private fun PanelLayoutSpec.bottom(): List<Key> = grid.rows.last()
+
     @Test
     fun `the GIF and sticker panels borrow the emoji panel's own switch row`() {
-        // The shipped panel: its bottom row, as it ships.
-        assertEquals(
-            listOf(BuiltInPanelLayouts.mediaBottomRow),
-            mediaBottomRowSpec(BuiltInPanelLayouts.EMOJI).grid.rows,
-        )
+        // The shipped panel: its bottom row, as it ships, under the browser.
+        val gif = mediaPanelLayout(PanelKind.GIF, BuiltInPanelLayouts.EMOJI, MediaSwitcher.BOTTOM)
+        assertEquals(BuiltInPanelLayouts.GIF, gif)
+        assertTrue(gif.canBeEnabled())
         // A bottom row the user rearranged comes across, height and all.
         val comma = Key(",")
         val rearranged = listOf(Key("ABC", action = KeyAction.Letters), switch, comma, Key(" ", action = KeyAction.Space))
         val grid = Key("", action = KeyAction.Field(PanelFieldKind.EMOJI_GRID), width = 10f)
         val own = PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(listOf(listOf(grid), rearranged), rowHeights = listOf(3f, 1.2f)))
-        val mirrored = mediaBottomRowSpec(own).grid
-        assertEquals(listOf(rearranged), mirrored.rows)
-        assertEquals(listOf(1.2f), mirrored.rowHeights)
+        val mirrored = mediaPanelLayout(PanelKind.STICKER, own, MediaSwitcher.BOTTOM)
+        assertEquals(PanelKind.STICKER, mirrored.panel)
+        assertEquals(listOf(PanelFieldKind.STICKER_BROWSER), mirrored.fieldRows().first())
+        assertEquals(rearranged, mirrored.bottom())
+        assertEquals(listOf(3f, 1.2f), mirrored.grid.rowHeights)
+        assertTrue(mirrored.canBeEnabled())
+    }
+
+    @Test
+    fun `with the switch up top the GIF panel still ends in abc space and backspace`() {
+        // Issue #538: the emoji panel's own last row of keys, not an empty edge.
+        for (placement in listOf(MediaSwitcher.TOP, MediaSwitcher.OFF)) {
+            val gif = mediaPanelLayout(PanelKind.GIF, BuiltInPanelLayouts.emoji(placement), placement)
+            assertEquals(placement.name, BuiltInPanelLayouts.bottomRow, gif.bottom())
+            assertTrue(placement.name, gif.canBeEnabled())
+        }
     }
 
     @Test
     fun `a switch row that is not keys and the switch alone stays with the emoji panel`() {
         val grid = Key("", action = KeyAction.Field(PanelFieldKind.EMOJI_GRID), width = 10f)
         val tabs = Key("", action = KeyAction.Field(PanelFieldKind.EMOJI_TABS), width = 7f)
-        // Beside the tab strip, as the shipped "top" panel has it.
+        // Beside the tab strip, with no row of keys: the shipped row for the setting.
         val beside = PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(listOf(listOf(tabs, switch), listOf(grid))))
-        assertEquals(listOf(BuiltInPanelLayouts.mediaBottomRow), mediaBottomRowSpec(beside).grid.rows)
-        assertEquals(null, mediaBottomRowSpec(beside).grid.rowHeights)
+        assertEquals(BuiltInPanelLayouts.mediaBottomRow, mediaPanelLayout(PanelKind.GIF, beside, MediaSwitcher.BOTTOM).bottom())
+        assertEquals(BuiltInPanelLayouts.bottomRow, mediaPanelLayout(PanelKind.GIF, beside, MediaSwitcher.TOP).bottom())
+        // Beside the tab strip over a row of keys: that row, without a switch.
+        val keys = listOf(Key("ABC", action = KeyAction.Letters), Key("⌫", action = KeyAction.Delete))
+        val over = PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(listOf(listOf(tabs, switch), listOf(grid), keys)))
+        assertEquals(keys, mediaPanelLayout(PanelKind.GIF, over, MediaSwitcher.BOTTOM).bottom())
         // Under a tall key that reaches down into it.
         val tall = Key("⌫", action = KeyAction.Delete, rowSpan = 2)
         val reached = PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(listOf(listOf(grid, tall), listOf(switch))))
-        assertEquals(listOf(BuiltInPanelLayouts.mediaBottomRow), mediaBottomRowSpec(reached).grid.rows)
-        // No switch at all.
+        assertEquals(BuiltInPanelLayouts.mediaBottomRow, mediaPanelLayout(PanelKind.GIF, reached, MediaSwitcher.BOTTOM).bottom())
+        // No switch and no keys at all.
         val none = PanelLayoutSpec(PanelKind.EMOJI, LayerSpec(listOf(listOf(grid))))
-        assertEquals(listOf(BuiltInPanelLayouts.mediaBottomRow), mediaBottomRowSpec(none).grid.rows)
+        assertEquals(BuiltInPanelLayouts.mediaBottomRow, mediaPanelLayout(PanelKind.GIF, none, MediaSwitcher.BOTTOM).bottom())
+    }
+
+    @Test
+    fun `a GIF panel the user laid out is drawn as laid out`() {
+        val browser = Key("", action = KeyAction.Field(PanelFieldKind.GIF_BROWSER), width = 10f)
+        val own = PanelLayoutSpec(PanelKind.GIF, LayerSpec(listOf(listOf(browser), listOf(switch))))
+        assertTrue(own.canBeEnabled())
+        val state = KeyboardUiState(
+            layouts = base,
+            settings = settings(MediaSwitcher.TOP),
+            panelLayouts = resolvePanelLayouts(listOf(own)),
+        )
+        assertEquals(own, state.panelLayout(PanelKind.GIF))
+        // The switch goes on any of the three media panels, never on the clipboard.
+        assertTrue(PanelFieldKind.MEDIA_TABS.isOn(PanelKind.STICKER))
+        assertFalse(PanelFieldKind.MEDIA_TABS.isOn(PanelKind.CLIPBOARD))
+        assertFalse(PanelFieldKind.GIF_BROWSER.isOn(PanelKind.STICKER))
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.ime.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,23 +13,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
 import com.wasimaster.wmkeyboard.core.layout.BuiltInPanelLayouts
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
-import com.wasimaster.wmkeyboard.core.layout.LayerSpec
 import com.wasimaster.wmkeyboard.core.layout.PanelFieldKind
 import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
-import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
 import com.wasimaster.wmkeyboard.core.settings.KeyboardSettings
 import com.wasimaster.wmkeyboard.core.settings.MediaSwitcher
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
@@ -36,16 +33,17 @@ import com.wasimaster.wmkeyboard.core.settings.isSupportedTool
 import com.wasimaster.wmkeyboard.core.settings.isUsableTool
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
+import com.wasimaster.wmkeyboard.ime.layoutKind
 
 /**
  * The switch between the emoji, GIF and sticker panels (issue #366): one
  * segment per panel, the open one lit, so the three read as the tabs of one
  * panel the way they do on most keyboards.
  *
- * The emoji panel carries it as a component of its layout
- * ([PanelFieldKind.MEDIA_TABS]); the GIF and sticker panels draw the row that
- * component sits in, or put the switch beside their search box, as
- * [KeyboardSettings.emoji]'s `mediaSwitcher` says.
+ * Every one of the three can carry it as a component of its layout
+ * ([PanelFieldKind.MEDIA_TABS]); a GIF or sticker panel the user has not laid
+ * out borrows the emoji panel's row that holds it, or puts the switch beside
+ * its search box, as [KeyboardSettings.emoji]'s `mediaSwitcher` says.
  */
 
 /** The panels the switch moves between, in the order it draws them. */
@@ -96,100 +94,122 @@ internal fun mediaOpenerTarget(open: PanelMode, last: PanelMode, settings: Keybo
 }
 
 /**
- * The row the GIF and sticker panels draw under their grids: the emoji
- * panel's own row that holds the switch, so a bottom row the user rearranged
- * comes across with it, else the shipped one.
+ * The GIF or sticker panel the user has not laid out (#538): its browser over
+ * a row borrowed from the emoji panel, so the three panels end in the same
+ * keys and a bottom row the user rearranged on the emoji panel comes across.
  *
- * The emoji panel's row is used only when it is keys and the switch alone.
- * One that also holds the tab strip, or that a key from the row above reaches
- * down into, belongs to the emoji panel, and lifted out it would draw a hole.
+ * The row borrowed is the emoji panel's switch row when that is keys and the
+ * switch alone, else the last row of keys it has (abc / space / backspace on
+ * the shipped panel with the switch up top), else the shipped row for the
+ * switch's [placement]. A row that also holds an emoji component, or that a
+ * key from the row above reaches down into, belongs to the emoji panel, and
+ * lifted out it would draw a hole. The emoji panel's label size, theme and
+ * font ride along for the same reason.
  */
-internal fun mediaBottomRowSpec(emoji: PanelLayoutSpec): PanelLayoutSpec {
+internal fun mediaPanelLayout(kind: PanelKind, emoji: PanelLayoutSpec, placement: MediaSwitcher): PanelLayoutSpec {
     val rows = emoji.grid.rows
-    val index = rows.indexOfFirst { row -> row.any { it.isMediaTabs() } }
-    val reachedInto = index > 0 && rows.take(index).withIndex().any { (r, row) ->
-        row.any { key -> r + key.rowSpan > index }
+    val switchRow = rows.indexOfFirst { row -> row.any { it.isMediaTabs() } }
+    val keysRow = rows.indexOfLast { row -> row.none { it.action is KeyAction.Field } }
+    val index = when {
+        rows.liftable(switchRow) -> switchRow
+        rows.liftable(keysRow) -> keysRow
+        else -> -1
     }
-    val own = rows.getOrNull(index)?.takeIf { row ->
-        !reachedInto && row.all { key -> key.rowSpan <= 1 && (key.action !is KeyAction.Field || key.isMediaTabs()) }
-    }
-    return PanelLayoutSpec(
-        panel = PanelKind.EMOJI,
-        grid = LayerSpec(
-            rows = listOf(own ?: BuiltInPanelLayouts.mediaBottomRow),
-            rowHeights = emoji.grid.rowHeights?.getOrNull(index)?.takeIf { own != null }?.let { listOf(it) },
-            fontScale = emoji.grid.fontScale,
-        ),
+    val own = rows.getOrNull(index)
+    val shipped = if (placement == MediaSwitcher.BOTTOM) BuiltInPanelLayouts.mediaBottomRow else BuiltInPanelLayouts.bottomRow
+    val height = own?.let { emoji.grid.rowHeights?.getOrNull(index) } ?: 1f
+    val spec = BuiltInPanelLayouts.media(kind, own ?: shipped, height)
+    return spec.copy(
+        grid = spec.grid.copy(fontScale = emoji.grid.fontScale, themeId = emoji.grid.themeId),
         appearance = emoji.appearance,
     )
+}
+
+/** Whether row [index] stands on its own: keys and the switch, nothing reaching in from above. */
+private fun List<List<Key>>.liftable(index: Int): Boolean {
+    val row = getOrNull(index) ?: return false
+    val reachedInto = take(index).withIndex().any { (r, above) -> above.any { key -> r + key.rowSpan > index } }
+    return !reachedInto && row.all { key -> key.rowSpan <= 1 && (key.action !is KeyAction.Field || key.isMediaTabs()) }
 }
 
 private fun Key.isMediaTabs(): Boolean = (action as? KeyAction.Field)?.kind == PanelFieldKind.MEDIA_TABS
 
 /**
- * Where the GIF and sticker panels draw the switch: [top] at the end of the
- * search row, or [bottom], the row under the grid. At most one is set.
+ * The switch as a pill beside the GIF or sticker search box, or null: only
+ * while the switch is on and the panel's layout has no switch cell of its
+ * own, so a layout that places it never shows two. Never while a search has
+ * the keys: they come back under the panel then.
  */
-internal class MediaSwitchSlots(
-    val top: (@Composable () -> Unit)?,
-    val bottom: (@Composable () -> Unit)?,
-)
-
-/**
- * The GIF or sticker panel's switch slots for [state]. Neither while a search
- * has the keys: they come back under the panel then, and the switch would sit
- * on top of them.
- */
-internal fun mediaSwitchSlots(state: KeyboardUiState, callbacks: PanelLayoutCallbacks): MediaSwitchSlots {
-    val placement = if (state.mediaSearchActive) MediaSwitcher.OFF else mediaSwitcherPlacement(state.settings)
-    return MediaSwitchSlots(
-        top = if (placement == MediaSwitcher.TOP) {
-            { MediaTabsPill(state, callbacks.onPanelChange) }
-        } else {
-            null
-        },
-        bottom = if (placement == MediaSwitcher.BOTTOM) {
-            { MediaBottomRow(state, callbacks, onClose = { callbacks.onPanelChange(state.panel) }) }
-        } else {
-            null
-        },
-    )
+internal fun mediaSwitchPill(
+    state: KeyboardUiState,
+    spec: PanelLayoutSpec,
+    onPanelChange: (PanelMode) -> Unit,
+): (@Composable () -> Unit)? {
+    if (state.mediaSearchActive || mediaSwitcherPlacement(state.settings) == MediaSwitcher.OFF) return null
+    if (spec.grid.rows.any { row -> row.any { it.isMediaTabs() } }) return null
+    return { MediaTabsPill(state, onPanelChange) }
 }
 
 /**
- * The switch's row under the GIF or sticker grid: real keys either side of it,
- * at exactly the height and inset the emoji panel's bottom row has, so the
- * row stays put as the panels swap underneath it.
+ * The GIF or sticker panel (#538): the browser and the keys around it, laid
+ * out like the emoji panel and inside the full-bleed chrome when that setting
+ * is on. A search draws the browser alone, short, with the key rows back
+ * underneath it for typing the query.
+ *
+ * [browser] draws the panel's body; `fullBleed` says the header already holds
+ * the search box, `inGrid` that it is filling a layout cell rather than
+ * sizing itself. [headerSearch] is the full-bleed header's search box.
  */
 @Composable
-internal fun MediaBottomRow(state: KeyboardUiState, callbacks: PanelLayoutCallbacks, onClose: () -> Unit) {
-    val emoji = state.panelLayout(PanelKind.EMOJI)
-    val spec = remember(emoji) { mediaBottomRowSpec(emoji) }
-    PanelLayoutGrid(
-        state, spec, callbacks, onClose,
-        fields = { kind ->
-            if (kind == PanelFieldKind.MEDIA_TABS) MediaTabsField(state, callbacks.onPanelChange)
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(mediaBottomRowHeight(state, spec)),
-        // A drag off abc would show the whole letters layer squeezed into
-        // this one row; the emoji panel's own grid has the height for it.
-        layerPeek = false,
-    )
-}
-
-/**
- * The height of [MediaBottomRow]: its keys at the key height its row asks
- * for, plus the gaps and the inset the emoji panel's grid puts around them.
- */
-internal fun mediaBottomRowHeight(
+internal fun MediaPanelHost(
     state: KeyboardUiState,
-    spec: PanelLayoutSpec = mediaBottomRowSpec(state.panelLayout(PanelKind.EMOJI)),
-): Dp {
-    val settings = state.settings
-    return rowScaledKeyHeight(settings.keyHeightDp, spec.grid.rowHeights?.firstOrNull()).dp +
-        keyGapV(settings) * 2 + KeyRowsPadVertical * 2
+    callbacks: PanelLayoutCallbacks,
+    headerSearch: @Composable RowScope.() -> Unit,
+    browser: @Composable (fullBleed: Boolean, inGrid: Boolean, switcher: (@Composable () -> Unit)?) -> Unit,
+) {
+    val kind = state.panel.layoutKind ?: return
+    val onClose = { callbacks.onPanelChange(state.panel) }
+    val spec = state.panelLayout(kind)
+    val pill = mediaSwitchPill(state, spec, callbacks.onPanelChange)
+    val fullBleed = state.settings.mediaFullBleed
+    val searching = state.mediaSearchActive
+    val fields: @Composable (PanelFieldKind) -> Unit = { field ->
+        when (field) {
+            PanelFieldKind.MEDIA_TABS -> MediaTabsField(state, callbacks.onPanelChange)
+            kind.requiredField -> browser(fullBleed, true, if (fullBleed) null else pill)
+            else -> Unit
+        }
+    }
+    if (fullBleed) {
+        FullBleedTool(
+            state,
+            title = "",
+            onClose = onClose,
+            // Search collapses the panel so the key rows fit below it, keeping
+            // a band of live results up.
+            compact = searching,
+            headerActions = {
+                headerSearch()
+                pill?.invoke()
+            },
+        ) {
+            if (searching) {
+                browser(true, false, null)
+            } else {
+                PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+            }
+        }
+    } else if (searching) {
+        browser(false, false, null)
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(keyRowsHeight(state)),
+        ) {
+            PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
+        }
+    }
 }
 
 /**

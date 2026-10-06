@@ -23,6 +23,10 @@ import kotlinx.serialization.json.jsonArray
 @Serializable
 enum class PanelKind(val shipped: Boolean = true) {
     @SerialName("emoji") EMOJI,
+    /** The GIF panel (#538): its browser plus the keys the user puts around it. */
+    @SerialName("gif") GIF,
+    /** The sticker panel, laid out like the GIF panel. */
+    @SerialName("sticker") STICKER,
     @SerialName("clipboard") CLIPBOARD,
     @SerialName("text_edit") TEXT_EDIT,
     @SerialName("trackpad") TRACKPAD,
@@ -45,6 +49,8 @@ enum class PanelKind(val shipped: Boolean = true) {
     val requiredField: PanelFieldKind?
         get() = when (this) {
             EMOJI -> PanelFieldKind.EMOJI_GRID
+            GIF -> PanelFieldKind.GIF_BROWSER
+            STICKER -> PanelFieldKind.STICKER_BROWSER
             CLIPBOARD -> PanelFieldKind.CLIPBOARD_LIST
             TRACKPAD -> PanelFieldKind.TRACKPAD
             TEXT_EDIT, NUMPAD -> null

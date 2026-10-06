@@ -11144,44 +11144,13 @@ private fun KeyboardBody(
                 }
                 PanelMode.GIF, PanelMode.STICKER -> {
                     val stickers = state.panel == PanelMode.STICKER
-                    // The switch to emoji and the other of the two (#366).
-                    val switch = mediaSwitchSlots(state, panelCallbacks)
-                    if (state.settings.mediaFullBleed) {
-                        // Search moves up into the reclaimed toolbar row, next
-                        // to the back button — same shape as the dictionary.
-                        FullBleedTool(
-                            state,
-                            title = "",
-                            onClose = { onPanelChange(state.panel) },
-                            // Search collapses the panel so the key rows fit
-                            // below it, keeping a band of live results up.
-                            compact = state.mediaSearchActive,
-                            headerActions = {
-                                GifHeaderSearchBar(state, stickers, onMediaQueryTap)
-                                switch.top?.invoke()
-                            },
-                        ) {
-                            GifPanel(
-                                state = state,
-                                stickers = stickers,
-                                onQueryTap = onMediaQueryTap,
-                                onRetry = onMediaRetry,
-                                onSelect = onGifSelect,
-                                onSourceSelect = onGifSourceSelect,
-                                onOpenToolSettings = onOpenToolSettings,
-                                fullBleed = true,
-                                onCategorySelect = onGifCategorySelect,
-                                onLongPress = onMediaLongPress,
-                                onPackFilter = onStickerPackFilter,
-                                onSaveToPack = onStickerSaveToPack,
-                                onCopy = onMediaCopy,
-                                onReport = onMediaReport,
-                                onDismissAction = onMediaActionDismiss,
-                                onOpenRoute = onOpenRoute,
-                                bottomBar = switch.bottom,
-                            )
-                        }
-                    } else {
+                    // A panel layout like the emoji panel's (#538): the
+                    // browser in its cell, the keys and the switch around it.
+                    MediaPanelHost(
+                        state,
+                        panelCallbacks,
+                        headerSearch = { GifHeaderSearchBar(state, stickers, onMediaQueryTap) },
+                    ) { fullBleed, inGrid, switcher ->
                         GifPanel(
                             state = state,
                             stickers = stickers,
@@ -11190,6 +11159,7 @@ private fun KeyboardBody(
                             onSelect = onGifSelect,
                             onSourceSelect = onGifSourceSelect,
                             onOpenToolSettings = onOpenToolSettings,
+                            fullBleed = fullBleed,
                             onCategorySelect = onGifCategorySelect,
                             onLongPress = onMediaLongPress,
                             onPackFilter = onStickerPackFilter,
@@ -11198,8 +11168,8 @@ private fun KeyboardBody(
                             onReport = onMediaReport,
                             onDismissAction = onMediaActionDismiss,
                             onOpenRoute = onOpenRoute,
-                            switcher = switch.top,
-                            bottomBar = switch.bottom,
+                            switcher = switcher,
+                            inGrid = inGrid,
                         )
                     }
                 }

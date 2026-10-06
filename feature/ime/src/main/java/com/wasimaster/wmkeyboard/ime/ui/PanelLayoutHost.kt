@@ -102,6 +102,11 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
     // The shipped emoji panel with the switch to GIFs and stickers where the
     // setting puts it (issue #366), or left out while there is nowhere to switch.
     if (kind == PanelKind.EMOJI) return BuiltInPanelLayouts.emoji(mediaSwitcherPlacement(settings))
+    // GIFs and stickers the user never laid out end the way the emoji panel
+    // does, whatever shape that is (#538).
+    if (kind == PanelKind.GIF || kind == PanelKind.STICKER) {
+        return mediaPanelLayout(kind, panelLayout(PanelKind.EMOJI), mediaSwitcherPlacement(settings))
+    }
     return shared ?: BuiltInPanelLayouts.default(kind)
 }
 

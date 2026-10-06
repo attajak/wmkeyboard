@@ -745,9 +745,10 @@ enum class PanelFieldKind(val panel: PanelKind) {
     @SerialName("emoji_search") EMOJI_SEARCH(PanelKind.EMOJI),
     @SerialName("emoji_grid") EMOJI_GRID(PanelKind.EMOJI),
     /**
-     * The emoji / GIF / sticker switch (issue #366). An emoji panel component
-     * because that panel is the one with a layout; the GIF and sticker panels
-     * draw the row it sits in, so the switch is in the same place in all three.
+     * The emoji / GIF / sticker switch (issue #366). Filed under the emoji
+     * panel, but each of the three may carry it ([isOn]): the GIF and sticker
+     * panels borrow the emoji panel's row it sits in until the user lays them
+     * out (#538), so the switch is in the same place in all three.
      */
     @SerialName("media_tabs") MEDIA_TABS(PanelKind.EMOJI),
     @SerialName("clipboard_search") CLIPBOARD_SEARCH(PanelKind.CLIPBOARD),
@@ -756,8 +757,22 @@ enum class PanelFieldKind(val panel: PanelKind) {
     /** The grid / list switch for the clipboard history. */
     @SerialName("clipboard_view") CLIPBOARD_VIEW(PanelKind.CLIPBOARD),
     @SerialName("trackpad") TRACKPAD(PanelKind.TRACKPAD),
+    /**
+     * The GIF panel's body (#538): its search box, source and category chips
+     * and the results, as one cell. The panel lays out the keys around it.
+     */
+    @SerialName("gif_browser") GIF_BROWSER(PanelKind.GIF),
+    /** The sticker panel's body, as [GIF_BROWSER] is the GIF panel's. */
+    @SerialName("sticker_browser") STICKER_BROWSER(PanelKind.STICKER),
     @SerialName("unknown") UNKNOWN(PanelKind.EMOJI),
     ;
+
+    /**
+     * Whether a layout of [kind] may carry this component: its own panel's,
+     * plus the emoji / GIF / sticker switch on any of those three panels.
+     */
+    fun isOn(kind: PanelKind): Boolean =
+        panel == kind || (this == MEDIA_TABS && (kind == PanelKind.GIF || kind == PanelKind.STICKER))
 
     /** Whether the editor may offer this kind; [UNKNOWN] is a decode artefact. */
     val isReal: Boolean get() = this != UNKNOWN
@@ -768,7 +783,8 @@ enum class PanelFieldKind(val panel: PanelKind) {
      * (tabs, search, the fragment chips) are a row tall, like a row of keys.
      */
     val fills: Boolean
-        get() = this == EMOJI_GRID || this == CLIPBOARD_LIST || this == TRACKPAD
+        get() = this == EMOJI_GRID || this == CLIPBOARD_LIST || this == TRACKPAD ||
+            this == GIF_BROWSER || this == STICKER_BROWSER
 }
 
 /**

@@ -13,6 +13,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -148,13 +149,13 @@ internal fun showMediaCategories(
     /** Passed in rather than read off [state]: the state's own getter needs a
      *  framework call, and this rule is worth having under a plain JVM test. */
     acceptsRichMedia: Boolean,
-    /** Height a row under the grid takes from the panel: the switch's row (#366). */
-    reserved: Dp = 0.dp,
+    /** The height the panel's body is given, when the keys of its layout take some of the key area (#538). */
+    available: Dp? = null,
 ): Boolean {
     if (state.mediaCategories.isEmpty()) return false
     if (state.mediaSearchActive || localGrid || !acceptsRichMedia) return false
     if (state.mediaQuery.isNotBlank() && state.mediaCategory == null) return false
-    return fullBleed || keyRowsHeight(state) - reserved >= MediaCategoryMinPanelHeight
+    return fullBleed || (available ?: keyRowsHeight(state)) >= MediaCategoryMinPanelHeight
 }
 
 /**
@@ -819,7 +820,8 @@ internal fun RowScope.GifHeaderSearchBar(
  * @param switcher the switch to the emoji and the other media panel, drawn at
  *   the end of the search bar (issue #366). Unused in [fullBleed], whose
  *   header is the host's to fill.
- * @param bottomBar the row under the grid that carries that switch instead.
+ * @param inGrid the panel is the browser cell of its layout (#538), which
+ *   owns the height, so the body fills the cell it is given.
  */
 @Composable
 internal fun GifPanel(
@@ -840,7 +842,7 @@ internal fun GifPanel(
     onDismissAction: () -> Unit = {},
     onOpenRoute: (String) -> Unit = {},
     switcher: (@Composable () -> Unit)? = null,
-    bottomBar: (@Composable () -> Unit)? = null,
+    inGrid: Boolean = false,
 ) {
     val ui = if (stickers) state.sticker else state.gif
     val tool = if (stickers) ToolbarTool.STICKER else ToolbarTool.GIF
@@ -848,7 +850,7 @@ internal fun GifPanel(
     val tabsMode = state.settings.gif.sourceMode == GifSourceMode.TABS
     val chips = GifSources.chips(sources, tabsMode)
     val localGrid = GifSources.targets(sources, state.mediaSource, tabsMode) == listOf(GifSource.LOCAL)
-    val sizing = if (fullBleed) {
+    val sizing = if (fullBleed || inGrid) {
         Modifier.fillMaxSize()
     } else {
         val height = if (state.mediaSearchActive) MediaSearchHeight else keyRowsHeight(state)
@@ -859,7 +861,9 @@ internal fun GifPanel(
     // "Add to which pack?", up when the add chip is pressed under All with
     // more than one pack to choose from. Panel-local: nothing else reads it.
     var choosingAddPack by remember { mutableStateOf(false) }
-    Box(modifier = sizing) {
+    BoxWithConstraints(modifier = sizing) {
+        // In a layout cell the keys around it have taken some of the key area.
+        val available = if (inGrid) maxHeight else null
         Column(modifier = Modifier.fillMaxSize()) {
             PanelFocusTarget(
                 panel = state.panel,
@@ -912,8 +916,7 @@ internal fun GifPanel(
                     },
                 )
             }
-            val reserved = if (bottomBar != null) mediaBottomRowHeight(state) else 0.dp
-            if (showMediaCategories(state, localGrid, fullBleed, state.acceptsRichMedia, reserved)) {
+            if (showMediaCategories(state, localGrid, fullBleed, state.acceptsRichMedia, available)) {
                 // Trending first, so there is always a way back out of a
                 // category — and somewhere for the focus ring to sit when no
                 // category is on.
@@ -944,8 +947,8 @@ internal fun GifPanel(
             // Not while the search box is up — the panel is squeezed to a couple
             // of rows there, and the notice is waiting when the results land.
             if (unsupported && !state.mediaSearchActive) MediaUnsupportedNotice(stickers)
-            // Weighted, so the row under it keeps its height and the results,
-            // the notices and the spinner fill what is left.
+            // Weighted, so the results, the notices and the spinner fill
+            // whatever the rows above leave.
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -997,7 +1000,6 @@ internal fun GifPanel(
                     }
                 }
             }
-            bottomBar?.invoke()
         }
         if (choosingAddPack) {
             StickerAddPackSheet(
