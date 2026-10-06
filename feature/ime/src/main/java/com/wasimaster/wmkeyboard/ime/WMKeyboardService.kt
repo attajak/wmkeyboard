@@ -9586,7 +9586,13 @@ open class WMKeyboardService : InputMethodService() {
         // double space, or the space the auto-space-after-punctuation rule
         // types. Either leaves a trailing space, and one shift press removes it
         // rather than arming caps, so a sentence can be continued without it.
-        if (pendingAutoSpace) {
+        //
+        // Only while auto-capitalization has shift up for the next sentence,
+        // where the press would otherwise just put it back down. With shift
+        // down — after a comma, or with auto-capitalization off — the press is
+        // the user asking for a capital, and the space stays (issue #542).
+        val autoCapped = _uiState.value.let { it.shiftState == ShiftState.ON && !it.shiftPressedByUser }
+        if (pendingAutoSpace && autoCapped) {
             pendingAutoSpace = false
             pendingPunctuationSpace = false
             val ic = currentInputConnection

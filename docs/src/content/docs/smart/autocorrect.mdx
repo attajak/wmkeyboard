@@ -147,7 +147,7 @@ Two related rules ride along with autocorrect and share its "sentence in progres
 
 ### Shift cancels a pending auto-space
 
-Right after either rule above inserts a space, the very next <KeyCap>Shift</KeyCap> press does something different from arming Shift or Caps Lock. It deletes that trailing space, as long as nothing has changed the text since, and cancels the auto-capitalization the period would otherwise have armed for the next sentence. It's a one-shot. Press any other key first and the pending state clears, after which a plain space press just confirms the space already there rather than adding a second one.
+Right after either rule above inserts a space and auto-capitalization raises Shift for the next sentence, the very next <KeyCap>Shift</KeyCap> press does something different from lowering it. It deletes that trailing space, as long as nothing has changed the text since, and cancels that auto-capitalization too. When Shift wasn't raised for you, because the mark was a comma or auto-capitalization is off, the press arms Shift as usual and the space stays, so you can still capitalize the next word by hand. It's a one-shot. Press any other key first and the pending state clears, after which a plain space press just confirms the space already there rather than adding a second one.
 
 ### A mark takes the keyboard's space back
 
