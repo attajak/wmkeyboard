@@ -69,6 +69,20 @@ class AvroDesktop private constructor(
      */
     fun suggest(typed: String, ours: SortedWords?, extra: List<String> = emptyList()): Suggestion {
         val middle = typed.trim { it in PADDING }
+        // Punctuation either side is read on its own (`.` is the danda) and
+        // put back round every word, as Avro does; an exact autocorrect aside.
+        val lead = phonetic.parse(typed.takeWhile { it in PADDING })
+        val trail = phonetic.parse(typed.substring(typed.length - typed.takeLastWhile { it in PADDING }.length)
+            .takeIf { middle.isNotEmpty() }.orEmpty())
+        if (lead.isNotEmpty() || trail.isNotEmpty()) {
+            val inner = suggest(middle, ours, extra)
+            val auto = autocorrectOf(typed, middle)
+            return Suggestion(
+                autocorrect = auto?.let { if (it.exact) it.text else lead + it.text + trail },
+                words = inner.words.map { lead + it + trail },
+                phonetic = lead + inner.phonetic + trail,
+            )
+        }
         val reading = phonetic.parse(middle)
         val auto = autocorrectOf(typed, middle)
         val key = middle.lowercase()
