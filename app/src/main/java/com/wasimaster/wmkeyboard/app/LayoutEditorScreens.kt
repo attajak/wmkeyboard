@@ -34,6 +34,7 @@ import androidx.compose.material3.RadioButton
 import com.wasimaster.wmkeyboard.core.layout.BottomRowRule
 import com.wasimaster.wmkeyboard.core.layout.BottomRowRules
 import com.wasimaster.wmkeyboard.core.layout.KeyRole
+import com.wasimaster.wmkeyboard.core.layout.activeFlick
 import com.wasimaster.wmkeyboard.core.layout.arrangedBy
 import com.wasimaster.wmkeyboard.core.layout.FlickDirection
 import com.wasimaster.wmkeyboard.core.layout.KanaVariantKeyLabel
@@ -3581,7 +3582,7 @@ internal fun EditorKeyCell(
         // towards. The keyboard only shows the cross under a finger, which
         // the editor has none of, so a kana pad here was a grid of あ, か, さ
         // with no way to see the forty other kana it types.
-        for ((direction, text) in key.flick) {
+        for ((direction, text) in key.activeFlick) {
             Text(
                 text = text,
                 color = foreground.copy(alpha = 0.6f),

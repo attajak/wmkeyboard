@@ -181,7 +181,7 @@ private fun locate(layout: KeyboardLayout, form: DeviceForm): Plan? {
             // nothing, and braille and morse are typed by position and timing
             // rather than by where a glyph sits. An unknown action is a layout
             // repair has not been through, so its shape is not trustworthy.
-            if (key.flick.isNotEmpty()) return null
+            if (key.activeFlick.isNotEmpty()) return null
             // A grid with a key spanning rows is not a grid of independent rows,
             // and every rule below moves keys between rows and widens the flanks
             // a span is standing in. Declining leaves the phone arrangement,

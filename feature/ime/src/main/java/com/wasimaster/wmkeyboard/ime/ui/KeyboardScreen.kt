@@ -512,6 +512,7 @@ import com.wasimaster.wmkeyboard.ime.shiftForGlide
 import com.wasimaster.wmkeyboard.core.layout.BottomRowRules
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.PAD_SPACE_LABEL
+import com.wasimaster.wmkeyboard.core.layout.activeFlick
 import com.wasimaster.wmkeyboard.core.layout.arrangedBy
 import com.wasimaster.wmkeyboard.core.layout.asEmojiKey
 import com.wasimaster.wmkeyboard.core.layout.isLocalCurrencyKey
@@ -20591,7 +20592,7 @@ private fun KeyFlickPopup(
     pressed: State<Boolean>,
     flickDirection: State<FlickDirection?>,
 ) {
-    if (key.flick.isNotEmpty() && !alternatesOpen && pressed.value) {
+    if (key.activeFlick.isNotEmpty() && !alternatesOpen && pressed.value) {
         Popup(popupPositionProvider = FlickPopupPositionProvider) {
             FlickCrossPopup(key, flickDirection.value, fontScale)
         }
@@ -22679,7 +22680,7 @@ private fun Modifier.pointerInputKey(
                 }
             }
         }
-    } else if ((key.action == KeyAction.Text || key.action is KeyAction.KeymanKey) && key.flick.isNotEmpty()) {
+    } else if (key.activeFlick.isNotEmpty()) {
         // A 12-key kana pad key: a tap commits the centre kana, a directional
         // flick past the slop commits that arm's kana instead. A Keyman key's
         // flicks work the same way, each arm being a key of its own that

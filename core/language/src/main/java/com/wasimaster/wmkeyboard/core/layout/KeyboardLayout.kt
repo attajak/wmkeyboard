@@ -793,3 +793,13 @@ const val MinRowHeightScale = 0.4f
 
 /** The tallest a per-row height multiplier is honoured at. */
 const val MaxRowHeightScale = 2.5f
+
+/**
+ * The flick arms this key actually types, which is [Key.flick] only on a key
+ * that commits text (issue #547). An action key — Undo, a tool, a layer
+ * switch — keeps whatever arms it had before its action was changed, since the
+ * file still says so, but no flick gesture is wired to it, so nothing may draw
+ * or reserve one either.
+ */
+val Key.activeFlick: Map<FlickDirection, String>
+    get() = if (action == KeyAction.Text || action is KeyAction.KeymanKey) flick else emptyMap()
