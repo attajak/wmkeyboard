@@ -30,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.RadioButton
 import com.wasimaster.wmkeyboard.core.layout.BottomRowRule
 import com.wasimaster.wmkeyboard.core.layout.BottomRowRules
@@ -592,6 +593,10 @@ internal fun KeyLayoutsScreen(
     // What decides which rows the groups hold; each row reads its own state.
     val enabledIds = settings.watch { it.enabledLayoutIds }
     val customLayouts = settings.watch { it.customLayouts }
+    // The switch on each row: the one place a layout you just made or imported
+    // can be turned on without leaving the screen it was made on. Same gate
+    // and same last-layout refusal as the cards under Languages.
+    val toggle = rememberLayoutToggle(settings, repository, scope) {}
     val layouts = enabledIds
         .filter(::isShippedLayoutId)
         .distinct()
@@ -772,6 +777,7 @@ internal fun KeyLayoutsScreen(
                     LayoutRow(
                         layout = layout,
                         enabled = settings.watch { layout.id in it.enabledLayoutIds },
+                        onToggle = { on -> toggle(layout.id, on) },
                         onEdit = { openEditor(layout.id) },
                         onExport = {
                             pendingExport = layout
@@ -855,6 +861,7 @@ internal fun KeyLayoutsScreen(
                         LayoutRow(
                             layout = layout,
                             enabled = settings.watch { layout.id in it.enabledLayoutIds },
+                            onToggle = { on -> toggle(layout.id, on) },
                             onEdit = { openEditor(layout.id) },
                             onExport = {
                                 pendingExport = layout
@@ -914,16 +921,33 @@ internal fun KeyLayoutsScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
+                // Two ways in: added and left off, or added and switched on in
+                // the same breath, since "import, then go and find the switch"
+                // was the step people got lost on.
+                fun import(turnOn: Boolean) {
                     val id = "custom_${System.currentTimeMillis()}"
                     val name = imported.layout.name
                     scope.launch {
                         repository.upsertCustomLayout(imported.layout.copy(id = id))
-                        message =
-                            context.getString(R.string.layout_editor_import_done_message, name)
+                        if (turnOn) {
+                            repository.setEnabledLayoutIds((settings.value.enabledLayoutIds + id).distinct())
+                        }
+                        message = context.getString(
+                            if (turnOn) R.string.layout_editor_import_done_on_message
+                            else R.string.layout_editor_import_done_message,
+                            name,
+                        )
                     }
                     confirmImport = null
-                }) { Text(stringResource(CommonR.string.common_import)) }
+                }
+                Row {
+                    TextButton(onClick = { import(turnOn = false) }) {
+                        Text(stringResource(CommonR.string.common_import))
+                    }
+                    TextButton(onClick = { import(turnOn = true) }) {
+                        Text(stringResource(R.string.layout_editor_import_and_enable))
+                    }
+                }
             },
             dismissButton = {
                 TextButton(onClick = { confirmImport = null }) {
@@ -1081,13 +1105,29 @@ private fun LayoutRow(
     /** Whether the layer list under this row is open; null for a layout with one grid. */
     expanded: Boolean? = null,
     onToggleLayers: () -> Unit = {},
+    /**
+     * Switches the layout on or off from its row (the answer is whether the
+     * switch flipped; the last layout on refuses). Null draws no switch, for a
+     * secondary layout, which cannot be switched on at all.
+     */
+    onToggle: ((Boolean) -> Boolean)? = null,
 ) {
     val resources = LocalContext.current.resources
     WmRow(
         title = layout.name,
         subtitle = layoutSummary(resources, layout, enabled),
         trailing = {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (onToggle != null && !layout.secondary) {
+                    val switchDesc = stringResource(R.string.layout_editor_row_switch_desc, layout.name)
+                    Switch(
+                        checked = enabled,
+                        onCheckedChange = { onToggle(it) },
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .semantics { contentDescription = switchDesc },
+                    )
+                }
                 if (expanded != null) {
                     IconButton(onClick = onToggleLayers) {
                         Icon(

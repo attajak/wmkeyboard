@@ -825,7 +825,7 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Export, duplicate, import — Filename derived from the layout name; import registered as a system file handler
     - Editing a shipped layout is an override, not a fork — Stored under the same id; the button reads Reset rather than Delete
     - Content-sniffed import — A renamed settings backup inside a .wmlayout.json imports as a backup
-    - Imported layouts are never auto-enabled — Added to the list; you turn them on under Languages
+    - Imported layouts are off unless asked — The import dialog offers Import and Import and turn on; every row under Your layouts carries its own on/off switch, and a layout of your own also sits on its language's Layouts shelf under Languages (#410 follow-up)
   - Community layouts from addon repositories `RARE` — "layout" is one of the addon types a repo URL can serve, capped at 4 MB
 - **Importing layouts from other keyboards** `RARE` — Reads FlorisBoard/HeliBoard JSON and HeliBoard's plain-text layout format
   - Two formats, one parser `RARE` — Format guessed from the first non-comment character, so a commented JSON file is not read as text

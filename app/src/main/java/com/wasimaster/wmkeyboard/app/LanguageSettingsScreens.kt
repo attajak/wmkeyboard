@@ -75,6 +75,7 @@ import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.KeymanBinding
 import com.wasimaster.wmkeyboard.core.layout.composerType
 import com.wasimaster.wmkeyboard.core.layout.language
+import com.wasimaster.wmkeyboard.core.layout.isShippedLayoutId
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticSchemes
 import com.wasimaster.wmkeyboard.core.prediction.PhoneticStripSource
@@ -768,7 +769,18 @@ private fun LayoutsGroup(
     val toggle = rememberLayoutToggle(settings, repository, scope) { rulesRefresh++ }
 
     val overflow = settings.watch { overflowLayoutIds(lang, it) }
-    val listed = lang.layoutIds - overflow.toSet()
+    // The user's own layouts for this language sit on the same shelf as the
+    // shipped ones: a grid made in the editor or imported as a file used to be
+    // reachable only from Layout & size, and "turn it on under Languages" sent
+    // people to a screen that did not list it. Edited copies of shipped layouts
+    // keep the shipped id and are already on the shelf; secondary layouts have
+    // no on/off at all.
+    val own = settings.watch { s ->
+        s.customLayouts
+            .filter { it.langId == lang.id && !it.secondary && !isShippedLayoutId(it.id) }
+            .map { it.id }
+    }
+    val listed = (lang.layoutIds - overflow.toSet()) + own
     val title = stringResource(R.string.languages_layouts_title)
 
     HighlightableRow(title, coarse = true) {

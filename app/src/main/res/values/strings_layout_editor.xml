@@ -40,7 +40,10 @@
 
     <!-- Import dialog. %1$s is the name of the layout inside the file. -->
     <string name="layout_editor_import_confirm_title">Import <xliff:g id="layout_name" example="Probhat">%1$s</xliff:g>?</string>
-    <string name="layout_editor_import_confirm_body">The app adds the layout to your layouts, but it does not turn it on. Turn it on under Languages when you are ready to type with it.</string>
+    <string name="layout_editor_import_confirm_body">The app adds the layout to your layouts. Import and turn on makes it a keyboard you can switch to at once. Import alone leaves it off, and the switch on its row turns it on later.</string>
+    <string name="layout_editor_import_and_enable">Import and turn on</string>
+    <string name="layout_editor_import_done_on_message">The app imported <xliff:g id="layout_name" example="Probhat">%1$s</xliff:g> and turned it on. Swipe the spacebar or hold the globe key to switch to it.</string>
+    <string name="layout_editor_row_switch_desc">Turn <xliff:g id="layout_name" example="My layout">%1$s</xliff:g> on or off</string>
     <string name="layout_editor_import_changes_title">Changed during the import:</string>
     <!-- One line in the list of changes the app made to the file. %1$s is the line. -->
     <string name="layout_editor_repair_note">• <xliff:g id="note">%1$s</xliff:g></string>
