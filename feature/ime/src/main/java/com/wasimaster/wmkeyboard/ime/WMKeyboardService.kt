@@ -5714,9 +5714,34 @@ open class WMKeyboardService : InputMethodService() {
         newSelEnd: Int,
         candidatesStart: Int,
         candidatesEnd: Int,
-    ) = trace(ImeTrace.UPDATE_SELECTION) {
-        updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+    ) {
+        // The settings app's own fields live in this process, and there the
+        // echo is not a message at all. Every hop from our commitText to the
+        // editor and back through InputMethodManager.updateSelection is a local
+        // binder, so this runs *inside* the commitText that caused it, before
+        // the caller has cleared its buffer — and the edits it makes from in
+        // there (the region re-arm, a finishComposingText) land inside the
+        // editor's own callback. Compose's RecordingInputConnection hands its
+        // pending commands to that callback before clearing them, so a nested
+        // edit applies the outer one a second time: "test." came out as
+        // "test.test" (#544), and with a snippet expanding, the nesting fed on
+        // itself until the app froze and died (#543). Posted, the echo arrives
+        // the way every other app's does, after the keystroke has finished.
+        if (currentInputEditorInfo?.packageName == packageName) {
+            inProcessEchoHandler.post {
+                trace(ImeTrace.UPDATE_SELECTION) {
+                    updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+                }
+            }
+            return
+        }
+        trace(ImeTrace.UPDATE_SELECTION) {
+            updateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd)
+        }
     }
+
+    /** Delivers [onUpdateSelection] for an editor in this process; see there. */
+    private val inProcessEchoHandler = Handler(Looper.getMainLooper())
 
     private fun updateSelection(
         oldSelStart: Int,
