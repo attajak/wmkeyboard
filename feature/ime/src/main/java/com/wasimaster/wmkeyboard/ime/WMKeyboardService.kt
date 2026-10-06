@@ -3471,7 +3471,12 @@ open class WMKeyboardService : InputMethodService() {
                     coinPickKey = nextCoinKey
                     remergeCurrencyRates()
                 }
-                configureClipboardStore(settings)
+                // A combine re-emit after the unlock can still carry the
+                // mirror's object; only a fresh one is the real store.
+                if (userUnlocked && stored !== lockedStoredSettings) clipboardLimitsKnown = true
+                lastStoredSettings = stored
+                // Locked, the history is in memory only, so nothing on disk is at stake.
+                if (clipboardLimitsKnown || !userUnlocked) configureClipboardStore(settings)
                 // "Keep it like any other clip" means the mark is ignored, so
                 // clips marked while hiding was on unmask rather than staying
                 // dots forever with no short timer left to sweep them.
@@ -4043,11 +4048,18 @@ open class WMKeyboardService : InputMethodService() {
         clipboardStore = ClipboardStore(
             store("clipboard/history.json"),
             imagesDir = store(ClipImageViewer.IMAGES_DIR),
+            // No limits until the user's own are in (#414). The store's
+            // defaults are a day and 100 clips, and the field start reads the
+            // history before the first settings emission lands, so a cold
+            // start pruned a "never expire" history down to its last 24 hours
+            // and the next copy saved it that way.
+            expiryMillis = 0L,
+            maxItems = 0,
+            sensitiveExpiryMillis = 0L,
         )
-        // The swapped-in store starts on the defaults; carry the user's limits
-        // across, or a bigger history and a longer expiry than asked for hold
-        // until the next settings emit.
-        configureClipboardStore(_uiState.value.settings)
+        // A store swapped in after that emission carries the user's limits
+        // across; one created before it waits for [clipboardLimitsKnown].
+        if (clipboardLimitsKnown || !userUnlocked) configureClipboardStore(_uiState.value.settings)
         snippetsFile = store("snippets/snippets.json")
         snippetStore = SnippetStore(snippetsFile)
         snippetsStamp = snippetsFile?.lastModified() ?: 0L
@@ -4078,6 +4090,11 @@ open class WMKeyboardService : InputMethodService() {
     private fun onUserUnlocked() {
         if (userUnlocked) return
         userUnlocked = true
+        // The settings in hand are the lock-screen mirror's, which can be the
+        // defaults. The real store's first emission is what the history on
+        // disk may be pruned by.
+        clipboardLimitsKnown = false
+        lockedStoredSettings = lastStoredSettings
         DebugLog.i("ime", "credential storage unlocked; re-attaching personal stores")
         if (unlockReceiverRegistered) {
             runCatching { unregisterReceiver(unlockReceiver) }
@@ -6150,6 +6167,19 @@ open class WMKeyboardService : InputMethodService() {
      * a hardware key, all of which arrive here as a selection update.
      */
     private var lastSelectionUpdateAt = 0L
+
+    /**
+     * Whether [settingsRepository] has emitted from credential storage yet, so
+     * the clipboard limits in [KeyboardUiState.settings] are the user's own
+     * rather than the defaults. Until then the history store prunes nothing.
+     */
+    private var clipboardLimitsKnown = false
+
+    /** The repository's last emission, before any of the keyboard's views. */
+    private var lastStoredSettings: KeyboardSettings? = null
+
+    /** [lastStoredSettings] at the unlock: the mirror's, not the real store's. */
+    private var lockedStoredSettings: KeyboardSettings? = null
 
     /** Hands the clipboard settings the store enforces to [clipboardStore]. */
     private fun configureClipboardStore(settings: KeyboardSettings) {
