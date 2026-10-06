@@ -1778,7 +1778,7 @@ object LanguageRegistry {
             englishName = "Lojban",
             script = ScriptId.LATIN,
             localeTag = "jbo",
-            layoutIds = listOf(BuiltInLayouts.QWERTY_ID),
+            layoutIds = listOf(AssetLayouts.JBO_QWERTY_ID),
         ),
         LanguageDef(
             id = "tlh",
@@ -1786,7 +1786,7 @@ object LanguageRegistry {
             englishName = "Klingon",
             script = ScriptId.LATIN,
             localeTag = "tlh",
-            layoutIds = listOf(BuiltInLayouts.QWERTY_ID, AssetLayouts.TLH_T9_ID),
+            layoutIds = listOf(AssetLayouts.TLH_QWERTY_ID, AssetLayouts.TLH_T9_ID),
         ),
         LanguageDef(
             id = "se",

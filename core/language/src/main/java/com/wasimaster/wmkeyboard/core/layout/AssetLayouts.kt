@@ -204,6 +204,8 @@ object AssetLayouts {
     const val BI_QWERTY_ID = "asset_bi_qwerty"
     const val TET_QWERTY_ID = "asset_tet_qwerty"
     const val IA_QWERTY_ID = "asset_ia_qwerty"
+    const val JBO_QWERTY_ID = "asset_jbo_qwerty"
+    const val TLH_QWERTY_ID = "asset_tlh_qwerty"
     const val DV_THAANA_ID = "asset_dv_thaana"
     const val SE_QWERTY_ID = "asset_se_qwerty"
     const val SMN_QWERTY_ID = "asset_smn_qwerty"
