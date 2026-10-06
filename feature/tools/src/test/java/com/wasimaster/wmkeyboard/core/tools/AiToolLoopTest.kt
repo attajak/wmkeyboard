@@ -59,6 +59,77 @@ class AiToolLoopTest {
         assertEquals("x", call.argument("query"))
     }
 
+    // The shapes a real local model produced. Gemma 4 E2B wrote both of these
+    // verbatim on device when asked to search: `tool_call` is a special token
+    // in its chat template, so the template mangles the exact string the
+    // instructions ask for. Matching only that string meant neither parsed and
+    // neither was hidden, which put raw JSON in the answer bubble.
+
+    @Test
+    fun `a marker with no brackets at all is read`() {
+        val text = """TOOL_CALL{{"name":"web_search","arguments":{"query":"latest tech news"}}}<tool_call|>"""
+        val call = AiToolProtocol.parseAll(text).single()
+        assertEquals(AiTools.WEB_SEARCH, call.name)
+        assertEquals("latest tech news", call.argument("query"))
+        assertEquals("", AiToolProtocol.stripped(text))
+    }
+
+    @Test
+    fun `pipes on either side, a repeated marker and a label are all skipped`() {
+        val text = """<|tool_call>call:tool_call{{"name":"web_fetch","arguments":""" +
+            """{"url":"https://a.test/x"}}}<tool_call|>"""
+        val call = AiToolProtocol.parseAll(text).single()
+        assertEquals(AiTools.WEB_FETCH, call.name)
+        assertEquals("https://a.test/x", call.argument("url"))
+        assertEquals("", AiToolProtocol.stripped(text))
+    }
+
+    @Test
+    fun `a marker that does not parse is still hidden`() {
+        // The worst outcome is not a missed call, it is a user reading JSON.
+        val text = """Here you go. <|tool_call|>{"nmae":"web_search"} and that is all."""
+        assertTrue(AiToolProtocol.parseAll(text).isEmpty())
+        val shown = AiToolProtocol.stripped(text)
+        assertFalse("tool_call" in shown)
+        assertFalse("nmae" in shown)
+        assertTrue(shown.startsWith("Here you go."))
+        assertTrue(shown.endsWith("and that is all."))
+    }
+
+    @Test
+    fun `a bare marker with prose after it loses only the marker`() {
+        assertEquals(
+            "I will look that up.",
+            AiToolProtocol.stripped("<tool_call>I will look that up."),
+        )
+    }
+
+    @Test
+    fun `a brace inside a query cannot end the object early`() {
+        val call = AiToolProtocol.parseAll(
+            """<tool_call>{"name":"web_search","arguments":{"query":"what does {x} mean"}}</tool_call>""",
+        ).single()
+        assertEquals("what does {x} mean", call.argument("query"))
+    }
+
+    @Test
+    fun `the words tool call in a sentence are left alone`() {
+        // The pattern ignores case, so matching the spaced form unbracketed
+        // would delete these words out of an ordinary answer.
+        val text = "You can make a tool call here, and TOOL CALL is the same thing."
+        assertTrue(AiToolProtocol.parseAll(text).isEmpty())
+        assertEquals(text, AiToolProtocol.stripped(text))
+    }
+
+    @Test
+    fun `a word that starts like the marker is held one chunk, then released`() {
+        val filter = AiToolProtocol.Filter()
+        // "to" could still grow into "tool_call", so it waits rather than
+        // being shown and then taken back.
+        assertEquals("I am going ", filter.feed("I am going to"))
+        assertEquals("to town.", filter.feed(" town.") + filter.flush())
+    }
+
     @Test
     fun `an ordinary answer has no calls and is left alone`() {
         val text = "Use a < b to compare them."
