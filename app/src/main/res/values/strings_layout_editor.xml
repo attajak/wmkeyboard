@@ -288,6 +288,13 @@
     <string name="layout_editor_flick_down_label">Flick down</string>
     <string name="layout_editor_flick_field_hint">Blank: no flick in this direction</string>
     <string name="layout_editor_flick_set_hint">A flick this way types %1$s</string>
+    <string name="layout_editor_flick_add_subtitle_action">A short flick left, up, right or down does an action, such as moving the cursor</string>
+    <string name="layout_editor_flick_caption_action">A flick in one direction does the action you choose for it. A tap still does what the key does.</string>
+    <string name="layout_editor_flick_action_none">No flick this way. Tap to choose an action.</string>
+    <string name="layout_editor_flick_action_set">A flick this way does this: %1$s</string>
+    <string name="layout_editor_flick_action_pick_desc">Do an action instead</string>
+    <string name="layout_editor_flick_shift_label">%1$s with Shift</string>
+    <string name="layout_editor_flick_shift_hint">Blank: shift types the capital letter of the flick</string>
     <!-- 小゛゜ is the name of the key on Japanese keyboards and stays as it is. -->
     <string name="layout_editor_kana_variant_title">Becomes 小゛゜ after a kana</string>
     <string name="layout_editor_kana_variant_subtitle">While the kana you are typing has a small, ゛ or ゜ form, this key changes it</string>

@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.ime
 import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
+import com.wasimaster.wmkeyboard.core.layout.hasFlicks
 import com.wasimaster.wmkeyboard.core.settings.LongPressLetterActions
 
 /**
@@ -53,4 +54,4 @@ internal fun globeDragAction(target: Key, letters: LongPressLetterActions): Clip
 
 /** Whether a drag off this key is the 🌐 shortcut drag, when it is switched on. */
 internal fun Key?.startsGlobeDrag(enabled: Boolean): Boolean =
-    enabled && this?.action == KeyAction.LanguageSwitch
+    enabled && this?.action == KeyAction.LanguageSwitch && this?.hasFlicks() != true

@@ -155,6 +155,28 @@ data class Key(
      */
     val flick: Map<FlickDirection, String> = emptyMap(),
     /**
+     * What each [flick] arm types while Shift is on, the way [shiftLabel] does
+     * for the tap (issue #550). A kana pad with a Shift key can then put its
+     * katakana on the same keys as its hiragana, rather than on a second
+     * layout behind a key of its own.
+     *
+     * An arm with no entry here does what a key with no [shiftLabel] does:
+     * Shift makes a letter a capital and leaves everything else alone. An entry
+     * for an arm with no [flick] text does nothing, since there is nothing for
+     * it to be the shifted form of.
+     */
+    val flickShift: Map<FlickDirection, String> = emptyMap(),
+    /**
+     * Flick arms that run an action instead of typing (issue #549): a key whose
+     * tap selects a word and whose four flicks move the caret, say.
+     *
+     * An arm here beats the [flick] text for the same direction. Unlike the text
+     * arms these work on an action key too, which is the case they exist for;
+     * see [takesFlickActions] for the few keys whose own drag or hold leaves no
+     * room for them.
+     */
+    val flickActions: Map<FlickDirection, KeyAlternate> = emptyMap(),
+    /**
      * How big this one key's label is drawn, as a multiple of an ordinary
      * letter's size — and null, the normal case, means the keyboard decides,
      * which is a letter's size for a letter and a smaller one for a
@@ -287,6 +309,8 @@ fun Key.asKanaVariantKey(): Key = copy(
     icon = null,
     iconHint = null,
     flick = emptyMap(),
+    flickShift = emptyMap(),
+    flickActions = emptyMap(),
     letters = null,
     repeatOnHold = false,
 )
@@ -416,7 +440,7 @@ fun Key.holdIsSpokenFor(): Boolean = repeatOnHold || action.holdIsSpokenFor()
  * nowhere to live inside it. That is a fact about the key rather than about
  * typing text, which is why it is here and not there.
  */
-fun Key.canRepeatOnHold(): Boolean = flick.isEmpty() && action.canRepeatOnHold()
+fun Key.canRepeatOnHold(): Boolean = flick.isEmpty() && flickActions.isEmpty() && action.canRepeatOnHold()
 
 /**
  * Whether a held finger on this key fires it over and over.
@@ -485,10 +509,19 @@ fun Key.alternateEntries(): List<AlternateEntry> {
  * this is a Keyman key that has one, else this key typing the flick's text.
  */
 fun Key.flickKey(direction: FlickDirection): Key? {
-    val text = flick[direction] ?: return null
-    val target = (action as? KeyAction.KeymanKey)?.flick?.get(direction)
-        ?: return copy(output = text)
-    return Key(label = text, output = target.text, action = target.toAction())
+    when (val arm = flickArm(direction)) {
+        null -> return null
+        // Pressed the way a popup's action entry is, so the arm does exactly
+        // what the same action does as an alternate.
+        is FlickArm.Action -> return Key(label = arm.alternate.label, action = arm.alternate.action)
+        is FlickArm.Text -> {
+            val target = (action as? KeyAction.KeymanKey)?.flick?.get(direction)
+            // The arm's own shift form, never the centre's: under Shift the
+            // flick used to type the tap's shiftLabel, whatever arm it took.
+                ?: return copy(output = arm.text, shiftLabel = flickShift[direction])
+            return Key(label = arm.text, output = target.text, action = target.toAction())
+        }
+    }
 }
 
 /**
@@ -803,3 +836,48 @@ const val MaxRowHeightScale = 2.5f
  */
 val Key.activeFlick: Map<FlickDirection, String>
     get() = if (action == KeyAction.Text || action is KeyAction.KeymanKey) flick else emptyMap()
+
+/** One arm of a key's flick cross: text it types, or an action it runs. */
+sealed interface FlickArm {
+    /** One of [Key.flick]. */
+    @JvmInline
+    value class Text(val text: String) : FlickArm
+
+    /** One of [Key.flickActions]. */
+    @JvmInline
+    value class Action(val alternate: KeyAlternate) : FlickArm
+}
+
+/**
+ * Whether [Key.flickActions] work on this key (issue #549).
+ *
+ * Every key but the ones whose drag or hold is already the gesture: the space
+ * bar's swipes and language picker, the delete keys' swipe and repeat, a braille
+ * dot's chord, a component's cell, and a key told to repeat while held. A flick
+ * arm on one of those would either never be reached or take away what the key
+ * is for, so the editor does not offer them and the keyboard does not read them.
+ */
+fun Key.takesFlickActions(): Boolean = action != KeyAction.Space && !holdIsSpokenFor()
+
+/**
+ * What a flick towards [direction] does: an action arm where the key has one
+ * it can use, else the text arm, else null for no arm that way. The one answer
+ * the gesture, the cross popup and the editor's preview all read, so none of
+ * them can show an arm another ignores.
+ */
+fun Key.flickArm(direction: FlickDirection): FlickArm? {
+    flickActions[direction]?.takeIf { takesFlickActions() }?.let { return FlickArm.Action(it) }
+    return activeFlick[direction]?.takeIf { it.isNotEmpty() }?.let { FlickArm.Text(it) }
+}
+
+/** Whether a flick off this key does anything at all; see [flickArm]. */
+fun Key.hasFlicks(): Boolean =
+    activeFlick.isNotEmpty() || (flickActions.isNotEmpty() && takesFlickActions())
+
+/**
+ * Whether a finger held on this flick arm runs it again and again: the arms
+ * that move the caret or delete, which repeat the same way the keys for them do.
+ * Asked of the key [flickKey] hands back.
+ */
+fun Key.flickArmRepeats(): Boolean =
+    action.deletesBackward() || action.deletesForward() || (action as? KeyAction.Edit)?.op?.repeats == true
