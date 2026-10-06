@@ -16,6 +16,7 @@ import androidx.compose.material3.AlertDialog
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SwapHoriz
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -808,6 +809,10 @@ private fun LayoutsGroup(
             spec.keyman?.let { it to spec.name }
         }
     }
+    // #464: QWERTZ for English. The way in used to be duplicating a layout in
+    // the editor and changing its language there, which nobody found.
+    var borrowing by remember { mutableStateOf(false) }
+    val context = LocalContext.current
     SettingsGroup {
         // A converted Keyman layout can only type what its author wrote once
         // its rules are on the device, so each one on the cards gets the row
@@ -815,6 +820,30 @@ private fun LayoutsGroup(
         for ((binding, name) in keymanListed) {
             item { KeymanRulesRow(binding, name, rulesRefresh) }
         }
+        item {
+            WmRow(
+                title = stringResource(R.string.languages_borrow_layout_title),
+                subtitle = stringResource(R.string.languages_borrow_layout_subtitle, lang.englishName),
+                leading = { Icon(Icons.Outlined.SwapHoriz, contentDescription = null) },
+                onClick = { borrowing = true },
+            )
+        }
+    }
+    if (borrowing) {
+        BorrowLayoutDialog(
+            target = lang,
+            onDismiss = { borrowing = false },
+            onPick = { picked ->
+                borrowing = false
+                borrowLayout(scope, repository, settings, lang, picked) { name ->
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.languages_borrow_layout_done, name),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            },
+        )
     }
 }
 

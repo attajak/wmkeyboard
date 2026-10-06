@@ -54,6 +54,17 @@
     <string name="languages_layout_keep_one">At least one layout must stay on.</string>
 
     <!--
+      Issue #464: a layout of another language, such as QWERTZ for English.
+      %1$s is the English name of the language whose screen this is.
+    -->
+    <string name="languages_borrow_layout_title">Use a layout from another language</string>
+    <string name="languages_borrow_layout_subtitle">Type <xliff:g id="language" example="English">%1$s</xliff:g> on QWERTZ, AZERTY or another layout</string>
+    <string name="languages_borrow_layout_body">The layout gets the dictionary, autocorrect and spelling rules of <xliff:g id="language" example="English">%1$s</xliff:g>. It is added to your layouts and turned on.</string>
+    <string name="languages_borrow_layout_none">No other language that uses the same letters as <xliff:g id="language" example="English">%1$s</xliff:g> has a layout to offer.</string>
+    <!-- Toast. %1$s is the layout name, for example "QWERTZ (German)". -->
+    <string name="languages_borrow_layout_done"><xliff:g id="layout" example="QWERTZ (German)">%1$s</xliff:g> is on.</string>
+
+    <!--
       The Keyman rules row. "Rules" is the word the Keyman project uses for the
       part that decides what a key types, so someone who knows the keyboard
       recognises it, and someone who does not gets told what it means in the
