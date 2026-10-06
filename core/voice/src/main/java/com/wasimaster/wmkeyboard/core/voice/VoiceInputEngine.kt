@@ -73,6 +73,12 @@ class VoiceInputEngine(private val context: Context) {
      * [formatting] asks the recognizer for punctuation and capital letters
      * (API 33+). Plain voice typing turns it off, because there the words are
      * wanted exactly as they were said.
+     *
+     * [alsoListenFor] are more language tags the speaker may switch to (#416).
+     * Android 14 lets a recognizer detect the language among a set and follow
+     * a switch mid-phrase; [languageTag] stays the one it starts in. Earlier
+     * versions, and recognizers that ignore the extras, hear [languageTag]
+     * alone.
      */
     fun start(
         languageTag: String,
@@ -80,6 +86,7 @@ class VoiceInputEngine(private val context: Context) {
         allowOnDevice: Boolean = true,
         formatting: Boolean = true,
         bias: VoiceBiasRequest = VoiceBiasRequest.NONE,
+        alsoListenFor: List<String> = emptyList(),
     ) {
         cancel()
         val onDevice = allowOnDevice &&
@@ -111,7 +118,10 @@ class VoiceInputEngine(private val context: Context) {
                 val kind = errorKind(error)
                 if (onDevice && kind == ErrorKind.LANGUAGE) {
                     onDeviceFailedTags += languageTag
-                    start(languageTag, listener, allowOnDevice = false, formatting = formatting, bias = bias)
+                    start(
+                        languageTag, listener, allowOnDevice = false,
+                        formatting = formatting, bias = bias, alsoListenFor = alsoListenFor,
+                    )
                     return
                 }
                 listener.onError(kind)
@@ -135,13 +145,14 @@ class VoiceInputEngine(private val context: Context) {
 
             override fun onEvent(eventType: Int, params: Bundle?) {}
         })
-        session.startListening(recognizerIntent(languageTag, formatting, bias))
+        session.startListening(recognizerIntent(languageTag, formatting, bias, alsoListenFor))
     }
 
     private fun recognizerIntent(
         languageTag: String,
         formatting: Boolean = true,
         bias: VoiceBiasRequest = VoiceBiasRequest.NONE,
+        alsoListenFor: List<String> = emptyList(),
     ): Intent =
         Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(
@@ -168,6 +179,18 @@ class VoiceInputEngine(private val context: Context) {
                 if (bias.deviceContext) {
                     putExtra(RecognizerIntent.EXTRA_ENABLE_BIASING_DEVICE_CONTEXT, true)
                 }
+            }
+            // More than one language at once (#416). Detection picks the
+            // language of the phrase among these; switching follows a change
+            // of language part way through one. Both are requests the
+            // recognizer may decline, and one that does hears EXTRA_LANGUAGE.
+            val others = alsoListenFor.filter { !it.equals(languageTag, ignoreCase = true) }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && others.isNotEmpty()) {
+                val allowed = arrayListOf(languageTag).apply { addAll(others) }
+                putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, true)
+                putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES, allowed)
+                putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_SWITCH, RecognizerIntent.LANGUAGE_SWITCH_BALANCED)
+                putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES, allowed)
             }
         }
 

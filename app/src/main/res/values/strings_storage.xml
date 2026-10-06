@@ -165,6 +165,7 @@
     <string name="storage_file_tap_offsets_label">Where your finger lands when tapping</string>
     <string name="storage_file_app_language_mix_label">Which language you write in each app</string>
     <string name="storage_file_typed_emails_label">Email addresses you typed</string>
+    <string name="storage_file_typed_numbers_label">Numbers you typed</string>
     <string name="storage_file_phonetic_script_choices_label">Words you switched between English and Bengali or Hindi</string>
     <string name="storage_file_glide_outcomes_label">Swipe readings you corrected</string>
     <string name="storage_file_glide_shapes_label">How you draw each word</string>

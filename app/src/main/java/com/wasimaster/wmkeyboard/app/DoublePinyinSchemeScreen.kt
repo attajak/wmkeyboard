@@ -240,6 +240,7 @@ internal fun DoublePinyinSchemeScreen(
         snackbarHost = { SnackbarHost(snackbar) },
     ) { padding ->
         val reduceMotion = settings.watch { it.reduceMotion }
+        ResizeForKeyboard()
         Column(Modifier.padding(padding).consumeWindowInsets(padding).imePadding().fillMaxSize()) {
             CodeSurface(
                 state = editor,

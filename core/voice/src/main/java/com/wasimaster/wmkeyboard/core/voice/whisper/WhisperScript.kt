@@ -156,6 +156,18 @@ object WhisperScript {
     private val CONVERTIBLE = setOf(ScriptId.DEVANAGARI, ScriptId.BENGALI)
 
     /**
+     * [rescue] for a dictation that listens for several languages at once
+     * (#416). Only a choice that writes in exactly one of the convertible
+     * scripts has a script to correct towards: with both Hindi and Bangla in
+     * it, text in either is a language the speaker asked for.
+     */
+    fun rescueAmong(text: String, languageIds: List<String>): String {
+        val targets = languageIds.filter { LanguageRegistry.byId(it).script in CONVERTIBLE }
+        if (targets.map { LanguageRegistry.byId(it).script }.distinct().size != 1) return text
+        return rescue(text, targets.first())
+    }
+
+    /**
      * The transcription with its script corrected for [languageId], or [text]
      * unchanged when there is nothing to correct: the language does not use one
      * of the convertible scripts, the text is already in the right one, or the

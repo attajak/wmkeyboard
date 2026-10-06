@@ -1803,7 +1803,6 @@ private fun KeyboardScreenFrame(
                     onOpenVoiceSettings = onOpenVoiceSettings,
                     onRestoreKeyboard = { onToolTap(ToolbarTool.VOICE) },
                     onAction = onVoiceRailKey,
-                    onLayoutSelect = onLayoutSelect,
                 )
             }
             // The keyboard stays composed until the slide has fully carried it
@@ -6273,7 +6272,7 @@ private fun symbolSetName(set: SymbolSet): String =
  * outliers. Tapping outside still dismisses: Compose asks for outside touches
  * whether or not the window is focusable.
  */
-private val MenuPopupProperties = PopupProperties(focusable = false)
+internal val MenuPopupProperties = PopupProperties(focusable = false)
 
 /** Pins a popup to the keyboard window's own corner, whatever its anchor. */
 private object WindowOriginPositionProvider : PopupPositionProvider {
@@ -6295,7 +6294,7 @@ private object WindowOriginPositionProvider : PopupPositionProvider {
  * The menu's own window is added after this one and so sits above it.
  */
 @Composable
-private fun StripMenuScrim(onDismiss: () -> Unit) {
+internal fun StripMenuScrim(onDismiss: () -> Unit) {
     Popup(
         popupPositionProvider = WindowOriginPositionProvider,
         properties = MenuPopupProperties,
@@ -11099,7 +11098,6 @@ private fun KeyboardBody(
                     onOpenVoiceSettings = onOpenVoiceSettings,
                     onUseSystemEngine = onVoiceUseSystemEngine,
                     onRailKey = onVoiceRailKey,
-                    onLayoutSelect = onLayoutSelect,
                     onClose = { onPanelChange(PanelMode.VOICE) },
                 )
                 PanelMode.PLUGINS -> FullBleedTool(

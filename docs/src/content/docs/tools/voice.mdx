@@ -188,7 +188,17 @@ It uses whatever provider and model the AI tool is set to, cloud or on-device, a
 
 ## Language and engine
 
-Voice typing doesn't have its own language picker: it dictates in whatever language your active keyboard layout is set to. If you have both English and at least one non-English language enabled, a small **EN** / **বাং** chip appears in the corner of the panel. Tapping it switches your active layout to the other language's first enabled layout, and dictation follows along. With only one language enabled, or with several non-English languages and no English one, no chip appears.
+<SettingsPath path="Voice typing / Voice typing language" />
+
+Out of the box, dictation listens for the language of the layout you're typing on, and switching layouts switches it. **Voice typing language** lets you break that link. It opens a list with **Follow the keyboard** at the top, your keyboard languages under it, and then the other languages speech recognition commonly handles:
+
+- **Follow the keyboard** is the default and works the way dictation always has.
+- **One language ticked** keeps dictation in that language whatever the layout. Type on your Bangla layout and still dictate in English, say.
+- **Several ticked** lets you speak any of them. Dictation starts in your keyboard's language when it's one of the ticked ones, otherwise in the first you ticked.
+
+How well "several" works depends on the engine. The system recognizer is asked to detect the language among your picks, and to follow a switch in the middle of a sentence, on Android 14 and later. That's a request, and only recognizers that support it (Google's is one) act on it. Others, and older Android versions, hear the starting language alone. [Offline Whisper](/tools/whisper/) and the [transcription server](/tools/transcription-server/) work the language out themselves with several picked, so give Whisper a multilingual model that covers all of them. Whisper's grouped models can only be told one language, and with one picked, they are.
+
+A language chip sits in the corner of the voice panel whenever there's a choice to make: two or more keyboard languages, or a choice already made. It shows what dictation listens for, **EN** or **EN+BN**, and it's drawn brighter when you've picked rather than followed the keyboard. Tap it for a menu: **Follow the keyboard**, each of your keyboard languages, **All my languages** to listen for every one of them at once, and **More languages…** to open the full list in settings. A pick from the menu is saved, the same as one made in settings, and a session that's listening starts again in it.
 
 On Android 12 and up the system recognizer prefers to run fully on-device, once your phone has that language's model installed. It's faster, needs no network, and skips the little beep before it starts listening. If a language's on-device model can't handle recognition, WM Keyboard falls back to the network recognizer transparently.
 
@@ -215,7 +225,7 @@ Everything below lives on the Voice typing screen, under Features on the setting
 | Spoken punctuation | On | Saying "comma", "question mark" or "দাঁড়ি" types the mark. |
 | Tidy dictation with AI | Off | Sends each phrase to the AI tool's model to take out filler words, repeats and spoken corrections. Hidden in plain text mode. See [Tidying dictation with AI](#tidying-dictation-with-ai). |
 
-All of these sit in a group headed **Dictation**. An **Engine** group above it holds the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
+All of these sit in a group headed **Dictation**. An **Engine** group above it holds **Voice typing language** (see [Language and engine](#language-and-engine)) and the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
 
 > Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.
 
@@ -257,6 +267,6 @@ With **Tidy dictation with AI** on, the text of each phrase (never the audio) al
 
 **Every row carries the usual restore button** once you move it off the default listed above. See [Putting one setting back](/reference/settings/#putting-one-setting-back). Where the collapsed bar last rested isn't one of those rows. It has no control on the settings screen, and you reset it by dragging the bar somewhere else.
 
-**The three views aren't full equivalents.** Continuous mode, spoken punctuation, and undo behave the same way whichever one you're in, because they live in the dictation session rather than in the view. Two things are panel-only: hold-to-talk, and the offline-model download chip. The **EN** / **বাং** language-switch chip sits on the panel and, behind the hamburger, on the collapsed bar. The compact bar doesn't get one. Dictation still follows your active layout's language there. You just switch layouts some other way, with a spacebar swipe or the language picker, instead of tapping a chip. Neither bar prompts you to download an offline model.
+**The three views aren't full equivalents.** Continuous mode, spoken punctuation, and undo behave the same way whichever one you're in, because they live in the dictation session rather than in the view. Two things are panel-only: hold-to-talk, and the offline-model download chip. The language chip sits on the panel and, behind the hamburger, on the collapsed bar. The compact bar doesn't get one. Dictation still listens for the language you picked there, or follows your layout, and you change it in settings or with a layout switch instead of a chip. Neither bar prompts you to download an offline model.
 
 Related: [Offline voice (Whisper)](/tools/whisper/) covers the second dictation engine, including its model catalog, per-language routing, downloads, and the full offline privacy guarantee.

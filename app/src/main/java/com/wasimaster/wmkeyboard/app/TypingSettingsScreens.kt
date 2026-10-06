@@ -915,6 +915,16 @@ internal fun TypingSuggestionsSettings(
             ) { scope.launch { repository.setTypedEmailSuggestions(it) } }
         }
         item {
+            // Issue #431: digits typed on their own, completed from their first ones.
+            ToggleSetting(
+                R.string.typing_typed_numbers_title,
+                stringResource(R.string.typing_typed_numbers_subtitle),
+                settings.watch { it.suggestionSources.typedNumbers },
+                info = stringResource(R.string.typing_typed_numbers_info),
+                default = SettingsDefaults.suggestionSources.typedNumbers,
+            ) { scope.launch { repository.setTypedNumberSuggestions(it) } }
+        }
+        item {
             ToggleSetting(
                 R.string.typing_app_names_title,
                 stringResource(R.string.typing_app_names_subtitle),

@@ -26,6 +26,19 @@ class WhisperScriptTest {
     }
 
     @Test
+    fun `a combined choice with one convertible script corrects towards it`() {
+        // English and Bangla dictated together (#416): Hindi letters can only
+        // be Bangla misread.
+        assertEquals("আমি ভালো আছি", WhisperScript.rescueAmong("আমি ভালো আছি".toDevanagari(), listOf("en", "bn")))
+    }
+
+    @Test
+    fun `a combined choice with both scripts leaves the text alone`() {
+        val devanagari = "मैं ठीक हूँ"
+        assertEquals(devanagari, WhisperScript.rescueAmong(devanagari, listOf("bn", "hi")))
+    }
+
+    @Test
     fun `a language outside the two scripts is never touched`() {
         // English, and a script the conversion knows nothing about.
         assertEquals("hello there", WhisperScript.rescue("hello there", "en"))

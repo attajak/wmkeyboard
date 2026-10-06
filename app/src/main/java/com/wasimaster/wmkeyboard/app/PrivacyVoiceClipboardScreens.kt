@@ -271,6 +271,7 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: LiveSetting
                     },
                 ) { scope.launch { repository.setVoiceEngine(it) } }
             }
+            item { VoiceLanguageRow(repository, settings) }
         }
     }
     SettingsGroup(stringResource(R.string.voice_dictation_group)) {

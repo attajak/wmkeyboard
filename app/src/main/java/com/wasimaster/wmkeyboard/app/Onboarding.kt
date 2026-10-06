@@ -168,6 +168,8 @@ internal fun OnboardingScreen(
     }
 
     Scaffold { padding ->
+        // It pads itself by the keyboard, so the window must not pan as well.
+        ResizeForKeyboard()
         Column(
             modifier = Modifier
                 .padding(padding)

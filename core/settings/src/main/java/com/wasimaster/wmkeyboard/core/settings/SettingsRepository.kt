@@ -2358,6 +2358,12 @@ data class SuggestionSourceSettings(
      * that call themselves email fields, and stays on the device.
      */
     val typedEmails: Boolean = false,
+    /**
+     * Remember the numbers typed on their own and offer the whole of one once
+     * its first digits are typed again (issue #431), the way Samsung's
+     * keyboard completes a phone number. Stays on the device.
+     */
+    val typedNumbers: Boolean = false,
     /** Suggest the names of installed apps ("sign" → Signal). No permission needed. */
     val appNames: Boolean = false,
     /**
@@ -3885,6 +3891,9 @@ val AiToolRoundsRange = 1..5
 /** Addresses typed into email fields (see `TypedEmails` in :core:prediction). */
 const val TYPED_EMAILS_FILE = "learning/typed_emails.json"
 
+/** Numbers typed on their own (see `TypedNumbers` in :core:prediction). */
+const val TYPED_NUMBERS_FILE = "learning/typed_numbers.json"
+
 /** How the user draws each word (see `GlideShapeStore` in :core:prediction). */
 const val GLIDE_SHAPES_FILE = "learning/glide_shapes.json"
 
@@ -3903,6 +3912,7 @@ val LEARNED_DATA_FILES = listOf(
     TAP_MODEL_FILE,
     APP_LANGUAGE_MIX_FILE,
     TYPED_EMAILS_FILE,
+    TYPED_NUMBERS_FILE,
     PHONETIC_SCRIPT_CHOICES_FILE,
     GLIDE_OUTCOMES_FILE,
     GLIDE_SHAPES_FILE,
@@ -4956,7 +4966,28 @@ data class WhisperSettings(
      * words above are sent in front of it.
      */
     val serverPrompt: String = "",
+    /**
+     * The languages dictation listens for (#416), as language ids in the order
+     * they were picked. Empty, the default, follows the keyboard: dictation
+     * hears the language of the layout being typed on, as it always has. One
+     * id pins dictation to that language whatever the layout. Two or more let
+     * the recognizer tell them apart where it can; [dictationLanguages] says
+     * which one a session starts in.
+     */
+    val languages: List<String> = emptyList(),
 )
+
+/**
+ * The languages a dictation listens for (#416), the one it starts in first.
+ * [keyboardId] is the language of the layout in use: what an empty choice
+ * follows, and the one a combined choice starts in when it is one of them,
+ * so switching layouts still moves the recognizer's first guess.
+ */
+fun WhisperSettings.dictationLanguages(keyboardId: String): List<String> = when {
+    languages.isEmpty() -> listOf(keyboardId)
+    keyboardId in languages -> listOf(keyboardId) + (languages - keyboardId)
+    else -> languages
+}
 
 /**
  * What one step of a sideways backspace swipe takes off (issue #36).
@@ -8297,6 +8328,7 @@ class SettingsRepository(private val context: Context) {
         private val CONTACT_EMAIL_SUGGESTIONS_IN_EMAIL_FIELDS =
             booleanPreferencesKey("contact_email_suggestions_in_email_fields")
         private val TYPED_EMAIL_SUGGESTIONS = booleanPreferencesKey("typed_email_suggestions")
+        private val TYPED_NUMBER_SUGGESTIONS = booleanPreferencesKey("typed_number_suggestions")
         private val APP_NAME_SUGGESTIONS = booleanPreferencesKey("app_name_suggestions")
         private val SUGGESTION_BLACKLIST = stringSetPreferencesKey("suggestion_blacklist")
         private val SUGGESTION_BLACKLIST_SCOPE = stringPreferencesKey("suggestion_blacklist_scope")
@@ -8903,6 +8935,8 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_BIAS_PERSONAL_WORDS = booleanPreferencesKey("voice_bias_personal_words")
         private val VOICE_BIAS_WORDS = stringPreferencesKey("voice_bias_words")
         private val VOICE_SERVER_PROMPT = stringPreferencesKey("voice_server_prompt")
+        /** Comma-separated language ids, in the order picked; see [WhisperSettings.languages]. */
+        private val VOICE_LANGUAGES = stringPreferencesKey("voice_languages")
         private val CAMERA_PREFER_FRONT = booleanPreferencesKey("camera_prefer_front")
         private val CAMERA_TIMER_SECONDS = intPreferencesKey("camera_timer_seconds")
         private val CAMERA_CAPTURE_MAX_PX = intPreferencesKey("camera_capture_max_px")
@@ -9894,6 +9928,7 @@ class SettingsRepository(private val context: Context) {
             contactEmailsInEmailFields = p[CONTACT_EMAIL_SUGGESTIONS_IN_EMAIL_FIELDS]
                 ?: defaults.suggestionSources.contactEmailsInEmailFields,
             typedEmails = p[TYPED_EMAIL_SUGGESTIONS] ?: defaults.suggestionSources.typedEmails,
+            typedNumbers = p[TYPED_NUMBER_SUGGESTIONS] ?: defaults.suggestionSources.typedNumbers,
             appNames = p[APP_NAME_SUGGESTIONS] ?: defaults.suggestionSources.appNames,
             blacklist = p[SUGGESTION_BLACKLIST] ?: defaults.suggestionSources.blacklist,
             blacklistByLanguage = blacklistsByLanguage(p),
@@ -10763,7 +10798,11 @@ class SettingsRepository(private val context: Context) {
             biasPersonalWords = p[VOICE_BIAS_PERSONAL_WORDS] ?: defaults.whisper.biasPersonalWords,
             biasWords = p[VOICE_BIAS_WORDS] ?: defaults.whisper.biasWords,
             serverPrompt = p[VOICE_SERVER_PROMPT] ?: defaults.whisper.serverPrompt,
+            languages = p[VOICE_LANGUAGES]?.let(::decodeVoiceLanguages) ?: defaults.whisper.languages,
         )
+
+    private fun decodeVoiceLanguages(raw: String): List<String> =
+        raw.split(',').map { it.trim() }.filter { it.isNotEmpty() }.distinct()
 
     private fun readCamera(p: Preferences, defaults: KeyboardSettings) =
         CameraSettings(
@@ -11869,6 +11908,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceServerPrompt(value: String) =
         editPrefs { it[VOICE_SERVER_PROMPT] = value }
+
+    /** [ids] in the order picked; an empty list goes back to following the keyboard (#416). */
+    suspend fun setVoiceLanguages(ids: List<String>) =
+        editPrefs { it[VOICE_LANGUAGES] = ids.distinct().joinToString(",") }
 
     suspend fun setCameraPreferFront(value: Boolean) =
         editPrefs { it[CAMERA_PREFER_FRONT] = value }
@@ -15148,6 +15191,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setTypedEmailSuggestions(value: Boolean) =
         editPrefs { it[TYPED_EMAIL_SUGGESTIONS] = value }
+
+    suspend fun setTypedNumberSuggestions(value: Boolean) =
+        editPrefs { it[TYPED_NUMBER_SUGGESTIONS] = value }
 
     suspend fun setAppNameSuggestions(value: Boolean) =
         editPrefs { it[APP_NAME_SUGGESTIONS] = value }

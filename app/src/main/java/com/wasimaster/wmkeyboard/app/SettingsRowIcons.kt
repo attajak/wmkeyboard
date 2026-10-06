@@ -872,6 +872,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_contact_emails_title) { Icons.Outlined.AlternateEmail }
         put(R.string.typing_contact_emails_in_email_fields_title) { Icons.Outlined.AlternateEmail }
         put(R.string.typing_typed_emails_title) { Icons.Outlined.History }
+        put(R.string.typing_typed_numbers_title) { Icons.Outlined.History }
         put(R.string.typing_app_names_title) { Icons.Outlined.Apps }
         put(R.string.typing_inline_emoji_search_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.typing_inline_autofill_title) { Icons.Outlined.Password }
@@ -1279,6 +1280,7 @@ internal object SettingsRowIcons {
         put(R.string.voice_silence_stop_title) { Icons.Outlined.Timer }
         put(R.string.voice_punctuation_title) { Icons.Outlined.MoreHoriz }
         put(R.string.voice_engine_title) { Icons.Outlined.GraphicEq }
+        put(R.string.voice_languages_title) { Icons.Outlined.Language }
         put(R.string.voice_translate_title) { Icons.Outlined.Translate }
         put(R.string.voice_server_language_title) { Icons.Outlined.Language }
         put(R.string.voice_bias_personal_title) { Icons.Outlined.Spellcheck }
