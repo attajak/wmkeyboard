@@ -11555,6 +11555,8 @@ private fun KeyboardBody(
                         state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
                         onGestureWords = onGestureWords,
                         onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                        onHandwritingUndo = onHandwritingUndo,
+                        onHandwritingDownload = onHandwritingDownload,
                         onKeyTouch = onKeyTouch,
                         onTouchKeys = onTouchKeys,
                     )
@@ -11586,6 +11588,8 @@ private fun KeyboardBody(
                     state, onKey, onText, onGesture, onGesturePreview, onCursorMove, onLayoutSelect,
                     onGestureWords = onGestureWords,
                     onKeyboardHandwritingStroke = onKeyboardHandwritingStroke,
+                    onHandwritingUndo = onHandwritingUndo,
+                    onHandwritingDownload = onHandwritingDownload,
                     onKeyTouch = onKeyTouch,
                     onTouchKeys = onTouchKeys,
                 )
@@ -14371,6 +14375,10 @@ private fun KeyRows(
     onGestureWords: (List<List<GesturePoint>>, List<KeyCenter>, Float, GlideVerdict) -> Unit =
         { _, _, _, _ -> },
     onKeyboardHandwritingStroke: (HwStroke, IntSize) -> Unit = { _, _ -> },
+    /** A handwriting layout's canvas (#557): undo the last stroke. */
+    onHandwritingUndo: () -> Unit = {},
+    /** A handwriting layout's canvas: fetch, or cancel fetching, the model. */
+    onHandwritingDownload: () -> Unit = {},
     /** Down position of the tap that committed a letter, in key-width units
      * (keyboard space). Fired just before the matching onKey. */
     onKeyTouch: (Float, Float) -> Unit = { _, _ -> },
@@ -14405,7 +14413,10 @@ private fun KeyRows(
     // Letter-area swipes are drawing handwriting rather than gliding a word
     // (full builds only). Capture arms whenever the mode is selected; the
     // service decides whether the drawn ink recognizes or prompts a download.
+    // A handwriting layout (#557) has its own canvas above the keys and no
+    // letters to swipe across, so neither the swipe ink nor glide applies.
     val handwriteSwipe = BuildConfig.ENABLE_ML_KIT_HANDWRITING &&
+        !state.layouts.handwriting &&
         state.settings.gestureTyping &&
         state.settings.letterSwipeAction == LetterSwipeAction.HANDWRITE &&
         state.layoutMode == LayoutMode.LETTERS &&
@@ -14421,7 +14432,7 @@ private fun KeyRows(
     val glideInCapture = state.captureTarget()?.takesWords == true &&
         state.captureTarget() != CaptureTarget.TYPING_TEST &&
         state.settings.gestureTyping
-    val gestureEnabled = !handwriteSwipe &&
+    val gestureEnabled = !handwriteSwipe && !state.layouts.handwriting &&
         (
             glideInTest || glideInCapture ||
                 (state.settings.gestureTyping && state.panel == PanelMode.NONE)
@@ -16067,8 +16078,20 @@ private fun KeyRows(
                 )
             }
             // Whatever the stretch above did not take. Without it the panels,
-            // sized to rowSpan, would be taller than the keys.
-            if (padLeft > 0.dp) Spacer(modifier = Modifier.height(padLeft))
+            // sized to rowSpan, would be taller than the keys. On a handwriting
+            // layout (#557) that band is the writing canvas: the letters layer
+            // is one bottom row, so the band is every other reserved row.
+            if (state.layouts.handwriting && mode == LayoutMode.LETTERS && state.panel == PanelMode.NONE) {
+                HandwritingLayoutCanvas(
+                    state = state,
+                    modifier = Modifier.fillMaxWidth().height(padLeft),
+                    onStroke = onKeyboardHandwritingStroke,
+                    onUndoStroke = onHandwritingUndo,
+                    onDownloadModel = onHandwritingDownload,
+                )
+            } else if (padLeft > 0.dp) {
+                Spacer(modifier = Modifier.height(padLeft))
+            }
             for (block in bodyBlocks) {
                 if (lane > 0.dp) {
                     // A band stands for several rows, so it reserves several

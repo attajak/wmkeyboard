@@ -192,10 +192,16 @@ object TextWordScan {
     /** What may sit between two letters of one word, as [WordContext.isLearnableWord] allows. */
     private const val WORD_JOINERS = WordContext.WORD_JOINERS
 
-    /** Whether [c] belongs to a script written without spaces between words. */
-    private fun isSpaceless(c: Char): Boolean {
-        if (c.code < 0x0E00) return false
-        return when (Character.UnicodeScript.of(c.code)) {
+    private fun isSpaceless(c: Char): Boolean = isSpaceless(c.code)
+
+    /**
+     * Whether [codePoint] belongs to a script written without spaces between
+     * words. A code point rather than a char, so the CJK extension planes
+     * answer too; handwriting asks it before spacing a recognised word.
+     */
+    fun isSpaceless(codePoint: Int): Boolean {
+        if (codePoint < 0x0E00) return false
+        return when (Character.UnicodeScript.of(codePoint)) {
             Character.UnicodeScript.HAN,
             Character.UnicodeScript.HIRAGANA,
             Character.UnicodeScript.KATAKANA,

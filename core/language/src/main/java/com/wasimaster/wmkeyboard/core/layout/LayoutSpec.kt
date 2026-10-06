@@ -303,6 +303,19 @@ data class LayoutSpec(
      */
     val secondary: Boolean = false,
     /**
+     * A writing canvas in place of the letter keys, the way Gboard offers
+     * handwriting as one of a language's layouts (issue #557). The canvas takes
+     * every reserved row above the [LayoutLayer.LETTERS] grid, so that grid is
+     * only the bottom row a writer still needs: ?123, the globe, space, delete,
+     * enter. The ink is recognised in this layout's language, through the same
+     * pipeline as the Handwriting tool, and the symbols layers are the ordinary
+     * ones.
+     *
+     * Additive and defaulted, so no format-version bump, for the reason
+     * [tabletExpand] gives.
+     */
+    val handwriting: Boolean = false,
+    /**
      * A theme of this layout's own (a `ThemeSpec.id`), used while any of its
      * layers is on screen, in place of the theme the settings select and of an
      * automatic light/dark pair (issue #61). A layer's [LayerSpec.themeId]

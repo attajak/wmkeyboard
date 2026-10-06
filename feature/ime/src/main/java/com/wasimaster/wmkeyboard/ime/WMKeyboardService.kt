@@ -23095,15 +23095,35 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
-     * Letter-area swipes are drawing handwriting (rather than gliding a word):
-     * full build, gesture typing on with the swipe action set to HANDWRITE, on
-     * the letter layer with no panel open. Model readiness is checked
-     * separately so this can also gate the "download the model" hint.
+     * Handwriting is being taken without the panel: either letter-area swipes
+     * draw ink ([swipeHandwriteActive]) or the layout itself is a writing
+     * canvas ([handwritingLayoutActive], issue #557). Model readiness is
+     * checked separately so this can also gate the "download the model" hint.
      */
     private fun keyboardHandwriteActive(state: KeyboardUiState): Boolean =
+        swipeHandwriteActive(state) || handwritingLayoutActive(state)
+
+    /**
+     * Letter-area swipes are drawing handwriting (rather than gliding a word):
+     * full build, gesture typing on with the swipe action set to HANDWRITE, on
+     * the letter layer with no panel open.
+     */
+    private fun swipeHandwriteActive(state: KeyboardUiState): Boolean =
         BuildConfig.ENABLE_ML_KIT_HANDWRITING &&
+            !state.layouts.handwriting &&
             state.settings.gestureTyping &&
             state.settings.letterSwipeAction == LetterSwipeAction.HANDWRITE &&
+            state.layoutMode == LayoutMode.LETTERS &&
+            state.panel == PanelMode.NONE
+
+    /**
+     * The active layout is a handwriting one and its canvas is on screen: full
+     * build, letters layer, no panel over it. No gesture setting is involved;
+     * picking the layout is the opt-in.
+     */
+    private fun handwritingLayoutActive(state: KeyboardUiState): Boolean =
+        BuildConfig.ENABLE_ML_KIT_HANDWRITING &&
+            state.layouts.handwriting &&
             state.layoutMode == LayoutMode.LETTERS &&
             state.panel == PanelMode.NONE
 
@@ -23307,15 +23327,16 @@ open class WMKeyboardService : InputMethodService() {
      * Bengali glyphs are built from several strokes — conjuncts, the matra,
      * vowel signs — and the writer lifts the finger between them; the global
      * default is short enough that a natural mid-glyph pause commits a
-     * half-written character. Give Bengali a higher floor so a comfortable
-     * inter-stroke pause never triggers an early commit, while still honouring
-     * a longer pause the user set for themselves.
+     * half-written character. A kanji, a hanzi or a hangul block is the same
+     * case, often ten strokes or more (issue #557). Give these a higher floor
+     * so a comfortable inter-stroke pause never triggers an early commit,
+     * while still honouring a longer pause the user set for themselves.
      */
     private fun handwritingRecognitionDelayMs(): Long {
         val state = _uiState.value
         var delay = state.settings.handwritingCommitDelayMs.toLong()
-        if (state.handwriting.languageTag == "bn") {
-            delay = maxOf(delay, BENGALI_HW_MIN_COMMIT_DELAY_MS)
+        if (state.handwriting.languageTag.substringBefore('-') in MULTI_STROKE_HW_LANGUAGES) {
+            delay = maxOf(delay, MULTI_STROKE_HW_MIN_COMMIT_DELAY_MS)
         }
         // Writing on the keys: for the dot leeway after a stroke, a tap over
         // the letters is grabbed as the dot on an i/j/t. Committing while that
@@ -23323,7 +23344,7 @@ open class WMKeyboardService : InputMethodService() {
         // it would neither type the key (the leeway already claimed the touch)
         // nor land on the glyph. So the ink waits at least as long as the
         // leeway the user set for it.
-        if (keyboardHandwriteActive(state)) {
+        if (swipeHandwriteActive(state)) {
             delay = maxOf(delay, state.settings.gesture.handwriteDotCooldownMs.toLong())
         }
         return delay
@@ -23382,10 +23403,14 @@ open class WMKeyboardService : InputMethodService() {
             word = word.replaceFirstChar { it.uppercase() }
         }
         // Space between consecutively written words, but never before
-        // punctuation ("," "." "?" …).
+        // punctuation ("," "." "?" …), and never on either side of a script
+        // written without spaces: two kanji written one after the other are
+        // one run of Japanese, not two words (issue #557).
         val needsSpace = settings.handwritingAutoSpace &&
             word.firstOrNull()?.isLetterOrDigit() == true &&
-            preContext.isNotEmpty() && !WordContext.isSpaceLike(preContext.last())
+            preContext.isNotEmpty() && !WordContext.isSpaceLike(preContext.last()) &&
+            !TextWordScan.isSpaceless(word.codePointAt(0)) &&
+            !TextWordScan.isSpaceless(preContext.codePointBefore(preContext.length))
         val connection = currentInputConnection ?: run {
             // Input connection lost between recognition and commit. Clear the
             // spinner and drop the ink instead of leaving the panel stuck in
@@ -35443,7 +35468,10 @@ open class WMKeyboardService : InputMethodService() {
          * multi-stroke conjuncts need more finger-up time between strokes than
          * the Latin default, so recognition doesn't fire mid-glyph.
          */
-        private const val BENGALI_HW_MIN_COMMIT_DELAY_MS = 1200L
+        private const val MULTI_STROKE_HW_MIN_COMMIT_DELAY_MS = 1200L
+
+        /** Ink language subtags whose glyphs take many strokes; see [handwritingRecognitionDelayMs]. */
+        private val MULTI_STROKE_HW_LANGUAGES = setOf("bn", "ja", "zh", "ko")
         /** Only the shipped default now; the live value is a setting. */
         @Suppress("unused")
         private const val WEATHER_CACHE_MS = 15L * 60 * 1000

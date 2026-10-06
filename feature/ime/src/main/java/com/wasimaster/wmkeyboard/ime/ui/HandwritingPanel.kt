@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import com.wasimaster.wmkeyboard.common.R as CommonR
+import com.wasimaster.wmkeyboard.config.BuildConfig
 import com.wasimaster.wmkeyboard.core.handwriting.HandwritingModels
 import com.wasimaster.wmkeyboard.core.handwriting.HwPoint
 import com.wasimaster.wmkeyboard.core.handwriting.HwStroke
@@ -97,7 +98,6 @@ internal fun HandwritingPanel(
     val height = keyRowsHeight(state)
     val hw = state.handwriting
     val feedback = LocalKeyPressFeedback.current
-    val context = LocalContext.current
 
     Row(
         modifier = Modifier
@@ -111,64 +111,7 @@ internal fun HandwritingPanel(
                 .fillMaxHeight()
                 .padding(2.dp),
         ) {
-            when (hw.status) {
-                HandwritingStatus.READY -> WritingCanvas(state, onStroke)
-                HandwritingStatus.CHECKING ->
-                    StatusMessage(stringResource(R.string.ime_handwriting_checking_progress))
-                HandwritingStatus.DOWNLOADING -> DownloadingMessage(hw, onDownloadModel)
-                HandwritingStatus.NEED_MODEL, HandwritingStatus.ERROR -> Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    val language = HandwritingModels.displayName(hw.languageTag)
-                    Text(
-                        hw.errorMessage ?: if (hw.modelBytes > 0L) {
-                            stringResource(
-                                R.string.ime_handwriting_need_model_sized_body,
-                                language,
-                                Formatter.formatShortFileSize(context, hw.modelBytes),
-                            )
-                        } else {
-                            stringResource(R.string.ime_handwriting_need_model_body, language)
-                        },
-                        color = kb.secondaryText,
-                        fontSize = 13.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 24.dp),
-                    )
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                            .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
-                            .background(kb.toolCircleActive)
-                            .clickable {
-                                feedback()
-                                onDownloadModel()
-                            }
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            Icons.Outlined.FileDownload,
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                            tint = kb.toolCircleActiveIcon,
-                        )
-                        Text(
-                            if (hw.status == HandwritingStatus.ERROR) {
-                                stringResource(CommonR.string.common_retry)
-                            } else {
-                                stringResource(CommonR.string.common_download)
-                            },
-                            color = kb.toolCircleActiveIcon,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.padding(start = 6.dp),
-                        )
-                    }
-                }
-            }
+            HandwritingStatusBody(state, onStroke, onDownloadModel)
 
             // Language chip: shows the active model, tap cycles through the
             // handwriting languages of the enabled modes.
@@ -206,23 +149,7 @@ internal fun HandwritingPanel(
             }
 
             // Undo the last stroke while ink is still on the canvas.
-            if (hw.strokes.isNotEmpty() && hw.status == HandwritingStatus.READY) {
-                Icon(
-                    Icons.AutoMirrored.Outlined.Undo,
-                    contentDescription = stringResource(R.string.ime_handwriting_undo_stroke_desc),
-                    tint = kb.toolbarIcon,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(4.dp)
-                        .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
-                        .clickable {
-                            feedback()
-                            onUndoStroke()
-                        }
-                        .padding(8.dp)
-                        .size(20.dp),
-                )
-            }
+            UndoStrokeButton(hw, onUndoStroke, Modifier.align(Alignment.BottomStart))
         }
 
         // Action rail, sized like a key column.
@@ -264,6 +191,128 @@ internal fun HandwritingPanel(
             }
         }
     }
+}
+
+/**
+ * The writing area of a handwriting layout (issue #557): the panel's canvas
+ * without its action rail, because the layout's own bottom row carries
+ * delete, space and enter. Ink goes through the keyboard-handwriting path in
+ * the service, which recognises it in the layout's language. No language
+ * chip either: the globe key on that row is how the language changes.
+ */
+@Composable
+internal fun HandwritingLayoutCanvas(
+    state: KeyboardUiState,
+    modifier: Modifier,
+    onStroke: (HwStroke, IntSize) -> Unit,
+    onUndoStroke: () -> Unit,
+    onDownloadModel: () -> Unit,
+) {
+    Box(modifier = modifier.padding(horizontal = 6.dp, vertical = 2.dp)) {
+        if (BuildConfig.ENABLE_ML_KIT_HANDWRITING) {
+            HandwritingStatusBody(state, onStroke, onDownloadModel)
+            UndoStrokeButton(state.handwriting, onUndoStroke, Modifier.align(Alignment.BottomStart))
+        } else {
+            StatusMessage(stringResource(R.string.ime_handwriting_layout_full_only_info))
+        }
+    }
+}
+
+/**
+ * What fills the writing area for the model's current state: the canvas once
+ * it is ready, otherwise the check, the download or the offer to download.
+ * Shared by the panel and the handwriting layouts.
+ */
+@Composable
+private fun HandwritingStatusBody(
+    state: KeyboardUiState,
+    onStroke: (HwStroke, IntSize) -> Unit,
+    onDownloadModel: () -> Unit,
+) {
+    val kb = LocalKbTheme.current
+    val hw = state.handwriting
+    val feedback = LocalKeyPressFeedback.current
+    val context = LocalContext.current
+    when (hw.status) {
+        HandwritingStatus.READY -> WritingCanvas(state, onStroke)
+        HandwritingStatus.CHECKING ->
+            StatusMessage(stringResource(R.string.ime_handwriting_checking_progress))
+        HandwritingStatus.DOWNLOADING -> DownloadingMessage(hw, onDownloadModel)
+        HandwritingStatus.NEED_MODEL, HandwritingStatus.ERROR -> Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            val language = HandwritingModels.displayName(hw.languageTag)
+            Text(
+                hw.errorMessage ?: if (hw.modelBytes > 0L) {
+                    stringResource(
+                        R.string.ime_handwriting_need_model_sized_body,
+                        language,
+                        Formatter.formatShortFileSize(context, hw.modelBytes),
+                    )
+                } else {
+                    stringResource(R.string.ime_handwriting_need_model_body, language)
+                },
+                color = kb.secondaryText,
+                fontSize = 13.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 24.dp),
+            )
+            Row(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
+                    .background(kb.toolCircleActive)
+                    .clickable {
+                        feedback()
+                        onDownloadModel()
+                    }
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Outlined.FileDownload,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp),
+                    tint = kb.toolCircleActiveIcon,
+                )
+                Text(
+                    if (hw.status == HandwritingStatus.ERROR) {
+                        stringResource(CommonR.string.common_retry)
+                    } else {
+                        stringResource(CommonR.string.common_download)
+                    },
+                    color = kb.toolCircleActiveIcon,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(start = 6.dp),
+                )
+            }
+        }
+    }
+}
+
+/** Undo the last stroke, while ink is still on the canvas. */
+@Composable
+private fun UndoStrokeButton(hw: HandwritingUi, onUndoStroke: () -> Unit, modifier: Modifier) {
+    if (hw.strokes.isEmpty() || hw.status != HandwritingStatus.READY) return
+    val kb = LocalKbTheme.current
+    val feedback = LocalKeyPressFeedback.current
+    Icon(
+        Icons.AutoMirrored.Outlined.Undo,
+        contentDescription = stringResource(R.string.ime_handwriting_undo_stroke_desc),
+        tint = kb.toolbarIcon,
+        modifier = modifier
+            .padding(4.dp)
+            .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
+            .clickable {
+                feedback()
+                onUndoStroke()
+            }
+            .padding(8.dp)
+            .size(20.dp),
+    )
 }
 
 /**

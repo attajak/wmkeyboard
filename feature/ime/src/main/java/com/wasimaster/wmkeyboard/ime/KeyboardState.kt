@@ -363,6 +363,11 @@ data class LayoutSet(
      * otherwise lend it are not the keyboard's.
      */
     val keymanLayerKeys: Set<String>? = null,
+    /**
+     * Whether the letters layer is a handwriting canvas over [letters]' one
+     * row (`LayoutSpec.handwriting`, issue #557).
+     */
+    val handwriting: Boolean = false,
 ) {
     /**
      * Rows the key grid reserves.

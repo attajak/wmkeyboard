@@ -174,6 +174,7 @@ object LanguageRegistry {
                 AssetLayouts.KO_CHEONJIIN_ID,
                 AssetLayouts.KO_PHONETIC_ID,
                 AssetLayouts.KO_DANMOEUM_ID,
+                AssetLayouts.KO_HANDWRITING_ID,
             ),
         ),
         LanguageDef(
@@ -1236,6 +1237,7 @@ object LanguageRegistry {
                 AssetLayouts.JA_ROMAJI_ID,
                 AssetLayouts.JA_FLICK_ID,
                 AssetLayouts.JA_KANA_JIS_ID,
+                AssetLayouts.JA_HANDWRITING_ID,
             ),
         ),
         LanguageDef(
@@ -1251,6 +1253,7 @@ object LanguageRegistry {
                 AssetLayouts.ZH_CANGJIE_ID,
                 AssetLayouts.ZH_CANGJIE_QUICK_ID,
                 AssetLayouts.ZH_STROKE_ID,
+                AssetLayouts.ZH_HANDWRITING_ID,
             ),
         ),
         LanguageDef(

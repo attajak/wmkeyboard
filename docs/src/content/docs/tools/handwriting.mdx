@@ -35,6 +35,10 @@ Two different controls undo ink, and they don't do the same thing:
 - **Undo last stroke**, an icon that appears in the bottom-left corner once you've drawn something, removes only the most recent stroke and re-runs recognition on whatever ink remains.
 - The rail's <KeyCap>Delete</KeyCap> key is different: while ink is still waiting to be recognized, pressing it throws away **all** pending strokes at once rather than deleting already-committed text. It's the natural "no, not that" reaction mid-word. Once the strokes have already turned into text, <KeyCap>Delete</KeyCap> goes back to deleting committed characters normally, and it auto-repeats on a hold like it does on the main keyboard.
 
+## Handwriting as a layout
+
+Chinese, Japanese and Korean have a **Handwriting** layout of their own, the way Gboard offers one. Turn it on with the language's other layouts and pick it with the globe key: the writing area takes the place of the letter keys, and a normal bottom row (<KeyCap>?123</KeyCap>, globe, punctuation, <KeyCap>Space</KeyCap>, <KeyCap>Delete</KeyCap>, <KeyCap>Enter</KeyCap>) stays under it. Ink is read in that layout's language, with everything below about models, delete and undo working the same. There's no language chip on it; the globe key changes language. On the lite build the area only says that handwriting needs the full edition.
+
 ## Handwriting without opening the panel
 
 <SettingsPath path="Typing / Gestures / Handwrite with swipes" />
@@ -77,11 +81,11 @@ If an enabled language has no ink model, it's called out separately underneath t
 <SettingsPath path="Tools / Handwriting / Input" />
 
 - **Stylus only**: off by default. With it on, only a stylus (S Pen or similar) draws on the canvas, and finger touches are ignored completely. Even with it off, a finger touch is briefly ignored right after a stylus stroke, so a palm resting on the screen while you write doesn't add stray ink.
-- **Automatic space**: on by default. Inserts a space between words you write one after another, but never before punctuation.
+- **Automatic space**: on by default. Inserts a space between words you write one after another, but never before punctuation, and never next to Chinese, Japanese, Thai or another script written without spaces.
 - **Recognition pause**: default **700 ms**, adjustable from 300–2000 ms. How long the canvas waits after your last stroke before it sends the word off for recognition. Shorter feels snappier. It can also cut a multi-stroke letter or a Bengali conjunct in half if you pause mid-letter, where a longer wait gives you room to breathe between strokes.
 
-:::note[Bangla gets a higher floor]
-Whatever the Recognition pause slider is set to, Bangla handwriting never commits sooner than 1200 ms after the last stroke. Bengali glyphs are frequently built from several separate strokes (conjuncts, the matra, vowel signs), and a natural pause between them would otherwise trigger an early, wrong commit.
+:::note[Bangla, Chinese, Japanese and Korean get a higher floor]
+Whatever the Recognition pause slider is set to, handwriting in these languages never commits sooner than 1200 ms after the last stroke. Bengali glyphs are frequently built from several separate strokes (conjuncts, the matra, vowel signs), and a kanji, hanzi or Hangul block can take ten strokes or more. A natural pause between them would otherwise trigger an early, wrong commit.
 :::
 
 ## Details & edge cases

@@ -104,6 +104,7 @@ fun compileLayoutSet(
         keymanLayerKeys = safe.layers.keys.takeIf { keys ->
             safe.keyman != null || keys.any { it.startsWith(KeymanLayers.PREFIX) }
         },
+        handwriting = safe.handwriting,
     )
 }
 
