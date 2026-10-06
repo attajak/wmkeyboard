@@ -1181,11 +1181,12 @@ fun KeyboardThemeProvider(
     // different from the rest — its faces simply also carry Latin glyphs, which
     // is what keeps Avro's romanized keys and mixed strips in one face.
     val scriptId = settings.script.id
-    // A theme may carry its own key font, by id. It sits between the
-    // per-script face and the global pick: script correctness still beats the
-    // theme's display face, and an id the device has no font for (the font is
-    // its own addon, which the user may not have installed) resolves to null
-    // in KeyboardFonts.family and falls through to the global setting.
+    // A theme may carry its own key font, by id. It sits below both the
+    // per-script face and the user's own English pick: script correctness still
+    // beats the theme's display face, a font the user chose beats a font a skin
+    // shipped with, and an id the device has no font for (the font is its own
+    // addon, which the user may not have installed) resolves to null in
+    // KeyboardFonts.family and falls through to the system face.
     // A theme may also name a face per script, which does beat the automatic
     // Noto one — a pixel theme with a pixel Bengali font asked for those glyphs,
     // it is not a Latin-only display face about to blank the board. The user's
@@ -1215,11 +1216,16 @@ fun KeyboardThemeProvider(
             settings.scriptFontIds[scriptId.name] ?: KeyboardFonts.DEFAULT_ID,
             layoutFontId,
             themeScriptFontId,
-        ) // The Latin/Cyrillic/Greek side of the same order: the layout's own
-            // face, then the theme's, then the user's global pick.
+        ) // The Latin/Cyrillic/Greek side of the same order: the user's own
+            // pick, then the layout's face, then the theme's. Only a deliberate
+            // pick counts — "default" is the absence of one and lets the layout
+            // and theme speak. The user's face used to sit last here, so any
+            // theme or layout carrying a font silently overruled the English
+            // font setting while the per-script ones above kept winning (#561).
+            ?: settings.keyFontId.takeIf { it != KeyboardFonts.DEFAULT_ID }
+                ?.let { KeyboardFonts.family(context, it) }
             ?: layoutFontId?.let { KeyboardFonts.family(context, it) }
             ?: themeFontId?.let { KeyboardFonts.family(context, it) }
-            ?: KeyboardFonts.family(context, settings.keyFontId)
     }
     val emojiFontFamily = remember(settings.emojiFont, settings.emojiFontInstalled.installedId) {
         KeyboardFonts.emojiFamily(

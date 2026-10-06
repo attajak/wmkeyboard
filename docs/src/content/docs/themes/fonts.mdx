@@ -28,6 +28,8 @@ On a device with no Play Services (a de-Googled ROM, most commonly), the Google 
 
 Selecting a font applies it immediately. The English face governs English mode, the Bengali face governs Avro, প্রভাত, and জাতীয় modes. Each script face governs typing in that script, across key labels, the suggestion strip, and the keyboard's own panels.
 
+A font you pick here beats one that comes with a theme or a layout. A theme's key font and a layout's label font only fill in while that script's row is left on its default, so leave English on **System default** if you want a theme or layout to bring its own type.
+
 ## Importing your own font file
 
 Every script section has an **Import a font file (.ttf or .otf)** button, and its own installed-fonts list once there's a font that fits it. The button adds the file to one shared library rather than overwriting a single slot, so importing a second font doesn't evict the first. Each list is filtered to the fonts that declare that script, plus any that declare no coverage at all. Import a Devanagari or Thai font from any section, or install one from an addon repository, and it turns up in that script's own picker. English and Bengali additionally keep a legacy single-file slot from older builds.
