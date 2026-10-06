@@ -308,9 +308,13 @@ private fun Plan.flanked(row: List<Key>, left: Key, right: Key): List<Key> {
 }
 
 /**
- * The bottom row: a dedicated emoji key beside `?123`, and on a large tablet the
- * arrow pair and the mirrored `?123` that a board too wide to thumb needs. The
+ * The bottom row: a dedicated emoji key beside `?123`, the arrow pair, and on a
+ * large tablet the mirrored `?123` that a board too wide to thumb needs. The
  * spacebar absorbs whatever slack is left, so the row still totals the grid.
+ *
+ * A small tablet gets the arrows too (issue #553). The bucket is by width in dp,
+ * so a 10-inch tablet at a high density lands in it, and its bottom row has the
+ * room: the period stays beside the spacebar and the arrows go after it.
  */
 private fun Plan.bottomRow(row: List<Key>, large: Boolean, symbolsKey: Key): List<Key> {
     val out = row.toMutableList()
@@ -321,11 +325,9 @@ private fun Plan.bottomRow(row: List<Key>, large: Boolean, symbolsKey: Key): Lis
         val at = out.indexOfFirst { it.action == KeyAction.Symbols }
         if (at >= 0) out.add(at + 1, emojiKey())
     }
-    if (large) {
-        out += leftArrowKey()
-        out += rightArrowKey()
-        out += symbolsKey
-    }
+    out += leftArrowKey()
+    out += rightArrowKey()
+    if (large) out += symbolsKey
     val slack = target - out.gridWidth()
     if (slack > 0f) {
         val at = out.indexOfFirst { it.action == KeyAction.Space }

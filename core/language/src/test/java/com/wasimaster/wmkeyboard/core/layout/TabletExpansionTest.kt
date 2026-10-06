@@ -65,7 +65,7 @@ class TabletExpansionTest {
     }
 
     @Test
-    fun `small tablet keeps the period on the bottom row and drops the arrows`() {
+    fun `small tablet keeps the period on the bottom row and the arrows after it`() {
         val rows = qwerty.expandForTablet(DeviceForm.SMALL_TABLET, numberRowShown = true).rows
 
         // Rows A and B are identical to the large form.
@@ -81,7 +81,7 @@ class TabletExpansionTest {
             "⇧:1.5 z:1.0 x:1.0 c:1.0 v:1.0 b:1.0 n:1.0 m:1.0 ,:1.0 ⇧:2.5",
             rows[2].spell(),
         )
-        assertEquals("?123:1.5 ☺:1.0 🌐:1.0 ␣:7.5 .:1.0", rows[3].spell())
+        assertEquals("?123:1.5 ☺:1.0 🌐:1.0 ␣:5.5 .:1.0 ←:1.0 →:1.0", rows[3].spell())
         rows.forEach { assertEquals(12f, it.width(), 0.001f) }
     }
 
