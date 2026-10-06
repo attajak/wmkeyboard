@@ -103,7 +103,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Article
@@ -235,7 +234,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
@@ -371,6 +369,7 @@ import androidx.compose.ui.graphics.luminance
 import com.wasimaster.wmkeyboard.core.theme.KEY_OVERRIDE_LABEL_SCALE_RANGE
 import com.wasimaster.wmkeyboard.core.theme.KeyOverride
 import com.wasimaster.wmkeyboard.core.theme.KeyShapeKind
+import com.wasimaster.wmkeyboard.core.theme.keyShapeFor
 import com.wasimaster.wmkeyboard.core.theme.brush
 import com.wasimaster.wmkeyboard.core.theme.keyShapeKindOrNull
 import com.wasimaster.wmkeyboard.core.ui.ToolPaint
@@ -20843,8 +20842,7 @@ private fun LanguagePickerPopup(
     // Rows are a fixed 40 dp, so whether the list scrolls is a count, known
     // before the first measure. A short list keeps no rail gutter, which left
     // the highlight stopping 14 dp short of the menu's right edge (#363).
-    val overflows = enabledLayoutIds.size * PickerRowHeightDp > PickerListMaxDp - 2 * PickerListPadDp
-    val rowShape = pickerRowShape(kb)
+    val overflows = enabledLayoutIds.size * PickerRowHeightDp > PickerListMaxDp
     LaunchedEffect(highlightIndex) {
         if (highlightIndex != null) {
             val rowPx = with(density) { PickerRowHeightDp.dp.toPx() }
@@ -20864,12 +20862,19 @@ private fun LanguagePickerPopup(
             border = kb.popupSurfaceBorder(),
             shadowElevation = elevationFor(kb.menuShapeKind, 8.dp),
         ) {
-            Column(modifier = Modifier.widthIn(min = 160.dp, max = 240.dp)) {
+            // The rows sit inside the menu's own outline shrunk by the inset and
+            // are clipped to it, so a highlight takes whatever shape the menu has
+            // where it meets it: the first row gets the menu's top corners, the
+            // last its bottom ones, the rows between run straight (#363).
+            Column(
+                modifier = Modifier
+                    .widthIn(min = 160.dp, max = 240.dp)
+                    .padding(PickerRowInsetDp.dp)
+                    .clip(pickerContentShape(kb)),
+            ) {
                 ScrollRail(
                     state = layoutRail,
-                    modifier = Modifier
-                        .heightIn(max = PickerListMaxDp.dp)
-                        .padding(vertical = PickerListPadDp.dp),
+                    modifier = Modifier.heightIn(max = PickerListMaxDp.dp),
                     fadeColor = kb.popup,
                     colors = kbRailColors(kb),
                     reserveGutter = overflows,
@@ -20889,11 +20894,6 @@ private fun LanguagePickerPopup(
                                 // Fixed row height — the hold-drag gesture steps its
                                 // highlight by this exact amount of finger travel.
                                 .height(PickerRowHeightDp.dp)
-                                // Inset from the menu's sides and cut to a shape
-                                // concentric with its corners, so the highlight
-                                // never meets the outline and gets clipped by it.
-                                .padding(horizontal = PickerRowInsetDp.dp)
-                                .clip(rowShape)
                                 .background(
                                     if (dragged || (selected && highlightIndex == null)) {
                                         kb.popupSelected
@@ -20916,10 +20916,7 @@ private fun LanguagePickerPopup(
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = PickerListPadDp.dp)
                         .height(PickerRowHeightDp.dp)
-                        .padding(horizontal = PickerRowInsetDp.dp)
-                        .clip(rowShape)
                         .clickable { onOtherKeyboards() }
                         .padding(horizontal = (16 - PickerRowInsetDp).dp)
                         .wrapContentHeight(Alignment.CenterVertically),
@@ -21822,24 +21819,17 @@ private const val PickerRowHeightDp = 40
 /** Tallest the list picker's scroller gets before it scrolls. */
 private const val PickerListMaxDp = 240
 
-/** Space above and below the list picker's rows. */
-private const val PickerListPadDp = 4
-
-/** How far a list picker row's highlight sits in from the menu's sides. */
+/** How far the list picker's rows, and so their highlight, sit in from the menu's edges. */
 private const val PickerRowInsetDp = 6
 
 /**
- * The list picker's row highlight: the menu's own outline shrunk by the inset,
- * so the two corners run concentric. Shapes that do not scale down to a 40 dp
- * row (squircle, pill, the decorative ones) fall back to a rounded rectangle.
+ * The outline the list picker's rows are clipped to: the menu's own shape,
+ * inset by [PickerRowInsetDp]. A shape drawn with a corner radius gives up the
+ * inset from it so the two outlines run concentric; the rest (squircle, pill,
+ * the decorative ones) scale with their box and follow the menu on their own.
  */
-private fun pickerRowShape(kb: KbTheme): Shape = when (kb.menuShapeKind) {
-    KeyShapeKind.SHARP -> RectangleShape
-    KeyShapeKind.CUT -> CutCornerShape((kb.popupRadiusDp - PickerRowInsetDp).coerceIn(2, 8).dp)
-    else -> RoundedCornerShape(
-        (kb.popupRadiusDp - PickerRowInsetDp).coerceIn(4, PickerRowHeightDp / 2).dp,
-    )
-}
+private fun pickerContentShape(kb: KbTheme): Shape =
+    keyShapeFor(kb.menuShapeKind, (kb.popupRadiusDp - PickerRowInsetDp).coerceAtLeast(0))
 
 /**
  * Widest the language carousel's scrolling strip gets before its chips scroll
