@@ -45,9 +45,13 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Settings
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SpaceBar
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Star
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Translate
+import android.view.KeyEvent
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.wasimaster.wmkeyboard.core.layout.KeyAction
 import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardCapslock
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Layers
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Bolt
 
 /**
  * Named-icon registry that lets any [com.wasimaster.wmkeyboard.core.layout.Key]
@@ -217,6 +221,29 @@ object KeyIcons {
             val vector = build()
             if (vector in drawn) null else name to vector
         }
+    }
+
+    /**
+     * The glyph an unlabelled key or popup entry of [action] draws in place of
+     * the stand-in character [KeyAction.fallbackLabel] spells for it, or null
+     * for an action with no glyph: the ones that read as a word (Ctrl, Fn, esc,
+     * ?123) and the ones that draw from an icon slot of their own.
+     *
+     * The board, the alternates popup and the layout editor's preview all ask
+     * here, so the three cannot drift apart. Tab and the arrows are answered
+     * with their slot's built-in glyph for the two that have no icon pack to
+     * honour; the board draws those through the slot itself.
+     */
+    fun forAction(action: KeyAction): ImageVector? = when (action) {
+        // A named layout: the keyboard with a switch arrow, apart from the
+        // input-method picker's plain keyboard and the globe.
+        is KeyAction.Layout -> SymbolIcons.KeyboardPreviousLanguage
+        is KeyAction.LayerSwitch -> Icons.Outlined.Layers
+        is KeyAction.Broadcast -> Icons.Outlined.Bolt
+        is KeyAction.SendKey -> arrowKeySlot(action.keyCode)?.let(IconDefaults::forSlot)
+            // Escape is a word on every physical keyboard, so it keeps "esc".
+            ?: SymbolIcons.KeyboardKeys.takeIf { action.keyCode != KeyEvent.KEYCODE_ESCAPE }
+        else -> null
     }
 
     /**

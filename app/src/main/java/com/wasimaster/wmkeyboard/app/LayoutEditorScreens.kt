@@ -3549,6 +3549,11 @@ internal fun EditorKeyCell(
                 ?: (key.action as? KeyAction.Edit)
                     ?.takeIf { key.label.isBlank() }
                     ?.let { textEditIcon(it.op) }
+                // Tab, the arrows, and a layout, layer, broadcast or key-send
+                // key: the glyph the board draws where the label is blank.
+                ?: key.action
+                    .takeIf { key.label.isBlank() || key.label == it.fallbackLabel() }
+                    ?.let(KeyIcons::forAction)
             if (cellIcon != null) {
                 Icon(
                     cellIcon,
@@ -3607,6 +3612,7 @@ internal fun EditorKeyCell(
                         ?: KeyIcons.byName(actionIconName(action))
                         ?: (action as? KeyAction.Tool)?.let { toolIconFor(it.tool) }
                         ?: (action as? KeyAction.Edit)?.let { textEditIcon(it.op) }
+                        ?: KeyIcons.forAction(action)
                     if (armIcon != null && arm.alternate.label.isBlank()) {
                         Icon(
                             armIcon,

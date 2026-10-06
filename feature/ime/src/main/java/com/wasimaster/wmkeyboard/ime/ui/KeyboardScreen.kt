@@ -20425,6 +20425,7 @@ private fun AlternateAction(
         KeyAction.InputMethodPicker, is KeyAction.SwitchInputMethod -> IconSlots.KEY_INPUT_METHOD_PICKER
         KeyAction.Emoji -> IconSlots.KEY_EMOJI
         is KeyAction.Tool -> IconSlots.forTool(action.tool)
+        is KeyAction.SendKey -> arrowKeySlot(action.keyCode)
         else -> null
     }?.takeIf { alternate.label.isBlank() }
     // Named, so both branches below can speak the entry rather than going silent
@@ -20440,6 +20441,10 @@ private fun AlternateAction(
     // icon, exactly as the key it would be on its own.
     val namedIcon = KeyIcons.byName(alternate.icon)
         ?: editOp?.takeIf { alternate.label.isBlank() }?.let { textEditIcon(it) }
+        // The ▦ ▤ ⚡ ⌨ an unlabelled layout, layer, broadcast or key-send entry
+        // used to draw as text. Only where no slot answers, so an icon pack
+        // still dresses an arrow or Tab entry the way it dresses the key.
+        ?: action.takeIf { slot == null && alternate.label.isBlank() }?.let(KeyIcons::forAction)
     Box(
         modifier = Modifier
             .clickable(onClick = onClick)
@@ -21342,6 +21347,16 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                 ?: (key.action as? KeyAction.SendKey)
                     ?.takeIf { mainIcon == null && (key.label.isBlank() || key.label in ArrowGlyphs) }
                     ?.let { arrowKeySlot(it.keyCode) }
+            // A layout, layer, broadcast or key-send key left unlabelled drew
+            // the stand-in character its fallback spells (▦ ▤ ⚡ ⌨); it wears a
+            // glyph now, the same one the popup and the editor's preview draw.
+            val fallbackIcon = if (mainIcon == null && toolSlot == null &&
+                (key.label.isBlank() || key.label == key.action.fallbackLabel())
+            ) {
+                KeyIcons.forAction(key.action)
+            } else {
+                null
+            }
             if (mainIcon != null) {
                 Icon(
                     mainIcon,
@@ -21354,6 +21369,15 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             } else if (toolSlot != null) {
                 SlotIcon(
                     toolSlot,
+                    contentDescription = visual.spoken.resolved(),
+                    tint = contentColor,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size((22f * fontScale).dp),
+                )
+            } else if (fallbackIcon != null) {
+                Icon(
+                    fallbackIcon,
                     contentDescription = visual.spoken.resolved(),
                     tint = contentColor,
                     modifier = Modifier

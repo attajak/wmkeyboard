@@ -91,6 +91,8 @@ EXTRA = {
     "Shift": ("shift", 0, False),
     "ShiftFilled": ("shift", 1, False),
     "ShiftLockFilled": ("shift_lock", 1, False),
+    "KeyboardPreviousLanguage": ("keyboard_previous_language", 0, False),
+    "KeyboardKeys": ("keyboard_keys", 0, False),
 }
 
 

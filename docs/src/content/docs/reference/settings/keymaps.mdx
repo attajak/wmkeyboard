@@ -117,7 +117,7 @@ A closing caption sits under the whole screen, and which one you get depends on 
 
 Tapping a key opens a bottom sheet headed "Row *N*, key *M*", with, in order:
 
-- **Label**: what's drawn on the key. On shift and caps lock keys a label other than `⇧` or `⇪` is drawn in place of the arrow, tinted while shift is on; blank keeps the arrow.
+- **Label**: what's drawn on the key. On shift and caps lock keys a label other than `⇧` or `⇪` is drawn in place of the arrow, tinted while shift is on; blank keeps the arrow. On an action key a blank label draws the action's icon: Tab and the arrow keys their own glyphs, an "Open a layout" key a keyboard with a switch arrow, a layer key a stack of layers, a broadcast key a bolt, and any other key press a row of keys. Escape keeps the word `esc`.
 - **Output**: blank by default, meaning the key types its label.
 - **Shift label**: blank by default, meaning shift types the label's uppercase.
 - For keys whose action is "Types text": **Flick directions**. A key with none shows an **Add flick directions** row; once opened, or on a key that already has flicks, four fields follow, **Flick left**, **Flick up**, **Flick right** and **Flick down**, each **default blank** (no flick that way). A blank field removes that direction from the key. The grid preview draws every flick's character at the matching edge of its key. Stored as `flick`.
