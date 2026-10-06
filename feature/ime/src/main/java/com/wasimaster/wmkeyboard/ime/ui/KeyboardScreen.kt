@@ -9394,12 +9394,58 @@ private fun ToolboxPanel(
         val pageSize = toolbox.pageSize.coerceIn(ToolboxPageSizeRange)
         val pageCount = toolboxPageCount(display.size, pageSize)
         val pager = rememberPagerState(pageCount = { pageCount })
+        // A tool held against either side edge turns the page that way, so a
+        // drag can carry it to another page (issue #536). Without this the drop
+        // only ever measured against the page in front, and the grid's own
+        // handler swallows the swipe a turn would otherwise take.
+        val edgePx = with(LocalDensity.current) { ToolboxPageTurnEdge.toPx() }
+        LaunchedEffect(dragTool) {
+            if (dragTool == null) return@LaunchedEffect
+            var heldDir = 0
+            var heldSince = 0L
+            while (true) {
+                val now = withFrameMillis { it }
+                val box = drag.toolboxViewport
+                val at = drag.position
+                val side = when {
+                    box == null || at.y !in box.top..box.bottom -> 0
+                    at.x < box.left + edgePx -> -1
+                    at.x > box.right - edgePx -> 1
+                    else -> 0
+                }
+                // The pager runs its pages right to left under RTL, so the left
+                // edge is the way to the next page there.
+                val dir = if (drag.boxRtl) -side else side
+                if (dir != heldDir) {
+                    heldDir = dir
+                    heldSince = now
+                    continue
+                }
+                val target = pager.currentPage + dir
+                if (dir == 0 || now - heldSince < ToolboxPageTurnDwellMs ||
+                    target !in 0 until pager.pageCount
+                ) {
+                    continue
+                }
+                pager.animateScrollToPage(target)
+                // The finger has not moved, but the page under it has: measure
+                // the drop again against the page now in front, once it has
+                // been laid out and registered its coordinates.
+                withFrameMillis { }
+                if (drag.dragging != null) drag.move(drag.position)
+                // Still on the edge, the next page is another full dwell away.
+                heldSince = withFrameMillis { it }
+            }
+        }
         HorizontalPager(
             state = pager,
             modifier = Modifier.weight(1f),
             // A page is cheap to build, but building the ones nobody has
             // swiped towards is still work the first frame doesn't need.
-            beyondViewportPageCount = 0,
+            // Except mid-drag: the gesture lives in the pointerInput of the page
+            // the tool was picked up from, and turning away from that page would
+            // dispose it and drop the tool wherever the finger happened to be.
+            beyondViewportPageCount = if (dragTool != null) pageCount else 0,
         ) { page ->
             // Only the page in front publishes to the drag controller: its
             // neighbours stay composed through a swipe, and two pages claiming
@@ -9927,6 +9973,16 @@ private fun ToolPill(
         }
     }
 }
+
+/**
+ * How close to the toolbox's side edge a dragged tool has to be held to turn
+ * the page. Narrow, so a drop on the outer column does not turn the page
+ * under it.
+ */
+private val ToolboxPageTurnEdge = 28.dp
+
+/** How long a dragged tool rests on that edge before the page turns. */
+private const val ToolboxPageTurnDwellMs = 450L
 
 /**
  * Which page of the paginated toolbox is in front. Deliberately not tappable:
