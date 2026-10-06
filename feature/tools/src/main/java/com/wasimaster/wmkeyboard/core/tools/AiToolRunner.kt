@@ -31,28 +31,47 @@ class AiToolRunner(
      * answered rather than ignored, because a model that gets silence repeats
      * itself until the round limit.
      */
-    fun run(call: AiToolCall): AiToolResult = AiToolResult(
-        call = call,
-        content = runCatching {
-            when (call.name) {
-                AiTools.WEB_SEARCH -> search(call)
-                AiTools.WEB_FETCH -> fetch(call)
-                else -> context.getString(R.string.ftools_ai_tool_unknown, call.name)
-            }
-        }.getOrElse { failure ->
-            // Everything else becomes an answer the model can act on, but a
-            // cancelled run is not a failed tool: swallowing it here would
-            // keep a retired generation going round the loop.
-            if (failure is CancellationException) throw failure
-            context.getString(R.string.ftools_ai_tool_failed, ToolHttp.friendlyMessage(context, failure))
-        },
+    fun run(call: AiToolCall): AiToolResult = runCatching {
+        when (call.name) {
+            AiTools.WEB_SEARCH -> search(call)
+            AiTools.WEB_FETCH -> fetch(call)
+            else -> refused(
+                call,
+                context.getString(R.string.ftools_ai_tool_unknown, call.name),
+                context.getString(R.string.ftools_ai_tool_reason_unknown),
+            )
+        }
+    }.getOrElse { failure ->
+        // Everything else becomes an answer the model can act on, but a
+        // cancelled run is not a failed tool: swallowing it here would
+        // keep a retired generation going round the loop.
+        if (failure is CancellationException) throw failure
+        val reason = ToolHttp.friendlyMessage(context, failure)
+        refused(call, context.getString(R.string.ftools_ai_tool_failed, reason), reason)
+    }
+
+    /**
+     * A call that did not work: [content] tells the model what to do about it,
+     * [reason] tells the user what happened. Two texts because they are for
+     * two readers — "answer from what you already know" is not something to
+     * show a person.
+     */
+    private fun refused(call: AiToolCall, content: String, reason: String) =
+        AiToolResult(call, content, error = reason)
+
+    private fun missing(call: AiToolCall, argument: String) = refused(
+        call,
+        context.getString(R.string.ftools_ai_tool_missing_argument, argument),
+        context.getString(R.string.ftools_ai_tool_reason_missing, argument),
     )
 
-    private fun search(call: AiToolCall): String {
-        val query = call.argument("query")
-            ?: return context.getString(R.string.ftools_ai_tool_missing_argument, "query")
-        val backend = ToolApiKeys.searchBackend(settings)
-            ?: return context.getString(R.string.ftools_ai_tool_no_search)
+    private fun search(call: AiToolCall): AiToolResult {
+        val query = call.argument("query") ?: return missing(call, "query")
+        val backend = ToolApiKeys.searchBackend(settings) ?: return refused(
+            call,
+            context.getString(R.string.ftools_ai_tool_no_search),
+            context.getString(R.string.ftools_ai_tool_reason_no_search),
+        )
         val safe = settings.webSearch.safe
         val page = when (backend) {
             SearchBackend.SEARXNG -> SearxClient.webSearch(
@@ -78,14 +97,28 @@ class AiToolRunner(
                 ),
             )
         }
-        return formatSearch(page, context.getString(R.string.ftools_ai_tool_no_results))
+        return AiToolResult(
+            call = call,
+            content = formatSearch(page, context.getString(R.string.ftools_ai_tool_no_results)),
+            sources = page.results.map { AiToolSource(it.title.trim(), it.url) },
+        )
     }
 
-    private fun fetch(call: AiToolCall): String {
-        val url = call.argument("url")
-            ?: return context.getString(R.string.ftools_ai_tool_missing_argument, "url")
-        val page = WebFetchClient.fetch(url)
-        return formatPage(page, url, context.getString(R.string.ftools_ai_tool_truncated))
+    private fun fetch(call: AiToolCall): AiToolResult {
+        val url = call.argument("url") ?: return missing(call, "url")
+        // Checked here as well as in the client, so the user is told plainly
+        // rather than shown the instruction the model gets.
+        val target = WebFetchClient.normalize(url) ?: return refused(
+            call,
+            context.getString(R.string.ftools_web_fetch_bad_url),
+            context.getString(R.string.ftools_ai_tool_reason_bad_url),
+        )
+        val page = WebFetchClient.fetch(target)
+        return AiToolResult(
+            call = call,
+            content = formatPage(page, url, context.getString(R.string.ftools_ai_tool_truncated)),
+            sources = listOf(AiToolSource(page.title.trim(), target)),
+        )
     }
 
     companion object {

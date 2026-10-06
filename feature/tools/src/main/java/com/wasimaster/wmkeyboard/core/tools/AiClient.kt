@@ -422,6 +422,7 @@ object AiClient {
         onPhase: (AiPhase) -> Unit,
         onPartial: (String) -> Unit,
         onToolCall: (AiToolCall) -> Unit = {},
+        onToolResult: (AiToolResult) -> Unit = {},
         isActive: () -> Boolean = { true },
     ): Completion = AiToolLoop.run(
         system = system,
@@ -433,6 +434,7 @@ object AiClient {
         onPhase = onPhase,
         onPartial = onPartial,
         onToolCall = onToolCall,
+        onToolResult = onToolResult,
         isActive = isActive,
     ) { roundSystem, roundTurns, roundTools, roundPartial ->
         completeStreaming(

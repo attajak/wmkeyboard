@@ -18,8 +18,11 @@ import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiPhase
 import com.wasimaster.wmkeyboard.core.tools.AiPrompts
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
+import com.wasimaster.wmkeyboard.core.tools.AiToolCall
 import com.wasimaster.wmkeyboard.core.tools.AiToolLoop
 import com.wasimaster.wmkeyboard.core.tools.AiToolProtocol
+import com.wasimaster.wmkeyboard.core.tools.AiToolResult
 import com.wasimaster.wmkeyboard.core.tools.AiToolRunner
 import com.wasimaster.wmkeyboard.core.tools.ToolHttp
 import com.wasimaster.wmkeyboard.core.tools.ToolHttpException
@@ -31,6 +34,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -90,6 +94,11 @@ object AiChatController {
         /** Model streams reasoning with no opening tag (Qwen3 style). */
         val implicitThink: Boolean = false,
         val choice: ModelChoice,
+        /**
+         * The tools called so far, oldest first; the newest may still be
+         * [AiToolActivity.running]. Lands in the stored answer at the end.
+         */
+        val tools: List<AiToolActivity> = emptyList(),
     )
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -317,6 +326,10 @@ object AiChatController {
                 provider = current.choice.provider.name,
                 model = modelName(current.choice),
                 stopped = true,
+                toolUses = AiToolActivity.settle(
+                    current.tools,
+                    context.getString(R.string.ime_ai_chat_stopped),
+                ),
             ),
         )
         store.save()
@@ -375,6 +388,8 @@ object AiChatController {
                     postPartial(seq, partial)
                 }
             },
+            onToolCall = { call -> postToolStarted(seq, call) },
+            onToolResult = { result -> postToolResult(seq, result) },
             isActive = { seq == runSeq },
         ) { _, roundTurns, _, roundPartial ->
             // The session remembers every earlier round itself, so only the
@@ -477,6 +492,8 @@ object AiChatController {
                     postPartial(seq, partial)
                 }
             },
+            onToolCall = { call -> postToolStarted(seq, call) },
+            onToolResult = { result -> postToolResult(seq, result) },
             isActive = { seq == runSeq },
         )
         return completion.text
@@ -489,6 +506,21 @@ object AiChatController {
 
     private fun postPartial(seq: Int, partial: String) {
         _run.value = _run.value?.takeIf { it.seq == seq && seq == runSeq }?.copy(partial = partial)
+    }
+
+    /** A tool call has begun: the chat says what it is doing until it ends. */
+    private fun postToolStarted(seq: Int, call: AiToolCall) {
+        _run.update { run ->
+            if (run == null || run.seq != seq || seq != runSeq) run
+            else run.copy(tools = run.tools + AiToolActivity.started(call))
+        }
+    }
+
+    private fun postToolResult(seq: Int, result: AiToolResult) {
+        _run.update { run ->
+            if (run == null || run.seq != seq || seq != runSeq) run
+            else run.copy(tools = AiToolActivity.record(run.tools, result))
+        }
     }
 
     /**
@@ -518,6 +550,12 @@ object AiChatController {
         val store = store(context)
         val implicitThink =
             choice.provider == AiProvider.ON_DEVICE && isReasoningModel(choice.localModelId)
+        // Kept with the answer — or with the failure, since a run that died
+        // after searching still searched.
+        val toolUses = AiToolActivity.settle(
+            _run.value?.takeIf { it.seq == seq }?.tools.orEmpty(),
+            context.getString(R.string.ime_ai_chat_error_generic),
+        )
         val message = if (raw != null) {
             val stripped = AiThinking.split(raw, implicitThink).output.trim()
                 .ifBlank { raw.trim() }
@@ -527,6 +565,7 @@ object AiChatController {
                 timestamp = System.currentTimeMillis(),
                 provider = choice.provider.name,
                 model = modelName(choice),
+                toolUses = toolUses,
             )
         } else {
             val failure = result.exceptionOrNull()
@@ -537,6 +576,7 @@ object AiChatController {
                 provider = choice.provider.name,
                 model = modelName(choice),
                 error = errorText(context, failure),
+                toolUses = toolUses,
             )
         }
         store.appendMessage(conversationId, message)

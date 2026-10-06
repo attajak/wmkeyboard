@@ -442,6 +442,7 @@ import com.wasimaster.wmkeyboard.core.localllm.LocalLlmEngine
 import com.wasimaster.wmkeyboard.core.localllm.LocalLlmStore
 import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiPrompts
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
 import com.wasimaster.wmkeyboard.core.tools.AiToolLoop
 import com.wasimaster.wmkeyboard.core.tools.AiToolRunner
 import com.wasimaster.wmkeyboard.core.tools.AiToolSpec
@@ -26475,6 +26476,8 @@ open class WMKeyboardService : InputMethodService() {
             // never recorded either.
             if (seq != aiRunSeq) return@launch
             if (localStandIn && (fellBack || result.isSuccess)) noteOfflineFallback(OFFLINE_FALLBACK_AI, fellBack)
+            // What the model looked up stays over the finished answer.
+            val toolUses = aiToolsOf(_uiState.value.ai)
             val next = result.fold(
                 onSuccess = { completion ->
                     val raw = completion.text
@@ -26493,6 +26496,7 @@ open class WMKeyboardService : InputMethodService() {
                                 settings.ai.diffOpensFirst &&
                                 aiDiffable(action, generated),
                             diffable = aiDiffable(action, generated),
+                            tools = toolUses,
                         )
                         raw.isBlank() -> AiUi.Error(
                             action,
@@ -26644,6 +26648,8 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
             },
+            onToolCall = { call -> applyAiTools(seq) { it + AiToolActivity.started(call) } },
+            onToolResult = { result -> applyAiTools(seq) { AiToolActivity.record(it, result) } },
             isActive = { seq == aiRunSeq },
         ) { roundSystem, roundTurns, _, roundPartial ->
             AiClient.Completion(
@@ -26678,6 +26684,30 @@ open class WMKeyboardService : InputMethodService() {
             val loading = it.ai as? AiUi.Loading
             if (loading == null) it else it.copy(ai = loading.copy(phase = phase))
         }
+    }
+
+    /**
+     * Rewrites the tool record of the run on screen, whichever view it is in:
+     * a model that wrote "let me check" before searching is already showing
+     * its streaming result, and the search belongs over that.
+     */
+    private fun applyAiTools(seq: Int, change: (List<AiToolActivity>) -> List<AiToolActivity>) {
+        if (seq != aiRunSeq) return
+        _uiState.update {
+            if (seq != aiRunSeq) return@update it
+            when (val ai = it.ai) {
+                is AiUi.Loading -> it.copy(ai = ai.copy(tools = change(ai.tools)))
+                is AiUi.Ready -> it.copy(ai = ai.copy(tools = change(ai.tools)))
+                else -> it
+            }
+        }
+    }
+
+    /** The tool record of the run on screen, to carry into the state that replaces it. */
+    private fun aiToolsOf(ai: AiUi): List<AiToolActivity> = when (ai) {
+        is AiUi.Loading -> ai.tools
+        is AiUi.Ready -> ai.tools
+        else -> emptyList()
     }
 
     /**
@@ -26719,6 +26749,8 @@ open class WMKeyboardService : InputMethodService() {
                     )
                 }
             },
+            onToolCall = { call -> applyAiTools(seq) { it + AiToolActivity.started(call) } },
+            onToolResult = { result -> applyAiTools(seq) { AiToolActivity.record(it, result) } },
             // A superseded or closed run stops reading here rather than holding
             // the socket — and paying for tokens — until the model finishes.
             isActive = { seq == aiRunSeq },
@@ -26757,6 +26789,7 @@ open class WMKeyboardService : InputMethodService() {
                         phase = AiPhase.THINKING,
                         thinkingChars = raw.length,
                         startedAtMs = startedAt,
+                        tools = aiToolsOf(it.ai),
                     )
                     shown.output.isBlank() -> it.ai // nothing visible yet
                     // showDiff stays false while this streams: a half-finished
@@ -26768,6 +26801,7 @@ open class WMKeyboardService : InputMethodService() {
                         sourceFromSelection = fromSelection,
                         stripMarkdown = (it.ai as? AiUi.Ready)?.stripMarkdown ?: true,
                         diffable = aiDiffable(action, generated),
+                        tools = aiToolsOf(it.ai),
                     )
                 },
             )

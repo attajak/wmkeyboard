@@ -47,6 +47,10 @@ object AiToolLoop {
      * has to answer with what it has. A model that keeps asking is not
      * stopped with an error: the last round is simply run with no tools
      * offered, so the user gets an answer rather than a failure.
+     *
+     * [onToolCall] fires as a call starts and [onToolResult] as it ends, both
+     * on the calling thread, so a surface can say what is running while it
+     * runs and keep a record of what ran.
      */
     @Suppress("LongParameterList")
     fun run(
@@ -59,6 +63,7 @@ object AiToolLoop {
         onPhase: (AiPhase) -> Unit = {},
         onPartial: (String) -> Unit = {},
         onToolCall: (AiToolCall) -> Unit = {},
+        onToolResult: (AiToolResult) -> Unit = {},
         isActive: () -> Boolean = { true },
         round: Round,
     ): AiClient.Completion {
@@ -97,7 +102,7 @@ object AiToolLoop {
             onPhase(AiPhase.USING_TOOL)
             val results = calls.map { call ->
                 onToolCall(call)
-                executor.run(call)
+                executor.run(call).also(onToolResult)
             }
             record(conversation, completion, calls, results, native)
             used++

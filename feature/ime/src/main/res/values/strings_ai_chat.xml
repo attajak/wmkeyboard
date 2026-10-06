@@ -76,4 +76,34 @@
     <string name="ime_ai_chat_ask_summary_prompt">Give me a short summary of this.</string>
     <string name="ime_ai_chat_ask_words">Hard words</string>
     <string name="ime_ai_chat_ask_words_prompt">Explain the difficult words and ideas in this.</string>
+
+    <!-- The web searches and pages the model used for an answer (#470), shown
+         over the answer in the chat and on the AI panel. -->
+    <!-- While it runs. %1$s is the model's search query. -->
+    <string name="ime_ai_chat_tool_searching">Searching the web for “%1$s”…</string>
+    <!-- While it runs. %1$s is the site, such as example.com. -->
+    <string name="ime_ai_chat_tool_reading">Reading %1$s…</string>
+    <string name="ime_ai_chat_tool_searched">Searched the web for “%1$s”</string>
+    <string name="ime_ai_chat_tool_read">Read %1$s</string>
+    <string name="ime_ai_chat_tool_search_failed">Could not search for “%1$s”</string>
+    <string name="ime_ai_chat_tool_read_failed">Could not read %1$s</string>
+    <!-- %1$s is the tool: ime_ai_chat_tool_name_*, or a name the model made up. -->
+    <string name="ime_ai_chat_tool_use_failed">%1$s did not work</string>
+    <string name="ime_ai_chat_tool_name_search">Web search</string>
+    <string name="ime_ai_chat_tool_name_fetch">Reading a page</string>
+    <string name="ime_ai_chat_tool_no_results">No results</string>
+    <plurals name="ime_ai_chat_tool_calls">
+        <item quantity="one">Used a tool %1$d time</item>
+        <item quantity="other">Used tools %1$d times</item>
+    </plurals>
+    <plurals name="ime_ai_chat_tool_failed_count">
+        <item quantity="one">%1$d failed</item>
+        <item quantity="other">%1$d failed</item>
+    </plurals>
+    <!-- Joins the two counts above: "Used tools 3 times, 1 failed". -->
+    <string name="ime_ai_chat_tool_summary_with_failed">%1$s, %2$s</string>
+    <string name="ime_ai_chat_tool_show_desc">Show the searches and pages used</string>
+    <string name="ime_ai_chat_tool_hide_desc">Hide the searches and pages used</string>
+    <string name="ime_ai_chat_tool_open_desc">Open the page</string>
+    <string name="ime_ai_chat_tool_copy_desc">Copy the address</string>
 </resources>

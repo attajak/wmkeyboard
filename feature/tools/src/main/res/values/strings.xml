@@ -35,4 +35,15 @@
     <string name="ftools_ai_tool_no_results">No results.</string>
     <!-- Appended to a fetched page that was cut at the character budget. -->
     <string name="ftools_ai_tool_truncated">[the page continues past this point and was cut]</string>
+
+    <!-- Why a tool call failed, as the AI chat and the AI panel show it under
+         the answer. Unlike the strings above, these are for the user. -->
+    <!-- The model asked to search but the user has set up no search service. -->
+    <string name="ftools_ai_tool_reason_no_search">Web search is not set up</string>
+    <!-- The model asked for a tool that does not exist. -->
+    <string name="ftools_ai_tool_reason_unknown">The model asked for a tool that does not exist</string>
+    <!-- The model left out a required value; %1$s is its name, such as "query" or "url". -->
+    <string name="ftools_ai_tool_reason_missing">The model left out the %1$s</string>
+    <!-- The model asked to read something that is not an http or https address. -->
+    <string name="ftools_ai_tool_reason_bad_url">Not a web address the keyboard will open</string>
 </resources>

@@ -1444,6 +1444,11 @@ sealed interface AiUi {
          * readout, so a slow provider looks slow instead of broken.
          */
         val startedAtMs: Long = 0L,
+        /**
+         * The tools the model has called so far (#470); the newest may still
+         * be running, and the progress readout then says which and on what.
+         */
+        val tools: List<com.wasimaster.wmkeyboard.core.tools.AiToolActivity> = emptyList(),
     ) : AiUi
     data class Ready(
         val action: com.wasimaster.wmkeyboard.core.tools.AiActionSpec,
@@ -1495,6 +1500,11 @@ sealed interface AiUi {
          * service sets this.
          */
         val diffable: Boolean = true,
+        /**
+         * The searches and pages the answer was built on (#470), drawn over
+         * it. Carried over from [Loading] as the run streams.
+         */
+        val tools: List<com.wasimaster.wmkeyboard.core.tools.AiToolActivity> = emptyList(),
     ) : AiUi
     data class Error(
         val action: com.wasimaster.wmkeyboard.core.tools.AiActionSpec,

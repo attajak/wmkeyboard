@@ -207,7 +207,7 @@ A model answers from what it was trained on, which is a fixed moment in the past
 - **Let the model read a web page** — off by default. The model gives one address and gets the text of that page back. It needs no search service, so it works on its own: paste a link, ask "what does this say?", and the model fetches it.
 - **Lookups per answer** — 1 to 5, default **3**. How many times the model may go and look something up before it has to answer with what it has. Each round is another request carrying everything found so far, so this is the setting that decides what a curious model costs you.
 
-Both tools work in the panel's actions and in [AI chat](/tools/ai-chat/). While one runs, the progress readout says **Using a tool**.
+Both tools work in the panel's actions and in [AI chat](/tools/ai-chat/). While one runs, the progress readout says what it's doing and on what: **Searching the web for "…"** with the model's own query, or **Reading example.com…** with the site it opened.
 
 ### Why page reading is the one that's off
 
@@ -228,7 +228,19 @@ It genuinely works, and a capable local model will use it — but a small one st
 
 ### Seeing what it looked up
 
-Every search and every page fetch is a row in the [network activity log](/privacy/network-activity/), filed under **AI tool use** rather than **Web search** — you didn't run that search, the model did, and the log should say which.
+An answer that used a tool says so. A line sits over the result, in the panel and in every chat answer: **Searched the web for "…"** or **Read example.com** for a single lookup, or **Used tools 3 times** when there were several. No line means the model answered from what it already knew.
+
+Tap the line to unfold it. Each lookup is listed with what came back:
+
+- **A search** shows the query and every result the model was handed, by title and site. **No results** if the search came back empty.
+- **A page read** shows the page's title and its full address, so you can check it's the page you think it is.
+- **A lookup that failed** is marked as failed, with the reason: **Web search is not set up**, a network error, the model asking for something that isn't a web address, and so on. The model is told too, and usually says it couldn't check.
+
+Tap a result to open it in your browser, or press and hold to copy its address. Only `http://` and `https://` addresses ever open. Anything else the model wrote can be copied but not opened. The lines aren't part of what **Replace** or **Insert** puts in your field.
+
+In [AI chat](/tools/ai-chat/) the record is saved with the answer, so reopening a conversation later still shows what each answer was built on. The panel's actions keep it only while the result is on screen.
+
+Every search and every page fetch is also a row in the [network activity log](/privacy/network-activity/), filed under **AI tool use** rather than **Web search** — you didn't run that search, the model did, and the log should say which.
 
 ## Chatting instead of transforming
 

@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.aichat
 
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -33,6 +34,13 @@ data class AiChatMessage(
      * before attachments existed still decodes.
      */
     val attachment: String = "",
+    /**
+     * The tools the model called on the way to this answer — each search with
+     * the results it was handed, each page it read, each call that failed —
+     * so a chat reopened later still shows what the answer was built on.
+     * Defaulted, so a file written before tool calls were recorded decodes.
+     */
+    val toolUses: List<AiToolActivity> = emptyList(),
 ) {
     val failed: Boolean get() = error.isNotEmpty()
 

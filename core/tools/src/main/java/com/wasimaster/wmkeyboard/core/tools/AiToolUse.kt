@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.core.tools
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -48,8 +49,114 @@ data class AiToolCall(
         }.getOrNull()
 }
 
-/** What running one produced, ready to hand back to the model. */
-data class AiToolResult(val call: AiToolCall, val content: String)
+/**
+ * What running one produced, ready to hand back to the model.
+ *
+ * [content] is the model's to read. [sources] and [error] are the user's: the
+ * pages the model was handed and, when the call did not work, why — in words
+ * meant for a person rather than the instructions [content] carries to the
+ * model. Together they make the [activity] the chat shows under an answer.
+ */
+data class AiToolResult(
+    val call: AiToolCall,
+    val content: String,
+    val sources: List<AiToolSource> = emptyList(),
+    /** Not empty means the call failed, and says why. */
+    val error: String = "",
+) {
+    val activity: AiToolActivity
+        get() = AiToolActivity.started(call).copy(running = false, sources = sources, error = error)
+}
+
+/** One page a tool call put in front of the model: a search result, or the page it read. */
+@Serializable
+data class AiToolSource(
+    val title: String = "",
+    val url: String = "",
+) {
+    /** The site, for a line too short for the whole address: `example.com`. */
+    val domain: String get() = AiToolActivity.domainOf(url)
+}
+
+/**
+ * One tool call as the user is shown it: what the model asked for, what came
+ * back, and whether it worked.
+ *
+ * Without this a run that searched the web looked exactly like one that did
+ * not, and the user had no way to tell an answer built on a page from one made
+ * up. It is what the chat draws while a tool runs ("Searching the web for …")
+ * and keeps under the answer afterwards, and it is stored with the message, so
+ * strings rather than enums for the same reason as the rest of the chat store:
+ * a record has to outlive a tool being renamed.
+ */
+@Serializable
+data class AiToolActivity(
+    /** [AiTools.WEB_SEARCH], [AiTools.WEB_FETCH], or a name the model made up. */
+    val tool: String,
+    /** The query searched for, or the address read. Empty when the model left it out. */
+    val target: String = "",
+    /** Still running. Never true in a stored message. */
+    val running: Boolean = false,
+    /** Search results the model was given, or the one page it read. */
+    val sources: List<AiToolSource> = emptyList(),
+    /** Not empty means the call failed, and says why. */
+    val error: String = "",
+) {
+    val failed: Boolean get() = error.isNotEmpty()
+
+    companion object {
+        /** A call the model just asked for, before it has run. */
+        fun started(call: AiToolCall): AiToolActivity = AiToolActivity(
+            tool = call.name,
+            target = when (call.name) {
+                AiTools.WEB_SEARCH -> call.argument("query")
+                AiTools.WEB_FETCH -> call.argument("url")
+                else -> null
+            }.orEmpty(),
+            running = true,
+        )
+
+        /**
+         * [trace] with [result] in place of the call it answers. Calls run one
+         * at a time, so that is the newest one still running; a result with no
+         * started call to replace is added at the end.
+         */
+        fun record(trace: List<AiToolActivity>, result: AiToolResult): List<AiToolActivity> {
+            val at = trace.indexOfLast { it.running }
+            if (at < 0) return trace + result.activity
+            return trace.toMutableList().also { it[at] = result.activity }
+        }
+
+        /**
+         * [trace] as it is kept once the run is over: a call the run ended in
+         * the middle of (Stop) is marked with [reason] rather than left
+         * looking as if it were still going, or as if it had worked.
+         */
+        fun settle(trace: List<AiToolActivity>, reason: String): List<AiToolActivity> =
+            trace.map { if (it.running) it.copy(running = false, error = reason) else it }
+
+        /**
+         * The host of [url] without a leading `www.`, or [url] itself when it
+         * has none — what a one-line record has room for.
+         */
+        fun domainOf(url: String): String {
+            val host = url.trim().substringAfter("://").substringBefore('/')
+                .substringBefore('?').substringBefore('#').substringAfterLast('@')
+            return host.removePrefix("www.").ifEmpty { url.trim() }
+        }
+
+        /**
+         * [url] when a tap may open it: http and https only. The address came
+         * from a model or a search result, so an `intent:` or `file:` one is
+         * offered for copying and never handed to a browser.
+         */
+        fun openableUrl(url: String): String? {
+            val trimmed = url.trim()
+            val scheme = trimmed.substringBefore("://", "").lowercase()
+            return trimmed.takeIf { (scheme == "http" || scheme == "https") && domainOf(it).isNotEmpty() }
+        }
+    }
+}
 
 /**
  * The tools the AI tool can offer, and the catalogue the settings rows switch

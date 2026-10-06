@@ -65,11 +65,13 @@ import com.wasimaster.wmkeyboard.core.tools.AiClient
 import com.wasimaster.wmkeyboard.core.tools.AiMarkdown
 import com.wasimaster.wmkeyboard.core.tools.AiPhase
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
 import com.wasimaster.wmkeyboard.core.tools.BuiltInAiActions
 import com.wasimaster.wmkeyboard.core.tools.TextDiff
 import com.wasimaster.wmkeyboard.core.tools.visibleAiActions
 import com.wasimaster.wmkeyboard.ime.AiUi
 import com.wasimaster.wmkeyboard.ime.FocusRegion
+import com.wasimaster.wmkeyboard.ime.KeyboardClipboard
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
@@ -364,6 +366,9 @@ internal fun AiPanel(
                         .padding(horizontal = 10.dp, vertical = 6.dp)
                         .verticalScroll(resultScroll),
                 ) {
+                    // What the model looked up for this answer (#470). Not
+                    // part of what Replace or Insert commits.
+                    PanelToolUses(ai.tools, Modifier.padding(bottom = 4.dp))
                     val comparison = diff
                     Text(
                         if (showDiff && comparison != null && !comparison.tooLong) {
@@ -1003,7 +1008,36 @@ private fun AiProgress(ai: AiUi.Loading, settings: KeyboardSettings) {
             Spacer(Modifier.height(6.dp))
             Text(detail, color = kb.secondaryText, fontSize = 11.sp)
         }
+        // Calls already made, while the model reads what they returned. A
+        // running one is the headline instead.
+        if (ai.tools.isNotEmpty() && ai.tools.none { it.running }) {
+            Spacer(Modifier.height(6.dp))
+            PanelToolUses(ai.tools)
+        }
     }
+}
+
+/** [ChatToolUses] in the panel's colours; a page opens in the browser, an address copies. */
+@Composable
+private fun PanelToolUses(uses: List<AiToolActivity>, modifier: Modifier = Modifier) {
+    if (uses.isEmpty()) return
+    val kb = LocalKbTheme.current
+    val context = LocalContext.current
+    ChatToolUses(
+        uses = uses,
+        colors = ChatMarkdownColors(
+            text = kb.chipText,
+            // Dimmed by alpha, as the reasoning is: some themes draw their
+            // secondary text in the same white.
+            dim = kb.chipText.copy(alpha = kb.chipText.alpha * 0.6f),
+            codeBackground = kb.chipText.copy(alpha = 0.10f),
+        ),
+        errorColor = kb.accent,
+        onOpen = { openToolLink(context, it) },
+        onCopy = { KeyboardClipboard.copy(context, it) },
+        modifier = modifier,
+        fontSize = 11.sp,
+    )
 }
 
 /** One step in [AiProgress]'s breadcrumb: done, in progress, or still ahead. */
@@ -1040,6 +1074,8 @@ private fun StepLabel(label: String, done: Boolean, current: Boolean) {
 @Composable
 private fun headline(ai: AiUi.Loading, onDevice: Boolean): String {
     val action = aiActionLabel(ai.action)
+    // A running tool says what it is doing: "Searching the web for …".
+    ai.tools.lastOrNull { it.running }?.let { return toolLine(it) }
     return when {
         ai.phase == AiPhase.THINKING -> stringResource(R.string.ime_ai_progress_thinking)
         onDevice -> stringResource(R.string.ime_ai_progress_on_device, action)

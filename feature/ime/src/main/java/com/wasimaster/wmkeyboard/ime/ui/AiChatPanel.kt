@@ -66,6 +66,7 @@ import com.wasimaster.wmkeyboard.core.aichat.AiChatMessage
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
 import com.wasimaster.wmkeyboard.ime.AiChatAction
 import com.wasimaster.wmkeyboard.ime.FocusRegion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
@@ -397,7 +398,7 @@ private fun Transcript(
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 if (live != null) {
-                    item(key = "live") { StreamingBubble(live, state.settings.ai.showThinking) }
+                    item(key = "live") { StreamingBubble(live, state.settings.ai.showThinking, onChat) }
                 }
                 itemsIndexed(
                     messages.asReversed(),
@@ -474,6 +475,10 @@ private fun MessageBubble(
                     .combinedClickable(onClick = onTap, onLongClick = { onCopy(message.content) })
                     .padding(horizontal = 10.dp, vertical = 7.dp),
             ) {
+                // What the answer was built on, over the answer.
+                if (message.toolUses.isNotEmpty()) {
+                    ToolUses(message.toolUses, colors, onChat, Modifier.padding(bottom = 4.dp))
+                }
                 when {
                     message.failed -> Text(message.error, color = kb.accent, fontSize = 13.sp, lineHeight = 18.sp)
                     // The user's own words are drawn as written: an asterisk
@@ -585,9 +590,28 @@ private fun Caption(text: String, color: Color) {
     Text(text, color = color, fontSize = 10.sp, lineHeight = 13.sp, modifier = Modifier.padding(top = 3.dp))
 }
 
+/** [ChatToolUses] in the bubble's colours, its links opened and copied the keyboard's way. */
+@Composable
+private fun ToolUses(
+    uses: List<AiToolActivity>,
+    colors: ChatMarkdownColors,
+    onChat: (AiChatAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    ChatToolUses(
+        uses = uses,
+        colors = colors,
+        errorColor = LocalKbTheme.current.accent,
+        onOpen = { openToolLink(context, it) },
+        onCopy = { onChat(AiChatAction.Copy(it)) },
+        modifier = modifier,
+    )
+}
+
 /** The answer forming: its text as it arrives, or what the model is doing until there is some. */
 @Composable
-private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean) {
+private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean, onChat: (AiChatAction) -> Unit) {
     val kb = LocalKbTheme.current
     val split = remember(run.partial, run.implicitThink) { AiThinking.split(run.partial, run.implicitThink) }
     val colors = ChatMarkdownColors(
@@ -603,6 +627,9 @@ private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean
                 .background(kb.chip)
                 .padding(horizontal = 10.dp, vertical = 7.dp),
         ) {
+            // The calls so far, the running one saying what it is doing.
+            val toolRunning = run.tools.any { it.running }
+            if (run.tools.isNotEmpty()) ToolUses(run.tools, colors, onChat, Modifier.padding(bottom = 4.dp))
             when {
                 showThinking && run.partial.isNotEmpty() -> Text(
                     // Dimmed by alpha, as the actions' result is: some themes
@@ -613,6 +640,9 @@ private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean
                     lineHeight = 18.sp,
                 )
                 split.output.isNotBlank() -> ChatMarkdown(split.output, colors)
+                // The line over this one already says which tool is running
+                // and on what; "Using a tool" under it would only repeat it.
+                toolRunning && !split.thinking -> Unit
                 else -> {
                     Text(
                         stringResource(

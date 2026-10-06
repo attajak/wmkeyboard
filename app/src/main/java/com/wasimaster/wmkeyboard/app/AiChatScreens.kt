@@ -62,7 +62,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -75,10 +77,12 @@ import com.wasimaster.wmkeyboard.core.aichat.AiChatStore
 import com.wasimaster.wmkeyboard.core.settings.AiProvider
 import com.wasimaster.wmkeyboard.core.support.Support
 import com.wasimaster.wmkeyboard.core.tools.AiThinking
+import com.wasimaster.wmkeyboard.core.tools.AiToolActivity
 import com.wasimaster.wmkeyboard.ime.aichat.AiChatController
 import com.wasimaster.wmkeyboard.ime.aichat.AiChatController.ModelChoice
 import com.wasimaster.wmkeyboard.ime.ui.ChatMarkdown
 import com.wasimaster.wmkeyboard.ime.ui.ChatMarkdownColors
+import com.wasimaster.wmkeyboard.ime.ui.ChatToolUses
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.ime.R as ImeR
 
@@ -433,6 +437,13 @@ internal fun AiChatScreen(
     }
 }
 
+private fun copyText(context: Context, text: String) {
+    runCatching {
+        (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+            .setPrimaryClip(ClipData.newPlainText("", text))
+    }
+}
+
 /**
  * The Retry action for a failed assistant turn: resends the user message
  * right before it. Only the newest failed message gets one — retrying an old
@@ -561,12 +572,7 @@ private fun MessageBubble(
 ) {
     val fromUser = message.role == AiChatMessage.ROLE_USER
     val context = LocalContext.current
-    val copy: (String) -> Unit = { text ->
-        runCatching {
-            (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
-                .setPrimaryClip(ClipData.newPlainText("", text))
-        }
-    }
+    val copy: (String) -> Unit = { text -> copyText(context, text) }
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = if (fromUser) Arrangement.End else Arrangement.Start,
@@ -586,6 +592,16 @@ private fun MessageBubble(
             modifier = Modifier.widthIn(max = 320.dp),
         ) {
             Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                // What the answer was built on, over the answer — kept on a
+                // failed turn too, since a run that died after searching
+                // still searched.
+                if (message.toolUses.isNotEmpty()) {
+                    val ink = when {
+                        message.failed -> MaterialTheme.colorScheme.onErrorContainer
+                        else -> MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                    ToolUses(message.toolUses, ink, copy, Modifier.padding(bottom = 4.dp))
+                }
                 if (message.failed) {
                     Text(
                         message.error,
@@ -663,6 +679,30 @@ private fun MessageBubble(
     }
 }
 
+/** [ChatToolUses] in Material colours: a page opens in the browser, an address copies. */
+@Composable
+private fun ToolUses(
+    uses: List<AiToolActivity>,
+    ink: Color,
+    onCopy: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val uriHandler = LocalUriHandler.current
+    ChatToolUses(
+        uses = uses,
+        colors = ChatMarkdownColors(
+            text = ink,
+            dim = ink.copy(alpha = 0.7f),
+            codeBackground = ink.copy(alpha = 0.10f),
+        ),
+        errorColor = MaterialTheme.colorScheme.error,
+        onOpen = { url -> runCatching { uriHandler.openUri(url) } },
+        onCopy = onCopy,
+        modifier = modifier,
+        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+    )
+}
+
 /** One of the small text buttons under a message. */
 @Composable
 private fun BubbleAction(@StringRes label: Int, onClick: () -> Unit) {
@@ -682,6 +722,8 @@ private fun BubbleAction(@StringRes label: Int, onClick: () -> Unit) {
 @Composable
 private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean) {
     val split = AiThinking.split(run.partial, run.implicitThink)
+    val context = LocalContext.current
+    val toolRunning = run.tools.any { it.running }
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
         Surface(
             shape = RoundedCornerShape(16.dp, 16.dp, 16.dp, 4.dp),
@@ -689,6 +731,15 @@ private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean
             modifier = Modifier.widthIn(max = 320.dp),
         ) {
             Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                // The calls so far; the running one says what it is doing.
+                if (run.tools.isNotEmpty()) {
+                    ToolUses(
+                        run.tools,
+                        MaterialTheme.colorScheme.onSurfaceVariant,
+                        { copyText(context, it) },
+                        Modifier.padding(bottom = 4.dp),
+                    )
+                }
                 when {
                     showThinking && run.partial.isNotEmpty() -> Text(
                         run.partial,
@@ -703,6 +754,8 @@ private fun StreamingBubble(run: AiChatController.ChatRun, showThinking: Boolean
                         split.output,
                         style = MaterialTheme.typography.bodyMedium,
                     )
+                    // The line above already names the tool and what it is on.
+                    toolRunning && !split.thinking -> Unit
                     else -> Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(
                             modifier = Modifier.width(16.dp).height(16.dp),
