@@ -48,6 +48,15 @@ data class LanguageDef(
      * the French standard.
      */
     val spacedOpeners: String = "",
+    /**
+     * Whether a letter's case is part of its spelling rather than a matter of
+     * where it stands: Klingon's `q` and `Q` are two different consonants, and
+     * `D`, `H`, `I` and `S` are only ever written as capitals. The keyboard
+     * then never changes case on its own — no capital at a sentence start, none
+     * carried over from the language switched away from — and leaves every
+     * capital to the keys and to shift.
+     */
+    val letterCaseIsSpelling: Boolean = false,
 ) {
     /** English-language convenience, preserving the old `InputMode.isEnglish` reads. */
     val isEnglish: Boolean get() = id == "en"
@@ -1787,6 +1796,7 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "tlh",
             layoutIds = listOf(AssetLayouts.TLH_QWERTY_ID, AssetLayouts.TLH_T9_ID),
+            letterCaseIsSpelling = true,
         ),
         LanguageDef(
             id = "se",

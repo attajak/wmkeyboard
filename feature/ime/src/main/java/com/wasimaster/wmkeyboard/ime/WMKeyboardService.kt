@@ -3742,7 +3742,7 @@ open class WMKeyboardService : InputMethodService() {
                 // language switch must not leave the old keyboard's rules
                 // running against the new grid.
                 syncKeymanSession(activeSpec)
-                val shift = shiftAcrossScriptChange(activeSpec.script())
+                val shift = shiftAcrossScriptChange(activeSpec.script(), activeSpec.language())
                 _uiState.update {
                     it.copy(
                         settings = modeSettings,
@@ -5786,7 +5786,7 @@ open class WMKeyboardService : InputMethodService() {
                 deviceLocked = deviceLocked,
                 // Against the layout this field opens on: the state still holds
                 // the last field's script until this update lands.
-                shiftState = autoCapitalizeShift(fieldSpec.script()),
+                shiftState = autoCapitalizeShift(fieldSpec.script(), fieldSpec.language()),
                 shiftPressedByUser = false,
                 clipboardItems = if (clipboardAccessible) clipboardStore.items() else emptyList(),
                 clipboardSuggestion = if (clipboardAccessible) it.clipboardSuggestion else null,
@@ -12546,7 +12546,7 @@ open class WMKeyboardService : InputMethodService() {
         // running against the new grid.
         syncKeymanSession(spec)
         syncEngineBlacklist(spec.language().id)
-        val shift = shiftAcrossScriptChange(spec.script())
+        val shift = shiftAcrossScriptChange(spec.script(), spec.language())
         _uiState.update {
             it.copy(
                 language = spec.language(),
@@ -35528,17 +35528,25 @@ open class WMKeyboardService : InputMethodService() {
      * onStartInput and a live connection: the framework computed it for
      * exactly this purpose.
      *
-     * [script] is the script the answer is for. It defaults to the one on
-     * screen; a caller about to swap the layout passes the incoming one, since
-     * the state still holds the outgoing script until its update lands.
+     * [script] and [language] are what the answer is for. They default to the
+     * ones on screen; a caller about to swap the layout passes the incoming
+     * ones, since the state still holds the outgoing pair until its update
+     * lands.
      */
-    private fun autoCapitalizeShift(script: ScriptDef = _uiState.value.script): ShiftState {
+    private fun autoCapitalizeShift(
+        script: ScriptDef = _uiState.value.script,
+        language: LanguageDef = _uiState.value.language,
+    ): ShiftState {
         val state = _uiState.value
         if (!state.settings.autoText.capitalize) return ShiftState.OFF
         // Sentence capitalization applies to every cased script; Arabic,
         // Bengali and the rest have no letter case, and their shift layer is a
         // second set of letters rather than capitals.
         if (!script.hasLetterCase) return ShiftState.OFF
+        // Nor in a language whose capitals are letters of their own (Klingon,
+        // #566): an armed shift there turns the word's first letter into a
+        // different one, `qaH` into `QaH`.
+        if (language.letterCaseIsSpelling) return ShiftState.OFF
         val info = currentInputEditorInfo ?: return ShiftState.OFF
         if (info.inputType and InputType.TYPE_MASK_CLASS != InputType.TYPE_CLASS_TEXT) {
             return ShiftState.OFF
@@ -35565,12 +35573,19 @@ open class WMKeyboardService : InputMethodService() {
      * without this the Arabic grid opened shifted after every switch at a
      * sentence start. Going the other way, Arabic to English at a sentence
      * start now gets its capital.
+     *
+     * A language whose case is spelling ([LanguageDef.letterCaseIsSpelling])
+     * counts as caseless here, though its script is Latin: the shift English
+     * armed at a sentence start would otherwise ride into Klingon and turn
+     * the first `q` into `Q`.
      */
-    private fun shiftAcrossScriptChange(script: ScriptDef): ShiftState? {
-        val from = _uiState.value.script
-        if (from.id == script.id) return null
-        if (from.hasLetterCase && script.hasLetterCase) return null
-        return autoCapitalizeShift(script)
+    private fun shiftAcrossScriptChange(script: ScriptDef, language: LanguageDef): ShiftState? {
+        val from = _uiState.value
+        val fromCased = from.script.hasLetterCase && !from.language.letterCaseIsSpelling
+        val toCased = script.hasLetterCase && !language.letterCaseIsSpelling
+        if (from.script.id == script.id && fromCased == toCased) return null
+        if (fromCased && toCased) return null
+        return autoCapitalizeShift(script, language)
     }
 
     private fun maybeAutoCapitalize() {

@@ -11,7 +11,10 @@
         "rows": [
           [
             {
-              "label": "q"
+              "label": "q",
+              "longPress": [
+                "Q"
+              ]
             },
             {
               "label": "w"
@@ -23,7 +26,10 @@
               "label": "r"
             },
             {
-              "label": "t"
+              "label": "t",
+              "longPress": [
+                "tlh"
+              ]
             },
             {
               "label": "y"
@@ -32,7 +38,8 @@
               "label": "u"
             },
             {
-              "label": "i"
+              "label": "I",
+              "shiftLabel": "I"
             },
             {
               "label": "o"
@@ -46,25 +53,30 @@
               "label": "a"
             },
             {
-              "label": "s"
+              "label": "S",
+              "shiftLabel": "S"
             },
             {
-              "label": "d"
+              "label": "D",
+              "shiftLabel": "D"
             },
             {
-              "label": "f"
+              "label": "gh",
+              "shiftLabel": "gh"
             },
             {
               "label": "g"
             },
             {
-              "label": "h"
+              "label": "H",
+              "shiftLabel": "H"
             },
             {
               "label": "j"
             },
             {
-              "label": "k"
+              "label": "ng",
+              "shiftLabel": "ng"
             },
             {
               "label": "l"
@@ -79,13 +91,16 @@
               "width": 1.5
             },
             {
-              "label": "z"
+              "label": "Q",
+              "shiftLabel": "Q"
             },
             {
-              "label": "x"
+              "label": "tlh",
+              "shiftLabel": "tlh"
             },
             {
-              "label": "c"
+              "label": "ch",
+              "shiftLabel": "ch"
             },
             {
               "label": "v"
