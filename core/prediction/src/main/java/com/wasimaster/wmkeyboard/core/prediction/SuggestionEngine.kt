@@ -442,6 +442,15 @@ class SuggestionEngine(
     @Volatile
     var phoneticCandidateLists: Map<String, PhoneticCandidateList> = emptyMap()
 
+    /**
+     * Desktop Avro's data, which the candidate list is built from while it is
+     * loaded; null until the caller loads it (only while a candidate list is
+     * on, since its dictionary is a few megabytes), and the list falls back
+     * to the keyboard's own search.
+     */
+    @Volatile
+    var avroDesktop: AvroDesktop? = null
+
     /** The spellings the user has overruled the script of; see [recordScriptChoice]. */
     @Volatile
     var scriptChoices: PhoneticScriptChoices = PhoneticScriptChoices()
@@ -2880,7 +2889,7 @@ class SuggestionEngine(
      */
     fun phoneticCandidates(languageId: String, composing: String, limit: Int): List<String> {
         val backend = phoneticBackend(languageId) ?: return emptyList()
-        return PhoneticCandidates.build(backend, composing, limit, ::suppressed)
+        return PhoneticCandidates.build(backend, composing, limit, avroDesktop, ::suppressed)
     }
 
     /**
@@ -2898,7 +2907,7 @@ class SuggestionEngine(
         val ours = phoneticSuggestions(backend, composing, limit, previousWord, previousWord2)
         if (phoneticCandidateLists[backend.scheme.languageId] != PhoneticCandidateList.STRIP) return ours
         val depth = maxOf(limit, PHONETIC_CANDIDATE_STRIP_DEPTH)
-        val avro = PhoneticCandidates.build(backend, composing, depth, ::suppressed)
+        val avro = PhoneticCandidates.build(backend, composing, depth, avroDesktop, ::suppressed)
         return (ours.take(1) + avro + ours).distinct().take(limit)
     }
 

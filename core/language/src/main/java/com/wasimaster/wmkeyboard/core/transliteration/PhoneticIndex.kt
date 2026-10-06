@@ -13,6 +13,13 @@ package com.wasimaster.wmkeyboard.core.transliteration
  */
 interface PhoneticIndex {
 
+    /**
+     * Every word of the list in [String.compareTo] order, for a search that
+     * walks it as a tree of shared prefixes (desktop Avro's regular-expression
+     * search, see `AvroDesktop`). Null where the index keeps no such order.
+     */
+    val sortedWords: SortedWords? get() = null
+
     /** Dictionary words phonetically matching the romanized [input], best first. */
     fun lookup(input: String): List<String>
 

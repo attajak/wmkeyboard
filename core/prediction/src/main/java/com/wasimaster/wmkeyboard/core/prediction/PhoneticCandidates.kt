@@ -44,15 +44,20 @@ object PhoneticCandidates {
     /**
      * Builds the list for [composing]. [suppressed] drops the words the user
      * never wants offered; the rules' reading survives it, as it does in the
-     * strip, because it is what a space falls back to.
+     * strip, because it is what a space falls back to. With [desktop] loaded,
+     * Bangla's list is desktop Avro's own, see [buildDesktop].
      */
     fun build(
         backend: PhoneticBackend,
         composing: String,
         limit: Int,
+        desktop: AvroDesktop? = null,
         suppressed: (String) -> Boolean = { false },
     ): List<String> {
         if (composing.isEmpty() || limit <= 0) return emptyList()
+        if (desktop != null && backend.scheme.languageId == AVRO_LANGUAGE) {
+            return buildDesktop(backend, desktop, composing, limit, suppressed)
+        }
         val scheme = backend.scheme
         val reading = scheme.transliterate(composing)
         val listed = backend.spellings.lookup(composing)
@@ -69,6 +74,46 @@ object PhoneticCandidates {
         out.add(reading)
         return out.asSequence().filter { it == reading || !suppressed(it) }.take(limit).toList()
     }
+
+    /**
+     * Desktop Avro's own list, from Avro's data ([AvroDesktop]), with the
+     * keyboard's words added and nothing of Avro's left out: Avro's
+     * autocorrect, then the keyboard's fixed spellings, then every dictionary
+     * word (Avro's search over both lists, plus the keyboard's own looser fold
+     * and suffix joins) nearest to Avro's reading first, then Avro's reading,
+     * then the keyboard's own reading where the two differ.
+     */
+    private fun buildDesktop(
+        backend: PhoneticBackend,
+        desktop: AvroDesktop,
+        composing: String,
+        limit: Int,
+        suppressed: (String) -> Boolean,
+    ): List<String> {
+        val extra = LinkedHashSet<String>()
+        extra.addAll(backend.index.lookupLoose(composing))
+        extra.addAll(withSuffixes(backend, composing))
+        val avro = desktop.suggest(composing, backend.index.sortedWords, extra.toList())
+        val reading = backend.scheme.transliterate(composing)
+        val readings = setOf(AvroDesktop.precomposed(avro.phonetic), AvroDesktop.precomposed(reading))
+        val out = ArrayList<String>()
+        val seen = HashSet<String>()
+        fun add(word: String) {
+            if (word.isEmpty()) return
+            val key = AvroDesktop.precomposed(word)
+            if (key !in readings && suppressed(word)) return
+            if (seen.add(key)) out += word
+        }
+        avro.autocorrect?.let(::add)
+        backend.spellings.lookup(composing).forEach(::add)
+        avro.words.forEach(::add)
+        add(avro.phonetic)
+        add(reading)
+        return out.take(limit)
+    }
+
+    /** The language whose phonetic layout is Avro, the one [AvroDesktop] builds for. */
+    private const val AVRO_LANGUAGE = "bn"
 
     /**
      * Every reading of [composing] as a base the dictionary or the map knows

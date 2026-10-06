@@ -1,0 +1,17 @@
+The files in this directory are data from ibus-avro
+(https://github.com/omicronlab/ibus-avro), Copyright (C) OmicronLab, and are
+covered by the Mozilla Public License 1.1 (assets/licenses/mpl-1.1.txt). The
+source form of each is that project's file of the same purpose:
+
+  phonetic.json      avrolib.js (the patterns of OmicronLab.Avro.Phonetic)
+  regex.json         avroregexlib.js (the patterns of AvroRegex)
+  suffix.json        suffixdict.js
+  autocorrect.json   autocorrect.js
+  dictionary.txt.gz  avrodict.js, one table per "@name" section; eleven
+                     "Ȁc" typos are written as the "‌" (ZWNJ) the
+                     source meant
+  search.json        the first-letter table lists in dbsearch.js
+
+Only the encoding changed (JSON and plain text instead of JavaScript). The code
+that reads them, core/prediction/.../AvroDesktop.kt, is WM Keyboard's own and
+MIT licensed.

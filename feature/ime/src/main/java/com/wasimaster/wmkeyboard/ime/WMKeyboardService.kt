@@ -177,6 +177,7 @@ import com.wasimaster.wmkeyboard.core.input.DeadKeys
 import com.wasimaster.wmkeyboard.core.input.MorseInput
 import com.wasimaster.wmkeyboard.core.input.MultitapCycle
 import com.wasimaster.wmkeyboard.core.prediction.AppNames
+import com.wasimaster.wmkeyboard.core.prediction.AvroDesktop
 import com.wasimaster.wmkeyboard.core.prediction.ContactEmails
 import com.wasimaster.wmkeyboard.core.prediction.ContactNames
 import com.wasimaster.wmkeyboard.core.prediction.Elisions
@@ -4313,6 +4314,7 @@ open class WMKeyboardService : InputMethodService() {
             romanizedGlides = romanizedGlides + ("bn" to bengaliGlide)
             // Every other phonetic language an enabled layout types through.
             loadExtraPhonetic()
+            suggestionEngine?.let { loadAvroDesktop(it, it.phoneticCandidateLists) }
             // A new engine means new word sources; re-ask whether this
             // language and layout can be glided.
             glideSourcesEpoch.update { it + 1 }
@@ -10240,9 +10242,49 @@ open class WMKeyboardService : InputMethodService() {
         val next = settings.suggestionStrip.phoneticCandidateLists
         if (engine.phoneticCandidateLists == next) return
         engine.phoneticCandidateLists = next
+        loadAvroDesktop(engine, next)
         if (composing.isEmpty() || _uiState.value.composer.phoneticLanguage == null) return
         refreshSuggestions()
     }
+
+    /**
+     * Loads desktop Avro's data (`assets/avro/`) into [engine] while Bangla
+     * shows a candidate list, and lets it go when none does: its dictionary is
+     * a few megabytes the keyboard has no other use for.
+     */
+    private fun loadAvroDesktop(engine: SuggestionEngine, lists: Map<String, PhoneticCandidateList>) {
+        val wanted = (lists["bn"] ?: PhoneticCandidateList.OFF) != PhoneticCandidateList.OFF
+        if (!wanted) {
+            engine.avroDesktop = null
+            avroDesktop = null
+            return
+        }
+        // Kept across engines: a dictionary reload builds a new engine, and
+        // the data it would read again has not changed.
+        avroDesktop?.let {
+            engine.avroDesktop = it
+            return
+        }
+        if (avroDesktopLoading) return
+        avroDesktopLoading = true
+        serviceScope.launch {
+            val loaded = withContext(Dispatchers.IO) {
+                runCatching { AvroDesktop.load { name -> assets.open("avro/$name") } }.getOrNull()
+            }
+            avroDesktopLoading = false
+            val current = suggestionEngine ?: return@launch
+            if (loaded == null || current.phoneticCandidateLists["bn"].let { it == null || it == PhoneticCandidateList.OFF }) {
+                return@launch
+            }
+            avroDesktop = loaded
+            current.avroDesktop = loaded
+            if (composing.isNotEmpty() && _uiState.value.composer.phoneticLanguage != null) refreshSuggestions()
+        }
+    }
+
+    /** Desktop Avro's data while a Bangla candidate list is on; see [loadAvroDesktop]. */
+    private var avroDesktop: AvroDesktop? = null
+    private var avroDesktopLoading = false
 
     /**
      * Pushes the fixed-strip setting of the layout now on screen ([spec]) to
@@ -35733,7 +35775,7 @@ private const val SUGGEST_PAGES_POOL = 24
  */
 private const val FIXED_PHONETIC_CHIPS = 2
 /** The most words the candidate-list row above the strip holds. */
-private const val PHONETIC_CANDIDATE_BAR_MAX = 20
+private const val PHONETIC_CANDIDATE_BAR_MAX = 100
 
 
 /** U+3000, the full-width space Japanese and Chinese text is spaced with. */

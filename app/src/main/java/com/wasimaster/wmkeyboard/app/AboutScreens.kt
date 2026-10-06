@@ -373,6 +373,15 @@ private val bundledAttributions: List<Attribution> = buildList {
     )
     add(
         Attribution(
+            "ibus-avro",
+            R.string.about_bundled_avro_used,
+            "Copyright (C) OmicronLab",
+            "MPL-1.1", "mpl-1.1.txt",
+            "https://github.com/omicronlab/ibus-avro",
+        ),
+    )
+    add(
+        Attribution(
             "OpenCC",
             R.string.about_bundled_opencc_used,
             "Copyright Carbo Kuo and OpenCC contributors",

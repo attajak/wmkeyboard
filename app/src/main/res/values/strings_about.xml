@@ -155,6 +155,7 @@
     <!-- :tada: is one of the shortcodes and stays exactly as it is. -->
     <string name="about_bundled_gemoji_used">The emoji shortcodes, the :tada: names that GitHub, Discord and Slack use</string>
     <string name="about_bundled_keyman_used">The key grids for 862 layouts, mostly for languages no other keyboard covers</string>
+    <string name="about_bundled_avro_used">Desktop Avro\'s dictionary, suffixes, autocorrect and search rules, behind the Avro candidate list</string>
     <string name="about_bundled_khipro_used">The rules of the Khipro Bangla layout</string>
     <string name="about_bundled_futo_layouts_used">The key grids of the layouts converted from FUTO Keyboard\'s layout files</string>
     <string name="about_bundled_floris_layouts_used">The key grids of the layouts converted from FlorisBoard\'s layout files</string>

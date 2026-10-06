@@ -145,6 +145,19 @@ class BengaliPhoneticIndex(entries: List<Pair<String, Int>>) : PhoneticIndex {
 
     override val isEmpty: Boolean get() = bucketStart.size <= 1
 
+    /** [byWord] as a [SortedWords], commonest first among the matches of a search. */
+    override val sortedWords: SortedWords = object : SortedWords {
+        override val size: Int get() = byWord.size
+
+        override fun length(i: Int): Int = byWord[i].let { wordStart[it + 1] - wordStart[it] }
+
+        override fun charAt(i: Int, at: Int): Char = wordChars[wordStart[byWord[i]] + at]
+
+        override fun word(i: Int): String = wordAt(byWord[i])
+
+        override fun rank(i: Int): Long = -frequencies[byWord[i]].toLong()
+    }
+
     private fun wordAt(position: Int): String =
         String(wordChars, wordStart[position], wordStart[position + 1] - wordStart[position])
 
