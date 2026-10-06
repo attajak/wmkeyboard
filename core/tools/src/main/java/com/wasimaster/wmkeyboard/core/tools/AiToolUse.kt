@@ -115,22 +115,34 @@ object AiTools {
 }
 
 /**
- * Tool calling for the providers that have no tool calling: a sentinel the
- * model writes into its answer, pulled back out of the stream before anyone
- * sees it.
+ * Tool calling for the providers that have no tool calling: a marker the model
+ * writes into its answer, pulled back out of the stream before anyone sees it.
  *
  * This is what lets an on-device model and Brave's Answers API take part at
  * all — neither has a function-calling API, and Brave takes one user message
  * with no system role, so everything either of them will ever know about tools
- * has to travel inside the text. It is strictly worse than the real thing: a
- * small model writes the sentinel wrong, or writes it and then keeps talking,
- * or describes it instead of using it. All three are survivable here —
- * a sentinel that does not parse is simply not a call — but a model that
- * reliably supports native tool calling should never be sent down
- * this path.
+ * has to travel inside the text. A model that supports native tool calling
+ * should never be sent down this path.
+ *
+ * The reader here is deliberately loose. Asked for `<tool_call>{…}</tool_call>`,
+ * a local model writes whatever its own fine-tune taught it, and the angle
+ * brackets are the worst part of it: `tool_call` is a *special token* in
+ * several chat templates, so the template mangles the very string we asked
+ * for. Gemma 4 E2B alone produced `TOOL_CALL{{…}}<tool_call|>` and
+ * `<|tool_call>call:tool_call{{…}}<tool_call|>` — no opener in the first,
+ * pipes on the wrong side in both, doubled braces in both. Matching only the
+ * exact string meant none of it parsed *and* none of it was hidden, so the
+ * user got raw JSON in the answer bubble: the worst of both outcomes.
+ *
+ * So [Filter] looks for a marker in any of the shapes those templates produce,
+ * takes the next balanced `{…}` after it however many layers of braces it is
+ * wrapped in, and — this is the part that matters for what the user sees —
+ * hides the whole span whether or not it ends up parsing. Machinery the model
+ * wrote for us is never the user's to read, even when it is malformed.
  */
 object AiToolProtocol {
 
+    /** The marker the instructions ask for; readers accept far more. */
     private const val OPEN = "<tool_call>"
     private const val CLOSE = "</tool_call>"
 
@@ -139,10 +151,16 @@ object AiToolProtocol {
 
     /**
      * What to append to the system prompt (or, for Brave, to the one user
-     * message) so the model knows the sentinel.
+     * message) so the model knows the marker.
      *
-     * Short on purpose. Every word is paid for on every run of every action,
-     * including the runs where the model never calls anything.
+     * Short on purpose — every word is paid for on every run, including the
+     * runs where nothing is ever called — but two instructions earn their
+     * place. "Do not ask the user to narrow" is there because a small model's
+     * first move, given a tool, is to ask which — Gemma 4 E2B asked twice
+     * before calling anything for a request it could have searched as
+     * written. "Exactly this and nothing else" is there because the reader
+     * hides a whole marker span, so a model that wraps its call in
+     * explanation loses the explanation too.
      */
     fun instructions(tools: List<AiToolSpec>): String {
         if (tools.isEmpty()) return ""
@@ -150,12 +168,13 @@ object AiToolProtocol {
             val args = tool.parameters["properties"]?.jsonObject?.keys.orEmpty().joinToString(", ")
             "- ${tool.name}($args): ${tool.description}"
         }
-        return "\n\nYou can call tools. To call one, reply with this and nothing else:\n" +
+        return "\n\nYou can call tools. To call one, write exactly this and nothing else:\n" +
             OPEN + """{"name":"TOOL","arguments":{"ARG":"VALUE"}}""" + CLOSE + "\n" +
             "The answer comes back as a message starting $RESULT_PREFIX, and you then " +
-            "reply to the user normally. Call a tool only when you need something you " +
-            "do not already know. Never mention the tools or this format to the user.\n" +
-            "Tools:\n" + list
+            "reply to the user normally. Call a tool whenever you need something you " +
+            "do not already know — do not ask the user to narrow a request you could " +
+            "look up as they wrote it. Never mention the tools or this format to the " +
+            "user.\nTools:\n" + list
     }
 
     /** The user message carrying one finished call's answer. */
@@ -163,14 +182,15 @@ object AiToolProtocol {
         "$RESULT_PREFIX ${result.call.name}\n${result.content}"
 
     /**
-     * Pulls sentinels out of a stream whose chunks can cut one anywhere —
-     * `<tool` in one event and `_call>{…}` in the next.
+     * Pulls markers out of a stream whose chunks can cut one anywhere — `<tool`
+     * in one event and `_call>{…}` in the next.
      *
-     * Same shape as `AiClient.BraveTagFilter` and for the same reason: text
-     * that might still turn into a sentinel is held back until it either does
-     * or cannot, and everything else passes straight through, so the answer
-     * still appears as it streams. The difference is that what a sentinel
-     * holds is kept rather than dropped.
+     * Same hold-back shape as `AiClient.BraveTagFilter`: text that might still
+     * turn into a marker is kept back until it either does or cannot, and
+     * everything else passes straight through, so the answer still appears as
+     * it streams. Here the hold can start on a bare `t` as well as on a `<`,
+     * because a marker need not have brackets at all — which costs at most a
+     * word of lag at a chunk boundary, and never shows a half-written marker.
      */
     class Filter {
         private val pending = StringBuilder()
@@ -186,10 +206,10 @@ object AiToolProtocol {
         }
 
         /**
-         * The end of the stream. A partial sentinel name is released as the
-         * text it turned out to be; a sentinel that never closed is read as a
-         * call anyway when its payload parses, because a model that ran out of
-         * room mid-sentinel still said what it wanted.
+         * The end of the stream. A partial marker is released as the text it
+         * turned out to be; a call that never closed is read anyway when what
+         * there is of it parses, because a model that ran out of room
+         * mid-marker still said what it wanted.
          */
         fun flush(): String = drain(final = true)
 
@@ -197,32 +217,25 @@ object AiToolProtocol {
             val out = StringBuilder()
             var i = 0
             while (i < pending.length) {
-                val open = pending.indexOf("<", i)
-                if (open < 0) {
+                val trigger = AiToolProtocol.nextTrigger(pending, i)
+                if (trigger < 0) {
                     out.append(pending, i, pending.length)
                     i = pending.length
                     break
                 }
-                out.append(pending, i, open)
-                i = open
-                if (pending.startsWith(OPEN, i)) {
-                    val body = i + OPEN.length
-                    val close = pending.indexOf(CLOSE, body)
-                    if (close < 0) {
-                        if (!final) break
-                        parse(pending.substring(body))?.let(found::add)
-                        i = pending.length
-                        break
+                out.append(pending, i, trigger)
+                i = trigger
+                when (val scan = AiToolProtocol.readCall(pending, i, final)) {
+                    Scan.NeedMore -> break
+                    Scan.NotHere -> {
+                        out.append(pending[i])
+                        i++
                     }
-                    parse(pending.substring(body, close))?.let(found::add)
-                    i = close + CLOSE.length
-                    continue
+                    is Scan.Found -> {
+                        scan.call?.let(found::add)
+                        i = scan.end
+                    }
                 }
-                // Not a sentinel yet, but it could still become one once the
-                // next chunk lands.
-                if (!final && OPEN.startsWith(pending.substring(i))) break
-                out.append('<')
-                i++
             }
             pending.delete(0, i)
             return out.toString()
@@ -230,7 +243,7 @@ object AiToolProtocol {
     }
 
     /**
-     * Every sentinel in one finished body. For the non-streaming path and for
+     * Every marker in one finished body. For the non-streaming path and for
      * reading a model's answer back in a test; the streaming path uses
      * [Filter], which has to do the same job a chunk at a time.
      */
@@ -241,22 +254,184 @@ object AiToolProtocol {
         return filter.calls
     }
 
-    /** [text] with every sentinel taken out, which is what the user may see. */
+    /** [text] with every marker taken out, which is what the user may see. */
     fun stripped(text: String): String {
         val filter = Filter()
         return (filter.feed(text) + filter.flush()).trim()
     }
 
+    // ---- the reader -------------------------------------------------------
+
+    private sealed interface Scan {
+        /** More of the stream is needed before this can be decided. */
+        object NeedMore : Scan
+
+        /** Not a marker after all; the character is ordinary text. */
+        object NotHere : Scan
+
+        /** A marker ran to [end]; [call] is null when it did not parse. */
+        data class Found(val call: AiToolCall?, val end: Int) : Scan
+    }
+
     /**
-     * One sentinel's payload as a call, or null when it is not one.
+     * The next place a marker could begin: an angle or square bracket, or the
+     * word itself, since several templates drop the brackets entirely.
+     */
+    private fun nextTrigger(text: CharSequence, from: Int): Int {
+        for (i in from until text.length) {
+            val c = text[i]
+            if (c == '<' || c == '[' || c == 't' || c == 'T') return i
+        }
+        return -1
+    }
+
+    /**
+     * Reads one marker and the call it introduces, starting at [start].
+     *
+     * A bare marker with no object after it is still consumed rather than
+     * shown: the model wrote it for us, and "<tool_call>" in the middle of an
+     * answer helps nobody.
+     */
+    private fun readCall(text: CharSequence, start: Int, final: Boolean): Scan {
+        val marker = matchMarker(text, start)
+        if (marker < 0) {
+            return if (!final && couldBecomeMarker(text, start)) Scan.NeedMore else Scan.NotHere
+        }
+        val body = skipFiller(text, marker, final) ?: return needMore(final, text.length)
+        if (body >= text.length) return needMore(final, text.length)
+        if (text[body] != '{') {
+            // A marker and then prose. Swallow only the marker itself and let
+            // the scan carry on through what follows as ordinary text.
+            return Scan.Found(null, marker)
+        }
+        val close = matchBraces(text, body)
+        if (close < 0) {
+            if (!final) return Scan.NeedMore
+            return Scan.Found(parse(text.substring(body)), text.length)
+        }
+        val call = parse(text.substring(body, close))
+        val end = skipClosing(text, close, final) ?: return Scan.NeedMore
+        return Scan.Found(call, end)
+    }
+
+    private fun needMore(final: Boolean, end: Int): Scan =
+        if (final) Scan.Found(null, end) else Scan.NeedMore
+
+    /**
+     * The end of a marker at [start], or -1. Written as a regex over a bounded
+     * window rather than a hand-rolled walk, because the shapes are many and
+     * all of them are trivial.
+     */
+    private fun matchMarker(text: CharSequence, start: Int): Int {
+        val window = text.subSequence(start, minOf(text.length, start + MARKER_WINDOW))
+        val match = MARKER.find(window)?.takeIf { it.range.first == 0 } ?: return -1
+        return start + match.range.last + 1
+    }
+
+    /**
+     * Whether what is left of the buffer could still grow into a marker. A
+     * prefix of any canonical spelling counts; so does a bracket on its own,
+     * which is how every bracketed spelling starts.
+     */
+    private fun couldBecomeMarker(text: CharSequence, start: Int): Boolean {
+        val tail = text.subSequence(start, minOf(text.length, start + MARKER_WINDOW)).toString()
+        if (tail.length >= MARKER_WINDOW) return false
+        return MARKER_SHAPES.any { it.startsWith(tail, ignoreCase = true) }
+    }
+
+    /**
+     * Past whatever a template wedged between the marker and the object:
+     * whitespace, a `call:` label, a code fence, and repeats of the marker
+     * itself. Null means the buffer ran out mid-filler.
+     */
+    private fun skipFiller(text: CharSequence, from: Int, final: Boolean): Int? {
+        var i = from
+        while (i < text.length) {
+            val c = text[i]
+            if (c.isWhitespace() || c == '`') {
+                i++
+                continue
+            }
+            val marker = matchMarker(text, i)
+            if (marker > i) {
+                i = marker
+                continue
+            }
+            val label = FILLER.find(text.subSequence(i, minOf(text.length, i + MARKER_WINDOW)))
+                ?.takeIf { it.range.first == 0 }
+            if (label != null) {
+                i += label.range.last + 1
+                continue
+            }
+            return i
+        }
+        return if (final) i else null
+    }
+
+    /**
+     * The index just past the `}` that closes the object opened at [from], or
+     * -1 when it never closes. Quoted strings are skipped whole, so a brace
+     * inside a search query cannot end the object early.
+     */
+    private fun matchBraces(text: CharSequence, from: Int): Int {
+        var depth = 0
+        var i = from
+        while (i < text.length) {
+            when (text[i]) {
+                '"' -> {
+                    i++
+                    while (i < text.length && text[i] != '"') {
+                        if (text[i] == '\\') i++
+                        i++
+                    }
+                }
+                '{' -> depth++
+                '}' -> {
+                    depth--
+                    if (depth == 0) return i + 1
+                }
+                else -> Unit
+            }
+            i++
+        }
+        return -1
+    }
+
+    /** Past a closing marker and any code fence after the object. */
+    private fun skipClosing(text: CharSequence, from: Int, final: Boolean): Int? {
+        var i = from
+        while (i < text.length && (text[i] == '`' || text[i] == ' ')) i++
+        val marker = matchMarker(text, i)
+        if (marker > i) {
+            i = marker
+            while (i < text.length && text[i] == '`') i++
+            return i
+        }
+        // The closer may simply not have arrived yet.
+        return if (final || !couldBecomeMarker(text, i)) from else null
+    }
+
+    /**
+     * One payload as a call, or null when it is not one.
      *
      * `arguments` is accepted both as an object and as a string holding one —
      * models trained against OpenAI's wire format write the string form about
-     * as often as the object form — and `parameters` is read as an alias,
-     * which is the other name that shows up.
+     * as often as the object form — and `parameters` is read as an alias.
+     * A payload wrapped in extra braces is unwrapped a layer at a time, which
+     * is what `{{"name":…}}` needs.
      */
-    private fun parse(payload: String): AiToolCall? = runCatching {
-        val root = Json.parseToJsonElement(payload.trim()).jsonObject
+    private fun parse(payload: String): AiToolCall? {
+        var body = payload.trim()
+        repeat(MAX_BRACE_LAYERS) {
+            read(body)?.let { parsed -> return parsed }
+            if (!body.startsWith("{{") || !body.endsWith("}}")) return null
+            body = body.substring(1, body.length - 1).trim()
+        }
+        return null
+    }
+
+    private fun read(payload: String): AiToolCall? = runCatching {
+        val root = Json.parseToJsonElement(payload).jsonObject
         val name = (root["name"] as? JsonPrimitive)?.content?.trim().orEmpty()
         if (name.isEmpty()) return null
         val args = root["arguments"] ?: root["parameters"]
@@ -267,4 +442,36 @@ object AiToolProtocol {
         }
         AiToolCall(id = "", name = name, arguments = arguments)
     }.getOrNull()
+
+    /**
+     * Every marker spelling seen in the wild, as one pattern: optional
+     * bracket, optional pipes either side, optional slash for a closer, the
+     * word with any separator, and the matching close bracket.
+     *
+     * Unbracketed, only `tool_call` counts, and the underscore is what makes
+     * it count. The pattern ignores case, so allowing the spaced form here
+     * would make the words "tool call" in an ordinary sentence disappear out
+     * of the answer — a far worse failure than missing one odd spelling,
+     * since the bracketed form already covers every template that writes it
+     * that way.
+     */
+    private val MARKER = Regex(
+        """^(?:[<\[]\s*\|?\s*/?\s*tool[_ ]?call\s*\|?\s*[>\]]?|/?tool_call)""",
+        RegexOption.IGNORE_CASE,
+    )
+
+    /** `call:`, `json`, and the other labels templates put before the object. */
+    private val FILLER = Regex("""^(?:call|json|arguments|args|function)\s*[:=]?""", RegexOption.IGNORE_CASE)
+
+    /** Canonical spellings, for deciding whether a cut-off tail could grow into one. */
+    private val MARKER_SHAPES = listOf(
+        "<tool_call>", "</tool_call>", "<|tool_call|>", "<|tool_call>", "<tool_call|>",
+        "[tool_call]", "[/tool_call]", "tool_call",
+    )
+
+    /** Longest marker worth looking at; keeps every scan bounded. */
+    private const val MARKER_WINDOW = 20
+
+    /** How many layers of stray braces a payload may be wrapped in. */
+    private const val MAX_BRACE_LAYERS = 3
 }
