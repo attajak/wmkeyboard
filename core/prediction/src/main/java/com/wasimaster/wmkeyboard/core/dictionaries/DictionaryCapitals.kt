@@ -111,6 +111,71 @@ object DictionaryCapitals {
         return if (shape == ALL_CAPS) 0 else shape
     }
 
+    /**
+     * Every spelling of the first [count] of [words] that a fold would lose,
+     * kept as written, for a language whose capitals are letters of their own
+     * (Klingon: `qaH` "sir" and `QaH` "help" are two words under one key).
+     *
+     * [fold] keeps one shape per key, which is right for German, where `Essen`
+     * and `essen` are one word in two positions, and wrong here, where they are
+     * two words. So such a list also gets this: a trie keyed by the spellings
+     * themselves, holding each word with a capital and, beside it, the
+     * lower-case twin of any such key, with its list frequency. Call it before
+     * [fold], which rewrites [words] in place. Null when nothing has a capital.
+     */
+    fun spellingsOf(words: Array<String?>, frequencies: IntArray, count: Int): PackedTrie? {
+        val kept = HashMap<String, Int>()
+        val cased = HashSet<String>()
+        for (i in 0 until count) {
+            val word = words[i] ?: continue
+            if (!hasCapital(word)) continue
+            kept.merge(WordKey.surface(word), maxOf(frequencies[i], 1), ::maxOf)
+            cased.add(WordKey.of(word))
+        }
+        if (kept.isEmpty()) return null
+        for (i in 0 until count) {
+            val word = words[i] ?: continue
+            if (hasCapital(word) || WordKey.of(word) !in cased) continue
+            kept.merge(WordKey.surface(word), maxOf(frequencies[i], 1), ::maxOf)
+        }
+        return PackedTrie.of(kept.map { it.key to it.value })
+    }
+
+    /**
+     * Every spelling [spellings] (from [spellingsOf]) holds for [key],
+     * commonest first. Empty when it holds none, which means the word is
+     * written in lower case, as [key] already is.
+     *
+     * A walk down the trie trying each character of [key] as it is and as its
+     * capital, so a key costs at most two child lookups per character and a
+     * branch only where the list really has both.
+     */
+    fun spellings(spellings: WordSource, key: String): List<String> {
+        if (key.isEmpty()) return emptyList()
+        val found = ArrayList<Pair<String, Int>>(2)
+        val out = StringBuilder(key.length)
+        for (walker in spellings.walkers()) {
+            fun descend(node: Int, at: Int) {
+                if (at == key.length) {
+                    if (walker.isWord(node)) found.add(out.toString() to walker.frequency(node))
+                    return
+                }
+                val lower = key[at]
+                val upper = lower.uppercaseChar()
+                for (c in if (upper == lower) charArrayOf(lower) else charArrayOf(lower, upper)) {
+                    val next = walker.child(node, c)
+                    if (next < 0) continue
+                    out.append(c)
+                    descend(next, at + 1)
+                    out.setLength(out.length - 1)
+                }
+            }
+            descend(walker.root, 0)
+        }
+        if (found.size < 2) return found.map { it.first }
+        return found.sortedByDescending { it.second }.map { it.first }.distinct()
+    }
+
     private fun hasCapital(word: String): Boolean {
         for (c in word) if (c.isUpperCase() || c.isTitleCase()) return true
         return false

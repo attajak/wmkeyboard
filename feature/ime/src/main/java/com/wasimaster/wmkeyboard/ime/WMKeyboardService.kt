@@ -173,6 +173,8 @@ import com.wasimaster.wmkeyboard.core.prediction.Apostrophes
 import com.wasimaster.wmkeyboard.core.prediction.AppLanguageMix
 import com.wasimaster.wmkeyboard.core.prediction.TypedEmails
 import com.wasimaster.wmkeyboard.core.prediction.TypedNumbers
+import com.wasimaster.wmkeyboard.core.prediction.KlingonNumbers
+import com.wasimaster.wmkeyboard.core.prediction.KlingonSuffixes
 import com.wasimaster.wmkeyboard.core.input.BrailleChord
 import com.wasimaster.wmkeyboard.core.input.BrailleGrade1
 import com.wasimaster.wmkeyboard.core.input.DeadKeys
@@ -4327,6 +4329,7 @@ open class WMKeyboardService : InputMethodService() {
                 skipAllCapsAutocorrect = _uiState.value.settings.correction.skipAllCaps
                 dictionaryCapitalsEnabled = _uiState.value.settings.correction.dictionaryCapitals
                 dictionaryCapitals = loadDictionaryCapitals()
+                dictionarySpellings = loadDictionarySpellings()
                 bundledCapitals = loadBundledCapitals()
                 learnedWordMinCount =
                     _uiState.value.settings.suggestionStrip.learnedWordMinCount
@@ -11165,14 +11168,24 @@ open class WMKeyboardService : InputMethodService() {
      * on, since it runs on every caret echo.
      */
     private fun noteNumberRun(ic: InputConnection, before: CharSequence?) {
-        if (!typedNumbersOn(_uiState.value)) {
+        val state = _uiState.value
+        val remembering = typedNumbersOn(state)
+        if (!remembering && !klingonNumbersOn(state)) {
             numberRunPending = false
             return
         }
         val digits = TypedNumbers.runBefore(before ?: ic.getTextBeforeCursor(NUMBER_RUN_LOOKBEHIND, 0))
         numberRun = digits
-        numberRunPending = digits != null
+        numberRunPending = remembering && digits != null
     }
+
+    /**
+     * Whether digits typed here are offered in Klingon words ([KlingonNumbers]):
+     * on a Klingon layout, outside a password box. Independent of remembering
+     * numbers, which is about the user's own numbers rather than how to say one.
+     */
+    private fun klingonNumbersOn(state: KeyboardUiState): Boolean =
+        state.language.id == KlingonSuffixes.LANGUAGE && !state.secureField
 
     /**
      * Keeps the number the caret sits right after, if there is one standing
@@ -11198,7 +11211,11 @@ open class WMKeyboardService : InputMethodService() {
      * scan of a capped list, so it runs inline.
      */
     private fun publishTypedNumbers(digits: String): Boolean {
-        val numbers = typedNumbers.complete(digits, NUMBER_SUGGESTION_LIMIT)
+        val state = _uiState.value
+        // In Klingon the number said in words leads, then the remembered ones.
+        val spoken = if (klingonNumbersOn(state)) KlingonNumbers.spell(digits) else null
+        val remembered = if (typedNumbersOn(state)) typedNumbers.complete(digits, NUMBER_SUGGESTION_LIMIT) else emptyList()
+        val numbers = listOfNotNull(spoken) + remembered
         if (numbers.isEmpty()) return false
         suggestionJob?.cancel()
         _uiState.update {
@@ -18246,8 +18263,11 @@ open class WMKeyboardService : InputMethodService() {
         // nothing rather than land somewhere they no longer are. No space
         // after it, since what follows a number is as often a mark as a word.
         val digitRun = numberRun
-        if (digitRun != null && composing.isEmpty() && suggestion.length > digitRun.length &&
-            suggestion.startsWith(digitRun)
+        if (digitRun != null && composing.isEmpty() && (
+                suggestion.length > digitRun.length && suggestion.startsWith(digitRun) ||
+                    // The same digits said in Klingon words replace them the same way.
+                    suggestion == KlingonNumbers.spell(digitRun)
+                )
         ) {
             numberRun = null
             if (TypedNumbers.runBefore(ic.getTextBeforeCursor(NUMBER_RUN_LOOKBEHIND, 0)) != digitRun) return
@@ -18296,8 +18316,10 @@ open class WMKeyboardService : InputMethodService() {
             if (caret.tail.isEmpty() && expectedSelEnd > expectedSelStart &&
                 ic.getSelectedText(0)?.toString() == caret.word
             ) {
-                val replacement =
-                    displayCaseForShift(caseLike(suggestion, caret.word), _uiState.value.shiftState)
+                val replacement = displayCaseForShift(
+                    caseLike(suggestion, caret.word, _uiState.value.language.letterCaseIsSpelling),
+                    _uiState.value.shiftState,
+                )
                 ic.commitText(replacement, 1)
                 invalidateExpectedSelection()
                 recordStat { onWordsCommitted(1, System.currentTimeMillis()) }
@@ -18333,7 +18355,10 @@ open class WMKeyboardService : InputMethodService() {
             // replaced, whose capital the live shift state can no longer
             // account for (#212).
             val replacement =
-                displayCaseForShift(caseLike(suggestion, caret.word), _uiState.value.shiftState)
+                displayCaseForShift(
+                    caseLike(suggestion, caret.word, _uiState.value.language.letterCaseIsSpelling),
+                    _uiState.value.shiftState,
+                )
             ic.beginBatchEdit()
             ic.deleteSurroundingText(head.length, tail.length)
             ic.commitText(replacement, 1)
@@ -18488,7 +18513,10 @@ open class WMKeyboardService : InputMethodService() {
         // since spent — auto-capitalize's above all (#212).
         notePhoneticPick(suggestion)
         val committed = _uiState.value.let { state ->
-            val cased = displayCaseForShift(caseLike(suggestion, replacedWord), state.shiftState)
+            val cased = displayCaseForShift(
+                caseLike(suggestion, replacedWord, state.language.letterCaseIsSpelling),
+                state.shiftState,
+            )
             // An English word picked on a layout with no case of its own opens
             // a sentence with a capital the way a committed one does.
             if (composing.isNotEmpty() && isLatinOnPhonetic(cased, state)) {
@@ -19806,7 +19834,11 @@ open class WMKeyboardService : InputMethodService() {
                     converts = state.composer.isTransliterating || state.composer.isConversion,
                     phonetic = state.composer.phoneticLanguage
                         ?: KHIPRO_GLIDE.takeIf { state.composer is KhiproComposer },
-                    alphabet = state.layouts.letterAlphabet + state.composer.glideKeys,
+                    alphabet = state.layouts.letterAlphabet + state.composer.glideKeys +
+                        // The glide grid puts the apostrophe on the `'` key for
+                        // these (see KeyboardScreen), so their words count as
+                        // drawable: most of Klingon's commonest end in one.
+                        if (state.language.apostropheIsLetter) APOSTROPHE_LETTERS else emptySet(),
                     sources = epoch,
                 )
             }
@@ -35202,6 +35234,19 @@ open class WMKeyboardService : InputMethodService() {
     }
 
     /**
+     * Every cased spelling of the downloaded lists of languages whose capitals
+     * are letters of their own (Klingon), by language id; see
+     * [DictionaryCapitals.spellingsOf]. Only those languages write the file.
+     */
+    private fun loadDictionarySpellings(): Map<String, WordSource> {
+        if (!userUnlocked) return emptyMap()
+        return DictionaryStore.downloadedLanguageIds(filesDir)
+            .filter { LanguageRegistry.byId(it).letterCaseIsSpelling && shippedDictionaryEnabled(it) }
+            .mapNotNull { id -> MappedTrie.open(DictionaryStore.spellingsFile(filesDir, id))?.let { id to it } }
+            .toMap()
+    }
+
+    /**
      * The capitals shipped for English's bundled list, which spells nothing
      * with one (#517): Monday, London, iPhone. Read from the APK, so a locked
      * boot has them too. Small enough to hold on the heap.
@@ -35244,6 +35289,7 @@ open class WMKeyboardService : InputMethodService() {
         suggestionEngine?.let { engine ->
             engine.dictionary = english ?: PackedTrie.EMPTY
             engine.dictionaryCapitals = loadDictionaryCapitals()
+            engine.dictionarySpellings = loadDictionarySpellings()
             engine.bengaliIndex = buildBengaliIndex()
             val lang = _uiState.value.language
             engine.customDictionary = customDictionaries[lang.id] ?: PackedTrie.EMPTY
@@ -36836,3 +36882,6 @@ private const val LATIN_EXTENDED_END = 0x24F
 
 /** WhatsApp, and the business build that registers its own package. */
 private val WHATSAPP_PACKAGES = listOf("com.whatsapp", "com.whatsapp.w4b")
+
+/** The apostrophe's two spellings, as code points: what a glide counts as a letter where it is one. */
+private val APOSTROPHE_LETTERS: Set<Int> = setOf('\''.code, '’'.code)

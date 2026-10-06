@@ -14799,7 +14799,15 @@ private fun KeyRows(
     val cooldownMs = gesture.postTypeCooldownMs
     // Which key a glide reads as an apostrophe. Read through a State because the
     // grid is built inside the pointer loop, which outlives this composition.
-    val apostropheKey = rememberUpdatedState(gesture.apostropheKey)
+    // A language that spells with the apostrophe (Klingon, Lojban) draws it
+    // through its own `'` key when the setting names none.
+    val apostropheKey = rememberUpdatedState(
+        if (gesture.apostropheKey == GlideApostropheKey.OFF && state.language.apostropheIsLetter) {
+            GlideApostropheKey.APOSTROPHE
+        } else {
+            gesture.apostropheKey
+        },
+    )
     // The spacebar cannot both end a word mid-stroke and stand for an
     // apostrophe: one crossing, two readings. Choosing it as the apostrophe key
     // stands the multi-word split down for as long as that choice holds.
@@ -16058,7 +16066,10 @@ private fun KeyRows(
                         // them as letters: both consumers of the map that are
                         // about letters filter them back out (see
                         // [GlidePunctuationCodePoints]).
-                        val letter = key.glideAnchor() ?: key.glidePunctuationCodePoint()
+                        // A multi-letter key (Klingon's `ch`) reports under
+                        // the letter it carries on the glide grid, when it has one.
+                        val letter = key.glideAnchor() ?: liveLayouts.value.digraphAnchors[key]
+                            ?: key.glidePunctuationCodePoint()
                         if (letter != null) {
                             val topLeft = coords.positionInRoot() - boxOrigin
                             val center = Offset(

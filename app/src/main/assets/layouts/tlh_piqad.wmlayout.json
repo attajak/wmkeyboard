@@ -1,0 +1,189 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_tlh_piqad",
+    "name": "pIqaD (Klingon)",
+    "langId": "tlh",
+    "version": 1,
+    "appearance": {
+      "fontId": "installed:Klingon pIqaD HaSta"
+    },
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            },
+            {
+              "label": "",
+              "longPress": [
+                ""
+              ]
+            }
+          ],
+          [
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            }
+          ],
+          [
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": ""
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              },
+              "width": 1.5
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              },
+              "width": 1.5
+            },
+            {
+              "label": "",
+              "longPress": [
+                ",",
+                "!",
+                "?"
+              ],
+              "role": "Comma"
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 4
+            },
+            {
+              "label": "",
+              "longPress": [
+                "",
+                ".",
+                "…",
+                ":",
+                ";"
+              ],
+              "role": "Period"
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              },
+              "width": 1.5
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

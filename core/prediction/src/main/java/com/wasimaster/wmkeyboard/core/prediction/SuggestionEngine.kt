@@ -8,6 +8,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideCoverage
 import com.wasimaster.wmkeyboard.core.gesture.GlideKeyMap
 import com.wasimaster.wmkeyboard.core.gesture.GlideWorkspace
 import com.wasimaster.wmkeyboard.core.gesture.RomanizedIndex
+import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import kotlin.math.exp
 import kotlin.math.ln
@@ -606,6 +607,25 @@ class SuggestionEngine(
     /** The user's switch over [dictionaryCapitals]. */
     @Volatile
     var dictionaryCapitalsEnabled: Boolean = true
+
+    /**
+     * Every cased spelling of the loaded word lists whose language writes its
+     * capitals as letters of their own, by language id
+     * ([DictionaryCapitals.spellingsOf]). Klingon's `qaH` and `QaH` are two
+     * words under one key, which one shape per key in [dictionaryCapitals]
+     * cannot hold. Outside [generation] for the same reason that is.
+     */
+    @Volatile
+    var dictionarySpellings: Map<String, WordSource> = emptyMap()
+
+    /**
+     * Whether the language being typed spells with its capitals (Klingon):
+     * a candidate is then offered in the spellings [caseExactForms] allows and
+     * never re-cased to follow what was typed, since a capital there is a
+     * different letter rather than a different position in the sentence.
+     */
+    private val caseExact: Boolean
+        get() = primaryLanguageId.isNotEmpty() && LanguageRegistry.byId(primaryLanguageId).letterCaseIsSpelling
 
     /**
      * How many times a word has to be typed before being learned protects it
@@ -1671,6 +1691,19 @@ class SuggestionEngine(
         /** Language id of bundled English, the only special-cased secondary. */
         private const val EN = "en"
 
+        /** How many suffixed forms of a whole Klingon word the strip is offered. */
+        private const val KLINGON_SUFFIX_OFFERS = 3
+
+        /**
+         * How far below the root its first suffixed form ranks, in nats: about
+         * a quarter of the root's own weight, so a common root's endings sit
+         * under the completions the list really has for it and above its tail.
+         */
+        private const val KLINGON_SUFFIX_DAMP = 1.4
+
+        /** The further step down for each later ending. */
+        private const val KLINGON_SUFFIX_STEP = 0.2
+
         /**
          * Log-score worth of one step of [rankOffsets]. One nat, the same
          * unit the reranker treats one engine rank as
@@ -2253,6 +2286,17 @@ class SuggestionEngine(
                     merged.merge(split.text, split.score, ::maxOf)
                 }
             }
+            // A whole Klingon word: its likeliest endings, below the list's own
+            // words for it and in the case it was typed (see [KlingonSuffixes]).
+            if (known && primaryLanguageId == KlingonSuffixes.LANGUAGE) {
+                val root = dictionaryScore(lower)
+                if (root.isFinite()) {
+                    KlingonSuffixes.offers(composing, KLINGON_SUFFIX_OFFERS) { inDictionaries(WordKey.of(it)) }
+                        .forEachIndexed { i, word ->
+                            merged.merge(word, root - KLINGON_SUFFIX_DAMP - i * KLINGON_SUFFIX_STEP, ::maxOf)
+                        }
+                }
+            }
         }
 
         // Context re-rank: a candidate the user has typed after [previousWord]
@@ -2338,6 +2382,15 @@ class SuggestionEngine(
             null
         }
 
+        if (caseExact) {
+            // Expanded before the slice: one key can be two words here, and a
+            // key whose spellings all disagree with what was typed is none.
+            return (reordered ?: ranked).asSequence()
+                .flatMap { if (it.contains('@')) sequenceOf(it) else caseExactForms(it, composing).asSequence() }
+                .distinct()
+                .take(limit)
+                .toList()
+        }
         return (reordered ?: ranked)
             .take(limit)
             // Emails are stored verbatim; case-matching the typed prefix would
@@ -3435,7 +3488,11 @@ class SuggestionEngine(
         keys: KeySets? = null,
     ): CorrectionDecision {
         val lower = word.lowercase()
-        if (word == lower) dictionaryCapital(lower)?.let { return it }
+        if (caseExact) {
+            caseRepair(word, lower)?.let { return it }
+        } else if (word == lower) {
+            dictionaryCapital(lower)?.let { return it }
+        }
         if (lower.length < 3) return NO_CORRECTION
         // An all-caps word is a deliberate acronym or shout, not a typo of a
         // lowercase word — don't "correct" it away when the user asked us not to.
@@ -3461,6 +3518,72 @@ class SuggestionEngine(
         if (suppressed(lower)) return null
         if (correctionStats.penalty(lower, spelling) != CorrectionStats.Penalty.NONE) return null
         return CorrectionDecision(apply = spelling, certainty = 1.0)
+    }
+
+    /**
+     * [dictionaryCapital] for a language whose capitals are letters (Klingon):
+     * [word] typed with the right letters in the wrong case — `qapla'` — is
+     * fixed to the list's spelling, `Qapla'`, whichever case was typed. A
+     * spelling the list has is left alone, however it is cased, since there
+     * `qaH` and `QaH` are both words. When several spellings would do, the one
+     * that changes fewest letters. Null when the list knows the key in no
+     * cased spelling, which leaves the word to the ordinary checks.
+     */
+    private fun caseRepair(word: String, lower: String): CorrectionDecision? {
+        val spellings = caseSpellings(lower)
+        if (spellings.isEmpty()) return null
+        if (word in spellings) return NO_CORRECTION
+        if (userLexicon.isCasePinned(lower) || userLexicon.displayOf(lower) == word) return NO_CORRECTION
+        if (suppressed(lower)) return null
+        val spelling = spellings.minBy { caseDisagreements(it, word) }
+        if (correctionStats.penalty(word, spelling) != CorrectionStats.Penalty.NONE) return NO_CORRECTION
+        return CorrectionDecision(apply = spelling, certainty = 1.0)
+    }
+
+    /** The cased spellings the language being typed gives [key]; see [DictionaryCapitals.spellings]. */
+    private fun caseSpellings(key: String): List<String> {
+        val source = dictionarySpellings[primaryLanguageId] ?: return emptyList()
+        return DictionaryCapitals.spellings(source, key)
+    }
+
+    /**
+     * The spellings [candidate] is offered in while [typed] is being written,
+     * in a language whose capitals are letters ([caseExact]).
+     *
+     * Every spelling that agrees with each letter typed so far, commonest
+     * first: typed `qa` keeps `qaH` and drops `QaH`, which is another word.
+     * A completion none agrees with is not offered at all. A correction (one
+     * that does not start with what was typed) is offered in the spelling that
+     * agrees best, since its letters already differ. A word the list writes
+     * only in lower case, or does not have, comes as [displayForm] gives it,
+     * under the same agreement rule.
+     */
+    private fun caseExactForms(candidate: String, typed: String): List<String> {
+        val key = WordKey.of(candidate)
+        val completes = typed.isNotEmpty() && key.startsWith(WordKey.of(typed))
+        val spellings = caseSpellings(key)
+        if (spellings.isEmpty()) {
+            val form = displayForm(candidate)
+            return if (completes && caseDisagreements(form, typed) > 0) emptyList() else listOf(form)
+        }
+        if (typed.isEmpty()) return spellings
+        val agreeing = spellings.filter { caseDisagreements(it, typed) == 0 }
+        return when {
+            agreeing.isNotEmpty() -> agreeing
+            completes -> emptyList()
+            else -> listOf(spellings.minBy { caseDisagreements(it, typed) })
+        }
+    }
+
+    /** How many places [spelling] and [typed] hold the same letter in different cases. */
+    private fun caseDisagreements(spelling: String, typed: String): Int {
+        var count = 0
+        for (i in 0 until minOf(spelling.length, typed.length)) {
+            val a = spelling[i]
+            val b = typed[i]
+            if (a != b && a.lowercaseChar() == b.lowercaseChar()) count++
+        }
+        return count
     }
 
     /**
@@ -4299,6 +4422,10 @@ class SuggestionEngine(
         if (word.isEmpty()) return word
         val key = word.lowercase()
         if (key != word) return word
+        // The list's commonest spelling, before anything the user's own case
+        // memory says: in such a language a capital is a letter, and the one
+        // vote the memory keeps per key cannot tell two words apart.
+        if (caseExact) caseSpellings(key).firstOrNull()?.let { return it }
         return userLexicon.displayOf(key) ?: systemWordCases[key]
             ?: listSpelling(key)?.takeUnless { userLexicon.isCasePinned(key) } ?: word
     }
@@ -4309,6 +4436,9 @@ class SuggestionEngine(
      * the BMP reads as all capitals and every suggestion for it is shouted.
      */
     private fun matchCase(typed: String, suggestion: String): String = when {
+        // A capital is a letter there, so following the typed pattern would
+        // spell another word: the spelling that agrees with it is chosen instead.
+        caseExact -> caseExactForms(suggestion, typed).firstOrNull() ?: suggestion
         typed.codePointCount(0, typed.length) > 1 && lettersAllUpper(typed) ->
             suggestion.uppercase()
         startsUpperCase(typed) -> capitalizeFirst(suggestion)

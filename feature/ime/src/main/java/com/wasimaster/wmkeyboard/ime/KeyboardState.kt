@@ -111,9 +111,13 @@ fun displayCaseForShift(word: String, shift: ShiftState): String {
  * as "no letters at all" and every replacement for it would be shouted — the
  * same trap `WordCase.kt` in :core:prediction was written for, mirrored here
  * because those helpers are internal to that module.
+ *
+ * [caseIsSpelling] is the language's [LanguageDef.letterCaseIsSpelling]: in
+ * Klingon a capital is a letter, so the shape of the word being replaced says
+ * nothing about the one replacing it, and `qaH` picked over `QaH` stays `qaH`.
  */
-fun caseLike(word: String, replaced: String?): String {
-    if (word.isEmpty() || replaced.isNullOrEmpty() || '@' in word) return word
+fun caseLike(word: String, replaced: String?, caseIsSpelling: Boolean = false): String {
+    if (caseIsSpelling || word.isEmpty() || replaced.isNullOrEmpty() || '@' in word) return word
     var at = 0
     var letters = 0
     var allUpper = true
@@ -406,6 +410,43 @@ data class LayoutSet(
         fn?.hasKanaVariantKeys() == true
 
     /**
+     * The letter each multi-letter key is anchored by on the glide grid, for
+     * the keys [glideAnchor] gives none: Klingon's `ch`, `gh`, `ng` and `tlh`
+     * keys each write a whole letter of its alphabet that Latin spells with two
+     * or three. Such a key stands for the first of its letters that no
+     * single-letter key on the board writes, so `ch` carries the `c` a Klingon
+     * board has nowhere else, while `gh`, whose g and h both have keys of their
+     * own, stays off the grid and a swipe takes those from their own keys.
+     * Without this, every word with a `ch` was out of a swipe's reach.
+     *
+     * Declared before [letterAlphabet], whose initializer reads it, and lazy so
+     * it stays out of equals/hashCode/copy.
+     */
+    val digraphAnchors: Map<Key, Int> by lazy {
+        val singles = HashSet<Int>()
+        for (row in letters.rows) {
+            for (key in row) {
+                if (key.action != KeyAction.Text) continue
+                key.glideAnchor()?.let(singles::add)
+                for (letter in key.letterSet()) singles.add(Character.toLowerCase(letter.code))
+            }
+        }
+        val out = HashMap<Key, Int>()
+        val claimed = HashSet<Int>()
+        for (row in letters.rows) {
+            for (key in row) {
+                if (key.action != KeyAction.Text || key.glideAnchor() != null) continue
+                val text = key.output ?: key.label
+                if (text.length !in 2..MAX_DIGRAPH_LETTERS || !text.all { it.isLetter() }) continue
+                val free = text.lowercase().firstOrNull { it.code !in singles && it.code !in claimed } ?: continue
+                claimed.add(free.code)
+                out[key] = free.code
+            }
+        }
+        out
+    }
+
+    /**
      * Every character the letter layer can produce: base labels, their shifted
      * forms, and whatever the long presses hold.
      *
@@ -434,6 +475,7 @@ data class LayoutSet(
                 // the board cannot write most of the alphabet. A set is a set,
                 // so the duplicate the anchor makes here costs nothing.
                 for (letter in key.letterSet()) add(Character.toLowerCase(letter.code))
+                digraphAnchors[key]?.let(::add)
                 take(key.output ?: key.label)
                 take(key.shiftLabel)
                 for (alternate in key.longPress) take(alternate)
@@ -483,7 +525,7 @@ data class LayoutSet(
             for (row in letters.rows) {
                 for (key in row) {
                     if (key.action != KeyAction.Text) continue
-                    val anchor = key.glideAnchor() ?: continue
+                    val anchor = key.glideAnchor() ?: digraphAnchors[key] ?: continue
                     when (pass) {
                         // An ambiguous key's whole set answers to its one
                         // anchor, so a word continuing with any letter of a T9
@@ -494,6 +536,7 @@ data class LayoutSet(
                             }
                         } else {
                             claim(key.output ?: key.label, anchor)
+                            digraphAnchors[key]?.let { out.putIfAbsent(it, anchor) }
                         }
                         SHIFT_PASS -> claim(key.shiftLabel, anchor)
                         else -> for (alternate in key.longPress) claim(alternate, anchor)
@@ -565,7 +608,7 @@ data class LayoutSet(
             for (row in letters.rows) {
                 for (key in row) {
                     if (key.action != KeyAction.Text) continue
-                    val anchor = key.glideAnchor() ?: continue
+                    val anchor = key.glideAnchor() ?: digraphAnchors[key] ?: continue
                     val (x, y) = centerOf(anchor) ?: continue
                     when (pass) {
                         // An ambiguous key's whole letter set lands on its one
@@ -588,6 +631,7 @@ data class LayoutSet(
                             }
                         } else {
                             emit(key.output ?: key.label, x, y)
+                            digraphAnchors[key]?.let { out.add(KeyCenter(it, x, y)) }
                         }
                         SHIFT_PASS -> emit(key.shiftLabel, x, y)
                         else -> for (alternate in key.longPress) emit(alternate, x, y)
@@ -3884,3 +3928,6 @@ private fun searchComposed(label: String): Char? {
 
 /** A base character plus at most this many combining marks is still one key. */
 private const val MAX_KEY_SPELLING = 4
+
+/** The longest key [LayoutSet.digraphAnchors] reads as one letter: Klingon's `tlh`. */
+private const val MAX_DIGRAPH_LETTERS = 3

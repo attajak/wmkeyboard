@@ -15,6 +15,7 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.googlefonts.Font as DownloadableFont
 import com.wasimaster.wmkeyboard.ime.R
 import com.wasimaster.wmkeyboard.core.fonts.FontStore
+import com.wasimaster.wmkeyboard.core.fonts.LayoutFonts
 import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.settings.EmojiFontChoice
 import java.io.File
@@ -521,7 +522,12 @@ object KeyboardFonts {
         val store = FontStore.get(context)
         store.existingFileFor(storeId)?.let { return it }
         val byName = store.textFonts().firstOrNull { it.name.equals(storeId, ignoreCase = true) }
-        return byName?.let { store.existingFileFor(it.id) }
+        byName?.let { return store.existingFileFor(it.id) }
+        // A face a shipped layout draws in and the data repository serves
+        // (Klingon pIqaD): fetched now, and drawn once [LayoutFonts.installs]
+        // moves. Until then the keys fall back like any missing font.
+        LayoutFonts.byName(storeId)?.let { LayoutFonts.request(context, it) }
+        return null
     }
 
     /**

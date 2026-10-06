@@ -10,6 +10,7 @@ import com.wasimaster.wmkeyboard.core.prediction.MappedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrie
 import com.wasimaster.wmkeyboard.core.prediction.PackedTrieCodec
 import com.wasimaster.wmkeyboard.core.prediction.RomanianSpelling
+import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.prediction.R
 import java.io.File
 import java.io.IOException
@@ -233,6 +234,13 @@ object WordlistDownloadManager {
      * returns, so a list on disk always has its capitals with it.
      */
     private fun pack(filesDir: File, langId: String, list: Wordlist, part: File): PackedTrie {
+        // Before the fold, which rewrites the words in place: a language whose
+        // capitals are letters keeps every spelling, not one shape per key.
+        val spellings = if (LanguageRegistry.byId(langId).letterCaseIsSpelling) {
+            DictionaryCapitals.spellingsOf(list.words, list.frequencies, list.count)
+        } else {
+            null
+        }
         val capitals = DictionaryCapitals.fold(list.words, list.count).capitals
         val trie = PackedTrie.of(list.words, list.frequencies, list.count)
         part.outputStream().use { PackedTrieCodec.write(trie, it) }
@@ -244,6 +252,14 @@ object WordlistDownloadManager {
         val scratch = File(file.path + ".part")
         scratch.outputStream().use { out -> capitals?.let { PackedTrieCodec.write(it, out) } }
         if (!scratch.renameTo(file)) scratch.delete()
+        val spellingsFile = DictionaryStore.spellingsFile(filesDir, langId)
+        if (spellings == null) {
+            spellingsFile.delete()
+        } else {
+            val spellingsScratch = File(spellingsFile.path + ".part")
+            spellingsScratch.outputStream().use { PackedTrieCodec.write(spellings, it) }
+            if (!spellingsScratch.renameTo(spellingsFile)) spellingsScratch.delete()
+        }
         return trie
     }
 

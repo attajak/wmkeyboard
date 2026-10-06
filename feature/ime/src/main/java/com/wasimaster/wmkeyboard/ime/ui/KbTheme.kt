@@ -23,6 +23,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +51,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
+import com.wasimaster.wmkeyboard.core.fonts.LayoutFonts
 import com.wasimaster.wmkeyboard.core.emoji.EmojiFontShaping
 import com.wasimaster.wmkeyboard.core.settings.withRotation
 import com.wasimaster.wmkeyboard.core.settings.rotates
@@ -1200,9 +1202,13 @@ fun KeyboardThemeProvider(
     val themeScriptFontId = remember(settings, darkSlot, scriptId) {
         settings.activeThemeSpec(darkSlot)?.scriptFontIds?.get(scriptId.name)
     }
+    // A layout's own face may still be on its way ([LayoutFonts]): when it
+    // lands the id is the same, so this is what tells the face to resolve again.
+    val layoutFontsInstalled by LayoutFonts.installs.collectAsState()
     val keyFontFamily = remember(
         scriptId,
         layoutFontId,
+        layoutFontsInstalled,
         themeFontId,
         themeScriptFontId,
         settings.keyFontId,

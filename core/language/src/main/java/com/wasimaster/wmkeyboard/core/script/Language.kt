@@ -57,6 +57,13 @@ data class LanguageDef(
      * capital to the keys and to shift.
      */
     val letterCaseIsSpelling: Boolean = false,
+    /**
+     * Whether the apostrophe is a letter of the alphabet rather than
+     * punctuation: Klingon's glottal stop (`Qapla'`), Lojban's `'` between
+     * vowels. A glide then draws it through the `'` key like any other letter,
+     * without the "Apostrophe in a glide" setting having to name a key.
+     */
+    val apostropheIsLetter: Boolean = false,
 ) {
     /** English-language convenience, preserving the old `InputMode.isEnglish` reads. */
     val isEnglish: Boolean get() = id == "en"
@@ -1788,6 +1795,8 @@ object LanguageRegistry {
             script = ScriptId.LATIN,
             localeTag = "jbo",
             layoutIds = listOf(AssetLayouts.JBO_QWERTY_ID),
+            letterCaseIsSpelling = true,
+            apostropheIsLetter = true,
         ),
         LanguageDef(
             id = "tlh",
@@ -1795,8 +1804,9 @@ object LanguageRegistry {
             englishName = "Klingon",
             script = ScriptId.LATIN,
             localeTag = "tlh",
-            layoutIds = listOf(AssetLayouts.TLH_QWERTY_ID, AssetLayouts.TLH_T9_ID),
+            layoutIds = listOf(AssetLayouts.TLH_QWERTY_ID, AssetLayouts.TLH_PIQAD_ID, AssetLayouts.TLH_T9_ID),
             letterCaseIsSpelling = true,
+            apostropheIsLetter = true,
         ),
         LanguageDef(
             id = "se",

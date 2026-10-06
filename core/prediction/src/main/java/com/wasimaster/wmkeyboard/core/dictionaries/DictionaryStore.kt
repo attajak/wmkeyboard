@@ -26,6 +26,7 @@ object DictionaryStore {
 
     private const val FILE_NAME = "main.wmdict"
     private const val CAPITALS_NAME = "caps.wmdict"
+    private const val SPELLINGS_NAME = "spellings.wmdict"
     private const val BUNDLED_DIR = "bundled"
 
     private fun root(filesDir: File) = File(filesDir, "dict")
@@ -46,6 +47,14 @@ object DictionaryStore {
      */
     fun capitalsFile(filesDir: File, langId: String): File =
         File(File(root(filesDir), langId), CAPITALS_NAME)
+
+    /**
+     * Every cased spelling of [langId]'s downloaded list, kept as written (see
+     * [DictionaryCapitals.spellingsOf]). Only written for a language whose
+     * capitals are letters of their own, and absent for every other.
+     */
+    fun spellingsFile(filesDir: File, langId: String): File =
+        File(File(root(filesDir), langId), SPELLINGS_NAME)
 
     /**
      * Whether this build can actually read [langId]'s downloaded dictionary.
@@ -88,6 +97,7 @@ object DictionaryStore {
         File(dir, FILE_NAME).delete()
         File(dir, "$FILE_NAME.part").delete()
         File(dir, CAPITALS_NAME).delete()
+        File(dir, SPELLINGS_NAME).delete()
         File(dir, "source").delete()
         File(dir, "size").delete()
     }

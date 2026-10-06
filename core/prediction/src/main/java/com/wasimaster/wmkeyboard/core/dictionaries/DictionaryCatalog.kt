@@ -294,7 +294,7 @@ object DictionaryCatalog {
         entry("ti", "ti", "ti", 5_411, 23_047L),
         entry("tk", "tk", "tk", 79_436, 320_667L),
         entry("tl", "tl", "tl", 144_149, 631_911L),
-        entry("tlh", "tlh", "tlh", 2_428, 6_843L),
+        entry("tlh", "tlh", "tlh", 6_277, 22_014L),
         // Toki Pona's entire vocabulary is ~140 words — the list is complete,
         // not truncated, so it ships despite being far below the usual floor.
         entry("tok", "tok", "tok", 178, 695L),
