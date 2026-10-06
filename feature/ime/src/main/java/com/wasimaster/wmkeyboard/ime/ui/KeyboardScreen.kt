@@ -1599,6 +1599,11 @@ fun KeyboardScreen(
             onSizingAction = onSizingAction,
             onFloatingBounds = onFloatingBounds,
             onWindowHeadroom = onWindowHeadroom,
+            onHandwritingStroke = onHandwritingStroke,
+            onHandwritingUndo = onHandwritingUndo,
+            onHandwritingDownload = onHandwritingDownload,
+            onSuggestion = onSuggestion,
+            onPanelChange = onPanelChange,
         )
     }
 }
@@ -1632,6 +1637,12 @@ private fun KeyboardScreenFrame(
     onSizingAction: (SizingAction) -> Unit,
     onFloatingBounds: (IntRect) -> Unit,
     onWindowHeadroom: (Int) -> Unit,
+    // Full-screen handwriting (#386) draws in the frame, outside the body.
+    onHandwritingStroke: (HwStroke, IntSize) -> Unit,
+    onHandwritingUndo: () -> Unit,
+    onHandwritingDownload: () -> Unit,
+    onSuggestion: (String) -> Unit,
+    onPanelChange: (PanelMode) -> Unit,
 ) {
     val movableBody = body
     LaunchedEffect(languageSwitchEcho.shown) {
