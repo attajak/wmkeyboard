@@ -45,6 +45,7 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.layout.resolveLayoutKeyman
 import com.wasimaster.wmkeyboard.core.transliteration.BijoyAnsi
+import com.wasimaster.wmkeyboard.core.dictionaries.AvroDictionaryDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryEntry
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
@@ -923,6 +924,7 @@ internal fun LanguageDetailScreen(
                 // automatic pass fetching the keywords straight back.
                 EmojiDictDownloadManager.delete(filesDir, langId)
                 NgramPackDownloadManager.delete(filesDir, langId)
+                if (langId == PhoneticSchemes.BENGALI.languageId) AvroDictionaryDownloads.delete(filesDir)
                 removeLanguage()
             },
         )
@@ -1793,6 +1795,9 @@ private fun PhoneticStripGroup(
 ) {
     // Branched on by the builder below, so watched once here.
     val fixed = settings.watch { langId in it.suggestionStrip.phoneticFixedStripLangs }
+    val candidateListOn = settings.watch {
+        it.suggestionStrip.phoneticCandidateListFor(langId) != PhoneticCandidateList.OFF
+    }
     SettingsGroup(stringResource(R.string.languages_phonetic_strip_title)) {
         item {
             ToggleSetting(
@@ -1867,7 +1872,31 @@ private fun PhoneticStripGroup(
                     },
                 ) { scope.launch { repository.setPhoneticCandidateList(langId, it) } }
             }
+            item(visible = candidateListOn) { AvroDictionaryRow() }
         }
+    }
+}
+
+/**
+ * Desktop Avro's dictionary, which the candidate list searches besides the
+ * keyboard's own words. The keyboard fetches it as the list is turned on; this
+ * row says where that stands and fetches it again after a failure.
+ */
+@Composable
+private fun AvroDictionaryRow() {
+    val filesDir = LocalContext.current.filesDir
+    val status by AvroDictionaryDownloads.status.collectAsState()
+    LaunchedEffect(Unit) { AvroDictionaryDownloads.refresh(filesDir) }
+    val value = when (val s = status) {
+        is AvroDictionaryDownloads.Status.Downloaded ->
+            stringResource(R.string.languages_avro_dictionary_downloaded, formatBytes(s.sizeBytes))
+        AvroDictionaryDownloads.Status.Downloading -> stringResource(CommonR.string.common_downloading)
+        AvroDictionaryDownloads.Status.Failed -> stringResource(R.string.languages_word_pairs_failed)
+        AvroDictionaryDownloads.Status.NotDownloaded ->
+            stringResource(R.string.languages_avro_dictionary_download, formatBytes(AvroDictionaryDownloads.APPROX_BYTES))
+    }
+    NavRow(R.string.languages_avro_dictionary_title, subtitle = value) {
+        if (status !is AvroDictionaryDownloads.Status.Downloaded) AvroDictionaryDownloads.start(filesDir)
     }
 }
 

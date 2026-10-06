@@ -138,6 +138,22 @@ class RomanizedIndex private constructor(
             return RomanizedIndex(PackedTrie.of(curated), downloadedRomanized, resolve, alphabet)
         }
 
+        /**
+         * A romanization whose spellings each stand for exactly one word,
+         * which [convert] gives back: Khipro, where a key sequence has one
+         * meaning. [personal] is walked ahead of [spellings], as the curated
+         * map is for Avro: the user's own words are the likelier ones.
+         */
+        fun deterministic(
+            spellings: WordSource,
+            personal: WordSource,
+            convert: (String) -> String,
+        ): RomanizedIndex {
+            val alphabet = ('a'..'z').mapTo(HashSet()) { it.code }
+            val resolve = { spelling: String -> listOf(convert(spelling)).filter { it.isNotEmpty() } }
+            return RomanizedIndex(personal, spellings, resolve, alphabet)
+        }
+
         /** How far behind its spelling's own score a second reading starts. */
         private const val ALTERNATE_STEP = 0.35
 

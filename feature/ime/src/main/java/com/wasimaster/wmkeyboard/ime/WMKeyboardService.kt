@@ -155,6 +155,7 @@ import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSample
 import com.wasimaster.wmkeyboard.core.gesture.GlideStroke
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeSource
 import com.wasimaster.wmkeyboard.core.gesture.GlideShapeStore
+import com.wasimaster.wmkeyboard.core.gesture.KhiproGlideSpellings
 import com.wasimaster.wmkeyboard.core.gesture.KeyOffsets
 import com.wasimaster.wmkeyboard.core.gesture.GesturePoint
 import com.wasimaster.wmkeyboard.core.gesture.GlideCase
@@ -181,6 +182,7 @@ import com.wasimaster.wmkeyboard.core.prediction.AvroDesktop
 import com.wasimaster.wmkeyboard.core.prediction.ContactEmails
 import com.wasimaster.wmkeyboard.core.prediction.ContactNames
 import com.wasimaster.wmkeyboard.core.prediction.Elisions
+import com.wasimaster.wmkeyboard.core.dictionaries.AvroDictionaryDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCapitals
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
@@ -532,7 +534,7 @@ import com.wasimaster.wmkeyboard.core.settings.isWhisperEnabled
 import com.wasimaster.wmkeyboard.core.transliteration.BijoyAnsi
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
-import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.SortedWords
 import com.wasimaster.wmkeyboard.core.transliteration.Khipro
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
@@ -3338,6 +3340,15 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
 
+        // Desktop Avro's dictionary landed or was removed: the candidate list
+        // re-reads Avro's data with it, or without it.
+        serviceScope.launch {
+            AvroDictionaryDownloads.completions.collect {
+                avroDesktop = null
+                suggestionEngine?.let { loadAvroDesktop(it, it.phoneticCandidateLists) }
+            }
+        }
+
         // A freshly landed n-gram pack goes live without waiting for a
         // language switch — but only when it is the active language's.
         serviceScope.launch {
@@ -4324,22 +4335,7 @@ open class WMKeyboardService : InputMethodService() {
                     },
                 )
             }
-            // Khipro (#541): its keys spell a word their own way, so a stroke
-            // over its grid is decoded against Khipro spellings of the Bangla
-            // list, generated offline by running Khipro's own rules backwards
-            // and kept only where they convert back to the word.
-            val khiproGlide = withContext(Dispatchers.Default) {
-                runCatching {
-                    assets.open(KHIPRO_SPELLINGS_ASSET).use { SpellingMap.load(it) }
-                }.getOrNull()?.let { map ->
-                    RomanizedIndex.of(
-                        spellings = map,
-                        phonetic = PhoneticIndex.EMPTY,
-                        nativeFrequency = { word -> suggestionEngine?.bengaliIndex?.frequencyOf(word) ?: 0 },
-                    )
-                } ?: RomanizedIndex.EMPTY
-            }
-            romanizedGlides = romanizedGlides + ("bn" to bengaliGlide) + (KHIPRO_GLIDE to khiproGlide)
+            romanizedGlides = romanizedGlides + ("bn" to bengaliGlide)
             // Every other phonetic language an enabled layout types through.
             loadExtraPhonetic()
             suggestionEngine?.let { loadAvroDesktop(it, it.phoneticCandidateLists) }
@@ -10295,9 +10291,19 @@ open class WMKeyboardService : InputMethodService() {
         }
         if (avroDesktopLoading) return
         avroDesktopLoading = true
+        // Avro's dictionary is a download: asked for the moment the list is
+        // turned on, and read in when it lands (see the completions above).
+        // Until then the list searches the keyboard's own words.
+        if (userUnlocked && !AvroDictionaryDownloads.isDownloaded(filesDir)) AvroDictionaryDownloads.start(filesDir)
         serviceScope.launch {
             val loaded = withContext(Dispatchers.IO) {
-                runCatching { AvroDesktop.load { name -> assets.open("avro/$name") } }.getOrNull()
+                val dictionary = AvroDictionaryDownloads.file(filesDir).takeIf { userUnlocked && it.isFile }
+                runCatching {
+                    AvroDesktop.load(
+                        open = { name -> assets.open("avro/$name") },
+                        dictionary = dictionary?.let { file -> { file.inputStream() } },
+                    )
+                }.getOrNull()
             }
             avroDesktopLoading = false
             val current = suggestionEngine ?: return@launch
@@ -10309,6 +10315,43 @@ open class WMKeyboardService : InputMethodService() {
             if (composing.isNotEmpty() && _uiState.value.composer.phoneticLanguage != null) refreshSuggestions()
         }
     }
+
+    /**
+     * Makes the Khipro grid glidable (#541): the Khipro spellings of every word
+     * of the Bangla list the engine holds (bundled, downloaded and imported),
+     * worked out on the device by running Khipro backwards and cached under
+     * `dict/bn` (see [KhiproGlideSpellings]), with the user's own Bangla words
+     * walked first. Rebuilt when the list or the learned words change; the
+     * first build of a big list takes minutes, and gliding waits for it.
+     */
+    private fun ensureKhiproGlide() {
+        val engine = suggestionEngine ?: return
+        val words = engine.bengaliIndex.sortedWords ?: return
+        val learned = userLexicon.mutationCount()
+        if (khiproGlideList === words && khiproGlideLearned == learned) return
+        if (khiproGlideJob?.isActive == true) return
+        val dir = File(File(filesDir, "dict"), "bn")
+        val unlocked = userUnlocked
+        khiproGlideJob = serviceScope.launch {
+            val (main, personal) = withContext(Dispatchers.Default) {
+                val main = khiproGlideMain.takeIf { khiproGlideList === words }
+                    ?: if (unlocked) KhiproGlideSpellings.load(words, dir) else null
+                val own = userLexicon.allWords().filter { (word, _) -> word.any { it in '\u0980'..'\u09FF' } }
+                main to KhiproGlideSpellings.ofWords(own)
+            }
+            khiproGlideMain = main
+            khiproGlideList = words
+            khiproGlideLearned = learned
+            romanizedGlides = romanizedGlides +
+                (KHIPRO_GLIDE to RomanizedIndex.deterministic(main ?: PackedTrie.EMPTY, personal, Khipro::convert))
+            glideSourcesEpoch.update { it + 1 }
+        }
+    }
+
+    private var khiproGlideJob: Job? = null
+    private var khiproGlideMain: WordSource? = null
+    private var khiproGlideList: SortedWords? = null
+    private var khiproGlideLearned = -1L
 
     /** Desktop Avro's data while a Bangla candidate list is on; see [loadAvroDesktop]. */
     private var avroDesktop: AvroDesktop? = null
@@ -19433,6 +19476,7 @@ open class WMKeyboardService : InputMethodService() {
                     // phonetic layout coverage is a question about the
                     // romanization rather than about the Bengali word list.
                     val engine = suggestionEngine
+                    if (gate.phonetic == KHIPRO_GLIDE) ensureKhiproGlide()
                     engine?.glideRomanization =
                         gate.phonetic?.let { romanizedGlides[it] } ?: RomanizedIndex.EMPTY
                     val allowed = gate.phonetic != null || !gate.converts
@@ -35826,9 +35870,6 @@ private const val SUGGEST_PAGES_POOL = 24
 private const val FIXED_PHONETIC_CHIPS = 2
 /** [romanizedGlides]' key for Khipro, whose spellings are not a language's. */
 private const val KHIPRO_GLIDE = "bn_khipro"
-
-/** Khipro spelling<TAB>Bangla word, for gliding over the Khipro grid (#541). */
-private const val KHIPRO_SPELLINGS_ASSET = "dictionaries/bn_khipro.tsv"
 
 /** The most words the candidate-list row above the strip holds. */
 private const val PHONETIC_CANDIDATE_BAR_MAX = 100

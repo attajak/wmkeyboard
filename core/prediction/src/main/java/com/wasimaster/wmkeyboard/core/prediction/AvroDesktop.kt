@@ -25,8 +25,13 @@ import java.util.zip.GZIPInputStream
  *    the list ends with and the one it is sorted against.
  *  - `regex.json`: the looser grammar Avro turns a spelling into a regular
  *    expression with, to find every dictionary word the spelling could be.
- *  - `dictionary.txt.gz`: Avro's word list, in its tables by first letter.
- *  - `search.json`: which tables a romanized first letter searches.
+ *  - `search.json`: which tables a romanized first letter searches, and the
+ *    first letters each table holds.
+ *
+ * Avro's word list itself, in its tables by first letter, is downloaded
+ * (`AvroDictionaryDownloads`, from the data repo) rather than shipped: it is
+ * most of the weight and only the candidate list wants it. Until it is here
+ * the search runs over the keyboard's own list alone.
  *  - `suffix.json`: the endings read off a word to find its base.
  *  - `autocorrect.json`: Avro's fixed spellings, the list's first entry.
  *
@@ -293,8 +298,11 @@ class AvroDesktop private constructor(
             return d[a.length][b.length]
         }
 
-        /** Reads the six files [open] names (`phonetic.json` and the rest of `assets/avro/`). */
-        fun load(open: (String) -> InputStream): AvroDesktop {
+        /**
+         * Reads the five files [open] names (`phonetic.json` and the rest of
+         * `assets/avro/`) and, when there is one, the downloaded [dictionary].
+         */
+        fun load(open: (String) -> InputStream, dictionary: (() -> InputStream)? = null): AvroDesktop {
             fun json(name: String): JsonObject =
                 open(name).use { Json.parseToJsonElement(it.readBytes().decodeToString()).jsonObject }
             val phonetic = AvroGrammar.of(json("phonetic.json"), regexMode = false)
@@ -303,11 +311,15 @@ class AvroDesktop private constructor(
                 .mapValues { it.value.jsonPrimitive.content }
             val autocorrect = json("autocorrect.json").getValue("words").jsonObject
                 .mapValues { it.value.jsonPrimitive.content }
-            val letters = json("search.json").getValue("letters").jsonObject.entries.associate { (letter, names) ->
+            val search = json("search.json")
+            val letters = search.getValue("letters").jsonObject.entries.associate { (letter, names) ->
                 letter[0] to names.jsonArray.map { it.jsonPrimitive.content }
             }
+            val initials = search.getValue("initials").jsonObject.entries.associate { (name, chars) ->
+                name to chars.jsonPrimitive.content.toSet()
+            }
             val grouped = LinkedHashMap<String, MutableList<String>>()
-            GZIPInputStream(open("dictionary.txt.gz")).bufferedReader().useLines { lines ->
+            dictionary?.let { GZIPInputStream(it()) }?.bufferedReader()?.useLines { lines ->
                 var current: MutableList<String>? = null
                 for (line in lines) {
                     when {
@@ -318,9 +330,6 @@ class AvroDesktop private constructor(
                 }
             }
             val tables = grouped.entries.associate { (name, words) -> name to FlatWords(words) }
-            val initials = grouped.entries.associate { (name, words) ->
-                name to words.mapNotNullTo(HashSet()) { it.firstOrNull() }
-            }
             return AvroDesktop(phonetic, regex, suffixes, autocorrect, letters, tables, initials)
         }
     }

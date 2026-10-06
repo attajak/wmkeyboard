@@ -7,10 +7,14 @@ source form of each is that project's file of the same purpose:
   regex.json         avroregexlib.js (the patterns of AvroRegex)
   suffix.json        suffixdict.js
   autocorrect.json   autocorrect.js
-  dictionary.txt.gz  avrodict.js, one table per "@name" section; eleven
-                     "Ȁc" typos are written as the "‌" (ZWNJ) the
-                     source meant
-  search.json        the first-letter table lists in dbsearch.js
+  search.json        the first-letter table lists in dbsearch.js, and the
+                     first letters of each table in avrodict.js
+
+Avro's dictionary itself (avrodict.js) is not here: the keyboard downloads it
+from the WM Keyboard data repo (data/bn/bn_avro_dictionary.txt.gz) under the
+same licence, re-encoded as one word per line under "@table" headings, with
+the source's eleven "Ȁc" typos written as the "‌" (ZWNJ) they were
+meant to be.
 
 Only the encoding changed (JSON and plain text instead of JavaScript). The code
 that reads them, core/prediction/.../AvroDesktop.kt, is WM Keyboard's own and

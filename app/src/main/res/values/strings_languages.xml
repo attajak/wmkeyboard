@@ -214,6 +214,9 @@
     <string name="languages_phonetic_candidates_title">Avro candidate list</string>
     <string name="languages_phonetic_candidates_subtitle">The words desktop Avro shows under the word you type</string>
     <!-- %1$s is the English name of the language, for example "Bengali". -->
+    <string name="languages_avro_dictionary_title">Desktop Avro\'s dictionary</string>
+    <string name="languages_avro_dictionary_download">The words only desktop Avro knows, <xliff:g id="size" example="580 KB">%1$s</xliff:g> to download. Tap to download.</string>
+    <string name="languages_avro_dictionary_downloaded">The words only desktop Avro knows, <xliff:g id="size" example="580 KB">%1$s</xliff:g></string>
     <string name="languages_phonetic_candidates_info">Desktop Avro shows a short list under the word you type. The list is built the same way here. First comes the known spelling for what you typed, if there is one. Next come the <xliff:g id="language" example="Bengali">%1$s</xliff:g> dictionary words that sound like it, and the words made by adding an ending to one of them, such as বন্ধু + দের. The words closest to the letter-for-letter reading come first. Last is the letter-for-letter reading itself.\n\nIn the suggestion strip: the word that the space bar will write stays first, and the list follows it. Bar above the strip: the whole list goes in a row of its own above the strip, and you can scroll through it. The row stays while the layout is on, so the keyboard does not change height between words.\n\nThe space bar writes the same word with all three choices.</string>
     <string name="languages_phonetic_candidates_off_label">Off</string>
     <string name="languages_phonetic_candidates_strip_label">In the strip</string>
