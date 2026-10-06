@@ -92,7 +92,6 @@ import androidx.compose.material.icons.outlined.FormatShapes
 import androidx.compose.material.icons.outlined.Forum
 import androidx.compose.material.icons.outlined.Fullscreen
 import androidx.compose.material.icons.outlined.Functions
-import androidx.compose.material.icons.outlined.GifBox
 import androidx.compose.material.icons.outlined.GridOn
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Group
@@ -192,6 +191,7 @@ import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.outlined.WorkOutline
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 
 /**
  * The icons the icon picker offers, keyed by a stable name.
@@ -299,7 +299,7 @@ object BuiltinIcons {
         "Forum" to { Icons.Outlined.Forum },
         "Fullscreen" to { Icons.Outlined.Fullscreen },
         "Functions" to { Icons.Outlined.Functions },
-        "GifBox" to { Icons.Outlined.GifBox },
+        "GifBox" to { SymbolIcons.GifBox },
         "GridOn" to { Icons.Outlined.GridOn },
         "GridView" to { Icons.Outlined.GridView },
         "Group" to { Icons.Outlined.Group },
@@ -382,6 +382,8 @@ object BuiltinIcons {
         "Star" to { Icons.Outlined.Star },
         "StarBorder" to { Icons.Outlined.StarBorder },
         "StarOutline" to { Icons.Outlined.StarOutline },
+        "Sticker" to { SymbolIcons.Sticker },
+        "StickerAdd" to { SymbolIcons.StickerAdd },
         "StickyNote2" to { Icons.AutoMirrored.Outlined.StickyNote2 },
         "Straighten" to { Icons.Outlined.Straighten },
         "SwapHoriz" to { Icons.Outlined.SwapHoriz },

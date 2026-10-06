@@ -26,7 +26,6 @@ import androidx.compose.material.icons.automirrored.outlined.Segment
 import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.automirrored.outlined.ShortText
 import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.automirrored.outlined.Undo
 import androidx.compose.material.icons.automirrored.outlined.VolumeUp
@@ -130,7 +129,6 @@ import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.Gamepad
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Gesture
-import androidx.compose.material.icons.outlined.Gif
 import androidx.compose.material.icons.outlined.Gradient
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.GridOn
@@ -308,6 +306,7 @@ import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material.icons.automirrored.outlined.CompareArrows
 import androidx.compose.material.icons.automirrored.outlined.FormatAlignLeft
 import androidx.compose.material.icons.automirrored.outlined.Rule
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.settings.R as SettingsR
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wasimaster.wmkeyboard.R
@@ -481,7 +480,7 @@ internal object SettingsRowIcons {
         put(R.string.backup_section_snippets_label) { Icons.Outlined.Description }
         put(R.string.backup_section_themes_label) { Icons.Outlined.Palette }
         put(R.string.backup_section_icons_label) { Icons.Outlined.Category }
-        put(R.string.backup_section_stickers_label) { Icons.Outlined.EmojiEmotions }
+        put(R.string.backup_section_stickers_label) { SymbolIcons.Sticker }
         put(R.string.backup_section_addons_label) { Icons.Outlined.Extension }
         put(R.string.backup_section_emoji_label) { Icons.Outlined.History }
         put(R.string.backup_section_statistics_label) { Icons.Outlined.QueryStats }
@@ -914,7 +913,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_smart_weather_title) { Icons.Outlined.WbSunny }
         put(R.string.typing_smart_lookups_title) { Icons.Outlined.Search }
         put(R.string.typing_smart_intents_title) { Icons.Outlined.Translate }
-        put(R.string.typing_smart_gifs_title) { Icons.Outlined.Gif }
+        put(R.string.typing_smart_gifs_title) { SymbolIcons.GifBox }
         put(R.string.typing_smart_numbers_title) { Icons.Outlined.Numbers }
         put(R.string.typing_smart_number_grouping_title) { Icons.AutoMirrored.Outlined.Segment }
         put(R.string.typing_otp_chip_title) { Icons.Outlined.Password }
@@ -1217,7 +1216,7 @@ internal object SettingsRowIcons {
         put(R.string.datasaver_weather_title) { Icons.Outlined.WbSunny }
         put(R.string.datasaver_rates_title) { Icons.Outlined.CurrencyExchange }
         put(R.string.datasaver_addons_title) { Icons.Outlined.Extension }
-        put(R.string.datasaver_media_title) { Icons.Outlined.Gif }
+        put(R.string.datasaver_media_title) { SymbolIcons.AnimatedImages }
         put(R.string.datasaver_search_title) { Icons.Outlined.Search }
         put(R.string.datasaver_animated_emoji_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.datasaver_downloads_title) { Icons.Outlined.CloudDownload }
@@ -1248,7 +1247,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_handwriting_auto_space_title) { Icons.Outlined.SpaceBar }
         put(R.string.tooldetail_handwriting_pause_title) { Icons.Outlined.Timer }
         put(R.string.tooldetail_handwriting_languages_title) { Icons.Outlined.Language }
-        put(R.string.tooldetail_sticker_packs_title) { Icons.AutoMirrored.Outlined.StickyNote2 }
+        put(R.string.tooldetail_sticker_packs_title) { SymbolIcons.Sticker }
         put(R.string.tooldetail_sticker_suggest_title) { Icons.Outlined.AutoAwesome }
         put(R.string.tooldetail_sticker_suggest_style_title) { Icons.Outlined.ViewAgenda }
         put(R.string.tooldetail_sticker_suggest_trigger_title) { Icons.AutoMirrored.Outlined.Backspace }
@@ -1511,8 +1510,8 @@ internal object SettingsRowIcons {
         put(R.string.layout_editor_kana_variant_title) { Icons.Outlined.Spellcheck }
         put(R.string.layout_editor_repeat_hold_title) { Icons.Outlined.Repeat }
         put(R.string.panel_name_emoji) { Icons.Outlined.EmojiEmotions }
-        put(R.string.panel_name_gif) { Icons.Outlined.Gif }
-        put(R.string.panel_name_sticker) { Icons.AutoMirrored.Outlined.StickyNote2 }
+        put(R.string.panel_name_gif) { SymbolIcons.GifBox }
+        put(R.string.panel_name_sticker) { SymbolIcons.Sticker }
         put(R.string.panel_name_clipboard) { Icons.Outlined.ContentPaste }
         put(R.string.panel_name_text_edit) { Icons.Outlined.EditNote }
         put(R.string.panel_name_trackpad) { Icons.Outlined.Mouse }

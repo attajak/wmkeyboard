@@ -3,10 +3,10 @@ package com.wasimaster.wmkeyboard.app.storage
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GifBox
 import androidx.compose.material.icons.outlined.NetworkCheck
 import androidx.compose.material.icons.outlined.SystemUpdate
 import androidx.compose.material.icons.outlined.AutoStories
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.tools.offlinegif.OfflineGifPacks
 import com.wasimaster.wmkeyboard.core.vocab.VocabDownloadManager
@@ -23,13 +23,11 @@ import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.DocumentScanner
 import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.Gif
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Interests
 import androidx.compose.material.icons.outlined.Inventory2
 import androidx.compose.material.icons.outlined.Mic
-import androidx.compose.material.icons.outlined.Mood
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PhotoCamera
@@ -463,7 +461,7 @@ internal object StorageCategories {
             id = "gif_packs",
             title = R.string.storage_gif_packs_title,
             subtitle = R.string.storage_gif_packs_subtitle,
-            icon = Icons.Outlined.GifBox,
+            icon = SymbolIcons.GifBox,
             accent = Color(0xFF7E57C2),
             group = StorageGroup.DOWNLOADS,
             danger = Danger.REDOWNLOAD,
@@ -537,7 +535,7 @@ internal object StorageCategories {
             id = "stickers",
             title = R.string.storage_stickers_title,
             subtitle = R.string.storage_stickers_subtitle,
-            icon = Icons.Outlined.Mood,
+            icon = SymbolIcons.Sticker,
             accent = Color(0xFFF06292),
             group = StorageGroup.LOOKS,
             danger = Danger.PERSONAL,
@@ -921,7 +919,7 @@ internal object StorageCategories {
             id = "cache_media",
             title = R.string.storage_cache_media_title,
             subtitle = R.string.storage_cache_media_subtitle,
-            icon = Icons.Outlined.Gif,
+            icon = SymbolIcons.AnimatedImages,
             accent = Color(0xFF00ACC1),
             group = StorageGroup.CACHE,
             pathsOf = { listOf(File(it.cache, "media")) },

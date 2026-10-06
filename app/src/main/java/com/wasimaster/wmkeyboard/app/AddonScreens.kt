@@ -39,7 +39,6 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.GraphicEq
@@ -122,6 +121,7 @@ import com.wasimaster.wmkeyboard.core.addons.InstalledAddon
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import com.wasimaster.wmkeyboard.core.addons.resolve
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.plugins.PluginStore
 import com.wasimaster.wmkeyboard.core.settings.DeviceNetworkState
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
@@ -209,7 +209,7 @@ private val AddonType.icon
         AddonType.EmojiKeywords -> Icons.Outlined.Translate
         AddonType.Snippets -> Icons.Outlined.Description
         AddonType.Espanso -> Icons.Outlined.Bolt
-        AddonType.Stickers -> Icons.Outlined.EmojiEmotions
+        AddonType.Stickers -> SymbolIcons.Sticker
         AddonType.IconPack -> Icons.Outlined.Category
         AddonType.Font -> Icons.Outlined.TextFields
         AddonType.EmojiFont -> Icons.Outlined.Mood

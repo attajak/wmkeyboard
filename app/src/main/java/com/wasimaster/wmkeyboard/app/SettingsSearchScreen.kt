@@ -30,7 +30,6 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.automirrored.outlined.Chat
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.outlined.AdsClick
 import androidx.compose.material.icons.outlined.AutoAwesome
@@ -117,6 +116,7 @@ import androidx.compose.ui.unit.dp
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.ui.toolAccentPaint
 import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
 import kotlinx.coroutines.Dispatchers
@@ -515,7 +515,7 @@ internal object SettingsRouteIcons {
         "voice" to { Icons.Outlined.Mic },
         "expander" to { Icons.AutoMirrored.Outlined.TextSnippet },
         "tools" to { Icons.Outlined.Widgets },
-        "sticker_packs" to { Icons.AutoMirrored.Outlined.StickyNote2 },
+        "sticker_packs" to { SymbolIcons.Sticker },
         "vocab/packs" to { Icons.Outlined.AutoStories },
         "vocab/lists" to { Icons.Outlined.AutoStories },
         "vocab/review" to { Icons.Outlined.AutoStories },

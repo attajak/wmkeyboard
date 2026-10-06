@@ -15,7 +15,6 @@ import androidx.compose.material.icons.automirrored.outlined.LastPage
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.automirrored.outlined.Redo
 import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.automirrored.outlined.Undo
 import androidx.compose.material.icons.outlined.Apps
@@ -52,7 +51,6 @@ import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.FirstPage
 import androidx.compose.material.icons.outlined.FlashlightOn
 import androidx.compose.material.icons.outlined.Functions
-import androidx.compose.material.icons.outlined.GifBox
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.HighlightAlt
 import androidx.compose.material.icons.outlined.ImageSearch
@@ -103,6 +101,7 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.wasimaster.wmkeyboard.core.icons.IconSlots
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.ime.EnterAction
 
@@ -159,8 +158,8 @@ object IconDefaults {
         ToolbarTool.VOCABULARY -> Icons.Outlined.AutoStories
         ToolbarTool.LEARN_FROM_TEXT -> Icons.Outlined.School
         ToolbarTool.TRANSLATE -> Icons.Outlined.Translate
-        ToolbarTool.GIF -> Icons.Outlined.GifBox
-        ToolbarTool.STICKER -> Icons.AutoMirrored.Outlined.StickyNote2
+        ToolbarTool.GIF -> SymbolIcons.GifBox
+        ToolbarTool.STICKER -> SymbolIcons.Sticker
         ToolbarTool.WEB_SEARCH -> Icons.Outlined.TravelExplore
         ToolbarTool.IMAGE_SEARCH -> Icons.Outlined.ImageSearch
         ToolbarTool.OCR -> Icons.Outlined.TextFields

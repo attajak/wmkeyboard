@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.automirrored.outlined.TrendingUp
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.outlined.ViewCarousel
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.vocab.VocabChipTap
 import com.wasimaster.wmkeyboard.core.vocab.VocabNudgeScope
 import com.wasimaster.wmkeyboard.core.vocab.VocabNudgeLevel
@@ -406,7 +407,7 @@ internal object ChoiceOptionIcons {
         put(GifContentFilter.HIGH) { Icons.Outlined.VerifiedUser }
 
         put(MediaSendMode.IMAGE) { Icons.Outlined.Image }
-        put(MediaSendMode.STICKER) { Icons.Outlined.Style }
+        put(MediaSendMode.STICKER) { SymbolIcons.Sticker }
 
         // The search sites are left out: four globes would say nothing.
         put(PhotoSearchTarget.LENS) { Icons.Outlined.CenterFocusStrong }

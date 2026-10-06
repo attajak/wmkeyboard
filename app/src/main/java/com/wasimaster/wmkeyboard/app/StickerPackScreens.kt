@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.FileOpen
@@ -61,6 +60,7 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.content.R as ContentR
 import com.wasimaster.wmkeyboard.core.addons.AddonType
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
 import com.wasimaster.wmkeyboard.core.stickers.CustomSticker
 import com.wasimaster.wmkeyboard.core.stickers.StickerAddResult
 import com.wasimaster.wmkeyboard.core.stickers.StickerImage
@@ -206,7 +206,7 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
             WmRow(
                 title = stringResource(R.string.import_signal_row_title),
                 subtitle = stringResource(R.string.import_signal_row_subtitle),
-                icon = Icons.AutoMirrored.Outlined.StickyNote2,
+                icon = SymbolIcons.StickerAdd,
                 accent = routeAccent("sticker_packs"),
                 highlightKey = R.string.import_signal_row_title,
                 onClick = { onNavigate(SIGNAL_STICKERS_ROUTE) },
@@ -216,7 +216,7 @@ internal fun StickerPacksScreen(onNavigate: (String) -> Unit) {
             WmRow(
                 title = stringResource(R.string.import_whatsapp_row_title),
                 subtitle = stringResource(R.string.import_whatsapp_row_subtitle),
-                icon = Icons.AutoMirrored.Outlined.StickyNote2,
+                icon = SymbolIcons.StickerAdd,
                 accent = routeAccent("sticker_packs"),
                 highlightKey = R.string.import_whatsapp_row_title,
                 onClick = { onNavigate(WHATSAPP_STICKERS_ROUTE) },
