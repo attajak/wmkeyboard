@@ -18190,7 +18190,10 @@ open class WMKeyboardService : InputMethodService() {
         // that one instead, and the next word starts after it rather than
         // running into this one (#508). The trailing space itself is opt-out
         // (A26): off commits the word bare and leaves the caret on it.
-        val autoSpace = _uiState.value.settings.suggestionStrip.autoSpaceAfterSuggestion
+        // A shortcut that expands to a gap — a tab, an em space — ends in one
+        // already, so it earns no space of its own on top (#552).
+        val autoSpace = _uiState.value.settings.suggestionStrip.autoSpaceAfterSuggestion &&
+            suggestion.lastOrNull()?.isWhitespace() != true
         val spaced = autoSpace && spacedAfterCaret(ic.getTextAfterCursor(1, 0))
         val tail = if (autoSpace && !spaced) " " else ""
         // Commit in the case the strip is showing: a shift held over the strip
@@ -18255,8 +18258,9 @@ open class WMKeyboardService : InputMethodService() {
         // that capital is auto-capitalize's, not the user's — so the pick
         // teaches a spelling only when the typed word's capital was trusted
         // (#100). A pick with nothing typed (a next-word prediction) carries
-        // no case evidence at all.
-        if ('@' !in suggestion) {
+        // no case evidence at all. A gap (#552) is not a word, and must not
+        // stand in as the previous word for the next one's n-grams either.
+        if ('@' !in suggestion && suggestion.isNotBlank()) {
             // A word the user came back to, then finished from the strip: the
             // pick is what the word became.
             val replaces = revision?.takeIf { it.mode == WordRevision.Mode.COMPOSING }?.let { r ->

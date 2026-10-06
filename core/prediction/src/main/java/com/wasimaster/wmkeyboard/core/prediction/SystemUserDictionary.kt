@@ -211,6 +211,10 @@ object SystemUserDictionary {
      * call — cheap, small, and the caller caches it — and never throws: an OEM
      * that hides the provider just yields an empty map. Powers
      * [com.wasimaster.wmkeyboard.core.settings.SuggestionStripSettings.expandUserDictShortcuts].
+     *
+     * An expansion that is nothing but whitespace — a tab, an em space — is
+     * kept as written: it is the whole point of that row ("tttq" → a tab),
+     * and trimming it like a word left nothing, so the row was dropped (#552).
      */
     fun shortcuts(context: Context): Map<String, String> {
         val out = HashMap<String, String>()
@@ -227,7 +231,7 @@ object SystemUserDictionary {
                 if (wordCol >= 0 && shortcutCol >= 0) {
                     while (cursor.moveToNext()) {
                         val shortcut = cursor.getString(shortcutCol)?.trim()
-                        val word = cursor.getString(wordCol)?.trim()
+                        val word = cursor.getString(wordCol)?.let { raw -> raw.trim().ifEmpty { raw } }
                         if (!shortcut.isNullOrEmpty() && !word.isNullOrEmpty()) {
                             out[shortcut.lowercase()] = word
                         }
