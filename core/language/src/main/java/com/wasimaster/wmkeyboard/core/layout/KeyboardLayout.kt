@@ -7,20 +7,53 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * The four flick directions a 12-key kana pad reads off a key. The centre
- * (a plain tap) commits the key's own [Key.output]/[Key.label]; a directional
- * flick commits the matching entry of [Key.flick]. Serialised lowercase so a
- * hand-authored layout reads `"flick": { "left": "い", "up": "う", … }`.
+ * The eight flick directions a key reads off a swipe: the four edges a 12-key
+ * kana pad uses and the four corners a MessagEase-style board adds (issue
+ * #410). The centre (a plain tap) commits the key's own [Key.output]/[Key.label];
+ * a directional flick commits the matching entry of [Key.flick]. Serialised
+ * lowercase so a hand-authored layout reads `"flick": { "left": "い", "up": "う",
+ * "up_right": "x", … }`.
  */
 @Serializable
-enum class FlickDirection {
-    @SerialName("left") LEFT,
+enum class FlickDirection(
+    /** Where this arm points, as a compass bearing: up is 0°, clockwise. */
+    val compassDegrees: Float,
+) {
+    @SerialName("left") LEFT(270f),
 
-    @SerialName("up") UP,
+    @SerialName("up") UP(0f),
 
-    @SerialName("right") RIGHT,
+    @SerialName("right") RIGHT(90f),
 
-    @SerialName("down") DOWN,
+    @SerialName("down") DOWN(180f),
+
+    // The diagonals came later (issue #410), so they sit after the four a file
+    // written before them could name: a pad's JSON keeps the order it was
+    // written in.
+    @SerialName("up_left") UP_LEFT(315f),
+
+    @SerialName("up_right") UP_RIGHT(45f),
+
+    @SerialName("down_left") DOWN_LEFT(225f),
+
+    @SerialName("down_right") DOWN_RIGHT(135f),
+    ;
+
+    /** A corner arm rather than an edge one. */
+    val isDiagonal: Boolean get() = compassDegrees % 90f != 0f
+
+    companion object {
+        /**
+         * The eight arms in reading order around a 3×3 pad, with `null` for
+         * the centre: what the flick cross, the key face and the editor's pad
+         * all lay out, so none of them can put an arm on a different cell.
+         */
+        val gridOrder: List<FlickDirection?> = listOf(
+            UP_LEFT, UP, UP_RIGHT,
+            LEFT, null, RIGHT,
+            DOWN_LEFT, DOWN, DOWN_RIGHT,
+        )
+    }
 }
 
 /**
@@ -148,10 +181,12 @@ data class Key(
      */
     val forceHint: Boolean = false,
     /**
-     * Directional flick outputs for a 12-key kana pad: a flick left/up/right/down
-     * from this key commits the matching kana instead of the centre tap. Empty
-     * (the usual case) means the key has no flick behaviour and a drag off it just
-     * cancels the press, exactly as before.
+     * Directional flick outputs: a short swipe from this key in one of the
+     * eight compass directions commits that arm's text instead of the centre
+     * tap, the way a 12-key kana pad reaches い from あ and a MessagEase-style
+     * board (issue #410) keeps nine letters on one key. Empty (the usual case)
+     * means the key has no flick behaviour and a drag off it just cancels the
+     * press, exactly as before.
      */
     val flick: Map<FlickDirection, String> = emptyMap(),
     /**

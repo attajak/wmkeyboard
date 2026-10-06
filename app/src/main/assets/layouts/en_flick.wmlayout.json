@@ -1,0 +1,136 @@
+{
+  "format": "wmkeyboard-layout",
+  "version": 1,
+  "layout": {
+    "id": "asset_en_flick",
+    "name": "English flick (3×3)",
+    "langId": "en",
+    "version": 2,
+    "layers": {
+      "letters": {
+        "rows": [
+          [
+            {
+              "label": "a",
+              "flick": {
+                "down_right": "v"
+              }
+            },
+            {
+              "label": "n",
+              "flick": {
+                "down": "l"
+              }
+            },
+            {
+              "label": "i",
+              "flick": {
+                "down_left": "x"
+              }
+            },
+            {
+              "label": "⌫",
+              "action": {
+                "type": "delete"
+              }
+            }
+          ],
+          [
+            {
+              "label": "h",
+              "flick": {
+                "right": "k"
+              }
+            },
+            {
+              "label": "o",
+              "flick": {
+                "left": "c",
+                "up": "u",
+                "right": "b",
+                "down": "d",
+                "up_left": "q",
+                "up_right": "p",
+                "down_left": "g",
+                "down_right": "j"
+              }
+            },
+            {
+              "label": "r",
+              "flick": {
+                "left": "m"
+              }
+            },
+            {
+              "label": "⇧",
+              "action": {
+                "type": "shift"
+              }
+            }
+          ],
+          [
+            {
+              "label": "t",
+              "flick": {
+                "up_right": "y"
+              }
+            },
+            {
+              "label": "e",
+              "flick": {
+                "up": "w",
+                "right": "z"
+              }
+            },
+            {
+              "label": "s",
+              "flick": {
+                "up_left": "f"
+              }
+            },
+            {
+              "label": "⏎",
+              "action": {
+                "type": "enter"
+              }
+            }
+          ],
+          [
+            {
+              "label": "?123",
+              "action": {
+                "type": "symbols"
+              }
+            },
+            {
+              "label": "🌐",
+              "action": {
+                "type": "language_switch"
+              }
+            },
+            {
+              "label": " ",
+              "action": {
+                "type": "space"
+              },
+              "width": 2
+            },
+            {
+              "label": ".",
+              "flick": {
+                "left": ",",
+                "up": "!",
+                "right": "?",
+                "down": "-",
+                "up_left": "'",
+                "up_right": "\"",
+                "down_left": ":",
+                "down_right": ";"
+              }
+            }
+          ]
+        ]
+      }
+    }
+  }
+}

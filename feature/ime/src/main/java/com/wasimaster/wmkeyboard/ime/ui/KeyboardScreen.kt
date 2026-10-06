@@ -481,6 +481,13 @@ import com.wasimaster.wmkeyboard.ime.DictionaryKind
 import com.wasimaster.wmkeyboard.ime.GlideExpansion
 import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.shiftCased
+import com.wasimaster.wmkeyboard.ime.flickReturned
+import com.wasimaster.wmkeyboard.ime.resolveFlickDirection
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.drawText
 import com.wasimaster.wmkeyboard.ime.shiftCasesText
 import com.wasimaster.wmkeyboard.ime.SnippetChip
 import com.wasimaster.wmkeyboard.ime.transliterationHintsShown
@@ -12684,16 +12691,32 @@ internal fun Key?.startsLayerDrag(): Boolean =
 
 /**
  * Whether a drag off this key is a gesture the grid itself owns — a chord
- * (issue #67) or a layer peek (issue #108) — or one the key owns, its action
- * flick arms (issue #549), so glide typing, handwriting and the octopus leave
+ * (issue #67) or a layer peek (issue #108) — or one the key owns, its flick
+ * arms (issues #549, #410), so glide typing, handwriting and the octopus leave
  * the stroke alone. Asked at the down, where the answer cannot change again.
  *
- * Only the action arms: a kana pad's text arms never shared a board with glide
- * typing, and handwriting over that pad is drawn the way it always was.
+ * Every flick arm, text ones included. The kana pad's text arms used to be
+ * left out because that pad never shared a board with glide typing, but a
+ * letter key given arms in the editor sits on a board that does, and the
+ * glide loop reads the Initial pass: it would claim the stroke and type a
+ * word while the key's own handler typed the arm.
  */
 internal fun Key?.ownsDrag(): Boolean =
-    startsChordDrag() || startsLayerDrag() ||
-        (this != null && flickActions.isNotEmpty() && takesFlickActions())
+    startsChordDrag() || startsLayerDrag() || (this != null && hasFlicks())
+
+/**
+ * What a swipe out to [direction] and more than halfway back again types
+ * (issue #410): the arm's own shift form, else its capital — or null when the
+ * arm has no form of its own, so the return keeps meaning what it always did
+ * on a kana pad, a drift back to the centre tap. A Keyman key's arms are the
+ * page Shift is on already and are never recased, as [FlickCrossPopup] knows.
+ */
+internal fun Key.flickShiftedText(direction: FlickDirection): String? {
+    if (action is KeyAction.KeymanKey) return null
+    val arm = flickArm(direction) as? FlickArm.Text ?: return null
+    val shifted = flickShift[direction]?.takeIf { it.isNotEmpty() } ?: shiftCased(arm.text, true)
+    return shifted.takeIf { it != arm.text }
+}
 
 /**
  * Whether a drag off this key is the possessive swipe's (#169) rather than a
@@ -12748,7 +12771,7 @@ internal fun Key?.ownsSpaceStroke(): Boolean = this?.action == KeyAction.Space
  * Any key whose hold opens the popup and whose first entry is a character —
  * which is what the corner shows. The keys left out already own a drag of
  * their own: the spacebar's swipes, backspace's delete swipe (its hold is
- * spoken for, so [opensAlternatesPopup] refuses it), a kana key's four arms,
+ * spoken for, so [opensAlternatesPopup] refuses it), a flick key's arms,
  * and the modifier and mode keys whose drags chord and peek.
  */
 internal fun Key.takesHintFlick(): Boolean =
@@ -17955,6 +17978,8 @@ internal fun currentLayout(state: KeyboardUiState): KeyboardLayout {
                     icon = null,
                     iconHint = null,
                     flick = emptyMap(),
+                    flickShift = emptyMap(),
+                    flickActions = emptyMap(),
                 )
                 domainAlternates.isNotEmpty() && role == KeyRole.Period ->
                     key.copy(longPress = domainAlternates + key.longPress)
@@ -18960,6 +18985,9 @@ internal fun KeyButton(
     // The flick arm the finger is currently over on a kana-pad key, driving the
     // cross popup's highlight; null when centred (a plain tap) or released.
     val flickDirection = remember { mutableStateOf<FlickDirection?>(null) }
+    // The finger went out to that arm and came back more than halfway, so the
+    // lift types the arm's capital (issue #410); the popup lights that instead.
+    val flickReturned = remember { mutableStateOf(false) }
     // Full tappable language picker (a list or, by setting, a carousel):
     // opened by a long-press on the globe key or by holding the spacebar when
     // more than two languages are enabled (a swipe through a long ring is
@@ -19006,10 +19034,15 @@ internal fun KeyButton(
     // the user opted back in: a floating digit over a PIN pad is noise, and easy
     // shoulder-surfing.
     val previewToken = remember { Any() }
+    // A flick key's cross popup already names what the press will type, so the
+    // bubble would be a second popup over the first, showing the centre glyph
+    // while an arm is lit (issue #410). It stays for a flick key whose cross
+    // the user switched off.
     val previewWanted = rememberUpdatedState(
         settings.popup.enabled &&
             (settings.popup.inNumericFields || !numericField) &&
-            key.action == KeyAction.Text,
+            key.action == KeyAction.Text &&
+            !(settings.layoutBehavior.flickPopup && key.hasFlicks()),
     )
     val previewLabel = rememberUpdatedState(visual.label)
     // Same staleness rule as the label: the pointer input holds its lambdas
@@ -19260,6 +19293,8 @@ internal fun KeyButton(
                         keyPreview.cancel(previewToken)
                     },
                     setFlickDirection = { flickDirection.value = it },
+                    setFlickReturned = { flickReturned.value = it },
+                    flickDistanceDp = settings.layoutBehavior.flickDistanceDp,
                     onKey = debounced,
                     // Repeat ticks bypass the debounce (raw onKey), taps don't.
                     onKeyRepeat = onKey,
@@ -19392,6 +19427,9 @@ internal fun KeyButton(
         contentAlignment = Alignment.Center,
     ) {
         KeyLabel(visual, settings, pressed)
+        // The `&&` reaches [hasFlicks] on no key but one with arms; every other
+        // key stays a single test off this path (issue #410).
+        if (settings.layoutBehavior.flickHints && key.hasFlicks()) FlickFaceArms(visual, settings)
         val popupPosition = rememberAboveAnchorPopup()
 
         if ((showAlternates || alternatesPrepared) && key.opensAlternatesPopup()) {
@@ -19434,9 +19472,11 @@ internal fun KeyButton(
         KeyFlickPopup(
             key = key,
             fontScale = settings.popup.fontScale,
+            enabled = settings.layoutBehavior.flickPopup,
             alternatesOpen = showAlternates,
             pressed = pressed,
             flickDirection = flickDirection,
+            flickReturned = flickReturned,
             shiftOn = visual.flickShiftOn,
             shiftCases = visual.flickShiftCases,
         )
@@ -20693,37 +20733,45 @@ private fun KeyLabel(visual: KeyVisual, settings: KeyboardSettings, pressed: Sta
 private fun KeyFlickPopup(
     key: Key,
     fontScale: Float,
+    /** [LayoutBehaviorSettings.flickPopup]: off leaves the face arms to say what a flick types. */
+    enabled: Boolean,
     /** The long-press alternates took over, so this is not shown. */
     alternatesOpen: Boolean,
     pressed: State<Boolean>,
     flickDirection: State<FlickDirection?>,
+    /** The finger is back from the lit arm far enough that the lift types its capital. */
+    flickReturned: State<Boolean>,
     /** [KeyVisual.flickShiftOn]. */
     shiftOn: Boolean,
     /** [KeyVisual.flickShiftCases]. */
     shiftCases: Boolean,
 ) {
-    if (key.hasFlicks() && !alternatesOpen && pressed.value) {
+    if (enabled && key.hasFlicks() && !alternatesOpen && pressed.value) {
         Popup(popupPositionProvider = FlickPopupPositionProvider) {
-            FlickCrossPopup(key, flickDirection.value, fontScale, shiftOn, shiftCases)
+            FlickCrossPopup(key, flickDirection.value, flickReturned.value, fontScale, shiftOn, shiftCases)
         }
     }
 }
 
 /**
- * The flick preview shown while a kana-pad key is held: the centre kana with
- * its defined arms laid out in a plus, the arm the finger is over — or the
- * centre, when [active] is null — highlighted. Only arms the key actually
- * defines are drawn, so a key with two flicks shows two chips, not four blanks.
+ * The flick preview shown while a flick key is held: the centre with its
+ * defined arms laid out around it on a 3×3 pad, the arm the finger is over —
+ * or the centre, when [active] is null — highlighted. Only arms the key
+ * actually defines are drawn, so a key with two flicks shows two chips, not
+ * eight blanks.
  *
  * Text is drawn the way the service will type it under the live Shift
  * ([WMKeyboardService.keyOutput]'s rule): the arm's own shift form, else the
- * capital of a letter. An action arm, and the centre of an action key, draw the
- * face that action wears in the alternates popup (issue #549).
+ * capital of a letter. The lit arm shows its capital instead while the finger
+ * has [returned] from it (issue #410), since that is what the lift will type.
+ * An action arm, and the centre of an action key, draw the face that action
+ * wears in the alternates popup (issue #549).
  */
 @Composable
 private fun FlickCrossPopup(
     key: Key,
     active: FlickDirection?,
+    returned: Boolean,
     fontScale: Float,
     shiftOn: Boolean,
     shiftCases: Boolean,
@@ -20744,21 +20792,29 @@ private fun FlickCrossPopup(
     Box(modifier = Modifier.size(148.dp)) {
         FlickCell(centre, active == null, Alignment.Center, fontScale)
         for (direction in FlickDirection.entries) {
+            val lit = active == direction
             val arm = when (val raw = key.flickArm(direction)) {
-                is FlickArm.Text -> FlickArm.Text(shown(raw.text, key.flickShift[direction]))
+                is FlickArm.Text -> FlickArm.Text(
+                    if (lit && returned) key.flickShiftedText(direction) ?: raw.text
+                    else shown(raw.text, key.flickShift[direction]),
+                )
                 else -> raw
             }
-            FlickCell(arm, active == direction, flickCellAlignment(direction), fontScale)
+            FlickCell(arm, lit, flickCellAlignment(direction), fontScale)
         }
     }
 }
 
-/** Where an arm's chip sits in the cross: the edge it is flicked towards. */
+/** Where an arm's chip sits in the cross: the edge or corner it is flicked towards. */
 private fun flickCellAlignment(direction: FlickDirection): Alignment = when (direction) {
     FlickDirection.UP -> Alignment.TopCenter
     FlickDirection.LEFT -> Alignment.CenterStart
     FlickDirection.RIGHT -> Alignment.CenterEnd
     FlickDirection.DOWN -> Alignment.BottomCenter
+    FlickDirection.UP_LEFT -> Alignment.TopStart
+    FlickDirection.UP_RIGHT -> Alignment.TopEnd
+    FlickDirection.DOWN_LEFT -> Alignment.BottomStart
+    FlickDirection.DOWN_RIGHT -> Alignment.BottomEnd
 }
 
 /** One chip of the flick cross: an absent arm, or an empty text one, draws nothing. */
@@ -21451,9 +21507,23 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                 // layout whether it overflowed is script-agnostic, costs the
                 // ordinary one-glyph key nothing, and settles in a frame or two.
                 var scale by remember(text, baseSize, fontScale) { mutableFloatStateOf(1f) }
+                // Arms drawn on the face (issue #410) take the edges, so the
+                // label is held in from whichever edges carry one and the
+                // overflow rule below shrinks it clear of them. The corners
+                // need no room: a letter never reaches them.
+                val armsShown = settings.layoutBehavior.flickHints && key.hasFlicks()
+                val sideArms = armsShown &&
+                    (key.flickArm(FlickDirection.LEFT) != null || key.flickArm(FlickDirection.RIGHT) != null)
+                val endArms = armsShown &&
+                    (key.flickArm(FlickDirection.UP) != null || key.flickArm(FlickDirection.DOWN) != null)
                 Text(
                     text = text,
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(
+                            horizontal = if (sideArms) FlickArmInsetDp else 0.dp,
+                            vertical = if (endArms) FlickArmInsetDp else 0.dp,
+                        ),
                     fontSize = (baseSize * fontScale * scale).sp,
                     fontWeight = if (visual.bold ?: settings.accessibility.boldLabels) {
                         FontWeight.Bold
@@ -21520,10 +21590,15 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
             } else {
                 Modifier.drawWithContent { if (!octopusHere.value) drawContent() }
             }
+            // An arm drawn in the top right corner (issue #410) owns it; the
+            // character hint would sit on top of it. The alternates are still
+            // one hold away, as with [Key.hideHint].
+            val cornerTaken = settings.layoutBehavior.flickHints &&
+                key.flickArm(FlickDirection.UP_RIGHT) != null
             KeyCornerHint(
                 transliterationRoman = if (key.hideHint) null else visual.transliterationRoman,
-                hintIcon = hintIcon.takeIf { showHints },
-                hint = hint.takeIf { showHints && key.opensAlternatesPopup() },
+                hintIcon = hintIcon.takeIf { showHints && !cornerTaken },
+                hint = hint.takeIf { showHints && !cornerTaken && key.opensAlternatesPopup() },
                 hintMask = hintMask,
                 hintColor = hintColor,
                 fontScale = fontScale,
@@ -21532,6 +21607,178 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
         }
     }
 }
+
+/**
+ * A flick key's arms drawn on its face (issue #410): each defined arm, small
+ * and in the hint colour, at the edge or corner it is flicked towards — the
+ * way MessagEase-style boards and Multiling O show what a swipe will type. The
+ * centre label and the icon faces are untouched; this only adds.
+ *
+ * Draw phase, not layout: eight `Text`s on each of a board's sixteen keys would
+ * be a hundred-odd extra layout nodes, all re-laid out every time Shift
+ * toggles (the arms re-case with it). One node per key measures its arms once
+ * into a cache and paints them, so a Shift toggle costs a repaint of the flick
+ * keys and nothing else. Action arms (issue #549) draw their icon's painter
+ * from the same cache, or the glyph the alternates popup would fall back to.
+ *
+ * Text is cased the way the cross popup draws it: the arm's own shift form
+ * under Shift, else the capital of a letter. Keyman arms are never recased.
+ */
+@Composable
+private fun BoxScope.FlickFaceArms(visual: KeyVisual, settings: KeyboardSettings) {
+    val key = visual.key
+    val keyman = key.action is KeyAction.KeymanKey
+    val color = visual.hintColor ?: visual.contentColor.copy(alpha = 0.55f)
+    val fontScale = settings.fontScale * visual.fontScale * settings.layoutBehavior.hintFontScale
+    val bold = settings.accessibility.boldLabels
+    val base = keyHintTextStyle()
+    val style = remember(base, fontScale, color, bold) {
+        base.copy(
+            fontSize = (FlickArmSp * fontScale).sp,
+            color = color,
+            fontWeight = if (bold) FontWeight.Bold else null,
+        )
+    }
+    // What each arm shows: text, or an icon for an action arm. Resolved in
+    // composition because a vector painter has to be remembered there; the
+    // list only changes with the key or the live Shift, both already keys of
+    // the composition this sits in.
+    val faces = FlickDirection.entries.mapNotNull { direction ->
+        when (val arm = key.flickArm(direction)) {
+            null -> null
+            is FlickArm.Text -> {
+                val text = when {
+                    keyman -> arm.text
+                    visual.flickShiftOn && key.flickShift[direction] != null -> key.flickShift.getValue(direction)
+                    else -> shiftCased(arm.text, visual.flickShiftCases)
+                }
+                direction to FlickFace.Glyph(text)
+            }
+            is FlickArm.Action -> {
+                val icon = flickArmIcon(arm.alternate)
+                // Qualified: `key` is the Key in this scope.
+                direction to if (icon != null) {
+                    FlickFace.Vector(androidx.compose.runtime.key(direction) { rememberVectorPainter(icon) })
+                } else {
+                    FlickFace.Glyph(arm.alternate.drawnLabel().ifBlank { flickArmGlyph(arm.alternate.action) })
+                }
+            }
+        }
+    }
+    val measurer = rememberTextMeasurer()
+    val topOffsetDp = settings.layoutBehavior.hintOffsetDp
+    val iconDp = HintIconDp * fontScale
+    Spacer(
+        modifier = Modifier
+            .matchParentSize()
+            .drawWithCache {
+                val inset = FlickArmEdgeInsetDp.toPx()
+                val top = topOffsetDp.dp.toPx()
+                val iconPx = iconDp.dp.toPx()
+                val laid = faces.map { (direction, face) ->
+                    when (face) {
+                        is FlickFace.Glyph -> {
+                            val result = measurer.measure(face.text, style, maxLines = 1, softWrap = false)
+                            val at = flickFaceTopLeft(
+                                direction, size, result.size.width.toFloat(), result.size.height.toFloat(), inset, top,
+                            )
+                            LaidArm(at, result, null)
+                        }
+                        is FlickFace.Vector -> LaidArm(
+                            flickFaceTopLeft(direction, size, iconPx, iconPx, inset, top),
+                            null,
+                            face.painter,
+                        )
+                    }
+                }
+                val tint = ColorFilter.tint(color)
+                onDrawBehind {
+                    for (arm in laid) {
+                        val text = arm.text
+                        if (text != null) {
+                            drawText(text, topLeft = arm.at)
+                        } else {
+                            translate(arm.at.x, arm.at.y) {
+                                with(arm.painter!!) { draw(Size(iconPx, iconPx), colorFilter = tint) }
+                            }
+                        }
+                    }
+                }
+            },
+    )
+}
+
+/** One arm's face, resolved in composition; see [FlickFaceArms]. */
+private sealed interface FlickFace {
+    class Glyph(val text: String) : FlickFace
+    class Vector(val painter: Painter) : FlickFace
+}
+
+/** One arm measured and placed, cached for the draw. */
+private class LaidArm(val at: Offset, val text: TextLayoutResult?, val painter: Painter?)
+
+/**
+ * The icon an action arm wears on the face, resolved the way [AlternateAction]
+ * resolves an unlabelled popup entry: the icon the author named, a text-editing
+ * operation's own icon, else the action's. Null for the actions that draw from
+ * an icon slot (delete, enter, shift): a slot can be a bitmap from an icon pack,
+ * which has no painter to cache, so those fall back to a glyph.
+ */
+private fun flickArmIcon(alternate: KeyAlternate): ImageVector? {
+    val action = alternate.action
+    return KeyIcons.byName(alternate.icon)
+        ?: (action as? KeyAction.Edit)?.takeIf { alternate.label.isBlank() }?.let { textEditIcon(it.op) }
+        ?: action.takeIf { alternate.label.isBlank() }?.let(KeyIcons::forAction)
+}
+
+/** The keycap glyph for an action arm with no icon of its own and no label. */
+private fun flickArmGlyph(action: KeyAction): String = when (action) {
+    KeyAction.Delete -> "⌫"
+    KeyAction.ForwardDelete -> "⌦"
+    KeyAction.Enter, KeyAction.Newline, KeyAction.EditorAction -> "⏎"
+    KeyAction.Shift -> "⇧"
+    KeyAction.CapsLock -> "⇪"
+    KeyAction.Space -> AlternateSpaceGlyph
+    KeyAction.LanguageSwitch -> "🌐"
+    KeyAction.Emoji -> "☺"
+    else -> "•"
+}
+
+/**
+ * Where an arm of [width]×[height] sits on a face of [size]: against the edge
+ * or corner it is flicked towards, [inset] in from the sides and bottom and
+ * [top] (the hint lane's own offset) down from the top, so the top arms line
+ * up with a corner hint on the key next door.
+ */
+private fun flickFaceTopLeft(
+    direction: FlickDirection,
+    size: Size,
+    width: Float,
+    height: Float,
+    inset: Float,
+    top: Float,
+): Offset {
+    val x = when (direction) {
+        FlickDirection.LEFT, FlickDirection.UP_LEFT, FlickDirection.DOWN_LEFT -> inset
+        FlickDirection.RIGHT, FlickDirection.UP_RIGHT, FlickDirection.DOWN_RIGHT -> size.width - inset - width
+        FlickDirection.UP, FlickDirection.DOWN -> (size.width - width) / 2f
+    }
+    val y = when (direction) {
+        FlickDirection.UP, FlickDirection.UP_LEFT, FlickDirection.UP_RIGHT -> top
+        FlickDirection.DOWN, FlickDirection.DOWN_LEFT, FlickDirection.DOWN_RIGHT -> size.height - inset - height
+        FlickDirection.LEFT, FlickDirection.RIGHT -> (size.height - height) / 2f
+    }
+    return Offset(x, y)
+}
+
+/** The size a flick arm is drawn at on the face: the hint lane's, a step up for legibility. */
+private const val FlickArmSp = 9.5f
+
+/** How far an arm sits in from the face's side and bottom edges. */
+private val FlickArmEdgeInsetDp = 3.dp
+
+/** How far the centre label is held in from an edge that carries an arm. */
+private val FlickArmInsetDp = 11.dp
 
 /**
  * A key's corner: what the transliterator is about to write with it, or else
@@ -22096,6 +22343,10 @@ private fun Modifier.pointerInputKey(
     openAlternates: () -> Unit,
     /** Live flick arm for the cross popup, or null when centred / released. */
     setFlickDirection: (FlickDirection?) -> Unit,
+    /** The finger has come back from that arm far enough to mean its capital (issue #410). */
+    setFlickReturned: (Boolean) -> Unit = {},
+    /** [LayoutBehaviorSettings.flickDistanceDp]: the travel that turns a press on a flick key into a flick. */
+    flickDistanceDp: Int = 22,
     onKey: (Key) -> Unit,
     /**
      * Un-debounced sink for auto-repeat ticks (held backspace/space). The
@@ -22887,26 +23138,39 @@ private fun Modifier.pointerInputKey(
             }
         }
     } else if (key.hasFlicks()) {
-        // A 12-key kana pad key: a tap commits the centre kana, a directional
-        // flick past the slop commits that arm's kana instead. A Keyman key's
-        // flicks work the same way, each arm being a key of its own that
-        // [flickKey] hands to the rules, and so does an arm that runs an action
-        // (issue #549), on a text key or an action key alike. One pointer owns
-        // the whole gesture (like space/backspace) so the cross popup can track
-        // the live direction; a long press still opens the alternates popup.
+        // A flick key: a tap commits the centre, a swipe past the slop in one
+        // of eight directions commits that arm instead — a 12-key kana pad's
+        // row-mates, or the nine letters a MessagEase-style key carries (issue
+        // #410). A Keyman key's flicks work the same way, each arm being a key
+        // of its own that [flickKey] hands to the rules, and so does an arm
+        // that runs an action (issue #549), on a text key or an action key
+        // alike. One pointer owns the whole gesture (like space/backspace) so
+        // the cross popup can track the live direction; a long press still
+        // opens the alternates popup.
         Modifier.pointerInput(
             key, longPressDelayMs, hapticOnLongPress, hapticOnLongPressRelease, alternates,
-            keyRepeat, textEditing, vibrateOnRepeat, soundOnRepeat,
+            keyRepeat, textEditing, vibrateOnRepeat, soundOnRepeat, flickDistanceDp,
         ) {
-            val slopPx = 22.dp.toPx()
+            val slopPx = flickDistanceDp.dp.toPx()
             val reachPx = AlternatesReachDp.toPx()
             val steerPx = AlternatesSteerDp.toPx()
+            val hasArm: (FlickDirection) -> Boolean = { key.flickArm(it) != null }
             awaitEachGesture {
                 val down = awaitFirstDown()
                 setPressed(true)
                 onKeyPress()
                 var dir: FlickDirection? = null
+                // The finger went out to [dir] and came back more than halfway:
+                // the lift types the arm's capital, FlickBoard's swipe-and-return.
+                var returned = false
                 var longFired = false
+                // Another handler (a grid loop reading the Initial pass)
+                // consumed the pointer: the press is theirs, and must not commit.
+                var stolen = false
+                // The farthest the finger has been from the down, which is the
+                // arm it reached even once it has started back.
+                var extreme = down.position
+                var extremeDist = 0f
                 // An arm that moves the caret or deletes keeps going while the
                 // finger stays on it, as the key for it would. Once it has run,
                 // the gesture has done its typing and the lift adds nothing.
@@ -22927,6 +23191,7 @@ private fun Modifier.pointerInputKey(
                 while (true) {
                     val event = awaitPointerEvent()
                     val change = event.changes.firstOrNull { it.id == down.id } ?: break
+                    if (change.isConsumed) { stolen = true; break }
                     if (!change.pressed) { change.consume(); break }
                     // The popup is up: the finger is choosing in it, not picking
                     // a kana arm. The two cannot both read this drag, and the
@@ -22936,22 +23201,45 @@ private fun Modifier.pointerInputKey(
                         change.consume()
                         continue
                     }
-                    val dx = change.position.x - down.position.x
-                    val dy = change.position.y - down.position.y
-                    // Dominant axis picks the arm; only directions the key
-                    // actually defines count, so a flick toward an empty arm
-                    // falls back to the centre tap rather than committing nothing.
-                    val raw = when {
-                        max(abs(dx), abs(dy)) < slopPx -> null
-                        abs(dx) >= abs(dy) -> if (dx < 0) FlickDirection.LEFT else FlickDirection.RIGHT
-                        else -> if (dy < 0) FlickDirection.UP else FlickDirection.DOWN
+                    val offset = change.position - down.position
+                    val dist = offset.getDistance()
+                    if (dist > extremeDist) {
+                        extremeDist = dist
+                        extreme = change.position
                     }
-                    val resolved = raw?.takeIf { key.flickArm(it) != null }
+                    // Only directions the key actually defines count, so a
+                    // flick toward an empty arm falls back to the centre tap
+                    // rather than committing nothing. An arm with a capital of
+                    // its own is the arm the finger *reached*, and a return
+                    // towards the centre asks for that capital; any other arm
+                    // follows the finger, so coming back inside the slop is the
+                    // cancel it always was on a kana pad.
+                    val live = resolveFlickDirection(offset.x, offset.y, slopPx, hasArm)
+                    val peak = resolveFlickDirection(
+                        extreme.x - down.position.x, extreme.y - down.position.y, slopPx, hasArm,
+                    )
+                    val resolved: FlickDirection?
+                    val nowReturned: Boolean
+                    if (peak != null && key.flickShiftedText(peak) != null) {
+                        resolved = peak
+                        nowReturned = flickReturned(extremeDist, (change.position - extreme).getDistance())
+                    } else {
+                        resolved = live
+                        nowReturned = false
+                    }
+                    if (nowReturned != returned) {
+                        returned = nowReturned
+                        setFlickReturned(returned)
+                    }
                     if (resolved != dir) {
                         dir = resolved
                         setFlickDirection(dir)
-                        // Committing to a flick arm cancels the pending long press.
-                        if (dir != null) longJob?.cancel()
+                        // Committing to a flick arm cancels the pending long
+                        // press, and says so under the finger.
+                        if (dir != null) {
+                            longJob?.cancel()
+                            onKeyHaptic()
+                        }
                         armRepeat?.cancel()
                         armRepeat = dir?.let { key.flickKey(it) }?.takeIf { it.flickArmRepeats() }?.let { arm ->
                             val intervalMs = when {
@@ -22977,9 +23265,18 @@ private fun Modifier.pointerInputKey(
                 setPressed(false)
                 onKeyRelease()
                 setFlickDirection(null)
+                setFlickReturned(false)
+                if (stolen) {
+                    if (longFired) alternates?.cancel()
+                    return@awaitEachGesture
+                }
                 val chosen = dir?.let { key.flickKey(it) }
+                // The capital the return asked for rides as both output and
+                // shift label, so an armed Shift and the return agree on it.
+                val capital = dir?.takeIf { returned }?.let { key.flickShiftedText(it) }
                 when {
                     armRepeated -> Unit
+                    chosen != null && capital != null -> onKey(chosen.copy(output = capital, shiftLabel = capital))
                     chosen != null -> onKey(chosen)
                     // The long press already opened alternates; release commits
                     // what the popup has highlighted, and never the centre kana.

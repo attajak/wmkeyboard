@@ -51,7 +51,10 @@ class LayoutJsonSchemaDriftTest {
         assertTrue(LayoutJsonSchema.layout.property("layers")!!.shape is MapShape)
         assertTrue("shift" in LayoutJsonSchema.action.variants)
         assertEquals(listOf("tool"), LayoutJsonSchema.action.variants.getValue("tool").properties.map { it.name })
-        assertEquals(listOf("left", "up", "right", "down"), ((key.property("flick")!!.shape as MapShape).key as EnumShape).values)
+        assertEquals(
+            listOf("left", "up", "right", "down", "up_left", "up_right", "down_left", "down_right"),
+            ((key.property("flick")!!.shape as MapShape).key as EnumShape).values,
+        )
     }
 
     @Test

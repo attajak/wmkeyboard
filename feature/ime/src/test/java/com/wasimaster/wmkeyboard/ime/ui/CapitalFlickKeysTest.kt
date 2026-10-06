@@ -39,5 +39,23 @@ class CapitalFlickKeysTest {
         assertNull(Key(label = "⇧", action = KeyAction.Shift).capitalFlickText())
         assertNull(Key(label = "?123", action = KeyAction.Symbols).capitalFlickText())
         assertNull(Key(label = "か", flick = mapOf(FlickDirection.UP to "く")).capitalFlickText())
+        assertNull(Key(label = "a", flick = mapOf(FlickDirection.DOWN_RIGHT to "v")).capitalFlickText())
+    }
+
+    @Test
+    fun `a swipe out to an arm and back types that arm's capital`() {
+        // Issue #410: the arm's own shift form first, else its capital; an arm
+        // whose shift changes nothing has no return form, so the return stays
+        // the kana pad's cancel.
+        val key = Key(
+            label = "o",
+            flick = mapOf(FlickDirection.UP_LEFT to "q", FlickDirection.DOWN to "1", FlickDirection.UP to "ß"),
+            flickShift = mapOf(FlickDirection.UP to "ẞ"),
+        )
+        assertEquals("Q", key.flickShiftedText(FlickDirection.UP_LEFT))
+        assertEquals("ẞ", key.flickShiftedText(FlickDirection.UP))
+        assertNull(key.flickShiftedText(FlickDirection.DOWN))
+        assertNull(key.flickShiftedText(FlickDirection.LEFT))
+        assertNull(Key(label = "あ", flick = mapOf(FlickDirection.LEFT to "い")).flickShiftedText(FlickDirection.LEFT))
     }
 }

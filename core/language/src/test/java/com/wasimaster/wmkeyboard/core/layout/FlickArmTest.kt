@@ -66,6 +66,28 @@ class FlickArmTest {
     }
 
     @Test
+    fun `a corner arm is an arm like any other`() {
+        // Issue #410: MessagEase's o carries all eight.
+        val key = Key(
+            "o",
+            flick = mapOf(
+                FlickDirection.UP_LEFT to "q", FlickDirection.UP to "u", FlickDirection.UP_RIGHT to "p",
+                FlickDirection.LEFT to "c", FlickDirection.RIGHT to "b",
+                FlickDirection.DOWN_LEFT to "g", FlickDirection.DOWN to "d", FlickDirection.DOWN_RIGHT to "j",
+            ),
+        )
+        assertTrue(key.hasFlicks())
+        assertEquals("q", (key.flickArm(FlickDirection.UP_LEFT) as FlickArm.Text).text)
+        assertEquals("j", key.flickKey(FlickDirection.DOWN_RIGHT)!!.output)
+        assertTrue(FlickDirection.UP_LEFT.isDiagonal)
+        assertFalse(FlickDirection.UP.isDiagonal)
+        // The pad order puts the centre in the middle and every arm once.
+        assertEquals(9, FlickDirection.gridOrder.size)
+        assertEquals(null, FlickDirection.gridOrder[4])
+        assertEquals(FlickDirection.entries.toSet(), FlickDirection.gridOrder.filterNotNull().toSet())
+    }
+
+    @Test
     fun `repair drops an action arm that only types or cannot run`() {
         val key = Key(
             "a",

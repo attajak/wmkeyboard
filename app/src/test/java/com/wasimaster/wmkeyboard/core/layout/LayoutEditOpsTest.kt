@@ -329,6 +329,13 @@ class LayoutEditOpsTest {
             .withArm(FlickDirection.LEFT, "い")
         assertEquals(listOf(FlickDirection.LEFT, FlickDirection.DOWN), arms.keys.toList())
         assertEquals(mapOf(FlickDirection.DOWN to "お"), arms.withArm(FlickDirection.LEFT, ""))
+        // A corner arm (issue #410) files after the four edges, whatever order
+        // the pad was filled in.
+        val corners = arms.withArm(FlickDirection.UP_LEFT, "q").withArm(FlickDirection.UP, "u")
+        assertEquals(
+            listOf(FlickDirection.LEFT, FlickDirection.UP, FlickDirection.DOWN, FlickDirection.UP_LEFT),
+            corners.keys.toList(),
+        )
     }
 
     @Test

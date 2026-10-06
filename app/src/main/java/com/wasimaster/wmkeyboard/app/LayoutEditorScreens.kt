@@ -132,6 +132,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
@@ -3608,11 +3610,7 @@ internal fun EditorKeyCell(
                 )
                 is FlickArm.Action -> {
                     val action = arm.alternate.action
-                    val armIcon = KeyIcons.byName(arm.alternate.icon)
-                        ?: KeyIcons.byName(actionIconName(action))
-                        ?: (action as? KeyAction.Tool)?.let { toolIconFor(it.tool) }
-                        ?: (action as? KeyAction.Edit)?.let { textEditIcon(it.op) }
-                        ?: KeyIcons.forAction(action)
+                    val armIcon = flickArmIcon(arm.alternate)
                     if (armIcon != null && arm.alternate.label.isBlank()) {
                         Icon(
                             armIcon,
@@ -3647,12 +3645,30 @@ internal fun EditorKeyCell(
     }
 }
 
-/** Where a flick's glyph sits on a preview cell: the edge it is flicked towards. */
+/** Where a flick's glyph sits on a preview cell: the edge or corner it is flicked towards. */
 private fun flickAlignment(direction: FlickDirection): Alignment = when (direction) {
     FlickDirection.LEFT -> Alignment.CenterStart
     FlickDirection.UP -> Alignment.TopCenter
     FlickDirection.RIGHT -> Alignment.CenterEnd
     FlickDirection.DOWN -> Alignment.BottomCenter
+    FlickDirection.UP_LEFT -> Alignment.TopStart
+    FlickDirection.UP_RIGHT -> Alignment.TopEnd
+    FlickDirection.DOWN_LEFT -> Alignment.BottomStart
+    FlickDirection.DOWN_RIGHT -> Alignment.BottomEnd
+}
+
+/**
+ * The icon an action arm draws in the preview and on the flick pad: the one
+ * the author named, the action's own, a tool's, or a text-editing operation's.
+ * Null when the arm wears a label instead, or nothing draws for it.
+ */
+private fun flickArmIcon(alternate: KeyAlternate): ImageVector? {
+    val action = alternate.action
+    return KeyIcons.byName(alternate.icon)
+        ?: KeyIcons.byName(actionIconName(action))
+        ?: (action as? KeyAction.Tool)?.let { toolIconFor(it.tool) }
+        ?: (action as? KeyAction.Edit)?.let { textEditIcon(it.op) }
+        ?: KeyIcons.forAction(action)
 }
 
 /** The preview's size for a flick glyph: small enough to leave the key's own label alone. */
@@ -4497,8 +4513,8 @@ private fun outputFieldSupport(key: Key): String = when {
 }
 
 /**
- * The four flick directions of a kana-pad key (issue #339): what a short flick
- * left, up, right or down types instead of the tap.
+ * The flick directions of a key (issue #339, eight of them since #410): what a
+ * short flick towards each edge or corner types instead of the tap.
  *
  * These were reachable only from the raw JSON, on the grounds that a flick map
  * is rare and whoever wants one already knows the word (see [LettersField]).
@@ -4559,38 +4575,44 @@ private fun FlickFields(
         val arm = k.flickActions[direction] ?: return@onChange k
         k.copy(flickActions = k.flickActions + (direction to change(arm)))
     }
-    for (direction in FlickDirection.entries) {
-        val arm = key.flickActions[direction]?.takeIf { takesActions }
-        if (arm != null) {
-            WmRow(
-                title = stringResource(flickLabelRes(direction)),
-                subtitle = stringResource(
-                    R.string.layout_editor_flick_action_set,
-                    actionAlternateName(arm, secondaryLayouts),
-                ),
-                leading = { Icon(Icons.Outlined.Bolt, contentDescription = null) },
-                trailing = {
-                    IconButton(onClick = { onChange { it.copy(flickActions = it.flickActions - direction) } }) {
-                        Icon(
-                            Icons.Outlined.Close,
-                            contentDescription = stringResource(R.string.layout_editor_action_alternate_remove_desc),
-                        )
-                    }
-                },
-                onClick = { picking = direction },
-            )
-            continue
-        }
-        if (!typesText) {
-            WmRow(
-                title = stringResource(flickLabelRes(direction)),
-                subtitle = stringResource(R.string.layout_editor_flick_action_none),
-                leading = { Icon(Icons.Outlined.Bolt, contentDescription = null) },
-                onClick = { picking = direction },
-            )
-            continue
-        }
+    // Issue #410: the eight arms as a 3×3 pad with the key itself in the
+    // middle, the way the keyboard draws them. Tap a cell to edit that arm in
+    // the fields below; eight pairs of fields in a column was a sheet nobody
+    // could see the shape of.
+    var selected by remember(ref, key.action) { mutableStateOf(FlickDirection.UP) }
+    FlickPad(key = key, selected = selected, takesActions = takesActions) { selected = it }
+    val direction = selected
+    val arm = key.flickActions[direction]?.takeIf { takesActions }
+    if (arm != null) {
+        WmRow(
+            title = stringResource(flickLabelRes(direction)),
+            subtitle = stringResource(
+                R.string.layout_editor_flick_action_set,
+                actionAlternateName(arm, secondaryLayouts),
+            ),
+            leading = { Icon(Icons.Outlined.Bolt, contentDescription = null) },
+            trailing = {
+                IconButton(onClick = { onChange { it.copy(flickActions = it.flickActions - direction) } }) {
+                    Icon(
+                        Icons.Outlined.Close,
+                        contentDescription = stringResource(R.string.layout_editor_action_alternate_remove_desc),
+                    )
+                }
+            },
+            onClick = { picking = direction },
+        )
+    } else if (!typesText) {
+        WmRow(
+            title = stringResource(flickLabelRes(direction)),
+            subtitle = stringResource(R.string.layout_editor_flick_action_none),
+            leading = { Icon(Icons.Outlined.Bolt, contentDescription = null) },
+            onClick = { picking = direction },
+        )
+    } else {
         val value = key.flick[direction].orEmpty()
+        // The direction is part of the reset key: the field remembers its text
+        // per key, and switching cells mid-edit must show the new arm's text,
+        // not the one just typed into.
         SheetField(
             label = stringResource(flickLabelRes(direction)),
             value = value,
@@ -4599,7 +4621,7 @@ private fun FlickFields(
             } else {
                 stringResource(R.string.layout_editor_flick_set_hint, value)
             },
-            resetKey = ref to direction,
+            resetKey = Triple(ref, direction, FlickTextField),
             trailing = if (takesActions) {
                 {
                     IconButton(onClick = { picking = direction }) {
@@ -4631,6 +4653,17 @@ private fun FlickFields(
             ) { text ->
                 onChange { it.copy(flickShift = it.flickShift.withArm(direction, text)) }
             }
+        }
+    }
+    if (key.flick.isNotEmpty() || key.flickShift.isNotEmpty() || key.flickActions.isNotEmpty()) {
+        TextButton(
+            onClick = {
+                onChange { it.copy(flick = emptyMap(), flickShift = emptyMap(), flickActions = emptyMap()) }
+                open = false
+            },
+            modifier = Modifier.padding(horizontal = 8.dp),
+        ) {
+            Text(stringResource(R.string.layout_editor_flick_clear))
         }
     }
 
@@ -4692,6 +4725,110 @@ private fun FlickFields(
     }
 }
 
+/**
+ * The 3×3 pad of a key's flick arms (issue #410): each arm's text or action
+ * icon in the cell it is flicked towards, a faint plus where there is none, the
+ * key's own label in the middle. Tapping a cell selects it for the fields
+ * under the pad; the selected cell wears the accent outline.
+ */
+@Composable
+private fun FlickPad(
+    key: Key,
+    selected: FlickDirection,
+    takesActions: Boolean,
+    onSelect: (FlickDirection) -> Unit,
+) {
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(10.dp)
+    val padDesc = stringResource(R.string.layout_editor_flick_pad_desc)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .semantics { contentDescription = padDesc },
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        for (row in FlickDirection.gridOrder.chunked(3)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                for (direction in row) {
+                    val isSelected = direction != null && direction == selected
+                    val label = direction?.let { stringResource(flickLabelRes(it)) }
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(48.dp)
+                            .clip(shape)
+                            .background(if (direction == null) colors.surfaceVariant else colors.surface)
+                            .border(
+                                width = if (isSelected) 2.dp else 1.dp,
+                                color = if (isSelected) colors.primary else colors.outlineVariant,
+                                shape = shape,
+                            )
+                            .then(
+                                if (direction != null) {
+                                    Modifier.clickable(onClickLabel = label) { onSelect(direction) }
+                                } else {
+                                    Modifier
+                                },
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        if (direction == null) {
+                            Text(
+                                text = key.label.ifBlank { "•" },
+                                fontWeight = FontWeight.Medium,
+                                maxLines = 1,
+                                color = colors.onSurfaceVariant,
+                            )
+                        } else {
+                            FlickPadCell(key, direction, takesActions, isSelected)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** One arm's cell on the [FlickPad]: its text, its action's icon, or a faint plus. */
+@Composable
+private fun FlickPadCell(key: Key, direction: FlickDirection, takesActions: Boolean, selected: Boolean) {
+    val colors = MaterialTheme.colorScheme
+    val tint = if (selected) colors.primary else colors.onSurface
+    when (val arm = key.flickArm(direction)) {
+        null -> Icon(
+            Icons.Outlined.Add,
+            contentDescription = null,
+            tint = colors.outline.copy(alpha = 0.6f),
+            modifier = Modifier.size(16.dp),
+        )
+        is FlickArm.Text -> Text(
+            text = arm.text,
+            color = tint,
+            fontSize = 16.sp,
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 4.dp),
+        )
+        is FlickArm.Action -> {
+            val icon = flickArmIcon(arm.alternate).takeIf { takesActions && arm.alternate.label.isBlank() }
+            if (icon != null) {
+                Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(18.dp))
+            } else {
+                Text(
+                    text = arm.alternate.label.ifBlank { "⚡" },
+                    color = tint,
+                    fontSize = 14.sp,
+                    maxLines = 1,
+                    modifier = Modifier.padding(horizontal = 4.dp),
+                )
+            }
+        }
+    }
+}
+
+/** Tells a flick arm's text field apart from its Shift field, which share a direction. */
+private const val FlickTextField = "text"
+
 /** Tells a flick arm's Shift field apart from its text field, which share a direction. */
 private const val FlickShiftField = "shift"
 
@@ -4713,6 +4850,10 @@ private fun flickLabelRes(direction: FlickDirection): Int = when (direction) {
     FlickDirection.UP -> R.string.layout_editor_flick_up_label
     FlickDirection.RIGHT -> R.string.layout_editor_flick_right_label
     FlickDirection.DOWN -> R.string.layout_editor_flick_down_label
+    FlickDirection.UP_LEFT -> R.string.layout_editor_flick_up_left_label
+    FlickDirection.UP_RIGHT -> R.string.layout_editor_flick_up_right_label
+    FlickDirection.DOWN_LEFT -> R.string.layout_editor_flick_down_left_label
+    FlickDirection.DOWN_RIGHT -> R.string.layout_editor_flick_down_right_label
 }
 
 /**

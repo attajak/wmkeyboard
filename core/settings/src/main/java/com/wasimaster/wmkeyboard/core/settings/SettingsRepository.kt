@@ -5291,6 +5291,9 @@ enum class BoardCorner {
 /** Bounds for the docked keyboard's corner radii, in dp; 0 is square. */
 val BoardCornerRadiusRange = 0..40
 
+/** Bounds for [LayoutBehaviorSettings.flickDistanceDp], in dp. The slider shares them. */
+val FlickDistanceRange = 8..48
+
 /** Bounds for [LayoutBehaviorSettings.globeTypingGuardMs]; 0 is off. The slider shares them. */
 val GlobeTypingGuardMsRange = 0..1000
 
@@ -6712,6 +6715,29 @@ data class LayoutBehaviorSettings(
      * up off a key ("de") can read as a flick.
      */
     val capitalFlick: Boolean = false,
+    /**
+     * Whether a key with flick arms ([com.wasimaster.wmkeyboard.core.layout.Key.flick])
+     * draws them on its face, small, at the edge or corner each is flicked
+     * towards, the way MessagEase-style boards and Multiling O show what a
+     * swipe will type (issue #410). On by default: a nine-letter key with no
+     * arms drawn is a key you have to memorise. Off leaves the face to the
+     * centre label and the corner hint, as the kana pad shipped.
+     */
+    val flickHints: Boolean = true,
+    /**
+     * Whether holding a flick key shows the cross popup of its arms, with the
+     * one the finger is over lit. On by default, as the kana pad shipped. Off
+     * for a board whose face already shows every arm ([flickHints]) and whose
+     * user would rather nothing covered the keys around it.
+     */
+    val flickPopup: Boolean = true,
+    /**
+     * How far a finger has to travel from the down before a flick key reads
+     * the stroke as a flick rather than a tap, in dp; see [FlickDistanceRange].
+     * 22 is what the kana pad shipped with. Lower makes a quick, short flick
+     * count on a small key; higher stops a tap that drifts from flicking.
+     */
+    val flickDistanceDp: Int = 22,
     /**
      * For this long after a typed key, a tap on the 🌐 key is ignored, in ms
      * (0 = off). The globe sits between `?123`/comma and the spacebar, and a
@@ -8396,6 +8422,9 @@ class SettingsRepository(private val context: Context) {
         private val SPACE_CURSOR_2D = booleanPreferencesKey("space_cursor_2d")
         private val HINT_FONT_SCALE = floatPreferencesKey("hint_font_scale")
         private val HINT_OFFSET = intPreferencesKey("hint_offset_dp")
+        private val FLICK_HINTS = booleanPreferencesKey("flick_hints")
+        private val FLICK_POPUP = booleanPreferencesKey("flick_popup")
+        private val FLICK_DISTANCE = intPreferencesKey("flick_distance_dp")
         private val TRANSLITERATION_HINTS = stringPreferencesKey("transliteration_hints")
         private val FANCY_STYLE = stringPreferencesKey("fancy_style")
         private val FANCY_TOOL_STYLE = stringPreferencesKey("fancy_tool_style")
@@ -10455,6 +10484,10 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.layoutBehavior.pickerHiddenLanguages,
             hintFontScale = p[HINT_FONT_SCALE] ?: defaults.layoutBehavior.hintFontScale,
             hintOffsetDp = p[HINT_OFFSET] ?: defaults.layoutBehavior.hintOffsetDp,
+            flickHints = p[FLICK_HINTS] ?: defaults.layoutBehavior.flickHints,
+            flickPopup = p[FLICK_POPUP] ?: defaults.layoutBehavior.flickPopup,
+            flickDistanceDp = p[FLICK_DISTANCE]?.coerceIn(FlickDistanceRange)
+                ?: defaults.layoutBehavior.flickDistanceDp,
             transliterationHints = p[TRANSLITERATION_HINTS]
                 ?.let { runCatching { TransliterationHintMode.valueOf(it) }.getOrNull() }
                 ?: defaults.layoutBehavior.transliterationHints,
@@ -15464,6 +15497,15 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHintOffsetDp(value: Int) =
         editPrefs { it[HINT_OFFSET] = value.coerceIn(0, 16) }
+
+    suspend fun setFlickHints(value: Boolean) =
+        editPrefs { it[FLICK_HINTS] = value }
+
+    suspend fun setFlickPopup(value: Boolean) =
+        editPrefs { it[FLICK_POPUP] = value }
+
+    suspend fun setFlickDistanceDp(value: Int) =
+        editPrefs { it[FLICK_DISTANCE] = value.coerceIn(FlickDistanceRange) }
 
     suspend fun setTransliterationHints(value: TransliterationHintMode) =
         editPrefs { it[TRANSLITERATION_HINTS] = value.name }

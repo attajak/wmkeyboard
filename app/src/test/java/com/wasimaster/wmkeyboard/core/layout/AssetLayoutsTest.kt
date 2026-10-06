@@ -110,6 +110,23 @@ class AssetLayoutsTest {
     }
 
     @Test
+    fun `the english flick layout reaches every letter from nine keys`() {
+        // Issue #410: a MessagEase-style 3×3 board. The centre letters plus the
+        // flick arms cover the alphabet; o carries all eight corners and edges.
+        val file = layoutFiles.first { it.name == "en_flick.${LayoutFile.FILE_EXTENSION}" }
+        val keys = LayoutFile.decode(file.readText())!!.layout
+            .layers.values.flatMap { it.rows.flatten() }
+        val o = keys.first { it.label == "o" }
+        assertEquals(FlickDirection.entries.toSet(), o.flick.keys)
+        assertEquals("q", o.flick[FlickDirection.UP_LEFT])
+        val reachable = keys.filter { it.action == KeyAction.Text }
+            .flatMap { listOf(it.output ?: it.label) + it.flick.values }
+            .flatMap { it.toList() }
+            .toSet()
+        assertEquals(emptyList<Char>(), ('a'..'z').filterNot { it in reachable })
+    }
+
+    @Test
     fun `the t9 pinyin layout maps letter groups to keypad digits`() {
         val file = layoutFiles.first { it.name == "zh_pinyin_t9.${LayoutFile.FILE_EXTENSION}" }
         val keys = LayoutFile.decode(file.readText())!!.layout

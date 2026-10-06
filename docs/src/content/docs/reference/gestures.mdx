@@ -75,6 +75,23 @@ The full field-by-field list (haptics, sound, popup timing, and every long-press
 | Double-tap <KeyCap>Shift</KeyCap> within the window | Shift key | Turns on caps lock | Caps lock double press (350 ms) |
 | Hold any key still | Any key | Shows the key preview bubble | Key popup (On) |
 
+## Flicking a key with arms
+
+<SettingsPath path="Typing / Gestures" />
+
+A key with flick directions (the Japanese flick pad, the English flick (3×3) board, or any key given arms in the layout editor) reads a short swipe off it as a flick. Full mechanics on [Flick keys](/typing/gestures/#flick-keys).
+
+| Gesture | Where | What it does | Setting |
+| --- | --- | --- | --- |
+| Tap | Flick key | Types the centre character | None |
+| Swipe past the flick distance in one of eight directions | Flick key | Types the arm at that edge or corner; an arm that runs an action runs it, and a cursor or delete arm repeats while held | Flick distance (22&nbsp;dp) |
+| Swipe towards an edge or corner with no arm | Flick key | Types the centre character | None |
+| Swipe out to a letter arm and more than halfway back | Flick key | Types that arm's capital (or its **with Shift** form) | None; an arm with no capital cancels to the centre instead |
+| Hold still inside the flick distance | Flick key | Opens the press-and-hold alternates, as on any key | Press and hold hints (On) |
+| Any swipe off a flick key | Flick key | Never starts a glide, a handwriting stroke or a hint flick | None |
+
+While the finger is down the cross popup shows every arm with the chosen one lit (Flick popup, On), and the key's face draws its arms small at their edges and corners (Show flick arms on keys, On).
+
 ## Dragging from a modifier key
 
 Every layout has a <KeyCap>Shift</KeyCap> key. A <KeyCap>Ctrl</KeyCap>, <KeyCap>Alt</KeyCap> or <KeyCap>Meta</KeyCap> key only exists on a layout you built or imported, since none of the shipped ones carry a modifier row. Add one from the [layout editor](/languages/custom-layouts/#editing-a-key). Full mechanics on [Gestures](/typing/gestures/#dragging-from-a-modifier-key).

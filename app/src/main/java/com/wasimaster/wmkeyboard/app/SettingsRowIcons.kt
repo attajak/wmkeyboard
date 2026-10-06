@@ -992,6 +992,9 @@ internal object SettingsRowIcons {
         put(R.string.typing_edge_swipe_back_title) { Icons.AutoMirrored.Outlined.ArrowBack }
         put(R.string.typing_hint_flick_title) { Icons.Outlined.SwipeDownAlt }
         put(R.string.typing_capital_flick_title) { Icons.Outlined.KeyboardCapslock }
+        put(R.string.typing_flick_hints_title) { Icons.Outlined.OpenWith }
+        put(R.string.typing_flick_popup_title) { Icons.Outlined.Preview }
+        put(R.string.typing_flick_distance_title) { Icons.Outlined.Straighten }
         put(R.string.typing_space_hold_keys_label) { Icons.Outlined.TouchApp }
         put(R.string.typing_backspace_swipe_title) { Icons.AutoMirrored.Outlined.Backspace }
         put(R.string.typing_backspace_unit_title) { Icons.AutoMirrored.Outlined.Backspace }

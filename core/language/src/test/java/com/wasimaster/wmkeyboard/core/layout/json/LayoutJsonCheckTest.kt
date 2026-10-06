@@ -83,6 +83,9 @@ class LayoutJsonCheckTest {
     @Test
     fun `a flick direction must be a real one`() {
         assertTrue(JsonIssueCode.UNKNOWN_MAP_KEY in codes(withKey("{\"label\": \"a\", \"flick\": {\"upp\": \"b\"}}")))
+        // The corners are spelled with an underscore (issue #410).
+        assertTrue(JsonIssueCode.UNKNOWN_MAP_KEY in codes(withKey("{\"label\": \"a\", \"flick\": {\"upleft\": \"b\"}}")))
+        assertTrue(JsonIssueCode.UNKNOWN_MAP_KEY !in codes(withKey("{\"label\": \"a\", \"flick\": {\"up_left\": \"b\"}}")))
     }
 
     @Test

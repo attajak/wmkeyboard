@@ -245,6 +245,28 @@ class LayoutCodecTest {
     }
 
     @Test
+    fun `round trips the corner flick arms under their snake-case names`() {
+        // Issue #410: the diagonals are spelled up_left and so on in the file.
+        val original = spec(
+            listOf(
+                Key(
+                    "o",
+                    flick = mapOf(
+                        FlickDirection.UP_LEFT to "q",
+                        FlickDirection.UP_RIGHT to "p",
+                        FlickDirection.DOWN_LEFT to "g",
+                        FlickDirection.DOWN_RIGHT to "j",
+                    ),
+                    flickShift = mapOf(FlickDirection.UP_LEFT to "Q"),
+                ),
+            ),
+        )
+        val encoded = LayoutCodec.encode(original)
+        assertTrue(encoded, "\"up_left\"" in encoded && "\"down_right\"" in encoded)
+        assertEquals(original, LayoutCodec.decode(encoded))
+    }
+
+    @Test
     fun `round trips a multitap cycle`() {
         val original = spec(listOf(Key("ㄱㅋ", output = "ㄱ", multitap = listOf("ㅋ", "ㄲ"))))
         val decoded = LayoutCodec.decode(LayoutCodec.encode(original))

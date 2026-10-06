@@ -4,6 +4,8 @@ import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
 import com.wasimaster.wmkeyboard.core.layout.FlickDirection
 import com.wasimaster.wmkeyboard.core.layout.Key
 import com.wasimaster.wmkeyboard.core.layout.KeyAction
+import com.wasimaster.wmkeyboard.core.layout.KeyAlternate
+import com.wasimaster.wmkeyboard.core.settings.TextEditAction
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -55,6 +57,21 @@ class HintFlickKeysTest {
                 flick = mapOf(FlickDirection.DOWN to "お"),
             ).takesHintFlick(),
         )
+    }
+
+    @Test
+    fun `a key with action arms owns its drag too`() {
+        // Issue #410: every flick key owns its stroke, so glide, handwriting
+        // and the hint flick all leave it alone.
+        val arrows = Key(
+            label = "e",
+            longPress = listOf("3"),
+            flickActions = mapOf(FlickDirection.LEFT to KeyAlternate(KeyAction.Edit(TextEditAction.LEFT))),
+        )
+        assertTrue(arrows.ownsDrag())
+        assertFalse(arrows.takesHintFlick())
+        assertTrue(Key(label = "o", flick = mapOf(FlickDirection.UP_LEFT to "q")).ownsDrag())
+        assertFalse(Key(label = "o").ownsDrag())
     }
 
     @Test

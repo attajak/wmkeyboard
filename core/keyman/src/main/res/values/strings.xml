@@ -13,8 +13,8 @@
     </plurals>
 
     <plurals name="core_keyman_diagonal_flicks_dropped">
-        <item quantity="one">The app removed %1$d diagonal flick. This keyboard supports flicks up, down, left and right only.</item>
-        <item quantity="other">The app removed %1$d diagonal flicks. This keyboard supports flicks up, down, left and right only.</item>
+        <item quantity="one">The app removed %1$d flick. Its direction is not one of the eight compass directions.</item>
+        <item quantity="other">The app removed %1$d flicks. Their directions are not one of the eight compass directions.</item>
     </plurals>
 
     <plurals name="core_keyman_special_keys_dropped">

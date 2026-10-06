@@ -79,7 +79,7 @@ There's a second, separate **Swipe down to hide** toggle for the toolbar strip, 
 
 Every key with press-and-hold characters shows the first of them in its corner: the <KeyCap>1</KeyCap> on <KeyCap>q</KeyCap>, the accents on a vowel, the currency signs on <KeyCap>$</KeyCap>. With this on, a short, quick swipe straight down on the key types that corner character outright, with no hold to wait out. It's the same character the popup would put first, on any key that has one, on every layer. Off by default.
 
-The swipe has to be all four things at once: **down** (within about 30° of straight down), **short** (between half a key's height and two of them), **straight**, and **quick** (under a quarter of a second from touch to lift). A drag that misses any of those is whatever it always was, so a slow pull down is still a glide and a tap that drifts is still a tap. The keys with a drag of their own keep it: the spacebar's swipes, backspace's delete swipe, the modifier and <KeyCap>?123</KeyCap> drags, and a kana key's four flick arms.
+The swipe has to be all four things at once: **down** (within about 30° of straight down), **short** (between half a key's height and two of them), **straight**, and **quick** (under a quarter of a second from touch to lift). A drag that misses any of those is whatever it always was, so a slow pull down is still a glide and a tap that drifts is still a tap. The keys with a drag of their own keep it: the spacebar's swipes, backspace's delete swipe, the modifier and <KeyCap>?123</KeyCap> drags, and a [flick key's](#flick-keys) arms.
 
 The one real cost is with [glide typing](/typing/glide-typing/). A very fast glide of a short word whose stroke runs straight down between neighbouring rows, "ed" for instance, can read as a flick and type the hint instead. The timing rule is what keeps that rare, since even a short glide usually takes longer than a flick, but it's why the setting ships off.
 
@@ -90,6 +90,18 @@ The one real cost is with [glide typing](/typing/glide-typing/). A very fast gli
 The same flick the other way. With this on, a short, quick swipe straight up on a letter types its capital, so a single capital in the middle of a word or a name needs no trip to <KeyCap>Shift</KeyCap>. On a key that has a shifted character of its own, such as a number-row key with a symbol above it, the swipe types that character instead. Keys whose Shift changes nothing (a digit with no shifted twin, a script without capitals) don't take the swipe. It doesn't touch Shift either: a Shift you armed is still armed for the next letter. Off by default.
 
 The rules are the ones the hint flick uses, pointed up: within about 30° of straight up, between half a key's height and two of them, straight, and under a quarter of a second. When [Words on the keys](/smart/words-on-the-keys/) shows a word on the key, a swipe up still takes that word, as it always has. The glide cost is the mirror image too: a very fast glide of a short word that runs straight up between neighbouring rows, "de" for instance, can type a capital instead.
+
+## Flick keys
+
+<SettingsPath path="Typing / Gestures / Show flick arms on keys" />
+
+Some keys carry more than one character. A tap types the one in the middle; a short swipe from the key in one of eight directions types the one at that edge or corner instead. The [Japanese Flick](/languages/cjk/#japanese-input) pad has always worked this way, with four arms, and the shipped **English flick (3×3)** layout takes it further in the MessagEase manner: all twenty-six letters on nine big keys, with `o` in the middle carrying q, u, p, c, b, g, d and j around it. Enable it under Languages like any other layout. Any key of any layout can be given arms of its own in the [layout editor](/languages/custom-layouts/#editing-a-key), and an arm can run an action, such as moving the cursor, as readily as it types.
+
+Each key draws its arms small, in the hint colour, at the edge or corner you swipe towards, so you can see what a swipe will type before you make it. **Show flick arms on keys** turns that drawing off, which leaves the face to the centre character the way the kana pad looked before. While your finger is down, a **Flick popup** over the key shows the centre and every arm in a 3×3 cross, with the one your finger is heading for lit; turn it off if the arms on the face are enough and you'd rather nothing covered the keys around it. The arm lights up with a short buzz the moment it is chosen.
+
+**Flick distance** is how far the finger has to travel from where it landed before the press reads as a flick rather than a tap, 22&nbsp;dp by default. Past that, the swipe's direction picks the nearest arm the key actually has, so a key with only four edge arms still has the generous quarter-circle each of them always had, a key with all eight gets a 45° sector for each, and a swipe towards an edge or corner that carries nothing types the centre character, as a drifting tap always did.
+
+Two more things a flick key does, both borrowed from FlickBoard and Thumb-Key. **Swipe out to a letter and back again** to where you started, and the swipe types that letter's capital: `q` from a swipe up-left on `o`, `Q` from the same swipe brought more than halfway back. That only applies to an arm that has a capital of its own (or a **with Shift** form set in the editor); on a kana arm, an action arm or an arm whose shift changes nothing, coming back to the centre cancels to a plain tap, exactly as before. And a **held** flick key still opens its press-and-hold alternates, since the hold only starts once the finger has stayed inside the flick distance.
 
 ## Swiping to add 's
 
@@ -271,6 +283,9 @@ A printable table of every gesture on one page lives at [Gesture cheat sheet](/r
 | Swipe down to hide the keyboard | Off |
 | Swipe down to type the hint | Off |
 | Swipe up for a capital | Off |
+| Show flick arms on keys | On |
+| Flick popup | On |
+| Flick distance | 22&nbsp;dp (8–48&nbsp;dp) |
 | Swipe to add 's | Off |
 | Arrows on the spacebar | On |
 | The spacebar shows | Language |
@@ -291,6 +306,7 @@ Open the **Typing** tile in settings, or search "Gestures", "Delete keys" or "Vo
 ## Details & edge cases
 
 - **Numpad is a discrete action, not a distance-based one.** Cursor keeps stepping for as long as you keep dragging. A swipe assigned to Numpad only needs to clear the initial slop once: the panel opens immediately and the rest of the drag does nothing.
+- **A flick key owns its whole stroke from the moment you touch it.** Glide typing, handwriting, the floating-word flick and the hint and capital flicks all leave a key with flick arms alone, whichever way the finger goes, so a swipe off one is only ever a flick. On the English 3×3 board that means glide typing never starts at all, which is by design: the letters are on the arms, not under a glide path.
 - **A hint flick is judged when the finger lifts, never while it's moving.** Nothing is claimed early, so a downward stroke that turns out to be longer, slower or bendier than a flick is decoded as the glide or read as the tap it always was. The one stroke it does take from glide typing is a fast, straight, short one, and the duration cap is what stops most short glided words from qualifying.
 - **The 's swipe is judged at the lift too, and never claims a stroke a glide could want.** Glide typing doesn't start strokes on punctuation keys, so a stroke off the comma or full stop is never a word in the first place, whether glide typing is on or off. Only a swipe that actually changed the field keeps the lift; one with nothing behind the cursor to extend lands as the key's own tap.
 - **Two settings hide the keyboard on a downward swipe, two words apart.** "Swipe down to hide the keyboard" lives here under Typing → Gestures and applies to the spacebar. "Swipe down to hide" under Appearance → Toolbar applies to the toolbar strip. They don't affect each other, and both are off out of the box.

@@ -280,16 +280,22 @@
 
     <!-- Switch on a key's sheet. On: holding the key fires it again and again, the way holding delete does. -->
     <string name="layout_editor_flick_add_action">Add flick directions</string>
-    <string name="layout_editor_flick_add_subtitle">For a 12-key kana pad: a short flick left, up, right or down types something else</string>
-    <string name="layout_editor_flick_caption">A flick in one direction types what you put in that field. A tap still types the output. Leave a field blank for no flick that way.</string>
+    <string name="layout_editor_flick_add_subtitle">A short swipe from the key in any of eight directions types something else, so one key can carry nine characters</string>
+    <string name="layout_editor_flick_caption">Tap a cell of the pad to set what a swipe that way types. A tap on the key still types the output. The keyboard draws the arms small on the key, and a swipe out to an arm and back types its capital.</string>
     <string name="layout_editor_flick_left_label">Flick left</string>
     <string name="layout_editor_flick_up_label">Flick up</string>
     <string name="layout_editor_flick_right_label">Flick right</string>
     <string name="layout_editor_flick_down_label">Flick down</string>
+    <string name="layout_editor_flick_up_left_label">Flick up left</string>
+    <string name="layout_editor_flick_up_right_label">Flick up right</string>
+    <string name="layout_editor_flick_down_left_label">Flick down left</string>
+    <string name="layout_editor_flick_down_right_label">Flick down right</string>
+    <string name="layout_editor_flick_pad_desc">Flick directions pad</string>
+    <string name="layout_editor_flick_clear">Remove all flick directions</string>
     <string name="layout_editor_flick_field_hint">Blank: no flick in this direction</string>
     <string name="layout_editor_flick_set_hint">A flick this way types %1$s</string>
-    <string name="layout_editor_flick_add_subtitle_action">A short flick left, up, right or down does an action, such as moving the cursor</string>
-    <string name="layout_editor_flick_caption_action">A flick in one direction does the action you choose for it. A tap still does what the key does.</string>
+    <string name="layout_editor_flick_add_subtitle_action">A short swipe from the key in any of eight directions does an action, such as moving the cursor</string>
+    <string name="layout_editor_flick_caption_action">Tap a cell of the pad to choose what a swipe that way does. A tap on the key still does what the key does.</string>
     <string name="layout_editor_flick_action_none">No flick this way. Tap to choose an action.</string>
     <string name="layout_editor_flick_action_set">A flick this way does this: %1$s</string>
     <string name="layout_editor_flick_action_pick_desc">Do an action instead</string>

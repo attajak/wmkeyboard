@@ -444,4 +444,5 @@ fun JsonShape.summary(): String = when (this) {
     BooleanShape -> "boolean"
 }
 
-private const val ENUM_SUMMARY_VALUES = 4
+// Eight, so the flick directions still spell themselves out in a hover.
+private const val ENUM_SUMMARY_VALUES = 8

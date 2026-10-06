@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.wasimaster.wmkeyboard.core.media.hasNotificationAccess
 import com.wasimaster.wmkeyboard.core.prediction.OctopusKind
 import com.wasimaster.wmkeyboard.core.prediction.UndoMemory
+import com.wasimaster.wmkeyboard.core.settings.FlickDistanceRange
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
 import com.wasimaster.wmkeyboard.core.settings.SuggestionHotkeyMode
 import com.wasimaster.wmkeyboard.core.thesaurus.SynonymSource
@@ -2277,6 +2278,37 @@ internal fun TypingGesturesSettings(
                 info = stringResource(R.string.typing_capital_flick_info),
                 default = SettingsDefaults.layoutBehavior.capitalFlick,
             ) { scope.launch { repository.setCapitalFlick(it) } }
+        }
+        item {
+            // Issue #410: keys with flick arms draw them on the face.
+            ToggleSetting(
+                R.string.typing_flick_hints_title,
+                stringResource(R.string.typing_flick_hints_subtitle),
+                settings.watch { it.layoutBehavior.flickHints },
+                info = stringResource(R.string.typing_flick_hints_info),
+                default = SettingsDefaults.layoutBehavior.flickHints,
+            ) { scope.launch { repository.setFlickHints(it) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.typing_flick_popup_title,
+                stringResource(R.string.typing_flick_popup_subtitle),
+                settings.watch { it.layoutBehavior.flickPopup },
+                info = stringResource(R.string.typing_flick_popup_info),
+                default = SettingsDefaults.layoutBehavior.flickPopup,
+            ) { scope.launch { repository.setFlickPopup(it) } }
+        }
+        item {
+            val dpFormat = stringResource(R.string.typing_value_dp)
+            SliderSetting(
+                R.string.typing_flick_distance_title,
+                subtitle = stringResource(R.string.typing_flick_distance_subtitle),
+                value = settings.watch { it.layoutBehavior.flickDistanceDp }.toFloat(),
+                range = FlickDistanceRange.first.toFloat()..FlickDistanceRange.last.toFloat(),
+                display = { dpFormat.format(it.roundToInt()) },
+                info = stringResource(R.string.typing_flick_distance_info),
+                default = SettingsDefaults.layoutBehavior.flickDistanceDp.toFloat(),
+            ) { scope.launch { repository.setFlickDistanceDp(it.roundToInt()) } }
         }
         item {
             // Issue #169: a short straight swipe from a punctuation key to s

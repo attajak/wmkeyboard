@@ -95,6 +95,10 @@ class TabletExpansionCorpusTest {
                 "builtin_khipro",
                 "builtin_t9",
                 "braille_chord", "ja_flick", "ja_kana_jis", "morse", "zh_stroke",
+                // The English 3×3 flick board (#410): every letter key carries
+                // its neighbours on flick arms, and the transform declines any
+                // key with flicks.
+                "en_flick",
                 "ipa", "music", "nqo_nko",
                 "zh_cangjie", "zh_cangjie_quick", "zh_pinyin_t9", "zh_zhuyin",
                 // The 천지인 pad (#372): a 12-key keypad with no shift key.

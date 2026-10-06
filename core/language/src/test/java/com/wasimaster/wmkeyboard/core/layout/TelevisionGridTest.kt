@@ -135,6 +135,23 @@ class TelevisionGridTest {
     }
 
     @Test
+    fun `a flick pad declines, since its geometry is the feature`() {
+        // Issue #410: sixteen keys is a keyboard by count, but each letter key
+        // carries its neighbours on its arms, and a 10-column re-cut would
+        // scatter them.
+        val pad = KeyboardLayout(
+            name = "flick",
+            rows = listOf(
+                listOf(Key("a", flick = mapOf(FlickDirection.DOWN_RIGHT to "v")), Key("n"), Key("i"), Key("⌫", action = KeyAction.Delete)),
+                listOf(Key("h"), Key("o"), Key("r"), Key("⇧", action = KeyAction.Shift)),
+                listOf(Key("t"), Key("e"), Key("s"), Key("⏎", action = KeyAction.Enter)),
+                listOf(Key("?123", action = KeyAction.Symbols), Key(" ", action = KeyAction.Space), Key(".")),
+            ),
+        )
+        assertNull(televisionGridColumns(pad))
+    }
+
+    @Test
     fun `a grid with tall keys declines rather than flattening them`() {
         val tall = KeyboardLayout(
             name = "tall",

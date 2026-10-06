@@ -443,10 +443,11 @@ object TouchLayoutConverter {
     }
 
     /**
-     * Keyman has eight flick directions and [FlickDirection] has four, so the
-     * diagonals are dropped and counted rather than rounded to a neighbour —
-     * a flick the user aims north-east landing on the north key's output is a
-     * worse outcome than the gesture doing nothing.
+     * Keyman's eight compass flicks map one to one onto [FlickDirection] since
+     * the diagonals arrived (issue #410). A name that is none of the eight is
+     * dropped and counted rather than rounded to a neighbour — a flick the
+     * user aims one way landing on another key's output is a worse outcome
+     * than the gesture doing nothing.
      */
     private fun convertFlicks(k: TouchKey, layerId: String, report: Report): Flicks {
         if (k.flick.isEmpty()) return Flicks(emptyMap(), emptyMap())
@@ -458,6 +459,10 @@ object TouchLayoutConverter {
                 "s" -> FlickDirection.DOWN
                 "e" -> FlickDirection.RIGHT
                 "w" -> FlickDirection.LEFT
+                "ne" -> FlickDirection.UP_RIGHT
+                "nw" -> FlickDirection.UP_LEFT
+                "se" -> FlickDirection.DOWN_RIGHT
+                "sw" -> FlickDirection.DOWN_LEFT
                 else -> null
             }
             if (mapped == null) {
@@ -708,7 +713,12 @@ data class KeymanConversionReport(
      * keys that type are kept.
      */
     val droppedMultitaps: Int = 0,
-    /** Flicks aimed at a diagonal, which our four directions cannot express. */
+    /**
+     * Flicks whose direction name is none of Keyman's eight compass points.
+     * The diagonals used to land here too, until [FlickDirection] grew them
+     * (issue #410); the field keeps its name so the import report and its
+     * strings stay where they were.
+     */
     val droppedDiagonalFlicks: Int = 0,
     /** Frame keys with no counterpart here, e.g. hide-keyboard. */
     val droppedSpecialKeys: Int = 0,

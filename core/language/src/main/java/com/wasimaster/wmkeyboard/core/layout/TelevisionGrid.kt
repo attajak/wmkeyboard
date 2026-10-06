@@ -91,6 +91,10 @@ fun televisionGridColumns(layout: KeyboardLayout): Int? {
     // An ambiguous key stands for several letters and is drawn big on purpose;
     // re-cutting that grid would be undoing the feature.
     if (keys.any { !it.letters.isNullOrEmpty() }) return null
+    // A flick pad's geometry is the feature: a 3×3 board whose keys each
+    // carry nine letters (issue #410), or a kana pad, re-cut into ten columns
+    // would scatter the arms and shrink the keys they need.
+    if (keys.any { it.hasFlicks() }) return null
     if (keys.size < MinKeys || keys.size > MaxKeys) return null
     val letterRows = layout.letterRows()
     if (letterRows.isEmpty()) return null

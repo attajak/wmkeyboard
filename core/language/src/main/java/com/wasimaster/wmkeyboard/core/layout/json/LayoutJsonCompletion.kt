@@ -579,7 +579,12 @@ private class Context(
             Snippet("{send_key: Tab}", "tab send_key", "{\"label\": \"⇥\", \"action\": {\"type\": \"send_key\", \"keyCode\": 61}}|"),
             Snippet("{mod: CTRL}", "ctrl mod", "{\"label\": \"Ctrl\", \"action\": {\"type\": \"mod\", \"key\": \"CTRL\"}}|"),
             Snippet("{edit: LEFT}", "arrow edit", "{\"label\": \"\", \"action\": {\"type\": \"edit\", \"op\": \"|\"}}", reopen = true),
-            Snippet("{flick}", "flick", "{\"label\": \"|\", \"flick\": {\"left\": \"\", \"up\": \"\", \"right\": \"\", \"down\": \"\"}}"),
+            Snippet(
+                "{flick}",
+                "flick",
+                "{\"label\": \"|\", \"flick\": {\"left\": \"\", \"up\": \"\", \"right\": \"\", \"down\": \"\", " +
+                    "\"up_left\": \"\", \"up_right\": \"\", \"down_left\": \"\", \"down_right\": \"\"}}",
+            ),
             Snippet("{none}", "none gap", "{\"label\": \"\", \"action\": {\"type\": \"none\"}}|"),
         )
         val PANEL_KEY_SNIPPETS = listOf(
