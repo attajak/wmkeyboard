@@ -14461,6 +14461,8 @@ private fun KeyRows(
     val liveCenters = rememberUpdatedState(keyCenters)
     val liveRects = rememberUpdatedState(keyRects)
     val liveLayouts = rememberUpdatedState(state.layouts)
+    // Non-letter keys the composer lets a stroke spell through (Khipro's `/`).
+    val liveGlideKeys = rememberUpdatedState(state.composer.glideKeys)
     // The bounds table, for the octopus tap, and the one that bites hardest:
     // [OctopusRects] stamps its rectangles with the very map they were measured
     // from and answers nothing against any other, so a loop holding the
@@ -15371,6 +15373,9 @@ private fun KeyRows(
                                     liveSpace.value.value,
                                     boxOrigin,
                                 ),
+                                extraCenters = liveGlideKeys.value.mapNotNull { codePoint ->
+                                    liveCenters.value[codePoint]?.let { codePoint to (it.x to it.y) }
+                                },
                             ) { codePoint ->
                                 liveCenters.value[codePoint]?.let { it.x to it.y }
                             }
@@ -17377,7 +17382,7 @@ internal fun bridgeSpaceAcrossGap(keys: List<Key>, gapWeight: Float): List<Key>?
  * "letter key" — the engine's touch model and [nearLetterKey] — so tracking them
  * cannot change where a tap lands or what starts a glide.
  */
-private val GlidePunctuationCodePoints = setOf(','.code, '.'.code, '\''.code)
+private val GlidePunctuationCodePoints = setOf(','.code, '.'.code, '\''.code, '/'.code)
 
 /** The character this key contributes to the centres map if it is punctuation. */
 private fun Key.glidePunctuationCodePoint(): Int? =

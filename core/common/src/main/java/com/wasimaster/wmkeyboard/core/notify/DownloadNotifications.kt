@@ -24,8 +24,12 @@ import kotlinx.coroutines.launch
  */
 sealed interface DownloadProgress {
 
-    /** Bytes so far, and the total when the source reported one. */
-    data class Running(val bytes: Long, val total: Long) : DownloadProgress
+    /**
+     * Bytes so far, and the total when the source reported one. [text] stands
+     * in for the byte count where the work is not a transfer (words spelled,
+     * say), and the bar still runs from [bytes] to [total].
+     */
+    data class Running(val bytes: Long, val total: Long, val text: String? = null) : DownloadProgress
 
     /** Finished, and whatever the file was for is ready to use. */
     data object Done : DownloadProgress
@@ -184,6 +188,11 @@ object DownloadNotifications {
             progress.value = DownloadProgress.Running(bytes, total)
         }
 
+        /** Work that is not a transfer: [done] of [total], described by [text]. */
+        fun progress(done: Long, total: Long, text: String) {
+            progress.value = DownloadProgress.Running(done, total, text)
+        }
+
         /** Finished, and whatever was fetched is usable. */
         fun done() {
             progress.value = DownloadProgress.Done
@@ -225,7 +234,9 @@ object DownloadNotifications {
         WmNotifications.post(context, NotificationKind.DOWNLOADS, id) {
             setContentTitle(title)
             setContentText(
-                if (known) {
+                if (progress.text != null) {
+                    progress.text
+                } else if (known) {
                     context.getString(
                         R.string.common_notify_download_progress,
                         Formatter.formatShortFileSize(context, progress.bytes),

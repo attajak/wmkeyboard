@@ -13,8 +13,9 @@ package com.wasimaster.wmkeyboard.core.transliteration
  * that comes back is right by construction, and any word of any list can be
  * spelled, not only the ones somebody listed.
  *
- * Letters only: a swipe cannot draw the slicer or the separator, so a word
- * that needs one (চন্দ্রবিন্দু's `/`) has no spelling here and is typed.
+ * Letters and the slicer `/`, which a swipe over the Khipro grid passes
+ * through (see [KEYS]). A word that needs any other key (the separator `;`,
+ * the blinder) has no spelling here and is typed.
  */
 object KhiproRomanizer {
 
@@ -97,14 +98,27 @@ object KhiproRomanizer {
         return Tables(start, afterConsonant, afterVowel, afterReph, longest)
     }
 
-    /** Every sequence of 1 to [MAX_KEYS] letters, shortest first. */
+    /**
+     * Every sequence of 1 to [MAX_KEYS] keys: the letters-only ones first,
+     * shortest first, then the ones with the slicer. A piece keeps its first
+     * [ALTERNATIVES], so one a letter spelling reaches never fills its list
+     * with slicer detours, and one only the slicer reaches still gets it.
+     */
     private fun sequences(): Sequence<String> = sequence {
-        var layer = listOf("")
-        repeat(MAX_KEYS) {
-            layer = layer.flatMap { prefix -> ('a'..'z').map { prefix + it } }
-            yieldAll(layer)
+        for (alphabet in listOf(KEYS.filter { it != '/' }, KEYS)) {
+            var layer = listOf("")
+            repeat(MAX_KEYS) {
+                layer = layer.flatMap { prefix -> alphabet.map { prefix + it } }
+                yieldAll(if (alphabet == KEYS) layer.filter { '/' in it } else layer)
+            }
         }
     }
+
+    /**
+     * The keys a swipe over the Khipro grid can pass through: the letters and
+     * the slicer, which is how চন্দ্রবিন্দু and খণ্ড-ত are typed (`cand/` is চাঁদ).
+     */
+    const val KEYS = "abcdefghijklmnopqrstuvwxyz/"
 
     /** Builds the pieces now, off the thread that will first need them. */
     fun warm() {
@@ -189,6 +203,7 @@ object KhiproRomanizer {
         var spelled = shortest
         for (at in (1 until shortest.length).reversed()) {
             if (shortest[at - 1] in VOWEL_KEYS || shortest[at] in VOWEL_KEYS) continue
+            if (shortest[at - 1] == '/' || shortest[at] == '/') continue
             val tried = spelled.substring(0, at) + "o" + spelled.substring(at)
             if (Khipro.convert(tried) == word) spelled = tried
         }

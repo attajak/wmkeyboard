@@ -98,6 +98,14 @@ interface Composer {
     val completionLanguage: String? get() = null
 
     /**
+     * Keys other than letters that a swipe over this layout may pass through as
+     * part of a word, by the character they type. Khipro's slicer `/` makes
+     * চন্দ্রবিন্দু and খণ্ড-ত, so a word with either is drawn through it (#541).
+     * Empty everywhere else: a stroke that grazes the comma is not spelling one.
+     */
+    val glideKeys: Set<Int> get() = emptySet()
+
+    /**
      * Whether this composer spells its buffer in roman letters: Avro's, Hindi
      * phonetic's, Khipro's.
      *

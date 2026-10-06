@@ -538,6 +538,8 @@ data class LayoutSet(
      */
     fun glideKeys(
         apostropheCenter: Pair<Float, Float>? = null,
+        /** Non-letter keys the composer spells through, by character, at their centres (Khipro's `/`). */
+        extraCenters: List<Pair<Int, Pair<Float, Float>>> = emptyList(),
         centerOf: (Int) -> Pair<Float, Float>?,
     ): List<KeyCenter> {
         val out = ArrayList<KeyCenter>(letters.rows.sumOf { it.size } * 2)
@@ -553,6 +555,7 @@ data class LayoutSet(
             out.add(KeyCenter('\'', x, y))
             out.add(KeyCenter('’', x, y))
         }
+        for ((codePoint, center) in extraCenters) out.add(KeyCenter(codePoint, center.first, center.second))
         for (pass in 0 until PASSES) {
             for (row in letters.rows) {
                 for (key in row) {

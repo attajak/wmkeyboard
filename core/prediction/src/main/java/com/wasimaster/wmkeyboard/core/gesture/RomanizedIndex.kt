@@ -147,9 +147,11 @@ class RomanizedIndex private constructor(
         fun deterministic(
             spellings: WordSource,
             personal: WordSource,
+            /** Every character a spelling may hold: the keys a stroke can pass through. */
+            keys: String,
             convert: (String) -> String,
         ): RomanizedIndex {
-            val alphabet = ('a'..'z').mapTo(HashSet()) { it.code }
+            val alphabet = keys.mapTo(HashSet()) { it.code }
             val resolve = { spelling: String -> listOf(convert(spelling)).filter { it.isNotEmpty() } }
             return RomanizedIndex(personal, spellings, resolve, alphabet)
         }

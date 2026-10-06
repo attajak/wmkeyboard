@@ -16,12 +16,14 @@ class KhiproRomanizerTest {
         val words = listOf(
             "আমি", "এখন", "আপনি", "করছি", "সময়", "কোথায়", "বাংলাদেশ", "ক্ষিপ্র",
             "দুর্বল", "বর্ষা", "পার্টি", "শনি", "হাসপাতাল", "ধন্যবাদ", "বন্ধুদের",
+            // The slicer: চন্দ্রবিন্দু and খণ্ড-ত.
+            "চাঁদ", "হঠাৎ", "দাঁড়িয়ে", "উৎসব",
         )
         for (word in words) {
             val spellings = KhiproRomanizer.spellings(word)
             assertTrue("$word has no spelling", spellings.isNotEmpty())
             for (spelling in spellings) {
-                assertTrue("$spelling is not all letters", spelling.all { it in 'a'..'z' })
+                assertTrue("$spelling has a key a swipe cannot reach", spelling.all { it in KhiproRomanizer.KEYS })
                 assertEquals(spelling, precomposed(word), precomposed(Khipro.convert(spelling)))
             }
         }
@@ -31,8 +33,8 @@ class KhiproRomanizerTest {
         assertEquals(listOf("ekhn", "ekhon"), KhiproRomanizer.spellings("এখন"))
     }
 
-    /** চন্দ্রবিন্দু takes the slicer, `/`, which a swipe cannot draw. */
-    @Test fun aWordNeedingANonLetterKeyHasNoSpelling() {
-        assertEquals(emptyList<String>(), KhiproRomanizer.spellings("চাঁদ"))
+    /** চন্দ্রবিন্দু comes from the slicer, which the stroke passes through. */
+    @Test fun theSlicerIsAKeyOfTheSpelling() {
+        assertTrue(KhiproRomanizer.spellings("চাঁদ").all { '/' in it })
     }
 }

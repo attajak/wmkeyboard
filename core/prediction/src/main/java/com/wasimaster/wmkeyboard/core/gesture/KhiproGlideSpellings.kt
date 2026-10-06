@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.core.transliteration.SortedWords
 import java.io.File
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * The Khipro spellings of a Bangla word list, worked out on the device and
@@ -21,13 +22,14 @@ import java.util.concurrent.Executors
  * on a phone, so it is done once, on every core, and written as a `.wmdict`
  * that is mapped rather than read; it is redone only when the list changes.
  *
- * Words that need a key a swipe cannot draw (`/` for চন্দ্রবিন্দু and খণ্ড-ত)
- * have no spelling and are typed.
+ * The slicer `/` counts as a key a stroke passes through, so words with
+ * চন্দ্রবিন্দু and খণ্ড-ত are spelled too; a word that needs any other
+ * non-letter key has no spelling and is typed.
  */
 object KhiproGlideSpellings {
 
     /** Bumped whenever the romanizer's output could change, so old caches are rebuilt. */
-    private const val VERSION = 1
+    private const val VERSION = 2
 
     private const val FILE_NAME = "khipro_glide.wmdict"
     private const val SIGNATURE_NAME = "khipro_glide.sig"
@@ -41,14 +43,14 @@ object KhiproGlideSpellings {
      * could not be built (a full disk); the caller then has nothing to glide
      * with, the same as before.
      */
-    fun load(words: SortedWords, dir: File): WordSource? {
+    fun load(words: SortedWords, dir: File, onProgress: ((done: Int, total: Int) -> Unit)? = null): WordSource? {
         val file = File(dir, FILE_NAME)
         val signatureFile = File(dir, SIGNATURE_NAME)
         val signature = signatureOf(words)
         if (file.isFile && runCatching { signatureFile.readText() }.getOrNull() == signature) {
             MappedTrie.open(file)?.let { return it }
         }
-        val trie = build(words)
+        val trie = build(words, onProgress)
         return runCatching {
             dir.mkdirs()
             val part = File(dir, "$FILE_NAME.part")
@@ -72,8 +74,11 @@ object KhiproGlideSpellings {
         return PackedTrie.of(spelled.toTypedArray<String?>(), frequencies.toIntArray(), spelled.size)
     }
 
-    private fun build(words: SortedWords): PackedTrie {
+    /** [onProgress] hears from the worker threads, a chunk at a time; only a build reports. */
+    private fun build(words: SortedWords, onProgress: ((Int, Int) -> Unit)?): PackedTrie {
+        onProgress?.invoke(0, words.size)
         KhiproRomanizer.warm()
+        val finished = AtomicInteger()
         val cores = Runtime.getRuntime().availableProcessors().coerceIn(1, 8)
         val pool = Executors.newFixedThreadPool(cores)
         try {
@@ -88,6 +93,8 @@ object KhiproGlideSpellings {
                             frequencies += frequency
                         }
                     }
+                    val done = finished.addAndGet(minOf(CHUNK, words.size - from))
+                    onProgress?.invoke(done, words.size)
                     spelled to frequencies
                 }
             }

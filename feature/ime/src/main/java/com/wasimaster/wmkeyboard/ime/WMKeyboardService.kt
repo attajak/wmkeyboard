@@ -536,6 +536,7 @@ import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.SortedWords
 import com.wasimaster.wmkeyboard.core.transliteration.Khipro
+import com.wasimaster.wmkeyboard.core.transliteration.KhiproRomanizer
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
 import com.wasimaster.wmkeyboard.core.layout.ClipboardKeyAction
@@ -10333,17 +10334,38 @@ open class WMKeyboardService : InputMethodService() {
         val dir = File(File(filesDir, "dict"), "bn")
         val unlocked = userUnlocked
         khiproGlideJob = serviceScope.launch {
+            // Shown only when the spellings are really being worked out, which
+            // on a downloaded list is minutes; a cached list says nothing.
+            var notify: DownloadNotifications.Handle? = null
             val (main, personal) = withContext(Dispatchers.Default) {
                 val main = khiproGlideMain.takeIf { khiproGlideList === words }
-                    ?: if (unlocked) KhiproGlideSpellings.load(words, dir) else null
+                    ?: if (unlocked) {
+                        KhiproGlideSpellings.load(words, dir) { done, total ->
+                            synchronized(this@WMKeyboardService) {
+                                val handle = notify ?: DownloadNotifications.start(
+                                    this@WMKeyboardService,
+                                    KHIPRO_GLIDE_NOTIFY_KEY,
+                                    getString(R.string.khipro_glide_preparing_title),
+                                ).also { notify = it }
+                                handle.progress(
+                                    done.toLong(),
+                                    total.toLong(),
+                                    getString(R.string.khipro_glide_preparing_progress, done, total),
+                                )
+                            }
+                        }
+                    } else {
+                        null
+                    }
                 val own = userLexicon.allWords().filter { (word, _) -> word.any { it in '\u0980'..'\u09FF' } }
                 main to KhiproGlideSpellings.ofWords(own)
             }
+            if (main != null) notify?.done() else notify?.failed()
             khiproGlideMain = main
             khiproGlideList = words
             khiproGlideLearned = learned
             romanizedGlides = romanizedGlides +
-                (KHIPRO_GLIDE to RomanizedIndex.deterministic(main ?: PackedTrie.EMPTY, personal, Khipro::convert))
+                (KHIPRO_GLIDE to RomanizedIndex.deterministic(main ?: PackedTrie.EMPTY, personal, KhiproRomanizer.KEYS, Khipro::convert))
             glideSourcesEpoch.update { it + 1 }
         }
     }
@@ -19466,7 +19488,7 @@ open class WMKeyboardService : InputMethodService() {
                     converts = state.composer.isTransliterating || state.composer.isConversion,
                     phonetic = state.composer.phoneticLanguage
                         ?: KHIPRO_GLIDE.takeIf { state.composer is KhiproComposer },
-                    alphabet = state.layouts.letterAlphabet,
+                    alphabet = state.layouts.letterAlphabet + state.composer.glideKeys,
                     sources = epoch,
                 )
             }
@@ -35870,6 +35892,9 @@ private const val SUGGEST_PAGES_POOL = 24
 private const val FIXED_PHONETIC_CHIPS = 2
 /** [romanizedGlides]' key for Khipro, whose spellings are not a language's. */
 private const val KHIPRO_GLIDE = "bn_khipro"
+
+/** The notification row that follows the Khipro spellings being worked out. */
+private const val KHIPRO_GLIDE_NOTIFY_KEY = "khipro-glide"
 
 /** The most words the candidate-list row above the strip holds. */
 private const val PHONETIC_CANDIDATE_BAR_MAX = 100
