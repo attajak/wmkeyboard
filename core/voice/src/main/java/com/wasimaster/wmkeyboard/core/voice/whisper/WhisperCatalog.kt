@@ -187,7 +187,10 @@ data class WhisperModel(
  * prompt (`<|en|>` `<|transcribe|>` as ids 50259/50359) onto the English-only
  * tokenizer, where those ids mean something else, so it answers most clips with
  * an immediate end-of-text and dictation comes back empty (#207) — `tiny-en`
- * takes nyadla's conversion of the same name, which forces the right prompt;
+ * takes nyadla's conversion of the same name, which gets position 1 right but
+ * still forces those two multilingual ids at positions 2 and 3 (seen in tiny.en
+ * and base.en; small.en and medium.en come from the same script), so
+ * [WhisperGraphFix] rewrites that table on first use (#440);
  * and the `-with-timestamp-` graphs emit timestamp tokens this decoder has no
  * use for.
  *

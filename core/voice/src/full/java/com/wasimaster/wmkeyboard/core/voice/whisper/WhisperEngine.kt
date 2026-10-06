@@ -71,7 +71,10 @@ object WhisperEngine {
         pcm: FloatArray,
         translate: Boolean,
         langToken: Int? = null,
-    ): String = runtime().transcribe(modelFile, vocabFile, pcm, translate, langToken)
+    ): String {
+        WhisperGraphFix.ensure(modelFile, vocabFile)
+        return runtime().transcribe(modelFile, vocabFile, pcm, translate, langToken)
+    }
 
     /**
      * Loads the interpreter and the vocabulary ahead of [transcribe]. Mapping a
@@ -82,7 +85,11 @@ object WhisperEngine {
      * Call on a background dispatcher only.
      */
     fun warm(modelFile: File, vocabFile: File) {
-        runCatching { runtime().warm(modelFile, vocabFile) }
+        runCatching {
+            // Before the interpreter maps the graph, never under it.
+            WhisperGraphFix.ensure(modelFile, vocabFile)
+            runtime().warm(modelFile, vocabFile)
+        }
     }
 
     /** Frees the cached interpreter. Non-blocking, so IME trim-memory never waits. */
