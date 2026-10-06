@@ -195,6 +195,7 @@ import com.wasimaster.wmkeyboard.core.layout.KeySlot
 import com.wasimaster.wmkeyboard.core.layout.roundGridUnit
 import com.wasimaster.wmkeyboard.core.layout.rowScaledKeyHeight
 import com.wasimaster.wmkeyboard.core.layout.fallbackLabel
+import com.wasimaster.wmkeyboard.core.layout.shiftLabelReplacesIcon
 import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.layout.findLayout
 import com.wasimaster.wmkeyboard.core.layout.isShippedLayoutId
@@ -5277,7 +5278,10 @@ private fun KeyLabelScaleRow(key: Key, onChange: (Float?) -> Unit) {
  * `KeyContent`'s own `when`, which is what it has to stay in step with.
  */
 private fun drawsScalableLabel(key: Key): Boolean = when (key.action) {
-    KeyAction.Shift, KeyAction.CapsLock, KeyAction.Delete, KeyAction.ForwardDelete,
+    // A worded shift key draws its label in place of the arrow (#559).
+    KeyAction.Shift, KeyAction.CapsLock ->
+        KeyIcons.byName(key.icon) == null && shiftLabelReplacesIcon(key.label)
+    KeyAction.Delete, KeyAction.ForwardDelete,
     KeyAction.Enter, KeyAction.Newline, KeyAction.LanguageSwitch,
     KeyAction.InputMethodPicker, KeyAction.Emoji, KeyAction.Space,
     is KeyAction.SwitchInputMethod,

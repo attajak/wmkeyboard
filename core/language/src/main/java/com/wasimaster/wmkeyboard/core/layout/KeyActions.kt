@@ -436,6 +436,23 @@ sealed interface KeyAction {
 }
 
 /**
+ * Whether a shift or caps-lock key draws its [label] instead of the arrow
+ * (issue #559).
+ *
+ * Those keys draw from an icon slot, and every label used to be thrown away
+ * for it: a key the author worded "A" or "ABC", or a syllabics board's
+ * "ᐃ ᐊ", still came out as the arrow. A blank label and the arrow glyphs the
+ * shipped layouts and importers write ("⇧", "⇪") keep the slot, so an icon
+ * pack still redresses them; anything else is the author's own face for the
+ * key, the same rule a tool key follows.
+ */
+fun shiftLabelReplacesIcon(label: String): Boolean =
+    label.isNotBlank() && label.trim() !in ShiftArrowGlyphs
+
+/** The labels that only spell a shift key's arrow; see [shiftLabelReplacesIcon]. */
+private val ShiftArrowGlyphs = setOf("⇧", "⇪", "⬆", "⇑", "↑", "⇮", "⇯")
+
+/**
  * What to draw on a key of this action that carries no label of its own.
  *
  * Both the keyboard and the layout editor's preview grid resolve a blank label

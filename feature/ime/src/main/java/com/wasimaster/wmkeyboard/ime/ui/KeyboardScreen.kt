@@ -544,6 +544,7 @@ import com.wasimaster.wmkeyboard.core.layout.drawnFontScale
 import com.wasimaster.wmkeyboard.core.layout.drawnLabel
 import com.wasimaster.wmkeyboard.core.layout.drawnLabelScale
 import com.wasimaster.wmkeyboard.core.layout.fallbackLabel
+import com.wasimaster.wmkeyboard.core.layout.shiftLabelReplacesIcon
 import com.wasimaster.wmkeyboard.core.layout.holdRepeats
 import com.wasimaster.wmkeyboard.core.layout.opensAlternatesPopup
 import com.wasimaster.wmkeyboard.core.layout.expandNumberRowForTablet
@@ -20937,6 +20938,36 @@ private fun ActionKeyIcon(
     }
 }
 
+/**
+ * The words a shift or caps-lock key wears in place of its arrow (issue #559),
+ * sized the way the fallback branch of [KeyContent] sizes any other worded key
+ * and tinted the way the arrow would be, so the key still shows shift is on.
+ */
+@Composable
+private fun ShiftKeyLabel(visual: KeyVisual, settings: KeyboardSettings, fontScale: Float, tint: Color) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        val keyScale = visual.drawnLabelScale()
+        val baseSize = when {
+            keyScale != null -> LetterLabelSp * keyScale
+            visual.label.length > 1 -> ModeLabelSp
+            else -> LetterLabelSp
+        }
+        var scale by remember(visual.label, baseSize, fontScale) { mutableFloatStateOf(1f) }
+        Text(
+            text = visual.label,
+            fontSize = (baseSize * fontScale * scale).sp,
+            fontWeight = if (visual.bold ?: settings.accessibility.boldLabels) FontWeight.Bold else FontWeight.Medium,
+            color = tint,
+            maxLines = 1,
+            softWrap = false,
+            overflow = TextOverflow.Ellipsis,
+            onTextLayout = {
+                if (it.hasVisualOverflow && scale > 0.5f) scale -= 0.08f
+            },
+        )
+    }
+}
+
 @Composable
 private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentColor: Color) {
     val key = visual.key
@@ -20949,19 +20980,26 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
     val namedIcon = KeyIcons.byName(key.icon)
     when (key.action) {
         // The shift slot and its spoken name both track the live shift state, and
-        // [spokenLabel] already words it the way this key wants read out.
-        KeyAction.Shift -> ActionKeyIcon(
-            namedIcon,
-            visual.iconSlot ?: IconSlots.KEY_SHIFT,
-            contentDescription = visual.spoken.resolved(),
-            tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
-        )
-        KeyAction.CapsLock -> ActionKeyIcon(
-            namedIcon,
-            visual.iconSlot ?: IconSlots.KEY_SHIFT_LOCK,
-            contentDescription = visual.spoken.resolved(),
-            tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor,
-        )
+        // [spokenLabel] already words it the way this key wants read out. A label
+        // the author wrote in place of the arrow is drawn instead (issue #559),
+        // lit the same way the arrow would be while shift is on.
+        KeyAction.Shift, KeyAction.CapsLock -> {
+            val tint = if (visual.iconActive) MaterialTheme.colorScheme.primary else contentColor
+            if (namedIcon == null && shiftLabelReplacesIcon(visual.label)) {
+                ShiftKeyLabel(visual, settings, fontScale, tint)
+            } else {
+                ActionKeyIcon(
+                    namedIcon,
+                    visual.iconSlot ?: if (key.action == KeyAction.Shift) {
+                        IconSlots.KEY_SHIFT
+                    } else {
+                        IconSlots.KEY_SHIFT_LOCK
+                    },
+                    contentDescription = visual.spoken.resolved(),
+                    tint = tint,
+                )
+            }
+        }
         KeyAction.Delete -> ActionKeyIcon(
             namedIcon,
             IconSlots.KEY_BACKSPACE,
