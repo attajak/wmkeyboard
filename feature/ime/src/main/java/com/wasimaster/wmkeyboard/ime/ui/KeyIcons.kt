@@ -1,51 +1,53 @@
 package com.wasimaster.wmkeyboard.ime.ui
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.automirrored.outlined.Backspace
-import androidx.compose.material.icons.automirrored.outlined.KeyboardReturn
-import androidx.compose.material.icons.automirrored.outlined.KeyboardTab
-import androidx.compose.material.icons.automirrored.outlined.Redo
-import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.AlternateEmail
-import androidx.compose.material.icons.outlined.ArrowDownward
-import androidx.compose.material.icons.outlined.ArrowUpward
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.ChevronLeft
-import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.ContentCut
-import androidx.compose.material.icons.outlined.ContentPaste
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.EmojiEmotions
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Highlight
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.KeyboardHide
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Mic
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Numbers
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Remove
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SpaceBar
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.Translate
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowBack
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowForward
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Backspace
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardReturn
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardTab
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Redo
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Send
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Undo
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Add
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AlternateEmail
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ArrowDownward
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ArrowUpward
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CalendarMonth
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ChevronLeft
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ChevronRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentCopy
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentCut
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentPaste
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.DarkMode
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.EmojiEmotions
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FavoriteBorder
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Highlight
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Image
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardArrowDown
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardArrowUp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardHide
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Language
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.LightMode
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Link
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Menu
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Mic
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.MoreHoriz
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Numbers
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Phone
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Remove
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Settings
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SpaceBar
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Star
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Translate
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardCapslock
 
 /**
  * Named-icon registry that lets any [com.wasimaster.wmkeyboard.core.layout.Key]
@@ -75,9 +77,10 @@ object KeyIcons {
         "enter" to Icons.AutoMirrored.Outlined.KeyboardReturn,
         "tab" to Icons.AutoMirrored.Outlined.KeyboardTab,
         "space" to Icons.Outlined.SpaceBar,
-        "shift" to KeyboardIcons.Shift,
-        "shift_on" to KeyboardIcons.ShiftFilled,
-        "shift_lock" to KeyboardIcons.ShiftLock,
+        "shift" to SymbolIcons.Shift,
+        "shift_on" to SymbolIcons.ShiftFilled,
+        "shift_lock" to SymbolIcons.ShiftLockFilled,
+        "caps_lock" to Icons.Outlined.KeyboardCapslock,
         "undo" to Icons.AutoMirrored.Outlined.Undo,
         "redo" to Icons.AutoMirrored.Outlined.Redo,
         // Arrows.
@@ -132,9 +135,8 @@ object KeyIcons {
         mapOf(
         "delete" to "backspace",
         "return" to "enter",
-        "caps" to "shift_lock",
-        "capslock" to "shift_lock",
-        "caps_lock" to "shift_lock",
+        "caps" to "caps_lock",
+        "capslock" to "caps_lock",
         "shift_filled" to "shift_on",
         "up" to "arrow_up",
         "down" to "arrow_down",

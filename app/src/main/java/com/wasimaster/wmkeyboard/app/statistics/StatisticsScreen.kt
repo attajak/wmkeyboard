@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DeleteSweep
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.DeleteSweep
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -63,9 +63,9 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import androidx.compose.material.icons.outlined.Abc
-import androidx.compose.material.icons.outlined.Speed
-import androidx.compose.material.icons.outlined.TextFields
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Abc
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Speed
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TextFields
 import com.wasimaster.wmkeyboard.app.ChoiceDetail
 
 /**

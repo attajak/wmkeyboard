@@ -12,18 +12,20 @@ import Shot from '@components/Shot.astro';
 
 Every glyph the keyboard draws around your keys (toolbar tools, the <KeyCap>Shift</KeyCap> and <KeyCap>Enter</KeyCap> keys, the emoji tab strip) is a named icon slot you can replace. Change one icon at a time, or install a pack that redraws the whole set.
 
+The built-in icons, in the keyboard and in the settings app alike, are Google's Material Symbols in their Rounded style, the same family Android itself draws with.
+
 <PhoneFrame caption="The Icons screen: the active pack, and every replaceable slot grouped by where it appears.">
   <Shot id="themes/icons-screen-overview" alt="The Icons screen: the active pack, and every replaceable slot grouped by where it appears." />
 </PhoneFrame>
 
 ## What you can replace
 
-There are 111 replaceable slots, split into four groups:
+There are 113 replaceable slots, split into four groups:
 
 | Group | Covers | Count |
 |---|---|---|
 | Tools | Every toolbar tool's own icon (clipboard, GIF, voice, and so on) | 72 |
-| Keys | Shift (off/on/locked), backspace, forward delete, globe, switch keyboard, emoji key, the four arrow-row keys, and Enter in each of its wordings (search, send, go, next, previous, done) | 19 |
+| Keys | Shift (off/on/locked), the Caps Lock key, backspace, forward delete, globe, switch keyboard, emoji key, the four arrow-row keys, the Tab key, and Enter in each of its wordings (search, send, go, next, previous, done) | 21 |
 | Toolbar chrome | Toolbox, back-to-keys, show-tools, emoji shortcut, close search, incognito badge, power saving badge | 7 |
 | Emoji tabs | Search, recent, most used, and one per emoji category | 13 |
 
@@ -45,7 +47,7 @@ SVGs are read by a small built-in parser rather than a full SVG engine. It suppo
 
 Tap any slot in the list to open its picker. Choose an icon from the built-in Material Symbols set, or tap **Use my own picture…** to import a file of your own — an SVG, or a PNG, WebP, JPEG or GIF.
 
-Shift is three separate slots (off, armed, locked) and Enter is one per wording, so "a different picture when caps lock is on" is a matter of filling two slots rather than one.
+Shift is three separate slots (off, armed, locked) and Enter is one per wording, so "a different picture when caps lock is on" is a matter of filling two slots rather than one. The Caps Lock key a tablet board adds has a slot of its own, apart from the locked Shift: both keys sit on the same board, and each keeps its own face. A key that sends Tab, whether the tablet board's or one you built in the layout editor, draws from the Tab slot.
 
 <PhoneFrame caption="Picking a replacement for the Shift icon: built-in alternatives, or an SVG of your own.">
   ![Picking a replacement for the Shift icon: built-in alternatives, or an SVG of your own.](@assets/screens/themes/icons-slot-picker.webp)

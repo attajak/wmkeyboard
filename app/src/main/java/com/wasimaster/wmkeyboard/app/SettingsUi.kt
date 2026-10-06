@@ -58,8 +58,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Restore
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowBack
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Restore
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -75,7 +75,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.material.icons.outlined.Delete
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
 import kotlinx.coroutines.CoroutineScope
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -145,7 +145,7 @@ import androidx.compose.ui.util.lerp
 import com.wasimaster.wmkeyboard.core.ui.ToolPaint
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import kotlin.math.roundToInt
-import androidx.compose.material.icons.outlined.Add
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable

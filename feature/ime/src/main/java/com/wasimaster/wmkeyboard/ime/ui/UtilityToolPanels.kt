@@ -27,9 +27,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.SwapHoriz
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Backspace
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Refresh
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SwapHoriz
 import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,6 +75,8 @@ internal fun ToolPanelChip(
     selected: Boolean = false,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    // Drawn in place of the words, which are then what TalkBack reads.
+    icon: ImageVector? = null,
     onClick: () -> Unit,
 ) {
     val kb = LocalKbTheme.current
@@ -89,13 +93,18 @@ internal fun ToolPanelChip(
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 10.dp, vertical = 5.dp),
     ) {
-        Text(
-            label,
-            color = (if (selected) kb.chipActiveText else kb.chipText).dim(),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            maxLines = 1,
-        )
+        val content = (if (selected) kb.chipActiveText else kb.chipText).dim()
+        if (icon != null) {
+            Icon(icon, contentDescription = label, tint = content, modifier = Modifier.size(16.dp))
+        } else {
+            Text(
+                label,
+                color = content,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+                maxLines = 1,
+            )
+        }
     }
 }
 
@@ -126,14 +135,29 @@ private fun KeypadButton(
             .clickable { feedback(); onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            label,
-            color = if (lit) kb.toolCircleActiveIcon else kb.keyText,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Medium,
-        )
+        val content = if (lit) kb.toolCircleActiveIcon else kb.keyText
+        // The keypads spell backspace as ⌫ so their `when` can match it; drawn,
+        // it is the same glyph the key grid's backspace wears.
+        if (label == KEYPAD_BACKSPACE) {
+            Icon(
+                Icons.AutoMirrored.Outlined.Backspace,
+                contentDescription = stringResource(CommonR.string.common_delete),
+                tint = content,
+                modifier = Modifier.size(22.dp),
+            )
+        } else {
+            Text(
+                label,
+                color = content,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Medium,
+            )
+        }
     }
 }
+
+/** The label a keypad gives its backspace key; [KeypadButton] draws it as an icon. */
+private const val KEYPAD_BACKSPACE = "⌫"
 
 // ---- symbols tool ----
 

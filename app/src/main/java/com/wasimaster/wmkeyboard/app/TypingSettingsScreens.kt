@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import android.view.KeyEvent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Switch
@@ -114,9 +114,9 @@ import com.wasimaster.wmkeyboard.core.settings.SpacebarDisplay
 import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.FiberManualRecord
-import androidx.compose.material.icons.outlined.KeyboardTab
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Block
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FiberManualRecord
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardTab
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /** One spacebar-swipe slot (quick or hold+swipe): nothing / language / cursor. */

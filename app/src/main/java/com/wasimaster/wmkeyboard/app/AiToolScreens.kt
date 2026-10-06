@@ -11,9 +11,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoint
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Edit
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Refresh
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Edit
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.Button
@@ -53,7 +53,7 @@ import com.wasimaster.wmkeyboard.BuildConfig
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.outlined.Check
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
 import androidx.compose.runtime.saveable.rememberSaveable
 
 /** The AI tool's settings: provider, credentials, output and prompts. */

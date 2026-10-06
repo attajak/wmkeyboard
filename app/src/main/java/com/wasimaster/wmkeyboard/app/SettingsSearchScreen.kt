@@ -22,60 +22,59 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Devices
-import androidx.compose.material.icons.outlined.Dns
-import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.automirrored.outlined.Chat
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.automirrored.outlined.TextSnippet
-import androidx.compose.material.icons.outlined.AdsClick
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.Autorenew
-import androidx.compose.material.icons.outlined.HighlightAlt
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Collections
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.PhotoLibrary
-import androidx.compose.material.icons.outlined.PieChart
-import androidx.compose.material.icons.outlined.QueryStats
-import androidx.compose.material.icons.outlined.Wallpaper
-import androidx.compose.material.icons.outlined.Accessibility
-import androidx.compose.material.icons.outlined.AspectRatio
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ContentPaste
-import androidx.compose.material.icons.outlined.EmojiEmotions
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.Gavel
-import androidx.compose.material.icons.outlined.GridOn
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Key
-import androidx.compose.material.icons.outlined.NetworkCheck
-import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.DataSaverOn
-import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.Checklist
-import androidx.compose.material.icons.outlined.Public
-import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material.icons.outlined.Sync
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Fingerprint
-import androidx.compose.material.icons.outlined.Mic
-import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material.icons.outlined.TextFields
-import androidx.compose.material.icons.outlined.TouchApp
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.ViewAgenda
-import androidx.compose.material.icons.outlined.Tag
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.Widgets
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.VerticalSplit
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Devices
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Dns
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Notifications
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoStories
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowBack
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Article
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Chat
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.TextSnippet
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AdsClick
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoAwesome
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Autorenew
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.HighlightAlt
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.History
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Collections
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Phone
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PhotoLibrary
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PieChart
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.QueryStats
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Wallpaper
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Accessibility
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AspectRatio
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentPaste
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.EmojiEmotions
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Extension
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Gavel
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.GridOn
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Image
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Info
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Key
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.NetworkCheck
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Language
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Palette
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.DataSaverOn
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Save
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Checklist
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Public
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Schedule
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Sync
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Fingerprint
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Mic
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Security
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TextFields
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TouchApp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Tune
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewAgenda
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Tag
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.VisibilityOff
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Widgets
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.MusicNote
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.VerticalSplit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -122,19 +121,18 @@ import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import androidx.compose.material.icons.outlined.Gesture
-import androidx.compose.material.icons.outlined.Password
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.Sort
-import androidx.compose.material.icons.outlined.Spellcheck
-import androidx.compose.material.icons.outlined.Shortcut
-import androidx.compose.material.icons.outlined.Preview
-import androidx.compose.material.icons.outlined.Vibration
-import androidx.compose.material.icons.outlined.ViewDay
-import androidx.compose.material.icons.outlined.PanTool
-import androidx.compose.material.icons.outlined.FormatSize
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Apps
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Gesture
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Password
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Lightbulb
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Sort
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Spellcheck
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Shortcut
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Preview
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Vibration
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewDay
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FormatSize
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.GridView
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Apps
 import androidx.compose.foundation.lazy.rememberLazyListState
 import com.wasimaster.wmkeyboard.core.ui.RailBucket
 import com.wasimaster.wmkeyboard.core.ui.ScrollRailBox
@@ -481,7 +479,7 @@ internal object SettingsRouteIcons {
         "typing/chips" to { Icons.Outlined.AutoAwesome },
         "typing/codes" to { Icons.Outlined.Password },
         "typing/gestures" to { Icons.Outlined.Gesture },
-        "typing/hardware" to { Icons.Outlined.Keyboard },
+        "typing/hardware" to { SymbolIcons.KeyboardExternalInput },
         "keypress" to { Icons.Outlined.TouchApp },
         "keypress/haptics" to { Icons.Outlined.Vibration },
         "keypress/popup" to { Icons.Outlined.Preview },
@@ -499,7 +497,7 @@ internal object SettingsRouteIcons {
         "icons" to { Icons.Outlined.Image },
         "layout" to { Icons.Outlined.AspectRatio },
         "layout/size" to { Icons.Outlined.FormatSize },
-        "layout/onehanded" to { Icons.Outlined.PanTool },
+        "layout/onehanded" to { SymbolIcons.MobileHandLeft },
         "keymaps" to { Icons.Outlined.GridOn },
         "rows" to { Icons.Outlined.ViewAgenda },
         "rows/symbol" to { Icons.Outlined.Tag },
@@ -545,12 +543,12 @@ internal object SettingsRouteIcons {
         "statistics" to { Icons.Outlined.QueryStats },
         "licenses" to { Icons.Outlined.Gavel },
         "debug_log" to { Icons.AutoMirrored.Outlined.Article },
-        "dictionary" to { Icons.AutoMirrored.Outlined.MenuBook },
-        "customdictionaries" to { Icons.AutoMirrored.Outlined.MenuBook },
+        "dictionary" to { SymbolIcons.Dictionary },
+        "customdictionaries" to { SymbolIcons.Dictionary },
         "blacklist" to { Icons.Outlined.VisibilityOff },
         "learnedcorrections" to { Icons.Outlined.Spellcheck },
         "phoneformats" to { Icons.Outlined.Phone },
-        "hwshortcuts" to { Icons.Outlined.Keyboard },
+        "hwshortcuts" to { SymbolIcons.KeyboardExternalInput },
         "musicapps" to { Icons.Outlined.MusicNote },
         "launchercombos" to { Icons.Outlined.VerticalSplit },
         "kdeconnect/devices" to { Icons.Outlined.Devices },

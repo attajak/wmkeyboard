@@ -75,10 +75,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoFixNormal
-import androidx.compose.material.icons.outlined.BorderStyle
-import androidx.compose.material.icons.outlined.Crop
-import androidx.compose.material.icons.outlined.Restore
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoFixNormal
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.BorderStyle
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Crop
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Restore
 
 /** Settings route hosting the sticker editor. */
 internal const val STICKER_EDITOR_ROUTE = "sticker_editor"

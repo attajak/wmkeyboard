@@ -2,8 +2,8 @@ package com.wasimaster.wmkeyboard.app
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.ViewStream
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Dashboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewStream
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource

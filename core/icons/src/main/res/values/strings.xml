@@ -27,7 +27,8 @@
     <string name="core_icons_slot_shift_label">Shift</string>
     <!-- The shift key while it is on, so the next letter is a capital letter. -->
     <string name="core_icons_slot_shift_on_label">Shift (on)</string>
-    <string name="core_icons_slot_caps_lock_label">Caps lock</string>
+    <string name="core_icons_slot_caps_lock_label">Shift (caps lock)</string>
+    <string name="core_icons_slot_caps_lock_key_label">Caps lock key</string>
     <string name="core_icons_slot_backspace_label">Backspace</string>
     <!-- The key that deletes the character after the cursor. -->
     <string name="core_icons_slot_forward_delete_label">Forward delete</string>
@@ -50,6 +51,7 @@
     <string name="core_icons_slot_arrow_up_label">Arrow up</string>
     <string name="core_icons_slot_arrow_down_label">Arrow down</string>
     <string name="core_icons_slot_arrow_right_label">Arrow right</string>
+    <string name="core_icons_slot_tab_label">Tab key</string>
 
     <!-- ================================================================== -->
     <!-- Toolbar icons.                                                     -->

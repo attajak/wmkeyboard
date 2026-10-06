@@ -140,6 +140,23 @@ class KeyVisualTest {
     }
 
     /**
+     * A dedicated Caps Lock key (the tablet board's) wears its own slot in both
+     * states, and is only lit by the lock: the locked shift's filled arrow is
+     * the shift key's face, and the two sit on the same board.
+     */
+    @Test
+    fun `a caps lock key draws its own slot, not the locked shift's`() {
+        val caps = Key("⇪", action = KeyAction.CapsLock)
+        val off = keyVisual(caps, state(), palette)
+        assertEquals(IconSlots.KEY_CAPS_LOCK, off.iconSlot)
+        assertEquals(false, off.iconActive)
+
+        val on = keyVisual(caps, state().copy(shiftState = ShiftState.CAPS_LOCK), palette)
+        assertEquals(IconSlots.KEY_CAPS_LOCK, on.iconSlot)
+        assertEquals(true, on.iconActive)
+    }
+
+    /**
      * An app-supplied actionLabel is drawn as wording, not an icon — that is the
      * whole point of it, and no icon can stand in for what the app chose.
      */

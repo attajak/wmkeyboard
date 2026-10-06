@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Visibility
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.VisibilityOff
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -86,11 +86,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.outlined.CloudDone
-import androidx.compose.material.icons.outlined.CloudOff
-import androidx.compose.material.icons.outlined.CloudQueue
-import androidx.compose.material.icons.outlined.FileDownload
-import androidx.compose.material.icons.outlined.FileUpload
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CloudDone
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CloudOff
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CloudQueue
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FileDownload
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FileUpload
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton

@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bookmark
-import androidx.compose.material.icons.outlined.Crop
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.outlined.Wallpaper
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Bookmark
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Crop
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Palette
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Undo
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Wallpaper
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -60,8 +60,8 @@ import com.wasimaster.wmkeyboard.core.tools.toAttribution
 import com.wasimaster.wmkeyboard.ime.ui.rememberMediaImageLoader
 import kotlinx.coroutines.launch
 import com.wasimaster.wmkeyboard.common.R as CommonR
-import androidx.compose.material.icons.outlined.StayCurrentLandscape
-import androidx.compose.material.icons.outlined.StayCurrentPortrait
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.StayCurrentLandscape
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.StayCurrentPortrait
 
 /**
  * One photo, previewed behind real keys, with everything that can be done

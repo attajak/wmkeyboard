@@ -16,10 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.ErrorOutline
-import androidx.compose.material.icons.outlined.OpenInBrowser
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CheckCircle
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentCopy
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ErrorOutline
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.OpenInBrowser
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton

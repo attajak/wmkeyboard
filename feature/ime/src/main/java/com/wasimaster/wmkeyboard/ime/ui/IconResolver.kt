@@ -9,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
@@ -29,8 +30,11 @@ import androidx.compose.ui.platform.LocalContext
 import com.wasimaster.wmkeyboard.core.icons.IconArt
 import com.wasimaster.wmkeyboard.core.icons.IconOverrides
 import com.wasimaster.wmkeyboard.core.icons.IconPackStore
+import com.wasimaster.wmkeyboard.core.icons.IconSlots
 import com.wasimaster.wmkeyboard.core.icons.RasterIcons
 import com.wasimaster.wmkeyboard.core.icons.SvgParser
+import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import com.wasimaster.wmkeyboard.core.settings.IconSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -89,6 +93,28 @@ class IconSet(private val icons: Map<String, ResolvedIcon>) {
 val LocalIconSet = staticCompositionLocalOf { IconSet.Builtin }
 
 /**
+ * Whether the layout in use is a phonetic one for an Indic language.
+ *
+ * The phonetic English switch wears the plain translate glyph, which the
+ * Translate tool wears too. On an Indic phonetic layout it draws
+ * `translate_indic` (a Devanagari letter beside a Latin one) instead, which says
+ * what the switch flips between. Arabic-script phonetic layouts keep the plain
+ * glyph: its non-Latin half is a CJK character, no closer to theirs.
+ *
+ * Not static: it changes with the language, and only the one slot reads it.
+ */
+val LocalPhoneticIndic = compositionLocalOf { false }
+
+/** The phonetic languages typed in an Arabic script; every other one is Indic. */
+private val ArabicScriptPhonetic = setOf("ar", "fa", "ur")
+
+/** Whether [phoneticLanguage], a composer's `phoneticLanguage`, is an Indic one. */
+fun phoneticIsIndic(phoneticLanguage: String?): Boolean =
+    phoneticLanguage != null && phoneticLanguage !in ArabicScriptPhonetic
+
+private val PhoneticEnglishSlot = IconSlots.forTool(ToolbarTool.PHONETIC_ENGLISH)
+
+/**
  * Draws the icon for [slot]: the user's replacement if they set one, otherwise
  * the built-in glyph.
  *
@@ -120,9 +146,20 @@ fun SlotIcon(
         Icon(bitmap = bitmap, contentDescription = contentDescription, modifier = painted, tint = shade)
         return
     }
-    val vector = resolved?.vector ?: IconDefaults.forSlot(slot) ?: return
+    val vector = resolved?.vector ?: builtinIcon(slot) ?: return
     Icon(imageVector = vector, contentDescription = contentDescription, modifier = painted, tint = shade)
 }
+
+/** The built-in glyph for [slot], with the one that depends on the language. */
+@Composable
+private fun builtinIcon(slot: String): ImageVector? =
+    // The slot is compared first so that every other icon on the board stays
+    // clear of the composition local and never recomposes when it changes.
+    if (slot == PhoneticEnglishSlot && LocalPhoneticIndic.current) {
+        SymbolIcons.TranslateIndic
+    } else {
+        IconDefaults.forSlot(slot)
+    }
 
 /**
  * Replaces whatever this element drew with [brush], keeping its shape.

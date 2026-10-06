@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bookmark
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Bookmark
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.OpenInNew
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon

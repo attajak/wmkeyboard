@@ -27,31 +27,31 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoStories
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Bolt
-import androidx.compose.material.icons.outlined.Category
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.Gavel
-import androidx.compose.material.icons.outlined.GraphicEq
-import androidx.compose.material.icons.outlined.LibraryMusic
-import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.outlined.Mood
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material.icons.outlined.TextFields
-import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material.icons.outlined.Visibility
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoStories
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.MenuBook
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.OpenInNew
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Bolt
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Category
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CheckCircle
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Code
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Description
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Download
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Extension
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Gavel
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.GraphicEq
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.LibraryMusic
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Mood
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.MoreVert
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Palette
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PlayArrow
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Save
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TextFields
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Translate
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Visibility
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
@@ -118,7 +118,7 @@ import com.wasimaster.wmkeyboard.core.addons.AddonRepoRef
 import com.wasimaster.wmkeyboard.core.addons.AddonStore
 import com.wasimaster.wmkeyboard.core.addons.AddonType
 import com.wasimaster.wmkeyboard.core.addons.InstalledAddon
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardArrowRight
 import com.wasimaster.wmkeyboard.core.addons.resolve
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
 import com.wasimaster.wmkeyboard.core.icons.SymbolIcons
@@ -205,7 +205,7 @@ private val AddonType.icon
     get() = when (this) {
         AddonType.Theme -> Icons.Outlined.Palette
         AddonType.Layout -> Icons.Outlined.Keyboard
-        AddonType.Dictionary -> Icons.AutoMirrored.Outlined.MenuBook
+        AddonType.Dictionary -> SymbolIcons.Dictionary
         AddonType.EmojiKeywords -> Icons.Outlined.Translate
         AddonType.Snippets -> Icons.Outlined.Description
         AddonType.Espanso -> Icons.Outlined.Bolt

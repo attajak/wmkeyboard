@@ -21,9 +21,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.automirrored.outlined.VolumeUp
-import androidx.compose.material.icons.outlined.Search
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowForward
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.VolumeUp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text

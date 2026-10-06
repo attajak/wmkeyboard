@@ -106,56 +106,59 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Article
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.ArrowForward
-import androidx.compose.material.icons.automirrored.outlined.Backspace
-import androidx.compose.material.icons.outlined.AudioFile
-import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.filled.PushPin
-import androidx.compose.material.icons.outlined.PushPin
-import androidx.compose.material.icons.outlined.PictureAsPdf
-import androidx.compose.material.icons.outlined.PhotoSizeSelectActual
-import androidx.compose.material.icons.outlined.PlayCircleOutline
-import androidx.compose.material.icons.outlined.VideoFile
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ChevronRight
-import androidx.compose.material.icons.outlined.ContentCut
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.ContentPaste
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.DragHandle
-import androidx.compose.material.icons.outlined.EmojiEmotions
-import androidx.compose.material.icons.outlined.Fullscreen
-import androidx.compose.material.icons.outlined.LibraryAdd
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Password
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.RemoveCircleOutline
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.ArrowDropDown
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.TextFields
-import androidx.compose.material.icons.automirrored.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.VisibilityOff
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Article
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowLeft
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Refresh
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowBack
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.ArrowForward
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Backspace
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AudioFile
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Description
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Download
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Edit
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Folder
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SwapHoriz
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Image
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.InsertDriveFile
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardArrowRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Undo
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Link
+import com.wasimaster.wmkeyboard.core.icons.symbols.filled.PushPin
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PushPin
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PictureAsPdf
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PhotoSizeSelectActual
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PlayCircleOutline
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.VideoFile
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ChevronRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentCut
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardArrowDown
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.KeyboardArrowUp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ContentPaste
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.DragHandle
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.EmojiEmotions
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Fullscreen
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.LibraryAdd
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Lock
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Password
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PlayArrow
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Phone
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Close
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.RemoveCircleOutline
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Settings
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Star
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.StarBorder
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoAwesome
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ArrowDropDown
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Visibility
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TextFields
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.OpenInNew
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.VisibilityOff
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -1348,6 +1351,7 @@ fun KeyboardScreen(
         // rest is provided once, around [KeyboardScreenFrame] below.
         CompositionLocalProvider(
             LocalIconSet provides iconSet,
+            LocalPhoneticIndic provides phoneticIsIndic(bodyState.composer.phoneticLanguage),
             // Where the caret sits in the keyboard's own focused field, for the
             // nine panels that draw one (#161).
             LocalCaptureCaret provides CaptureCaretHandle(
@@ -11509,8 +11513,9 @@ private fun KeyboardBody(
                             ) { onAiInsert() }
                             Spacer(Modifier.width(5.dp))
                             ToolPanelChip(
-                                "↻",
+                                stringResource(CommonR.string.common_retry),
                                 modifier = Modifier.focusRing(focusedAction == base + 2),
+                                icon = Icons.Outlined.Refresh,
                             ) { onAiRetry() }
                             Spacer(Modifier.width(5.dp))
                         }
@@ -13756,7 +13761,7 @@ internal fun keyVisual(
             }
             // Always the lock glyph, lit when the lock is on: the key's face says
             // what it does, not what state the board happens to be in.
-            action == KeyAction.CapsLock -> IconSlots.KEY_SHIFT_LOCK
+            action == KeyAction.CapsLock -> IconSlots.KEY_CAPS_LOCK
             // CUSTOM is the one enter action with no slot: the app supplied its
             // own wording, so there is no icon to replace.
             action == KeyAction.Enter ->
@@ -16499,23 +16504,27 @@ fun arrowRowKey(arrow: ArrowKey): Key = when (arrow) {
 
 /**
  * The icon slot a key sending [keyCode] draws, or null for any key code that is
- * not one of the four arrows. The arrow row's keys draw through a slot so an
- * icon pack can redress them with the rest of the keys (#504).
+ * not one of the four arrows or Tab. The arrow row's keys draw through a slot so
+ * an icon pack can redress them with the rest of the keys (#504), and Tab does
+ * the same: the tablet board and the layout editor both make one, and its ⇥
+ * label drew as a thin text arrow beside real glyphs.
  */
 internal fun arrowKeySlot(keyCode: Int): String? = when (keyCode) {
     KeyEvent.KEYCODE_DPAD_LEFT -> IconSlots.KEY_ARROW_LEFT
     KeyEvent.KEYCODE_DPAD_UP -> IconSlots.KEY_ARROW_UP
     KeyEvent.KEYCODE_DPAD_DOWN -> IconSlots.KEY_ARROW_DOWN
     KeyEvent.KEYCODE_DPAD_RIGHT -> IconSlots.KEY_ARROW_RIGHT
+    KeyEvent.KEYCODE_TAB -> IconSlots.KEY_TAB
     else -> null
 }
 
 /**
- * The labels [arrowRowKey] writes. A custom key sending an arrow code under one
- * of these, or under no label, draws the slot's icon; one its author worded
- * ("Prev") keeps the word, like any other key.
+ * The labels [arrowRowKey], the tablet board and the action picker's fallback
+ * write. A custom key sending an arrow or Tab under one of these, or under no
+ * label, draws the slot's icon; one its author worded ("Prev") keeps the word,
+ * like any other key.
  */
-private val ArrowGlyphs = setOf("←", "↑", "↓", "→")
+private val ArrowGlyphs = setOf("←", "↑", "↓", "→", "⇥")
 
 /**
  * Autopilot's drawn letters and the octopus words over the grid, with the
@@ -20405,7 +20414,7 @@ private fun AlternateAction(
     // when one was written; the slot is only for an unlabelled entry.
     val slot = when (action) {
         KeyAction.Shift -> IconSlots.KEY_SHIFT
-        KeyAction.CapsLock -> IconSlots.KEY_SHIFT_LOCK
+        KeyAction.CapsLock -> IconSlots.KEY_CAPS_LOCK
         KeyAction.Delete -> IconSlots.KEY_BACKSPACE
         KeyAction.ForwardDelete -> IconSlots.KEY_FORWARD_DELETE
         KeyAction.Enter, KeyAction.Newline -> IconSlots.KEY_ENTER
@@ -21130,7 +21139,7 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                     visual.iconSlot ?: if (key.action == KeyAction.Shift) {
                         IconSlots.KEY_SHIFT
                     } else {
-                        IconSlots.KEY_SHIFT_LOCK
+                        IconSlots.KEY_CAPS_LOCK
                     },
                     contentDescription = visual.spoken.resolved(),
                     tint = tint,
@@ -21282,10 +21291,11 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    if (showArrows) Text(
-                        text = "◀",
-                        fontSize = (8 * fontScale).sp,
-                        color = contentColor.copy(alpha = 0.35f),
+                    if (showArrows) Icon(
+                        Icons.AutoMirrored.Outlined.ArrowLeft,
+                        contentDescription = null,
+                        tint = contentColor.copy(alpha = 0.35f),
+                        modifier = Modifier.size((14 * fontScale).dp),
                     )
                     if (namedIcon != null) {
                         // Beside the name it is read at the name's weight; alone
@@ -21307,10 +21317,11 @@ private fun KeyContent(visual: KeyVisual, settings: KeyboardSettings, contentCol
                         softWrap = false,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    if (showArrows) Text(
-                        text = "▶",
-                        fontSize = (8 * fontScale).sp,
-                        color = contentColor.copy(alpha = 0.35f),
+                    if (showArrows) Icon(
+                        Icons.AutoMirrored.Outlined.ArrowRight,
+                        contentDescription = null,
+                        tint = contentColor.copy(alpha = 0.35f),
+                        modifier = Modifier.size((14 * fontScale).dp),
                     )
                 }
             }

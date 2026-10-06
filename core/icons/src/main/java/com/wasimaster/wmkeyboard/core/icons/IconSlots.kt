@@ -63,6 +63,13 @@ object IconSlots {
     const val KEY_SHIFT = "key.shift"
     const val KEY_SHIFT_ON = "key.shift_on"
     const val KEY_SHIFT_LOCK = "key.shift_lock"
+
+    /**
+     * The dedicated Caps Lock key a tablet board adds. Its own slot rather than
+     * [KEY_SHIFT_LOCK]: that one is the shift key's face while caps lock is on,
+     * and the two keys sit on the same board.
+     */
+    const val KEY_CAPS_LOCK = "key.caps_lock"
     const val KEY_BACKSPACE = "key.backspace"
     const val KEY_FORWARD_DELETE = "key.forward_delete"
     const val KEY_GLOBE = "key.globe"
@@ -74,6 +81,9 @@ object IconSlots {
     const val KEY_ARROW_UP = "key.arrow_up"
     const val KEY_ARROW_DOWN = "key.arrow_down"
     const val KEY_ARROW_RIGHT = "key.arrow_right"
+
+    /** A key sending Tab: the tablet board's, or one built in the layout editor. */
+    const val KEY_TAB = "key.tab"
 
     /**
      * One per enter action the field can ask for. `EnterAction.CUSTOM` has no
@@ -136,6 +146,7 @@ object IconSlots {
         IconSlot(KEY_SHIFT, IconSlotGroup.KEY, R.string.core_icons_slot_shift_label),
         IconSlot(KEY_SHIFT_ON, IconSlotGroup.KEY, R.string.core_icons_slot_shift_on_label),
         IconSlot(KEY_SHIFT_LOCK, IconSlotGroup.KEY, R.string.core_icons_slot_caps_lock_label),
+        IconSlot(KEY_CAPS_LOCK, IconSlotGroup.KEY, R.string.core_icons_slot_caps_lock_key_label),
         IconSlot(KEY_BACKSPACE, IconSlotGroup.KEY, R.string.core_icons_slot_backspace_label),
         IconSlot(KEY_FORWARD_DELETE, IconSlotGroup.KEY, R.string.core_icons_slot_forward_delete_label),
         IconSlot(KEY_ENTER, IconSlotGroup.KEY, R.string.core_icons_slot_enter_label),
@@ -156,6 +167,7 @@ object IconSlots {
         IconSlot(KEY_ARROW_UP, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_up_label),
         IconSlot(KEY_ARROW_DOWN, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_down_label),
         IconSlot(KEY_ARROW_RIGHT, IconSlotGroup.KEY, R.string.core_icons_slot_arrow_right_label),
+        IconSlot(KEY_TAB, IconSlotGroup.KEY, R.string.core_icons_slot_tab_label),
     )
 
     private val chromeSlots: List<IconSlot> = listOf(

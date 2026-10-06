@@ -54,9 +54,9 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.ViewColumn
-import androidx.compose.material.icons.outlined.ViewWeek
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SwapHoriz
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewColumn
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewWeek
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**

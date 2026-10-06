@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.height
 import com.wasimaster.wmkeyboard.app.lock.AppLockTargets
 import com.wasimaster.wmkeyboard.app.lock.LocalAppLock
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
-import androidx.compose.material.icons.outlined.Settings
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -45,16 +45,16 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.outlined.Memory
-import androidx.compose.material.icons.outlined.PhoneAndroid
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Memory
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.PhoneAndroid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.Dns
-import androidx.compose.material.icons.outlined.Dashboard
-import androidx.compose.material.icons.outlined.TextFields
-import androidx.compose.material.icons.outlined.TouchApp
-import androidx.compose.material.icons.outlined.ViewCompact
-import androidx.compose.material.icons.outlined.ViewStream
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Block
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Dns
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Dashboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TextFields
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TouchApp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewCompact
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ViewStream
 
 /** The permission that lets the clipboard read the user's screenshots. */
 private val ImagesPermission: String
