@@ -5,8 +5,7 @@
     a language without its list on the phone answers "no opinion" per word.
 -->
 <spell-checker xmlns:android="http://schemas.android.com/apk/res/android"
-    android:label="@string/spell_checker_name"
-    android:supportsSentenceSpellCheck="true">
+    android:label="@string/spell_checker_name">
     <subtype android:label="@string/subtype_plain_label" android:languageTag="ab" android:subtypeLocale="ab" />
     <subtype android:label="@string/subtype_plain_label" android:languageTag="ace" android:subtypeLocale="ace" />
     <subtype android:label="@string/subtype_plain_label" android:languageTag="ady" android:subtypeLocale="ady" />
