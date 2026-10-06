@@ -870,6 +870,9 @@ class SnippetStore(private val storageFile: File?) {
     /** Plain triggers that expand without asking. See [SnippetIndex.expandingTriggers]. */
     fun expandingTriggers(): Set<String> = index().expandingTriggers
 
+    /** True when an expanding trigger opens with a digit. See [SnippetIndex.hasDigitLedTriggers]. */
+    fun hasDigitLedTriggers(): Boolean = index().hasDigitLedTriggers
+
     /** True when any trigger reaches back past its last word, the prefix path's gate. */
     fun hasPrefixTriggers(): Boolean = index().hasPrefixTriggers
 

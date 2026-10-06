@@ -571,6 +571,15 @@ class SnippetIndex private constructor(
      */
     val expandingTriggers: Set<String> = plain.filterValues { it.id !in asking }.keys
 
+    /**
+     * True when some expanding plain trigger opens with a digit, like `123`
+     * (#554). A word-initial digit commits straight to the field and never
+     * reaches the composing buffer, so such a trigger can only be matched by
+     * reading the field back — and the keyboard asks this first, so a user
+     * without one never pays for the read.
+     */
+    val hasDigitLedTriggers: Boolean = expandingTriggers.any { it.firstOrNull()?.isDigit() == true }
+
     /** True when some trigger reaches back past its last word, so the keyboard need not look. */
     val hasPrefixTriggers: Boolean = prefixed.isNotEmpty()
 

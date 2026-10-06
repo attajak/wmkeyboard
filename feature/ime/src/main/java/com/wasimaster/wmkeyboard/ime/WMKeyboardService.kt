@@ -13096,17 +13096,23 @@ open class WMKeyboardService : InputMethodService() {
      * Only where the buffer is off, so an ordinary text box keeps its one
      * matching path, and never in a password field. The read is skipped
      * outright for a user with no triggers.
+     *
+     * A field that composes gets this path for one shape only: a trigger that
+     * opens with a digit (#554). A word-initial digit commits literally
+     * (`3pm`), so `123` never reaches the buffer and [commitComposing] has
+     * nothing to match; every other trigger was already looked up there.
      */
     private fun tryUncomposedTrigger(ic: InputConnection, state: KeyboardUiState): Boolean {
         if (composing.isNotEmpty() || state.secureField || state.nullField) return false
-        if (state.composer.isTransliterating || state.composer.isConversion || state.composesForSuggestions) {
-            return false
-        }
-        val prefixes = snippetStore.hasPrefixTriggers()
+        if (state.composer.isTransliterating || state.composer.isConversion) return false
+        val digitLedOnly = state.composesForSuggestions
+        if (digitLedOnly && !snippetStore.hasDigitLedTriggers()) return false
+        val prefixes = !digitLedOnly && snippetStore.hasPrefixTriggers()
         if (snippetStore.expandingTriggers().isEmpty() && !prefixes) return false
         val read = ic.getTextBeforeCursor(UNCOMPOSED_TRIGGER_LOOKBACK, 0)?.toString() ?: return false
         val run = read.substring(read.indexOfLast { it.isWhitespace() } + 1)
         if (run.isEmpty()) return false
+        if (digitLedOnly && !run[0].isDigit()) return false
         val wordStart = run.indexOfLast { !isComposingWordChar(it) } + 1
         val word = run.substring(wordStart)
         // The run as a plain trigger first, then its last word finishing a
