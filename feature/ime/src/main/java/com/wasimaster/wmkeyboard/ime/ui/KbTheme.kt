@@ -518,9 +518,12 @@ private fun contrastRatio(a: Color, b: Color): Float {
  * back to guaranteed contrast when it isn't — accent text on an
  * accent-tinted chip was unreadable in most light themes.
  */
-private fun legibleOn(background: Color, candidates: List<Color>): Color =
-    candidates.firstOrNull { contrastRatio(it, background) >= 3f }
+private fun legibleOn(background: Color, candidates: List<Color>, minRatio: Float = 3f): Color =
+    candidates.firstOrNull { contrastRatio(it, background) >= minRatio }
         ?: if (background.luminance() > 0.5f) Color.Black else Color.White
+
+/** The contrast a popup's chosen alternate keeps against its highlight. */
+private const val SELECTED_GLYPH_CONTRAST = 4.5f
 
 /**
  * The default (system) theme, derived from the Material scheme. In dark
@@ -609,7 +612,9 @@ internal fun defaultKbTheme(
         popupBorderWidthDp = 0f,
         popupElevation = DEFAULT_POPUP_ELEVATION,
         popupSelected = scheme.primary,
-        popupSelectedText = scheme.onSurface,
+        // onPrimary, not onSurface: in a dark scheme both onSurface and
+        // primary are light, and the chosen alternate came out pale on pale.
+        popupSelectedText = scheme.onPrimary,
         popupTexture = null,
         toolbarIcon = scheme.onSurfaceVariant,
         toolCircle = toolCircle,
@@ -773,7 +778,13 @@ private fun specKbTheme(spec: ThemeSpec, settings: KeyboardSettings): KbTheme {
             ?: DEFAULT_POPUP_ELEVATION),
         popupSelected = spec.popupSelectedBackground?.let(::colorOf) ?: accent,
         popupSelectedText = spec.popupSelectedText?.let(::colorOf)
-            ?: legibleOn(spec.popupSelectedBackground?.let(::colorOf) ?: accent, listOf(keyText)),
+            // A single glyph on the highlight, so body-text contrast (4.5:1)
+            // rather than the 3:1 a large label gets by with.
+            ?: legibleOn(
+                spec.popupSelectedBackground?.let(::colorOf) ?: accent,
+                listOf(keyText),
+                minRatio = SELECTED_GLYPH_CONTRAST,
+            ),
         popupTexture = spec.popupTexture,
         toolbarIcon = spec.toolbarIcon?.let(::colorOf) ?: secondary,
         toolCircle = spec.toolCircleBackground?.let(::colorOf)

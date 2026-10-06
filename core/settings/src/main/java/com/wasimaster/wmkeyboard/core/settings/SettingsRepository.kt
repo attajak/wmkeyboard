@@ -431,6 +431,14 @@ data class KeyPopupSettings(
      * leaves and a second tap picks an entry.
      */
     val alternatesHoldToSelect: Boolean = true,
+    /**
+     * The long-press popup as it was before #532: laid out where the key is
+     * rather than with its first entry over the key, the finger aiming where it
+     * is rather than where it started, no entry growing under the finger, and a
+     * highlight that jumps rather than slides. For anyone who finds the moving
+     * parts harder to follow (Accessibility › Motion). Off by default.
+     */
+    val alternatesClassic: Boolean = false,
 ) {
     /**
      * The stored height of one style, on or off: what [heightDp] is for [onKey],
@@ -8258,6 +8266,7 @@ class SettingsRepository(private val context: Context) {
         private val ALTERNATES_NEAREST_FIRST = booleanPreferencesKey("alternates_nearest_first")
         private val ALTERNATES_ORDER = stringPreferencesKey("alternates_order")
         private val ALTERNATES_HOLD_TO_SELECT = booleanPreferencesKey("alternates_hold_to_select")
+        private val ALTERNATES_CLASSIC = booleanPreferencesKey("alternates_classic")
         private val COLOR_VISION_FILTER = stringPreferencesKey("color_vision_filter")
         private val HIGH_CONTRAST_KEYS = booleanPreferencesKey("high_contrast_keys")
         private val KEY_OUTLINES = booleanPreferencesKey("key_outlines")
@@ -13414,6 +13423,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.popup.alternatesOrder,
             alternatesHoldToSelect = p[ALTERNATES_HOLD_TO_SELECT]
                 ?: defaults.popup.alternatesHoldToSelect,
+            alternatesClassic = p[ALTERNATES_CLASSIC] ?: defaults.popup.alternatesClassic,
         )
     }
 
@@ -14683,6 +14693,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAlternatesNearestFirst(value: Boolean) =
         editPrefs { it[ALTERNATES_NEAREST_FIRST] = value }
+
+    suspend fun setAlternatesClassic(value: Boolean) =
+        editPrefs { it[ALTERNATES_CLASSIC] = value }
 
     suspend fun setAlternatesOrder(value: List<AlternateGroup>) =
         editPrefs { it[ALTERNATES_ORDER] = encodeAlternatesOrder(value) }

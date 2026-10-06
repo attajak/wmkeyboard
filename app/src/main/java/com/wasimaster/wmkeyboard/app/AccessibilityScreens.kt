@@ -146,6 +146,15 @@ internal fun AccessibilitySettings(
                 default = SettingsDefaults.reduceMotion,
             ) { scope.launch { repository.setReduceMotion(it) } }
         }
+        item {
+            ToggleSetting(
+                R.string.accessibility_classic_popup_title,
+                stringResource(R.string.accessibility_classic_popup_subtitle),
+                settings.watch { it.popup.alternatesClassic },
+                info = stringResource(R.string.accessibility_classic_popup_info),
+                default = SettingsDefaults.popup.alternatesClassic,
+            ) { scope.launch { repository.setAlternatesClassic(it) } }
+        }
     }
 
     SettingsGroup(stringResource(R.string.accessibility_settings_app_title)) {
