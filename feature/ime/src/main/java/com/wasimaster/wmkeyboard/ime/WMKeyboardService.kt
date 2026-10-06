@@ -247,6 +247,7 @@ import com.wasimaster.wmkeyboard.core.settings.KeySoundStyle
 import com.wasimaster.wmkeyboard.core.settings.KeyboardMode
 import com.wasimaster.wmkeyboard.core.settings.LanguageDetectionStrength
 import com.wasimaster.wmkeyboard.core.settings.LetterSwipeAction
+import com.wasimaster.wmkeyboard.core.settings.HandwritingFullScreenMode
 import android.net.ConnectivityManager
 import com.wasimaster.wmkeyboard.core.settings.PhotoNetworkConditions
 import com.wasimaster.wmkeyboard.core.settings.RotationState
@@ -370,6 +371,10 @@ import com.wasimaster.wmkeyboard.core.tools.toolbarHintButtons
 import com.wasimaster.wmkeyboard.ime.ui.StableMeasureFrame
 import com.wasimaster.wmkeyboard.ime.ui.ImeNavigationBars
 import com.wasimaster.wmkeyboard.ime.ui.LocalImeNavigationBars
+import com.wasimaster.wmkeyboard.ime.ui.HandwritingFullScreenControls
+import com.wasimaster.wmkeyboard.ime.ui.LocalHandwritingFullScreen
+import com.wasimaster.wmkeyboard.ime.ui.handwritingFullScreen
+import com.wasimaster.wmkeyboard.ime.ui.handwritingFullScreenManual
 import com.wasimaster.wmkeyboard.ime.ui.SymbolRowAction
 import com.wasimaster.wmkeyboard.ime.ui.activeSymbolSet
 import com.wasimaster.wmkeyboard.ime.ui.trimMediaImageMemory
@@ -4507,6 +4512,7 @@ open class WMKeyboardService : InputMethodService() {
                 LocalSystemNavBarPainter provides systemNavBarPainter,
                 LocalInlineChipPaletteReporter provides inlineChipPaletteReporter,
                 LocalImeNavigationBars provides navigationBars,
+                LocalHandwritingFullScreen provides hwFullScreenControls,
             ) {
                 ServiceKeyboardContent()
             }
@@ -4789,6 +4795,57 @@ open class WMKeyboardService : InputMethodService() {
         window?.window?.decorView?.requestLayout()
     }
 
+    // ---- full-screen handwriting (issue #386) ----
+
+    /** The compact bar's rectangle in IME-window pixels, for the touchable region. */
+    private var hwFullScreenBarBounds: android.graphics.Rect? = null
+
+    private val hwFullScreenControls = HandwritingFullScreenControls(
+        onToggle = ::onHandwritingFullScreenToggle,
+        onInkToggle = ::onHandwritingInkToggle,
+        onBarBounds = ::onHandwritingFullScreenBarBounds,
+    )
+
+    /**
+     * The panel's expand button, or the bar's shrink one. Pending ink goes:
+     * it was drawn in the other canvas's coordinates, and recognising it
+     * against this one's size would read it as a different shape.
+     */
+    private fun onHandwritingFullScreenToggle() {
+        vibrate()
+        dropKeyboardHandwritingInk()
+        hwFullScreenBarBounds = null
+        _uiState.update {
+            it.copy(
+                handwriting = it.handwriting.copy(
+                    fullScreen = !it.handwriting.fullScreen,
+                    fullScreenInk = true,
+                ),
+            )
+        }
+        // A landscape extract editor would cover the app the ink is for.
+        updateFullscreenMode()
+        // Insets are only re-queried on a window layout pass; force one.
+        window?.window?.decorView?.requestLayout()
+    }
+
+    /** Pen-button mode: the canvas catches touches as ink, or lets them through. */
+    private fun onHandwritingInkToggle() {
+        vibrate()
+        _uiState.update {
+            it.copy(handwriting = it.handwriting.copy(fullScreenInk = !it.handwriting.fullScreenInk))
+        }
+        window?.window?.decorView?.requestLayout()
+    }
+
+    private fun onHandwritingFullScreenBarBounds(bounds: IntRect) {
+        val rect = android.graphics.Rect(bounds.left, bounds.top, bounds.right, bounds.bottom)
+        if (rect != hwFullScreenBarBounds) {
+            hwFullScreenBarBounds = rect
+            window?.window?.decorView?.requestLayout()
+        }
+    }
+
     // ---- floating mode ----
 
     /** Panel bounds in IME-window coordinates, for the touchable region. */
@@ -4886,6 +4943,30 @@ open class WMKeyboardService : InputMethodService() {
             }
             return
         }
+        if (handwritingFullScreen(_uiState.value)) {
+            // Full-screen handwriting: the app keeps its whole height under
+            // the see-through canvas. The window takes every touch while the
+            // pen-button canvas is catching ink, and only the bar's otherwise
+            // — the stylus mode never catches here at all, Android's own
+            // stylus window does. Until the bar has published a rectangle
+            // the whole window stays touchable, so the bar is never dead.
+            val state = _uiState.value
+            val decorHeight = window?.window?.decorView?.height ?: return
+            outInsets.contentTopInsets = decorHeight
+            outInsets.visibleTopInsets = decorHeight
+            val catching = handwritingFullScreenManual(state) &&
+                state.handwriting.fullScreenInk &&
+                state.handwriting.status == HandwritingStatus.READY
+            val bar = hwFullScreenBarBounds
+            if (catching || bar == null) {
+                outInsets.touchableInsets = Insets.TOUCHABLE_INSETS_FRAME
+            } else {
+                outInsets.touchableInsets = Insets.TOUCHABLE_INSETS_REGION
+                outInsets.touchableRegion.setEmpty()
+                outInsets.touchableRegion.set(bar)
+            }
+            return
+        }
         if (!_uiState.value.settings.floatingKeyboard) {
             // Docked: the frame's held bands are transparent window over the
             // app, not keyboard. Both insets, so the app resizes to the board
@@ -4928,6 +5009,7 @@ open class WMKeyboardService : InputMethodService() {
      */
     override fun onEvaluateFullscreenMode(): Boolean =
         if (_uiState.value.settings.floatingKeyboard || voiceBarShowing() ||
+            handwritingFullScreen(_uiState.value) ||
             (pinnedNow() && isNullField()) ||
             DeviceForm.of(resources.configuration.smallestScreenWidthDp).isTablet
         ) {
@@ -23318,6 +23400,7 @@ open class WMKeyboardService : InputMethodService() {
      * strokes don't reappear when the user comes back to the letters.
      */
     private fun dropKeyboardHandwritingInk() {
+        hwStylusInk = false
         if (_uiState.value.handwriting.strokes.isEmpty()) return
         hwJob?.cancel()
         hwGeneration++
@@ -23337,7 +23420,14 @@ open class WMKeyboardService : InputMethodService() {
         hwGeneration++
         val tag = hwLanguageTag()
         _uiState.update {
-            it.copy(handwriting = HandwritingUi(status = HandwritingStatus.CHECKING, languageTag = tag))
+            it.copy(
+                handwriting = HandwritingUi(
+                    status = HandwritingStatus.CHECKING,
+                    languageTag = tag,
+                    fullScreen = it.handwriting.fullScreen,
+                    fullScreenInk = it.handwriting.fullScreenInk,
+                ),
+            )
         }
         serviceScope.launch {
             val downloaded = HandwritingModels.isDownloaded(tag)
@@ -23438,9 +23528,7 @@ open class WMKeyboardService : InputMethodService() {
     /** A stroke was finished on the canvas; recognize after a short pause. */
     fun onHandwritingStroke(stroke: HwStroke, canvasSize: IntSize) {
         val state = _uiState.value
-        if ((state.panel != PanelMode.HANDWRITING && !keyboardHandwriteActive(state)) ||
-            state.handwriting.status != HandwritingStatus.READY
-        ) {
+        if (!handwritingInkAccepted(state) || state.handwriting.status != HandwritingStatus.READY) {
             return
         }
         hwCanvasSize = canvasSize
@@ -23529,9 +23617,7 @@ open class WMKeyboardService : InputMethodService() {
                 writingAreaHeight = hwCanvasSize.height.toFloat(),
             )
         }
-        if (generation != hwGeneration ||
-            (_uiState.value.panel != PanelMode.HANDWRITING && !keyboardHandwriteActive(_uiState.value))
-        ) {
+        if (generation != hwGeneration || !handwritingInkAccepted(_uiState.value)) {
             return
         }
 
@@ -23543,6 +23629,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         if (candidates.isEmpty()) {
+            hwStylusInk = false
             _uiState.update {
                 it.copy(handwriting = it.handwriting.copy(strokes = emptyList(), recognizing = false))
             }
@@ -23591,12 +23678,84 @@ open class WMKeyboardService : InputMethodService() {
         lastGestureStroke = null
         lastHandAdjustment = null
         armRevertGuard()
+        hwStylusInk = false
         _uiState.update {
             it.copy(
                 handwriting = it.handwriting.copy(strokes = emptyList(), recognizing = false),
                 suggestions = if (state.secureField) emptyList() else candidates,
             )
         }
+    }
+
+    /**
+     * Somewhere is taking ink right now: the panel (docked, floating or full
+     * screen), the keys themselves, or a stylus session Android started over
+     * a text field. Both ends of recognition check it, so ink that lost its
+     * surface is never committed.
+     */
+    private fun handwritingInkAccepted(state: KeyboardUiState): Boolean =
+        state.panel == PanelMode.HANDWRITING || keyboardHandwriteActive(state) || hwStylusInk
+
+    // ---- stylus handwriting (Android 14+, issue #386 "automatic" mode) ----
+
+    /**
+     * Ink from Android's stylus handwriting window is pending recognition.
+     * Outlives the session itself on purpose: the session can time out or
+     * end on a stroke outside it while the last word is still recognising.
+     */
+    private var hwStylusInk = false
+
+    /** The view drawing ink in Android's stylus handwriting window. */
+    private var stylusInkView: StylusInkView? = null
+
+    /** The ink window [stylusInkView] was last attached to; the platform remakes it. */
+    private var stylusInkWindow: android.view.Window? = null
+
+    /**
+     * Android saw a stylus start writing over a text field and offers us the
+     * session. Taken only in the full build, with the stylus mode picked and
+     * the model on the phone: the platform then routes stylus events to the
+     * ink window over the whole screen while fingers keep reaching the app,
+     * which is exactly the split the stylus mode promises.
+     */
+    override fun onStartStylusHandwriting(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return false
+        if (!BuildConfig.ENABLE_ML_KIT_HANDWRITING) return false
+        val state = _uiState.value
+        if (state.settings.handwritingFullScreenMode != HandwritingFullScreenMode.AUTOMATIC) return false
+        if (state.handwriting.status != HandwritingStatus.READY) {
+            // Never checked in this process (the panel was never opened), or
+            // the model is missing. The check is quick once ML Kit is up, so
+            // the next stroke over a field gets its session.
+            if (state.handwriting.status != HandwritingStatus.DOWNLOADING) refreshHandwritingStatus()
+            return false
+        }
+        val inkWindow = stylusHandwritingWindow ?: return false
+        val view = stylusInkView ?: StylusInkView(this, ::onStylusInkStroke).also { view ->
+            stylusInkView = view
+            serviceScope.launch {
+                _uiState.map { it.handwriting.strokes }.distinctUntilChanged().collect { strokes ->
+                    view.setStrokes(strokes)
+                }
+            }
+        }
+        if (inkWindow !== stylusInkWindow) {
+            (view.parent as? android.view.ViewGroup)?.removeView(view)
+            inkWindow.setContentView(view)
+            stylusInkWindow = inkWindow
+        }
+        // Ink from the panel's canvas is in that canvas's coordinates.
+        if (!hwStylusInk) dropKeyboardHandwritingInk()
+        hwStylusInk = true
+        // Long enough to think between words. Fingers pass through the
+        // whole time, so a long session costs nothing.
+        setStylusHandwritingSessionTimeout(java.time.Duration.ofMillis(STYLUS_SESSION_TIMEOUT_MS))
+        return true
+    }
+
+    private fun onStylusInkStroke(stroke: HwStroke, canvasSize: IntSize) {
+        hwStylusInk = true
+        onHandwritingStroke(stroke, canvasSize)
     }
 
     // ---- tools: flashlight, undo/redo, weather ----
@@ -35632,6 +35791,9 @@ open class WMKeyboardService : InputMethodService() {
          * the Latin default, so recognition doesn't fire mid-glyph.
          */
         private const val MULTI_STROKE_HW_MIN_COMMIT_DELAY_MS = 1200L
+
+        /** Idle time before Android ends a stylus handwriting session (issue #386). */
+        private const val STYLUS_SESSION_TIMEOUT_MS = 10_000L
 
         /** Ink language subtags whose glyphs take many strokes; see [handwritingRecognitionDelayMs]. */
         private val MULTI_STROKE_HW_LANGUAGES = setOf("bn", "ja", "zh", "ko")

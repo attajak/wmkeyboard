@@ -1816,7 +1816,20 @@ private fun KeyboardScreenFrame(
                             translationY = collapse.value * chromeHeight.intValue
                         },
                 ) {
-                    if (state.settings.floatingKeyboard) {
+                    if (handwritingFullScreen(state)) {
+                        // Full-screen handwriting (issue #386) outranks both
+                        // chromes: the canvas is the whole window and the
+                        // keyboard is a small bar on top of it.
+                        HandwritingFullScreen(
+                            state = state,
+                            onStroke = onHandwritingStroke,
+                            onUndoStroke = onHandwritingUndo,
+                            onDownloadModel = onHandwritingDownload,
+                            onKey = onKey,
+                            onSuggestion = onSuggestion,
+                            onClose = { onPanelChange(PanelMode.HANDWRITING) },
+                        )
+                    } else if (state.settings.floatingKeyboard) {
                         // Floating mode: the compose root spans the whole IME
                         // window with no background; the service restricts the
                         // touchable region to the panel so everything else

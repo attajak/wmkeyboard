@@ -134,6 +134,7 @@ import com.wasimaster.wmkeyboard.core.settings.GifContentFilter
 import com.wasimaster.wmkeyboard.core.settings.GifSourceMode
 import com.wasimaster.wmkeyboard.core.settings.KeyboardAlignment
 import com.wasimaster.wmkeyboard.core.settings.LetterSwipeAction
+import com.wasimaster.wmkeyboard.core.settings.HandwritingFullScreenMode
 import com.wasimaster.wmkeyboard.core.settings.ManualModeDuration
 import com.wasimaster.wmkeyboard.core.settings.MediaSendMode
 import com.wasimaster.wmkeyboard.core.settings.OneHandedMode
@@ -361,6 +362,9 @@ internal object ChoiceOptionIcons {
 
         put(LetterSwipeAction.TYPE_WORDS) { Icons.Outlined.Gesture }
         put(LetterSwipeAction.HANDWRITE) { Icons.Outlined.Draw }
+
+        put(HandwritingFullScreenMode.MANUAL) { Icons.Outlined.TouchApp }
+        put(HandwritingFullScreenMode.AUTOMATIC) { Icons.Outlined.Draw }
 
         put(SuggestionHotkeyMode.OFF) { Icons.Outlined.Block }
         put(SuggestionHotkeyMode.LEADER_DIGIT) { Icons.Outlined.KeyboardCommandKey }

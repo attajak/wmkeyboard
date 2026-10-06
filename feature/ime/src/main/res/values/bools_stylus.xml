@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Whether the keyboard tells Android it takes stylus handwriting sessions
+      (method.xml's supportsStylusHandwriting, issue #386). Off here and on in
+      the full flavour: lite has no recogniser, and declaring support anyway
+      would let Android hand it stylus drags over a text field that it can
+      only refuse, after the app has already given them up.
+    -->
+    <bool name="ime_supports_stylus_handwriting">false</bool>
+</resources>

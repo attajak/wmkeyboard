@@ -1372,6 +1372,11 @@ private fun SearchStrings.toolPageRowsA(): List<SettingsSearchEntry> = listOf(
     toolEntry(ToolbarTool.HANDWRITING, R.string.tooldetail_handwriting_pause_title, R.string.tooldetail_handwriting_pause_subtitle),
     toolEntry(
         ToolbarTool.HANDWRITING,
+        R.string.tooldetail_handwriting_full_screen_title,
+        R.string.tooldetail_handwriting_full_screen_subtitle,
+    ),
+    toolEntry(
+        ToolbarTool.HANDWRITING,
         R.string.tooldetail_handwriting_languages_title,
         R.string.tooldetail_handwriting_languages_subtitle,
     ),

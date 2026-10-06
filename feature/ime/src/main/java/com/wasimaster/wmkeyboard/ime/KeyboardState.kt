@@ -922,6 +922,17 @@ data class HandwritingUi(
     val download: com.wasimaster.wmkeyboard.core.handwriting.HandwritingDownloadProgress? = null,
     /** What this language's model installs to, or 0 when ML Kit lists no size. */
     val modelBytes: Long = 0,
+    /**
+     * The panel is blown up to a see-through canvas over the whole app with
+     * the keyboard shrunk to a small bar (issue #386). Kept across a status
+     * reset, so a language switch does not drop the user out of it.
+     */
+    val fullScreen: Boolean = false,
+    /**
+     * Pen-button mode only: the full-screen canvas is catching touches (true)
+     * or letting them through to the app (false).
+     */
+    val fullScreenInk: Boolean = true,
 )
 
 /**

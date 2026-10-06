@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The full build has the ML Kit recogniser; see main's copy. -->
+    <bool name="ime_supports_stylus_handwriting">true</bool>
+</resources>

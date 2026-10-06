@@ -35,6 +35,19 @@ Two different controls undo ink, and they don't do the same thing:
 - **Undo last stroke**, an icon that appears in the bottom-left corner once you've drawn something, removes only the most recent stroke and re-runs recognition on whatever ink remains.
 - The rail's <KeyCap>Delete</KeyCap> key is different: while ink is still waiting to be recognized, pressing it throws away **all** pending strokes at once rather than deleting already-committed text. It's the natural "no, not that" reaction mid-word. Once the strokes have already turned into text, <KeyCap>Delete</KeyCap> goes back to deleting committed characters normally, and it auto-repeats on a hold like it does on the main keyboard.
 
+## Writing over the whole screen
+
+<SettingsPath path="Tools / Handwriting / Full-screen writing" />
+
+Tap the expand button in the top-right corner of the panel and the canvas leaves the keyboard: it covers the whole screen, see-through, so you write straight over the app and watch each word land in the text field. The keyboard shrinks to a small bar at the bottom with the recogniser's other readings of the last word (tap one to swap it in), and keys for undo stroke, <KeyCap>Delete</KeyCap>, <KeyCap>Space</KeyCap>, <KeyCap>Enter</KeyCap>, a shrink button back to the panel, and a keyboard button that closes handwriting. It works the same with the keyboard floating. While the canvas is up, the app keeps its full height and never jumps around under your ink.
+
+A see-through canvas has to decide which touches are writing and which are meant for the app. **Full-screen writing** picks how:
+
+- **Pen button** (the default): a pen button on the bar switches the canvas between writing and using the app. While it shows the pen, every touch on the screen is ink. Tap it and it turns into a hand: now every touch goes to the app underneath (scroll, tap a link, move the cursor) while the canvas stays out of the way. Works with a finger or any stylus.
+- **Stylus** (Android 14 and later): a stylus writes and a finger keeps using the app, at the same time, with no button. Start writing with the pen over a text field and Android hands the stroke to the keyboard, which then takes pen ink anywhere on the screen until you stop for ten seconds. This rides on Android's own stylus handwriting, so Android's **Write in text fields** setting for styluses has to be on. It sits with the phone's stylus settings, and phones that ship with a pen usually have it on already. It works in any app's text field even with the keyboard closed, since Android starts it from the pen. The row is not shown on Android 13 and older.
+
+The stylus mode only works with a stylus the screen reports as one (S Pen, a Wacom-type EMR pen, a USI pen, most Bluetooth styluses); a finger or a passive rubber-tip pen looks like a finger and goes to the app.
+
 ## Handwriting as a layout
 
 Chinese, Japanese and Korean have a **Handwriting** layout of their own, the way Gboard offers one. Turn it on with the language's other layouts and pick it with the globe key: the writing area takes the place of the letter keys, and a normal bottom row (<KeyCap>?123</KeyCap>, globe, punctuation, <KeyCap>Space</KeyCap>, <KeyCap>Delete</KeyCap>, <KeyCap>Enter</KeyCap>) stays under it. Ink is read in that layout's language, with everything below about models, delete and undo working the same. There's no language chip on it; the globe key changes language. On the lite build the area only says that handwriting needs the full edition.
@@ -91,7 +104,8 @@ Whatever the Recognition pause slider is set to, handwriting in these languages 
 ## Details & edge cases
 
 - **Palm rejection** happens automatically and isn't a setting: once the canvas sees a stylus point, it ignores finger touches for 800 ms afterward.
-- There's no hover preview, no air-gesture support, and no S Pen side-button handling. The only stylus-specific behavior is palm rejection.
+- There's no hover preview, no air-gesture support, and no S Pen side-button handling. The stylus-specific behaviors are palm rejection and the **Stylus** full-screen mode.
+- Switching between the panel and full screen throws away ink that hasn't been recognised yet: it was drawn on the other canvas, at another size.
 - Auto-capitalization at the start of a sentence only applies when you're writing in American English with Auto-capitalize on, and never in a password or other secure field. Bangla and other languages without letter case are skipped entirely.
 - The recognizer only sees the last 20 characters of text before your cursor as context (a limit set by ML Kit itself, not WM Keyboard).
 - Handwriting has no direct-boot support: neither the panel nor handwriting-by-swipe works before you've unlocked your device once after a restart, unlike some other tools. If [Power Saving mode](/typing/power-saving/) is set to drop on-device models to save battery, handwriting-by-swipe is switched back to plain gesture typing until you turn it back on.

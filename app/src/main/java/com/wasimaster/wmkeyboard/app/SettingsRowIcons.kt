@@ -244,6 +244,7 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Timer
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Today
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Toll
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TouchApp
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.OpenInFull
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Translate
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.OpenInBrowser
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.TravelExplore
@@ -1244,6 +1245,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_handwriting_stylus_title) { Icons.Outlined.Draw }
         put(R.string.tooldetail_handwriting_auto_space_title) { Icons.Outlined.SpaceBar }
         put(R.string.tooldetail_handwriting_pause_title) { Icons.Outlined.Timer }
+        put(R.string.tooldetail_handwriting_full_screen_title) { Icons.Outlined.OpenInFull }
         put(R.string.tooldetail_handwriting_languages_title) { Icons.Outlined.Language }
         put(R.string.tooldetail_sticker_packs_title) { SymbolIcons.Sticker }
         put(R.string.tooldetail_sticker_suggest_title) { Icons.Outlined.AutoAwesome }

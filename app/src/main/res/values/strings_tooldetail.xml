@@ -342,6 +342,13 @@
     <string name="tooldetail_handwriting_pause_title">Recognition pause</string>
     <string name="tooldetail_handwriting_pause_subtitle">How long after the last stroke the keyboard waits before it recognizes the word</string>
     <string name="tooldetail_handwriting_pause_info">A shorter pause feels faster, but it can cut multi-stroke letters and Bengali conjuncts in half. A longer pause gives you more time between strokes. Gboard uses about half a second.</string>
+    <string name="tooldetail_handwriting_full_screen_title">Full-screen writing</string>
+    <string name="tooldetail_handwriting_full_screen_subtitle">How the full-screen canvas tells your writing apart from taps on the app</string>
+    <string name="tooldetail_handwriting_full_screen_info">Tap the expand button on the handwriting panel to write anywhere over the app. The keyboard shrinks to a small bar and the canvas is see-through, so you can watch the text arrive.</string>
+    <string name="tooldetail_handwriting_full_screen_manual_label">Pen button</string>
+    <string name="tooldetail_handwriting_full_screen_manual_desc">A pen button on the bar switches between writing and using the app. Works with a finger or any stylus</string>
+    <string name="tooldetail_handwriting_full_screen_automatic_label">Stylus</string>
+    <string name="tooldetail_handwriting_full_screen_automatic_desc">A stylus writes and a finger keeps using the app. Start each run of writing over a text field. Needs Android\'s own setting for writing in text fields with a stylus</string>
     <string name="tooldetail_handwriting_models_header">Recognition models</string>
     <string name="tooldetail_handwriting_models_info">One model for each language that you type in. Recognition runs fully on your device with Google ML Kit. Each language needs a one-time download, and its size is shown on its own row — they range from about 8 MB to about 26 MB. After that, handwriting works offline.</string>
     <string name="tooldetail_handwriting_languages_title">Languages and layouts</string>

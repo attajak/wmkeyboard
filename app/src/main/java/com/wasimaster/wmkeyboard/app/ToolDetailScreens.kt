@@ -37,6 +37,7 @@ import com.wasimaster.wmkeyboard.core.settings.LauncherIconShape
 import com.wasimaster.wmkeyboard.core.settings.PhotoSearchEngine
 import com.wasimaster.wmkeyboard.core.settings.PhotoSearchTarget
 import com.wasimaster.wmkeyboard.core.settings.SettingsDefaults
+import com.wasimaster.wmkeyboard.core.settings.HandwritingFullScreenMode
 import com.wasimaster.wmkeyboard.core.tools.CryptoCatalog
 import com.wasimaster.wmkeyboard.core.tools.CurrencyClient
 import com.wasimaster.wmkeyboard.core.tools.CurrencyLabel
@@ -1735,6 +1736,36 @@ internal fun ToolDetailSettings(
                         info = stringResource(R.string.tooldetail_handwriting_pause_info),
                         default = SettingsDefaults.handwritingCommitDelayMs.toFloat(),
                     ) { scope.launch { repository.setHandwritingCommitDelayMs(it.roundToInt()) } }
+                }
+                // Issue #386. Automatic rides on Android's own stylus
+                // handwriting, which only exists from Android 14; below that
+                // the row would offer a choice of one.
+                item(visible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    ChoiceSetting(
+                        title = R.string.tooldetail_handwriting_full_screen_title,
+                        subtitle = stringResource(R.string.tooldetail_handwriting_full_screen_subtitle),
+                        info = stringResource(R.string.tooldetail_handwriting_full_screen_info),
+                        options = listOf(
+                            HandwritingFullScreenMode.MANUAL to
+                                stringResource(R.string.tooldetail_handwriting_full_screen_manual_label),
+                            HandwritingFullScreenMode.AUTOMATIC to
+                                stringResource(R.string.tooldetail_handwriting_full_screen_automatic_label),
+                        ),
+                        selected = settings.watch { it.handwritingFullScreenMode },
+                        onChange = { scope.launch { repository.setHandwritingFullScreenMode(it) } },
+                        default = SettingsDefaults.handwritingFullScreenMode,
+                        detail = { mode ->
+                            ChoiceDetail(
+                                stringResource(
+                                    if (mode == HandwritingFullScreenMode.AUTOMATIC) {
+                                        R.string.tooldetail_handwriting_full_screen_automatic_desc
+                                    } else {
+                                        R.string.tooldetail_handwriting_full_screen_manual_desc
+                                    },
+                                ),
+                            )
+                        },
+                    )
                 }
             }
             SectionHeader(

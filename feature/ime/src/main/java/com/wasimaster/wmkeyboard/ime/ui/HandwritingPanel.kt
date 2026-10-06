@@ -23,6 +23,7 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Keyboa
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Undo
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FileDownload
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Keyboard
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.OpenInFull
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SpaceBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -150,6 +151,26 @@ internal fun HandwritingPanel(
 
             // Undo the last stroke while ink is still on the canvas.
             UndoStrokeButton(hw, onUndoStroke, Modifier.align(Alignment.BottomStart))
+
+            // Blow the canvas up over the whole app (issue #386).
+            if (hw.status == HandwritingStatus.READY) {
+                val fullScreen = LocalHandwritingFullScreen.current
+                Icon(
+                    Icons.Outlined.OpenInFull,
+                    contentDescription = stringResource(R.string.ime_handwriting_full_screen_desc),
+                    tint = kb.toolbarIcon,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(4.dp)
+                        .clip(RoundedCornerShape(kb.toolRadiusDp.dp))
+                        .clickable {
+                            feedback()
+                            fullScreen.onToggle()
+                        }
+                        .padding(8.dp)
+                        .size(20.dp),
+                )
+            }
         }
 
         // Action rail, sized like a key column.
@@ -224,7 +245,7 @@ internal fun HandwritingLayoutCanvas(
  * Shared by the panel and the handwriting layouts.
  */
 @Composable
-private fun HandwritingStatusBody(
+internal fun HandwritingStatusBody(
     state: KeyboardUiState,
     onStroke: (HwStroke, IntSize) -> Unit,
     onDownloadModel: () -> Unit,
@@ -295,7 +316,7 @@ private fun HandwritingStatusBody(
 
 /** Undo the last stroke, while ink is still on the canvas. */
 @Composable
-private fun UndoStrokeButton(hw: HandwritingUi, onUndoStroke: () -> Unit, modifier: Modifier) {
+internal fun UndoStrokeButton(hw: HandwritingUi, onUndoStroke: () -> Unit, modifier: Modifier) {
     if (hw.strokes.isEmpty() || hw.status != HandwritingStatus.READY) return
     val kb = LocalKbTheme.current
     val feedback = LocalKeyPressFeedback.current
@@ -418,9 +439,11 @@ private fun DownloadingMessage(hw: HandwritingUi, onCancel: () -> Unit) {
 }
 
 @Composable
-private fun WritingCanvas(
+internal fun WritingCanvas(
     state: KeyboardUiState,
     onStroke: (HwStroke, IntSize) -> Unit,
+    /** The "write here" line; off over an app, where it would sit on the app's own text. */
+    showHint: Boolean = true,
 ) {
     val kb = LocalKbTheme.current
     val hw = state.handwriting
@@ -474,7 +497,7 @@ private fun WritingCanvas(
                 }
             },
     ) {
-        if (hw.strokes.isEmpty() && activeStroke.isEmpty() && !hw.recognizing) {
+        if (showHint && hw.strokes.isEmpty() && activeStroke.isEmpty() && !hw.recognizing) {
             Text(
                 stringResource(R.string.ime_handwriting_canvas_hint),
                 color = kb.secondaryText.copy(alpha = 0.45f),
@@ -499,7 +522,7 @@ private fun WritingCanvas(
     }
 }
 
-private fun pathOf(points: List<HwPoint>): Path {
+internal fun pathOf(points: List<HwPoint>): Path {
     val path = Path()
     if (points.isEmpty()) return path
     path.moveTo(points.first().x, points.first().y)
@@ -525,7 +548,7 @@ private fun StatusMessage(text: String) {
 
 /** One key on the panel's right-hand action rail (same look as the numpad keys). */
 @Composable
-private fun HwRailKey(
+internal fun HwRailKey(
     description: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,

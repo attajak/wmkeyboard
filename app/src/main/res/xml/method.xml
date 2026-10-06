@@ -2,6 +2,7 @@
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
     android:settingsActivity="com.wasimaster.wmkeyboard.app.MainActivity"
     android:supportsInlineSuggestions="true"
+    android:supportsStylusHandwriting="@bool/ime_supports_stylus_handwriting"
     android:supportsSwitchingToNextInputMethod="true">
     <!--
       supportsInlineSuggestions is what makes the autofill framework offer the
@@ -11,6 +12,14 @@
       password manager falls back to drawing its own dropdown over the keyboard
       (#250). The chips themselves are built in InlineAutofill and hosted by the
       suggestion strip.
+    -->
+    <!--
+      supportsStylusHandwriting lets Android hand the keyboard a stylus
+      handwriting session when a pen starts writing over a text field: an ink
+      window over the whole screen that takes the stylus and lets fingers
+      through (the "Stylus" full-screen writing mode, issue #386). The service
+      still refuses the session unless that mode is picked. Full build only,
+      through the bool; see bools_stylus.xml.
     -->
     <!--
       No static subtypes on purpose. Every subtype we expose is registered at

@@ -129,6 +129,11 @@
     <string name="ime_handwriting_need_model_sized_body">Handwriting for <xliff:g id="language" example="English">%1$s</xliff:g> needs a one-time model download of <xliff:g id="size" example="24.6 MB">%2$s</xliff:g>.</string>
     <string name="ime_handwriting_canvas_hint">Write here</string>
     <string name="ime_handwriting_undo_stroke_desc">Undo the last stroke</string>
+    <string name="ime_handwriting_full_screen_desc">Write over the whole screen</string>
+    <string name="ime_handwriting_exit_full_screen_desc">Back to the handwriting panel</string>
+    <string name="ime_handwriting_ink_on_desc">Writing. Tap to use the app instead</string>
+    <string name="ime_handwriting_ink_off_desc">Using the app. Tap to write</string>
+    <string name="ime_handwriting_stylus_hint">Write with your stylus over a text field</string>
     <!-- Shown in place of the writing area of a handwriting layout in the
          Lite edition, which does not include the recognizer. -->
     <string name="ime_handwriting_layout_full_only_info">Handwriting is in the Full edition only. Use the globe key to change to a different layout.</string>

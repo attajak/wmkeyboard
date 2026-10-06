@@ -1151,6 +1151,15 @@ enum class TransliterationHintMode { OFF, ADDED, CLUSTER }
 enum class LetterSwipeAction { TYPE_WORDS, HANDWRITE }
 
 /**
+ * How full-screen handwriting tells ink from touches meant for the app
+ * (issue #386). MANUAL: a pen button on the compact bar switches the
+ * transparent canvas between catching every touch and letting every touch
+ * through. AUTOMATIC: a stylus writes and a finger keeps working the app,
+ * through Android's own stylus handwriting (Android 14 and later).
+ */
+enum class HandwritingFullScreenMode { MANUAL, AUTOMATIC }
+
+/**
  * Which key a glide reads as an apostrophe, so a contraction can be *drawn*:
  * `i → t → ' → s` spells "it's" rather than "its".
  *
@@ -3107,6 +3116,8 @@ data class KeyboardSettings(
     val handwritingCommitDelayMs: Int = 700,
     /** Insert a space between consecutively handwritten words. */
     val handwritingAutoSpace: Boolean = true,
+    /** How full-screen handwriting separates ink from app touches (see [HandwritingFullScreenMode]). */
+    val handwritingFullScreenMode: HandwritingFullScreenMode = HandwritingFullScreenMode.MANUAL,
     /** Voice tool surface and collapsed-bar state, grouped (see [VoiceBarSettings]). */
     val voiceBar: VoiceBarSettings = VoiceBarSettings(),
     /** Keep listening after each dictated sentence. */
@@ -8826,6 +8837,7 @@ class SettingsRepository(private val context: Context) {
         private val HANDWRITING_STYLUS_ONLY = booleanPreferencesKey("handwriting_stylus_only")
         private val HANDWRITING_COMMIT_DELAY = intPreferencesKey("handwriting_commit_delay")
         private val HANDWRITING_AUTO_SPACE = booleanPreferencesKey("handwriting_auto_space")
+        private val HANDWRITING_FULL_SCREEN_MODE = stringPreferencesKey("handwriting_full_screen_mode")
         // Legacy boolean the three-way voice_ui_mode replaced; still read as
         // the fallback so an existing strip-mode choice survives the update.
         private val VOICE_STRIP_MODE = booleanPreferencesKey("voice_strip_mode")
@@ -9568,6 +9580,9 @@ class SettingsRepository(private val context: Context) {
             handwritingCommitDelayMs = p[HANDWRITING_COMMIT_DELAY]
                 ?: defaults.handwritingCommitDelayMs,
             handwritingAutoSpace = p[HANDWRITING_AUTO_SPACE] ?: defaults.handwritingAutoSpace,
+            handwritingFullScreenMode = p[HANDWRITING_FULL_SCREEN_MODE]
+                ?.let { runCatching { HandwritingFullScreenMode.valueOf(it) }.getOrNull() }
+                ?: defaults.handwritingFullScreenMode,
             voiceBar = readVoiceBar(p, defaults),
             voiceContinuous = p[VOICE_CONTINUOUS] ?: defaults.voiceContinuous,
             voiceSpokenPunctuation = p[VOICE_SPOKEN_PUNCTUATION]
@@ -11689,6 +11704,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setHandwritingAutoSpace(value: Boolean) =
         editPrefs { it[HANDWRITING_AUTO_SPACE] = value }
+
+    suspend fun setHandwritingFullScreenMode(value: HandwritingFullScreenMode) =
+        editPrefs { it[HANDWRITING_FULL_SCREEN_MODE] = value.name }
 
     suspend fun setVoiceUiMode(value: String) =
         editPrefs {
