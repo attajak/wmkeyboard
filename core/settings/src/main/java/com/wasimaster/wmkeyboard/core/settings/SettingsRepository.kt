@@ -2226,9 +2226,17 @@ data class AutocorrectSettings(
      * Whether Enter ends a word the way space does, correction included
      * (issue #457). Off, the word before Enter goes in as typed: a search
      * query or a name sent with Enter is the one place a correction is sent
-     * before anyone reads it. Space and punctuation still correct.
+     * before anyone reads it. Space still corrects.
      */
     val onEnter: Boolean = true,
+    /**
+     * Whether a mark that ends a word (. , ! ? ; : and the danda) corrects it
+     * the way space does, so "teh!" lands as "the!" (#562). Off by default: a
+     * mark is also typed for its own sake, mid-abbreviation or inside a name
+     * the word list has never heard of, and nothing used to touch the word
+     * in front of it.
+     */
+    val onPunctuation: Boolean = false,
     /**
      * Whether a word the word list spells with a capital and never without
      * one ("Haus", "Berlin") is written that way when it is typed or swiped
@@ -8268,6 +8276,7 @@ class SettingsRepository(private val context: Context) {
         private val AUTOCORRECT_SKIP_ALL_CAPS =
             booleanPreferencesKey("autocorrect_skip_all_caps")
         private val AUTOCORRECT_ON_ENTER = booleanPreferencesKey("autocorrect_on_enter")
+        private val AUTOCORRECT_ON_PUNCTUATION = booleanPreferencesKey("autocorrect_on_punctuation")
         private val DICTIONARY_CAPITALS = booleanPreferencesKey("dictionary_capitals")
         private val AUTO_CAPITALIZE = booleanPreferencesKey("auto_capitalize")
         private val DOUBLE_SPACE_PERIOD = booleanPreferencesKey("double_space_period")
@@ -9900,6 +9909,7 @@ class SettingsRepository(private val context: Context) {
                 ?: defaults.correction.undoMemory,
             skipAllCaps = p[AUTOCORRECT_SKIP_ALL_CAPS] ?: defaults.correction.skipAllCaps,
             onEnter = p[AUTOCORRECT_ON_ENTER] ?: defaults.correction.onEnter,
+            onPunctuation = p[AUTOCORRECT_ON_PUNCTUATION] ?: defaults.correction.onPunctuation,
             dictionaryCapitals = p[DICTIONARY_CAPITALS] ?: defaults.correction.dictionaryCapitals,
         )
 
@@ -14753,6 +14763,9 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAutocorrectOnEnter(value: Boolean) =
         editPrefs { it[AUTOCORRECT_ON_ENTER] = value }
+
+    suspend fun setAutocorrectOnPunctuation(value: Boolean) =
+        editPrefs { it[AUTOCORRECT_ON_PUNCTUATION] = value }
 
     suspend fun setDictionaryCapitals(value: Boolean) =
         editPrefs { it[DICTIONARY_CAPITALS] = value }

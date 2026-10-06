@@ -431,6 +431,15 @@ internal fun TypingCorrectionsSettings(
             }
             item {
                 ToggleSetting(
+                    R.string.typing_autocorrect_on_punctuation_title,
+                    stringResource(R.string.typing_autocorrect_on_punctuation_subtitle),
+                    settings.watch { it.correction.onPunctuation },
+                    info = stringResource(R.string.typing_autocorrect_on_punctuation_info),
+                    default = SettingsDefaults.correction.onPunctuation,
+                ) { scope.launch { repository.setAutocorrectOnPunctuation(it) } }
+            }
+            item {
+                ToggleSetting(
                     R.string.typing_dictionary_capitals_title,
                     stringResource(R.string.typing_dictionary_capitals_subtitle),
                     settings.watch { it.correction.dictionaryCapitals },

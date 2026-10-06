@@ -9228,14 +9228,15 @@ open class WMKeyboardService : InputMethodService() {
             // apostrophe a contraction is missing goes back the same way:
             // "thats." was the one ending that left it out (#240). Only for
             // the marks that end a word — a slash or a symbol-layer insert is
-            // a character landing mid-thought, not a word being finished —
-            // and only the apostrophe, not autocorrect: guessing at a whole
-            // spelling on a mark the user may be typing for its own sake is a
-            // wider change than this, and the space bar is still where a word
-            // gets second-guessed.
+            // a character landing mid-thought, not a word being finished.
+            // Autocorrect only when asked for (#562): a mark is also typed for
+            // its own sake, after an abbreviation or a name no list holds, so
+            // by default the space bar is still where a word gets
+            // second-guessed.
             commitComposing(
                 ic,
-                autocorrect = false,
+                autocorrect = endsWord && state.settings.correction.enabled &&
+                    state.settings.correction.onPunctuation,
                 fixApostrophes = endsWord && state.settings.autoText.apostrophe,
                 expandPatterns = endsWord,
             )
@@ -10110,11 +10111,19 @@ open class WMKeyboardService : InputMethodService() {
                 // stop, or nothing at all when a {cursor} marker swallowed the
                 // key. Reading one character past the commit and putting
                 // whatever it is back verbatim beats guessing which it was.
-                val probe = ic.getTextBeforeCursor(revert.committed.length + 1, 0)?.toString()
-                val tail = if (probe != null && probe.length > revert.committed.length) {
-                    probe.takeLast(1)
-                } else {
-                    ""
+                //
+                // A word corrected by a mark (#562) under the auto-space rule
+                // has two characters behind it, the mark and its space. Those
+                // two exactly, and nothing else, count as a two-character tail.
+                val wide = ic.getTextBeforeCursor(revert.committed.length + 2, 0)?.toString()
+                val markAndSpace = wide != null && wide.length == revert.committed.length + 2 &&
+                    wide.endsWith(' ') && wide[wide.length - 2] in AUTO_SPACE_PUNCTUATION &&
+                    wide.dropLast(2) == revert.committed
+                val probe = if (markAndSpace) wide else wide?.takeLast(revert.committed.length + 1)
+                val tail = when {
+                    markAndSpace -> probe.orEmpty().takeLast(2)
+                    probe != null && probe.length > revert.committed.length -> probe.takeLast(1)
+                    else -> ""
                 }
                 if (probe != null && probe.dropLast(tail.length) == revert.committed) {
                     ic.beginBatchEdit()
