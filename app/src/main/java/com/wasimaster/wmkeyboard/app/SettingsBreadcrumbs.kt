@@ -395,6 +395,22 @@ internal fun RegisterSettingsCrumb(title: String, route: String? = null) {
 }
 
 /**
+ * Whether the screen being composed was opened, as opposed to returned to —
+ * [SettingsBreadcrumbBar]'s `opened`.
+ *
+ * Asked in the screen's own composition, where it is answered before
+ * [RegisterSettingsCrumb]'s effect can answer it by adding the step: a
+ * `remember` runs as the composition does, and an effect only once it has been
+ * applied. A screen not on the trail yet is being opened.
+ */
+@Composable
+internal fun rememberCrumbOpened(): Boolean {
+    val trail = LocalSettingsCrumbTrail.current ?: return true
+    val entry = currentCrumbEntry() ?: return true
+    return remember(trail, entry) { !trail.holds(entry.id) }
+}
+
+/**
  * The path strip for the screen holding [entryId], or nothing at all when that
  * screen is the home list, which has no path to draw.
  *
@@ -411,6 +427,15 @@ internal fun RegisterSettingsCrumb(title: String, route: String? = null) {
  *
  * The trail is only read here, not in the frame around it, so a navigation
  * anywhere in the app recomposes this row and nothing else.
+ *
+ * [opened] is which way this screen was reached: opened, and the accent is
+ * moving off the step behind it, or returned to, and the accent is moving back
+ * onto this one. It is [rememberCrumbOpened]'s answer, taken before the
+ * screen's own step reaches the trail. The strip used to latch it itself, on
+ * its own first composition — but it sits in the Scaffold's top bar, which is
+ * composed in the measure pass, and whether the step-adding effect had already
+ * run by then came down to frame timing. When it had, a push read as a return,
+ * and the accent snapped off the step behind instead of travelling off it.
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -419,17 +444,12 @@ internal fun SettingsBreadcrumbBar(
     entryId: String,
     currentTitle: String,
     currentRoute: String?,
+    opened: Boolean,
     onCurrent: () -> Unit,
     accent: Color,
     tint: Color,
     modifier: Modifier = Modifier,
 ) {
-    // Which way this screen was reached, latched before its own step reaches
-    // the trail: opened, and the accent is moving off the step behind it, or
-    // returned to, and the accent is moving back onto this one. Read a frame
-    // later the two are indistinguishable, so it is remembered rather than
-    // recomputed.
-    val opened = remember(trail, entryId) { !trail.holds(entryId) }
     val crumbs = trail.ancestorsOf(entryId)
     if (crumbs.size < MinCrumbDepth) return
     // The step that wore the accent a moment ago. Only a screen that was just
@@ -437,19 +457,16 @@ internal fun SettingsBreadcrumbBar(
     // the last of its ancestors. A screen being returned to left its own
     // accent behind on a screen that is on its way out.
     val wasHere = if (opened) crumbs.lastOrNull()?.entryId else null
-    val scroll = rememberScrollState()
     // The near end of the path is the useful one, and the end a long path
-    // pushes off the screen. Scrolled to whenever the path grows — and keyed
-    // on the range as well, because on a screen's first frame the row has not
-    // been measured yet and the range is still zero; it settles a frame later.
-    //
-    // Jumped, not walked. The walk the eye wants is already being drawn: each
-    // pill is flying from where it sat on the screen behind to where it sits
-    // here, and here is the scrolled position. Animating the scroll as well
-    // moves those landing places while the flights are in the air, so every
-    // pill retargets mid-flight and the strip travels at a speed that depends
-    // on when the row happened to settle.
-    LaunchedEffect(crumbs.size, scroll.maxValue) { scroll.scrollTo(scroll.maxValue) }
+    // pushes off the screen — so the strip scrolls from its end: reversed, a
+    // scroll of zero is the end of the row. That holds from the first measure.
+    // It used to be a scroll to the end from an effect, which on a screen's
+    // first frame found the row unmeasured and the range zero, scrolled
+    // nowhere, and jumped a frame later: every pill's landing place moved
+    // after the flights had taken off, and they all retargeted mid-air.
+    // A short path still sits at the start, because the row is only as wide
+    // as its pills and the box lays it out from the start.
+    val scroll = rememberScrollState()
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -464,7 +481,7 @@ internal fun SettingsBreadcrumbBar(
         Box(Modifier.fillMaxSize().crumbBand().background(tint))
         Row(
             modifier = Modifier
-                .horizontalScroll(scroll)
+                .horizontalScroll(scroll, reverseScrolling = true)
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

@@ -889,6 +889,15 @@ private fun flightKey(part: String, destination: String, from: String?): String 
 internal fun takeOffKey(part: String, destination: String): String =
     flightKey(part, destination, LocalScreenRoute.current)
 
+/**
+ * [takeOffKey] under an origin the row names itself, for a screen with several
+ * rows into one destination — search results — where the screen's own name
+ * would hang one key on all of them. The row must hand [from] to
+ * [FlightOrigin.leaving] as it navigates, so the destination lands on it.
+ */
+internal fun takeOffKey(part: String, destination: String, from: String): String =
+    flightKey(part, destination, from)
+
 /** The key this screen uses for the flight that opened it. */
 @Composable
 internal fun landingKey(part: String): String =
@@ -2529,6 +2538,7 @@ private fun WmScreenFrame(
     // is drawn outside the graph, and then there is no strip.
     val trail = LocalSettingsCrumbTrail.current
     val entry = currentCrumbEntry()
+    val crumbOpened = rememberCrumbOpened()
     RegisterSettingsCrumb(crumbTitle ?: title, route)
     val slots = remember { ScreenSlots() }
     val preview = LocalKeyboardPreview.current?.takeIf { slots.dock == null }
@@ -2611,6 +2621,7 @@ private fun WmScreenFrame(
                                 entryId = entry.id,
                                 currentTitle = crumbTitle ?: title,
                                 currentRoute = route,
+                                opened = crumbOpened,
                                 onCurrent = toTop,
                                 // The heading's own colour, so the pill and the
                                 // tile above it are visibly the same section.
