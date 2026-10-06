@@ -1,0 +1,54 @@
+name: IndexNow
+
+# After a push that changes docs pages, wait for Cloudflare Pages to deploy it,
+# then tell IndexNow (Bing, Yandex, Seznam, Naver) which pages changed. Pages
+# are picked by their sitemap <lastmod>, which is each page's git date.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/src/content/docs/**'
+      - 'docs/src/pages/**'
+  workflow_dispatch:
+    inputs:
+      all:
+        description: 'Submit every URL in the sitemap'
+        type: boolean
+        default: false
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Submit changed pages
+        working-directory: docs
+        env:
+          BEFORE: ${{ github.event.before }}
+          ALL: ${{ github.event_name == 'workflow_dispatch' && inputs.all }}
+        run: |
+          if [ "$ALL" = "true" ]; then
+            node scripts/indexnow.mjs --all
+            exit 0
+          fi
+          expect=$(git log -1 --format=%cI -- src/content/docs src/pages)
+          if [ -n "$BEFORE" ] && git cat-file -e "$BEFORE" 2>/dev/null; then
+            since=$(git log -1 --format=%cI "$BEFORE")
+          else
+            since=$(git log -1 --format=%cI HEAD~1)
+          fi
+          node scripts/indexnow.mjs --since "$since" --expect "$expect"

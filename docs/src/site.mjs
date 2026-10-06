@@ -26,6 +26,14 @@ export const SITE_TAGLINE_TITLE = 'WM Keyboard — privacy-first Android keyboar
 export const SITE_DESCRIPTION =
 	'A modern, privacy-first Android keyboard — offline intelligence, 843 languages, themes, tools and an addon ecosystem.';
 
+/**
+ * IndexNow key (https://www.indexnow.org). Not a secret: the protocol proves
+ * ownership by serving it back from `public/<key>.txt`, so the two must match.
+ * `scripts/indexnow.mjs` submits changed URLs with it after each deploy, and
+ * Bing, Yandex, Seznam and Naver all read the same submission.
+ */
+export const INDEXNOW_KEY = '2aede9eeff19d0a2c253a2ca1134c854';
+
 /** Social card. 1200×630, regenerate with `npm run og`. */
 export const OG_IMAGE = '/og-card.png';
 export const OG_IMAGE_ALT = `${SITE_TITLE}: a privacy-first Android keyboard with 843 languages, offline intelligence, tools and themes.`;

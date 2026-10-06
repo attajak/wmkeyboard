@@ -10,15 +10,15 @@
  * One `git log` pass builds the whole map. Asking git per file meant 143
  * processes and about two seconds of the build spent waiting on fork().
  *
- * A checkout with no git history (a tarball, or a shallow CI clone with
- * `--depth=1` over a file that changed earlier) yields nothing for some files.
- * That's fine: a missing `lastmod` is correct there, and inventing `Date.now()`
- * would tell crawlers every page changed on every deploy.
+ * A checkout with no git history (a tarball, or a shallow clone the history
+ * can't be fetched into) yields nothing for some files. That's fine: a missing
+ * `lastmod` is correct there, and inventing `Date.now()` would tell crawlers
+ * every page changed on every deploy.
  */
 
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, isAbsolute, join } from 'node:path';
 
 /**
  * The docs directory, found from the working directory rather than from
@@ -46,33 +46,88 @@ const DOCS_DIR = findDocsDir();
 
 let cache;
 
+function git(args, timeout) {
+	return execFileSync('git', args, {
+		cwd: DOCS_DIR,
+		encoding: 'utf8',
+		maxBuffer: 64 * 1024 * 1024,
+		stdio: ['ignore', 'pipe', 'ignore'],
+		timeout,
+	});
+}
+
+/**
+ * Commits a shallow clone's history stops at, or an empty set for a full one.
+ *
+ * Cloudflare Pages builds from a `--depth=1` clone. Its one commit shows every
+ * file in the tree as added, so without this every page in the sitemap carried
+ * the deploy's own commit time: 230 identical `<lastmod>`s, which is the
+ * "everything changed on every deploy" signal crawlers learn to ignore. So
+ * first try to fetch the real history (commits and trees only, no file
+ * contents, which is all `--name-only` reads), and whatever stays shallow after
+ * that marks the commits whose dates can't be trusted.
+ */
+function shallowBoundary() {
+	try {
+		if (git(['rev-parse', '--is-shallow-repository']).trim() !== 'true') return new Set();
+	} catch {
+		return new Set();
+	}
+	try {
+		git(['fetch', '--quiet', '--unshallow', '--filter=blob:none', 'origin'], 180_000);
+	} catch {
+		// No remote, no network, or a server without partial clone. Fall through
+		// and leave the boundary's files undated.
+	}
+	try {
+		const file = git(['rev-parse', '--git-path', 'shallow']).trim();
+		return new Set(
+			readFileSync(isAbsolute(file) ? file : join(DOCS_DIR, file), 'utf8')
+				.split('\n')
+				.map((line) => line.trim())
+				.filter(Boolean),
+		);
+	} catch {
+		// No shallow file: the fetch above made the clone whole.
+		return new Set();
+	}
+}
+
 /** `Map<'src/content/docs/typing/glide-typing.mdx', '2026-09-15T12:00:00+06:00'>`, keyed relative to docs/. */
 export function lastModifiedByFile() {
 	if (cache) return cache;
 	cache = new Map();
 
+	const boundary = shallowBoundary();
 	let out;
 	try {
-		out = execFileSync(
-			'git',
-			['log', '--pretty=format:%x00%cI', '--name-only', '--no-merges', '--', 'src/content/docs', 'src/pages'],
-			{ cwd: DOCS_DIR, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] },
-		);
+		out = git([
+			'log',
+			'--pretty=format:%x00%H %cI',
+			'--name-only',
+			'--no-merges',
+			'--',
+			'src/content/docs',
+			'src/pages',
+		]);
 	} catch {
 		// No git, no history, or not a repository. Every page goes undated.
 		return cache;
 	}
 
 	// The log is newest-first, so the first date seen for a path is its latest.
-	// Renames show under the new path only, which is what we want.
+	// Renames show under the new path only, which is what we want. A path first
+	// seen in a shallow boundary commit is claimed with no date: that commit
+	// lists it only because the history before it is missing.
 	let date;
 	for (const line of out.split('\n')) {
 		if (line.startsWith('\0')) {
-			date = line.slice(1).trim();
+			const [hash, when] = line.slice(1).trim().split(' ');
+			date = boundary.has(hash) ? null : when;
 			continue;
 		}
 		const file = line.trim();
-		if (!file || !date) continue;
+		if (!file || date === undefined) continue;
 		// `git log` prints paths from the repository root; the docs site is a
 		// subdirectory of it.
 		const key = file.replace(/^docs\//, '');
