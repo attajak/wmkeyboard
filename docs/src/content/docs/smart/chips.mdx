@@ -103,7 +103,7 @@ A code you never copied has its own route to the strip. If you let the keyboard 
 
 Each detector has guards against the shapes of text that look like a trigger but usually aren't:
 
-- **Dates** (`12/04`, `12/04/2025`, `2024-07`) never read as arithmetic. A zero-padded pair reads as a date, and a lone `-` between two plain numbers needs a second operator to count as a sum. Either way, an explicit `=` forces the answer.
+- **Dates** (`12/04`, `12/04/2025`, `2024-07`) never read as arithmetic. A zero-padded pair reads as a date. A lone `-` between two plain numbers is a sum (`12-4` offers `8`) unless either side has four digits or a leading zero, since `555-1234`, `2024-25` and `2024-07` are a phone number, a season and a month. Either way, an explicit `=` forces the answer.
 - **Order numbers and prices** don't turn into phone numbers. A leading `#`, `$`, `£`, or `€` rules a run of digits out.
 - **Years** don't turn into codes. A bare 4-digit value between 1900 and 2099 is rejected even next to a code-sounding word.
 - Google's `G-123456` SMS prefix is stripped before the code check, since it's branding rather than part of the code.

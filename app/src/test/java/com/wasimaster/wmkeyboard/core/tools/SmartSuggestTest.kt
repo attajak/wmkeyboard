@@ -553,6 +553,14 @@ class SmartSuggestTest {
     }
 
     @Test
+    fun aShortSubtractionIsASumWithoutTheEquals() {
+        // #545
+        assertEquals("8", hit("12-4")?.result)
+        assertEquals("75", hit("100-25")?.result)
+        assertNull(hit("2024-25"))
+    }
+
+    @Test
     fun aPlainDivisionIsASumOfItsOwn() {
         assertEquals("0.5", hit("1/2")?.result)
         assertEquals("3", hit("12/4")?.result)

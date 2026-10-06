@@ -1203,11 +1203,16 @@ object SmartSuggest {
         if (DATE_LIKE.matches(compact)) return false
         if (PADDED_PAIR.matches(compact)) return false
 
-        // "555-1234" is a phone number far more often than a subtraction, so
-        // a lone dash between plain integers needs a second operator first.
+        // "555-1234" is a phone number, "2024-25" a season and "2024-07" a
+        // month, far more often than subtractions. A lone dash between plain
+        // integers is a sum only when neither side is that shape — "12-4" is.
         if (operators == "-") {
             val parts = compact.split('-')
-            if (parts.size == 2 && parts.all { it.isNotEmpty() && it.all(Char::isDigit) }) return false
+            if (parts.size == 2 && parts.all { it.isNotEmpty() && it.all(Char::isDigit) } &&
+                parts.any { it.length >= 4 || it.length > 1 && it[0] == '0' }
+            ) {
+                return false
+            }
         }
         return true
     }
