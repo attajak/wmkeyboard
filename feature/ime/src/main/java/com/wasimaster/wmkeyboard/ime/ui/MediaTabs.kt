@@ -188,6 +188,7 @@ internal fun MediaPanelHost(
             // Search collapses the panel so the key rows fit below it, keeping
             // a band of live results up.
             compact = searching,
+            extraHeight = mediaPanelExtraHeight(state),
             headerActions = {
                 headerSearch()
                 pill?.invoke()
@@ -205,7 +206,8 @@ internal fun MediaPanelHost(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(keyRowsHeight(state)),
+                // As tall as the emoji panel's setting makes it (#537).
+                .height(mediaPanelHeight(state, keyRowsHeight(state))),
         ) {
             PanelLayoutGrid(state, spec, callbacks, onClose, fields, Modifier.fillMaxSize())
         }

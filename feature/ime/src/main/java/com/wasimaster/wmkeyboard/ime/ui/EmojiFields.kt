@@ -5,11 +5,13 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,12 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DeleteSweep
@@ -32,8 +36,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +48,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -56,6 +63,7 @@ import com.wasimaster.wmkeyboard.ime.KeyboardUiState
 import com.wasimaster.wmkeyboard.ime.PanelMode
 import com.wasimaster.wmkeyboard.ime.R
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 /**
  * The emoji panel's components, each drawn into the cell its panel layout gives
@@ -86,11 +94,17 @@ internal class EmojiFieldCallbacks(
  * list, the pager both drive, and the derived catalog views. Created once
  * above both cells, so the page survives entering and leaving search, and a
  * layout without a tab strip still pages by swipe.
+ *
+ * With the continuous list on (#540) the pager stands idle: [sections] is the
+ * whole panel as one list, [listState] scrolls it, and the tabs follow that.
  */
 @Stable
 internal class EmojiPanelSession(
     val tabs: List<String>,
     val pagerState: PagerState,
+    val listState: LazyGridState,
+    /** The continuous list, or null while the panel pages. */
+    val sections: EmojiSections?,
     /** Gender/role variants (🏃‍♀️, 👨‍⚕️…) collapsed under their base emoji. */
     val variantChildren: Map<String, List<String>>,
     val history: List<String>,
@@ -104,8 +118,22 @@ internal class EmojiPanelSession(
         get() = reorderOpenState.value
         set(value) { reorderOpenState.value = value }
 
-    val selectedTab: String
-        get() = tabs.getOrElse(pagerState.currentPage) { tabs.firstOrNull().orEmpty() }
+    /** The tab in front: the pager's page, or the section at the top of the list. */
+    val selectedIndex: Int
+        get() = sections?.tabAt(listState.firstVisibleItemIndex) ?: pagerState.currentPage
+
+    /**
+     * Where the tab bar sits, between tabs while a swipe or a scroll is under
+     * way. Reads scroll state, so read it in the draw phase only.
+     */
+    fun barPosition(): Float = sections?.position(listState.firstVisibleItemIndex)
+        ?: (pagerState.currentPage + pagerState.currentPageOffsetFraction)
+
+    /** Brings tab [index] to the front: its page, or its heading at the top of the list. */
+    suspend fun goTo(index: Int) {
+        val list = sections
+        if (list == null) pagerState.scrollToPage(index) else listState.scrollToItem(list.starts.getOrElse(index) { 0 })
+    }
 }
 
 @Composable
@@ -141,12 +169,26 @@ internal fun rememberEmojiPanelSession(state: KeyboardUiState): EmojiPanelSessio
     // through an updated state so history appearing does not rebuild it.
     val tabCount = rememberUpdatedState(tabs.size)
     val pagerState = rememberPagerState(pageCount = { tabCount.value })
+    val listState = rememberLazyGridState()
+    // Built only with the setting on, and only when what it lists changes:
+    // every emoji tap emits fresh state, and this must not run per tap.
+    val continuous = state.settings.emoji.continuousScroll
+    val emojiOrder = state.settings.emoji.categoryEmojiOrder
+    val sections = if (continuous) {
+        remember(tabs, history, state.emojiCatalog, emojiOrder, state.hiddenEmoji) {
+            EmojiSections.build(tabs, history, state.emojiCatalog, emojiOrder, state.hiddenEmoji)
+        }
+    } else {
+        null
+    }
     val gridCell = with(state.settings.emoji) { maxOf(gridCellSize, gridEmojiSize + 12) }.dp
     // The reorder flag lives on the session object, which a new history list
     // replaces; it is held outside so the sheet survives a favourite landing.
     val reorderOpen = remember { mutableStateOf(false) }
-    return remember(tabs, pagerState, variantChildren, history, historyMode, gridCell) {
-        EmojiPanelSession(tabs, pagerState, variantChildren, history, historyMode, gridCell, reorderOpen)
+    return remember(tabs, pagerState, listState, sections, variantChildren, history, historyMode, gridCell) {
+        EmojiPanelSession(
+            tabs, pagerState, listState, sections, variantChildren, history, historyMode, gridCell, reorderOpen,
+        )
     }
 }
 
@@ -167,30 +209,32 @@ internal fun EmojiField(
 }
 
 /**
- * The category strip: every tab shares the cell's width evenly. Tab (the key)
- * reaches it through the CHIPS region; activating a chip scrolls the pager,
- * which is the selection, so there is no state to hoist.
+ * The category strip: every tab shares the cell's width evenly, or, when that
+ * would make a tab narrower than [EmojiTabMinWidth], every tab takes that much
+ * and the strip scrolls sideways under the finger (#539), keeping the tab in
+ * front in view. Tab (the key) reaches it through the CHIPS region; activating
+ * a chip moves the pager or the list, which is the selection, so there is no
+ * state to hoist.
  */
 @Composable
 private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
     val tabs = session.tabs
     val scope = rememberCoroutineScope()
     val reduceMotion = state.settings.reduceMotion
-    val pagerState = session.pagerState
     // A tapped tab moves the page in one step and slides only the bar.
     // Scrolling the pager there instead dragged every category in between
     // through composition: the pager snaps to three pages short of a far tab
     // and animates the rest, and each page it crosses is a whole emoji grid
     // being laid out and shaped mid-slide, which is what made the bar stutter
-    // (and jump, at the snap). Now only the tab landed on is composed.
+    // (and jump, at the snap). Now only the tab landed on is composed. The
+    // continuous list jumps for the same reason.
     val tabSlide = remember { TabSlide() }
     val goToTab: (Int) -> Unit = { index ->
         scope.launch {
             // From wherever the bar is drawn now, a slide still running included.
-            val from = tabSlide.active?.value
-                ?: (pagerState.currentPage + pagerState.currentPageOffsetFraction)
+            val from = tabSlide.active?.value ?: session.barPosition()
             val slide = tabSlide.start(from)
-            launch { pagerState.scrollToPage(index) }
+            launch { session.goTo(index) }
             if (!reduceMotion) {
                 slide.animateTo(index.toFloat(), tween(EmojiTabSlideMs, easing = FastOutSlowInEasing))
             }
@@ -206,41 +250,64 @@ private fun EmojiTabsField(state: KeyboardUiState, session: EmojiPanelSession) {
     )
     if (tabs.isEmpty()) return
     val focusedTab = state.focusedIndex(FocusRegion.CHIPS)
-    val selectedTab = session.selectedTab
+    // Derived, so a scroll recomposes the strip when the tab in front changes
+    // and not on every row of emoji that goes by.
+    val selected by remember(session) { derivedStateOf { session.selectedIndex } }
     val mostUsed = session.historyMode == EmojiTabMode.MOST_USED
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 2.dp)
+    val indicatorColor = MaterialTheme.colorScheme.onSurface
+    val row: @Composable (Modifier) -> Unit = { modifier ->
+        Row(
             // One bar for the row, in place of one per tab. Pages and tabs are
             // the same list, so outside a tap's own slide the pager's position
             // is the bar's position, and a swipe drags it under the finger.
-            .emojiTabIndicator(tabs.size, MaterialTheme.colorScheme.onSurface) {
-                tabSlide.active?.value ?: (pagerState.currentPage + pagerState.currentPageOffsetFraction)
+            modifier = modifier.emojiTabIndicator(tabs.size, indicatorColor) {
+                tabSlide.active?.value ?: session.barPosition()
             },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        tabs.forEachIndexed { index, tab ->
-            EmojiTab(
-                slot = emojiTabSlot(tab, mostUsed),
-                description = when (tab) {
-                    KAOMOJI_TAB -> stringResource(R.string.ime_emoji_tab_kaomoji)
-                    EMOTICON_TAB -> stringResource(R.string.ime_emoji_tab_emoticons)
-                    RECENT_TAB -> stringResource(
-                        if (mostUsed) R.string.ime_emoji_tab_most_used else R.string.ime_emoji_tab_recent,
-                    )
-                    // An emoji group name, which comes from the catalog data.
-                    else -> tab.replaceFirstChar { it.uppercase() }
-                },
-                label = textArtTabLabel(tab),
-                selected = tab == selectedTab,
-                focused = index == focusedTab,
-                onClick = { goToTab(index) },
-                bar = false,
-            )
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                EmojiTab(
+                    slot = emojiTabSlot(tab, mostUsed),
+                    description = emojiTabTitle(tab, mostUsed),
+                    label = textArtTabLabel(tab),
+                    selected = index == selected,
+                    focused = index == focusedTab,
+                    onClick = { goToTab(index) },
+                    bar = false,
+                )
+            }
+        }
+    }
+    BoxWithConstraints(modifier = Modifier.fillMaxSize().padding(horizontal = 2.dp)) {
+        if (maxWidth / tabs.size >= EmojiTabMinWidth) {
+            row(Modifier.fillMaxSize())
+        } else {
+            val scroll = rememberScrollState()
+            val tabPx = with(LocalDensity.current) { EmojiTabMinWidth.toPx() }
+            val viewport = with(LocalDensity.current) { maxWidth.toPx() }
+            // The tab in front stays in view, centred where the strip allows,
+            // as a swipe or the list's scroll moves it on.
+            LaunchedEffect(selected, viewport, scroll.maxValue) {
+                val target = (selected * tabPx + tabPx / 2f - viewport / 2f).roundToInt()
+                scroll.animateScrollTo(target.coerceIn(0, scroll.maxValue))
+            }
+            Box(modifier = Modifier.fillMaxSize().horizontalScroll(scroll)) {
+                row(
+                    Modifier
+                        .width(EmojiTabMinWidth * tabs.size)
+                        .fillMaxHeight(),
+                )
+            }
         }
     }
 }
+
+/**
+ * The narrowest a category tab gets before the strip scrolls instead (#539):
+ * a 20 dp icon with room either side to hit it, about what the other
+ * keyboards give a tab.
+ */
+private val EmojiTabMinWidth = 40.dp
 
 /** How long the tab bar takes to slide to a tapped tab. */
 private const val EmojiTabSlideMs = 220
@@ -370,6 +437,10 @@ internal fun EmojiGridField(
 
     val tabs = session.tabs
     if (tabs.isEmpty()) return
+    session.sections?.let { sections ->
+        ContinuousEmojiGrid(state, session, sections, callbacks)
+        return
+    }
     val pagerState = session.pagerState
     val history = session.history
     // A pager, not a swapped-in single grid: horizontal swipes cross

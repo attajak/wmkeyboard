@@ -23263,7 +23263,7 @@ internal fun TextArtGrid(kaomoji: Boolean, onTap: (String) -> Unit) {
  * is unrecognisable, and the user is picking by shape, not by name.
  */
 @Composable
-private fun TextArtCell(art: String, onTap: (String) -> Unit) {
+internal fun TextArtCell(art: String, onTap: (String) -> Unit) {
     val kb = LocalKbTheme.current
     val feedback = LocalKeyPressFeedback.current
     // Reset per entry: cells are recycled across scroll positions, so a size

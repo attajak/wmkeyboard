@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- ===== Languages settings screen ===== -->
 
@@ -109,6 +109,14 @@
     <string name="langemoji_media_switcher_info">The switch has one button for each of the emoji panel, the GIF panel and the sticker panel, so that you can go from one to the next directly. It is at the same place in all three panels. \"Bottom\" puts it in the bottom row, between ABC and the space bar. \"Top\" puts it at the end of the search row. The GIF button and the sticker button show only while those tools are on. If you changed the layout of the emoji panel, the switch is where your layout puts it. To add it, use the \"Emoji, GIF and sticker switch\" part in the panel layout editor.</string>
     <string name="langemoji_media_switcher_top">Top</string>
     <string name="langemoji_media_switcher_bottom">Bottom</string>
+    <string name="langemoji_emoji_continuous_title">One long list</string>
+    <string name="langemoji_emoji_continuous_subtitle">Scroll through all the emoji, with a heading over each category</string>
+    <string name="langemoji_emoji_continuous_info">When this is on, the emoji panel is one list that you scroll from top to bottom. Each category starts with its name, and you go from one category to the next without a stop. The category tabs jump to a category and show the category that you are in. When this is off, each category is a page, and you swipe left or right to go to the next one.</string>
+    <string name="langemoji_panel_height_title">Panel height</string>
+    <string name="langemoji_panel_height_subtitle">How much taller than the keyboard the emoji, GIF and sticker panels open</string>
+    <string name="langemoji_panel_height_info">A taller panel shows more emoji, GIFs and stickers at one time. The letters keep their own height, and the three panels have the same height, so the keyboard does not move when you go from one to the next. The panel never covers more than most of the screen, so on a short screen, or with the phone sideways, it can stay shorter than this.</string>
+    <string name="langemoji_panel_height_none">Same as keyboard</string>
+    <string name="langemoji_panel_height_value" tools:ignore="PluralsCandidate">+%1$d dp</string>
     <string name="langemoji_media_remember_title">Open the last used panel</string>
     <string name="langemoji_media_remember_subtitle">The emoji key opens emoji, GIFs or stickers, the same as you left them</string>
     <string name="langemoji_media_remember_info">When this is on, the emoji key and the emoji tool open the panel of the three that you used last. If one of the three panels is open, they close it. When this is off, the emoji key always opens the emoji panel. The keyboard forgets the last panel when it restarts.</string>

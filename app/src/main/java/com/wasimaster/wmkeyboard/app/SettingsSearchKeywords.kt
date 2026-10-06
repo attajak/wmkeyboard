@@ -117,6 +117,8 @@ internal val SettingsSearchKeywords: Map<Int, Int> = buildMap {
     put(R.string.langemoji_emoji_kaomoji_title, R.string.search_kw_langemoji_emoji_kaomoji)
     put(R.string.langemoji_media_switcher_title, R.string.search_kw_langemoji_media_switcher)
     put(R.string.langemoji_media_remember_title, R.string.search_kw_langemoji_media_remember)
+    put(R.string.langemoji_emoji_continuous_title, R.string.search_kw_langemoji_emoji_continuous)
+    put(R.string.langemoji_panel_height_title, R.string.search_kw_langemoji_panel_height)
     put(R.string.langemoji_emoji_skin_tone_title, R.string.search_kw_langemoji_emoji_skin_tone)
     put(R.string.langemoji_emoji_sticker_title, R.string.search_kw_langemoji_emoji_sticker)
     put(R.string.langemoji_lang_os_switcher_title, R.string.search_kw_langemoji_lang_os_switcher)

@@ -38,6 +38,7 @@ import com.wasimaster.wmkeyboard.core.settings.EmojiBarCountRange
 import com.wasimaster.wmkeyboard.core.settings.EmojiGridCellSizeRange
 import com.wasimaster.wmkeyboard.core.settings.EmojiGridEmojiSizeRange
 import com.wasimaster.wmkeyboard.core.settings.EmojiRecentsRange
+import com.wasimaster.wmkeyboard.core.settings.MediaPanelExtraHeightRange
 import com.wasimaster.wmkeyboard.core.settings.EmojiBarMode
 import com.wasimaster.wmkeyboard.core.settings.EmojiFontChoice
 import com.wasimaster.wmkeyboard.core.settings.EmojiSkinTone
@@ -432,6 +433,31 @@ internal fun EmojiPanelSettings(
                 info = stringResource(R.string.langemoji_emoji_size_info),
                 default = SettingsDefaults.emoji.gridEmojiSize.toFloat(),
             ) { scope.launch { repository.setEmojiGridEmojiSize(it.roundToInt()) } }
+        }
+        item {
+            ToggleSetting(
+                R.string.langemoji_emoji_continuous_title,
+                stringResource(R.string.langemoji_emoji_continuous_subtitle),
+                settings.watch { it.emoji.continuousScroll },
+                info = stringResource(R.string.langemoji_emoji_continuous_info),
+                default = SettingsDefaults.emoji.continuousScroll,
+            ) { scope.launch { repository.setEmojiContinuousScroll(it) } }
+        }
+        item {
+            val none = stringResource(R.string.langemoji_panel_height_none)
+            val taller = stringResource(R.string.langemoji_panel_height_value)
+            SliderSetting(
+                R.string.langemoji_panel_height_title,
+                subtitle = stringResource(R.string.langemoji_panel_height_subtitle),
+                value = settings.watch { it.emoji.panelExtraHeightDp }.toFloat(),
+                range = MediaPanelExtraHeightRange.first.toFloat()..MediaPanelExtraHeightRange.last.toFloat(),
+                display = {
+                    val dp = it.roundToInt()
+                    if (dp == 0) none else taller.format(dp)
+                },
+                info = stringResource(R.string.langemoji_panel_height_info),
+                default = SettingsDefaults.emoji.panelExtraHeightDp.toFloat(),
+            ) { scope.launch { repository.setMediaPanelExtraHeightDp(it.roundToInt()) } }
         }
         item {
             SliderSetting(

@@ -6045,7 +6045,23 @@ data class EmojiSettings(
      * Off by default: the emoji key opens emoji.
      */
     val rememberMediaTab: Boolean = false,
+    /**
+     * The emoji panel as one long list, every category under a short heading,
+     * instead of a page per category (#540). The tabs jump to a heading and
+     * follow the scroll. Off by default: pages are what the panel has always been.
+     */
+    val continuousScroll: Boolean = false,
+    /**
+     * How much taller than the keyboard the emoji, GIF and sticker panels open,
+     * in dp (#537); the letters stay as compact as they are. One value for the
+     * three, so switching between them never changes the height. See
+     * [MediaPanelExtraHeightRange].
+     */
+    val panelExtraHeightDp: Int = 0,
 )
+
+/** How much taller than the keyboard the emoji, GIF and sticker panels may be set, in dp (#537). */
+val MediaPanelExtraHeightRange = 0..400
 
 /** Bounds for [EmojiSettings.barCount]; the settings slider shares them. */
 val EmojiBarCountRange = 3..16
@@ -8753,6 +8769,8 @@ class SettingsRepository(private val context: Context) {
             stringPreferencesKey("emoji_category_emoji_order")
         private val EMOJI_MEDIA_SWITCHER = stringPreferencesKey("emoji_media_switcher")
         private val EMOJI_REMEMBER_MEDIA_TAB = booleanPreferencesKey("emoji_remember_media_tab")
+        private val EMOJI_CONTINUOUS_SCROLL = booleanPreferencesKey("emoji_continuous_scroll")
+        private val EMOJI_PANEL_EXTRA_HEIGHT_DP = intPreferencesKey("emoji_panel_extra_height_dp")
         private val EMOJI_AUTO_DOWNLOAD_KEYWORDS =
             booleanPreferencesKey("emoji_auto_download_keywords")
         // Stored as the DISABLED set so tools added in future versions
@@ -10582,6 +10600,9 @@ class SettingsRepository(private val context: Context) {
                 ?.let { runCatching { MediaSwitcher.valueOf(it) }.getOrNull() }
                 ?: defaults.emoji.mediaSwitcher,
             rememberMediaTab = p[EMOJI_REMEMBER_MEDIA_TAB] ?: defaults.emoji.rememberMediaTab,
+            continuousScroll = p[EMOJI_CONTINUOUS_SCROLL] ?: defaults.emoji.continuousScroll,
+            panelExtraHeightDp = p[EMOJI_PANEL_EXTRA_HEIGHT_DP]?.coerceIn(MediaPanelExtraHeightRange)
+                ?: defaults.emoji.panelExtraHeightDp,
         )
 
     private fun readToolbox(p: Preferences, defaults: KeyboardSettings) =
@@ -14262,6 +14283,14 @@ class SettingsRepository(private val context: Context) {
     /** See [EmojiSettings.rememberMediaTab]. */
     suspend fun setEmojiRememberMediaTab(value: Boolean) =
         editPrefs { it[EMOJI_REMEMBER_MEDIA_TAB] = value }
+
+    /** See [EmojiSettings.continuousScroll]. */
+    suspend fun setEmojiContinuousScroll(value: Boolean) =
+        editPrefs { it[EMOJI_CONTINUOUS_SCROLL] = value }
+
+    /** See [EmojiSettings.panelExtraHeightDp]. */
+    suspend fun setMediaPanelExtraHeightDp(value: Int) =
+        editPrefs { it[EMOJI_PANEL_EXTRA_HEIGHT_DP] = value.coerceIn(MediaPanelExtraHeightRange) }
 
     /**
      * Rewrites the category tab order; see [EmojiSettings.categoryOrder]. The

@@ -116,6 +116,8 @@
     <string name="search_kw_langemoji_emoji_kaomoji">ascii shrug japanese faces</string>
     <string name="search_kw_langemoji_media_switcher">tabs jump unified media</string>
     <string name="search_kw_langemoji_media_remember">tab remember reopen unified</string>
+    <string name="search_kw_langemoji_emoji_continuous">continuous vertical sections pages headers</string>
+    <string name="search_kw_langemoji_panel_height">size expand bigger grow</string>
     <string name="search_kw_langemoji_emoji_skin_tone">fitzpatrick diversity complexion</string>
     <string name="search_kw_langemoji_emoji_sticker">sticker png</string>
     <string name="search_kw_langemoji_lang_os_switcher">ime subtype</string>
