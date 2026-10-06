@@ -2647,9 +2647,7 @@ open class WMKeyboardService : InputMethodService() {
         val kde = state.settings.kdeConnect
         if (!kde.enabled || !kde.clipboardSend) return
         val engine = KdeConnectHub.engine ?: return
-        if (!isClipboardAccessible() || state.secureField ||
-            (state.incognitoOn && state.settings.incognitoPausesClipboard)
-        ) return
+        if (!isClipboardAccessible() || clipCapturePaused(state)) return
         val clip = (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip
             ?.takeIf { it.itemCount > 0 } ?: return
         // Text only, and only text that is really there: coercing would turn
@@ -2657,6 +2655,24 @@ open class WMKeyboardService : InputMethodService() {
         val text = clip.getItemAt(0)?.text?.toString().orEmpty()
         if (text.isEmpty()) return
         engine.clipboard.localChanged(text, isSensitive = clipMarkedSensitive(clip) || ClipSensitivity.looksSensitive(text))
+    }
+
+    /**
+     * Whether a copy made right now stays out of the history: incognito with
+     * its clipboard pause, or a password field.
+     *
+     * The field half is read off the field that has focus *now*, not off
+     * [KeyboardUiState.fieldIncognito] / [KeyboardUiState.secureField]. Those
+     * describe the last field the keyboard was drawn over and stay set until
+     * the next one draws it, so a copy made with no field at all (a URL off
+     * Firefox's toolbar, a screenshot) was dropped for as long as the last
+     * field typed in had been a private tab or a password box (issue #551).
+     */
+    private fun clipCapturePaused(state: KeyboardUiState): Boolean {
+        val field = currentInputEditorInfo?.takeIf { currentInputStarted }
+        val incognito = state.settings.incognito ||
+            (state.settings.autoIncognito && field.requestsNoPersonalizedLearning())
+        return (incognito && state.settings.incognitoPausesClipboard) || field.isSecureField()
     }
 
     private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
@@ -2673,8 +2689,7 @@ open class WMKeyboardService : InputMethodService() {
         kdeClipboardChanged(state)
         if (!isClipboardAccessible() ||
             !state.settings.clipboard.history ||
-            (state.incognitoOn && state.settings.incognitoPausesClipboard) ||
-            state.secureField
+            clipCapturePaused(state)
         ) return@OnPrimaryClipChangedListener
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = clipboard.primaryClip ?: return@OnPrimaryClipChangedListener
@@ -2836,10 +2851,7 @@ open class WMKeyboardService : InputMethodService() {
 
     private fun handleScreenshotAdded() {
         val state = _uiState.value
-        if (!state.settings.clipboard.history ||
-            (state.incognitoOn && state.settings.incognitoPausesClipboard) ||
-            state.secureField
-        ) return
+        if (!state.settings.clipboard.history || clipCapturePaused(state)) return
 
         serviceScope.launch(Dispatchers.IO) {
             val projection = arrayOf(
