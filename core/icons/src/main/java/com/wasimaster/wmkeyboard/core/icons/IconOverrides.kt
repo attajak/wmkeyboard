@@ -6,8 +6,9 @@ package com.wasimaster.wmkeyboard.core.icons
  *
  * Safe as a flat CSV because neither half can contain a separator. Slot ids are
  * lowercase `a-z0-9._` (see [IconSlots.isWellFormed]) and a source is `b:<name>`
- * for a bundled icon or `p:<packId>` for one out of an installed pack — no `,`
- * and no `=` in either.
+ * for a bundled icon, `p:<packId>` for one out of an installed pack, or
+ * `v:<variant>` for one of the slot's alternative looks — no `,` and no `=` in
+ * any of them.
  *
  * Lives here rather than inside `SettingsRepository` so it is a plain pair of
  * functions a unit test can call, with no DataStore or Android context in the
@@ -21,9 +22,28 @@ object IconOverrides {
     /** `p:<packId>` — this slot's icon out of a specific installed pack. */
     const val PACK_PREFIX = "p:"
 
+    /**
+     * `v:<variant>` — one of this slot's alternative looks, out of whatever
+     * supplies the slot: the active pack when it has the variant (a file named
+     * `<slot>@<variant>`), otherwise the app's own variant of that name.
+     *
+     * Unlike `p:` this is relative, not pinned. Picking the GIF tool's plain
+     * lettering means "the lettering look", so switching to a pack that draws
+     * its own lettering shows the pack's; a pack that has no such variant keeps
+     * its own icon for the slot rather than reverting to a built-in one beside
+     * its other glyphs.
+     */
+    const val VARIANT_PREFIX = "v:"
+
     fun builtinSource(name: String): String = BUILTIN_PREFIX + name
 
     fun packSource(packId: String): String = PACK_PREFIX + packId
+
+    fun variantSource(variant: String): String = VARIANT_PREFIX + variant
+
+    /** The variant a source picks, or null when it is not a `v:` source. */
+    fun variantOf(source: String?): String? =
+        source?.takeIf { it.startsWith(VARIANT_PREFIX) }?.removePrefix(VARIANT_PREFIX)
 
     /**
      * Parses [csv], dropping anything unusable.

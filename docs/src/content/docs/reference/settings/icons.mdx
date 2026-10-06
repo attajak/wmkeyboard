@@ -60,7 +60,7 @@ Below that, the rest of the screen is the 111 replaceable slots, in four groups.
 | Toolbar | Toolbox, back-to-keys, show-tools, emoji shortcut, close search, incognito badge, power saving badge | 7 |
 | Emoji tabs | Search, recent, most used, and one per emoji category | 13 |
 
-Each row's subtitle names where that icon currently comes from. You get the label of a built-in icon you picked by hand, or "From `<pack name>`" if it's pulling from a pack (per-slot override or the active pack), or "Default" once nothing overrides it. The Tools rows use each tool's own settings-screen name, so a row here and that tool's own icon setting always agree on what it's called.
+Each row's subtitle names where that icon currently comes from. You get the label of a built-in icon you picked by hand, the name of [another look](#other-looks) you picked for it, or "From `<pack name>`" if it's pulling from a pack (per-slot override or the active pack), or "Default" once nothing overrides it. The Tools rows use each tool's own settings-screen name, so a row here and that tool's own icon setting always agree on what it's called.
 
 ### Replacing one icon
 
@@ -69,6 +69,28 @@ Tapping any slot row opens its picker: a search field (placeholder "Search Mater
 <PhoneFrame caption="The per-slot picker: search, the built-in grid, and Use my own SVG…">
   {/* shot: reference/settings/icons-slot-picker */}
 </PhoneFrame>
+
+#### Other looks
+
+Some slots have more than one drawing of the same idea, and for those the picker opens with an **Other looks** row above the search field: the slot's default look first, then each alternative, with its name underneath. Tapping one switches the slot to it and closes the dialog; tapping the default look puts the slot back, the same as **Use the default**. A slot with no alternatives has no row.
+
+With the built-in icons, these slots have other looks:
+
+| Slot | Other looks |
+|---|---|
+| GIF tool | **Letters** (the word GIF on its own, without the box), **Small letters** (the box's own letters, box removed) |
+| Emoji tool, emoji key, emoji shortcut | **Simple** (a plainer smiley) |
+| Clipboard tool | **Plain** (the clipboard without lines, the one Paste wears) |
+| Settings tool | **Filled** |
+| Voice tool | **Filled**, **Sound wave** |
+| Web search tool | **Magnifier** |
+| Appearance tool | **Brush** |
+| Sound & haptics tool | **Speaker** |
+| AI writing tools | **Robot** |
+| Hide keyboard tool | **Arrow** (a downward chevron) |
+| Incognito tool | **Hat and glasses** (the incognito badge's own glyph) |
+
+When a pack is active and draws that slot, the row offers the pack's own alternatives instead, if it ships any, and hides when it ships none. A look you picked follows the pack you switch to: it shows the pack's drawing of that look when the pack has one, and the pack's ordinary icon for the slot when it doesn't. The row's subtitle on the slot list names the look while it's being drawn, for example "Letters".
 
 Below the grid, **Use my own SVG…** opens a file picker restricted to SVG-ish MIME types. A file that parses and fits under 256 KB goes into the reserved **My icons** pack, and the slot is pinned to it: "The app set a custom icon for `<slot>`." A file that doesn't gets "The app cannot use that file as an icon. The file must be an SVG smaller than 256 KB."
 

@@ -57,6 +57,12 @@ A single icon you import this way goes into a reserved pack called **My icons**,
 
 **Reset all icons** turns off the active pack and clears every per-slot choice in one tap. It's a full reset, not only the single-icon changes. Installed packs stay on the device, so delete a pack separately if you want it gone.
 
+## Other looks of the same icon
+
+Some icons come in more than one drawing, and their picker opens with an **Other looks** row above the search. The GIF tool is the obvious one: its default is the word GIF inside a box, and **Letters** draws the word on its own. With the built-in icons, the emoji tool and key (a simpler smiley), clipboard (a plain clipboard), settings (a filled gear), voice (a filled microphone, or a sound wave), web search (a magnifier), appearance (a brush), sound & haptics (a speaker), AI writing tools (a robot), hide keyboard (a down arrow) and incognito (hat and glasses) have other looks too. The full list is on the [Icons reference](/reference/settings/icons/#other-looks).
+
+A pack can ship other looks of its own. When the active pack draws a slot, the row offers the pack's looks instead of the built-in ones, and a look you picked carries across packs by name: switch to a pack with its own "Letters" GIF and you get that pack's drawing, switch to one without and you get the pack's ordinary GIF icon.
+
 ## Installing a pack
 
 A pack can come from two places, and both end up in the same list of installed packs.
@@ -77,7 +83,7 @@ There are two ways to end up with a pack of your own. One suits a pack you're bu
 
 **Build it in the app.** Pick files slot by slot from the per-slot picker described above. They accumulate into the reserved "My icons" pack on their own. When you're happy with it, tap the export icon on that pack's row on the Icons screen to save it as a real `.wmicons` file through the system file picker. There's no manifest to write by hand, which makes this the fastest way to get a working pack you can keep or hand on.
 
-**Hand-author a manifest for a repository.** A `.wmicons` file is a renamed ZIP: a `pack.json` manifest plus one file per replaced slot, named after the slot id (`icons/tool.clipboard.svg`, `icons/key.shift.png`, and so on). The extension in the entry name only says where the slot id ends; what the file *is* comes from its bytes. The full manifest shape, the slot-id table, and the supported SVG subset are documented once, in [Icon packs](/development/addon-repos/repo-format/#icon-packs) under the addon repository format. Follow that spec when you publish a pack into a repository. Export a pack from the app first, as above, and you have a real seed file to edit by hand.
+**Hand-author a manifest for a repository.** A `.wmicons` file is a renamed ZIP: a `pack.json` manifest plus one file per replaced slot, named after the slot id (`icons/tool.clipboard.svg`, `icons/key.shift.png`, and so on). Another look for a slot adds `@` and a name to the slot id, as in `icons/tool.gif@text.svg`; give it one of the app's own look names (`text`, `filled`, `simple`…) and a user who picked that look keeps it when they switch to your pack. The extension in the entry name only says where the slot id ends; what the file *is* comes from its bytes. The full manifest shape, the slot-id table, and the supported SVG subset are documented once, in [Icon packs](/development/addon-repos/repo-format/#icon-packs) under the addon repository format. Follow that spec when you publish a pack into a repository. Export a pack from the app first, as above, and you have a real seed file to edit by hand.
 
 ## Options
 
@@ -87,6 +93,7 @@ There are two ways to end up with a pack of your own. One suits a pack you're bu
 - **Per-slot overrides** are the icons you've set one at a time from the slot picker. None by default.
 - **Import an icon pack** opens a `.wmicons` file someone shared, without going through a repository.
 - **Reset all icons** turns off the active pack and drops every per-slot override in one step. Installed packs stay on the device.
+- **Other looks** switches one slot to another drawing of the same icon, from the app or from the active pack. None by default.
 - **Use my own picture…** sets one slot from a file of your own — SVG, PNG, WebP, JPEG or GIF — from inside that slot's picker.
 
 When a slot could be filled four different ways, a single icon you picked by hand wins over an active pack, an active pack wins over the glyphs the theme you are wearing brought with it, and those win over the app's own default. Overriding one icon from a pack you've installed sticks even after the pack updates or gets swapped out.

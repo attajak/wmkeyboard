@@ -46,7 +46,9 @@ import java.util.zip.ZipOutputStream
  * archive streams entry by entry.
  *
  * Slot ids are the file names — an icon for `tool.clipboard` is
- * `icons/tool.clipboard.svg`, or `.png` for a raster one (issue #504). The list
+ * `icons/tool.clipboard.svg`, or `.png` for a raster one (issue #504). An
+ * alternative look for a slot adds `@<variant>` to the id —
+ * `icons/tool.gif@text.svg` — and is listed in `slots` under that same key. The list
  * in `slots` is advisory; the import walks the archive's entries and keeps every
  * one whose name matches a slot [IconSlots] knows, so a pack hand-assembled
  * without a careful manifest still works.
@@ -284,7 +286,8 @@ object IconPackFile {
      * `icons/tool.clipboard.svg` → `tool.clipboard`, or null when the entry
      * names no slot this version knows. Accepts the file at the archive root
      * too, since that is how a pack assembled by hand often ends up, and any of
-     * the raster extensions as well as `.svg`.
+     * the raster extensions as well as `.svg`. A variant entry keeps its
+     * variant: `icons/tool.gif@text.svg` → `tool.gif@text`.
      *
      * The extension is only used to find where the slot id ends. What the file
      * actually *is* comes from [extensionOf], reading the bytes.
@@ -293,9 +296,8 @@ object IconPackFile {
         val base = entryName.substringAfterLast('/').substringAfterLast('\\')
         val extension = RasterIcons.FILE_EXTENSIONS
             .firstOrNull { base.endsWith(".$it", ignoreCase = true) } ?: return null
-        val slot = base.dropLast(extension.length + 1).lowercase()
-        if (!IconSlots.isWellFormed(slot)) return null
-        return IconSlots.byId(slot)?.let { slot }
+        val key = base.dropLast(extension.length + 1).lowercase()
+        return key.takeIf(IconSlots::isKnownKey)
     }
 
     /**

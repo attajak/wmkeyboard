@@ -79,6 +79,13 @@ EXTRA = {
     "Sticker": ("sticker", 0, False),
     "StickerAdd": ("sticker_add", 0, False),
     "GifBox": ("gif_box", 0, False),
+    # Icon variants (IconDefaults.variants): the GIF tool's lettering without
+    # the box, large and at the box's own letter size.
+    "Gif": ("gif", 0, False),
+    "Gif2": ("gif_2", 0, False),
+    "SmartToy": ("smart_toy", 0, False),
+    "SettingsFilled": ("settings", 1, False),
+    "MicFilled": ("mic", 1, False),
     "AnimatedImages": ("animated_images", 0, False),
     "TrackpadInput": ("trackpad_input", 0, False),
     "MobileHandLeft": ("mobile_hand_left", 0, False),

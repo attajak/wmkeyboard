@@ -62,5 +62,17 @@ class IconOverridesTest {
     fun `source prefixes are distinct`() {
         assertTrue(!IconOverrides.builtinSource("x").startsWith(IconOverrides.PACK_PREFIX))
         assertTrue(!IconOverrides.packSource("x").startsWith(IconOverrides.BUILTIN_PREFIX))
+        assertTrue(!IconOverrides.variantSource("x").startsWith(IconOverrides.BUILTIN_PREFIX))
+        assertTrue(!IconOverrides.variantSource("x").startsWith(IconOverrides.PACK_PREFIX))
+    }
+
+    @Test
+    fun `a variant source round trips and names its variant`() {
+        val slot = IconSlots.forTool(ToolbarTool.GIF)
+        val map = mapOf(slot to IconOverrides.variantSource("text"))
+        assertEquals(map, IconOverrides.decode(IconOverrides.encode(map)))
+        assertEquals("text", IconOverrides.variantOf(map[slot]))
+        assertEquals(null, IconOverrides.variantOf(IconOverrides.builtinSource("text")))
+        assertEquals(null, IconOverrides.variantOf(null))
     }
 }

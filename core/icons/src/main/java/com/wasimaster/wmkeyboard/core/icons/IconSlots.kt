@@ -224,4 +224,52 @@ object IconSlots {
             id.first() in 'a'..'z' &&
             ".." !in id &&
             id.all { it in 'a'..'z' || it in '0'..'9' || it == '.' || it == '_' }
+
+    // ---- variants ----
+
+    /**
+     * Joins a slot id to the name of one of its alternative looks: `tool.gif@text`
+     * is the `text` look of `tool.gif`.
+     *
+     * A pack ships a variant as a file of that name (`icons/tool.gif@text.svg`)
+     * and lists the same key in its `slots`, so the variant rides every bit of
+     * machinery a slot's own icon does — the store, the export, the reconcile
+     * sweep — with no second list to keep in step. Neither half can contain the
+     * separator, so the split is never ambiguous.
+     */
+    const val VARIANT_SEPARATOR = '@'
+
+    fun variantKey(slot: String, variant: String): String = "$slot$VARIANT_SEPARATOR$variant"
+
+    /** The slot half of a pack key: `tool.gif@text` → `tool.gif`, and a plain slot id is itself. */
+    fun slotOf(key: String): String = key.substringBefore(VARIANT_SEPARATOR)
+
+    /** The variant half of a pack key, or null when the key is a slot's own icon. */
+    fun variantOf(key: String): String? {
+        val at = key.indexOf(VARIANT_SEPARATOR)
+        return if (at < 0) null else key.substring(at + 1)
+    }
+
+    /**
+     * Whether [name] may name a variant: lowercase letters, digits and `_`,
+     * starting with a letter, at most 32 long. No `.` at all, so a variant can
+     * never smuggle a path segment into the file name it becomes.
+     */
+    fun isVariantNameWellFormed(name: String): Boolean =
+        name.isNotEmpty() &&
+            name.length <= 32 &&
+            name.first() in 'a'..'z' &&
+            name.all { it in 'a'..'z' || it in '0'..'9' || it == '_' }
+
+    /**
+     * Whether a pack may hold [key]: a slot this version knows, alone or with a
+     * well-formed variant name after [VARIANT_SEPARATOR]. The check every key
+     * arriving from a pack goes through before it becomes a file name.
+     */
+    fun isKnownKey(key: String): Boolean {
+        val slot = slotOf(key)
+        if (!isWellFormed(slot) || byId(slot) == null) return false
+        val variant = variantOf(key) ?: return true
+        return isVariantNameWellFormed(variant)
+    }
 }

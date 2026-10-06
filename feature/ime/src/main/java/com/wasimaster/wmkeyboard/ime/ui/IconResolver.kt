@@ -224,12 +224,31 @@ fun buildIconSet(settings: IconSettings, store: IconPackStore): IconSet {
         readIconFile(path)?.toResolvedIcon(slot, fitGlyph = true)?.let { resolved[slot] = it }
     }
     // Then the active pack, so a per-slot override written afterwards wins.
-    if (activePackId.isNotEmpty()) {
-        for ((slot, art) in store.art(activePackId)) {
-            resolved[slot] = art.toResolvedIcon(slot) ?: continue
-        }
+    // Its variants (`tool.gif@text`) are skipped here: they are only drawn for
+    // a slot whose override picks one, below, and building the rest would be
+    // a parse or a bitmap decode per variant for nothing.
+    val packArt = if (activePackId.isNotEmpty()) store.art(activePackId) else emptyMap()
+    for ((key, art) in packArt) {
+        if (IconSlots.variantOf(key) != null) continue
+        resolved[key] = art.toResolvedIcon(key) ?: continue
     }
     for ((slot, source) in settings.overrides) {
+        val variant = IconOverrides.variantOf(source)
+        if (variant != null) {
+            // A variant is relative to whatever supplies the slot. The active
+            // pack's own variant wins; a pack that draws this slot but not
+            // that variant keeps its own glyph, so one built-in look does not
+            // turn up among the pack's; and a slot no pack covers takes the
+            // app's variant of that name.
+            val fromPack = packArt[IconSlots.variantKey(slot, variant)]?.toResolvedIcon(slot)
+            val icon = when {
+                fromPack != null -> fromPack
+                slot in packArt -> null
+                else -> IconDefaults.variant(slot, variant)?.let { ResolvedIcon(vector = it, monochrome = true) }
+            }
+            if (icon != null) resolved[slot] = icon
+            continue
+        }
         val icon = when {
             source.startsWith(IconOverrides.BUILTIN_PREFIX) ->
                 BuiltinIcons.byName(source.removePrefix(IconOverrides.BUILTIN_PREFIX))
@@ -246,6 +265,17 @@ fun buildIconSet(settings: IconSettings, store: IconPackStore): IconSet {
     }
     return if (resolved.isEmpty()) IconSet.Builtin else IconSet(resolved)
 }
+
+/**
+ * One icon out of [packId], ready to draw: a slot's own (`tool.gif`) or one of
+ * its variants (`tool.gif@text`). Null when the pack has no such icon or it
+ * will not build.
+ *
+ * Blocking on the first read of a pack, like [IconPackStore.art] underneath it,
+ * so the settings app's variant row calls it off the main thread.
+ */
+fun resolvePackIcon(store: IconPackStore, packId: String, key: String): ResolvedIcon? =
+    store.art(packId)[key]?.toResolvedIcon(IconSlots.slotOf(key))
 
 /**
  * A theme's icon file as art, or null when it has gone or is not one.

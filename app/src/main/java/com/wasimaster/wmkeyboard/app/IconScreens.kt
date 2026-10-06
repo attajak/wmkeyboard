@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.app
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Delete
@@ -25,6 +27,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -33,10 +37,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -59,7 +65,10 @@ import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.util.requireInputStream
 import com.wasimaster.wmkeyboard.core.util.requireOutputStream
 import com.wasimaster.wmkeyboard.ime.ui.BuiltinIcons
+import com.wasimaster.wmkeyboard.ime.ui.IconDefaults
+import com.wasimaster.wmkeyboard.ime.ui.ResolvedIcon
 import com.wasimaster.wmkeyboard.ime.ui.SlotIcon
+import com.wasimaster.wmkeyboard.ime.ui.resolvePackIcon
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -311,9 +320,21 @@ internal fun IconsScreen(
     }
 
     picking?.let { slot ->
+        // The looks this slot offers, from whichever pack is active or from the
+        // app's own table. Read off the main thread: a pack's variants are
+        // files, and the first read of a pack parses all of them.
+        val activePackId = settings.watch { it.icons.activePackId }
+        val variants by produceState(emptyList<VariantChoice>(), slot, activePackId, revision) {
+            value = withContext(Dispatchers.Default) { variantChoices(store, activePackId, slot.id) }
+        }
         IconPickerDialog(
             slot = slot,
             settings = settings,
+            variants = variants,
+            onPickVariant = { name ->
+                scope.launch { repository.setIconOverride(slot.id, IconOverrides.variantSource(name)) }
+                picking = null
+            },
             onPickBuiltin = { name ->
                 scope.launch { repository.setIconOverride(slot.id, IconOverrides.builtinSource(name)) }
                 picking = null
@@ -420,6 +441,15 @@ private fun describeSource(
 ): String {
     val default = context.getString(CommonR.string.common_default)
     val override = settings.icons.overrides[slot.id]
+    IconOverrides.variantOf(override)?.let { variant ->
+        // Named only when something actually draws it; otherwise the slot is
+        // showing the pack's or the default glyph, and the lines below say so.
+        val active = store.pack(settings.icons.activePackId)
+        val fromPack = active != null && IconSlots.variantKey(slot.id, variant) in active.slots
+        val builtin = (active == null || slot.id !in active.slots) &&
+            variant in IconDefaults.variantNames(slot.id)
+        if (fromPack || builtin) return variantLabel(context, variant)
+    }
     if (override != null) {
         if (override.startsWith(IconOverrides.BUILTIN_PREFIX)) {
             val builtin = override.removePrefix(IconOverrides.BUILTIN_PREFIX)
@@ -515,6 +545,8 @@ private fun PackRow(
 private fun IconPickerDialog(
     slot: IconSlot,
     settings: LiveSettings,
+    variants: List<VariantChoice>,
+    onPickVariant: (String) -> Unit,
     onPickBuiltin: (String) -> Unit,
     onImportSvg: () -> Unit,
     onReset: () -> Unit,
@@ -537,6 +569,36 @@ private fun IconPickerDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
+                if (variants.isNotEmpty()) {
+                    // Above the search, because a second look of the same icon
+                    // is the likelier thing to want than a different icon.
+                    val override = settings.watch { it.icons.overrides[slot.id] }
+                    val picked = IconOverrides.variantOf(override)
+                    Text(
+                        stringResource(R.string.plugins_icons_picker_variants_title),
+                        style = MaterialTheme.typography.titleSmall,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                    ) {
+                        for (choice in variants) {
+                            val name = choice.name
+                            IconGridCell(
+                                name = if (name == null) {
+                                    stringResource(CommonR.string.common_default)
+                                } else {
+                                    variantLabel(context, name)
+                                },
+                                // The default look is "no choice made", so it
+                                // reads as picked only when nothing else is.
+                                selected = if (name == null) override == null else name == picked,
+                                onClick = { if (name == null) onReset() else onPickVariant(name) },
+                                modifier = Modifier.width(IconGridCellMinWidth),
+                            ) { ResolvedGlyph(choice.icon) }
+                        }
+                    }
+                }
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
@@ -597,6 +659,89 @@ private fun IconPickerDialog(
             TextButton(onClick = onDismiss) { Text(stringResource(CommonR.string.common_cancel)) }
         },
     )
+}
+
+/** One look a slot offers in the picker's variant row; [name] null is its default look. */
+private class VariantChoice(val name: String?, val icon: ResolvedIcon?)
+
+/**
+ * The looks [slot] offers under [activePackId], default first.
+ *
+ * Mirrors what `buildIconSet` will draw for each choice, so the row never shows
+ * a look the keyboard would not. A pack that draws the slot offers its own
+ * variants and nothing else, since a built-in look among a pack's glyphs is
+ * exactly what picking a pack was meant to avoid. A slot the pack leaves alone
+ * offers the app's variants, plus any the pack draws for it anyway.
+ *
+ * Empty when there is nothing to choose between, which hides the row. Blocking:
+ * a pack's first read parses its files.
+ */
+private fun variantChoices(store: IconPackStore, activePackId: String, slot: String): List<VariantChoice> {
+    val pack = store.pack(activePackId)
+    val packVariants = pack?.let { store.variantsOf(it.id, slot) }.orEmpty()
+    val choices = ArrayList<VariantChoice>()
+    if (pack != null && slot in pack.slots) {
+        for (name in packVariants) {
+            resolvePackIcon(store, pack.id, IconSlots.variantKey(slot, name))
+                ?.let { choices += VariantChoice(name, it) }
+        }
+        if (choices.isEmpty()) return emptyList()
+        choices.add(0, VariantChoice(null, resolvePackIcon(store, pack.id, slot)))
+        return choices
+    }
+    // The pack's own variant wins a name both offer, as it does on the keyboard.
+    val names = (packVariants + IconDefaults.variantNames(slot)).distinct()
+    for (name in names) {
+        val icon = pack?.let { resolvePackIcon(store, it.id, IconSlots.variantKey(slot, name)) }
+            ?: IconDefaults.variant(slot, name)?.let { ResolvedIcon(vector = it) }
+            ?: continue
+        choices += VariantChoice(name, icon)
+    }
+    if (choices.isEmpty()) return emptyList()
+    choices.add(0, VariantChoice(null, IconDefaults.forSlot(slot)?.let { ResolvedIcon(vector = it) }))
+    return choices
+}
+
+/**
+ * The wording for a variant name. The app's own names are translated; a name
+ * only a pack uses is shown as the pack spelled it, with its underscores made
+ * spaces, because there is no wording for it to look up.
+ */
+private fun variantLabel(context: Context, name: String): String {
+    val res = when (name) {
+        IconDefaults.VARIANT_TEXT -> R.string.plugins_icons_variant_text
+        IconDefaults.VARIANT_TEXT_SMALL -> R.string.plugins_icons_variant_text_small
+        IconDefaults.VARIANT_SIMPLE -> R.string.plugins_icons_variant_simple
+        IconDefaults.VARIANT_PLAIN -> R.string.plugins_icons_variant_plain
+        IconDefaults.VARIANT_FILLED -> R.string.plugins_icons_variant_filled
+        IconDefaults.VARIANT_WAVE -> R.string.plugins_icons_variant_wave
+        IconDefaults.VARIANT_MAGNIFIER -> R.string.plugins_icons_variant_magnifier
+        IconDefaults.VARIANT_BRUSH -> R.string.plugins_icons_variant_brush
+        IconDefaults.VARIANT_SPEAKER -> R.string.plugins_icons_variant_speaker
+        IconDefaults.VARIANT_ROBOT -> R.string.plugins_icons_variant_robot
+        IconDefaults.VARIANT_CHEVRON -> R.string.plugins_icons_variant_chevron
+        IconDefaults.VARIANT_MASK -> R.string.plugins_icons_variant_mask
+        else -> null
+    }
+    return res?.let { context.getString(it) }
+        ?: name.replace('_', ' ').replaceFirstChar { it.uppercaseChar() }
+}
+
+/**
+ * A [ResolvedIcon] at grid size: a picture or a vector, tinted only when it is
+ * monochrome, so a pack's full-colour variant previews as it will draw.
+ */
+@Composable
+private fun ResolvedGlyph(icon: ResolvedIcon?) {
+    val size = Modifier.size(IconGridGlyph)
+    val tint = if (icon == null || icon.monochrome) LocalContentColor.current else Color.Unspecified
+    val bitmap = icon?.bitmap
+    val vector = icon?.vector
+    when {
+        bitmap != null -> Icon(bitmap = bitmap, contentDescription = null, modifier = size, tint = tint)
+        vector != null -> Icon(vector, contentDescription = null, modifier = size, tint = tint)
+        else -> Spacer(size)
+    }
 }
 
 /**

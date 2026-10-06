@@ -11,6 +11,11 @@ import kotlinx.serialization.Serializable
  * [slots] holds slot ids only, never file names. The file backing a slot is
  * always `<slotId>.svg` inside the pack's directory — derived, never taken
  * from a manifest — so a hostile pack has no way to name a path at all.
+ *
+ * An entry may also be a variant key, `<slotId>@<variant>` (see
+ * [IconSlots.VARIANT_SEPARATOR]): an alternative look for that slot, which the
+ * user can pick per slot. Its file is derived the same way, and
+ * [IconSlots.isKnownKey] vets it before it ever gets that far.
  */
 @Serializable
 data class IconPack(

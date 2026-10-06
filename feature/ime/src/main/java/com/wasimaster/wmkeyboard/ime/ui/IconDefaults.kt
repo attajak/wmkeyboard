@@ -16,10 +16,12 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Redo
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Send
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.TextSnippet
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.Undo
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.VolumeUp
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Apps
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.AutoAwesome
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.BarChart
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.BatterySaver
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Brush
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Calculate
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.CalendarMonth
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Check
@@ -49,6 +51,7 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Fastfood
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FirstPage
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.FlashlightOn
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Functions
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.GraphicEq
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.GridView
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.HighlightAlt
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.ImageSearch
@@ -80,6 +83,7 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Schedule
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.School
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Search
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SelectAll
+import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SentimentSatisfied
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Settings
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Speed
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.SmartButton
@@ -313,4 +317,86 @@ object IconDefaults {
      */
     fun forSlot(slot: String): ImageVector? =
         bySlot[slot] ?: if (slot.startsWith("emoji_tab.")) Icons.Outlined.EmojiEmotions else null
+
+    /**
+     * The app's own alternative looks for a slot, picked per slot from the
+     * Icons screen and stored as a `v:<name>` override (see
+     * `IconOverrides.VARIANT_PREFIX`).
+     *
+     * Only where Material Symbols has a real second drawing of the same idea —
+     * the GIF tool's lettering without its box, a filled gear, a waveform for
+     * voice — not a different idea that happens to fit. A slot with nothing
+     * here offers no variants, and the picker hides the row for it.
+     *
+     * The names are part of the stored setting and of the pack format (a pack's
+     * `tool.gif@text` is offered under the same name), so they never change
+     * once shipped. Lambdas, so building the table builds no vectors: only the
+     * picker and a slot actually set to a variant ever draw one.
+     */
+    private val variants: Map<String, Map<String, () -> ImageVector>> by lazy {
+        val emoji: Map<String, () -> ImageVector> = linkedMapOf(
+            VARIANT_SIMPLE to { Icons.Outlined.SentimentSatisfied },
+        )
+        mapOf(
+            IconSlots.forTool(ToolbarTool.GIF) to linkedMapOf(
+                // gif_2: the lettering at full width, the look most keyboards use.
+                VARIANT_TEXT to { SymbolIcons.Gif2 },
+                // gif: the box's own letters with the box taken away.
+                VARIANT_TEXT_SMALL to { SymbolIcons.Gif },
+            ),
+            IconSlots.forTool(ToolbarTool.EMOJI) to emoji,
+            IconSlots.KEY_EMOJI to emoji,
+            IconSlots.CHROME_EMOJI_SHORTCUT to emoji,
+            // The bare clipboard, which Paste also wears — see forTool for why
+            // that is not the default.
+            IconSlots.forTool(ToolbarTool.CLIPBOARD) to linkedMapOf(
+                VARIANT_PLAIN to { Icons.Outlined.ContentPaste },
+            ),
+            IconSlots.forTool(ToolbarTool.SETTINGS) to linkedMapOf(
+                VARIANT_FILLED to { SymbolIcons.SettingsFilled },
+            ),
+            IconSlots.forTool(ToolbarTool.VOICE) to linkedMapOf(
+                VARIANT_FILLED to { SymbolIcons.MicFilled },
+                VARIANT_WAVE to { Icons.Outlined.GraphicEq },
+            ),
+            IconSlots.forTool(ToolbarTool.WEB_SEARCH) to linkedMapOf(
+                VARIANT_MAGNIFIER to { Icons.Outlined.Search },
+            ),
+            IconSlots.forTool(ToolbarTool.THEMES) to linkedMapOf(
+                VARIANT_BRUSH to { Icons.Outlined.Brush },
+            ),
+            IconSlots.forTool(ToolbarTool.SOUND_HAPTICS) to linkedMapOf(
+                VARIANT_SPEAKER to { Icons.AutoMirrored.Outlined.VolumeUp },
+            ),
+            IconSlots.forTool(ToolbarTool.AI) to linkedMapOf(
+                VARIANT_ROBOT to { SymbolIcons.SmartToy },
+            ),
+            IconSlots.forTool(ToolbarTool.HIDE_KEYBOARD) to linkedMapOf(
+                VARIANT_CHEVRON to { Icons.Outlined.KeyboardArrowDown },
+            ),
+            // The hat and glasses the toolbar's incognito badge already wears.
+            IconSlots.forTool(ToolbarTool.INCOGNITO) to linkedMapOf(
+                VARIANT_MASK to { KeyboardIcons.Incognito },
+            ),
+        )
+    }
+
+    /** The names of [slot]'s built-in variants, in the order the picker shows them. */
+    fun variantNames(slot: String): List<String> = variants[slot]?.keys?.toList().orEmpty()
+
+    /** [slot]'s built-in variant called [name], or null when it has none by that name. */
+    fun variant(slot: String, name: String): ImageVector? = variants[slot]?.get(name)?.invoke()
+
+    const val VARIANT_TEXT = "text"
+    const val VARIANT_TEXT_SMALL = "text_small"
+    const val VARIANT_SIMPLE = "simple"
+    const val VARIANT_PLAIN = "plain"
+    const val VARIANT_FILLED = "filled"
+    const val VARIANT_WAVE = "wave"
+    const val VARIANT_MAGNIFIER = "magnifier"
+    const val VARIANT_BRUSH = "brush"
+    const val VARIANT_SPEAKER = "speaker"
+    const val VARIANT_ROBOT = "robot"
+    const val VARIANT_CHEVRON = "chevron"
+    const val VARIANT_MASK = "mask"
 }

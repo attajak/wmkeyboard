@@ -39,6 +39,28 @@ internal fun IconGridCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // The name underneath already says what this is, so the glyph adds
+    // nothing a screen reader should repeat.
+    IconGridCell(name, selected, onClick, modifier) {
+        Icon(vector, contentDescription = null, modifier = Modifier.size(IconGridGlyph))
+    }
+}
+
+/** The glyph size inside an [IconGridCell], for a cell that draws its own. */
+internal val IconGridGlyph = 22.dp
+
+/**
+ * An [IconGridCell] that draws its own [glyph], for art that is not a plain
+ * vector: a pack's picture, or a full-colour icon that must not take the tint.
+ */
+@Composable
+internal fun IconGridCell(
+    name: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    glyph: @Composable () -> Unit,
+) {
     Surface(
         shape = RoundedCornerShape(10.dp),
         color = if (selected) {
@@ -55,9 +77,7 @@ internal fun IconGridCell(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.padding(horizontal = 2.dp, vertical = 8.dp),
         ) {
-            // The name underneath already says what this is, so the glyph adds
-            // nothing a screen reader should repeat.
-            Icon(vector, contentDescription = null, modifier = Modifier.size(22.dp))
+            glyph()
             Text(
                 name,
                 style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp, lineHeight = 11.sp),

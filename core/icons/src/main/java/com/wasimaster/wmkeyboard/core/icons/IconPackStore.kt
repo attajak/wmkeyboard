@@ -196,6 +196,16 @@ class IconPackStore(private var baseDir: File?) {
         return null
     }
 
+    /**
+     * The alternative looks [packId] draws for [slot], by variant name, in the
+     * order the pack lists them. Empty for a pack with none, which is most.
+     */
+    @Synchronized
+    fun variantsOf(packId: String, slot: String): List<String> =
+        pack(packId)?.slots.orEmpty().mapNotNull { key ->
+            if (IconSlots.slotOf(key) == slot) IconSlots.variantOf(key) else null
+        }
+
     // ---- packs ---------------------------------------------------------
 
     /** Creates a pack, or returns null when [MAX_PACKS] is already reached. */
@@ -274,7 +284,8 @@ class IconPackStore(private var baseDir: File?) {
      * Writes [bytes] as [slot]'s icon in [packId]. Returns false when the slot
      * is unknown, the file is not an icon this can draw, or the write failed —
      * the caller reports that rather than silently registering a slot with no
-     * file behind it.
+     * file behind it. [slot] may be a variant key (`tool.gif@text`) as well as
+     * a plain slot id.
      *
      * The extension comes from the bytes, not from whatever the file was called
      * where it came from: a raster is sniffed, and anything else is tried as
@@ -285,7 +296,7 @@ class IconPackStore(private var baseDir: File?) {
     fun setIcon(packId: String, slot: String, bytes: ByteArray): Boolean {
         val index = packs.indexOfFirst { it.id == packId }
         if (index < 0) return false
-        if (!IconSlots.isWellFormed(slot) || IconSlots.byId(slot) == null) return false
+        if (!IconSlots.isKnownKey(slot)) return false
         // Identify before writing: a file the renderer can't use is not worth
         // storing, and finding out now lets the picker say so.
         val extension = identify(bytes) ?: return false

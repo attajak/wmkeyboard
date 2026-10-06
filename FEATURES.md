@@ -1271,7 +1271,10 @@ something only some of them do. Unmarked means Gboard or SwiftKey has it too.
     - Zip-bomb caps — 400 entries, 8MB total
     - Up to 20 installed packs — Plus a built-as-you-go 'mine' pack for single-slot imports
   - Per-slot overrides `RARE` — A slot can take one of 181 bundled Material glyphs or an icon from any installed pack
-    - CSV storage — slot=b:<name> or slot=p:<packId>; unknown slots dropped, missing packs kept
+    - CSV storage — slot=b:<name>, slot=p:<packId> or slot=v:<variant>; unknown slots dropped, missing packs kept
+  - Icon variants — Other looks of one slot, picked from an "Other looks" row in its picker (GIF lettering without the box, filled gear, sound-wave voice…)
+    - Pack variants — A pack ships icons/<slotId>@<variant>.svg; shown instead of the built-in looks when the pack draws that slot
+    - Relative choice — v:<name> resolves in whichever pack is active, falling back to that pack's plain icon, never a built-in look
   - Per-tool icon colours `RARE` — Default accent per tool, user override, and an optional two-colour gradient
     - Derived gradient end — Far end follows the near end until the user pins it down
 - **Import, export and sharing** `uncommon` — .wmtheme.json plus a FlorisBoard converter and repo installs

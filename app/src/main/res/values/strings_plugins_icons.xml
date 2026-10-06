@@ -193,4 +193,32 @@
     <string name="plugins_icons_picker_use_svg_action">Use my own picture…</string>
     <string name="plugins_icons_picker_use_default_action">Use the default</string>
 
+    <!-- Heading over a row of other looks of the same icon, for example the GIF
+         tool drawn as the letters GIF without the box around them. -->
+    <string name="plugins_icons_picker_variants_title">Other looks</string>
+    <!-- The names of those looks, under each one. Keep them short: the cell is
+         about 68dp wide and shows two lines. -->
+    <!-- The word GIF on its own, in large letters, without a box. -->
+    <string name="plugins_icons_variant_text">Letters</string>
+    <!-- The word GIF on its own, in small letters, without a box. -->
+    <string name="plugins_icons_variant_text_small">Small letters</string>
+    <!-- A simpler smiley face. -->
+    <string name="plugins_icons_variant_simple">Simple</string>
+    <!-- A clipboard with no lines drawn on it. -->
+    <string name="plugins_icons_variant_plain">Plain</string>
+    <!-- The same shape, filled in solid instead of drawn as an outline. -->
+    <string name="plugins_icons_variant_filled">Filled</string>
+    <!-- Vertical bars of different heights, like a sound wave. -->
+    <string name="plugins_icons_variant_wave">Sound wave</string>
+    <string name="plugins_icons_variant_magnifier">Magnifier</string>
+    <!-- A paint brush. -->
+    <string name="plugins_icons_variant_brush">Brush</string>
+    <!-- A loudspeaker. -->
+    <string name="plugins_icons_variant_speaker">Speaker</string>
+    <string name="plugins_icons_variant_robot">Robot</string>
+    <!-- An arrow that points down, like a "v". -->
+    <string name="plugins_icons_variant_chevron">Arrow</string>
+    <!-- A hat and glasses, the usual picture for private browsing. -->
+    <string name="plugins_icons_variant_mask">Hat and glasses</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.core.icons
 
 import com.wasimaster.wmkeyboard.icons.R
+import com.wasimaster.wmkeyboard.core.settings.ToolbarTool
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -247,6 +248,20 @@ class IconPackFileTest {
         assertNull(IconPackFile.slotForEntry("icons/unknown.png"))
         assertNull(IconPackFile.slotForEntry("icons/${IconSlots.KEY_SHIFT}.exe"))
         assertNull(IconPackFile.slotForEntry("pack.json"))
+    }
+
+    @Test
+    fun `slotForEntry keeps a variant and refuses a malformed one`() {
+        val gif = IconSlots.forTool(ToolbarTool.GIF)
+        assertEquals("$gif@text", IconPackFile.slotForEntry("icons/$gif@text.svg"))
+        assertEquals("$gif@text_small", IconPackFile.slotForEntry("icons/$gif@Text_Small.png"))
+        // A variant of a slot this version does not know is as unknown as the slot.
+        assertNull(IconPackFile.slotForEntry("icons/tool.nonexistent@text.svg"))
+        // No dots, no second separator, nothing empty: the key becomes a file name.
+        assertNull(IconPackFile.slotForEntry("icons/$gif@.svg"))
+        assertNull(IconPackFile.slotForEntry("icons/$gif@a.b.svg"))
+        assertNull(IconPackFile.slotForEntry("icons/$gif@a@b.svg"))
+        assertNull(IconPackFile.slotForEntry("icons/$gif@1text.svg"))
     }
 
     @Test

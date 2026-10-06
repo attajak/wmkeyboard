@@ -344,6 +344,7 @@ informational and import ignores them. Both are optional in a hand-built pack.
   - icons/
     - tool.clipboard.svg one file per replaced slot
     - key.shift.png vector or picture, either way
+    - tool.gif@text.svg another look for a slot (optional)
 
 </FileTree>
 
@@ -384,6 +385,37 @@ The Tools row is derived from the app's tool list, so its count grows with
 every new tool. The other three groups are hand-maintained lists in the app.
 Two of them have grown too: a new key and a new piece of toolbar chrome each
 picked up a replaceable icon. The Emoji tabs group has not changed.
+
+**Variants.** A pack may draw more than one look for a slot. Add `@` and a
+variant name to the slot id: `icons/tool.gif@text.svg` is the `text` look of
+`tool.gif`, and it goes in `slots` under the same key, `"tool.gif@text"`. A
+variant name is lowercase letters, digits and `_`, starts with a letter, and is
+at most 32 characters. The slot's plain file (`tool.gif.svg`) stays the default
+look; users pick a variant per slot from that slot's picker.
+
+The user's pick is stored by variant name, not by pack, so reusing the app's own
+names lets a choice carry over when someone switches to your pack:
+
+| Slot | Built-in variant names |
+|---|---|
+| `tool.gif` | `text` (the word on its own, large), `text_small` (the box's letters, box removed) |
+| `tool.emoji`, `key.emoji`, `chrome.emoji_shortcut` | `simple` |
+| `tool.clipboard` | `plain` |
+| `tool.settings` | `filled` |
+| `tool.voice` | `filled`, `wave` |
+| `tool.web_search` | `magnifier` |
+| `tool.themes` | `brush` |
+| `tool.sound_haptics` | `speaker` |
+| `tool.ai` | `robot` |
+| `tool.hide_keyboard` | `chevron` |
+| `tool.incognito` | `mask` |
+
+Any other name works too and is shown to the user as written, with underscores
+as spaces. When a pack draws a slot, its picker offers that pack's variants
+only; a user's pick the pack has no drawing for falls back to the pack's plain
+icon for the slot, never to a built-in one. A variant without a plain file for
+its slot is allowed and is offered beside the app's own looks. Builds from
+before variants existed skip `@` files on import and report them as ignored.
 
 A pack does **not** have to be complete: any slot it leaves out keeps the app's
 built-in icon. The `slots` list is advisory. The app walks the archive's
