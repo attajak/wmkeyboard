@@ -760,7 +760,7 @@ private fun WordListDownloadDialog(
  * region where that source has more than one. "AOSP, Brazil"; "Frequency".
  */
 @Composable
-private fun entryLabel(entry: DictionaryEntry): String {
+internal fun entryLabel(entry: DictionaryEntry): String {
     val source = stringResource(entry.source.labelRes)
     val variant = entry.variantRes
         ?.takeIf { DictionaryCatalog.forLanguage(entry.languageId).count { it.source == entry.source } > 1 }

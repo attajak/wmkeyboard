@@ -71,12 +71,15 @@ internal object OfflineImport {
      * Installs what [uris] hold and reports on each file, in order.
      * [wordlistSize] is how much of a word list to keep, as a download would
      * ask. [onFile] names the file being worked on, for a progress line.
-     * Blocking: call it off the main thread.
+     * [choose] asks which list to install when the files hold more than one
+     * for a language (English's US and UK lists), returning null to install
+     * none. Blocking between choices: call it off the main thread.
      */
-    fun run(
+    suspend fun run(
         context: Context,
         uris: List<Uri>,
         wordlistSize: DictionaryCatalog.DictionarySize,
+        choose: suspend (langId: String, options: List<DictionaryEntry>) -> DictionaryEntry?,
         onFile: (String) -> Unit = {},
     ): List<Outcome> {
         val staging = File(context.cacheDir, "offline_import").apply { deleteRecursively(); mkdirs() }
@@ -104,7 +107,7 @@ internal object OfflineImport {
                     staged.delete()
                 }
             }
-            outcomes += installAll(context, files, wordlistSize, onFile)
+            outcomes += installAll(context, files, wordlistSize, choose, onFile)
             return outcomes
         } finally {
             staging.deleteRecursively()
@@ -114,13 +117,13 @@ internal object OfflineImport {
     /**
      * Sorts [files] by what they are, then installs them. Sorting first is
      * what lets the two halves of a word-pair pack meet, and lets a language
-     * pack carrying several lists for one language install the one a
-     * download would have picked.
+     * pack carrying several lists for one language ask which one to install.
      */
-    private fun installAll(
+    private suspend fun installAll(
         context: Context,
         files: List<File>,
         size: DictionaryCatalog.DictionarySize,
+        choose: suspend (langId: String, options: List<DictionaryEntry>) -> DictionaryEntry?,
         onFile: (String) -> Unit,
     ): List<Outcome> {
         val filesDir = context.filesDir
@@ -142,8 +145,22 @@ internal object OfflineImport {
             }
         }
         for ((langId, candidates) in wordlists) {
-            val preferred = DictionaryCatalog.preferred(langId)
-            val (entry, file) = candidates.firstOrNull { it.first == preferred } ?: candidates.first()
+            // A pack carries every list a language has (English: AOSP United
+            // States, AOSP United Kingdom, Frequency), and only one can be in
+            // use, so which one is the user's to say, as a download asks.
+            val picked = if (candidates.size == 1) {
+                candidates.single().first
+            } else {
+                choose(langId, candidates.map { it.first })
+            }
+            val chosen = candidates.firstOrNull { it.first == picked }
+            if (chosen == null) {
+                candidates.forEach { (_, other) ->
+                    outcomes += Outcome(other.name, true, R.string.offline_import_wordlist_not_chosen)
+                }
+                continue
+            }
+            val (entry, file) = chosen
             onFile(file.name)
             outcomes += attempt(file.name, busy = WordlistDownloadManager.isBusy) {
                 val words = WordlistDownloadManager.install(filesDir, entry, size, file)
@@ -153,7 +170,7 @@ internal object OfflineImport {
                 )
             }
             // The lists the language pack also carried for this language were
-            // not wrong, only not the one to use; say so rather than drop them.
+            // not wrong, only not the one picked; say so rather than drop them.
             candidates.filter { it.second != file }.forEach { (_, other) ->
                 outcomes += Outcome(other.name, true, R.string.offline_import_wordlist_skipped, listOf(file.name))
             }

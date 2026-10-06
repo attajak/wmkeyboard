@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -36,12 +38,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.common.R as CommonR
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
+import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryEntry
+import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -94,6 +100,13 @@ internal fun OfflineImportRow(
 /** The picker, the running import and its report, for any surface that starts one. */
 internal class OfflineImportRunner(val pick: () -> Unit, val running: Boolean)
 
+/** A language the import holds several word lists for, waiting on the user to pick one. */
+private class WordlistChoice(
+    val langId: String,
+    val options: List<DictionaryEntry>,
+    val answer: CompletableDeferred<DictionaryEntry?>,
+)
+
 @Composable
 internal fun rememberOfflineImport(
     wordlistSize: DictionaryCatalog.DictionarySize = DictionaryCatalog.DictionarySize.LARGE,
@@ -103,12 +116,20 @@ internal fun rememberOfflineImport(
     val scope = rememberCoroutineScope()
     var working by remember { mutableStateOf<String?>(null) }
     var report by remember { mutableStateOf<List<OfflineImport.Outcome>?>(null) }
+    var choice by remember { mutableStateOf<WordlistChoice?>(null) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
         if (uris.isEmpty()) return@rememberLauncherForActivityResult
         working = ""
         scope.launch {
             val outcomes = withContext(Dispatchers.IO) {
-                OfflineImport.run(context.applicationContext, uris, wordlistSize) { name ->
+                OfflineImport.run(
+                    context.applicationContext, uris, wordlistSize,
+                    choose = { langId, options ->
+                        val answer = CompletableDeferred<DictionaryEntry?>()
+                        withContext(Dispatchers.Main) { choice = WordlistChoice(langId, options, answer) }
+                        answer.await()
+                    },
+                ) { name ->
                     scope.launch { working = name }
                 }
             }
@@ -117,9 +138,77 @@ internal fun rememberOfflineImport(
             if (outcomes.any { it.ok }) onImported()
         }
     }
-    working?.let { OfflineImportProgress(it) }
+    val pending = choice
+    if (pending != null) {
+        WordlistChoiceDialog(pending) { picked ->
+            choice = null
+            pending.answer.complete(picked)
+        }
+    } else {
+        working?.let { OfflineImportProgress(it) }
+    }
     report?.let { OfflineImportReport(it) { report = null } }
     return OfflineImportRunner(pick = { launcher.launch(arrayOf("*/*")) }, running = working != null)
+}
+
+/**
+ * Which of a language's word lists to install, when one import carries
+ * several: a language pack holds all of them (English's US and UK AOSP lists
+ * and its counted one). Opens on the list a download would start on.
+ */
+@Composable
+private fun WordlistChoiceDialog(choice: WordlistChoice, onDone: (DictionaryEntry?) -> Unit) {
+    val preferred = DictionaryCatalog.preferred(choice.langId)
+    var selected by remember(choice) {
+        mutableStateOf(choice.options.firstOrNull { it == preferred } ?: choice.options.first())
+    }
+    AlertDialog(
+        onDismissRequest = { onDone(null) },
+        properties = DialogProperties(dismissOnClickOutside = false),
+        title = {
+            Text(
+                stringResource(
+                    R.string.offline_import_wordlist_choose_title,
+                    LanguageRegistry.byId(choice.langId).displayName,
+                ),
+            )
+        },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Text(
+                    stringResource(R.string.offline_import_wordlist_choose_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+                for (option in choice.options) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = option == selected,
+                                role = Role.RadioButton,
+                                onClick = { selected = option },
+                            )
+                            .padding(vertical = 4.dp),
+                    ) {
+                        RadioButton(selected = option == selected, onClick = null)
+                        Text(
+                            entryLabel(option),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 12.dp),
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onDone(selected) }) { Text(stringResource(R.string.offline_import_action)) }
+        },
+        dismissButton = {
+            TextButton(onClick = { onDone(null) }) { Text(stringResource(CommonR.string.common_cancel)) }
+        },
+    )
 }
 
 @Composable

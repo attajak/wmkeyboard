@@ -75,7 +75,10 @@
     <string name="offline_import_share_links_action">Share</string>
     <string name="offline_import_unreadable_zip">This zip could not be opened.</string>
     <string name="offline_import_wordlist_done">Word list for %1$s, %2$s words</string>
-    <string name="offline_import_wordlist_skipped">Not used: %1$s is the list this language takes</string>
+    <string name="offline_import_wordlist_skipped">Not used: %1$s was installed instead</string>
+    <string name="offline_import_wordlist_not_chosen">Not installed: no list was chosen</string>
+    <string name="offline_import_wordlist_choose_title">Which word list for %1$s?</string>
+    <string name="offline_import_wordlist_choose_body">The import holds more than one, and a language uses one at a time. Import the pack again to switch to another later.</string>
     <string name="offline_import_word_pairs_done">Word pairs for %1$s</string>
     <string name="offline_import_emoji_done">Emoji names in %1$s, %2$s emoji</string>
     <string name="offline_import_cjk_done">Conversion dictionary: %1$s</string>
