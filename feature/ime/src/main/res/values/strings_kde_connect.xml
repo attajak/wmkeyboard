@@ -61,6 +61,7 @@
     <string name="ime_kde_input_unsupported">This computer does not accept remote input</string>
     <string name="ime_kde_key_esc" translatable="false">Esc</string>
     <string name="ime_kde_key_tab" translatable="false">Tab</string>
+    <string name="ime_kde_key_enter" translatable="false">Enter</string>
     <string name="ime_kde_key_ctrl" translatable="false">Ctrl</string>
     <string name="ime_kde_key_alt" translatable="false">Alt</string>
     <string name="ime_kde_key_super" translatable="false">Super</string>

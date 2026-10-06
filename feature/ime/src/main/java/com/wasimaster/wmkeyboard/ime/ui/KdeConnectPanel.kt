@@ -36,6 +36,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardArrowLeft
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardArrowRight
+import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.KeyboardReturn
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.VolumeOff
 import com.wasimaster.wmkeyboard.core.icons.symbols.automirrored.outlined.VolumeUp
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Computer
@@ -52,10 +53,12 @@ import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Tablet
 import com.wasimaster.wmkeyboard.core.icons.symbols.outlined.Tv
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -77,6 +80,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wasimaster.wmkeyboard.core.kdeconnect.KdeClick
@@ -130,7 +134,7 @@ internal fun KdeConnectPanel(state: KeyboardUiState, capture: CaptureCallbacks) 
     val settings = state.settings.kdeConnect
     val onKde = capture.onKde
 
-    Column(Modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 4.dp)) {
+    CompactLines { Column(Modifier.fillMaxSize().padding(horizontal = 8.dp, vertical = 4.dp)) {
         when {
             state.deviceLocked -> CenterNotice(kb, Icons.Outlined.Phonelink, stringResource(R.string.ime_kde_locked), "")
             !settings.enabled -> Intro(kb) { onKde(KdeAction.TurnOn) }
@@ -150,54 +154,84 @@ internal fun KdeConnectPanel(state: KeyboardUiState, capture: CaptureCallbacks) 
                 }
             }
         }
-    }
+    } }
 }
 
-/** The header's right side: the device chip (opens the list), and settings. */
+/**
+ * Material's bodyLarge, which every `Text` in the keyboard inherits, sets a
+ * 24 sp line height: a 10–12 sp line then sits in a box twice its size, so
+ * wrapped hints spread apart and a button grows to 40 dp around one line.
+ */
 @Composable
-internal fun RowScope.KdeHeaderActions(state: KeyboardUiState, onKde: (KdeAction) -> Unit) {
+private fun CompactLines(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalTextStyle provides LocalTextStyle.current.copy(lineHeight = TextUnit.Unspecified), content = content)
+}
+
+/**
+ * The whole header after the back button: the tool's name, the device chip
+ * (opens the list) and settings. The panel passes no title of its own so the
+ * name lives here, where the chip can be the one that gives way: a long
+ * computer name ellipsizes before it pushes the settings button off the row.
+ */
+@Composable
+internal fun RowScope.KdeHeaderActions(state: KeyboardUiState, onKde: (KdeAction) -> Unit) = CompactLines {
     val kb = LocalKbTheme.current
     val hub by KdeConnectHub.state.collectAsState()
     val enabled = state.settings.kdeConnect.enabled
     val device = hub.device(state.kde.deviceId)?.takeIf { it.paired && it.reachable } ?: hub.connected.firstOrNull()
-    if (enabled && (device != null || hub.devices.isNotEmpty())) {
-        Row(
-            modifier = Modifier
-                .clip(kb.chipShape())
-                .background(if (state.kde.showDevices) kb.chipActive else kb.chip)
-                .clickable { onKde(KdeAction.ShowDevices(!state.kde.showDevices)) }
-                .padding(horizontal = 10.dp, vertical = 5.dp)
-                .widthIn(max = 190.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            val tint = if (state.kde.showDevices) kb.chipActiveText else kb.chipText
-            Box(
-                Modifier.size(7.dp).clip(CircleShape)
-                    .background(if (device != null) ConnectedGreen else kb.secondaryText),
-            )
-            Spacer(Modifier.width(6.dp))
-            Text(
-                device?.name ?: stringResource(R.string.ime_kde_devices),
-                color = tint, fontSize = 12.sp, fontWeight = FontWeight.Medium,
-                maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f, fill = false),
-            )
-            device?.battery?.let { battery ->
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    stringResource(R.string.ime_kde_battery, battery.charge),
-                    color = tint.copy(alpha = 0.75f), fontSize = 11.sp, maxLines = 1,
-                )
-            }
+    Text(
+        stringResource(R.string.ime_tool_kde_connect),
+        color = kb.secondaryText,
+        fontSize = 13.sp,
+        fontWeight = FontWeight.Medium,
+        maxLines = 1,
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+    )
+    Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
+        if (enabled && (device != null || hub.devices.isNotEmpty())) {
+            DeviceChip(kb, state, device, onKde)
         }
-        Spacer(Modifier.width(6.dp))
     }
+    Spacer(Modifier.width(6.dp))
     Box(
         modifier = Modifier.size(30.dp).clip(CircleShape).background(kb.toolCircle)
             .clickable { onKde(KdeAction.OpenSettings) },
         contentAlignment = Alignment.Center,
     ) {
         Icon(Icons.Outlined.Settings, stringResource(R.string.ime_kde_settings), tint = kb.toolbarIcon, modifier = Modifier.size(16.dp))
+    }
+}
+
+@Composable
+private fun DeviceChip(kb: KbTheme, state: KeyboardUiState, device: KdeDevice?, onKde: (KdeAction) -> Unit) {
+    Row(
+        modifier = Modifier
+            .clip(kb.chipShape())
+            .background(if (state.kde.showDevices) kb.chipActive else kb.chip)
+            .chipBorder(kb, kb.chipShape())
+            .clickable { onKde(KdeAction.ShowDevices(!state.kde.showDevices)) }
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val tint = if (state.kde.showDevices) kb.chipActiveText else kb.chipText
+        Box(
+            Modifier.size(7.dp).clip(CircleShape)
+                .background(if (device != null) ConnectedGreen else kb.secondaryText),
+        )
+        Spacer(Modifier.width(6.dp))
+        Text(
+            device?.name ?: stringResource(R.string.ime_kde_devices),
+            color = tint, fontSize = 12.sp, fontWeight = FontWeight.Medium,
+            maxLines = 1, overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f, fill = false),
+        )
+        device?.battery?.let { battery ->
+            Spacer(Modifier.width(6.dp))
+            Text(
+                stringResource(R.string.ime_kde_battery, battery.charge),
+                color = tint.copy(alpha = 0.75f), fontSize = 11.sp, maxLines = 1,
+            )
+        }
     }
 }
 
@@ -485,7 +519,9 @@ private fun InputTab(kb: KbTheme, state: KeyboardUiState, device: KdeDevice, eng
                 Spacer(Modifier.weight(1f))
                 QuickKey(kb, stringResource(R.string.ime_kde_key_esc)) { capture.onKdeKey(KdeSpecialKey.ESCAPE, state.kde.mods) }
                 QuickKey(kb, stringResource(R.string.ime_kde_key_tab)) { capture.onKdeKey(KdeSpecialKey.TAB, state.kde.mods) }
-                QuickKey(kb, "↵") { capture.onKdeKey(KdeSpecialKey.ENTER, state.kde.mods) }
+                QuickKey(kb, stringResource(R.string.ime_kde_key_enter), icon = Icons.AutoMirrored.Outlined.KeyboardReturn) {
+                    capture.onKdeKey(KdeSpecialKey.ENTER, state.kde.mods)
+                }
             }
         }
     }
@@ -884,29 +920,36 @@ private fun DeviceTab(kb: KbTheme, device: KdeDevice, engine: KdeConnectEngine, 
 
 // ---- small parts ----
 
+/**
+ * The panel's one filled button. Its words are black or white against the
+ * accent itself: `toolCircleActiveIcon` belongs on `toolCircleActive`, and on
+ * many themes it *is* the accent, which left the label invisible. Faded as a
+ * whole when disabled, fill included.
+ */
 @Composable
 private fun AccentButton(kb: KbTheme, label: String, enabled: Boolean = true, onClick: () -> Unit) {
     Box(
-        Modifier.clip(RoundedCornerShape(kb.keyRadiusDp.dp)).background(kb.accent).alpha(if (enabled) 1f else 0.4f)
-            .clickable(enabled = enabled, onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
-    ) { Text(label, color = kb.toolCircleActiveIcon, fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1) }
+        Modifier.alpha(if (enabled) 1f else BUTTON_DISABLED_ALPHA).height(QUICK_KEY_HEIGHT).clip(RoundedCornerShape(kb.keyRadiusDp.dp))
+            .background(kb.accent).clickable(enabled = enabled, onClick = onClick).padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
+    ) { Text(label, color = maxContrastOn(kb.accent), fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1) }
 }
 
 @Composable
 private fun QuickKey(kb: KbTheme, label: String = "", icon: ImageVector? = null, armed: Boolean = false, onClick: () -> Unit) {
     val tick = LocalHapticFeedback.current
     Box(
-        Modifier.height(30.dp).widthIn(min = 38.dp).clip(RoundedCornerShape(kb.keyRadiusDp.dp))
+        Modifier.height(QUICK_KEY_HEIGHT).widthIn(min = 40.dp).clip(RoundedCornerShape(kb.keyRadiusDp.dp))
             .background(if (armed) kb.accent else kb.modifierKey)
             .clickable {
                 tick()
                 onClick()
             }
-            .padding(horizontal = 9.dp),
+            .padding(horizontal = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        val tint = if (armed) kb.toolCircleActiveIcon else kb.modifierKeyText
-        if (icon != null) Icon(icon, null, tint = tint, modifier = Modifier.size(18.dp))
+        val tint = if (armed) maxContrastOn(kb.accent) else kb.modifierKeyText
+        if (icon != null) Icon(icon, label.ifEmpty { null }, tint = tint, modifier = Modifier.size(18.dp))
         else Text(label, color = tint, fontSize = 12.sp, fontWeight = FontWeight.Medium, maxLines = 1)
     }
 }
@@ -933,7 +976,7 @@ private fun BigKey(kb: KbTheme, icon: ImageVector, description: String, modifier
             onClick()
         },
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, description, tint = if (accent) kb.toolCircleActiveIcon else kb.modifierKeyText, modifier = Modifier.size(40.dp)) }
+    ) { Icon(icon, description, tint = if (accent) maxContrastOn(kb.accent) else kb.modifierKeyText, modifier = Modifier.size(40.dp)) }
 }
 
 @Composable
@@ -941,7 +984,7 @@ private fun SmallToggle(kb: KbTheme, icon: ImageVector, description: String, on:
     Box(
         Modifier.size(28.dp).clip(CircleShape).background(if (on) kb.accent else kb.toolCircle).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, description, tint = if (on) kb.toolCircleActiveIcon else kb.toolbarIcon, modifier = Modifier.size(16.dp)) }
+    ) { Icon(icon, description, tint = if (on) maxContrastOn(kb.accent) else kb.toolbarIcon, modifier = Modifier.size(16.dp)) }
 }
 
 @Composable
@@ -1006,6 +1049,10 @@ private fun failureText(failure: KdePairFailure): Int = when (failure) {
 private val ConnectedGreen = Color(0xFF43A047)
 private val FailedRed = Color(0xFFE53935)
 private const val NOTICE_MS = 3_500L
+private const val BUTTON_DISABLED_ALPHA = 0.4f
+
+/** Esc, Tab, the arrows and the "Type on PC" button beside them: one row height. */
+private val QUICK_KEY_HEIGHT = 34.dp
 private const val ECHO_CHARS = 120
 private const val OUTPUT_LINES_SHOWN = 200
 private const val FINGERPRINT_SHOWN = 47

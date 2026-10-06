@@ -11212,7 +11212,9 @@ private fun KeyboardBody(
                 // for the key strip, the echo line and a sliver of touchpad.
                 PanelMode.KDE_CONNECT -> FullBleedTool(
                     state,
-                    title = stringResource(R.string.ime_tool_kde_connect),
+                    // Its name is drawn by the header actions, beside the device chip that
+                    // gives way to it when the row runs short.
+                    title = "",
                     onClose = { onPanelChange(PanelMode.KDE_CONNECT) },
                     compact = state.kdeTypingActive || state.kdeHostEntryActive,
                     compactHeight = if (state.kdeHostEntryActive) 96.dp else KdeTypingCompactHeight,
