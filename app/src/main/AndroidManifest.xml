@@ -930,7 +930,9 @@
         <!--
              The keyboard's word lists as Android's spell checker (#511). Only
              runs once the user picks it under the system's spell checker
-             setting.
+             setting. Its metadata file must not be named spellchecker.xml:
+             the full flavour's Harper service owns that name, and a flavour
+             resource replaces main's by name.
         -->
         <service
             android:name="com.wasimaster.wmkeyboard.app.spell.WMSpellCheckerService"
@@ -942,7 +944,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.view.textservice.scs"
-                android:resource="@xml/spellchecker" />
+                android:resource="@xml/spellchecker_words" />
         </service>
 
         <!--
