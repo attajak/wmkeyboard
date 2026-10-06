@@ -42,6 +42,16 @@
     <!-- The phrase just dictated is in the field and the AI model is cleaning
          it up: filler words and self-corrections removed (#499). -->
     <string name="ime_voice_status_tidying">Tidying up…</string>
+    <!-- Heading of the menu on the voice panel's language chip (#416), and
+         what TalkBack says the chip does. -->
+    <string name="ime_voice_language_menu_title">Voice typing language</string>
+    <!-- Menu entry: dictation hears the language of the keyboard layout in use. -->
+    <string name="ime_voice_language_follow">Follow the keyboard</string>
+    <!-- Menu entry: dictation listens for every keyboard language at once and
+         tells them apart where the recognizer can. -->
+    <string name="ime_voice_language_all">All my languages</string>
+    <!-- Menu entry: opens the Voice typing settings to choose any language. -->
+    <string name="ime_voice_language_more">More languages…</string>
     <!-- Offline voice typing is selected, but no model is downloaded, so the
          microphone can do nothing. Keep this to one short line: the two chips
          directly below it are what name the ways forward. -->

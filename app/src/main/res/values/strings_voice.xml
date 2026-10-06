@@ -117,4 +117,11 @@
     <string name="voice_hold_subtitle">How long you hold the microphone before it becomes press-and-hold</string>
     <string name="voice_hold_info">A short tap on the microphone starts dictation and leaves it running until you tap again. Holding it instead dictates only while you hold, like a walkie-talkie. This is the line between the two. Raise it if a slow press keeps stopping your dictation, lower it if you mean to hold and it keeps latching on.</string>
 
+    <!-- #416: the languages dictation listens for, apart from the keyboard's. -->
+    <string name="voice_languages_title">Voice typing language</string>
+    <string name="voice_languages_subtitle">The language dictation listens for, or several at once</string>
+    <string name="voice_languages_follow">Follow the keyboard</string>
+    <string name="voice_languages_keyboard_group">Your keyboard languages</string>
+    <string name="voice_languages_other_group">Other languages</string>
+    <string name="voice_languages_dialog_body">Following the keyboard, dictation listens for the language of the layout you are typing on. Tick one language to keep dictation in it whatever the layout. Tick several to speak any of them. The system recognizer tells them apart on Android 14 and later, where the recognizer supports it. Offline Whisper and the transcription server work out the language themselves, so give Whisper a model that covers all of them. Elsewhere the first language is the one heard: the keyboard\'s language when it is ticked.</string>
 </resources>

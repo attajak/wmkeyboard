@@ -1140,6 +1140,12 @@ sealed interface VoiceBarAction {
      * service's touchable region, so touches beside the bar reach the app.
      */
     data class Bounds(val left: Int, val top: Int, val right: Int, val bottom: Int) : VoiceBarAction
+
+    /**
+     * A pick off the voice panel's language chip (#416): the languages
+     * dictation listens for, in order, or none to follow the keyboard.
+     */
+    data class PickLanguages(val ids: List<String>) : VoiceBarAction
 }
 
 /**

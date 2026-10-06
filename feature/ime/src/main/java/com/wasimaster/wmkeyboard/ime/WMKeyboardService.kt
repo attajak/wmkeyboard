@@ -280,6 +280,7 @@ import com.wasimaster.wmkeyboard.core.settings.VoiceBarSettings
 import com.wasimaster.wmkeyboard.core.settings.interactiveTyping
 import com.wasimaster.wmkeyboard.core.settings.plainTyping
 import com.wasimaster.wmkeyboard.core.settings.serverFor
+import com.wasimaster.wmkeyboard.core.settings.dictationLanguages
 import com.wasimaster.wmkeyboard.core.settings.restrictedToDirectBoot
 import com.wasimaster.wmkeyboard.core.settings.withoutModes
 import com.wasimaster.wmkeyboard.core.settings.PowerSavingSettings
@@ -2593,6 +2594,12 @@ open class WMKeyboardService : InputMethodService() {
      * any other capture. Pinned for the same reason as [whisperCapture].
      */
     private var serverCapture: String? = null
+    /**
+     * Every language the clip in [whisperRecorder] was started to listen for
+     * (#416), the first being the one in [whisperCapture] or [serverCapture].
+     * More than one means the model or the server is left to tell them apart.
+     */
+    private var captureLanguages: List<String> = emptyList()
     /**
      * Data saving held the last server clip back with an ASK: the next mic tap
      * is the user's "go ahead", and grants [MeteredFeature.CLOUD_VOICE].
@@ -12566,8 +12573,10 @@ open class WMKeyboardService : InputMethodService() {
         // collapsed bar's language switch lands here too — but only mid-
         // session: the bar idles with the mic closed, and a language change
         // must not open it uninvited.
-        if (_uiState.value.panel == PanelMode.VOICE ||
-            (voiceBarShowing() && voiceActive())
+        // A dictation with languages of its own (#416) has nothing to restart
+        // for, nor does a switch between two layouts of the same language.
+        if ((_uiState.value.panel == PanelMode.VOICE || (voiceBarShowing() && voiceActive())) &&
+            voiceLanguageIds() != voiceSessionLanguages
         ) {
             startVoice()
         }
@@ -21674,9 +21683,56 @@ open class WMKeyboardService : InputMethodService() {
 
     // ---- voice input ----
 
-    /** Recognition language follows the input mode, like handwriting. */
-    private fun voiceLanguageTag(): String =
-        _uiState.value.language.localeTag
+    /**
+     * The languages dictation listens for (#416), the one it starts in first:
+     * the input language, like handwriting, unless the user picked their own
+     * on the Voice typing screen or off the panel's language chip.
+     */
+    private fun voiceLanguageIds(): List<String> =
+        _uiState.value.settings.whisper.dictationLanguages(_uiState.value.language.id)
+
+    /** The language a dictation starts in; see [voiceLanguageIds]. */
+    private fun voiceLanguageId(): String = voiceLanguageIds().first()
+
+    /** BCP-47 tag of [voiceLanguageId], as the recognizer takes it. */
+    private fun voiceLanguageTag(): String = voiceTagOf(voiceLanguageId())
+
+    private fun voiceTagOf(languageId: String): String {
+        val keyboard = _uiState.value.language
+        return if (languageId == keyboard.id) keyboard.localeTag else LanguageRegistry.byId(languageId).localeTag
+    }
+
+    /**
+     * The languages [startVoice] last opened the microphone for. A layout
+     * switch that leaves them as they are, because dictation has its own
+     * languages or the new layout types the same one, leaves the session be.
+     */
+    private var voiceSessionLanguages: List<String> = emptyList()
+
+    /**
+     * A pick off the voice panel's language chip (#416): [ids] become the
+     * languages dictation listens for, empty to follow the keyboard again.
+     * The state moves ahead of the DataStore write, as in [onVoiceModePick],
+     * so a session restarted for it is already in the new language. Only a
+     * microphone that is listening restarts: a phrase being transcribed or
+     * tidied was said in the old language and finishes in it.
+     */
+    private fun onVoiceLanguagePick(ids: List<String>) {
+        vibrate()
+        _uiState.update {
+            it.copy(settings = it.settings.copy(whisper = it.settings.whisper.copy(languages = ids)))
+        }
+        serviceScope.launch { settingsRepository.setVoiceLanguages(ids) }
+        if (_uiState.value.voice.status == VoiceStatus.LISTENING) {
+            voiceSilentRetries = 0
+            startVoice()
+        } else if (!voiceActive()) {
+            // The offline-model chip speaks for the language on the panel.
+            _uiState.update {
+                it.copy(voice = it.voice.copy(languageTag = voiceLanguageTag(), modelState = VoiceModelState.UNKNOWN))
+            }
+        }
+    }
 
     /** Mic button on the voice panel/strip: start, or finish the session. */
     fun onVoiceToggle() {
@@ -21815,7 +21871,9 @@ open class WMKeyboardService : InputMethodService() {
         cancelVoice()
         voiceStopRequested = false
         voiceSessionForField = fieldVoice()
-        val tag = voiceLanguageTag()
+        val languageIds = voiceLanguageIds()
+        voiceSessionLanguages = languageIds
+        val tag = voiceTagOf(languageIds.first())
         fun fail(status: VoiceStatus, message: String? = null) {
             _uiState.update {
                 it.copy(
@@ -21840,7 +21898,7 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         var server = serverVoiceSelected()
-        if (server && _uiState.value.settings.whisper.serverFor(_uiState.value.language.id).url.isBlank()) {
+        if (server && _uiState.value.settings.whisper.serverFor(languageIds.first()).url.isBlank()) {
             // The server engine is chosen but has no address: say so, with the
             // same way out the missing Whisper model gets.
             _uiState.update {
@@ -21942,6 +22000,7 @@ open class WMKeyboardService : InputMethodService() {
             // recognizer is asked for no punctuation and no capital letters.
             formatting = !plainVoice(),
             bias = recognizerBias(),
+            alsoListenFor = languageIds.drop(1).map(::voiceTagOf),
             listener = object : VoiceInputEngine.Listener {
                 override fun onListening() {
                     if (generation != voiceGeneration) return
@@ -22124,7 +22183,7 @@ open class WMKeyboardService : InputMethodService() {
         val s = _uiState.value.settings
         return WhisperStore.modelForLanguage(
             filesDir,
-            _uiState.value.language.id,
+            voiceLanguageId(),
             s.whisper.modelId,
             s.whisper.modelByLang,
         )
@@ -22135,8 +22194,10 @@ open class WMKeyboardService : InputMethodService() {
      * recorded for the server that could not be sent (#452). Blocking; call off
      * the main thread.
      */
-    private fun transcribeOnDevice(model: WhisperModel, pcm: FloatArray, languageId: String): String {
-        val langToken = model.langTokenFor(languageId)
+    private fun transcribeOnDevice(model: WhisperModel, pcm: FloatArray, languages: List<String>): String {
+        // As in [finishWhisper]: a choice of several languages is left to the
+        // model to tell apart.
+        val langToken = languages.singleOrNull()?.let(model::langTokenFor)
         val translate = _uiState.value.settings.whisper.translate && model.supportsTranslate
         val text = WhisperEngine.transcribe(
             WhisperStore.modelFile(filesDir, model),
@@ -22147,7 +22208,7 @@ open class WMKeyboardService : InputMethodService() {
         ).trim()
         // As in [finishWhisper]: only a graph left to detect the language can
         // answer in the wrong script.
-        return if (langToken == null && model.fixedLang == null) WhisperScript.rescue(text, languageId) else text
+        return if (langToken == null && model.fixedLang == null) WhisperScript.rescueAmong(text, languages) else text
     }
 
     /**
@@ -22229,7 +22290,7 @@ open class WMKeyboardService : InputMethodService() {
         if (!isWhisperEnabled() || s.whisper.engine != "whisper") return null
         return WhisperStore.modelForLanguage(
             filesDir,
-            _uiState.value.language.id,
+            voiceLanguageId(),
             s.whisper.modelId,
             s.whisper.modelByLang,
         )
@@ -22245,9 +22306,11 @@ open class WMKeyboardService : InputMethodService() {
      * the capture is the same, only [finishWhisper] sends it somewhere else.
      */
     private fun startWhisperCapture(model: WhisperModel?, generation: Int) {
-        val languageId = _uiState.value.language.id
+        val languages = voiceLanguageIds()
+        val languageId = languages.first()
         whisperCapture = model?.let { it to languageId }
         serverCapture = if (model == null) languageId else null
+        captureLanguages = languages
         lateinit var recorder: WhisperRecorder
         recorder = WhisperRecorder(
             onLevel = { level ->
@@ -22347,12 +22410,15 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
         val model = capture?.first
-        val languageId = capture?.second ?: _uiState.value.language.id
+        val languageId = capture?.second ?: voiceLanguageId()
+        val languages = captureLanguages.ifEmpty { listOf(languageId) }
         val gen = voiceGeneration
         val tag = _uiState.value.voice.languageTag
         // Grouped graphs take the language as an input, so hand them the language
-        // being typed in rather than letting them guess from a short clip.
-        val langToken = model?.langTokenFor(languageId)
+        // being typed in rather than letting them guess from a short clip. A
+        // dictation that listens for several (#416) is the one case where the
+        // guess is wanted: the graph can only be told one.
+        val langToken = if (languages.size == 1) model?.langTokenFor(languageId) else null
         // Only ask for the translate task where the model was actually trained for
         // it. A graph can carry the signature without it being any good: turbo was
         // exported with one and trained for transcription alone, and running that
@@ -22393,7 +22459,7 @@ open class WMKeyboardService : InputMethodService() {
             withContext(Dispatchers.Main) {
                 if (gen != voiceGeneration) return@withContext
                 result
-                    .map { if (detected) WhisperScript.rescue(it.trim(), languageId) else it.trim() }
+                    .map { if (detected) WhisperScript.rescueAmong(it.trim(), languages) else it.trim() }
                     .map { VoiceClipGate.clean(it, faint) }
                     .onSuccess { commitWhisperResult(it, tag, userStopped) }
                     .onFailure { e ->
@@ -22428,9 +22494,15 @@ open class WMKeyboardService : InputMethodService() {
         val gen = voiceGeneration
         val tag = _uiState.value.voice.languageTag
         val server = _uiState.value.settings.whisper
+        val languages = captureLanguages.ifEmpty { listOf(languageId) }
         // The server detects the language itself when told nothing, and a code
-        // Whisper does not know would get the request refused.
-        val language = if (server.serverSendLanguage) WhisperLanguages.codeForLanguage(languageId) else null
+        // Whisper does not know would get the request refused. The request
+        // names one language, so a dictation in several (#416) names none.
+        val language = if (server.serverSendLanguage && languages.size == 1) {
+            WhisperLanguages.codeForLanguage(languageId)
+        } else {
+            null
+        }
         _uiState.update {
             it.copy(voice = it.voice.copy(status = VoiceStatus.TRANSCRIBING, partial = "", level = 0f))
         }
@@ -22482,7 +22554,7 @@ open class WMKeyboardService : InputMethodService() {
             } else {
                 null
             }
-            val heard = if (local != null) runCatching { transcribeOnDevice(local, pcm, languageId) } else result
+            val heard = if (local != null) runCatching { transcribeOnDevice(local, pcm, languages) } else result
             withContext(Dispatchers.Main) {
                 if (gen != voiceGeneration) return@withContext
                 // Told on the move, and forgotten once the server answers again.
@@ -22831,6 +22903,7 @@ open class WMKeyboardService : InputMethodService() {
             is VoiceBarAction.SwitchSurface -> switchVoiceSurface(action.mode)
             VoiceBarAction.CloseStrip -> closeVoiceStrip()
             is VoiceBarAction.Bounds -> onVoiceBarBounds(action)
+            is VoiceBarAction.PickLanguages -> onVoiceLanguagePick(action.ids)
         }
     }
 

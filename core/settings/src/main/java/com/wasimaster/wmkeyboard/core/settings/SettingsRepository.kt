@@ -4966,7 +4966,28 @@ data class WhisperSettings(
      * words above are sent in front of it.
      */
     val serverPrompt: String = "",
+    /**
+     * The languages dictation listens for (#416), as language ids in the order
+     * they were picked. Empty, the default, follows the keyboard: dictation
+     * hears the language of the layout being typed on, as it always has. One
+     * id pins dictation to that language whatever the layout. Two or more let
+     * the recognizer tell them apart where it can; [dictationLanguages] says
+     * which one a session starts in.
+     */
+    val languages: List<String> = emptyList(),
 )
+
+/**
+ * The languages a dictation listens for (#416), the one it starts in first.
+ * [keyboardId] is the language of the layout in use: what an empty choice
+ * follows, and the one a combined choice starts in when it is one of them,
+ * so switching layouts still moves the recognizer's first guess.
+ */
+fun WhisperSettings.dictationLanguages(keyboardId: String): List<String> = when {
+    languages.isEmpty() -> listOf(keyboardId)
+    keyboardId in languages -> listOf(keyboardId) + (languages - keyboardId)
+    else -> languages
+}
 
 /**
  * What one step of a sideways backspace swipe takes off (issue #36).
@@ -8885,6 +8906,8 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_BIAS_PERSONAL_WORDS = booleanPreferencesKey("voice_bias_personal_words")
         private val VOICE_BIAS_WORDS = stringPreferencesKey("voice_bias_words")
         private val VOICE_SERVER_PROMPT = stringPreferencesKey("voice_server_prompt")
+        /** Comma-separated language ids, in the order picked; see [WhisperSettings.languages]. */
+        private val VOICE_LANGUAGES = stringPreferencesKey("voice_languages")
         private val CAMERA_PREFER_FRONT = booleanPreferencesKey("camera_prefer_front")
         private val CAMERA_TIMER_SECONDS = intPreferencesKey("camera_timer_seconds")
         private val CAMERA_CAPTURE_MAX_PX = intPreferencesKey("camera_capture_max_px")
@@ -10742,7 +10765,11 @@ class SettingsRepository(private val context: Context) {
             biasPersonalWords = p[VOICE_BIAS_PERSONAL_WORDS] ?: defaults.whisper.biasPersonalWords,
             biasWords = p[VOICE_BIAS_WORDS] ?: defaults.whisper.biasWords,
             serverPrompt = p[VOICE_SERVER_PROMPT] ?: defaults.whisper.serverPrompt,
+            languages = p[VOICE_LANGUAGES]?.let(::decodeVoiceLanguages) ?: defaults.whisper.languages,
         )
+
+    private fun decodeVoiceLanguages(raw: String): List<String> =
+        raw.split(',').map { it.trim() }.filter { it.isNotEmpty() }.distinct()
 
     private fun readCamera(p: Preferences, defaults: KeyboardSettings) =
         CameraSettings(
@@ -11848,6 +11875,10 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setVoiceServerPrompt(value: String) =
         editPrefs { it[VOICE_SERVER_PROMPT] = value }
+
+    /** [ids] in the order picked; an empty list goes back to following the keyboard (#416). */
+    suspend fun setVoiceLanguages(ids: List<String>) =
+        editPrefs { it[VOICE_LANGUAGES] = ids.distinct().joinToString(",") }
 
     suspend fun setCameraPreferFront(value: Boolean) =
         editPrefs { it[CAMERA_PREFER_FRONT] = value }

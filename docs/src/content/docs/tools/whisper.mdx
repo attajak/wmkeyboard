@@ -110,7 +110,7 @@ The Whisper-specific controls live inside the same **Voice typing** screen as th
 
 **Model for other languages** sets that fallback by hand. It sits under **Your models**, below the per-language list, and it only appears once you have more than one model on disk, where the choice means something. **Automatic** is the default and keeps the old behaviour: the best downloaded model that covers the language you're typing in. Pick a model instead and every unpinned language uses that one.
 
-Dictation still resolves per language, from the language of the active layout, the same way the system recognizer follows the layout's locale. The app also fills the fallback in for you when a model is the only one on disk, and clears the choice if you delete that model.
+Dictation still resolves per language, from the language of the active layout, the same way the system recognizer follows the layout's locale. A [Voice typing language](/tools/voice/#language-and-engine) you picked takes the layout's place. With several picked, the model for the first is used and left to detect which one you speak, so pick a multilingual model that covers them all. The app also fills the fallback in for you when a model is the only one on disk, and clears the choice if you delete that model.
 
 Nine of the 10 multilingual models support translation. Turbo doesn't, because large-v3-turbo was trained for transcription only, and none of the 19 single-language models do either. If a language routes to one of those, the translate toggle has no visible effect for it.
 
