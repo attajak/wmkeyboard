@@ -532,6 +532,7 @@ import com.wasimaster.wmkeyboard.core.settings.isWhisperEnabled
 import com.wasimaster.wmkeyboard.core.transliteration.BijoyAnsi
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliGraphemes
 import com.wasimaster.wmkeyboard.core.transliteration.BengaliPhoneticIndex
+import com.wasimaster.wmkeyboard.core.transliteration.PhoneticIndex
 import com.wasimaster.wmkeyboard.core.transliteration.Khipro
 import com.wasimaster.wmkeyboard.core.layout.AssetLayouts
 import com.wasimaster.wmkeyboard.core.layout.BuiltInLayouts
@@ -2144,7 +2145,7 @@ open class WMKeyboardService : InputMethodService() {
             }.toMap()
         }
         engine.extraPhonetic = backends
-        romanizedGlides = romanizedGlides.filterKeys { it == PhoneticSchemes.BENGALI.languageId } +
+        romanizedGlides = romanizedGlides.filterKeys { it == PhoneticSchemes.BENGALI.languageId || it == KHIPRO_GLIDE } +
             backends.mapValues { (_, backend) ->
                 RomanizedIndex.of(
                     spellings = backend.spellings,
@@ -4311,7 +4312,22 @@ open class WMKeyboardService : InputMethodService() {
                     },
                 )
             }
-            romanizedGlides = romanizedGlides + ("bn" to bengaliGlide)
+            // Khipro (#541): its keys spell a word their own way, so a stroke
+            // over its grid is decoded against Khipro spellings of the Bangla
+            // list, generated offline by running Khipro's own rules backwards
+            // and kept only where they convert back to the word.
+            val khiproGlide = withContext(Dispatchers.Default) {
+                runCatching {
+                    assets.open(KHIPRO_SPELLINGS_ASSET).use { SpellingMap.load(it) }
+                }.getOrNull()?.let { map ->
+                    RomanizedIndex.of(
+                        spellings = map,
+                        phonetic = PhoneticIndex.EMPTY,
+                        nativeFrequency = { word -> suggestionEngine?.bengaliIndex?.frequencyOf(word) ?: 0 },
+                    )
+                } ?: RomanizedIndex.EMPTY
+            }
+            romanizedGlides = romanizedGlides + ("bn" to bengaliGlide) + (KHIPRO_GLIDE to khiproGlide)
             // Every other phonetic language an enabled layout types through.
             loadExtraPhonetic()
             suggestionEngine?.let { loadAvroDesktop(it, it.phoneticCandidateLists) }
@@ -19372,7 +19388,8 @@ open class WMKeyboardService : InputMethodService() {
                 GlideGate(
                     languageId = state.language.id,
                     converts = state.composer.isTransliterating || state.composer.isConversion,
-                    phonetic = state.composer.phoneticLanguage,
+                    phonetic = state.composer.phoneticLanguage
+                        ?: KHIPRO_GLIDE.takeIf { state.composer is KhiproComposer },
                     alphabet = state.layouts.letterAlphabet,
                     sources = epoch,
                 )
@@ -35774,6 +35791,12 @@ private const val SUGGEST_PAGES_POOL = 24
  * [SuggestionEngine.phoneticFixedStrip]).
  */
 private const val FIXED_PHONETIC_CHIPS = 2
+/** [romanizedGlides]' key for Khipro, whose spellings are not a language's. */
+private const val KHIPRO_GLIDE = "bn_khipro"
+
+/** Khipro spelling<TAB>Bangla word, for gliding over the Khipro grid (#541). */
+private const val KHIPRO_SPELLINGS_ASSET = "dictionaries/bn_khipro.tsv"
+
 /** The most words the candidate-list row above the strip holds. */
 private const val PHONETIC_CANDIDATE_BAR_MAX = 100
 
