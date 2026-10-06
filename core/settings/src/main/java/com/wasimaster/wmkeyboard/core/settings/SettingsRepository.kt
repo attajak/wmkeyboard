@@ -6660,9 +6660,11 @@ data class IconSettings(
      * Slot id → icon source, for slots the user changed one at a time.
      *
      * A source is `b:<name>` for one of the bundled Material icons (see
-     * `BuiltinIcons`) or `p:<packId>` to take that slot from a specific
-     * installed pack. An entry naming a pack or an icon that no longer exists
-     * falls back to the default rather than drawing nothing.
+     * `BuiltinIcons`), `p:<packId>` to take that slot from a specific
+     * installed pack, or `v:<variant>` for one of the slot's other looks, out
+     * of the active pack or the app's own (`IconDefaults.variant`). An entry
+     * naming a pack, an icon or a look that no longer exists falls back to the
+     * default rather than drawing nothing.
      */
     val overrides: Map<String, String> = emptyMap(),
     /**
