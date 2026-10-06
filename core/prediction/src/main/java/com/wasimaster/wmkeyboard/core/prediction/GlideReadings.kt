@@ -46,7 +46,7 @@ import kotlin.math.abs
  */
 class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
 
-    private class Entry(val key: String, val readings: List<String>) {
+    private class Entry(val key: String, var readings: List<String>) {
         var anchor: Int = UNANCHORED
 
         /**
@@ -211,6 +211,19 @@ class GlideReadings(private val capacity: Int = DEFAULT_CAPACITY) {
     /** Forgets the readings of the [word] starting at [start]: one was taken. */
     fun forget(word: String, start: Int) {
         find(word, start)?.let { entries.remove(it) }
+    }
+
+    /**
+     * Takes [word] out of every stroke's readings: the user deleted it from
+     * the dictionary (#277). Reading a swiped word back puts its readings in
+     * front of the strip, so a deleted word left here came straight back the
+     * moment the strip was rebuilt. The entries stay, strokes and all.
+     */
+    fun dropReading(word: String) {
+        for (entry in entries) {
+            if (entry.readings.none { it.equals(word, ignoreCase = true) }) continue
+            entry.readings = entry.readings.filterNot { it.equals(word, ignoreCase = true) }
+        }
     }
 
     fun clear() {

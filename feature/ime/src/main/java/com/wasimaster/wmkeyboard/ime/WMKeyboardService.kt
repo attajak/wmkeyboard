@@ -32216,6 +32216,9 @@ open class WMKeyboardService : InputMethodService() {
         learningBuffer.drop(trimmed)
         wordRanks.remove(trimmed)
         glideShapes.forget(trimmed)
+        // A caret on a swiped word fills the strip from that stroke's readings,
+        // not from the engine, so the refresh below put it straight back (#277).
+        glideReadings.dropReading(trimmed)
         suggestionEngine?.rankOffsets = wordRanks.snapshot()
         serviceScope.launch {
             val removed = withContext(Dispatchers.IO) {
