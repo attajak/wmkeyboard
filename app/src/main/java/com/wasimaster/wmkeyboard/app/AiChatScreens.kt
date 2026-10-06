@@ -312,7 +312,9 @@ internal fun AiChatScreen(
         // off the top of the screen (#143). Stopping the column at the keyboard
         // instead shrinks the reverseLayout transcript from its top, so the
         // newest message stays on screen. The Scaffold's bottom inset is
-        // consumed first so the navigation bar is not counted twice.
+        // consumed first so the navigation bar is not counted twice. The
+        // window is told not to pan as well, or the composer rises twice.
+        ResizeForKeyboard()
         Column(
             modifier = Modifier
                 .padding(padding)

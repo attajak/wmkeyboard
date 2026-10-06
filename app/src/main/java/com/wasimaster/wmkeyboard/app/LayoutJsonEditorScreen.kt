@@ -369,6 +369,7 @@ internal fun LayoutJsonEditorScreen(
         val reduceMotion = settings.watch { it.reduceMotion }
         // The window no longer resizes for the keyboard on Android 15, so the content
         // stops at the top of the keyboard itself; the plugin editor explains why.
+        ResizeForKeyboard()
         Column(Modifier.padding(padding).consumeWindowInsets(padding).imePadding().fillMaxSize()) {
             AnimatedVisibility(
                 visible = findOpen,

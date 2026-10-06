@@ -790,6 +790,7 @@ internal fun PluginIdeScreen(draftId: String, onBack: () -> Unit, reduceMotion: 
         // keyboard begins, which is also how the suggestion list knows there is no
         // room below the caret. The Scaffold's own bottom inset is consumed first so
         // the navigation bar is not counted twice.
+        ResizeForKeyboard()
         Column(Modifier.padding(padding).consumeWindowInsets(padding).imePadding().fillMaxSize()) {
             AnimatedVisibility(
                 visible = findOpen,

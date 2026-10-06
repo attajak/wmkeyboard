@@ -1,7 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
 import android.content.Context
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -89,27 +88,6 @@ internal val LocalKeyboardPreview = compositionLocalOf<KeyboardPreviewState?> { 
  */
 @Composable
 internal fun CloseOrphanedKeyboardPreview(state: KeyboardPreviewState) {
-    // The activity leaves its soft input mode unset, so the system pans the
-    // whole window up to uncover a focused field. The field pads itself by the
-    // keyboard's inset already, and the two together threw it up under the
-    // status bar with an empty screen below it. While it is open the window is
-    // told to resize instead, which from Android 15 means neither pan nor
-    // resize, only the insets the field already answers.
-    val context = LocalContext.current
-    DisposableEffect(state.open) {
-        val window = context.findActivity()?.window
-        val before = window?.attributes?.softInputMode
-        val opened = state.open
-        if (opened && window != null && before != null) {
-            window.setSoftInputMode(
-                (before and WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST.inv()) or
-                    WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE,
-            )
-        }
-        onDispose {
-            if (opened && window != null && before != null) window.setSoftInputMode(before)
-        }
-    }
     LaunchedEffect(state) {
         snapshotFlow { state.open && state.hosts == 0 }.collectLatest { orphaned ->
             if (!orphaned) return@collectLatest
@@ -171,6 +149,9 @@ internal fun KeyboardPreviewBar(state: KeyboardPreviewState) {
         state.hosts++
         onDispose { state.hosts-- }
     }
+    // Pads itself by the keyboard below, so the window must not pan as well:
+    // the two together threw the field up under the status bar.
+    ResizeForKeyboard()
     LaunchedEffect(Unit) {
         focus.requestFocus()
         keyboard?.show()
