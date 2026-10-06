@@ -1,5 +1,6 @@
 package com.wasimaster.wmkeyboard.app
 
+import android.os.Build
 import android.view.Window
 import android.view.WindowManager
 import androidx.compose.runtime.Composable
@@ -18,8 +19,15 @@ import java.util.WeakHashMap
  * A screen that also pads itself by the keyboard's inset gets both: the field
  * rises by the keyboard's height twice and ends up under the status bar with an
  * empty screen below it. While such a screen is shown the window is set to
- * adjustResize, which from Android 15 (edge to edge) means neither pan nor
- * resize, only the insets the screen already answers.
+ * adjustNothing (adjustResize before Android 11, which only reports the
+ * keyboard's inset to a resizing window).
+ *
+ * Not adjustResize from 11 on: the window still pans under it, whenever the
+ * keyboard's inset arrives before the screen has moved its field up. Android
+ * checks where the focused field is at that moment, finds it behind the
+ * keyboard and slides the window; a chat with a long transcript, whose frames
+ * are slower, lost that race some of the time. adjustNothing never pans, and
+ * from 11 the inset reaches the screen all the same.
  *
  * Counted per window, so two such screens overlapping during a transition hand
  * over cleanly, and the mode the window had before comes back once the last of
@@ -47,10 +55,12 @@ private object SoftInputResize {
         }
         val before = window.attributes.softInputMode
         held[window] = Held(before, 1)
-        window.setSoftInputMode(
-            (before and WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST.inv()) or
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE,
-        )
+        val adjust = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+        } else {
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        }
+        window.setSoftInputMode((before and WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST.inv()) or adjust)
     }
 
     fun release(window: Window) {
