@@ -145,6 +145,7 @@ The same two lists are editable from settings, if you would rather not chase the
 | Best suggestion in the middle | On |
 | Shorten long words | In the middle |
 | Numbers from the letter keys | Off |
+| Remember numbers you type | Off |
 | Space after a suggestion | On |
 | Block offensive words | On |
 | Context-aware suggestions | On |
@@ -156,6 +157,8 @@ The same two lists are editable from settings, if you would rather not chase the
 None of these reach a conversion keyboard. Chinese, Cantonese and Japanese put the composer's own character candidates on the strip, and that list is how the language is typed rather than a guess about it, so it survives **Suggestions** being off, a field that asks for a silent strip, and a password box alike. See [Chinese, Japanese & Korean](/languages/cjk/).
 
 **Numbers from the letter keys** (off) is for boards with the number row hidden, where each top-row letter carries a small digit in its corner. When every letter of the word you're typing sits on one of those keys, the strip's last slot also offers the number those digits spell: `qwe` on QWERTY offers `123` beside the words, and one tap types it. It reads the keys you pressed rather than the letters, so AZERTY's `azerty` spells `123456` and a layout with no digit hints offers nothing. The number is never the first slot, never what a space commits and never an autocorrect target. Two letters at least, so a lone `I` stays a word rather than an 8. Five digits or more are grouped the way the [number chip](/smart/chips/) groups them, under its **Grouping style**, as long as **Group long numbers** is on. With the number row shown the digits have keys of their own and nothing is offered.
+
+**Remember numbers you type** (off) completes the numbers you type often, the way Samsung's keyboard does. A number of three digits or more that stands on its own is kept when you press space or enter after it, or leave the field. The next time you type its first digits, the strip shows the numbers you've typed that start with them, the most used first, and one tap replaces your digits with the whole number. No space follows it, since a number is as often followed by a full stop as by a word. A number is only one of its own after a space, at the start of the text, or after `+`, `(` or `#`, so the `880` of `+880` counts. Digits stuck to letters (`win10`) and the pieces of a number split by a comma, a colon or a dash (`1,234`, `12:30`, `0171-234`) are left alone. Nothing is kept from a password field, in incognito, or while **Learn from typing** is off. Number and phone fields have no strip at all, so this works in ordinary text fields. The list stays on the phone, holds up to 100 numbers, and is deleted with the other learned data under [Storage](/privacy/data/).
 
 Four of the rows above aren't in the Suggestions group at all. They live under <SettingsPath path="Typing / Automatic corrections" />, and they're listed here because what they actually do is change the strip:
 

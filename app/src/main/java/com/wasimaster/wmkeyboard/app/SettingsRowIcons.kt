@@ -872,6 +872,7 @@ internal object SettingsRowIcons {
         put(R.string.typing_contact_emails_title) { Icons.Outlined.AlternateEmail }
         put(R.string.typing_contact_emails_in_email_fields_title) { Icons.Outlined.AlternateEmail }
         put(R.string.typing_typed_emails_title) { Icons.Outlined.History }
+        put(R.string.typing_typed_numbers_title) { Icons.Outlined.History }
         put(R.string.typing_app_names_title) { Icons.Outlined.Apps }
         put(R.string.typing_inline_emoji_search_title) { Icons.Outlined.EmojiEmotions }
         put(R.string.typing_inline_autofill_title) { Icons.Outlined.Password }

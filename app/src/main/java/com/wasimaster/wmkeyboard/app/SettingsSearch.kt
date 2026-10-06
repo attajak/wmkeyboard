@@ -342,6 +342,7 @@ private fun SearchStrings.typingSuggestionsRows(): List<SettingsSearchEntry> {
         row(R.string.typing_contact_emails_title, R.string.typing_contact_emails_subtitle),
         row(R.string.typing_contact_emails_in_email_fields_title, R.string.typing_contact_emails_in_email_fields_subtitle),
         row(R.string.typing_typed_emails_title, R.string.typing_typed_emails_subtitle),
+        row(R.string.typing_typed_numbers_title, R.string.typing_typed_numbers_subtitle),
         row(R.string.typing_app_names_title, R.string.typing_app_names_subtitle),
         row(R.string.typing_inline_emoji_search_title, R.string.typing_inline_emoji_search_subtitle),
         row(R.string.typing_inline_autofill_title, R.string.typing_inline_autofill_subtitle),

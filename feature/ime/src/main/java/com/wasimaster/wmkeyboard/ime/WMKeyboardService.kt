@@ -172,6 +172,7 @@ import android.provider.ContactsContract
 import com.wasimaster.wmkeyboard.core.prediction.Apostrophes
 import com.wasimaster.wmkeyboard.core.prediction.AppLanguageMix
 import com.wasimaster.wmkeyboard.core.prediction.TypedEmails
+import com.wasimaster.wmkeyboard.core.prediction.TypedNumbers
 import com.wasimaster.wmkeyboard.core.input.BrailleChord
 import com.wasimaster.wmkeyboard.core.input.BrailleGrade1
 import com.wasimaster.wmkeyboard.core.input.DeadKeys
@@ -339,6 +340,7 @@ import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxLadder
 import com.wasimaster.wmkeyboard.core.prediction.GlideSandboxPolicy
 import com.wasimaster.wmkeyboard.core.settings.APP_LANGUAGE_MIX_FILE
 import com.wasimaster.wmkeyboard.core.settings.TYPED_EMAILS_FILE
+import com.wasimaster.wmkeyboard.core.settings.TYPED_NUMBERS_FILE
 import com.wasimaster.wmkeyboard.core.settings.HAND_MODEL_FILE
 import com.wasimaster.wmkeyboard.core.settings.LEARNED_CORRECTIONS_FILE
 import com.wasimaster.wmkeyboard.core.settings.PHONETIC_SCRIPT_CHOICES_FILE
@@ -745,6 +747,7 @@ open class WMKeyboardService : InputMethodService() {
         correctionMemory.save()
         appLanguageMix.save()
         typedEmails.save()
+        typedNumbers.save()
         scriptChoices.save()
         glideOutcomes.save()
         glideShapes.save()
@@ -944,6 +947,28 @@ open class WMKeyboardService : InputMethodService() {
 
     /** Addresses typed into email fields, when the user asked for them (#475). */
     private var typedEmails = TypedEmails(null)
+
+    /** Numbers typed on their own, offered again from their first digits (#431). */
+    private var typedNumbers = TypedNumbers(null)
+
+    /**
+     * The run of digits the caret sits right after, while the strip offers
+     * the remembered numbers that go on from it (#431), or null. Read off the
+     * field by [restartSuggestionsAtCursor], since a digit typed at the start
+     * of a word commits straight through and no composing buffer holds it.
+     * Dropped by every key press and caret move, and re-read from the echo
+     * that follows, so the strip never offers numbers for text that has moved
+     * on.
+     */
+    private var numberRun: String? = null
+
+    /**
+     * Whether the caret was last seen right after a run of digits that has
+     * not been remembered yet. Unlike [numberRun] it survives the key presses
+     * that extend the run, so the space, enter or field change that ends it
+     * still knows there is one to keep — see [rememberTypedNumber].
+     */
+    private var numberRunPending = false
 
     /**
      * The spellings the user has switched between English and a phonetic
@@ -3622,6 +3647,7 @@ open class WMKeyboardService : InputMethodService() {
                         languageMixConfidence.reload()
                         appLanguageMix.reload()
                         typedEmails.reload()
+                        typedNumbers.reload()
                         scriptChoices.reload()
                     }
                     suggestionEngine?.rankOffsets = wordRanks.snapshot()
@@ -4039,6 +4065,7 @@ open class WMKeyboardService : InputMethodService() {
         languageMixConfidence = LanguageMixConfidence(store("learning/language_mix.json"))
         appLanguageMix = AppLanguageMix(store(APP_LANGUAGE_MIX_FILE))
         typedEmails = TypedEmails(store(TYPED_EMAILS_FILE))
+        typedNumbers = TypedNumbers(store(TYPED_NUMBERS_FILE))
         scriptChoices = PhoneticScriptChoices(store(PHONETIC_SCRIPT_CHOICES_FILE))
         suggestionEngine?.scriptChoices = scriptChoices
         emojiUsage = EmojiUsage(store("learning/emoji_usage.json")).also {
@@ -5483,6 +5510,9 @@ open class WMKeyboardService : InputMethodService() {
         smartMutedAfter = null
         stickerMutedAfter = null
         patternMutedAfter = null
+        // The digits the strip was completing were in the old field.
+        numberRun = null
+        numberRunPending = false
         // A new field is a fresh audience for the intent chips; a restart is
         // the same field talking, where a retired hint stays retired.
         if (!restarting) intentChipsRetired.clear()
@@ -6407,6 +6437,7 @@ open class WMKeyboardService : InputMethodService() {
         // Before the base class lets go of the connection: the address is
         // read off the field that is closing.
         rememberTypedEmail()
+        rememberTypedNumber()
         super.onFinishInputView(finishingInput)
         keyboardVisible = false
         // The drag that put it up cannot finish with the keyboard gone.
@@ -6865,6 +6896,17 @@ open class WMKeyboardService : InputMethodService() {
     fun onKey(key: Key) = trace(ImeTrace.KEY) { handleKey(key) }
 
     private fun handleKey(key: Key) {
+        // The strip's remembered numbers were about the caret before this key
+        // (#431); its echo re-reads them. A space or an enter ends the run of
+        // digits, which is the moment it is worth remembering.
+        numberRun = null
+        if (numberRunPending && (
+                key.action == KeyAction.Space || key.action == KeyAction.Enter ||
+                    key.action == KeyAction.Newline || key.action == KeyAction.EditorAction
+                )
+        ) {
+            rememberTypedNumber()
+        }
         // Space, backspace and enter on a Keyman layout: the layer may say what
         // modifiers the rules see them with and where they lead, and the
         // keyboard's PostKeystroke group runs after them as after every other
@@ -10875,6 +10917,8 @@ open class WMKeyboardService : InputMethodService() {
         // answered again from scratch below.
         clearCaretWord()
         resumedWord = null
+        numberRun = null
+        numberRunPending = false
         caretSettleJob?.cancel()
         caretSettleJob = null
         // The caret settling right after a swipe is the commit's own echo:
@@ -11071,7 +11115,78 @@ open class WMKeyboardService : InputMethodService() {
         } else {
             syncPreviousWordFromField(ic)
         }
+        noteNumberRun(ic, cached)
         refreshSuggestions()
+    }
+
+    /**
+     * Whether numbers are being remembered and offered here (#431): the
+     * setting, and never in a password box, where a PIN is exactly the number
+     * nobody wants kept. Incognito and learning being off stop the
+     * remembering in [rememberTypedNumber], not the offering.
+     */
+    private fun typedNumbersOn(state: KeyboardUiState): Boolean =
+        state.settings.suggestionSources.typedNumbers && !state.secureField
+
+    /**
+     * Reads the run of digits the caret has just landed after, for the strip
+     * to complete ([numberRun]) and for the key that ends it to remember
+     * ([numberRunPending]). [before] is the text the caller already read, when
+     * it read any; otherwise this asks the editor, but only with the setting
+     * on, since it runs on every caret echo.
+     */
+    private fun noteNumberRun(ic: InputConnection, before: CharSequence?) {
+        if (!typedNumbersOn(_uiState.value)) {
+            numberRunPending = false
+            return
+        }
+        val digits = TypedNumbers.runBefore(before ?: ic.getTextBeforeCursor(NUMBER_RUN_LOOKBEHIND, 0))
+        numberRun = digits
+        numberRunPending = digits != null
+    }
+
+    /**
+     * Keeps the number the caret sits right after, if there is one standing
+     * on its own (#431). Read live rather than taken from [numberRun], which
+     * was dropped by the very key that ends the run and may in any case trail
+     * a fast typist by a digit. Learning off, incognito and a field that keeps
+     * the keyboard's hands off all keep it out, the same as a word.
+     */
+    private fun rememberTypedNumber() {
+        if (!numberRunPending) return
+        numberRunPending = false
+        val state = _uiState.value
+        if (!typedNumbersOn(state) || !learningAllowed || !userUnlocked) return
+        val ic = currentInputConnection ?: return
+        val digits = TypedNumbers.runBefore(ic.getTextBeforeCursor(NUMBER_RUN_LOOKBEHIND, 0)) ?: return
+        typedNumbers.record(digits)
+    }
+
+    /**
+     * Puts the remembered numbers that go on from [digits] on the strip, and says
+     * whether there were any. None leaves the strip to the ordinary next-word
+     * pass, which is what it showed after digits before this existed. A cheap
+     * scan of a capped list, so it runs inline.
+     */
+    private fun publishTypedNumbers(digits: String): Boolean {
+        val numbers = typedNumbers.complete(digits, NUMBER_SUGGESTION_LIMIT)
+        if (numbers.isEmpty()) return false
+        suggestionJob?.cancel()
+        _uiState.update {
+            it.copy(
+                suggestions = numbers,
+                phoneticCandidates = emptyList(),
+                emojiSuggestions = emptyList(),
+                punctuationSuggestions = emptyList(),
+                nextLetterBias = emptyMap(),
+                octopus = emptyMap(),
+                inlineEmoji = false,
+                joinSuggestion = null,
+                revisionSuggestion = null,
+                autocorrectWord = null,
+            )
+        }
+        return true
     }
 
     /**
@@ -17476,6 +17591,11 @@ open class WMKeyboardService : InputMethodService() {
             return
         }
 
+        // The caret right after digits typed on their own: the numbers the
+        // user typed before that start with them (#431).
+        val digitRun = numberRun
+        if (typed.isEmpty() && digitRun != null && publishTypedNumbers(digitRun)) return
+
         if (latinResolution(state, typed)) {
             resolveCommitAhead(engine, typed)
         } else {
@@ -18059,6 +18179,29 @@ open class WMKeyboardService : InputMethodService() {
                     octopus = emptyMap(),
                     emojiSuggestions = emptyList(),
                 )
+            }
+            return
+        }
+        // A remembered number (#431): no composing region backs the digits it
+        // completes either, so they come out by hand. Re-read first, the same
+        // as a caret word below: a chip that has outlived its digits does
+        // nothing rather than land somewhere they no longer are. No space
+        // after it, since what follows a number is as often a mark as a word.
+        val digitRun = numberRun
+        if (digitRun != null && composing.isEmpty() && suggestion.length > digitRun.length &&
+            suggestion.startsWith(digitRun)
+        ) {
+            numberRun = null
+            if (TypedNumbers.runBefore(ic.getTextBeforeCursor(NUMBER_RUN_LOOKBEHIND, 0)) != digitRun) return
+            ic.beginBatchEdit()
+            ic.deleteSurroundingText(digitRun.length, 0)
+            ic.commitText(suggestion, 1)
+            ic.endBatchEdit()
+            lastGestureWord = null
+            lastRevertible = null
+            clearSwapOffer()
+            _uiState.update {
+                it.copy(suggestions = emptyList(), octopus = emptyMap(), emojiSuggestions = emptyList())
             }
             return
         }
@@ -35733,6 +35876,12 @@ open class WMKeyboardService : InputMethodService() {
 
         /** How many contact-email completions the email-field strip may show. */
         private const val EMAIL_FIELD_SUGGESTION_LIMIT = 5
+
+        /** Remembered numbers on the strip at once (#431). */
+        private const val NUMBER_SUGGESTION_LIMIT = 3
+
+        /** Enough to hold the longest number [TypedNumbers] keeps, and what stands in front of it. */
+        private const val NUMBER_RUN_LOOKBEHIND = TypedNumbers.MAX_LENGTH + 1
 
         /** Shortest token before the cursor that triggers an email completion. */
         private const val EMAIL_FIELD_MIN_PREFIX = 2
