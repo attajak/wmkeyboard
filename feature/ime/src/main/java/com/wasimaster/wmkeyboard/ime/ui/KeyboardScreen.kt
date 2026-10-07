@@ -20102,12 +20102,19 @@ private fun AlternatesPopup(
     if (hold != null) {
         LaunchedEffect(hold, still) {
             var lit = false
+            var litIndex = -1
             snapshotFlow { hold.selected.intValue to entryRects.value }.collectLatest { (index, rects) ->
                 val target = rects.getOrNull(index)
+                val moved = index != litIndex
+                litIndex = index
                 when {
                     target == null -> lit = false
                     // Appearing, it is already where it belongs; only a move slides.
-                    !lit || still -> {
+                    // So does the same entry laid out somewhere else: a popup near
+                    // the right edge lays out once left to right and then mirrors,
+                    // and sliding after its first entry crossed the whole popup
+                    // and lit the last entry on the way (#583).
+                    !lit || still || !moved -> {
                         lit = true
                         highlight.snapTo(target)
                     }
