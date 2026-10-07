@@ -17794,8 +17794,22 @@ open class WMKeyboardService : InputMethodService() {
                 // leads the strip, and what the keys spell sits right behind
                 // it, one tap away (#487).
                 val latin = if (completing != null) completionLatin(state, typed) else null
-                val suggested = (if (latin != null) listOf(latin) + deep.filterNot { it == latin } else deep)
-                    .take(stripDepth)
+                // Otherwise the keys as typed still get a chip, right behind
+                // the Bangla reading, for the English words no list knows
+                // (#594); with English mixing off there is none.
+                val literal = if (completing != null && latin == null && state.allowsTypingIntelligence) {
+                    engine.completionLiteral(typed)?.let { sentenceCasedLatin(it, typed, state) }
+                } else {
+                    null
+                }
+                val ranked = if (latin != null) listOf(latin) + deep.filterNot { it == latin } else deep
+                val suggested = (
+                    if (literal != null && ranked.none { it == literal }) {
+                        ranked.take(1) + literal + ranked.drop(1)
+                    } else {
+                        ranked
+                    }
+                    ).take(stripDepth)
                 // A28: a personal-dictionary shortcut typed in full offers its
                 // expansion as the top chip (e.g. "omw" → "on my way"). Prepended
                 // so it wins the primary slot; deduped against the word list.

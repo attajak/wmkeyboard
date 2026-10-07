@@ -3022,6 +3022,20 @@ class SuggestionEngine(
         }
 
     /**
+     * The keys of a word on a layout that spells its words outright (Khipro),
+     * written as typed, for a strip chip of their own (#594): an English word
+     * no list knows (a name, a brand, slang) can still go in as typed. Null
+     * when the keys are not letters alone, or when English is not mixed in on
+     * this layout ([phoneticAutoEnglish], with English among the language's
+     * secondaries), which keeps the strip as it was for everyone else.
+     */
+    fun completionLiteral(roman: String): String? {
+        if (!phoneticMixing || !phoneticAutoEnglish) return null
+        if (roman.isEmpty() || !roman.all { it in 'a'..'z' || it in 'A'..'Z' }) return null
+        return latinForm(roman)
+    }
+
+    /**
      * The English a space should commit for [roman] on a layout whose keys
      * spell the word outright (Khipro, #487), or null when it should commit
      * [composed], the layout's own reading.
