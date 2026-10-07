@@ -6,6 +6,7 @@ import android.os.StatFs
 import android.provider.OpenableColumns
 import androidx.annotation.StringRes
 import com.wasimaster.wmkeyboard.R
+import com.wasimaster.wmkeyboard.core.dictionaries.AvroDictionaryDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryEntry
 import com.wasimaster.wmkeyboard.core.dictionaries.NgramPackCatalog
@@ -221,6 +222,12 @@ internal object OfflineImport {
             return attempt(name) {
                 OcrPacks.install(filesDir, pack, file)
                 Outcome(name, true, R.string.offline_import_ocr_done, listOf(OcrLanguages.nameOf(pack)))
+            }
+        }
+        if (name == AvroDictionaryDownloads.PUBLISHED_NAME) {
+            return attempt(name) {
+                AvroDictionaryDownloads.install(filesDir, file)
+                Outcome(name, true, R.string.offline_import_avro_done)
             }
         }
         if (name == CutoutModel.FILE_NAME) {

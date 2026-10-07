@@ -45,7 +45,10 @@ object AvroDictionaryDownloads {
     const val APPROX_BYTES = 580_000L
 
     private const val FILE_NAME = "avro_dictionary.txt.gz"
-    private const val REPO_PATH = "data/bn/bn_avro_dictionary.txt.gz"
+
+    /** The name the data repo publishes it under, which an offline import is recognised by. */
+    const val PUBLISHED_NAME = "bn_avro_dictionary.txt.gz"
+    private const val REPO_PATH = "data/bn/$PUBLISHED_NAME"
     private const val USER_AGENT = "WMKeyboard Avro dictionary downloader"
 
     /** Far above the real file; a response past it is not this file. */
@@ -97,6 +100,26 @@ object AvroDictionaryDownloads {
         file(filesDir).delete()
         File(file(filesDir).path + ".part").delete()
         _status.value = Status.NotDownloaded
+        _completions.tryEmit(Unit)
+    }
+
+    /**
+     * Installs [source], a copy of the published file fetched elsewhere, with
+     * the same check a download gets. Throws if it is not an Avro dictionary.
+     */
+    fun install(filesDir: File, source: File) {
+        check(source.length() <= MAX_BYTES && holdsTables(source)) { "${source.name} is not an Avro dictionary" }
+        val target = file(filesDir)
+        target.parentFile?.mkdirs()
+        val part = File(target.path + ".part")
+        try {
+            source.inputStream().use { input -> part.outputStream().use { input.copyTo(it) } }
+            target.delete()
+            if (!part.renameTo(target)) throw IOException("could not move ${part.name} into place")
+        } finally {
+            part.delete()
+        }
+        _status.value = Status.Downloaded(target.length())
         _completions.tryEmit(Unit)
     }
 
