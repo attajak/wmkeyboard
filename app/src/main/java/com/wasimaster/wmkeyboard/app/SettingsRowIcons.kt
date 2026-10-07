@@ -1278,6 +1278,7 @@ internal object SettingsRowIcons {
         put(R.string.tooldetail_qr_scan_haptics_title) { Icons.Outlined.Vibration }
         put(R.string.tooldetail_qr_scan_preview_title) { Icons.Outlined.Link }
         put(R.string.tooldetail_doc_scan_gallery_title) { Icons.Outlined.PhotoLibrary }
+        put(R.string.voice_enabled_title) { Icons.Outlined.Mic }
         put(R.string.voice_ui_title) { Icons.Outlined.ViewAgenda }
         put(R.string.voice_typing_title) { Icons.Outlined.RecordVoiceOver }
         put(R.string.voice_hold_picks_title) { Icons.Outlined.TouchApp }

@@ -986,6 +986,7 @@ private fun SearchStrings.voiceRows(): List<SettingsSearchEntry> {
     fun row(@StringRes title: Int, @StringRes subtitle: Int = 0, weight: EntryWeight = EntryWeight.NORMAL) =
         entry(title, subtitle, R.string.home_voice_title, "voice", weight = weight)
     return listOf(
+        row(R.string.voice_enabled_title, R.string.voice_enabled_subtitle),
         row(R.string.voice_engine_title, R.string.voice_engine_subtitle),
         row(R.string.voice_languages_title, R.string.voice_languages_subtitle),
         row(R.string.voice_ui_title, R.string.voice_ui_subtitle),

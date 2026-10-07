@@ -7,6 +7,10 @@
 -->
 <resources>
 
+    <!-- The switch at the top of the screen. Off hides every other row on it. -->
+    <string name="voice_enabled_title">Use voice typing</string>
+    <string name="voice_enabled_subtitle">Off removes the microphone from the whole keyboard</string>
+    <string name="voice_enabled_info">When this is off, the keyboard never opens the microphone. The Voice tool goes from the toolbar, the toolbox and the shortcuts, the boxes of the keyboard itself lose their microphone button, and the collapsed bar does not show. The recognition engines and the Whisper models are not loaded, so voice typing uses no memory. Your voice settings stay as they are for when you turn it on again.</string>
     <string name="voice_engine_group">Engine</string>
     <string name="voice_engine_title">Recognition engine</string>
     <string name="voice_engine_subtitle">How the keyboard turns speech into text</string>

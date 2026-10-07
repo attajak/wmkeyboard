@@ -35,6 +35,17 @@ class ToolAvailabilityTest {
     }
 
     @Test
+    fun `voice typing switched off blocks the voice tool and only that one`() {
+        val off = KeyboardSettings().let { it.copy(voiceBar = it.voiceBar.copy(enabled = false)) }
+        assertEquals(ToolBlocker.VOICE_OFF, toolBlocker(ToolbarTool.VOICE, off))
+        assertFalse(ToolbarTool.VOICE in usableTools(off))
+        assertNull(toolBlocker(ToolbarTool.VOICE, KeyboardSettings()))
+        for (tool in ToolbarTool.entries) {
+            if (tool != ToolbarTool.VOICE) assertTrue("$tool", toolBlocker(tool, off) != ToolBlocker.VOICE_OFF)
+        }
+    }
+
+    @Test
     fun `only the search tools can be blocked on a key`() {
         val settings = KeyboardSettings()
         for (tool in ToolbarTool.entries) {

@@ -60,6 +60,9 @@ enum class ToolBlocker {
 
     /** The Secondary layout tool: the user has not made a secondary layout yet. */
     NEEDS_SECONDARY_LAYOUT,
+
+    /** The Voice tool: voice typing is switched off on the Voice typing screen (#578). */
+    VOICE_OFF,
 }
 
 /** Why [tool] cannot run right now, or null when it can; see [ToolBlocker]. */
@@ -74,6 +77,7 @@ fun toolBlocker(tool: ToolbarTool, settings: KeyboardSettings): ToolBlocker? = w
     // that does nothing is worse than no button.
     ToolbarTool.CUSTOM_LAYOUT ->
         if (secondaryLayouts(settings.customLayouts).isNotEmpty()) null else ToolBlocker.NEEDS_SECONDARY_LAYOUT
+    ToolbarTool.VOICE -> if (settings.voiceBar.enabled) null else ToolBlocker.VOICE_OFF
     else -> null
 }
 

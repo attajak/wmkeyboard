@@ -10368,7 +10368,8 @@ private fun CaptureStrip(state: KeyboardUiState, capture: CaptureCallbacks) {
     ) {
         // Dictation into this field (#353): a microphone at the end of its
         // strip, and while the phrase is being said the strip says so.
-        val dictation = state.captureTarget()?.takesDictation == true
+        // No microphone at all while voice typing is switched off (#578).
+        val dictation = state.captureTarget()?.takesDictation == true && state.settings.voiceBar.enabled
         if (dictation && state.fieldVoiceSpeaks()) {
             FieldVoiceStatus(state.voice, capture.onVoice)
         } else {

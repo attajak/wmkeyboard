@@ -36,5 +36,6 @@
     <!-- Shown in place of the description when a tool cannot run until an API key is given. The switch is off and cannot be pressed. -->
     <string name="tools_needs_key_subtitle">Needs an API key. Press this row to add one.</string>
     <string name="tools_needs_instance_subtitle">Needs a SearXNG instance</string>
+    <string name="tools_voice_off_subtitle">Voice typing is off. Press this row to turn it on.</string>
     <string name="tools_needs_layout_subtitle">Needs a secondary layout. Press this row, then Key layouts, to make one.</string>
 </resources>

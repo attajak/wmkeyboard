@@ -1070,8 +1070,12 @@ data class VoiceUi(
 /** The session records a whole clip and transcribes it after the stop tap. */
 val VoiceUi.clipBased: Boolean get() = whisper || remote
 
-/** The persisted settings say the collapsed voice bar should be up. */
-fun VoiceBarSettings.armed(): Boolean = mode == VoiceBarSettings.MODE_BAR && active
+/**
+ * The persisted settings say the collapsed voice bar should be up. Never while
+ * voice typing is switched off (#578); [active] is kept, so the bar comes back
+ * if it is switched on again.
+ */
+fun VoiceBarSettings.armed(): Boolean = enabled && mode == VoiceBarSettings.MODE_BAR && active
 
 /**
  * An interactive voice typing session can be run from one microphone button,

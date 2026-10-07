@@ -4799,6 +4799,14 @@ val HoldToTalkRange = 200..1500
 val VoiceSilenceStopRange = 500..4000
 
 data class VoiceBarSettings(
+    /**
+     * Voice typing at all (#578). Off, every way into dictation is shut: the
+     * Voice tool leaves the toolbar, the toolbox and the shortcuts
+     * ([ToolBlocker.VOICE_OFF]), the keyboard's own fields lose their
+     * microphone, and the collapsed bar stays down. Nothing of the voice
+     * engines is loaded then, since they only load when a session starts.
+     */
+    val enabled: Boolean = true,
     /** What the voice tool opens: the full panel, the strip over the keys, or the collapsed bar. */
     val mode: String = MODE_PANEL,
     /**
@@ -8961,6 +8969,7 @@ class SettingsRepository(private val context: Context) {
         private val VOICE_STRIP_MODE = booleanPreferencesKey("voice_strip_mode")
         private val VOICE_UI_MODE = stringPreferencesKey("voice_ui_mode")
         private val VOICE_TYPING_MODE = stringPreferencesKey("voice_typing_mode")
+        private val VOICE_ENABLED = booleanPreferencesKey("voice_enabled")
         private val VOICE_BAR_ACTIVE = booleanPreferencesKey("voice_bar_active")
         private val VOICE_BAR_VERTICAL = booleanPreferencesKey("voice_bar_vertical")
         private val VOICE_BAR_SNAP = intPreferencesKey("voice_bar_snap")
@@ -10823,6 +10832,7 @@ class SettingsRepository(private val context: Context) {
 
     private fun readVoiceBar(p: Preferences, defaults: KeyboardSettings) =
         VoiceBarSettings(
+            enabled = p[VOICE_ENABLED] ?: defaults.voiceBar.enabled,
             mode = p[VOICE_UI_MODE] ?: if (p[VOICE_STRIP_MODE] == true) {
                 VoiceBarSettings.MODE_STRIP
             } else {
@@ -11855,6 +11865,9 @@ class SettingsRepository(private val context: Context) {
             // only [setVoiceSurface]'s inline collapse sets this true.
             it[VOICE_BAR_INLINE] = false
         }
+
+    suspend fun setVoiceEnabled(value: Boolean) =
+        editPrefs { it[VOICE_ENABLED] = value }
 
     suspend fun setVoiceTypingMode(value: String) =
         editPrefs { it[VOICE_TYPING_MODE] = value }

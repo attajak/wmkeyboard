@@ -230,6 +230,21 @@ internal fun VoiceSettings(repository: SettingsRepository, settings: LiveSetting
     val typingMode = settings.watch { it.voiceBar.typingMode }
     val usingWhisper = whisperEnabled && engine == "whisper"
     val usingServer = engine == "server"
+    // The master switch (#578). Off, the rest of the screen is about something
+    // the keyboard no longer does, so it goes; the values stay stored.
+    val voiceOn = settings.watch { it.voiceBar.enabled }
+    SettingsGroup {
+        item {
+            ToggleSetting(
+                R.string.voice_enabled_title,
+                stringResource(R.string.voice_enabled_subtitle),
+                voiceOn,
+                info = stringResource(R.string.voice_enabled_info),
+                default = SettingsDefaults.voiceBar.enabled,
+            ) { scope.launch { repository.setVoiceEnabled(it) } }
+        }
+    }
+    if (!voiceOn) return
     // Every build has the picker now: the server engine needs no model and no
     // native runtime, so the lite build offers system and server.
     run {

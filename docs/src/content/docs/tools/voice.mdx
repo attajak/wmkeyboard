@@ -216,6 +216,7 @@ Everything below lives on the Voice typing screen, under Features on the setting
 
 | Setting | Default | What it does |
 |---|---|---|
+| Use voice typing | On | The switch at the top of the screen. Off removes the microphone from the whole keyboard and hides every other row here. See [Turning voice typing off](#turning-voice-typing-off). |
 | Voice typing view | Full panel | A choice of three, not a switch: which surface the mic button opens. **Full panel**, **Compact bar over the keys**, or **Collapsed bar, keyboard hidden**. |
 | Voice typing mode | One block at a time | Another choice of three: whether the keys work while the mic is open. **One block at a time**, **Type while you speak**, or **Type while you speak, plain text**. See [Typing while you dictate](#typing-while-you-dictate). |
 | Hold the tool to pick a mode | On | A press and hold on the toolbar's Voice tool opens a menu of the three modes; picking one makes it the mode and starts dictation. Off gives the hold back to the toolbar's own press-and-hold action. |
@@ -228,6 +229,17 @@ Everything below lives on the Voice typing screen, under Features on the setting
 All of these sit in a group headed **Dictation**. An **Engine** group above it holds **Voice typing language** (see [Language and engine](#language-and-engine)) and the **Recognition engine** choice: **System recognizer** (the default), **Offline Whisper** in an edition with the offline engine built in (see [Offline voice (Whisper)](/tools/whisper/)), and **Transcription server** in every edition, which sends each phrase to a speech-to-text server you run (see [Transcription server](/tools/transcription-server/)). With the system recognizer in use, the screen ends with this note about what it sends:
 
 > Recognition uses the speech recognizer of your device. On Android 12 and later it runs on your device when the language model is installed. If it is not, the audio goes to the recognizer service while you speak. Press and hold the microphone to speak in walkie-talkie style. It stops when you let go.
+
+### Turning voice typing off
+
+If you never dictate, turn off **Use voice typing** at the top of the Voice typing screen. With it off, the keyboard never opens the microphone:
+
+- The Voice tool leaves the toolbar and the toolbox, and a key, a hardware shortcut or a press-and-hold bound to it does nothing. On the Tools screen its row says that voice typing is off, and its own switch can't be turned on until you turn voice typing back on.
+- The keyboard's own boxes (the search, translate and AI fields, and the rest) lose the microphone at the end of their strip.
+- The [collapsed bar](#the-collapsed-bar) doesn't show, even if you left the keyboard collapsed to it.
+- A dictation that's running when you switch it off stops, and its view closes.
+
+Nothing of voice typing is loaded while it's off. The system recognizer is only asked for when a dictation starts, and an [offline Whisper](/tools/whisper/) model is only read when a phrase is transcribed, so a keyboard that never dictates never holds either one in memory. The rest of the screen is hidden while the switch is off, but your choices are kept for when you turn it on again.
 
 ### Words to listen for
 
@@ -243,7 +255,7 @@ The system recognizer gets up to 200 words as a biasing list. It reads the list 
 The tool page carries only what belongs to the button:
 
 - **All voice typing settings**: opens the screen above.
-- **Enabled**: whether Voice typing appears on the toolbar and in the toolbox.
+- **Enabled**: whether Voice typing appears on the toolbar and in the toolbox. Turning the tool off only takes the button away; the microphone is still reachable from a bound key and from the keyboard's own boxes. To switch voice typing off everywhere, use [Use voice typing](#turning-voice-typing-off) instead.
 - **Icon colour**: only shown if [colorful tool icons](/tools/overview/) is turned on globally. Overrides just this tool's icon color.
 - **Keyword shortcut**: the words that make the [Smart chips](/smart/chips/) suggestion offer to open this panel.
 

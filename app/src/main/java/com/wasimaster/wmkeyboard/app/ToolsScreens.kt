@@ -482,6 +482,7 @@ private fun ToolRow(
             ToolBlocker.NEEDS_SEARCH_KEY -> stringResource(R.string.tools_needs_key_subtitle)
             ToolBlocker.NEEDS_SEARCH_INSTANCE -> stringResource(R.string.tools_needs_instance_subtitle)
             ToolBlocker.NEEDS_SECONDARY_LAYOUT -> stringResource(R.string.tools_needs_layout_subtitle)
+            ToolBlocker.VOICE_OFF -> stringResource(R.string.tools_voice_off_subtitle)
         },
         leading = {
             SlotIcon(

@@ -3788,6 +3788,7 @@ open class WMKeyboardService : InputMethodService() {
                         activeModeId = mode?.id,
                     )
                 }
+                if (!modeSettings.voiceBar.enabled) putVoiceAway()
                 // The stored settings are in the state from here on; the
                 // dictionary load may now read them (#91).
                 storedSettingsApplied.complete(Unit)
@@ -21015,6 +21016,13 @@ open class WMKeyboardService : InputMethodService() {
      */
     fun onPanelChange(panel: PanelMode, haptic: Boolean = true) {
         if (panel == PanelMode.CLIPBOARD && !isClipboardAccessible()) return
+        // Voice typing switched off (#578): nothing opens the panel. One
+        // already open still closes, through the toggle below.
+        if (panel == PanelMode.VOICE && _uiState.value.panel != PanelMode.VOICE &&
+            !_uiState.value.settings.voiceBar.enabled
+        ) {
+            return
+        }
         if (rerouteVoiceTool(panel)) return
         dismissVoiceSurfacesFor(panel)
         // Panels have their own key semantics — the panel would eat the
@@ -21959,6 +21967,9 @@ open class WMKeyboardService : InputMethodService() {
 
     private fun startVoice() {
         cancelVoice()
+        // The last gate for every way in (#578): with voice typing switched
+        // off the microphone never opens, whatever surface asked.
+        if (!_uiState.value.settings.voiceBar.enabled) return
         voiceStopRequested = false
         voiceSessionForField = fieldVoice()
         val languageIds = voiceLanguageIds()
@@ -23142,7 +23153,7 @@ open class WMKeyboardService : InputMethodService() {
             CaptureVoiceAction.TOGGLE -> {
                 val state = _uiState.value
                 val key = state.captureKey() ?: return
-                if (state.captureTarget()?.takesDictation != true) return
+                if (state.captureTarget()?.takesDictation != true || !state.settings.voiceBar.enabled) return
                 if (state.voice.field != key) {
                     // One microphone, one destination: whatever was listening
                     // for the app's field stops first.
@@ -23335,6 +23346,21 @@ open class WMKeyboardService : InputMethodService() {
         _uiState.update { it.copy(voice = it.voice.copy(strip = true)) }
         voiceSilentRetries = 0
         startVoice()
+    }
+
+    /**
+     * Voice typing was switched off (#578) while a voice surface may be up: the
+     * mic is released and the panel, the strip and a field's dictation all go.
+     * The collapsed bar goes by itself, since [VoiceBarSettings.armed] reads
+     * the switch. Cheap when nothing is up, which is every call but the first.
+     */
+    private fun putVoiceAway() {
+        val state = _uiState.value
+        if (state.panel == PanelMode.VOICE) onPanelChange(PanelMode.VOICE, haptic = false)
+        cancelVoice()
+        if (state.voice.strip || state.voice.field != null) {
+            _uiState.update { it.copy(voice = it.voice.copy(strip = false, field = null, canUndo = false)) }
+        }
     }
 
     private fun closeVoiceStrip() {
