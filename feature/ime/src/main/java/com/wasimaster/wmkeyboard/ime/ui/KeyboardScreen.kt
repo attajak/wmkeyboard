@@ -3100,7 +3100,19 @@ private class HeldCandidates(state: KeyboardUiState) {
     var inlineEmoji: Boolean = state.inlineEmoji
         private set
 
+    /**
+     * Whether [suggestions] are a conversion IME's candidates, which draw as
+     * the packed, scrolling candidate row. Taken with the list it describes:
+     * switching from English to Japanese flips the composer while the English
+     * words are still on the strip, and drawing those through the candidate
+     * row for the length of their fade-out slid them left and resized them
+     * (#587). It moves only when a new list arrives.
+     */
+    var conversion: Boolean = state.composer.isConversion
+        private set
+
     fun advance(state: KeyboardUiState) {
+        if (state.suggestions !== suggestions) conversion = state.composer.isConversion
         suggestions = state.suggestions
         emojiSuggestions = state.emojiSuggestions
         punctuation = state.punctuationSuggestions
@@ -4395,7 +4407,7 @@ private fun TopBar(
                         alpha = stripContentFade,
                         onEmoji = onSuggestion,
                     )
-                } else if (state.composer.isConversion) {
+                } else if (held.conversion) {
                     CandidateStrip(
                         candidates = shownSuggestions,
                         enabled = suggestionsShowing,
