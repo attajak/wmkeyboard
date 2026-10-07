@@ -9,6 +9,7 @@ import com.wasimaster.wmkeyboard.R
 import com.wasimaster.wmkeyboard.core.dictionaries.AvroDictionaryDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryEntry
+import com.wasimaster.wmkeyboard.core.dictionaries.KhiproGlideDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.NgramPackCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.NgramPackDownloadManager
 import com.wasimaster.wmkeyboard.core.dictionaries.NgramPackEntry
@@ -228,6 +229,12 @@ internal object OfflineImport {
             return attempt(name) {
                 AvroDictionaryDownloads.install(filesDir, file)
                 Outcome(name, true, R.string.offline_import_avro_done)
+            }
+        }
+        if (name == KhiproGlideDownloads.PUBLISHED_NAME) {
+            return attempt(name, busy = KhiproGlideDownloads.isBusy) {
+                KhiproGlideDownloads.install(filesDir, file)
+                Outcome(name, true, R.string.offline_import_khipro_glide_done)
             }
         }
         if (name == CutoutModel.FILE_NAME) {

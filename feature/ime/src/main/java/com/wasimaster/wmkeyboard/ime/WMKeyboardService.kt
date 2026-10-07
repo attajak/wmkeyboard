@@ -190,6 +190,7 @@ import com.wasimaster.wmkeyboard.core.dictionaries.AvroDictionaryDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCatalog
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryCapitals
 import com.wasimaster.wmkeyboard.core.dictionaries.DictionaryStore
+import com.wasimaster.wmkeyboard.core.dictionaries.KhiproGlideDownloads
 import com.wasimaster.wmkeyboard.core.dictionaries.WordlistDownloadManager
 import com.wasimaster.wmkeyboard.core.prediction.CompositeWordSource
 import com.wasimaster.wmkeyboard.core.prediction.CustomDictionaries
@@ -3396,6 +3397,14 @@ open class WMKeyboardService : InputMethodService() {
             AvroDictionaryDownloads.completions.collect {
                 avroDesktop = null
                 suggestionEngine?.let { loadAvroDesktop(it, it.phoneticCandidateLists) }
+            }
+        }
+
+        // The Khipro glide table landed, or could not be fetched: Khipro's
+        // glide is set up again, from the table or, failing it, on the device.
+        serviceScope.launch {
+            KhiproGlideDownloads.completions.collect {
+                if (_uiState.value.composer is KhiproComposer) ensureKhiproGlide()
             }
         }
 
@@ -10520,27 +10529,39 @@ open class WMKeyboardService : InputMethodService() {
     /**
      * Makes the Khipro grid glidable (#541): the Khipro spellings of every word
      * of the Bangla list the engine holds (bundled, downloaded and imported),
-     * worked out on the device by running Khipro backwards and cached under
-     * `dict/bn` (see [KhiproGlideSpellings]), with the user's own Bangla words
-     * walked first. Rebuilt when the list or the learned words change; the
-     * first build of a big list takes minutes, and gliding waits for it.
+     * cached under `dict/bn` (see [KhiproGlideSpellings]), with the user's own
+     * Bangla words walked first. Rebuilt when the list or the learned words
+     * change.
+     *
+     * The spellings come from the table the data repo publishes
+     * ([KhiproGlideDownloads]), fetched the first time this runs; gliding waits
+     * for it. Only when it cannot be had (offline, or a build with no internet)
+     * are they all worked out on the device by running Khipro backwards, which
+     * on a downloaded list is minutes of every core (#593).
      */
     private fun ensureKhiproGlide() {
         val engine = suggestionEngine ?: return
         val words = engine.bengaliIndex.sortedWords ?: return
         val learned = userLexicon.mutationCount()
-        if (khiproGlideList === words && khiproGlideLearned == learned) return
-        if (khiproGlideJob?.isActive == true) return
-        val dir = File(File(filesDir, "dict"), "bn")
         val unlocked = userUnlocked
+        val table = KhiproGlideDownloads.file(filesDir).takeIf { unlocked && it.isFile }
+        val tableSize = table?.length() ?: -1L
+        if (khiproGlideList === words && khiproGlideLearned == learned && khiproGlideTable == tableSize) return
+        if (khiproGlideJob?.isActive == true) return
+        if (unlocked && table == null && !KhiproGlideDownloads.failed) {
+            // Back here through the completions once it lands or fails.
+            KhiproGlideDownloads.start(filesDir)
+            return
+        }
+        val dir = File(File(filesDir, "dict"), "bn")
         khiproGlideJob = serviceScope.launch {
             // Shown only when the spellings are really being worked out, which
             // on a downloaded list is minutes; a cached list says nothing.
             var notify: DownloadNotifications.Handle? = null
             val (main, personal) = withContext(Dispatchers.Default) {
-                val main = khiproGlideMain.takeIf { khiproGlideList === words }
+                val main = khiproGlideMain.takeIf { khiproGlideList === words && khiproGlideTable == tableSize }
                     ?: if (unlocked) {
-                        KhiproGlideSpellings.load(words, dir) { done, total ->
+                        KhiproGlideSpellings.load(words, dir, premade = table) { done, total ->
                             synchronized(this@WMKeyboardService) {
                                 val handle = notify ?: DownloadNotifications.start(
                                     this@WMKeyboardService,
@@ -10564,6 +10585,7 @@ open class WMKeyboardService : InputMethodService() {
             khiproGlideMain = main
             khiproGlideList = words
             khiproGlideLearned = learned
+            khiproGlideTable = tableSize
             romanizedGlides = romanizedGlides +
                 (KHIPRO_GLIDE to RomanizedIndex.deterministic(main ?: PackedTrie.EMPTY, personal, KhiproRomanizer.KEYS, Khipro::convert))
             glideSourcesEpoch.update { it + 1 }
@@ -10574,6 +10596,7 @@ open class WMKeyboardService : InputMethodService() {
     private var khiproGlideMain: WordSource? = null
     private var khiproGlideList: SortedWords? = null
     private var khiproGlideLearned = -1L
+    private var khiproGlideTable = -1L
 
     /** Desktop Avro's data while a Bangla candidate list is on; see [loadAvroDesktop]. */
     private var avroDesktop: AvroDesktop? = null

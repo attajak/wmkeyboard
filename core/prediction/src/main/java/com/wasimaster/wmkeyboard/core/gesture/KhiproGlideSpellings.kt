@@ -10,6 +10,7 @@ import java.io.File
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.zip.GZIPInputStream
 
 /**
  * The Khipro spellings of a Bangla word list, worked out on the device and
@@ -21,6 +22,13 @@ import java.util.concurrent.atomic.AtomicInteger
  * That is a few hundred microseconds a word, minutes for a 450,000-word list
  * on a phone, so it is done once, on every core, and written as a `.wmdict`
  * that is mapped rather than read; it is redone only when the list changes.
+ *
+ * The data repo publishes those spellings for its own list
+ * (`bn_khipro_glide.txt.gz`, see `KhiproGlideDownloads`), worked out once on a
+ * computer, and a list built with that file at hand reads its words' spellings
+ * from it: only the words it does not list (the bundled list's extras, an
+ * import) are spelled on the device, which is seconds rather than minutes of
+ * every core (#593).
  *
  * The slicer `/` counts as a key a stroke passes through, so words with
  * চন্দ্রবিন্দু and খণ্ড-ত are spelled too; a word that needs any other
@@ -43,14 +51,23 @@ object KhiproGlideSpellings {
      * could not be built (a full disk); the caller then has nothing to glide
      * with, the same as before.
      */
-    fun load(words: SortedWords, dir: File, onProgress: ((done: Int, total: Int) -> Unit)? = null): WordSource? {
+    fun load(
+        words: SortedWords,
+        dir: File,
+        premade: File? = null,
+        onProgress: ((done: Int, total: Int) -> Unit)? = null,
+    ): WordSource? {
         val file = File(dir, FILE_NAME)
         val signatureFile = File(dir, SIGNATURE_NAME)
-        val signature = signatureOf(words)
+        val table = premade?.takeIf { it.isFile }
+        // The table's size is part of the signature, so a cache worked out on
+        // the device is replaced once the table arrives, and again if a newer
+        // one does; its spellings are the same, only some were missing.
+        val signature = signatureOf(words) + (table?.let { ":p${it.length()}" } ?: "")
         if (file.isFile && runCatching { signatureFile.readText() }.getOrNull() == signature) {
             MappedTrie.open(file)?.let { return it }
         }
-        val trie = build(words, onProgress)
+        val trie = build(words, table, onProgress)
         return runCatching {
             dir.mkdirs()
             val part = File(dir, "$FILE_NAME.part")
@@ -75,30 +92,39 @@ object KhiproGlideSpellings {
     }
 
     /** [onProgress] hears from the worker threads, a chunk at a time; only a build reports. */
-    private fun build(words: SortedWords, onProgress: ((Int, Int) -> Unit)?): PackedTrie {
-        onProgress?.invoke(0, words.size)
-        KhiproRomanizer.warm()
+    private fun build(words: SortedWords, table: File?, onProgress: ((Int, Int) -> Unit)?): PackedTrie {
+        val listed = BooleanArray(words.size)
+        val premade = table?.let { runCatching { readTable(words, it, listed) }.getOrNull() }
+        if (premade == null) listed.fill(false)
+        // Only the words the table did not cover are worked out here, and only
+        // that work is reported: a list the table covers builds in seconds and
+        // raises no progress notification at all.
+        val todo = (0 until words.size).filter { !listed[it] }
+        if (todo.isNotEmpty()) {
+            onProgress?.invoke(0, todo.size)
+            KhiproRomanizer.warm()
+        }
         val finished = AtomicInteger()
         val cores = Runtime.getRuntime().availableProcessors().coerceIn(1, 8)
         val pool = Executors.newFixedThreadPool(cores)
         try {
-            val tasks = (0 until words.size step CHUNK).map { from ->
+            val tasks = todo.chunked(CHUNK).map { chunk ->
                 Callable {
                     val spelled = ArrayList<String>()
                     val frequencies = ArrayList<Int>()
-                    for (i in from until minOf(from + CHUNK, words.size)) {
-                        val frequency = (-words.rank(i)).coerceIn(1, Int.MAX_VALUE.toLong()).toInt()
+                    for (i in chunk) {
+                        val frequency = frequencyOf(words, i)
                         for (spelling in KhiproRomanizer.spellings(words.word(i))) {
                             spelled += spelling
                             frequencies += frequency
                         }
                     }
-                    val done = finished.addAndGet(minOf(CHUNK, words.size - from))
-                    onProgress?.invoke(done, words.size)
+                    val done = finished.addAndGet(chunk.size)
+                    onProgress?.invoke(done, todo.size)
                     spelled to frequencies
                 }
             }
-            val parts = pool.invokeAll(tasks).map { it.get() }
+            val parts = listOfNotNull(premade) + pool.invokeAll(tasks).map { it.get() }
             val count = parts.sumOf { it.first.size }
             val all = arrayOfNulls<String>(count)
             val frequencies = IntArray(count)
@@ -115,6 +141,64 @@ object KhiproGlideSpellings {
         } finally {
             pool.shutdown()
         }
+    }
+
+    private fun frequencyOf(words: SortedWords, i: Int): Int =
+        (-words.rank(i)).coerceIn(1, Int.MAX_VALUE.toLong()).toInt()
+
+    /**
+     * The spellings [table] lists for words of [words], with their frequencies,
+     * marking each word it covered in [listed]. A table line is
+     * `word<TAB>spelling[<TAB>spelling…]`; its words outside the list (a list
+     * downloaded at a smaller size) are passed over.
+     */
+    private fun readTable(words: SortedWords, table: File, listed: BooleanArray): Pair<List<String>, List<Int>> {
+        val spelled = ArrayList<String>()
+        val frequencies = ArrayList<Int>()
+        GZIPInputStream(table.inputStream()).bufferedReader().useLines { lines ->
+            for (line in lines) {
+                if (line.isEmpty() || line[0] == '#') continue
+                val fields = line.split('\t')
+                if (fields.size < 2) continue
+                val i = indexOf(words, fields[0])
+                if (i < 0 || listed[i]) continue
+                listed[i] = true
+                val frequency = frequencyOf(words, i)
+                for (f in 1 until fields.size) {
+                    if (fields[f].isEmpty()) continue
+                    spelled += fields[f]
+                    frequencies += frequency
+                }
+            }
+        }
+        return spelled to frequencies
+    }
+
+    /** Where [word] is in [words], which are in [String.compareTo] order, or -1. */
+    private fun indexOf(words: SortedWords, word: String): Int {
+        var lo = 0
+        var hi = words.size - 1
+        while (lo <= hi) {
+            val mid = (lo + hi) ushr 1
+            val order = compare(words, mid, word)
+            when {
+                order < 0 -> lo = mid + 1
+                order > 0 -> hi = mid - 1
+                else -> return mid
+            }
+        }
+        return -1
+    }
+
+    /** [String.compareTo] of word [i] against [word], without building the word. */
+    private fun compare(words: SortedWords, i: Int, word: String): Int {
+        val length = words.length(i)
+        val common = minOf(length, word.length)
+        for (j in 0 until common) {
+            val diff = words.charAt(i, j) - word[j]
+            if (diff != 0) return diff
+        }
+        return length - word.length
     }
 
     /** Which list the cache was built for: its size and every word, hashed, and the romanizer's version. */
