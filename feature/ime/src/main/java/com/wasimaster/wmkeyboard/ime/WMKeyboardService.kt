@@ -5805,7 +5805,10 @@ open class WMKeyboardService : InputMethodService() {
                 shiftPressedByUser = false,
                 clipboardItems = if (clipboardAccessible) clipboardStore.items() else emptyList(),
                 clipboardSuggestion = if (clipboardAccessible) it.clipboardSuggestion else null,
-                clipChipsDismissed = false,
+                // clipChipsDismissed is left as it was: a row of recent copies
+                // put away stays away until the next copy, rather than coming
+                // back with every field the same clips were already offered
+                // in (#594).
                 enterAction = info.enterAction(),
                 enterActionLabel = info?.actionLabel?.toString()?.takeIf { label -> label.isNotBlank() },
                 handwriting = it.handwriting.copy(strokes = emptyList(), recognizing = false),
@@ -32914,7 +32917,9 @@ open class WMKeyboardService : InputMethodService() {
             }
         }
         // Whether tapped from the panel or the strip chip, the recent-copy chip
-        // has served its purpose once something was pasted.
+        // has served its purpose once something was pasted, and so has the
+        // row of recent copies (#594).
+        _uiState.update { it.copy(clipChipsDismissed = true) }
         clearClipboardSuggestion()
         purgeAfterPasswordPaste(item)
         closePanelAfterInsertIfEnabled()
@@ -33099,8 +33104,7 @@ open class WMKeyboardService : InputMethodService() {
         // A dismissed code chip must stay dismissed: the next field entry would
         // otherwise put the same clip straight back on the strip.
         _uiState.value.clipboardSuggestion?.let { pastedCodeClipId = it.id }
-        // The row of recent copies goes with it (#414), until the next field
-        // or the next copy.
+        // The row of recent copies goes with it (#414), until the next copy.
         _uiState.update { it.copy(clipChipsDismissed = true) }
         clearClipboardSuggestion()
     }

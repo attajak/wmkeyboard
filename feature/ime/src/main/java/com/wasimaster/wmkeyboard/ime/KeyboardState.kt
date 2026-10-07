@@ -2947,9 +2947,9 @@ data class KeyboardUiState(
      */
     val clipboardSuggestion: ClipItem? = null,
     /**
-     * The row of recent copies on the idle strip (#414) was put away with its
-     * ✕, for this field. Back for the next field, and the moment something new
-     * is copied.
+     * The row of recent copies on the idle strip (#414) was put away, by its
+     * ✕ or by pasting one of its clips. Back the moment something new is
+     * copied, and not before (#594).
      */
     val clipChipsDismissed: Boolean = false,
     /**

@@ -4262,7 +4262,7 @@ private fun TopBar(
                 val clipChipShares = suggestionsShowing || smartReplies.isNotEmpty()
                 // The last few copies as a row of chips (#414): the idle strip
                 // holds them until something is typed, and one ✕ at the end
-                // puts the row away for this field. Text clips only, never a
+                // (or a paste from it) puts the row away until the next copy. Text clips only, never a
                 // secret, the same gates as the single chip's.
                 val clipBarChips = if (recentClipsBar && smart == null && !clipChipShares) {
                     state.clipboardItems
