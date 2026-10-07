@@ -17858,12 +17858,18 @@ open class WMKeyboardService : InputMethodService() {
                 // Next-letter distribution for smart key-hit detection. Only for
                 // plain Latin composing — conversion/transliteration IMEs commit
                 // through their own composer, where a Latin-letter nudge is wrong.
+                // Read off the ranked list the strip is cut from, so the keys
+                // grow toward the words the strip offers: the raw trie walk
+                // knows only the primary dictionary, with no context, and on a
+                // mixed board it enlarged "e a c" for "be" while the strip said
+                // "beshi". The walk is the fallback for a list with nothing
+                // that continues the buffer (only corrections, say).
                 val bias = if (
                     state.settings.layoutBehavior.smartHitDetection &&
                     typed.isNotEmpty() &&
                     !state.composer.isTransliterating
                 ) {
-                    engine.nextLetterWeights(typed)
+                    rankedNextLetters(typed, deepAll).ifEmpty { engine.nextLetterWeights(typed) }
                 } else {
                     emptyMap()
                 }
@@ -36804,6 +36810,36 @@ private const val KHIPRO_GLIDE = "bn_khipro"
 private const val KHIPRO_GLIDE_NOTIFY_KEY = "khipro-glide"
 
 /** The most words the candidate-list row above the strip holds. */
+/**
+ * The letter each of [ranked]'s completions of [typed] continues with, weighed
+ * by the word's rank and normalised to 0..1 with the top letter at 1.0, for
+ * autopilot. Rank, not frequency, because the list is already the engine's
+ * verdict — context, secondary languages and learned words included — and a
+ * letter is as likely as the best-placed words behind it. Words that do not
+ * extend the buffer (corrections, the typed word itself) say nothing about the
+ * next key and are skipped, as is a next letter outside the BMP, which no
+ * single-Char key types.
+ */
+private fun rankedNextLetters(typed: String, ranked: List<String>): Map<Char, Float> {
+    val tally = HashMap<Char, Float>()
+    var weight = 1f
+    for (word in ranked) {
+        if (word.length > typed.length && word.startsWith(typed, ignoreCase = true)) {
+            val ch = word[typed.length]
+            if (ch.isLetter() && !ch.isSurrogate()) {
+                val key = ch.lowercaseChar()
+                tally[key] = (tally[key] ?: 0f) + weight
+            }
+        }
+        weight *= RANKED_LETTER_DECAY
+    }
+    val max = tally.values.maxOrNull() ?: return emptyMap()
+    return tally.mapValues { it.value / max }
+}
+
+/** How much each rank down the list counts for less in [rankedNextLetters]. */
+private const val RANKED_LETTER_DECAY = 0.6f
+
 private const val PHONETIC_CANDIDATE_BAR_MAX = 100
 
 
