@@ -5696,6 +5696,12 @@ open class WMKeyboardService : InputMethodService() {
         ) {
             bindEngineToLayout(fieldSpec, current)
         }
+        // The phonetic switches are per language too, and the settings
+        // collector only ever set them for the saved layout: an app that
+        // reopens on its remembered Avro left the engine on the English
+        // layout's answers, so the fixed strip never fixed anything (#575).
+        syncPhoneticAutoEnglish(modeSettings, fieldSpec)
+        syncPhoneticFixedStrip(modeSettings, fieldSpec)
         syncAnsiOutput(modeSettings, fieldSpec)
         _uiState.update {
             it.copy(
