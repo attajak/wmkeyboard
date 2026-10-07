@@ -61,6 +61,7 @@ import com.wasimaster.wmkeyboard.core.layout.PanelKind
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutCodec
 import com.wasimaster.wmkeyboard.core.layout.PanelLayoutSpec
 import com.wasimaster.wmkeyboard.core.layout.fitRowToGrid
+import com.wasimaster.wmkeyboard.core.layout.hasFlicks
 import com.wasimaster.wmkeyboard.core.layout.json.LayoutJsonRoot
 import com.wasimaster.wmkeyboard.core.layout.gridWeightOf
 import com.wasimaster.wmkeyboard.core.layout.isAllowedOnPanel
@@ -601,6 +602,18 @@ internal fun PanelEditorBody(
                 grid.persistent,
                 info = stringResource(R.string.panel_layout_persist_info),
             ) { on -> editGrid { it.copy(persistent = on) } }
+        }
+        // Issue #588 on a panel: the Numpad's flick arms, over the setting.
+        if (rows.any { row -> row.any { k -> k.hasFlicks() } }) {
+            item {
+                val global = settings.watch { it.layoutBehavior.flickHints }
+                ToggleSetting(
+                    R.string.layout_editor_flick_hints_title,
+                    stringResource(R.string.layout_editor_flick_hints_subtitle),
+                    grid.flickHints ?: global,
+                    info = stringResource(R.string.layout_editor_flick_hints_info),
+                ) { on -> editGrid { it.copy(flickHints = on.takeIf { value -> value != global }) } }
+            }
         }
         item {
             // A theme of the panel's own (issue #61 on a panel): the board

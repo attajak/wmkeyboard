@@ -641,6 +641,8 @@ data class KeyboardLayout(
      * on screen rather than re-deriving the layer-beats-layout rule.
      */
     val themeId: String? = null,
+    /** [LayerSpec.flickHints], carried onto the grid on screen; null follows the setting. */
+    val flickHints: Boolean? = null,
     /** [LayerSpec.keymanFrames], carried onto the grid on screen. */
     val keymanFrames: Map<String, KeymanTarget> = emptyMap(),
 )

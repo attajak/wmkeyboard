@@ -146,6 +146,15 @@ data class LayerSpec(
      */
     val themeId: String? = null,
     /**
+     * Whether this layer's flick keys draw their arms on the face, over the
+     * keyboard-wide setting (`LayoutBehaviorSettings.flickHints`, #588). Null,
+     * the normal case, follows the setting: a number pad can keep its arms
+     * while the kana pad, whose flicks the hands already know, goes without.
+     *
+     * Additive and defaulted, so no format-version bump.
+     */
+    val flickHints: Boolean? = null,
+    /**
      * A converted Keyman layer's own word on its space, backspace and enter
      * keys, by Keyman key id (`K_SPACE`, `K_BKSP`, `K_ENTER`): the modifiers
      * the rules see them pressed with, where the key's `layer` says something

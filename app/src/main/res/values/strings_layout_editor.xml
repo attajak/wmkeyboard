@@ -517,6 +517,9 @@
 
     <!-- Keep a layer open across a close and reopen of the keyboard (issue #60). -->
     <string name="layout_editor_persist_title">Keep this layer open</string>
+    <string name="layout_editor_flick_hints_title">Show flick arms here</string>
+    <string name="layout_editor_flick_hints_subtitle">For this layer only, over the keyboard-wide Show flick arms on keys setting</string>
+    <string name="layout_editor_flick_hints_info">Flick keys draw the characters they type in each direction on the key face. Turn this off for a pad whose flicks you already know, and keep them on another, such as the number pad. While it matches the keyboard-wide setting, this layer follows that setting.</string>
     <string name="layout_editor_persist_subtitle">The layer stays on screen when the keyboard closes or the field changes. Make sure you have a way to exit this layout.</string>
     <string name="panel_layout_persist_subtitle">The panel stays open when the keyboard closes or the field changes. Make sure you have a way to exit this panel.</string>
     <string name="panel_layout_persist_info">Normally a panel closes each time the keyboard opens on a new field. With this on, the panel stays until you press a key or a tool that goes somewhere else, or the Back button. The keyboard cannot close it by itself.</string>

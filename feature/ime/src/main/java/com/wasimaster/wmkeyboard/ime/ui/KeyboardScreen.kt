@@ -3090,6 +3090,18 @@ private const val FullBleedReturnFadeMs = 260
  * every publish of the ui state, so a plain object read in the pass that wrote
  * it is both correct and one composition cheaper.
  */
+/**
+ * These settings with the flick arms a layer asks for ([LayerSpec.flickHints],
+ * #588) standing in for the keyboard-wide switch; the same object when the
+ * layer has no say or agrees, so a grid that never sets it costs nothing.
+ */
+internal fun KeyboardSettings.withLayerFlickHints(layer: Boolean?): KeyboardSettings =
+    if (layer == null || layer == layoutBehavior.flickHints) {
+        this
+    } else {
+        copy(layoutBehavior = layoutBehavior.copy(flickHints = layer))
+    }
+
 private class HeldCandidates(state: KeyboardUiState) {
     var suggestions: List<String> = state.suggestions
         private set
@@ -16025,7 +16037,10 @@ private fun KeyRows(
             val onSpacePositioned: (LayoutCoordinates) -> Unit = remember(spaceRect) {
                 { coords -> spaceRect.value = coords.boundsInRoot() }
             }
-            val settings = state.settings
+            // A layer may show or hide its flick arms over the setting (#588).
+            val settings = remember(state.settings, layout.flickHints) {
+                state.settings.withLayerFlickHints(layout.flickHints)
+            }
             val split = settings.splitKeyboard
             val splitGapPercent = settings.splitGapPercent
             // The focused field wants a keypad, which suppresses the preview

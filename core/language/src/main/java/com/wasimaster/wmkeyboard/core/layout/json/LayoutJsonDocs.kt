@@ -78,6 +78,8 @@ object LayoutJsonDocs {
         "LayerSpec.bottomRowAsLaidOut" to
             "Draws the bottom row exactly as it is here. The Bottom row settings do not hide, move, swap or change its keys.",
         "LayerSpec.themeId" to "A theme for while this layer is on screen, over the layout's theme and the settings.",
+        "LayerSpec.flickHints" to
+            "Whether this layer's flick keys draw their arms on the key face. Leave it out to follow the keyboard's setting.",
 
         "LayoutAppearance.fontId" to
             "The label font: \"default\", \"google:<Name>\", \"installed:<name>\" or \"custom\". A font this device does not have falls " +

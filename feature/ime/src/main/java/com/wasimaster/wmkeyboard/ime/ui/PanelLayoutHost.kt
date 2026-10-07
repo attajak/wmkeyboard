@@ -95,7 +95,7 @@ internal fun KeyboardUiState.panelLayout(kind: PanelKind): PanelLayoutSpec {
         layouts.number?.let { number ->
             return PanelLayoutSpec(
                 PanelKind.NUMPAD,
-                LayerSpec(rows = number.rows, rowHeights = number.rowHeights),
+                LayerSpec(rows = number.rows, rowHeights = number.rowHeights, flickHints = number.flickHints),
                 appearance = number.appearance,
             )
         }

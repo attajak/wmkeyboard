@@ -84,7 +84,10 @@ internal fun PanelLayoutGrid(
      */
     layerPeek: Boolean = true,
 ) {
-    val settings = state.settings
+    // The panel's own flick arms, over the setting (#588): the Numpad is a panel.
+    val settings = remember(state.settings, spec.grid.flickHints) {
+        state.settings.withLayerFlickHints(spec.grid.flickHints)
+    }
     if (spec.grid.rows.isEmpty()) return
 
     // One lambda for the grid's life, so every key sees the same value and a

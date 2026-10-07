@@ -58,6 +58,7 @@ fun LayoutSpec.compile(layer: LayoutLayer): KeyboardLayout = synchronized(compil
         persistent = resolved.persistent,
         bottomRowAsLaidOut = resolved.bottomRowAsLaidOut,
         themeId = resolved.themeId ?: themeId,
+        flickHints = resolved.flickHints,
         keymanFrames = resolved.keymanFrames.orEmpty(),
     )
     compileCache[cacheKey] = this to built
@@ -84,6 +85,7 @@ fun LayoutSpec.compileNamed(name: String): KeyboardLayout? = synchronized(namedC
         persistent = resolved.persistent,
         bottomRowAsLaidOut = resolved.bottomRowAsLaidOut,
         themeId = resolved.themeId ?: themeId,
+        flickHints = resolved.flickHints,
         keymanFrames = resolved.keymanFrames.orEmpty(),
     )
     namedCompileCache[cacheKey] = this to built
