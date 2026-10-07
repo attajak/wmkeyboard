@@ -5289,6 +5289,14 @@ private fun RowScope.CandidateStrip(
     onExpand: () -> Unit,
 ) {
     val listState = rememberLazyListState()
+    // A new reading starts at the left edge, where its best candidates are.
+    // The list keeps its scroll by item key otherwise, so a strip scrolled
+    // through for one word opened the next one part way along (#589).
+    // requestScrollToItem lands before the next layout, with no frame drawn
+    // at the old offset.
+    LaunchedEffect(candidates) {
+        listState.requestScrollToItem(highlighted.takeIf { it in candidates.indices } ?: 0)
+    }
     // Stepping past the right edge has to bring the highlight with it, or the
     // candidate Enter is about to type is one nobody can see.
     ScrollFocusIntoView(highlighted.takeIf { it >= 0 && it < candidates.size }) {
