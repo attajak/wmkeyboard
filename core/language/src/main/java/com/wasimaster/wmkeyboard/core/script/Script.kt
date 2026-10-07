@@ -190,6 +190,16 @@ enum class ScriptId {
      * dot-cell glyphs for the keycaps.
      */
     BRAILLE,
+
+    /**
+     * Klingon pIqaD, in the ConScript Unicode Registry's Private Use Area slot
+     * (U+F8D0..F8FF). No language writes it as its own script: Klingon's is
+     * Latin, and this is what its pIqaD layout names instead
+     * (`LayoutSpec.ownScript`), so the layout gets a font choice of its own.
+     * Uncased, no composer. No phone font covers the Private Use Area, which
+     * is why its default face is fetched (see `KeyboardFonts`).
+     */
+    PIQAD,
 }
 
 /** Which way the script runs. Drives the suggestion strip's layout direction. */
@@ -1624,6 +1634,18 @@ object ScriptRegistry {
             composer = ComposerType.NONE,
             fontHint = FontHint.GENERIC,
             unicodeRange = 0x2800..0x28FF,
+        ),
+        // pIqaD types each Klingon letter as one Private Use Area character,
+        // 1:1 and without case, like IPA.
+        ScriptDef(
+            id = ScriptId.PIQAD,
+            direction = TextDirection.LTR,
+            hasLetterCase = false,
+            composer = ComposerType.NONE,
+            fontHint = FontHint.GENERIC,
+            unicodeRange = 0xF8D0..0xF8FF,
+            // The registry's pIqaD full stop, which the layout's period key types.
+            fullStop = "\uF8FE",
         ),
     ).associateBy { it.id }
 

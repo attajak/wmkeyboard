@@ -47,6 +47,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptId
+import com.wasimaster.wmkeyboard.core.layout.resolveLayout
 import com.wasimaster.wmkeyboard.core.settings.SettingsRepository
 import com.wasimaster.wmkeyboard.core.fonts.FontFile
 import com.wasimaster.wmkeyboard.core.fonts.FontImportResult
@@ -98,7 +99,12 @@ internal fun FontSettings(
     // One row per script, the font it draws with as the value; the full list
     // of faces for a script lives on its own page. Which scripts get a row is
     // read here; each row reads its own font.
-    val enabledScripts = settings.watch { s -> s.enabledLanguages.mapTo(mutableSetOf()) { it.script } }
+    // A layout can write a script its language does not (Klingon's pIqaD), so
+    // the enabled layouts' own scripts count too.
+    val enabledScripts = settings.watch { s ->
+        s.enabledLanguages.mapTo(mutableSetOf()) { it.script } +
+            s.enabledLayoutIds.mapNotNull { id -> resolveLayout(s.customLayouts, id).ownScript }
+    }
     SettingsGroup(
         stringResource(R.string.fonts_pick_group_title),
         info = stringResource(R.string.fonts_info),
@@ -251,7 +257,9 @@ internal fun FontPickerScreen(repository: SettingsRepository, settings: LiveSett
             sample = choices.sample,
             selectedId = settings.watch { it.scriptFontIds[script] } ?: KeyboardFonts.DEFAULT_ID,
             googleNames = choices.fonts,
-            defaultLabel = stringResource(R.string.fonts_default_noto_label),
+            defaultLabel = choices.automaticName
+                ?.let { stringResource(R.string.fonts_default_named_label, it) }
+                ?: stringResource(R.string.fonts_default_noto_label),
             customId = customId,
             customFile = KeyboardFonts.customScriptFontFile(context, choices.script),
             customName = settings.watch { it.customScriptFontNames[script] }.orEmpty(),

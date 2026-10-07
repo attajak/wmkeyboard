@@ -448,6 +448,7 @@ private fun conjunctSample(script: ScriptId): String? = when (script) {
     ScriptId.SOGDIAN, ScriptId.SORA_SOMPENG, ScriptId.SOYOMBO, ScriptId.SUNDANESE, ScriptId.SYLOTI_NAGRI, ScriptId.TAGALOG,
     ScriptId.TAGBANWA, ScriptId.TAI_THAM, ScriptId.TAI_VIET, ScriptId.TAKRI, ScriptId.TIRHUTA, ScriptId.TODHRI, ScriptId.TOTO,
     ScriptId.UGARITIC, ScriptId.VITHKUQI, ScriptId.YEZIDI, ScriptId.YI, ScriptId.ZANABAZAR_SQUARE, ScriptId.MUSIC, ScriptId.BRAILLE,
+    ScriptId.PIQAD,
     -> null
 }
 

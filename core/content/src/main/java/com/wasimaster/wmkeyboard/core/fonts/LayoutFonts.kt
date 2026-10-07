@@ -1,6 +1,7 @@
 package com.wasimaster.wmkeyboard.core.fonts
 
 import android.content.Context
+import android.os.SystemClock
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceEndpoints
 import com.wasimaster.wmkeyboard.core.endpoints.ServiceRepo
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
@@ -20,16 +21,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
- * Fonts a shipped layout draws its keys in that no phone has, fetched from the
- * data repository the first time that layout is shown.
+ * Default faces for scripts no phone font covers, fetched from the data
+ * repository the first time the keyboard draws that script.
  *
- * A layout names its face as `installed:<name>` (`LayoutAppearance.fontId`),
- * the same id an add-on font is reached by, so once the file is in the
- * [FontStore] nothing about it is special. What this adds is getting it
- * there: when that id finds no installed font and the name is one listed
- * here, the keyboard asks for it ([request]) and draws the keys in the
- * fallback face until it lands, at which point [installs] moves and the board
- * picks it up.
+ * The keyboard reaches one as `installed:<name>`, the same id an add-on font
+ * is reached by, so once the file is in the [FontStore] nothing about it is
+ * special and the user can still pick another face for the script. What this
+ * adds is getting it there: when that id finds no installed font and the name
+ * is one listed here, the keyboard asks for it ([request]) and draws the keys
+ * in the fallback face until it lands, at which point [installs] moves and the
+ * board picks it up.
  *
  * Today that is Klingon pIqaD, whose letters live in the Private Use Area
  * (the ConScript registry's U+F8D0–U+F8FF) and so in no system font at all.
@@ -67,9 +68,9 @@ object LayoutFonts {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    /** Names being fetched, and names that failed in this process and are not asked for again. */
+    /** Names being fetched, and when each name's last fetch failed (uptime ms). */
     private val running = ConcurrentHashMap.newKeySet<String>()
-    private val failed = ConcurrentHashMap.newKeySet<String>()
+    private val failedAt = ConcurrentHashMap<String, Long>()
 
     private val _installs = MutableStateFlow(0)
 
@@ -82,17 +83,26 @@ object LayoutFonts {
 
     /**
      * Fetches and installs [entry] in the background, unless it is on its way
-     * or failed already in this process: this is asked on every resolve of a
-     * face that is not there yet, and offline that is every frame the layout
-     * is up. The next process tries again.
+     * or failed less than [RETRY_AFTER_MS] ago: this is asked on every resolve
+     * of a face that is not there yet, and offline that is every time the
+     * keyboard draws. A failure is tried again after the pause rather than
+     * never, so a phone that was offline at first still gets the font.
      */
     fun request(context: Context, entry: Entry) {
-        if (entry.name in failed || !running.add(entry.name)) return
+        val now = SystemClock.uptimeMillis()
+        val failed = failedAt[entry.name]
+        if (failed != null && now - failed < RETRY_AFTER_MS) return
+        if (!running.add(entry.name)) return
         val app = context.applicationContext
         scope.launch {
             val installed = runCatching { fetchAndInstall(app, entry) }.getOrDefault(false)
             running.remove(entry.name)
-            if (installed) _installs.value++ else failed.add(entry.name)
+            if (installed) {
+                failedAt.remove(entry.name)
+                _installs.value++
+            } else {
+                failedAt[entry.name] = SystemClock.uptimeMillis()
+            }
         }
     }
 
@@ -146,6 +156,7 @@ object LayoutFonts {
     }
 
     private const val USER_AGENT = "WMKeyboard layout font downloader"
+    private const val RETRY_AFTER_MS = 60_000L
     private const val TIMEOUT_MS = 15_000
     private const val BUFFER_BYTES = 16 * 1024
 }

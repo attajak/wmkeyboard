@@ -57,6 +57,8 @@ object LayoutJsonDocs {
             "out wide by hand.",
         "LayoutSpec.keyman" to "The Keyman keyboard whose rules decide what the keys type. Only a converted Keyman layout has one.",
         "LayoutSpec.appearance" to "This layout's own label font and size, over the theme and the settings.",
+        "LayoutSpec.script" to
+            "The script the keys write, when it is not the language's, such as PIQAD for Klingon pIqaD. It decides the font the keys use.",
         "LayoutSpec.secondary" to
             "A grid that a key or the Secondary layout tool opens, not a language: a symbols page of your own, or a macro pad. Only its " +
             "letters layer is used.",

@@ -4,6 +4,7 @@ import com.wasimaster.wmkeyboard.core.script.ComposerType
 import com.wasimaster.wmkeyboard.core.script.LanguageDef
 import com.wasimaster.wmkeyboard.core.script.LanguageRegistry
 import com.wasimaster.wmkeyboard.core.script.ScriptDef
+import com.wasimaster.wmkeyboard.core.script.ScriptId
 import com.wasimaster.wmkeyboard.core.script.ScriptRegistry
 import com.wasimaster.wmkeyboard.core.util.JsonPretty
 import com.wasimaster.wmkeyboard.core.util.firstJsonDocument
@@ -280,6 +281,17 @@ data class LayoutSpec(
      */
     val appearance: LayoutAppearance? = null,
     /**
+     * The script this grid's keys write, when it is not its language's: Klingon
+     * is written in Latin letters, but its pIqaD layout types the pIqaD
+     * alphabet. Null, every other layout, takes the language's script.
+     *
+     * The script decides the face the keys draw in, among the rest, so this is
+     * what gives pIqaD a font choice of its own beside English's. An id this
+     * build does not know decodes as null, and the grid falls back to its
+     * language's script. Defaulted, so no format-version bump.
+     */
+    @SerialName("script") val ownScript: ScriptId? = null,
+    /**
      * A grid the user reaches by a key or the toolbar, not by picking a
      * language: a symbols page of their own, a macro pad, a calculator strip
      * (issue #62).
@@ -350,8 +362,12 @@ fun secondaryLayouts(custom: List<LayoutSpec>): List<LayoutSpec> =
  */
 fun LayoutSpec.language(): LanguageDef = LanguageRegistry.byId(langId)
 
-/** The script [language] writes, carrying its direction, case and font behaviour. */
-fun LayoutSpec.script(): ScriptDef = ScriptRegistry[language().script]
+/**
+ * The script this layout writes, carrying its direction, case and font
+ * behaviour: its own [LayoutSpec.ownScript] when it names one, otherwise its
+ * [language]'s.
+ */
+fun LayoutSpec.script(): ScriptDef = ScriptRegistry[ownScript ?: language().script]
 
 /**
  * The composer that turns keystrokes into text: the layout's explicit

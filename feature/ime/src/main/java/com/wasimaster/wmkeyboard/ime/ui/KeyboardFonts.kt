@@ -271,6 +271,12 @@ object KeyboardFonts {
         @StringRes val labelRes: Int,
         val sample: String,
         val fonts: List<String>,
+        /**
+         * The face the script draws in when nothing is picked, by name, for a
+         * script whose default is not a Noto face: pIqaD's is fetched (see
+         * [fetchedScriptFonts]). Null is the usual automatic Noto face.
+         */
+        val automaticName: String? = null,
     )
 
     val scriptFontChoices: List<ScriptFontChoices> = listOf(
@@ -394,6 +400,25 @@ object KeyboardFonts {
                 "Zhi Mang Xing",
             ),
         ),
+        // No Google font has pIqaD, so the list is empty: the automatic face
+        // is fetched, and anything else comes from the font library.
+        ScriptFontChoices(
+            ScriptId.PIQAD, R.string.ime_font_script_piqad_label,
+            // tlhIngan Hol · its letters a to tlh
+            "\uF8E4\uF8D7\uF8DC\uF8D0\uF8DB \uF8D6\uF8DD\uF8D9 · \uF8D0\uF8D1\uF8D2\uF8D3\uF8D4\uF8D5",
+            emptyList(),
+            automaticName = LayoutFonts.KLINGON_PIQAD.name,
+        ),
+    )
+
+    /**
+     * The default face of a script no phone font covers, fetched from the data
+     * repository the first time it is drawn ([LayoutFonts]) and installed into
+     * the font library under its name. Below every face the user, the layout
+     * or the theme picked, like the Noto default it stands in for.
+     */
+    private val fetchedScriptFonts: Map<ScriptId, LayoutFonts.Entry> = mapOf(
+        ScriptId.PIQAD to LayoutFonts.KLINGON_PIQAD,
     )
 
     private val scriptFontChoicesById: Map<ScriptId, ScriptFontChoices> =
@@ -434,6 +459,9 @@ object KeyboardFonts {
         if (selectedId != DEFAULT_ID) family(context, selectedId)?.let { return it }
         if (layoutFontId != null) family(context, layoutFontId)?.let { return it }
         if (themeScriptId != null) family(context, themeScriptId)?.let { return it }
+        // Asked before the provider check below: this one is our own download,
+        // not Google's, and works on a phone without Play services.
+        fetchedScriptFonts[scriptId]?.let { return family(context, FontStore.fontIdFor(it.name)) }
         // Only when the provider is actually there. Without this the request is
         // made on every device — including the many with no Play services at
         // all, where it can do nothing but fail — and on F-Droid, where

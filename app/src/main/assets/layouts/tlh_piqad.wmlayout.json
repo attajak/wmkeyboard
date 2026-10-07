@@ -5,10 +5,8 @@
     "id": "asset_tlh_piqad",
     "name": "pIqaD (Klingon)",
     "langId": "tlh",
+    "script": "PIQAD",
     "version": 1,
-    "appearance": {
-      "fontId": "installed:Klingon pIqaD HaSta"
-    },
     "layers": {
       "letters": {
         "rows": [

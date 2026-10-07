@@ -44,6 +44,7 @@
     <string name="ime_font_script_korean_label">Korean</string>
     <string name="ime_font_script_japanese_label">Japanese</string>
     <string name="ime_font_script_chinese_label">Chinese</string>
+    <string name="ime_font_script_piqad_label">Klingon pIqaD</string>
 
     <!--
       Scanner panels. The lite build of the app leaves out the text and QR code

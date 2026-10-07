@@ -23,6 +23,8 @@
     <string name="fonts_default_system_label">System default</string>
     <!-- The row that keeps the Noto font the app selects for the script. -->
     <string name="fonts_default_noto_label">Automatic (Noto)</string>
+    <!-- The default font of a script that is not a Noto face. The app downloads it when the keyboard first needs it. -->
+    <string name="fonts_default_named_label">Automatic (<xliff:g id="font" example="Klingon pIqaD HaSta">%1$s</xliff:g>)</string>
     <!-- Name of a font file the user imported that has no name of its own. -->
     <string name="fonts_imported_label">Imported font</string>
 
