@@ -3,6 +3,7 @@ package com.wasimaster.wmkeyboard.core.tools
 import com.wasimaster.wmkeyboard.core.netlog.NetLog
 import com.wasimaster.wmkeyboard.core.netlog.NetSource
 import com.wasimaster.wmkeyboard.tools.feature.R
+import java.util.Locale
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -72,14 +73,41 @@ object SearxClient {
      * sends the user looking in the wrong place. Their instance is up and
      * reachable — it just has not enabled the JSON format, which is one line in
      * `settings.yml`. Say that instead.
+     *
+     * A 429 is the bot limiter public instances run, not a quota, so it gets
+     * its own wording too.
      */
     private fun get(url: String, source: NetSource): String = try {
-        ToolHttp.get(url, headers = mapOf("Accept" to "application/json"), source = source, route = NetLog.pathOf(url))
+        ToolHttp.get(url, headers = requestHeaders(), source = source, route = NetLog.pathOf(url))
     } catch (e: ToolHttpException) {
-        if (e.status == HTTP_FORBIDDEN) {
-            throw ToolHttpException(R.string.ftools_search_error_json_disabled)
+        when (e.status) {
+            HTTP_FORBIDDEN -> throw ToolHttpException(R.string.ftools_search_error_json_disabled)
+            HTTP_TOO_MANY_REQUESTS -> throw ToolHttpException(R.string.ftools_search_error_searx_limited)
         }
         throw e
+    }
+
+    /**
+     * The headers a browser sends, which is what SearXNG's limiter (on by
+     * default on public instances) checks before anything else (#592). It
+     * answers 429 to a request whose `Accept` lacks `text/html` or which has
+     * no `Accept-Language` at all, whatever the rate, so `Accept:
+     * application/json` alone was refused by every instance that runs it.
+     * JSON still comes first; the format is asked for in the URL anyway.
+     * `Accept-Encoding` is left to HttpURLConnection, which offers gzip and
+     * unpacks it only while the header is its own.
+     */
+    internal fun requestHeaders(locale: Locale = Locale.getDefault()): Map<String, String> {
+        val tag = locale.toLanguageTag().takeIf { it.isNotEmpty() && it != "und" }
+        val language = when {
+            tag == null -> "en;q=0.9"
+            locale.language == "en" -> "$tag,en;q=0.9"
+            else -> "$tag,${locale.language};q=0.9,en;q=0.8"
+        }
+        return mapOf(
+            "Accept" to "application/json,text/html;q=0.9,*/*;q=0.8",
+            "Accept-Language" to language,
+        )
     }
 
     /**
@@ -191,4 +219,5 @@ object SearxClient {
         url.substringAfter("://").substringBefore('/')
 
     private const val HTTP_FORBIDDEN = 403
+    private const val HTTP_TOO_MANY_REQUESTS = 429
 }

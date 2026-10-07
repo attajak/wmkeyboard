@@ -15,6 +15,7 @@
          403 from one nearly always means its JSON format is off, which is one
          line of its settings.yml, so say that rather than "Forbidden". -->
     <string name="ftools_search_error_json_disabled">This SearXNG instance has not enabled its JSON API. Add <![CDATA[<b>json</b>]]> to <![CDATA[<b>search.formats</b>]]> in its settings.yml, or use another instance.</string>
+    <string name="ftools_search_error_searx_limited">This SearXNG instance is turning away apps for now (HTTP 429). Public instances limit requests that don\'t come from a browser. Try again later, or use an instance of your own or one that allows its JSON API.</string>
 
     <!-- AI tool calling (#470). These are not shown to the user: they are
          handed back to the model as the result of the tool it asked for, so
