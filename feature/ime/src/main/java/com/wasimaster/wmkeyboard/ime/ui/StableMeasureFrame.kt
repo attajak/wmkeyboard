@@ -242,12 +242,12 @@ internal class StableMeasureFrame(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         freshTraversal = true
-        // The window's current insets, read rather than waited for: cached by
-        // the view root, so this costs a lookup, and an unchanged value
-        // invalidates nothing.
-        refreshNavigationBars()
     }
 
+    // Only the insets dispatched to this frame, never the window's raw
+    // rootWindowInsets: those are taken before anything above the keyboard
+    // has used them up, and reading them padded the keys a second time for a
+    // bar already padded for, a row-high gap below the space bar (#569).
     override fun dispatchApplyWindowInsets(insets: WindowInsets): WindowInsets {
         navigationBars?.update(insets, this)
         return super.dispatchApplyWindowInsets(insets)
@@ -255,12 +255,7 @@ internal class StableMeasureFrame(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        refreshNavigationBars()
-    }
-
-    /** Reads the navigation bar's insets off the window as it stands now. */
-    fun refreshNavigationBars() {
-        navigationBars?.update(rootWindowInsets, this)
+        requestApplyInsets()
     }
 
     // The four stages of an insets animation stop here rather than going on to

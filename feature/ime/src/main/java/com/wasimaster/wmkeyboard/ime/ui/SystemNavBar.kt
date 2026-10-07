@@ -2,6 +2,7 @@ package com.wasimaster.wmkeyboard.ime.ui
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.os.Build
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.tappableElement
 import androidx.compose.runtime.Composable
@@ -23,13 +24,12 @@ import com.wasimaster.wmkeyboard.core.settings.bottomPaddingOr
  * navigation bar, and to pick icons that stay visible on it.
  *
  * Why this exists at all, when [NavigationBarBackground] already paints the
- * band: it only paints on Android 15 and up. From 15 the IME window is laid
- * out edge to edge, `WindowInsets.navigationBars` inside it is a real inset,
- * and the board — gradient, image and all — runs under the bar. Below 15 the
- * IME window stops above the bar, that inset is zero, nothing of ours is drawn
- * there, and the bar takes the window's own `navigationBarColor`. Left unset
- * that is the platform default, which on some light-mode OEM builds is opaque
- * white under a coloured keyboard (issue #255).
+ * band: the keyboard's window is edge to edge on every version and the board
+ * — gradient, image and all — runs under the bar, but below Android 15 the
+ * system still draws the bar's own background over it in the window's
+ * `navigationBarColor`. Left unset that is the platform default, which on
+ * some light-mode OEM builds is opaque white under a coloured keyboard
+ * (issue #255).
  *
  * The default implementation does nothing, which is what the settings app's
  * theme previews want: they run in an Activity whose own window owns the bar.
@@ -101,9 +101,11 @@ fun SystemNavigationBarColor(kb: KbTheme) {
 
 /**
  * True when the window's bottom edge carries a gesture handle rather than a
- * row of navigation buttons. False below Android 15 inside the keyboard, whose
- * window stops above the bar and sees no inset at all, and for a three-button
- * bar turned into a side rail in landscape.
+ * row of navigation buttons, on Android 15 and up. Always false below 15:
+ * the 32dp over a gesture handle was measured against Gboard on 15, and below
+ * it the keyboard has always sat 8dp over the bar's inset, which the keys
+ * still pad for now that the window is edge to edge there too (#569). False
+ * as well for a three-button bar turned into a side rail in landscape.
  *
  * The kind of bar comes from the system's navigation mode, not from the
  * insets: in gesture mode the system draws its own hide-keyboard and
@@ -114,6 +116,7 @@ fun SystemNavigationBarColor(kb: KbTheme) {
  */
 @Composable
 fun gestureBarAtBottom(): Boolean {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) return false
     val density = LocalDensity.current
     if (navigationBarInsets().getBottom(density) == 0) return false
     val resources = LocalContext.current.resources

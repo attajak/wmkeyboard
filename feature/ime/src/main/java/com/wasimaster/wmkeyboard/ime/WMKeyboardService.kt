@@ -62,6 +62,7 @@ import android.content.ClipDescription
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
@@ -3191,6 +3192,13 @@ open class WMKeyboardService : InputMethodService() {
         DebugLog.attach(this)
         lifecycleOwner = KeyboardViewLifecycleOwner()
         lifecycleOwner.onCreate()
+        // The keyboard's window is edge to edge on every Android version, as
+        // FlorisBoard's is, and the keys pad themselves clear of the
+        // navigation bar by the inset the window hands them (#569). Left to
+        // the platform, the window's decor pads the keyboard above the bar
+        // below Android 15 and does not from 15, so the keyboard had to guess
+        // which, and every guess broke on some phone.
+        window.window?.let { WindowCompat.setDecorFitsSystemWindows(it, false) }
 
         userUnlocked = DirectBoot.isUserUnlocked(this)
         DebugLog.i("ime", "service created (unlocked=$userUnlocked)")
@@ -4517,9 +4525,6 @@ open class WMKeyboardService : InputMethodService() {
      */
     private var inputRootView: View? = null
 
-    /** The input view's outer frame, for the insets re-read when the window comes back (#468). */
-    private var inputFrame: StableMeasureFrame? = null
-
     override fun onCreateInputView(): View = trace(ImeTrace.CREATE_INPUT_VIEW) { createInputView() }
 
     private fun createInputView(): View {
@@ -4562,7 +4567,6 @@ open class WMKeyboardService : InputMethodService() {
         // The keyboard keeps the params the input frame gives an input view:
         // full width, its own height.
         return StableMeasureFrame(this, navigationBars).apply {
-            inputFrame = this
             edgeSwipeBackEnabled = { _uiState.value.settings.layoutBehavior.edgeSwipeBack }
             onEdgeSwipeBack = ::onEdgeSwipeBack
             addView(
@@ -4612,12 +4616,13 @@ open class WMKeyboardService : InputMethodService() {
      * Paints the system navigation bar under the keyboard in the keyboard's own
      * colour (issue #255).
      *
-     * Only Android 14 and below need this. From 15 the IME window is laid out
-     * edge to edge and the board draws the band itself; below 15 the window
-     * stops above the bar and the bar takes this window's `navigationBarColor`,
-     * which — never set — stayed the platform's. On stock Android that default
-     * is close enough to go unnoticed; on some OEM light-mode builds it is
-     * opaque white under a coloured keyboard.
+     * Only Android 14 and below need this. The window is edge to edge on every
+     * version (see onCreate) and the board runs under the bar, but below 15
+     * the system still draws the bar's own background over it in this
+     * window's `navigationBarColor`, which — never set — stayed the
+     * platform's. On stock Android that default is close enough to go
+     * unnoticed; on some OEM light-mode builds it is opaque white under a
+     * coloured keyboard.
      *
      * `setNavigationBarColor` is a no-op from API 35 on, where the board is
      * already drawing there, so the call needs no version gate of its own.
@@ -6416,8 +6421,6 @@ open class WMKeyboardService : InputMethodService() {
         // keyboard pads itself clear of is read from them, and a window coming
         // back from another keyboard must not keep the ones it left with.
         inputRootView?.requestApplyInsets()
-        // And read them now, without waiting for that dispatch to arrive.
-        inputFrame?.refreshNavigationBars()
     }
 
     /**

@@ -13,17 +13,22 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.view.WindowInsetsCompat
 
 /**
- * The navigation bar's insets as the keyboard window last received them from
- * the platform, kept apart from Compose's own `WindowInsets.navigationBars`
- * (issues #463, #468).
+ * The navigation bar's insets as the keyboard window last dispatched them to
+ * the keyboard's frame, kept apart from Compose's own
+ * `WindowInsets.navigationBars` (issues #463, #468).
  *
  * Compose's insets listener stopped taking new insets after the keyboard was
  * switched away and back, and the bottom row then sat on the gesture handle
  * and the system's keyboard buttons. Holding back the insets animations that
  * leave it waiting (see [StableMeasureFrame]) was not enough on every phone.
  * So the keyboard's frame records the insets the view hierarchy is handed,
- * and reads them again from the window whenever it is laid out or comes back
- * on screen, which no listener state can get stuck in front of.
+ * which no listener state can get stuck in front of, and asks for a fresh
+ * dispatch when it is attached or the window comes back on screen.
+ *
+ * Only the dispatched insets, the same ones a View with fitsSystemWindows
+ * pads by (HeliBoard's keyboard view): the window's raw `rootWindowInsets`
+ * count a bar that something above the keyboard has already padded for, and
+ * reading those gave a row-high gap under the space bar (#569).
  *
  * Plain pixels, like the platform's own insets.
  */
@@ -38,9 +43,8 @@ class ImeNavigationBars {
     var bottom by mutableIntStateOf(0)
         private set
 
-    /** Takes the navigation bar out of [insets]; null (a detached view) changes nothing. */
-    fun update(insets: android.view.WindowInsets?, view: View) {
-        if (insets == null) return
+    /** Takes the navigation bar out of [insets]. */
+    fun update(insets: android.view.WindowInsets, view: View) {
         val bars = WindowInsetsCompat.toWindowInsetsCompat(insets, view)
             .getInsets(WindowInsetsCompat.Type.navigationBars())
         left = bars.left
