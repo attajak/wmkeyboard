@@ -53,6 +53,16 @@ object JapaneseComposer : Composer {
 
     override fun composeBuffer(buffer: String): String = Kana.toHiragana(buffer)
 
+    /**
+     * A hyphen typed inside a word is the long-vowel mark, as in every romaji
+     * IME: `ka-do` is かーど and converts to カード (#596). Without this the
+     * hyphen is punctuation, committing `ka` as か and typing a literal `-`.
+     * Between words it stays a hyphen. The kana layouts type ー itself, which
+     * is a letter and joins the word already.
+     */
+    override fun buffersChar(c: Char, composing: CharSequence): Boolean =
+        c == '-' && composing.isNotEmpty()
+
     override fun candidates(buffer: String): List<String> = candidates(buffer, LIMIT)
 
     override fun candidates(buffer: String, limit: Int): List<String> =
