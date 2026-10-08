@@ -13,10 +13,11 @@ emoji search and a 75+ tool toolbox that all run on the phone and never phone ho
 
 <a href="https://github.com/wasi-master/wmkeyboard/releases/latest"><img src="https://img.shields.io/github/v/release/wasi-master/wmkeyboard?style=flat-square&label=Release&color=3DDC84&logo=android&logoColor=white" alt="Latest release"></a>
 <a href="https://f-droid.org/packages/com.wasimaster.wmkeyboard/"><img src="https://img.shields.io/f-droid/v/com.wasimaster.wmkeyboard?style=flat-square&label=F-Droid&color=1976D2&logo=fdroid&logoColor=white" alt="F-Droid"></a>
-<a href="https://github.com/wasi-master/wmkeyboard/releases"><img src="https://img.shields.io/github/downloads/wasi-master/wmkeyboard/total?style=flat-square&label=Downloads&color=6C5CE7" alt="Downloads"></a>
+<a href="https://github.com/wasi-master/wmkeyboard/releases"><img src="https://img.shields.io/github/downloads/wasi-master/wmkeyboard/total?style=flat-square&label=Downloads&color=6C5CE7&logo=rolldown&logoColor=white" alt="Downloads"></a>
 <a href="https://github.com/wasi-master/wmkeyboard/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/wasi-master/wmkeyboard/ci.yml?style=flat-square&label=CI&logo=githubactions&logoColor=white" alt="CI"></a>
 <a href="https://wmkeyboard.pages.dev"><img src="https://img.shields.io/badge/Docs-wmkeyboard.pages.dev-F38020?style=flat-square&logo=cloudflarepages&logoColor=white" alt="Docs"></a>
-<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1f6feb?style=flat-square" alt="MIT license"></a>
+<a href="https://t.me/wmkeyboard"><img src="https://img.shields.io/badge/Telegram-Join%20Chat-24A1DE?style=flat-square&logo=telegram&logoColor=white" alt="Telegram Group"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1f6feb?style=flat-square&logo=spdx&logoColor=white" alt="MIT license"></a>
 
 <a href="#install">Install</a> · <a href="#the-tour">Tour</a> · <a href="#languages">Languages</a> · <a href="#privacy">Privacy</a> · <a href="#editions">Editions</a> · <a href="#faq">FAQ</a> · <a href="#build-it-yourself">Build</a> · <a href="https://wmkeyboard.pages.dev"><b>Read the docs</b></a>
 
