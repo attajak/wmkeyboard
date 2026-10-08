@@ -343,7 +343,7 @@ gives you a local preview.
   The About screen in the app has a Report a bug row that pre-fills one, and a bot turns a
   release crash trace into a readable one on your issue within a couple of minutes.
 - **Questions and ideas:** [GitHub Discussions](https://github.com/wasi-master/wmkeyboard/discussions).
-- **Chat:** [t.me/WasiMaster](https://t.me/WasiMaster) on Telegram.
+- **Chat:** [t.me/wmkeyboard](https://t.me/wmkeyboard) on Telegram.
 - **Anything you would rather not or can't post publicly:** [arianmollik323@gmail.com](mailto:arianmollik323@gmail.com).
   Security reports go through [private vulnerability reporting](SECURITY.md).
 
